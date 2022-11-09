@@ -43,6 +43,13 @@
 		3E67EE54291B3CC800ED60C8 /* Meshes in Resources */ = {isa = PBXBuildFile; fileRef = 3E67EE53291B3CC700ED60C8 /* Meshes */; };
 		3E67EE56291B3DEE00ED60C8 /* ARRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E67EDCD291B2F7600ED60C8 /* ARRenderer.swift */; };
 		3E67EE59291B3E7900ED60C8 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E67EE1B291B397800ED60C8 /* ViewController.swift */; };
+		3E67EE66291B7A1000ED60C8 /* Vector2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E67EE65291B7A1000ED60C8 /* Vector2.swift */; };
+		3E67EE68291B94FC00ED60C8 /* Vector3.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E67EE67291B94FC00ED60C8 /* Vector3.swift */; };
+		3E67EE6A291B952200ED60C8 /* Vector4.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E67EE69291B952200ED60C8 /* Vector4.swift */; };
+		3E67EE6C291B956300ED60C8 /* Matrix4x4.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E67EE6B291B956300ED60C8 /* Matrix4x4.swift */; };
+		3E67EE6E291B971100ED60C8 /* Matrix3x3.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E67EE6D291B971100ED60C8 /* Matrix3x3.swift */; };
+		3E67EE70291B976300ED60C8 /* Quaternion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E67EE6F291B976300ED60C8 /* Quaternion.swift */; };
+		3E67EE72291B97B100ED60C8 /* MathUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E67EE71291B97B100ED60C8 /* MathUtil.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -78,6 +85,15 @@
 
 /* Begin PBXCopyFilesBuildPhase section */
 		3E67EE07291B304700ED60C8 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "include/$(PRODUCT_NAME)";
+			dstSubfolderSpec = 16;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		3E67EE5C291B799900ED60C8 /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
 			dstPath = "include/$(PRODUCT_NAME)";
@@ -136,6 +152,14 @@
 		3E67EE4C291B3A7A00ED60C8 /* AAPLConfig.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AAPLConfig.h; sourceTree = "<group>"; };
 		3E67EE53291B3CC700ED60C8 /* Meshes */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Meshes; sourceTree = "<group>"; };
 		3E67EE55291B3D8600ED60C8 /* SwiftArche.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = SwiftArche.entitlements; sourceTree = "<group>"; };
+		3E67EE5E291B799900ED60C8 /* libvox.math.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libvox.math.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		3E67EE65291B7A1000ED60C8 /* Vector2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Vector2.swift; sourceTree = "<group>"; };
+		3E67EE67291B94FC00ED60C8 /* Vector3.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Vector3.swift; sourceTree = "<group>"; };
+		3E67EE69291B952200ED60C8 /* Vector4.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Vector4.swift; sourceTree = "<group>"; };
+		3E67EE6B291B956300ED60C8 /* Matrix4x4.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Matrix4x4.swift; sourceTree = "<group>"; };
+		3E67EE6D291B971100ED60C8 /* Matrix3x3.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Matrix3x3.swift; sourceTree = "<group>"; };
+		3E67EE6F291B976300ED60C8 /* Quaternion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Quaternion.swift; sourceTree = "<group>"; };
+		3E67EE71291B97B100ED60C8 /* MathUtil.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MathUtil.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -168,12 +192,20 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		3E67EE5B291B799900ED60C8 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
 		3E67EDBC291B2F7600ED60C8 = {
 			isa = PBXGroup;
 			children = (
+				3E67EE5F291B799900ED60C8 /* vox.math */,
 				3E67EE0A291B304700ED60C8 /* vox.render */,
 				3E67EDFE291B301700ED60C8 /* vox.shader */,
 				3E67EDC7291B2F7600ED60C8 /* SwiftArche */,
@@ -192,6 +224,7 @@
 				3E67EDE8291B2F7800ED60C8 /* SwiftArcheUITests.xctest */,
 				3E67EDFD291B301700ED60C8 /* vox.shader.metallib */,
 				3E67EE09291B304700ED60C8 /* libvox.render.a */,
+				3E67EE5E291B799900ED60C8 /* libvox.math.a */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -304,6 +337,20 @@
 			path = UtilityExtensions;
 			sourceTree = "<group>";
 		};
+		3E67EE5F291B799900ED60C8 /* vox.math */ = {
+			isa = PBXGroup;
+			children = (
+				3E67EE65291B7A1000ED60C8 /* Vector2.swift */,
+				3E67EE67291B94FC00ED60C8 /* Vector3.swift */,
+				3E67EE69291B952200ED60C8 /* Vector4.swift */,
+				3E67EE6D291B971100ED60C8 /* Matrix3x3.swift */,
+				3E67EE6B291B956300ED60C8 /* Matrix4x4.swift */,
+				3E67EE6F291B976300ED60C8 /* Quaternion.swift */,
+				3E67EE71291B97B100ED60C8 /* MathUtil.swift */,
+			);
+			path = vox.math;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -395,6 +442,23 @@
 			productReference = 3E67EE09291B304700ED60C8 /* libvox.render.a */;
 			productType = "com.apple.product-type.library.static";
 		};
+		3E67EE5D291B799900ED60C8 /* vox.math */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 3E67EE64291B799900ED60C8 /* Build configuration list for PBXNativeTarget "vox.math" */;
+			buildPhases = (
+				3E67EE5A291B799900ED60C8 /* Sources */,
+				3E67EE5B291B799900ED60C8 /* Frameworks */,
+				3E67EE5C291B799900ED60C8 /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = vox.math;
+			productName = vox.math;
+			productReference = 3E67EE5E291B799900ED60C8 /* libvox.math.a */;
+			productType = "com.apple.product-type.library.static";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -422,6 +486,9 @@
 					3E67EE08291B304700ED60C8 = {
 						CreatedOnToolsVersion = 14.1;
 					};
+					3E67EE5D291B799900ED60C8 = {
+						CreatedOnToolsVersion = 14.1;
+					};
 				};
 			};
 			buildConfigurationList = 3E67EDC0291B2F7600ED60C8 /* Build configuration list for PBXProject "SwiftArche" */;
@@ -437,8 +504,9 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				3E67EDFC291B301700ED60C8 /* vox.shader */,
+				3E67EE5D291B799900ED60C8 /* vox.math */,
 				3E67EE08291B304700ED60C8 /* vox.render */,
+				3E67EDFC291B301700ED60C8 /* vox.shader */,
 				3E67EDC4291B2F7600ED60C8 /* SwiftArche */,
 				3E67EDDD291B2F7800ED60C8 /* SwiftArcheTests */,
 				3E67EDE7291B2F7800ED60C8 /* SwiftArcheUITests */,
@@ -560,6 +628,20 @@
 				3E67EE2D291B3A3F00ED60C8 /* GBufferTextures.swift in Sources */,
 				3E67EE29291B3A3F00ED60C8 /* TraditionalDeferredRenderer.swift in Sources */,
 				3E67EE35291B3A4B00ED60C8 /* ModelIO+Extensions.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		3E67EE5A291B799900ED60C8 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				3E67EE68291B94FC00ED60C8 /* Vector3.swift in Sources */,
+				3E67EE6A291B952200ED60C8 /* Vector4.swift in Sources */,
+				3E67EE72291B97B100ED60C8 /* MathUtil.swift in Sources */,
+				3E67EE66291B7A1000ED60C8 /* Vector2.swift in Sources */,
+				3E67EE70291B976300ED60C8 /* Quaternion.swift in Sources */,
+				3E67EE6C291B956300ED60C8 /* Matrix4x4.swift in Sources */,
+				3E67EE6E291B971100ED60C8 /* Matrix3x3.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -918,6 +1000,32 @@
 			};
 			name = Release;
 		};
+		3E67EE62291B799900ED60C8 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 4SL5L673UU;
+				OTHER_LDFLAGS = "-ObjC";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		3E67EE63291B799900ED60C8 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 4SL5L673UU;
+				OTHER_LDFLAGS = "-ObjC";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -971,6 +1079,15 @@
 			buildConfigurations = (
 				3E67EE0E291B304700ED60C8 /* Debug */,
 				3E67EE0F291B304700ED60C8 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		3E67EE64291B799900ED60C8 /* Build configuration list for PBXNativeTarget "vox.math" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				3E67EE62291B799900ED60C8 /* Debug */,
+				3E67EE63291B799900ED60C8 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
