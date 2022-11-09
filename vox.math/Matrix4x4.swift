@@ -30,10 +30,10 @@ struct Matrix {
     ///   - m42: default 0, column 4, row 2
     ///   - m43: default 0, column 4, row 3
     ///   - m44: default 1, column 4, row 4
-    init(_ m11: Float = 1, _ m12: Float = 0, _ m13: Float = 0, _ m14: Float = 0,
-         _ m21: Float = 0, _ m22: Float = 1, _ m23: Float = 0, _ m24: Float = 0,
-         _ m31: Float = 0, _ m32: Float = 0, _ m33: Float = 1, _ m34: Float = 0,
-         _ m41: Float = 0, _ m42: Float = 0, _ m43: Float = 0, _ m44: Float = 1) {
+    init(m11: Float = 1, m12: Float = 0, m13: Float = 0, m14: Float = 0,
+         m21: Float = 0, m22: Float = 1, m23: Float = 0, m24: Float = 0,
+         m31: Float = 0, m32: Float = 0, m33: Float = 1, m34: Float = 0,
+         m41: Float = 0, m42: Float = 0, m43: Float = 0, m44: Float = 1) {
         elements = simd_float4x4([SIMD4<Float>(m11, m12, m13, m14),
                                   SIMD4<Float>(m21, m22, m23, m24),
                                   SIMD4<Float>(m31, m32, m33, m34),
@@ -153,25 +153,25 @@ extension Matrix {
         let sy = scale.y
         let sz = scale.z
 
-        return Matrix((1 - (yy + zz)) * sx,
-                (xy + wz) * sx,
-                (xz - wy) * sx,
-                0,
-
-                (xy - wz) * sy,
-                (1 - (xx + zz)) * sy,
-                (yz + wx) * sy,
-                0,
-
-                (xz + wy) * sz,
-                (yz - wx) * sz,
-                (1 - (xx + yy)) * sz,
-                0,
-
-                translation.x,
-                translation.y,
-                translation.z,
-                1)
+        return Matrix(m11: (1 - (yy + zz)) * sx,
+                      m12: (xy + wz) * sx,
+                      m13: (xz - wy) * sx,
+                      m14: 0,
+                      
+                      m21: (xy - wz) * sy,
+                      m22: (1 - (xx + zz)) * sy,
+                      m23: (yz + wx) * sy,
+                      m24: 0,
+                      
+                      m31: (xz + wy) * sz,
+                      m32: (yz - wx) * sz,
+                      m33: (1 - (xx + yy)) * sz,
+                      m34: 0,
+                      
+                      m41: translation.x,
+                      m42: translation.y,
+                      m43: translation.z,
+                      m44: 1)
     }
 
     /// Calculate a matrix from scale vector.
@@ -179,25 +179,25 @@ extension Matrix {
     ///   - s: The scale vector
     ///   - out: The calculated matrix
     static func scaling(s: Vector3) -> Matrix {
-        Matrix(s.x,
-                0,
-                0,
-                0,
-
-                0,
-                s.y,
-                0,
-                0,
-
-                0,
-                0,
-                s.z,
-                0,
-
-                0,
-                0,
-                0,
-                1)
+        Matrix(m11: s.x,
+               m12: 0,
+               m13: 0,
+               m14: 0,
+               
+               m21: 0,
+               m22: s.y,
+               m23: 0,
+               m24: 0,
+               
+               m31: 0,
+               m32: 0,
+               m33: s.z,
+               m34: 0,
+               
+               m41: 0,
+               m42: 0,
+               m43: 0,
+               m44: 1)
     }
 
     /// Calculate a matrix from translation vector.
@@ -205,25 +205,25 @@ extension Matrix {
     ///   - translation: The translation vector
     ///   - out: The calculated matrix
     static func translation(translation: Vector3) -> Matrix {
-        Matrix(1,
-                0,
-                0,
-                0,
-
-                0,
-                1,
-                0,
-                0,
-
-                0,
-                0,
-                1,
-                0,
-
-                translation.x,
-                translation.y,
-                translation.z,
-                1)
+        Matrix(m11: 1,
+               m12: 0,
+               m13: 0,
+               m14: 0,
+               
+               m21: 0,
+               m22: 1,
+               m23: 0,
+               m24: 0,
+               
+               m31: 0,
+               m32: 0,
+               m33: 1,
+               m34: 0,
+               
+               m41: translation.x,
+               m42: translation.y,
+               m43: translation.z,
+               m44: 1)
     }
 
     /// Calculate the inverse of the specified matrix.
@@ -247,25 +247,25 @@ extension Matrix {
         _ = xAxis.normalize()
         let yAxis = Vector3.cross(left: zAxis, right: xAxis)
 
-        return Matrix(xAxis.x,
-                yAxis.x,
-                zAxis.x,
-                0,
-
-                xAxis.y,
-                yAxis.y,
-                zAxis.y,
-                0,
-
-                xAxis.z,
-                yAxis.z,
-                zAxis.z,
-                0,
-
-                -Vector3.dot(left: xAxis, right: eye),
-                -Vector3.dot(left: yAxis, right: eye),
-                -Vector3.dot(left: zAxis, right: eye),
-                1)
+        return Matrix(m11: xAxis.x,
+                      m12: yAxis.x,
+                      m13: zAxis.x,
+                      m14: 0,
+                      
+                      m21: xAxis.y,
+                      m22: yAxis.y,
+                      m23: zAxis.y,
+                      m24: 0,
+                      
+                      m31: xAxis.z,
+                      m32: yAxis.z,
+                      m33: zAxis.z,
+                      m34: 0,
+                      
+                      m41: -Vector3.dot(left: xAxis, right: eye),
+                      m42: -Vector3.dot(left: yAxis, right: eye),
+                      m43: -Vector3.dot(left: zAxis, right: eye),
+                      m44: 1)
     }
 
     /// Calculate an orthographic projection matrix.
@@ -282,25 +282,25 @@ extension Matrix {
         let bt = 1 / (bottom - top)
         let nf = 1 / (near - far)
 
-        return Matrix(-2 * lr,
-                0,
-                0,
-                0,
-
-                0,
-                -2 * bt,
-                0,
-                0,
-
-                0,
-                0,
-                2 * nf,
-                0,
-
-                (left + right) * lr,
-                (top + bottom) * bt,
-                (far + near) * nf,
-                1)
+        return Matrix(m11: -2 * lr,
+                      m12: 0,
+                      m13: 0,
+                      m14: 0,
+                      
+                      m21: 0,
+                      m22: -2 * bt,
+                      m23: 0,
+                      m24: 0,
+                      
+                      m31: 0,
+                      m32: 0,
+                      m33: 2 * nf,
+                      m34: 0,
+                      
+                      m41: (left + right) * lr,
+                      m42: (top + bottom) * bt,
+                      m43: (far + near) * nf,
+                      m44: 1)
     }
 
 
@@ -315,25 +315,25 @@ extension Matrix {
         let f = 1.0 / tan(fovy / 2)
         let nf = 1 / (near - far)
 
-        return Matrix(f / aspect,
-                0,
-                0,
-                0,
-
-                0,
-                f,
-                0,
-                0,
-
-                0,
-                0,
-                (far + near) * nf,
-                -1,
-
-                0,
-                0,
-                2 * far * near * nf,
-                0)
+        return Matrix(m11: f / aspect,
+                      m12: 0,
+                      m13: 0,
+                      m14: 0,
+                      
+                      m21: 0,
+                      m22: f,
+                      m23: 0,
+                      m24: 0,
+                      
+                      m31: 0,
+                      m32: 0,
+                      m33: (far + near) * nf,
+                      m34: -1,
+                      
+                      m41: 0,
+                      m42: 0,
+                      m43: 2 * far * near * nf,
+                      m44: 0)
     }
 
     /// The specified matrix rotates around an arbitrary axis.
@@ -520,15 +520,15 @@ extension Matrix {
             let invSY = 1 / sy
             let invSZ = 1 / sz
 
-            rotation = Quaternion.rotationMatrix3x3(m: Matrix3x3(m11 * invSX,
-                    m12 * invSX,
-                    m13 * invSX,
-                    m21 * invSY,
-                    m22 * invSY,
-                    m23 * invSY,
-                    m31 * invSZ,
-                    m32 * invSZ,
-                    m33 * invSZ))
+            rotation = Quaternion.rotationMatrix3x3(m: Matrix3x3(m11: m11 * invSX,
+                                                                 m12: m12 * invSX,
+                                                                 m13: m13 * invSX,
+                                                                 m21: m21 * invSY,
+                                                                 m22: m22 * invSY,
+                                                                 m23: m23 * invSY,
+                                                                 m31: m31 * invSZ,
+                                                                 m32: m32 * invSZ,
+                                                                 m33: m33 * invSZ))
             return true
         }
     }

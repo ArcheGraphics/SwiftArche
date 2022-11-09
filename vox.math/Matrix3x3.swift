@@ -21,9 +21,9 @@ struct Matrix3x3 {
     ///   - m31: Default 0 column 3, row 1
     ///   - m32: Default 0 column 3, row 2
     ///   - m33: Default 1 column 3, row 3
-    init(_ m11: Float = 1, _ m12: Float = 0, _ m13: Float = 0,
-         _ m21: Float = 0, _ m22: Float = 1, _ m23: Float = 0,
-         _ m31: Float = 0, _ m32: Float = 0, _ m33: Float = 1) {
+    init(m11: Float = 1, m12: Float = 0, m13: Float = 0,
+         m21: Float = 0, m22: Float = 1, m23: Float = 0,
+         m31: Float = 0, m32: Float = 0, m33: Float = 1) {
         elements = simd_float3x3([SIMD3<Float>(m11, m12, m13),
                                   SIMD3<Float>(m21, m22, m23),
                                   SIMD3<Float>(m31, m32, m33)])
@@ -173,17 +173,17 @@ extension Matrix3x3 {
         }
         det = 1.0 / det
 
-        return Matrix3x3((a22 * b11 - a23 * b10 + a24 * b09) * det,
-                (a23 * b08 - a21 * b11 - a24 * b07) * det,
-                (a21 * b10 - a22 * b08 + a24 * b06) * det,
-
-                (a13 * b10 - a12 * b11 - a14 * b09) * det,
-                (a11 * b11 - a13 * b08 + a14 * b07) * det,
-                (a12 * b08 - a11 * b10 - a14 * b06) * det,
-
-                (a42 * b05 - a43 * b04 + a44 * b03) * det,
-                (a43 * b02 - a41 * b05 - a44 * b01) * det,
-                (a41 * b04 - a42 * b02 + a44 * b00) * det)
+        return Matrix3x3(m11: (a22 * b11 - a23 * b10 + a24 * b09) * det,
+                         m12: (a23 * b08 - a21 * b11 - a24 * b07) * det,
+                         m13: (a21 * b10 - a22 * b08 + a24 * b06) * det,
+                         
+                         m21: (a13 * b10 - a12 * b11 - a14 * b09) * det,
+                         m22: (a11 * b11 - a13 * b08 + a14 * b07) * det,
+                         m23: (a12 * b08 - a11 * b10 - a14 * b06) * det,
+                         
+                         m31: (a42 * b05 - a43 * b04 + a44 * b03) * det,
+                         m32: (a43 * b02 - a41 * b05 - a44 * b01) * det,
+                         m33: (a41 * b04 - a42 * b02 + a44 * b00) * det)
     }
 
     /// The specified matrix rotates around an angle.
@@ -205,17 +205,17 @@ extension Matrix3x3 {
         let a32 = a.elements.columns.2[1]
         let a33 = a.elements.columns.2[2]
 
-        return Matrix3x3(c * a11 + s * a21,
-                c * a12 + s * a22,
-                c * a13 + s * a23,
-
-                c * a21 - s * a11,
-                c * a22 - s * a12,
-                c * a23 - s * a13,
-
-                a31,
-                a32,
-                a33)
+        return Matrix3x3(m11: c * a11 + s * a21,
+                         m12: c * a12 + s * a22,
+                         m13: c * a13 + s * a23,
+                         
+                         m21: c * a21 - s * a11,
+                         m22: c * a22 - s * a12,
+                         m23: c * a23 - s * a13,
+                         
+                         m31: a31,
+                         m32: a32,
+                         m33: a33)
     }
 
     /// Scale a matrix by a given vector.
