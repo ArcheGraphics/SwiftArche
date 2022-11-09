@@ -4,102 +4,98 @@
 //  personal capacity and am not conveying any rights to any intellectual
 //  property of any third parties.
 
-import UIKit
-import Metal
 import MetalKit
-import ARKit
 import vox_render
 
-extension MTKView: RenderDestinationProvider {
-}
+class ViewController: UIViewController {
+    var renderView: MTKView!
 
-class ViewController: UIViewController, MTKViewDelegate, ARSessionDelegate {
-
-    var session: ARSession!
     var renderer: Renderer!
+    var scene: Scene!
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        // Set the view's delegate
-        session = ARSession()
-        session.delegate = self
+        guard let device = MTLCreateSystemDefaultDevice() else {
+            fatalError("Unable to create default Metal Device")
+        }
 
-        // Set the view to use the default device
-        if let view = self.view as? MTKView {
-            view.device = MTLCreateSystemDefaultDevice()
-            view.backgroundColor = UIColor.clear
-            view.delegate = self
+        renderView = MTKView(frame: view.frame, device: device)
+        renderView.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(renderView)
+        NSLayoutConstraint.activate([
+            renderView.topAnchor.constraint(equalTo: view.topAnchor),
+            renderView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            renderView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            renderView.bottomAnchor.constraint(equalTo: view.bottomAnchor)])
 
-            guard view.device != nil else {
-                print("Metal is not supported on this device")
-                return
+        // Set the pixel formats of the render destination.
+        renderView.depthStencilPixelFormat = .depth32Float_stencil8
+        renderView.colorPixelFormat = .bgra8Unorm_srgb
+
+        scene = Scene(device: device)
+
+        if useSinglePassDeferred {
+            renderer = SinglePassDeferredRenderer(device: device,
+                    scene: scene,
+                    renderDestination: renderView) { [weak self] in
+
+                guard let strongSelf = self else {
+                    return
+                }
+
+                if !strongSelf.renderView.isPaused {
+                    strongSelf.scene.update()
+                }
             }
+        } else {
 
-            // Configure the renderer to draw to the view
-            renderer = Renderer(session: session, metalDevice: view.device!, renderDestination: view)
+            renderer = TraditionalDeferredRenderer(device: device,
+                    scene: scene,
+                    renderDestination: renderView) { [weak self] in
 
-            renderer.drawRectResized(size: view.bounds.size)
+                guard let strongSelf = self else {
+                    return
+                }
+
+                if !strongSelf.renderView.isPaused {
+                    strongSelf.scene.update()
+                }
+            }
         }
 
-        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(ViewController.handleTap(gestureRecognize:)))
-        view.addGestureRecognizer(tapGesture)
+        // Getter for the currentDrawable, note that this is optional.
+        // The renderer does not need to draw to a drawable, it could draw to an offscreen texture instead.
+        renderer.getCurrentDrawable = { [weak self] in
+            self?.renderView.currentDrawable
+        }
+
+        // Called when the drawable size changes, again, this is optional.
+        // The renderer does not need to draw to a drawable, it could draw to an offscreen texture instead.
+        renderer.drawableSizeWillChange = drawableSizeWillChange
+
+        renderer.mtkView(renderView, drawableSizeWillChange: renderView.drawableSize)
+
+        // The renderer serves as the MTKViewDelegate.
+        renderView.delegate = renderer
+
     }
 
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
+    var drawableSizeWillChange: ((MTLDevice, CGSize, MTLStorageMode) -> Void) {
+        { [weak self] device, size, gBufferStorageMode in
+            self?.scene.camera.updateProjection(drawableSize: size)
 
-        // Create a session configuration
-        let configuration = ARWorldTrackingConfiguration()
-
-        // Run the view's session
-        session.run(configuration)
-    }
-
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-
-        // Pause the view's session
-        session.pause()
-    }
-
-    @objc
-    func handleTap(gestureRecognize: UITapGestureRecognizer) {
-        // Create anchor using the camera's current position
-        if let currentFrame = session.currentFrame {
-
-            // Create a transform with a translation of 0.2 meters in front of the camera
-            var translation = matrix_identity_float4x4
-            translation.columns.3.z = -0.2
-            let transform = simd_mul(currentFrame.camera.transform, translation)
-
-            // Add a new anchor to the session
-            let anchor = ARAnchor(transform: transform)
-            session.add(anchor: anchor)
+            // Re-create GBuffer textures to match the new drawable size.
+            self?.scene.gBufferTextures.makeTextures(device: device, size: size, storageMode: gBufferStorageMode)
         }
     }
 
-    // MARK: - MTKViewDelegate
-    // Called whenever view changes orientation or layout is changed
-    func mtkView(_ view: MTKView, drawableSizeWillChange size: CGSize) {
-        renderer.drawRectResized(size: size)
-    }
-
-    // Called whenever the view needs to render
-    func draw(in view: MTKView) {
-        renderer.update()
-    }
-
-    // MARK: - ARSessionDelegate
-    func session(_ session: ARSession, didFailWithError error: Error) {
-        // Present an error message to the user
-    }
-
-    func sessionWasInterrupted(_ session: ARSession) {
-        // Inform the user that the session has been interrupted, for example, by presenting an overlay
-    }
-
-    func sessionInterruptionEnded(_ session: ARSession) {
-        // Reset tracking and/or remove existing anchors if consistent tracking is required
+    var useSinglePassDeferred: Bool {
+        #if targetEnvironment(simulator)
+        return false
+        #else
+        let device = MTLCreateSystemDefaultDevice()!
+        return device.supportsFamily(.apple1)
+        #endif
     }
 }

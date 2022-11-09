@@ -5,3 +5,8 @@
 //  property of any third parties.
 
 #import "ShaderTypes.h"
+
+#define AAPLShaderCommon_h
+#import "AAPLConfig.h"
+#import "AAPLShaderTypes.h"
+#import "AAPLShaderCommon.h"

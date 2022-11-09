@@ -4,513 +4,342 @@
 //  personal capacity and am not conveying any rights to any intellectual
 //  property of any third parties.
 
-import Foundation
-import Metal
+import simd
+import ModelIO
 import MetalKit
-import ARKit
 
-public protocol RenderDestinationProvider {
-    var currentRenderPassDescriptor: MTLRenderPassDescriptor? { get }
-    var currentDrawable: CAMetalDrawable? { get }
-    var colorPixelFormat: MTLPixelFormat { get set }
-    var depthStencilPixelFormat: MTLPixelFormat { get set }
-    var sampleCount: Int { get set }
-}
+// MARK: - Renderer
 
-// The max number of command buffers in flight
-let kMaxBuffersInFlight: Int = 3
+public class Renderer: NSObject {
+    lazy var shadowRenderPassDescriptor: MTLRenderPassDescriptor = {
+        let descriptor = MTLRenderPassDescriptor()
+        descriptor.depthAttachment.texture = scene.shadowMap
+        descriptor.depthAttachment.storeAction = .store
+        return descriptor
+    }()
 
-// The max number anchors our uniform buffer will hold
-let kMaxAnchorInstanceCount: Int = 64
+    // The semaphore used to control GPU-CPU synchronization of frames.
+    private let inFlightSemaphore: DispatchSemaphore
 
-// The 16 byte aligned size of our uniform structures
-let kAlignedSharedUniformsSize: Int = (MemoryLayout<SharedUniforms>.size & ~0xFF) + 0x100
-let kAlignedInstanceUniformsSize: Int = ((MemoryLayout<InstanceUniforms>.size * kMaxAnchorInstanceCount) & ~0xFF) + 0x100
+    private let commandQueue: MTLCommandQueue
 
-// Vertex data for an image plane
-let kImagePlaneVertexData: [Float] = [
-    -1.0, -1.0, 0.0, 1.0,
-    1.0, -1.0, 1.0, 1.0,
-    -1.0, 1.0, 0.0, 0.0,
-    1.0, 1.0, 1.0, 0.0,
-]
+    // Called at the start of every frame.
+    private let didBeginFrame: () -> Void
 
+    // sets the GBuffer textures when there is a re-size.
+    let setGBufferTextures: (MTLRenderPassDescriptor) -> Void
 
-public class Renderer {
-    let session: ARSession
+    // If provided, this will be called at the end of every frame, and should return a drawable that will be presented.
+    public var getCurrentDrawable: (() -> CAMetalDrawable?)?
+
+    // If provided, this will be called whenever the drawable size changes.
+    public var drawableSizeWillChange: ((MTLDevice, CGSize, MTLStorageMode) -> Void)?
+
+    var scene: Scene
+
+    var pipelineStates: PipelineStates
+    var depthStencilStates: DepthStencilStates
+
     let device: MTLDevice
-    let inFlightSemaphore = DispatchSemaphore(value: kMaxBuffersInFlight)
-    var renderDestination: RenderDestinationProvider
 
-    // Metal objects
-    var commandQueue: MTLCommandQueue!
-    var sharedUniformBuffer: MTLBuffer!
-    var anchorUniformBuffer: MTLBuffer!
-    var imagePlaneVertexBuffer: MTLBuffer!
-    var capturedImagePipelineState: MTLRenderPipelineState!
-    var capturedImageDepthState: MTLDepthStencilState!
-    var anchorPipelineState: MTLRenderPipelineState!
-    var anchorDepthState: MTLDepthStencilState!
-    var capturedImageTextureY: CVMetalTexture?
-    var capturedImageTextureCbCr: CVMetalTexture?
+    // MARK: - Init
 
-    // Captured image texture cache
-    var capturedImageTextureCache: CVMetalTextureCache!
+    init(device: MTLDevice,
+         scene: Scene,
+         renderDestination: RenderDestination,
+         singlePass: Bool,
+         didBeginFrame: @escaping () -> Void) {
 
-    // Metal vertex descriptor specifying how vertices will by laid out for input into our
-    //   anchor geometry render pipeline and how we'll layout our Model IO vertices
-    var geometryVertexDescriptor: MTLVertexDescriptor!
-
-    // MetalKit mesh containing vertex data and index buffer for our anchor geometry
-    var cubeMesh: MTKMesh!
-
-    // Used to determine _uniformBufferStride each frame.
-    //   This is the current frame number modulo kMaxBuffersInFlight
-    var uniformBufferIndex: Int = 0
-
-    // Offset within _sharedUniformBuffer to set for the current frame
-    var sharedUniformBufferOffset: Int = 0
-
-    // Offset within _anchorUniformBuffer to set for the current frame
-    var anchorUniformBufferOffset: Int = 0
-
-    // Addresses to write shared uniforms to each frame
-    var sharedUniformBufferAddress: UnsafeMutableRawPointer!
-
-    // Addresses to write anchor uniforms to each frame
-    var anchorUniformBufferAddress: UnsafeMutableRawPointer!
-
-    // The number of anchor instances to render
-    var anchorInstanceCount: Int = 0
-
-    // The current viewport size
-    var viewportSize: CGSize = CGSize()
-
-    // Flag for viewport size changes
-    var viewportSizeDidChange: Bool = false
-
-
-    public init(session: ARSession, metalDevice device: MTLDevice, renderDestination: RenderDestinationProvider) {
-        self.session = session
         self.device = device
-        self.renderDestination = renderDestination
-        loadMetal()
-        loadAssets()
+
+        self.scene = scene
+
+        // Create all of the MTLRenderPipelineState that the renderer will use.
+        pipelineStates = PipelineStates(device: device, renderDestination: renderDestination,
+                singlePass: singlePass)
+
+        // Create all of the MTLDepthStencilState that the renderer will use.
+        depthStencilStates = DepthStencilStates(device: device)
+
+        print("Selected Device: \(device.name)")
+
+        inFlightSemaphore = DispatchSemaphore(value: maxFramesInFlight)
+
+        guard let commandQueue = device.makeCommandQueue() else {
+            fatalError("Failed to make command queue.")
+        }
+        self.commandQueue = commandQueue
+
+        self.didBeginFrame = didBeginFrame
+
+        self.setGBufferTextures = scene.setGBufferTextures
+
+        super.init()
     }
 
-    public func drawRectResized(size: CGSize) {
-        viewportSize = size
-        viewportSizeDidChange = true
-    }
-
-    public func update() {
-        // Wait to ensure only kMaxBuffersInFlight are getting processed by any stage in the Metal
+    /// Perform operations necessary at the beginning of the frame.  Wait on the in flight semaphore,
+    /// and get a command buffer to encode intial commands for this frame.
+    func beginFrame() -> MTLCommandBuffer {
+        // Wait to ensure only maxFramesInFlight are getting processed by any stage in the Metal
         //   pipeline (App, Metal, Drivers, GPU, etc)
-        let _ = inFlightSemaphore.wait(timeout: DispatchTime.distantFuture)
+        inFlightSemaphore.wait()
 
-        // Create a new command buffer for each renderpass to the current drawable
-        if let commandBuffer = commandQueue.makeCommandBuffer() {
-            commandBuffer.label = "MyCommand"
-
-            // Add completion handler which signal _inFlightSemaphore when Metal and the GPU has fully
-            //   finished processing the commands we're encoding this frame.  This indicates when the
-            //   dynamic buffers, that we're writing to this frame, will no longer be needed by Metal
-            //   and the GPU.
-            // Retain our CVMetalTextures for the duration of the rendering cycle. The MTLTextures
-            //   we use from the CVMetalTextures are not valid unless their parent CVMetalTextures
-            //   are retained. Since we may release our CVMetalTexture ivars during the rendering
-            //   cycle, we must retain them separately here.
-            var textures = [capturedImageTextureY, capturedImageTextureCbCr]
-            commandBuffer.addCompletedHandler { [weak self] commandBuffer in
-                if let strongSelf = self {
-                    strongSelf.inFlightSemaphore.signal()
-                }
-                textures.removeAll()
-            }
-
-            updateBufferStates()
-            updateGameState()
-
-            if let renderPassDescriptor = renderDestination.currentRenderPassDescriptor,
-               let currentDrawable = renderDestination.currentDrawable,
-               let renderEncoder = commandBuffer.makeRenderCommandEncoder(descriptor: renderPassDescriptor) {
-
-                renderEncoder.label = "MyRenderEncoder"
-
-                drawCapturedImage(renderEncoder: renderEncoder)
-                drawAnchorGeometry(renderEncoder: renderEncoder)
-
-                // We're done encoding commands
-                renderEncoder.endEncoding()
-
-                // Schedule a present once the framebuffer is complete using the current drawable
-                commandBuffer.present(currentDrawable)
-            }
-
-            // Finalize rendering here & push the command buffer to the GPU
-            commandBuffer.commit()
+        // Create a new command buffer for each render pass to the current drawable
+        guard let commandBuffer = commandQueue.makeCommandBuffer() else {
+            fatalError("Failed to create a command new command buffer.")
         }
+
+        didBeginFrame()
+
+        return commandBuffer
     }
 
-    // MARK: - Private
-
-    func loadMetal() {
-        // Create and load our basic Metal state objects
-
-        // Set the default formats needed to render
-        renderDestination.depthStencilPixelFormat = .depth32Float_stencil8
-        renderDestination.colorPixelFormat = .bgra8Unorm
-        renderDestination.sampleCount = 1
-
-        // Calculate our uniform buffer sizes. We allocate kMaxBuffersInFlight instances for uniform
-        //   storage in a single buffer. This allows us to update uniforms in a ring (i.e. triple
-        //   buffer the uniforms) so that the GPU reads from one slot in the ring wil the CPU writes
-        //   to another. Anchor uniforms should be specified with a max instance count for instancing.
-        //   Also uniform storage must be aligned (to 256 bytes) to meet the requirements to be an
-        //   argument in the constant address space of our shading functions.
-        let sharedUniformBufferSize = kAlignedSharedUniformsSize * kMaxBuffersInFlight
-        let anchorUniformBufferSize = kAlignedInstanceUniformsSize * kMaxBuffersInFlight
-
-        // Create and allocate our uniform buffer objects. Indicate shared storage so that both the
-        //   CPU can access the buffer
-        sharedUniformBuffer = device.makeBuffer(length: sharedUniformBufferSize, options: .storageModeShared)
-        sharedUniformBuffer.label = "SharedUniformBuffer"
-
-        anchorUniformBuffer = device.makeBuffer(length: anchorUniformBufferSize, options: .storageModeShared)
-        anchorUniformBuffer.label = "AnchorUniformBuffer"
-
-        // Create a vertex buffer with our image plane vertex data.
-        let imagePlaneVertexDataCount = kImagePlaneVertexData.count * MemoryLayout<Float>.size
-        imagePlaneVertexBuffer = device.makeBuffer(bytes: kImagePlaneVertexData, length: imagePlaneVertexDataCount, options: [])
-        imagePlaneVertexBuffer.label = "ImagePlaneVertexBuffer"
-
-        // Load all the shader files with a metal file extension in the project
-        let libraryURL = Bundle.main.url(forResource: "vox.shader", withExtension: "metallib")!;
-        var defaultLibrary: MTLLibrary?;
-        do {
-            defaultLibrary = try device.makeLibrary(URL: libraryURL);
-        } catch let error {
-            print("Error creating MetalKit mesh, error \(error)")
+    /// Perform operations necessary to obtain a command buffer for rendering to the drawable.  By
+    /// endoding commands that are not dependant on the drawable in a separate command buffer, Metal
+    /// can begin executing encoded commands for the frame (commands from the previous command buffer)
+    /// before a drawable for this frame becomes avaliable.
+    func beginDrawableCommands() -> MTLCommandBuffer {
+        guard let commandBuffer = commandQueue.makeCommandBuffer() else {
+            fatalError("Failed to make command buffer from command queue")
         }
 
-
-        let capturedImageVertexFunction = defaultLibrary!.makeFunction(name: "capturedImageVertexTransform")!
-        let capturedImageFragmentFunction = defaultLibrary!.makeFunction(name: "capturedImageFragmentShader")!
-
-        // Create a vertex descriptor for our image plane vertex buffer
-        let imagePlaneVertexDescriptor = MTLVertexDescriptor()
-
-        // Positions.
-        imagePlaneVertexDescriptor.attributes[0].format = .float2
-        imagePlaneVertexDescriptor.attributes[0].offset = 0
-        imagePlaneVertexDescriptor.attributes[0].bufferIndex = Int(kBufferIndexMeshPositions.rawValue)
-
-        // Texture coordinates.
-        imagePlaneVertexDescriptor.attributes[1].format = .float2
-        imagePlaneVertexDescriptor.attributes[1].offset = 8
-        imagePlaneVertexDescriptor.attributes[1].bufferIndex = Int(kBufferIndexMeshPositions.rawValue)
-
-        // Buffer Layout
-        imagePlaneVertexDescriptor.layouts[0].stride = 16
-        imagePlaneVertexDescriptor.layouts[0].stepRate = 1
-        imagePlaneVertexDescriptor.layouts[0].stepFunction = .perVertex
-
-        // Create a pipeline state for rendering the captured image
-        let capturedImagePipelineStateDescriptor = MTLRenderPipelineDescriptor()
-        capturedImagePipelineStateDescriptor.label = "MyCapturedImagePipeline"
-        capturedImagePipelineStateDescriptor.rasterSampleCount = renderDestination.sampleCount
-        capturedImagePipelineStateDescriptor.vertexFunction = capturedImageVertexFunction
-        capturedImagePipelineStateDescriptor.fragmentFunction = capturedImageFragmentFunction
-        capturedImagePipelineStateDescriptor.vertexDescriptor = imagePlaneVertexDescriptor
-        capturedImagePipelineStateDescriptor.colorAttachments[0].pixelFormat = renderDestination.colorPixelFormat
-        capturedImagePipelineStateDescriptor.depthAttachmentPixelFormat = renderDestination.depthStencilPixelFormat
-        capturedImagePipelineStateDescriptor.stencilAttachmentPixelFormat = renderDestination.depthStencilPixelFormat
-
-        do {
-            try capturedImagePipelineState = device.makeRenderPipelineState(descriptor: capturedImagePipelineStateDescriptor)
-        } catch let error {
-            print("Failed to created captured image pipeline state, error \(error)")
+        // Add completion hander which signals inFlightSemaphore
+        // when Metal and the GPU has fully finished processing the commands encoded for this frame.
+        // This indicates when the dynamic buffers, written this frame, will no longer be needed by Metal and the GPU.
+        commandBuffer.addCompletedHandler { [weak self] _ in
+            self?.inFlightSemaphore.signal()
         }
 
-        let capturedImageDepthStateDescriptor = MTLDepthStencilDescriptor()
-        capturedImageDepthStateDescriptor.depthCompareFunction = .always
-        capturedImageDepthStateDescriptor.isDepthWriteEnabled = false
-        capturedImageDepthState = device.makeDepthStencilState(descriptor: capturedImageDepthStateDescriptor)
-
-        // Create captured image texture cache
-        var textureCache: CVMetalTextureCache?
-        CVMetalTextureCacheCreate(nil, nil, device, nil, &textureCache)
-        capturedImageTextureCache = textureCache
-
-        let anchorGeometryVertexFunction = defaultLibrary!.makeFunction(name: "anchorGeometryVertexTransform")!
-        let anchorGeometryFragmentFunction = defaultLibrary!.makeFunction(name: "anchorGeometryFragmentLighting")!
-
-        // Create a vertex descriptor for our Metal pipeline. Specifies the layout of vertices the
-        //   pipeline should expect. The layout below keeps attributes used to calculate vertex shader
-        //   output position separate (world position, skinning, tweening weights) separate from other
-        //   attributes (texture coordinates, normals).  This generally maximizes pipeline efficiency
-        geometryVertexDescriptor = MTLVertexDescriptor()
-
-        // Positions.
-        geometryVertexDescriptor.attributes[0].format = .float3
-        geometryVertexDescriptor.attributes[0].offset = 0
-        geometryVertexDescriptor.attributes[0].bufferIndex = Int(kBufferIndexMeshPositions.rawValue)
-
-        // Texture coordinates.
-        geometryVertexDescriptor.attributes[1].format = .float2
-        geometryVertexDescriptor.attributes[1].offset = 0
-        geometryVertexDescriptor.attributes[1].bufferIndex = Int(kBufferIndexMeshGenerics.rawValue)
-
-        // Normals.
-        geometryVertexDescriptor.attributes[2].format = .half3
-        geometryVertexDescriptor.attributes[2].offset = 8
-        geometryVertexDescriptor.attributes[2].bufferIndex = Int(kBufferIndexMeshGenerics.rawValue)
-
-        // Position Buffer Layout
-        geometryVertexDescriptor.layouts[0].stride = 12
-        geometryVertexDescriptor.layouts[0].stepRate = 1
-        geometryVertexDescriptor.layouts[0].stepFunction = .perVertex
-
-        // Generic Attribute Buffer Layout
-        geometryVertexDescriptor.layouts[1].stride = 16
-        geometryVertexDescriptor.layouts[1].stepRate = 1
-        geometryVertexDescriptor.layouts[1].stepFunction = .perVertex
-
-        // Create a reusable pipeline state for rendering anchor geometry
-        let anchorPipelineStateDescriptor = MTLRenderPipelineDescriptor()
-        anchorPipelineStateDescriptor.label = "MyAnchorPipeline"
-        anchorPipelineStateDescriptor.rasterSampleCount = renderDestination.sampleCount
-        anchorPipelineStateDescriptor.vertexFunction = anchorGeometryVertexFunction
-        anchorPipelineStateDescriptor.fragmentFunction = anchorGeometryFragmentFunction
-        anchorPipelineStateDescriptor.vertexDescriptor = geometryVertexDescriptor
-        anchorPipelineStateDescriptor.colorAttachments[0].pixelFormat = renderDestination.colorPixelFormat
-        anchorPipelineStateDescriptor.depthAttachmentPixelFormat = renderDestination.depthStencilPixelFormat
-        anchorPipelineStateDescriptor.stencilAttachmentPixelFormat = renderDestination.depthStencilPixelFormat
-
-        do {
-            try anchorPipelineState = device.makeRenderPipelineState(descriptor: anchorPipelineStateDescriptor)
-        } catch let error {
-            print("Failed to created anchor geometry pipeline state, error \(error)")
-        }
-
-        let anchorDepthStateDescriptor = MTLDepthStencilDescriptor()
-        anchorDepthStateDescriptor.depthCompareFunction = .less
-        anchorDepthStateDescriptor.isDepthWriteEnabled = true
-        anchorDepthState = device.makeDepthStencilState(descriptor: anchorDepthStateDescriptor)
-
-        // Create the command queue
-        commandQueue = device.makeCommandQueue()
+        return commandBuffer
     }
 
-    func loadAssets() {
-        // Create and load our assets into Metal objects including meshes and textures
+    /// Perform cleanup operations including presenting the drawable and committing the command buffer
+    /// for the current frame.  Also, when enabled, draw buffer examination elements before all this.
+    func endFrame(_ commandBuffer: MTLCommandBuffer) {
+        // Schedule a present once the framebuffer is complete using the current drawable
 
-        // Create a MetalKit mesh buffer allocator so that ModelIO will load mesh data directly into
-        //   Metal buffers accessible by the GPU
-        let metalAllocator = MTKMeshBufferAllocator(device: device)
-
-        // Create a Model IO vertexDescriptor so that we format/layout our model IO mesh vertices to
-        //   fit our Metal render pipeline's vertex descriptor layout
-        let vertexDescriptor = MTKModelIOVertexDescriptorFromMetal(geometryVertexDescriptor)
-
-        // Indicate how each Metal vertex descriptor attribute maps to each ModelIO attribute
-        (vertexDescriptor.attributes[Int(kVertexAttributePosition.rawValue)] as! MDLVertexAttribute).name = MDLVertexAttributePosition
-        (vertexDescriptor.attributes[Int(kVertexAttributeTexcoord.rawValue)] as! MDLVertexAttribute).name = MDLVertexAttributeTextureCoordinate
-        (vertexDescriptor.attributes[Int(kVertexAttributeNormal.rawValue)] as! MDLVertexAttribute).name = MDLVertexAttributeNormal
-
-        // Use ModelIO to create a box mesh as our object
-        let mesh = MDLMesh(boxWithExtent: vector3(0.075, 0.075, 0.075), segments: vector3(1, 1, 1), inwardNormals: false, geometryType: .triangles, allocator: metalAllocator)
-
-        // Perform the format/relayout of mesh vertices by setting the new vertex descriptor in our
-        //   Model IO mesh
-        mesh.vertexDescriptor = vertexDescriptor
-
-        // Create a MetalKit mesh (and submeshes) backed by Metal buffers
-        do {
-            try cubeMesh = MTKMesh(mesh: mesh, device: device)
-        } catch let error {
-            print("Error creating MetalKit mesh, error \(error)")
+        if let drawable = getCurrentDrawable?() {
+            commandBuffer.present(drawable)
         }
+
+        // Finalize rendering here & push the command buffer to the GPU
+        commandBuffer.commit()
     }
 
-    func updateBufferStates() {
-        // Update the location(s) to which we'll write to in our dynamically changing Metal buffers for
-        //   the current frame (i.e. update our slot in the ring buffer used for the current frame)
-
-        uniformBufferIndex = (uniformBufferIndex + 1) % kMaxBuffersInFlight
-
-        sharedUniformBufferOffset = kAlignedSharedUniformsSize * uniformBufferIndex
-        anchorUniformBufferOffset = kAlignedInstanceUniformsSize * uniformBufferIndex
-
-        sharedUniformBufferAddress = sharedUniformBuffer.contents().advanced(by: sharedUniformBufferOffset)
-        anchorUniformBufferAddress = anchorUniformBuffer.contents().advanced(by: anchorUniformBufferOffset)
+    func encodePass(into commandBuffer: MTLCommandBuffer,
+                    using descriptor: MTLRenderPassDescriptor,
+                    label: String,
+                    _ encodingBlock: (MTLRenderCommandEncoder) -> Void) {
+        guard let renderEncoder = commandBuffer.makeRenderCommandEncoder(descriptor: descriptor) else {
+            fatalError("Failed to make render command encoder with: \(descriptor.description)")
+        }
+        renderEncoder.label = label
+        encodingBlock(renderEncoder)
+        renderEncoder.endEncoding()
     }
 
-    func updateGameState() {
-        // Update any game state
-
-        guard let currentFrame = session.currentFrame else {
-            return
-        }
-
-        updateSharedUniforms(frame: currentFrame)
-        updateAnchors(frame: currentFrame)
-        updateCapturedImageTextures(frame: currentFrame)
-
-        if viewportSizeDidChange {
-            viewportSizeDidChange = false
-
-            updateImagePlane(frame: currentFrame)
-        }
-    }
-
-    func updateSharedUniforms(frame: ARFrame) {
-        // Update the shared uniforms of the frame
-
-        let uniforms = sharedUniformBufferAddress.assumingMemoryBound(to: SharedUniforms.self)
-
-        uniforms.pointee.viewMatrix = frame.camera.viewMatrix(for: .landscapeRight)
-        uniforms.pointee.projectionMatrix = frame.camera.projectionMatrix(for: .landscapeRight, viewportSize: viewportSize, zNear: 0.001, zFar: 1000)
-
-        // Set up lighting for the scene using the ambient intensity if provided
-        var ambientIntensity: Float = 1.0
-
-        if let lightEstimate = frame.lightEstimate {
-            ambientIntensity = Float(lightEstimate.ambientIntensity) / 1000.0
-        }
-
-        let ambientLightColor: vector_float3 = vector3(0.5, 0.5, 0.5)
-        uniforms.pointee.ambientLightColor = ambientLightColor * ambientIntensity
-
-        var directionalLightDirection: vector_float3 = vector3(0.0, 0.0, -1.0)
-        directionalLightDirection = simd_normalize(directionalLightDirection)
-        uniforms.pointee.directionalLightDirection = directionalLightDirection
-
-        let directionalLightColor: vector_float3 = vector3(0.6, 0.6, 0.6)
-        uniforms.pointee.directionalLightColor = directionalLightColor * ambientIntensity
-
-        uniforms.pointee.materialShininess = 30
-    }
-
-    func updateAnchors(frame: ARFrame) {
-        // Update the anchor uniform buffer with transforms of the current frame's anchors
-        anchorInstanceCount = min(frame.anchors.count, kMaxAnchorInstanceCount)
-
-        var anchorOffset: Int = 0
-        if anchorInstanceCount == kMaxAnchorInstanceCount {
-            anchorOffset = max(frame.anchors.count - kMaxAnchorInstanceCount, 0)
-        }
-
-        for index in 0..<anchorInstanceCount {
-            let anchor = frame.anchors[index + anchorOffset]
-
-            // Flip Z axis to convert geometry from right handed to left handed
-            var coordinateSpaceTransform = matrix_identity_float4x4
-            coordinateSpaceTransform.columns.2.z = -1.0
-
-            let modelMatrix = simd_mul(anchor.transform, coordinateSpaceTransform)
-
-            let anchorUniforms = anchorUniformBufferAddress.assumingMemoryBound(to: InstanceUniforms.self).advanced(by: index)
-            anchorUniforms.pointee.modelMatrix = modelMatrix
-        }
-    }
-
-    func updateCapturedImageTextures(frame: ARFrame) {
-        // Create two textures (Y and CbCr) from the provided frame's captured image
-        let pixelBuffer = frame.capturedImage
-
-        if (CVPixelBufferGetPlaneCount(pixelBuffer) < 2) {
-            return
-        }
-
-        capturedImageTextureY = createTexture(fromPixelBuffer: pixelBuffer, pixelFormat: .r8Unorm, planeIndex: 0)
-        capturedImageTextureCbCr = createTexture(fromPixelBuffer: pixelBuffer, pixelFormat: .rg8Unorm, planeIndex: 1)
-    }
-
-    func createTexture(fromPixelBuffer pixelBuffer: CVPixelBuffer, pixelFormat: MTLPixelFormat, planeIndex: Int) -> CVMetalTexture? {
-        let width = CVPixelBufferGetWidthOfPlane(pixelBuffer, planeIndex)
-        let height = CVPixelBufferGetHeightOfPlane(pixelBuffer, planeIndex)
-
-        var texture: CVMetalTexture? = nil
-        let status = CVMetalTextureCacheCreateTextureFromImage(nil, capturedImageTextureCache, pixelBuffer, nil, pixelFormat, width, height, planeIndex, &texture)
-
-        if status != kCVReturnSuccess {
-            texture = nil
-        }
-
-        return texture
-    }
-
-    func updateImagePlane(frame: ARFrame) {
-        // Update the texture coordinates of our image plane to aspect fill the viewport
-        let displayToCameraTransform = frame.displayTransform(for: .landscapeRight, viewportSize: viewportSize).inverted()
-
-        let vertexData = imagePlaneVertexBuffer.contents().assumingMemoryBound(to: Float.self)
-        for index in 0...3 {
-            let textureCoordIndex = 4 * index + 2
-            let textureCoord = CGPoint(x: CGFloat(kImagePlaneVertexData[textureCoordIndex]), y: CGFloat(kImagePlaneVertexData[textureCoordIndex + 1]))
-            let transformedCoord = textureCoord.applying(displayToCameraTransform)
-            vertexData[textureCoordIndex] = Float(transformedCoord.x)
-            vertexData[textureCoordIndex + 1] = Float(transformedCoord.y)
-        }
-    }
-
-    func drawCapturedImage(renderEncoder: MTLRenderCommandEncoder) {
-        guard let textureY = capturedImageTextureY, let textureCbCr = capturedImageTextureCbCr else {
-            return
-        }
-
-        // Push a debug group allowing us to identify render commands in the GPU Frame Capture tool
-        renderEncoder.pushDebugGroup("DrawCapturedImage")
-
-        // Set render command encoder state
-        renderEncoder.setCullMode(.none)
-        renderEncoder.setRenderPipelineState(capturedImagePipelineState)
-        renderEncoder.setDepthStencilState(capturedImageDepthState)
-
-        // Set mesh's vertex buffers
-        renderEncoder.setVertexBuffer(imagePlaneVertexBuffer, offset: 0, index: Int(kBufferIndexMeshPositions.rawValue))
-
-        // Set any textures read/sampled from our render pipeline
-        renderEncoder.setFragmentTexture(CVMetalTextureGetTexture(textureY), index: Int(kTextureIndexY.rawValue))
-        renderEncoder.setFragmentTexture(CVMetalTextureGetTexture(textureCbCr), index: Int(kTextureIndexCbCr.rawValue))
-
-        // Draw each submesh of our mesh
-        renderEncoder.drawPrimitives(type: .triangleStrip, vertexStart: 0, vertexCount: 4)
-
+    func encodeStage(using renderEncoder: MTLRenderCommandEncoder,
+                     label: String,
+                     _ encodingBlock: () -> Void) {
+        renderEncoder.pushDebugGroup(label)
+        encodingBlock()
         renderEncoder.popDebugGroup()
     }
 
-    func drawAnchorGeometry(renderEncoder: MTLRenderCommandEncoder) {
-        guard anchorInstanceCount > 0 else {
-            return
+    func encodeGBufferStage(using renderEncoder: MTLRenderCommandEncoder) {
+        encodeStage(using: renderEncoder, label: "GBuffer Generation Stage") {
+            renderEncoder.setRenderPipelineState(pipelineStates.gBufferGeneration)
+            renderEncoder.setDepthStencilState(depthStencilStates.gBufferGeneration)
+            renderEncoder.setCullMode(.back)
+            renderEncoder.setStencilReferenceValue(128)
+            renderEncoder.setVertexBuffer(scene.frameData, offset: 0, index: Int(AAPLBufferFrameData.rawValue))
+            renderEncoder.setFragmentBuffer(scene.frameData, offset: 0, index: Int(AAPLBufferFrameData.rawValue))
+            renderEncoder.setFragmentTexture(scene.shadowMap, index: Int(AAPLTextureIndexShadow.rawValue))
+
+            renderEncoder.draw(meshes: scene.meshes)
         }
+    }
 
-        // Push a debug group allowing us to identify render commands in the GPU Frame Capture tool
-        renderEncoder.pushDebugGroup("DrawAnchors")
+    func encodeDirectionalLightingStage(using renderEncoder: MTLRenderCommandEncoder) {
+        encodeStage(using: renderEncoder, label: "Directional Lighting Stage") {
+            renderEncoder.setRenderPipelineState(pipelineStates.directionalLighting)
+            renderEncoder.setDepthStencilState(depthStencilStates.directionalLighting)
+            if !GBufferTextures.attachedInFinalPass {
+                scene.setGBufferTextures(renderEncoder: renderEncoder)
+            }
+            renderEncoder.setCullMode(.back)
+            renderEncoder.setStencilReferenceValue(128)
 
-        // Set render command encoder state
-        renderEncoder.setCullMode(.back)
-        renderEncoder.setRenderPipelineState(anchorPipelineState)
-        renderEncoder.setDepthStencilState(anchorDepthState)
+            renderEncoder.setVertexBuffer(scene.quadVertexBuffer,
+                    offset: 0,
+                    index: Int(AAPLBufferIndexMeshPositions.rawValue))
 
-        // Set any buffers fed into our render pipeline
-        renderEncoder.setVertexBuffer(anchorUniformBuffer, offset: anchorUniformBufferOffset, index: Int(kBufferIndexInstanceUniforms.rawValue))
-        renderEncoder.setVertexBuffer(sharedUniformBuffer, offset: sharedUniformBufferOffset, index: Int(kBufferIndexSharedUniforms.rawValue))
-        renderEncoder.setFragmentBuffer(sharedUniformBuffer, offset: sharedUniformBufferOffset, index: Int(kBufferIndexSharedUniforms.rawValue))
+            renderEncoder.setVertexBuffer(scene.frameData,
+                    offset: 0,
+                    index: Int(AAPLBufferFrameData.rawValue))
 
-        // Set mesh's vertex buffers
-        for bufferIndex in 0..<cubeMesh.vertexBuffers.count {
-            let vertexBuffer = cubeMesh.vertexBuffers[bufferIndex]
-            renderEncoder.setVertexBuffer(vertexBuffer.buffer, offset: Int(vertexBuffer.offset), index: bufferIndex)
+            renderEncoder.setFragmentBuffer(scene.frameData,
+                    offset: 0,
+                    index: Int(AAPLBufferFrameData.rawValue))
+
+            // Draw full screen quad
+            renderEncoder.drawPrimitives(type: .triangle, vertexStart: 0, vertexCount: 6)
         }
+    }
 
-        // Draw each submesh of our mesh
-        for submesh in cubeMesh.submeshes {
-            renderEncoder.drawIndexedPrimitives(type: submesh.primitiveType, indexCount: Int(submesh.indexCount), indexType: submesh.indexType,
-                    indexBuffer: submesh.indexBuffer.buffer, indexBufferOffset: Int(submesh.indexBuffer.offset), instanceCount: anchorInstanceCount)
+    func encodeLightMaskStage(using renderEncoder: MTLRenderCommandEncoder) {
+        if let lightMaskPipelineState = pipelineStates.lightMask,
+           let lightMaskDepthStencilState = depthStencilStates.lightMask {
+            encodeStage(using: renderEncoder, label: "Point Light Mask Stage") {
+
+                renderEncoder.setRenderPipelineState(lightMaskPipelineState)
+                renderEncoder.setDepthStencilState(lightMaskDepthStencilState)
+
+                renderEncoder.setStencilReferenceValue(128)
+                renderEncoder.setCullMode(.front)
+
+                renderEncoder.setVertexBuffer(scene.frameData,
+                        offset: 0,
+                        index: Int(AAPLBufferFrameData.rawValue))
+
+                renderEncoder.setVertexBuffer(scene.pointLights,
+                        offset: 0,
+                        index: Int(AAPLBufferIndexLightsData.rawValue))
+
+                renderEncoder.setVertexBuffer(scene.lightPositions,
+                        offset: 0,
+                        index: Int(AAPLBufferIndexLightsPosition.rawValue))
+
+                renderEncoder.setFragmentBuffer(scene.frameData,
+                        offset: 0,
+                        index: Int(AAPLBufferFrameData.rawValue))
+
+                renderEncoder.draw(meshes: [scene.icosahedron],
+                        instanceCount: scene.numberOfLights,
+                        requiresMaterials: false)
+            }
         }
+    }
 
-        renderEncoder.popDebugGroup()
+    func encodePointLightStage(using renderEncoder: MTLRenderCommandEncoder) {
+        encodeStage(using: renderEncoder, label: "Point Light Stage") {
+
+            renderEncoder.setRenderPipelineState(pipelineStates.pointLighting)
+            renderEncoder.setDepthStencilState(depthStencilStates.pointLighting)
+
+            if !device.supportsFamily(.apple1) {
+                scene.setGBufferTextures(renderEncoder: renderEncoder)
+            }
+
+            renderEncoder.setStencilReferenceValue(128)
+            renderEncoder.setCullMode(.back)
+
+            renderEncoder.setVertexBuffer(scene.frameData,
+                    offset: 0,
+                    index: Int(AAPLBufferFrameData.rawValue))
+
+            renderEncoder.setVertexBuffer(scene.pointLights,
+                    offset: 0,
+                    index: Int(AAPLBufferIndexLightsData.rawValue))
+
+            renderEncoder.setVertexBuffer(scene.lightPositions,
+                    offset: 0,
+                    index: Int(AAPLBufferIndexLightsPosition.rawValue))
+
+            renderEncoder.setFragmentBuffer(scene.frameData,
+                    offset: 0,
+                    index: Int(AAPLBufferFrameData.rawValue))
+
+            renderEncoder.setFragmentBuffer(scene.pointLights,
+                    offset: 0,
+                    index: Int(AAPLBufferIndexLightsData.rawValue))
+
+            renderEncoder.setFragmentBuffer(scene.lightPositions,
+                    offset: 0,
+                    index: Int(AAPLBufferIndexLightsPosition.rawValue))
+
+            renderEncoder.draw(meshes: [scene.icosahedron],
+                    instanceCount: scene.numberOfLights,
+                    requiresMaterials: false)
+        }
+    }
+
+    func encodeSkyboxStage(using renderEncoder: MTLRenderCommandEncoder) {
+        encodeStage(using: renderEncoder, label: "Skybox Stage") {
+
+            renderEncoder.setRenderPipelineState(pipelineStates.skybox)
+            renderEncoder.setDepthStencilState(depthStencilStates.skybox)
+
+            renderEncoder.setCullMode(.front)
+
+            renderEncoder.setVertexBuffer(scene.frameData, offset: 0, index: Int(AAPLBufferFrameData.rawValue))
+            renderEncoder.setFragmentTexture(scene.skyMap, index: Int(AAPLTextureIndexBaseColor.rawValue))
+
+            renderEncoder.draw(meshes: [scene.skyMesh],
+                    requiresMaterials: false)
+        }
+    }
+
+    func encodeFairyBillboardStage(using renderEncoder: MTLRenderCommandEncoder) {
+        encodeStage(using: renderEncoder, label: "Fairy Lights Stage") {
+            renderEncoder.setRenderPipelineState(pipelineStates.fairyLighting)
+            renderEncoder.setDepthStencilState(depthStencilStates.fairyLighting)
+            renderEncoder.setCullMode(.back)
+
+            renderEncoder.setVertexBuffer(scene.frameData,
+                    offset: 0,
+                    index: Int(AAPLBufferFrameData.rawValue))
+
+            renderEncoder.setVertexBuffer(scene.fairy,
+                    offset: 0,
+                    index: Int(AAPLBufferIndexMeshPositions.rawValue))
+
+            renderEncoder.setVertexBuffer(scene.pointLights,
+                    offset: 0,
+                    index: Int(AAPLBufferIndexLightsData.rawValue))
+
+            renderEncoder.setVertexBuffer(scene.lightPositions,
+                    offset: 0,
+                    index: Int(AAPLBufferIndexLightsPosition.rawValue))
+
+            renderEncoder.setFragmentTexture(scene.fairyMap,
+                    index: Int(AAPLTextureIndexAlpha.rawValue))
+
+            renderEncoder.drawPrimitives(type: .triangleStrip,
+                    vertexStart: 0,
+                    vertexCount: scene.fairyVerticesCount,
+                    instanceCount: scene.numberOfLights)
+        }
+    }
+
+    func encodeShadowMapPass(into commandBuffer: MTLCommandBuffer) {
+        encodePass(into: commandBuffer,
+                using: shadowRenderPassDescriptor,
+                label: "Shadow Map Pass") { renderEncoder in
+
+            encodeStage(using: renderEncoder, label: "Shadow Generation Stage") {
+                renderEncoder.setRenderPipelineState(pipelineStates.shadowGeneration)
+                renderEncoder.setDepthStencilState(depthStencilStates.shadowGeneration)
+                renderEncoder.setCullMode(.back)
+                renderEncoder.setDepthBias(0.015, slopeScale: 7, clamp: 0.02)
+                renderEncoder.setVertexBuffer(scene.frameData, offset: 0, index: Int(AAPLBufferFrameData.rawValue))
+
+                // The Shadow Command does not need mesh materials.
+                renderEncoder.draw(meshes: scene.meshes, requiresMaterials: false)
+            }
+        }
+    }
+
+}
+
+// MARK: - MTKViewDelegate
+
+extension Renderer: MTKViewDelegate {
+    /// MTKViewDelegate Callback: Respond to device orientation change or other view size change
+    public func mtkView(_ view: MTKView, drawableSizeWillChange size: CGSize) {
+    }
+
+    public func draw(in view: MTKView) {
     }
 }
+
