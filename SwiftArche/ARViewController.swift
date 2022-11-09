@@ -16,7 +16,7 @@ extension MTKView: RenderDestinationProvider {
 class ViewController: UIViewController, MTKViewDelegate, ARSessionDelegate {
 
     var session: ARSession!
-    var renderer: Renderer!
+    var renderer: ARRenderer!
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -37,7 +37,7 @@ class ViewController: UIViewController, MTKViewDelegate, ARSessionDelegate {
             }
 
             // Configure the renderer to draw to the view
-            renderer = Renderer(session: session, metalDevice: view.device!, renderDestination: view)
+            renderer = ARRenderer(session: session, metalDevice: view.device!, renderDestination: view)
 
             renderer.drawRectResized(size: view.bounds.size)
         }
