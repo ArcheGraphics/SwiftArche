@@ -1,9 +1,8 @@
+//  Copyright (c) 2022 Feng Yang
 //
-//  Renderer.swift
-//  SwiftArche
-//
-//  Created by yangfengzz on 2022/11/9.
-//
+//  I am making my contributions/submissions to this project solely in my
+//  personal capacity and am not conveying any rights to any intellectual
+//  property of any third parties.
 
 import Foundation
 import Metal
@@ -132,7 +131,9 @@ public class Renderer {
             updateBufferStates()
             updateGameState()
 
-            if let renderPassDescriptor = renderDestination.currentRenderPassDescriptor, let currentDrawable = renderDestination.currentDrawable, let renderEncoder = commandBuffer.makeRenderCommandEncoder(descriptor: renderPassDescriptor) {
+            if let renderPassDescriptor = renderDestination.currentRenderPassDescriptor,
+               let currentDrawable = renderDestination.currentDrawable,
+               let renderEncoder = commandBuffer.makeRenderCommandEncoder(descriptor: renderPassDescriptor) {
 
                 renderEncoder.label = "MyRenderEncoder"
 
@@ -501,12 +502,13 @@ public class Renderer {
         // Set mesh's vertex buffers
         for bufferIndex in 0..<cubeMesh.vertexBuffers.count {
             let vertexBuffer = cubeMesh.vertexBuffers[bufferIndex]
-            renderEncoder.setVertexBuffer(vertexBuffer.buffer, offset: vertexBuffer.offset, index: bufferIndex)
+            renderEncoder.setVertexBuffer(vertexBuffer.buffer, offset: Int(vertexBuffer.offset), index: bufferIndex)
         }
 
         // Draw each submesh of our mesh
         for submesh in cubeMesh.submeshes {
-            renderEncoder.drawIndexedPrimitives(type: submesh.primitiveType, indexCount: submesh.indexCount, indexType: submesh.indexType, indexBuffer: submesh.indexBuffer.buffer, indexBufferOffset: submesh.indexBuffer.offset, instanceCount: anchorInstanceCount)
+            renderEncoder.drawIndexedPrimitives(type: submesh.primitiveType, indexCount: Int(submesh.indexCount), indexType: submesh.indexType,
+                    indexBuffer: submesh.indexBuffer.buffer, indexBufferOffset: Int(submesh.indexBuffer.offset), instanceCount: anchorInstanceCount)
         }
 
         renderEncoder.popDebugGroup()

@@ -1,18 +1,12 @@
+//  Copyright (c) 2022 Feng Yang
 //
-//  ShaderTypes.h
-//  SwiftArche
-//
-//  Created by yangfengzz on 2022/11/9.
-//
+//  I am making my contributions/submissions to this project solely in my
+//  personal capacity and am not conveying any rights to any intellectual
+//  property of any third parties.
 
-//
-//  Header containing types and enum constants shared between Metal shaders and C/ObjC source
-//
-#ifndef ShaderTypes_h
-#define ShaderTypes_h
+#pragma once
 
 #include <simd/simd.h>
-
 
 // Buffer index values shared between shader and C code to ensure Metal shader buffer inputs match
 //   Metal API buffer set calls
@@ -58,5 +52,3 @@ typedef struct {
 typedef struct {
     matrix_float4x4 modelMatrix;
 } InstanceUniforms;
-
-#endif /* ShaderTypes_h */

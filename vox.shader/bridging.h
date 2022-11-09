@@ -1,12 +1,7 @@
+//  Copyright (c) 2022 Feng Yang
 //
-//  SwiftArche-Bridging-Header.h
-//  SwiftArche
-//
-//  Created by yangfengzz on 2022/11/9.
-//
-
-//
-//  Use this file to import your target's public headers that you would like to expose to Swift.
-//
+//  I am making my contributions/submissions to this project solely in my
+//  personal capacity and am not conveying any rights to any intellectual
+//  property of any third parties.
 
 #import "ShaderTypes.h"
