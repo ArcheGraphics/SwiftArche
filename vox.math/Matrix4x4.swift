@@ -411,7 +411,7 @@ extension Matrix {
     ///   - m43: column 4, row 3
     ///   - m44: column 4, row 4
     /// - Returns: This matrix
-    mutating func setValue(m11: Float, m12: Float, m13: Float, m14: Float,
+    mutating func set(m11: Float, m12: Float, m13: Float, m14: Float,
                            m21: Float, m22: Float, m23: Float, m24: Float,
                            m31: Float, m32: Float, m33: Float, m34: Float,
                            m41: Float, m42: Float, m43: Float, m44: Float) -> Matrix {
@@ -429,7 +429,7 @@ extension Matrix {
     ///   - array: The array
     ///   - offset: The start offset of the array
     /// - Returns: This matrix
-    mutating func setValueByArray(array: Array<Float>, offset: Int = 0) -> Matrix {
+    mutating func set(array: Array<Float>, offset: Int = 0) -> Matrix {
         var index = 0
         for i in 0..<4 {
             for j in 0..<4 {

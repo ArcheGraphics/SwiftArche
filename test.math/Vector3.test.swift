@@ -149,7 +149,7 @@ class Vector3Tests: XCTestCase {
 
         let b = Vector4(2, 3, 4, 1)
         var m4 = Matrix()
-        _ = m4.setValue(m11: 1, m12: 0, m13: 0, m14: 0,
+        _ = m4.set(m11: 1, m12: 0, m13: 0, m14: 0,
                 m21: 0, m22: 1, m23: 0, m24: 0,
                 m31: 0, m32: 0, m33: 1, m34: 0,
                 m41: 0, m42: 0, m43: 1, m44: 1)
@@ -172,7 +172,7 @@ class Vector3Tests: XCTestCase {
 
     func testSetValue() {
         var a = Vector3(3, 4, 5)
-        let out = a.setValue(x: 5, y: 6, z: 7)
+        let out = a.set(x: 5, y: 6, z: 7)
         XCTAssertEqual(out.x, 5)
         XCTAssertEqual(out.y, 6)
         XCTAssertEqual(out.z, 7)
@@ -180,7 +180,7 @@ class Vector3Tests: XCTestCase {
 
     func testSetValueByArray() {
         var a = Vector3(3, 4, 3)
-        let out = a.setValueByArray(array: [5, 6, 4])
+        let out = a.set(array: [5, 6, 4])
         XCTAssertEqual(out.x, 5)
         XCTAssertEqual(out.y, 6)
         XCTAssertEqual(out.z, 4)
@@ -310,7 +310,7 @@ class Vector3Tests: XCTestCase {
         let a = Vector3(2, 3, 4)
         let b = Vector4(2, 3, 4, 1)
         var m4 = Matrix()
-        _ = m4.setValue(m11: 1, m12: 0, m13: 0, m14: 0,
+        _ = m4.set(m11: 1, m12: 0, m13: 0, m14: 0,
                 m21: 0, m22: 1, m23: 0, m24: 0,
                 m31: 0, m32: 0, m33: 1, m34: 0,
                 m41: 0, m42: 0, m43: 1, m44: 1)

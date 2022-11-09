@@ -153,13 +153,13 @@ class QuaternionTests: XCTestCase {
         XCTAssertEqual(Quaternion.equals(left: out, right: b), true)
 
         out = Quaternion.rotateY(quaternion: a, rad: 1.5)
-        _ = b.setValue(x: 0, y: 0, z: 0, w: 1)
+        _ = b.set(x: 0, y: 0, z: 0, w: 1)
         _ = b.rotateY(rad: 1.5)
         XCTAssertEqual(Quaternion.equals(left: out, right: Quaternion(0, 0.6816387600233341, 0, 0.7316888688738209)), true)
         XCTAssertEqual(Quaternion.equals(left: out, right: b), true)
 
         out = Quaternion.rotateZ(quaternion: a, rad: 1.5)
-        _ = b.setValue(x: 0, y: 0, z: 0, w: 1)
+        _ = b.set(x: 0, y: 0, z: 0, w: 1)
         _ = b.rotateZ(rad: 1.5)
         XCTAssertEqual(Quaternion.equals(left: out, right: Quaternion(0, 0, 0.6816387600233341, 0.7316888688738209)), true)
         XCTAssertEqual(Quaternion.equals(left: out, right: b), true)
@@ -184,15 +184,15 @@ class QuaternionTests: XCTestCase {
 
     func testSetValue() {
         var a = Quaternion()
-        _ = a.setValue(x: 1, y: 1, z: 1, w: 1)
+        _ = a.set(x: 1, y: 1, z: 1, w: 1)
         var b = Quaternion()
-        _ = b.setValueByArray(array: [1, 1, 1, 1])
+        _ = b.set(array: [1, 1, 1, 1])
         XCTAssertEqual(Quaternion.equals(left: a, right: b), true)
 
         var c = [Float](repeating: 0, count: 4)
         b.toArray(out: &c)
         var d = Quaternion()
-        _ = d.setValueByArray(array: c)
+        _ = d.set(array: c)
         XCTAssertEqual(Quaternion.equals(left: a, right: d), true)
     }
 

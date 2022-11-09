@@ -139,7 +139,7 @@ class Vector4Tests: XCTestCase {
     func testStaticTransform() {
         let a = Vector4(2, 3, 4, 5)
         var m4 = Matrix()
-        _ = m4.setValue(m11: 1, m12: 0, m13: 0, m14: 0,
+        _ = m4.set(m11: 1, m12: 0, m13: 0, m14: 0,
                 m21: 0, m22: 1, m23: 0, m24: 0,
                 m31: 0, m32: 0, m33: 1, m34: 0,
                 m41: 0, m42: 0, m43: 1, m44: 0)
@@ -164,7 +164,7 @@ class Vector4Tests: XCTestCase {
 
     func testSetValue() {
         var a = Vector4(3, 4, 5, 0)
-        let out = a.setValue(x: 5, y: 6, z: 7, w: 1)
+        let out = a.set(x: 5, y: 6, z: 7, w: 1)
         XCTAssertEqual(out.x, 5)
         XCTAssertEqual(out.y, 6)
         XCTAssertEqual(out.z, 7)
@@ -173,7 +173,7 @@ class Vector4Tests: XCTestCase {
 
     func testSetValueByArray() {
         var a = Vector4(3, 4, 3, 8)
-        let out = a.setValueByArray(array: [5, 6, 4, 1])
+        let out = a.set(array: [5, 6, 4, 1])
         XCTAssertEqual(out.x, 5)
         XCTAssertEqual(out.y, 6)
         XCTAssertEqual(out.z, 4)

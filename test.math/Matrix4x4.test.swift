@@ -157,9 +157,9 @@ class MatrixTests: XCTestCase {
                         m31: 0, m32: 0, m33: -1, m34: 0,
                         m41: 0, m42: 0, m43: -8, m44: 1)), true)
 
-        _ = eye.setValue(x: 0, y: 0, z: 0)
-        _ = target.setValue(x: 0, y: 1, z: -1)
-        _ = up.setValue(x: 0, y: 1, z: 0)
+        _ = eye.set(x: 0, y: 0, z: 0)
+        _ = target.set(x: 0, y: 1, z: -1)
+        _ = up.set(x: 0, y: 1, z: 0)
         out = Matrix.lookAt(eye: eye, target: target, up: up)
         XCTAssertEqual(Matrix.equals(left: out,
                 right: Matrix(m11: 1, m12: 0, m13: 0, m14: 0,
@@ -245,7 +245,7 @@ class MatrixTests: XCTestCase {
 
     func testSetValue() {
         var a = Matrix()
-        _ = a.setValue(m11: 1, m12: 2, m13: 3.3, m14: 4,
+        _ = a.set(m11: 1, m12: 2, m13: 3.3, m14: 4,
                 m21: 5, m22: 6, m23: 7, m24: 8,
                 m31: 9, m32: 10.9, m33: 11, m34: 12,
                 m41: 13, m42: 14, m43: 15, m44: 16)
@@ -259,7 +259,7 @@ class MatrixTests: XCTestCase {
 
     func testSetValueByArray() {
         var a = Matrix()
-        _ = a.setValueByArray(array: [1, 2, 3.3, 4, 5, 6, 7, 8, 9, 10.9, 11, 12, 13, 14, 15, 16])
+        _ = a.set(array: [1, 2, 3.3, 4, 5, 6, 7, 8, 9, 10.9, 11, 12, 13, 14, 15, 16])
 
         XCTAssertEqual(Matrix.equals(left: a,
                 right: Matrix(m11: 1, m12: 2, m13: 3.3, m14: 4,
@@ -273,7 +273,7 @@ class MatrixTests: XCTestCase {
         var b = [Float](repeating: 0, count: 16)
         a.toArray(out: &b)
         var c = Matrix()
-        _ = c.setValueByArray(array: b)
+        _ = c.set(array: b)
 
         XCTAssertEqual(Matrix.equals(left: a, right: c), true)
     }

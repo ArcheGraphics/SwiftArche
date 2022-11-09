@@ -88,7 +88,7 @@ class Matrix3x3Tests: XCTestCase {
                 m31: 9, m32: 10, m33: 11, m34: 12)
 
         // Matrix
-        _ = out.setValueByMatrix(a: a)
+        _ = out.set(a: a)
         XCTAssertEqual(Matrix3x3.equals(left: out, right: Matrix3x3(m11: 1, m12: 2, m13: 3,
                 m21: 5, m22: 6, m23: 7,
                 m31: 9, m32: 10, m33: 11)), true)
@@ -188,7 +188,7 @@ class Matrix3x3Tests: XCTestCase {
 
     func testSetValue() {
         var a = Matrix3x3()
-        _ = a.setValue(m11: 1, m12: 2, m13: 3,
+        _ = a.set(m11: 1, m12: 2, m13: 3,
                 m21: 4, m22: 5, m23: 6,
                 m31: 7, m32: 8, m33: 9)
 
@@ -199,16 +199,16 @@ class Matrix3x3Tests: XCTestCase {
 
     func testSetValueByxxx() {
         var a = Matrix3x3()
-        _ = a.setValueByArray(array: [1, 2, 3, 4, 5, 6, 7, 8, 9])
+        _ = a.set(array: [1, 2, 3, 4, 5, 6, 7, 8, 9])
         var b = Matrix3x3()
-        _ = b.setValueByMatrix(a: Matrix(m11: 1, m12: 2, m13: 3, m14: 0,
+        _ = b.set(a: Matrix(m11: 1, m12: 2, m13: 3, m14: 0,
                 m21: 4, m22: 5, m23: 6, m24: 0,
                 m31: 7, m32: 8, m33: 9, m34: 0,
                 m41: 0, m42: 0, m43: 0, m44: 1))
         var c = Matrix3x3()
         var arr = [Float](repeating: 0, count: 9)
         a.toArray(out: &arr)
-        _ = c.setValueByArray(array: arr)
+        _ = c.set(array: arr)
 
         XCTAssertEqual(Matrix3x3.equals(left: a, right: b), true)
         XCTAssertEqual(Matrix3x3.equals(left: a, right: c), true)

@@ -259,7 +259,7 @@ extension Matrix3x3 {
 
 extension Matrix3x3 {
     /// Set the value of this matrix, and return this matrix.
-    mutating func setValue(m11: Float, m12: Float, m13: Float,
+    mutating func set(m11: Float, m12: Float, m13: Float,
                            m21: Float, m22: Float, m23: Float,
                            m31: Float, m32: Float, m33: Float
     ) -> Matrix3x3 {
@@ -275,7 +275,7 @@ extension Matrix3x3 {
     ///   - array: The array
     ///   - offset: The start offset of the array
     /// - Returns: This matrix
-    mutating func setValueByArray(array: Array<Float>, offset: Int = 0) -> Matrix3x3 {
+    mutating func set(array: Array<Float>, offset: Int = 0) -> Matrix3x3 {
         var index = 0
         for i in 0..<3 {
             for j in 0..<3 {
@@ -290,7 +290,7 @@ extension Matrix3x3 {
     /// - Remark: upper-left principle
     /// - Parameter a: The specified 4x4 matrix
     /// - Returns: This 3x3 matrix
-    mutating func setValueByMatrix(a: Matrix) -> Matrix3x3 {
+    mutating func set(a: Matrix) -> Matrix3x3 {
         elements.columns.0[0] = a.elements.columns.0[0]
         elements.columns.0[1] = a.elements.columns.0[1]
         elements.columns.0[2] = a.elements.columns.0[2]

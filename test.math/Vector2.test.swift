@@ -126,14 +126,14 @@ class Vector2Tests: XCTestCase {
 
     func testSetValue() {
         var a = Vector2(3, 4)
-        _ = a.setValue(x: 5, y: 6)
+        _ = a.set(x: 5, y: 6)
         XCTAssertEqual(a.x, 5)
         XCTAssertEqual(a.y, 6)
     }
 
     func testSetValueByArray() {
         var a = Vector2(3, 4)
-        _ = a.setValueByArray(array: [5, 6])
+        _ = a.set(array: [5, 6])
         XCTAssertEqual(a.x, 5)
         XCTAssertEqual(a.y, 6)
 

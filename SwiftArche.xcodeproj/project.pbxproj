@@ -61,6 +61,8 @@
 		3E67EE92291BE31200ED60C8 /* Matrix3x3.test.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E67EE91291BE31200ED60C8 /* Matrix3x3.test.swift */; };
 		3E67EE94291BE31D00ED60C8 /* Quaternion.test.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E67EE93291BE31D00ED60C8 /* Quaternion.test.swift */; };
 		3E67EE96291BE33700ED60C8 /* MathUtil.test.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E67EE95291BE33700ED60C8 /* MathUtil.test.swift */; };
+		3E67EE98291BE78A00ED60C8 /* Color.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E67EE97291BE78A00ED60C8 /* Color.swift */; };
+		3E67EE9A291BEA0A00ED60C8 /* Color.test.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E67EE99291BEA0A00ED60C8 /* Color.test.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -189,6 +191,8 @@
 		3E67EE91291BE31200ED60C8 /* Matrix3x3.test.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Matrix3x3.test.swift; sourceTree = "<group>"; };
 		3E67EE93291BE31D00ED60C8 /* Quaternion.test.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Quaternion.test.swift; sourceTree = "<group>"; };
 		3E67EE95291BE33700ED60C8 /* MathUtil.test.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MathUtil.test.swift; sourceTree = "<group>"; };
+		3E67EE97291BE78A00ED60C8 /* Color.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Color.swift; sourceTree = "<group>"; };
+		3E67EE99291BEA0A00ED60C8 /* Color.test.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Color.test.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -387,6 +391,7 @@
 				3E67EE6D291B971100ED60C8 /* Matrix3x3.swift */,
 				3E67EE6B291B956300ED60C8 /* Matrix4x4.swift */,
 				3E67EE6F291B976300ED60C8 /* Quaternion.swift */,
+				3E67EE97291BE78A00ED60C8 /* Color.swift */,
 			);
 			path = vox.math;
 			sourceTree = "<group>";
@@ -411,6 +416,7 @@
 				3E67EE91291BE31200ED60C8 /* Matrix3x3.test.swift */,
 				3E67EE8F291BE30800ED60C8 /* Matrix4x4.test.swift */,
 				3E67EE93291BE31D00ED60C8 /* Quaternion.test.swift */,
+				3E67EE99291BEA0A00ED60C8 /* Color.test.swift */,
 			);
 			path = test.math;
 			sourceTree = "<group>";
@@ -730,6 +736,7 @@
 			files = (
 				3E67EE78291BA15200ED60C8 /* ContainmentType.swift in Sources */,
 				3E67EE68291B94FC00ED60C8 /* Vector3.swift in Sources */,
+				3E67EE98291BE78A00ED60C8 /* Color.swift in Sources */,
 				3E67EE6A291B952200ED60C8 /* Vector4.swift in Sources */,
 				3E67EE7A291BA19700ED60C8 /* FrustumFace.swift in Sources */,
 				3E67EE72291B97B100ED60C8 /* MathUtil.swift in Sources */,
@@ -745,6 +752,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3E67EE9A291BEA0A00ED60C8 /* Color.test.swift in Sources */,
 				3E67EE84291BDE7700ED60C8 /* Vector2.test.swift in Sources */,
 				3E67EE8C291BDF7600ED60C8 /* Vector3.test.swift in Sources */,
 				3E67EE90291BE30800ED60C8 /* Matrix4x4.test.swift in Sources */,

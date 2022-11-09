@@ -234,7 +234,7 @@ extension Vector4 {
     ///   - y: The y component of the vector
     ///   - z: The z component of the vector
     /// - Returns: This vector
-    mutating func setValue(x: Float, y: Float, z: Float, w: Float) -> Vector4 {
+    mutating func set(x: Float, y: Float, z: Float, w: Float) -> Vector4 {
         elements = SIMD4<Float>(x, y, z, w)
         return self
     }
@@ -244,7 +244,7 @@ extension Vector4 {
     ///   - array: The array
     ///   - offset: The start offset of the array
     /// - Returns: This vector
-    mutating func setValueByArray(array: Array<Float>, offset: Int = 0) -> Vector4 {
+    mutating func set(array: Array<Float>, offset: Int = 0) -> Vector4 {
         elements = SIMD4<Float>(array[offset],
                 array[offset + 1],
                 array[offset + 2],
