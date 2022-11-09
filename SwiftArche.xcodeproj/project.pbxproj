@@ -50,6 +50,9 @@
 		3E67EE6E291B971100ED60C8 /* Matrix3x3.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E67EE6D291B971100ED60C8 /* Matrix3x3.swift */; };
 		3E67EE70291B976300ED60C8 /* Quaternion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E67EE6F291B976300ED60C8 /* Quaternion.swift */; };
 		3E67EE72291B97B100ED60C8 /* MathUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E67EE71291B97B100ED60C8 /* MathUtil.swift */; };
+		3E67EE76291B9D3F00ED60C8 /* PlaneIntersectionType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E67EE75291B9D3F00ED60C8 /* PlaneIntersectionType.swift */; };
+		3E67EE78291BA15200ED60C8 /* ContainmentType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E67EE77291BA15200ED60C8 /* ContainmentType.swift */; };
+		3E67EE7A291BA19700ED60C8 /* FrustumFace.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E67EE79291BA19700ED60C8 /* FrustumFace.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -160,6 +163,9 @@
 		3E67EE6D291B971100ED60C8 /* Matrix3x3.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Matrix3x3.swift; sourceTree = "<group>"; };
 		3E67EE6F291B976300ED60C8 /* Quaternion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Quaternion.swift; sourceTree = "<group>"; };
 		3E67EE71291B97B100ED60C8 /* MathUtil.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MathUtil.swift; sourceTree = "<group>"; };
+		3E67EE75291B9D3F00ED60C8 /* PlaneIntersectionType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaneIntersectionType.swift; sourceTree = "<group>"; };
+		3E67EE77291BA15200ED60C8 /* ContainmentType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContainmentType.swift; sourceTree = "<group>"; };
+		3E67EE79291BA19700ED60C8 /* FrustumFace.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FrustumFace.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -340,15 +346,26 @@
 		3E67EE5F291B799900ED60C8 /* vox.math */ = {
 			isa = PBXGroup;
 			children = (
+				3E67EE73291B9D3000ED60C8 /* enums */,
+				3E67EE71291B97B100ED60C8 /* MathUtil.swift */,
 				3E67EE65291B7A1000ED60C8 /* Vector2.swift */,
 				3E67EE67291B94FC00ED60C8 /* Vector3.swift */,
 				3E67EE69291B952200ED60C8 /* Vector4.swift */,
 				3E67EE6D291B971100ED60C8 /* Matrix3x3.swift */,
 				3E67EE6B291B956300ED60C8 /* Matrix4x4.swift */,
 				3E67EE6F291B976300ED60C8 /* Quaternion.swift */,
-				3E67EE71291B97B100ED60C8 /* MathUtil.swift */,
 			);
 			path = vox.math;
+			sourceTree = "<group>";
+		};
+		3E67EE73291B9D3000ED60C8 /* enums */ = {
+			isa = PBXGroup;
+			children = (
+				3E67EE75291B9D3F00ED60C8 /* PlaneIntersectionType.swift */,
+				3E67EE77291BA15200ED60C8 /* ContainmentType.swift */,
+				3E67EE79291BA19700ED60C8 /* FrustumFace.swift */,
+			);
+			path = enums;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -635,13 +652,16 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3E67EE78291BA15200ED60C8 /* ContainmentType.swift in Sources */,
 				3E67EE68291B94FC00ED60C8 /* Vector3.swift in Sources */,
 				3E67EE6A291B952200ED60C8 /* Vector4.swift in Sources */,
+				3E67EE7A291BA19700ED60C8 /* FrustumFace.swift in Sources */,
 				3E67EE72291B97B100ED60C8 /* MathUtil.swift in Sources */,
 				3E67EE66291B7A1000ED60C8 /* Vector2.swift in Sources */,
 				3E67EE70291B976300ED60C8 /* Quaternion.swift in Sources */,
 				3E67EE6C291B956300ED60C8 /* Matrix4x4.swift in Sources */,
 				3E67EE6E291B971100ED60C8 /* Matrix3x3.swift in Sources */,
+				3E67EE76291B9D3F00ED60C8 /* PlaneIntersectionType.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
