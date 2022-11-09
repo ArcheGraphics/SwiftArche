@@ -9,6 +9,7 @@ import UIKit
 import Metal
 import MetalKit
 import ARKit
+import vox_render
 
 extension MTKView : RenderDestinationProvider {
 }

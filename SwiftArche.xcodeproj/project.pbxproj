@@ -8,8 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		3E67EDC9291B2F7600ED60C8 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E67EDC8291B2F7600ED60C8 /* AppDelegate.swift */; };
-		3E67EDCB291B2F7600ED60C8 /* Shaders.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3E67EDCA291B2F7600ED60C8 /* Shaders.metal */; };
-		3E67EDCE291B2F7600ED60C8 /* Renderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E67EDCD291B2F7600ED60C8 /* Renderer.swift */; };
 		3E67EDD0291B2F7600ED60C8 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E67EDCF291B2F7600ED60C8 /* ViewController.swift */; };
 		3E67EDD3291B2F7600ED60C8 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3E67EDD1291B2F7600ED60C8 /* Main.storyboard */; };
 		3E67EDD5291B2F7800ED60C8 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3E67EDD4291B2F7800ED60C8 /* Assets.xcassets */; };
@@ -17,6 +15,9 @@
 		3E67EDE3291B2F7800ED60C8 /* SwiftArcheTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E67EDE2291B2F7800ED60C8 /* SwiftArcheTests.swift */; };
 		3E67EDED291B2F7800ED60C8 /* SwiftArcheUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E67EDEC291B2F7800ED60C8 /* SwiftArcheUITests.swift */; };
 		3E67EDEF291B2F7800ED60C8 /* SwiftArcheUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E67EDEE291B2F7800ED60C8 /* SwiftArcheUITestsLaunchTests.swift */; };
+		3E67EE10291B304F00ED60C8 /* Renderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E67EDCD291B2F7600ED60C8 /* Renderer.swift */; };
+		3E67EE16291B313300ED60C8 /* libvox.render.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E67EE09291B304700ED60C8 /* libvox.render.a */; };
+		3E67EE19291B332900ED60C8 /* Shaders.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3E67EDCA291B2F7600ED60C8 /* Shaders.metal */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -34,7 +35,33 @@
 			remoteGlobalIDString = 3E67EDC4291B2F7600ED60C8;
 			remoteInfo = SwiftArche;
 		};
+		3E67EE11291B312400ED60C8 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 3E67EDBD291B2F7600ED60C8 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 3E67EDFC291B301700ED60C8;
+			remoteInfo = vox.shader;
+		};
+		3E67EE13291B312B00ED60C8 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 3E67EDBD291B2F7600ED60C8 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 3E67EE08291B304700ED60C8;
+			remoteInfo = vox.render;
+		};
 /* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		3E67EE07291B304700ED60C8 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "include/$(PRODUCT_NAME)";
+			dstSubfolderSpec = 16;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		3E67EDC5291B2F7600ED60C8 /* SwiftArche.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SwiftArche.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -46,12 +73,14 @@
 		3E67EDD2291B2F7600ED60C8 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		3E67EDD4291B2F7800ED60C8 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		3E67EDD7291B2F7800ED60C8 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
-		3E67EDD9291B2F7800ED60C8 /* SwiftArche-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "SwiftArche-Bridging-Header.h"; sourceTree = "<group>"; };
+		3E67EDD9291B2F7800ED60C8 /* bridging.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = bridging.h; sourceTree = "<group>"; };
 		3E67EDDE291B2F7800ED60C8 /* SwiftArcheTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SwiftArcheTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		3E67EDE2291B2F7800ED60C8 /* SwiftArcheTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftArcheTests.swift; sourceTree = "<group>"; };
 		3E67EDE8291B2F7800ED60C8 /* SwiftArcheUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SwiftArcheUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		3E67EDEC291B2F7800ED60C8 /* SwiftArcheUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftArcheUITests.swift; sourceTree = "<group>"; };
 		3E67EDEE291B2F7800ED60C8 /* SwiftArcheUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftArcheUITestsLaunchTests.swift; sourceTree = "<group>"; };
+		3E67EDFD291B301700ED60C8 /* vox.shader.metallib */ = {isa = PBXFileReference; explicitFileType = "archive.metal-library"; includeInIndex = 0; path = vox.shader.metallib; sourceTree = BUILT_PRODUCTS_DIR; };
+		3E67EE09291B304700ED60C8 /* libvox.render.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libvox.render.a; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -59,6 +88,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3E67EE16291B313300ED60C8 /* libvox.render.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -76,16 +106,26 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		3E67EE06291B304700ED60C8 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
 		3E67EDBC291B2F7600ED60C8 = {
 			isa = PBXGroup;
 			children = (
+				3E67EE0A291B304700ED60C8 /* vox.render */,
+				3E67EDFE291B301700ED60C8 /* vox.shader */,
 				3E67EDC7291B2F7600ED60C8 /* SwiftArche */,
 				3E67EDE1291B2F7800ED60C8 /* SwiftArcheTests */,
 				3E67EDEB291B2F7800ED60C8 /* SwiftArcheUITests */,
 				3E67EDC6291B2F7600ED60C8 /* Products */,
+				3E67EE15291B313300ED60C8 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -95,6 +135,8 @@
 				3E67EDC5291B2F7600ED60C8 /* SwiftArche.app */,
 				3E67EDDE291B2F7800ED60C8 /* SwiftArcheTests.xctest */,
 				3E67EDE8291B2F7800ED60C8 /* SwiftArcheUITests.xctest */,
+				3E67EDFD291B301700ED60C8 /* vox.shader.metallib */,
+				3E67EE09291B304700ED60C8 /* libvox.render.a */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -103,14 +145,10 @@
 			isa = PBXGroup;
 			children = (
 				3E67EDC8291B2F7600ED60C8 /* AppDelegate.swift */,
-				3E67EDCA291B2F7600ED60C8 /* Shaders.metal */,
-				3E67EDCC291B2F7600ED60C8 /* ShaderTypes.h */,
-				3E67EDCD291B2F7600ED60C8 /* Renderer.swift */,
 				3E67EDCF291B2F7600ED60C8 /* ViewController.swift */,
 				3E67EDD1291B2F7600ED60C8 /* Main.storyboard */,
-				3E67EDD4291B2F7800ED60C8 /* Assets.xcassets */,
 				3E67EDD6291B2F7800ED60C8 /* LaunchScreen.storyboard */,
-				3E67EDD9291B2F7800ED60C8 /* SwiftArche-Bridging-Header.h */,
+				3E67EDD4291B2F7800ED60C8 /* Assets.xcassets */,
 			);
 			path = SwiftArche;
 			sourceTree = "<group>";
@@ -132,6 +170,31 @@
 			path = SwiftArcheUITests;
 			sourceTree = "<group>";
 		};
+		3E67EDFE291B301700ED60C8 /* vox.shader */ = {
+			isa = PBXGroup;
+			children = (
+				3E67EDD9291B2F7800ED60C8 /* bridging.h */,
+				3E67EDCC291B2F7600ED60C8 /* ShaderTypes.h */,
+				3E67EDCA291B2F7600ED60C8 /* Shaders.metal */,
+			);
+			path = vox.shader;
+			sourceTree = "<group>";
+		};
+		3E67EE0A291B304700ED60C8 /* vox.render */ = {
+			isa = PBXGroup;
+			children = (
+				3E67EDCD291B2F7600ED60C8 /* Renderer.swift */,
+			);
+			path = vox.render;
+			sourceTree = "<group>";
+		};
+		3E67EE15291B313300ED60C8 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -142,10 +205,12 @@
 				3E67EDC1291B2F7600ED60C8 /* Sources */,
 				3E67EDC2291B2F7600ED60C8 /* Frameworks */,
 				3E67EDC3291B2F7600ED60C8 /* Resources */,
+				3E67EE1A291B339200ED60C8 /* Copy Metal Libraries */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				3E67EE14291B312B00ED60C8 /* PBXTargetDependency */,
 			);
 			name = SwiftArche;
 			productName = SwiftArche;
@@ -188,6 +253,39 @@
 			productReference = 3E67EDE8291B2F7800ED60C8 /* SwiftArcheUITests.xctest */;
 			productType = "com.apple.product-type.bundle.ui-testing";
 		};
+		3E67EDFC291B301700ED60C8 /* vox.shader */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 3E67EE01291B301700ED60C8 /* Build configuration list for PBXNativeTarget "vox.shader" */;
+			buildPhases = (
+				3E67EDFB291B301700ED60C8 /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = vox.shader;
+			productName = vox.shader;
+			productReference = 3E67EDFD291B301700ED60C8 /* vox.shader.metallib */;
+			productType = "com.apple.product-type.metal-library";
+		};
+		3E67EE08291B304700ED60C8 /* vox.render */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 3E67EE0D291B304700ED60C8 /* Build configuration list for PBXNativeTarget "vox.render" */;
+			buildPhases = (
+				3E67EE05291B304700ED60C8 /* Sources */,
+				3E67EE06291B304700ED60C8 /* Frameworks */,
+				3E67EE07291B304700ED60C8 /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				3E67EE12291B312400ED60C8 /* PBXTargetDependency */,
+			);
+			name = vox.render;
+			productName = vox.render;
+			productReference = 3E67EE09291B304700ED60C8 /* libvox.render.a */;
+			productType = "com.apple.product-type.library.static";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -209,6 +307,12 @@
 						CreatedOnToolsVersion = 14.1;
 						TestTargetID = 3E67EDC4291B2F7600ED60C8;
 					};
+					3E67EDFC291B301700ED60C8 = {
+						CreatedOnToolsVersion = 14.1;
+					};
+					3E67EE08291B304700ED60C8 = {
+						CreatedOnToolsVersion = 14.1;
+					};
 				};
 			};
 			buildConfigurationList = 3E67EDC0291B2F7600ED60C8 /* Build configuration list for PBXProject "SwiftArche" */;
@@ -224,6 +328,8 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
+				3E67EDFC291B301700ED60C8 /* vox.shader */,
+				3E67EE08291B304700ED60C8 /* vox.render */,
 				3E67EDC4291B2F7600ED60C8 /* SwiftArche */,
 				3E67EDDD291B2F7800ED60C8 /* SwiftArcheTests */,
 				3E67EDE7291B2F7800ED60C8 /* SwiftArcheUITests */,
@@ -258,13 +364,33 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		3E67EE1A291B339200ED60C8 /* Copy Metal Libraries */ = {
+			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "Copy Metal Libraries";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "cp \"$TARGET_BUILD_DIR/vox.shader.metallib\" \"$TARGET_BUILD_DIR/$UNLOCALIZED_RESOURCES_FOLDER_PATH/.\"\n";
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		3E67EDC1291B2F7600ED60C8 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				3E67EDCB291B2F7600ED60C8 /* Shaders.metal in Sources */,
-				3E67EDCE291B2F7600ED60C8 /* Renderer.swift in Sources */,
 				3E67EDD0291B2F7600ED60C8 /* ViewController.swift in Sources */,
 				3E67EDC9291B2F7600ED60C8 /* AppDelegate.swift in Sources */,
 			);
@@ -287,6 +413,22 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		3E67EDFB291B301700ED60C8 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				3E67EE19291B332900ED60C8 /* Shaders.metal in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		3E67EE05291B304700ED60C8 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				3E67EE10291B304F00ED60C8 /* Renderer.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -299,6 +441,16 @@
 			isa = PBXTargetDependency;
 			target = 3E67EDC4291B2F7600ED60C8 /* SwiftArche */;
 			targetProxy = 3E67EDE9291B2F7800ED60C8 /* PBXContainerItemProxy */;
+		};
+		3E67EE12291B312400ED60C8 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 3E67EDFC291B301700ED60C8 /* vox.shader */;
+			targetProxy = 3E67EE11291B312400ED60C8 /* PBXContainerItemProxy */;
+		};
+		3E67EE14291B312B00ED60C8 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 3E67EE08291B304700ED60C8 /* vox.render */;
+			targetProxy = 3E67EE13291B312B00ED60C8 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -460,10 +612,10 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = archegraphics.SwiftArche;
+				PRODUCT_BUNDLE_IDENTIFIER = archegraphics.Flex;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
-				SWIFT_OBJC_BRIDGING_HEADER = "SwiftArche/SwiftArche-Bridging-Header.h";
+				SWIFT_OBJC_BRIDGING_HEADER = vox.shader/bridging.h;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -493,10 +645,10 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = archegraphics.SwiftArche;
+				PRODUCT_BUNDLE_IDENTIFIER = archegraphics.Flex;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
-				SWIFT_OBJC_BRIDGING_HEADER = "SwiftArche/SwiftArche-Bridging-Header.h";
+				SWIFT_OBJC_BRIDGING_HEADER = vox.shader/bridging.h;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -578,6 +730,52 @@
 			};
 			name = Release;
 		};
+		3E67EE02291B301700ED60C8 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 4SL5L673UU;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		3E67EE03291B301700ED60C8 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 4SL5L673UU;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+		3E67EE0E291B304700ED60C8 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 4SL5L673UU;
+				OTHER_LDFLAGS = "-ObjC";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_OBJC_BRIDGING_HEADER = vox.shader/bridging.h;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		3E67EE0F291B304700ED60C8 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 4SL5L673UU;
+				OTHER_LDFLAGS = "-ObjC";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_OBJC_BRIDGING_HEADER = vox.shader/bridging.h;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -613,6 +811,24 @@
 			buildConfigurations = (
 				3E67EDF9291B2F7800ED60C8 /* Debug */,
 				3E67EDFA291B2F7800ED60C8 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		3E67EE01291B301700ED60C8 /* Build configuration list for PBXNativeTarget "vox.shader" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				3E67EE02291B301700ED60C8 /* Debug */,
+				3E67EE03291B301700ED60C8 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		3E67EE0D291B304700ED60C8 /* Build configuration list for PBXNativeTarget "vox.render" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				3E67EE0E291B304700ED60C8 /* Debug */,
+				3E67EE0F291B304700ED60C8 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
