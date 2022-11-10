@@ -70,10 +70,17 @@
 		3E67EEA4291C993600ED60C8 /* CollisionUtil.test.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E67EEA3291C993600ED60C8 /* CollisionUtil.test.swift */; };
 		3E67EEA6291C996600ED60C8 /* Ray.test.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E67EEA5291C996600ED60C8 /* Ray.test.swift */; };
 		3E67EEA8291C9F2D00ED60C8 /* SphericalHarmonics3.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E67EEA7291C9F2D00ED60C8 /* SphericalHarmonics3.swift */; };
+		3E67EEAA291CEBDF00ED60C8 /* Layer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E67EEA9291CEBDF00ED60C8 /* Layer.swift */; };
+		3E67EEAC291CEC2200ED60C8 /* DisorderedArray.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E67EEAB291CEC2200ED60C8 /* DisorderedArray.swift */; };
+		3E67EEAE291CEC9D00ED60C8 /* UpdateFlagManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E67EEAD291CEC9D00ED60C8 /* UpdateFlagManager.swift */; };
+		3E67EEB0291CECA500ED60C8 /* UpdateFlag.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E67EEAF291CECA500ED60C8 /* UpdateFlag.swift */; };
+		3E67EEB2291CF07E00ED60C8 /* Util.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8CB4D62123269161B355A /* Util.swift */; };
 		43D8C2105702030D5652A7A0 /* CollisionUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8CD246102C5B06736E329 /* CollisionUtil.swift */; };
 		43D8C24FFB67D0EAF01AEA27 /* Plane.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8C38B710691B861E8D39F /* Plane.swift */; };
 		43D8C27938D6DB364069F77A /* BoundingSphere.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8C994E210CFEEA2560E05 /* BoundingSphere.swift */; };
 		43D8C3F95E3065DFFE4D2176 /* BoundingBox.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8C42B88ACC2E2114AF177 /* BoundingBox.swift */; };
+		43D8C64F87A019BFA0DE1CC0 /* BoolUpdateFlag.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8CAED3B1AFD13451D2107 /* BoolUpdateFlag.swift */; };
+		43D8C73C5DE246FB90B0C7CD /* ListenerUpdateFlag .swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8C11CC2C81E2597C1A743 /* ListenerUpdateFlag .swift */; };
 		43D8C95F71DA2BB448D9A8E3 /* Ray.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8C1F25D3E4025BA6C8E2F /* Ray.swift */; };
 		43D8CEC103063AE1BE61B2A8 /* BoundingFrustum.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8C6D2A37C7B97B84BA40F /* BoundingFrustum.swift */; };
 		43D8CF51D259BF8108280B41 /* SphericalHarmonics3.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8CAF5E3A5BD4BF225335E /* SphericalHarmonics3.swift */; };
@@ -214,12 +221,19 @@
 		3E67EEA3291C993600ED60C8 /* CollisionUtil.test.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollisionUtil.test.swift; sourceTree = "<group>"; };
 		3E67EEA5291C996600ED60C8 /* Ray.test.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Ray.test.swift; sourceTree = "<group>"; };
 		3E67EEA7291C9F2D00ED60C8 /* SphericalHarmonics3.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SphericalHarmonics3.swift; sourceTree = "<group>"; };
+		3E67EEA9291CEBDF00ED60C8 /* Layer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Layer.swift; sourceTree = "<group>"; };
+		3E67EEAB291CEC2200ED60C8 /* DisorderedArray.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DisorderedArray.swift; sourceTree = "<group>"; };
+		3E67EEAD291CEC9D00ED60C8 /* UpdateFlagManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateFlagManager.swift; sourceTree = "<group>"; };
+		3E67EEAF291CECA500ED60C8 /* UpdateFlag.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateFlag.swift; sourceTree = "<group>"; };
+		43D8C11CC2C81E2597C1A743 /* ListenerUpdateFlag .swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "ListenerUpdateFlag .swift"; sourceTree = "<group>"; };
 		43D8C1F25D3E4025BA6C8E2F /* Ray.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Ray.swift; sourceTree = "<group>"; };
 		43D8C38B710691B861E8D39F /* Plane.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Plane.swift; sourceTree = "<group>"; };
 		43D8C42B88ACC2E2114AF177 /* BoundingBox.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BoundingBox.swift; sourceTree = "<group>"; };
 		43D8C6D2A37C7B97B84BA40F /* BoundingFrustum.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BoundingFrustum.swift; sourceTree = "<group>"; };
 		43D8C994E210CFEEA2560E05 /* BoundingSphere.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BoundingSphere.swift; sourceTree = "<group>"; };
+		43D8CAED3B1AFD13451D2107 /* BoolUpdateFlag.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BoolUpdateFlag.swift; sourceTree = "<group>"; };
 		43D8CAF5E3A5BD4BF225335E /* SphericalHarmonics3.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SphericalHarmonics3.swift; sourceTree = "<group>"; };
+		43D8CB4D62123269161B355A /* Util.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Util.swift; sourceTree = "<group>"; };
 		43D8CD246102C5B06736E329 /* CollisionUtil.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CollisionUtil.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -362,9 +376,11 @@
 				3E67EE20291B3A3F00ED60C8 /* SinglePassDeferredRenderer.swift */,
 				3E67EE21291B3A3F00ED60C8 /* TraditionalDeferredRenderer.swift */,
 				3E67EE22291B3A3F00ED60C8 /* VertexDescriptors.swift */,
+				3E67EDCD291B2F7600ED60C8 /* ARRenderer.swift */,
 				3E67EE1F291B3A2A00ED60C8 /* UtilityExtensions */,
 				3E67EE1D291B3A0E00ED60C8 /* Utilities */,
-				3E67EDCD291B2F7600ED60C8 /* ARRenderer.swift */,
+				3E67EEB1291CF05B00ED60C8 /* base */,
+				3E67EEA9291CEBDF00ED60C8 /* Layer.swift */,
 			);
 			path = vox.render;
 			sourceTree = "<group>";
@@ -461,6 +477,19 @@
 				3E67EEA7291C9F2D00ED60C8 /* SphericalHarmonics3.swift */,
 			);
 			path = test.math;
+			sourceTree = "<group>";
+		};
+		3E67EEB1291CF05B00ED60C8 /* base */ = {
+			isa = PBXGroup;
+			children = (
+				3E67EEAF291CECA500ED60C8 /* UpdateFlag.swift */,
+				43D8CAED3B1AFD13451D2107 /* BoolUpdateFlag.swift */,
+				43D8C11CC2C81E2597C1A743 /* ListenerUpdateFlag .swift */,
+				3E67EEAD291CEC9D00ED60C8 /* UpdateFlagManager.swift */,
+				3E67EEAB291CEC2200ED60C8 /* DisorderedArray.swift */,
+				43D8CB4D62123269161B355A /* Util.swift */,
+			);
+			path = base;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -752,23 +781,30 @@
 			files = (
 				3E67EE3D291B3A5200ED60C8 /* Camera.swift in Sources */,
 				3E67EE33291B3A4B00ED60C8 /* SIMD+Extensions.swift in Sources */,
+				3E67EEAE291CEC9D00ED60C8 /* UpdateFlagManager.swift in Sources */,
 				3E67EE2F291B3A3F00ED60C8 /* PipelineStates.swift in Sources */,
 				3E67EE3C291B3A5200ED60C8 /* BufferView.swift in Sources */,
+				3E67EEB0291CECA500ED60C8 /* UpdateFlag.swift in Sources */,
 				3E67EE28291B3A3F00ED60C8 /* SinglePassDeferredRenderer.swift in Sources */,
 				3E67EE2B291B3A3F00ED60C8 /* DepthStencilStates.swift in Sources */,
 				3E67EE3A291B3A5200ED60C8 /* Transform.swift in Sources */,
+				3E67EEAA291CEBDF00ED60C8 /* Layer.swift in Sources */,
 				3E67EE2A291B3A3F00ED60C8 /* VertexDescriptors.swift in Sources */,
 				3E67EE56291B3DEE00ED60C8 /* ARRenderer.swift in Sources */,
+				3E67EEAC291CEC2200ED60C8 /* DisorderedArray.swift in Sources */,
 				3E67EE2E291B3A3F00ED60C8 /* Scene.swift in Sources */,
 				3E67EE42291B3A5A00ED60C8 /* Material.swift in Sources */,
 				3E67EE43291B3A5A00ED60C8 /* Mesh.swift in Sources */,
 				3E67EE2C291B3A3F00ED60C8 /* Renderer.swift in Sources */,
 				3E67EE34291B3A4B00ED60C8 /* Metal+Extensions.swift in Sources */,
 				3E67EE41291B3A5A00ED60C8 /* SubMesh.swift in Sources */,
+				3E67EEB2291CF07E00ED60C8 /* Util.swift in Sources */,
 				3E67EE3B291B3A5200ED60C8 /* RenderDestination.swift in Sources */,
 				3E67EE2D291B3A3F00ED60C8 /* GBufferTextures.swift in Sources */,
 				3E67EE29291B3A3F00ED60C8 /* TraditionalDeferredRenderer.swift in Sources */,
 				3E67EE35291B3A4B00ED60C8 /* ModelIO+Extensions.swift in Sources */,
+				43D8C64F87A019BFA0DE1CC0 /* BoolUpdateFlag.swift in Sources */,
+				43D8C73C5DE246FB90B0C7CD /* ListenerUpdateFlag .swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
