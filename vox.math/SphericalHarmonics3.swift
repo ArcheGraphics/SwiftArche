@@ -19,7 +19,7 @@ struct SphericalHarmonics3 {
     /// - Parameters:
     ///   - sh: The sh
     ///   - s: The amount by which to scale the SphericalHarmonics3
-    static func *(sh: inout SphericalHarmonics3, s: Float) {
+    static func *=(sh: inout SphericalHarmonics3, s: Float) {
         sh.coefficients[0] *= s
         sh.coefficients[1] *= s
         sh.coefficients[2] *= s
