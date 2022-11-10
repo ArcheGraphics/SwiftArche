@@ -474,7 +474,7 @@ extension Matrix {
     /// Calculate a determinant of this matrix.
     /// - Returns: The determinant of this matrix
     func determinant() -> Float {
-        return elements.determinant
+        elements.determinant
     }
 
 

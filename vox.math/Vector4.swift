@@ -233,6 +233,7 @@ extension Vector4 {
     ///   - x: The x component of the vector
     ///   - y: The y component of the vector
     ///   - z: The z component of the vector
+    ///   - w: The w component of the vector
     /// - Returns: This vector
     mutating func set(x: Float, y: Float, z: Float, w: Float) -> Vector4 {
         elements = SIMD4<Float>(x, y, z, w)

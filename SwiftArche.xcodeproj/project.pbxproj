@@ -63,6 +63,13 @@
 		3E67EE96291BE33700ED60C8 /* MathUtil.test.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E67EE95291BE33700ED60C8 /* MathUtil.test.swift */; };
 		3E67EE98291BE78A00ED60C8 /* Color.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E67EE97291BE78A00ED60C8 /* Color.swift */; };
 		3E67EE9A291BEA0A00ED60C8 /* Color.test.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E67EE99291BEA0A00ED60C8 /* Color.test.swift */; };
+		43D8C2105702030D5652A7A0 /* CollisionUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8CD246102C5B06736E329 /* CollisionUtil.swift */; };
+		43D8C24FFB67D0EAF01AEA27 /* Plane.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8C38B710691B861E8D39F /* Plane.swift */; };
+		43D8C27938D6DB364069F77A /* BoundingSphere.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8C994E210CFEEA2560E05 /* BoundingSphere.swift */; };
+		43D8C3F95E3065DFFE4D2176 /* BoundingBox.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8C42B88ACC2E2114AF177 /* BoundingBox.swift */; };
+		43D8C95F71DA2BB448D9A8E3 /* Ray.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8C1F25D3E4025BA6C8E2F /* Ray.swift */; };
+		43D8CEC103063AE1BE61B2A8 /* BoundingFrustum.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8C6D2A37C7B97B84BA40F /* BoundingFrustum.swift */; };
+		43D8CF51D259BF8108280B41 /* SphericalHarmonics3.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8CAF5E3A5BD4BF225335E /* SphericalHarmonics3.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -193,6 +200,13 @@
 		3E67EE95291BE33700ED60C8 /* MathUtil.test.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MathUtil.test.swift; sourceTree = "<group>"; };
 		3E67EE97291BE78A00ED60C8 /* Color.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Color.swift; sourceTree = "<group>"; };
 		3E67EE99291BEA0A00ED60C8 /* Color.test.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Color.test.swift; sourceTree = "<group>"; };
+		43D8C1F25D3E4025BA6C8E2F /* Ray.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Ray.swift; sourceTree = "<group>"; };
+		43D8C38B710691B861E8D39F /* Plane.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Plane.swift; sourceTree = "<group>"; };
+		43D8C42B88ACC2E2114AF177 /* BoundingBox.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BoundingBox.swift; sourceTree = "<group>"; };
+		43D8C6D2A37C7B97B84BA40F /* BoundingFrustum.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BoundingFrustum.swift; sourceTree = "<group>"; };
+		43D8C994E210CFEEA2560E05 /* BoundingSphere.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BoundingSphere.swift; sourceTree = "<group>"; };
+		43D8CAF5E3A5BD4BF225335E /* SphericalHarmonics3.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SphericalHarmonics3.swift; sourceTree = "<group>"; };
+		43D8CD246102C5B06736E329 /* CollisionUtil.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CollisionUtil.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -392,6 +406,13 @@
 				3E67EE6B291B956300ED60C8 /* Matrix4x4.swift */,
 				3E67EE6F291B976300ED60C8 /* Quaternion.swift */,
 				3E67EE97291BE78A00ED60C8 /* Color.swift */,
+				43D8C42B88ACC2E2114AF177 /* BoundingBox.swift */,
+				43D8C994E210CFEEA2560E05 /* BoundingSphere.swift */,
+				43D8C38B710691B861E8D39F /* Plane.swift */,
+				43D8C6D2A37C7B97B84BA40F /* BoundingFrustum.swift */,
+				43D8CD246102C5B06736E329 /* CollisionUtil.swift */,
+				43D8C1F25D3E4025BA6C8E2F /* Ray.swift */,
+				43D8CAF5E3A5BD4BF225335E /* SphericalHarmonics3.swift */,
 			);
 			path = vox.math;
 			sourceTree = "<group>";
@@ -745,6 +766,13 @@
 				3E67EE6C291B956300ED60C8 /* Matrix4x4.swift in Sources */,
 				3E67EE6E291B971100ED60C8 /* Matrix3x3.swift in Sources */,
 				3E67EE76291B9D3F00ED60C8 /* PlaneIntersectionType.swift in Sources */,
+				43D8C3F95E3065DFFE4D2176 /* BoundingBox.swift in Sources */,
+				43D8C27938D6DB364069F77A /* BoundingSphere.swift in Sources */,
+				43D8C24FFB67D0EAF01AEA27 /* Plane.swift in Sources */,
+				43D8CEC103063AE1BE61B2A8 /* BoundingFrustum.swift in Sources */,
+				43D8C2105702030D5652A7A0 /* CollisionUtil.swift in Sources */,
+				43D8C95F71DA2BB448D9A8E3 /* Ray.swift in Sources */,
+				43D8CF51D259BF8108280B41 /* SphericalHarmonics3.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -43,7 +43,7 @@ struct Color {
     ///   - b: The blue component of the color
     ///   - a: The alpha component of the color
     init(_ r: Float = 1, _ g: Float = 1, _ b: Float = 1, _ a: Float = 1) {
-        self.elements = [r, g, b, a]
+        elements = [r, g, b, a]
     }
 
     /// Constructor of Color.

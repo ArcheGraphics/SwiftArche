@@ -71,6 +71,15 @@ extension Vector3 {
         Vector3(left.elements * right.elements)
     }
 
+    /// Scale a vector by the given value.
+    /// - Parameters:
+    ///   - left: The vector to scale
+    ///   - s: The amount by which to scale the vector
+    ///   - out: The scaled vector
+    static func *(left: Vector3, s: Float) -> Vector3 {
+        Vector3(left.elements * s)
+    }
+
     /// Determines the divisor of two vectors.
     /// - Parameters:
     ///   - left: The first vector to divide
@@ -78,6 +87,15 @@ extension Vector3 {
     ///   - out: The divisor of two vectors
     static func /(left: Vector3, right: Vector3) -> Vector3 {
         Vector3(left.elements / right.elements)
+    }
+
+    /// Determines the divisor of two vectors.
+    /// - Parameters:
+    ///   - left: The first vector to divide
+    ///   - right: The second vector to divide
+    ///   - out: The divisor of two vectors
+    static func /(left: Vector3, right: Float) -> Vector3 {
+        Vector3(left.elements / right)
     }
 
     /// Determines the dot product of two vectors.
@@ -167,15 +185,6 @@ extension Vector3 {
     ///   - out: The normalized vector
     static func normalize(left: Vector3) -> Vector3 {
         Vector3(simd_normalize(left.elements))
-    }
-
-    /// Scale a vector by the given value.
-    /// - Parameters:
-    ///   - left: The vector to scale
-    ///   - s: The amount by which to scale the vector
-    ///   - out: The scaled vector
-    static func scale(left: Vector3, s: Float) -> Vector3 {
-        Vector3(left.elements * s)
     }
 }
 
