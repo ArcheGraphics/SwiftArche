@@ -53,6 +53,10 @@ extension Vector3 {
         Vector3(left.elements + right.elements)
     }
 
+    static func +=(left: inout Vector3, right: Vector3) {
+        left.elements += right.elements
+    }
+
     /// Determines the difference between two vectors.
     /// - Parameters:
     ///   - left: The first vector to subtract
@@ -60,6 +64,10 @@ extension Vector3 {
     /// - Returns: The difference between two vectors
     static func -(left: Vector3, right: Vector3) -> Vector3 {
         Vector3(left.elements - right.elements)
+    }
+
+    static func -=(left: inout Vector3, right: Vector3) {
+        left.elements -= right.elements
     }
 
     /// Determines the product of two vectors.
@@ -71,6 +79,10 @@ extension Vector3 {
         Vector3(left.elements * right.elements)
     }
 
+    static func *=(left: inout Vector3, right: Vector3) {
+        left.elements *= right.elements
+    }
+
     /// Scale a vector by the given value.
     /// - Parameters:
     ///   - left: The vector to scale
@@ -78,6 +90,10 @@ extension Vector3 {
     /// - Returns: The scaled vector
     static func *(left: Vector3, s: Float) -> Vector3 {
         Vector3(left.elements * s)
+    }
+
+    static func *=(left: inout Vector3, right: Float) {
+        left.elements *= right
     }
 
     /// Determines the divisor of two vectors.
@@ -89,6 +105,10 @@ extension Vector3 {
         Vector3(left.elements / right.elements)
     }
 
+    static func /=(left: inout Vector3, right: Vector3) {
+        left.elements /= right.elements
+    }
+
     /// Determines the divisor of two vectors.
     /// - Parameters:
     ///   - left: The first vector to divide
@@ -98,6 +118,10 @@ extension Vector3 {
         Vector3(left.elements / right)
     }
 
+    static func /=(left: inout Vector3, right: Float) {
+        left.elements /= right
+    }
+
     /// Reverses the direction of a given vector.
     /// - Parameters:
     ///   - left: The vector to negate
@@ -105,7 +129,9 @@ extension Vector3 {
     static prefix func -(left: Vector3) -> Vector3 {
         Vector3(-left.elements)
     }
+}
 
+extension Vector3 {
     /// Determines the dot product of two vectors.
     /// - Parameters:
     ///   - left: The first vector to dot

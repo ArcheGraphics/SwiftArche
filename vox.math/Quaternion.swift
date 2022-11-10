@@ -76,6 +76,10 @@ extension Quaternion {
         Quaternion(left.elements + right.elements)
     }
 
+    static func +=(left: inout Quaternion, right: Quaternion) {
+        left.elements += right.elements
+    }
+
     /// Determines the product of two vectors.
     /// - Parameters:
     ///   - left: The first vector to multiply
@@ -83,6 +87,10 @@ extension Quaternion {
     /// - Returns: The product of two vectors
     static func *(left: Quaternion, right: Quaternion) -> Quaternion {
         Quaternion(left.elements * right.elements)
+    }
+
+    static func *=(left: inout Quaternion, right: Quaternion) {
+        left.elements *= right.elements
     }
 
     /// Scale a vector by the given value.
@@ -93,7 +101,13 @@ extension Quaternion {
     static func *(left: Quaternion, s: Float) -> Quaternion {
         Quaternion(left.elements * s)
     }
-    
+
+    static func *=(left: inout Quaternion, right: Float) {
+        left.elements *= right
+    }
+}
+
+extension Quaternion {
     /// Calculate quaternion that contains conjugated version of the specified quaternion.
     /// - Parameters:
     ///   - a: The specified quaternion

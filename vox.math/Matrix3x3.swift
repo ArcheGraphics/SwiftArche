@@ -49,6 +49,10 @@ extension Matrix3x3 {
         Matrix3x3(left.elements + right.elements)
     }
 
+    static func +=(left: inout Matrix3x3, right: Matrix3x3) {
+        left.elements += right.elements
+    }
+
     /// Determines the difference between two vectors.
     /// - Parameters:
     ///   - left: The first vector to subtract
@@ -56,6 +60,10 @@ extension Matrix3x3 {
     /// - Returns: The difference between two vectors
     static func -(left: Matrix3x3, right: Matrix3x3) -> Matrix3x3 {
         Matrix3x3(left.elements - right.elements)
+    }
+
+    static func -=(left: inout Matrix3x3, right: Matrix3x3) {
+        left.elements -= right.elements
     }
 
     /// Determines the product of two vectors.
@@ -67,6 +75,12 @@ extension Matrix3x3 {
         Matrix3x3(left.elements * right.elements)
     }
 
+    static func *=(left: inout Matrix3x3, right: Matrix3x3) {
+        left.elements *= right.elements
+    }
+}
+
+extension Matrix3x3 {
     /// Determines whether the specified matrices are equals.
     /// - Parameters:
     ///   - left: The first matrix to compare

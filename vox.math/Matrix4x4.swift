@@ -60,6 +60,10 @@ extension Matrix {
         Matrix(left.elements * right.elements)
     }
 
+    static func *=(left: inout Matrix, right: Matrix) {
+        left.elements *= right.elements
+    }
+
     /// Determines whether the specified matrices are equals.
     /// - Parameters:
     ///   - left: The first matrix to compare

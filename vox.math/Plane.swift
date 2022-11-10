@@ -43,9 +43,8 @@ extension Plane {
     ///   - p: The specified plane
     /// - Returns: A normalized version of the specified plane
     static func normalize(p: Plane) -> Plane {
-        let normal = p.normal
-        let factor = 1.0 / normal.length()
-        return Plane(normal * factor, p.distance * factor)
+        let factor = 1.0 / p.normal.length()
+        return Plane(p.normal * factor, p.distance * factor)
     }
 
     /// Calculate the plane that contains the three specified points.

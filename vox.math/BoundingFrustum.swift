@@ -74,32 +74,23 @@ struct BoundingFrustum {
 }
 
 extension BoundingFrustum {
-    /// Get the plane by the given index.
-    /// - Remark:
-    /// 0: near
-    /// 1: far
-    /// 2: left
-    /// 3: right
-    /// 4: top
-    /// 5: bottom
-    /// - Parameter index: The index
+    /// Get the plane by the given face.
+    /// - Parameter face - The frustum face
     /// - Returns: The plane get
-    func getPlane(index: Int) -> Plane? {
-        switch (index) {
-        case 0:
-            return near
-        case 1:
-            return far
-        case 2:
-            return left
-        case 3:
-            return right
-        case 4:
-            return top
-        case 5:
-            return bottom
-        default:
-            return nil
+    func getPlane(face: FrustumFace) -> Plane {
+        switch (face) {
+        case FrustumFace.Near:
+            return near;
+        case FrustumFace.Far:
+            return far;
+        case FrustumFace.Left:
+            return left;
+        case FrustumFace.Right:
+            return right;
+        case FrustumFace.Bottom:
+            return bottom;
+        case FrustumFace.Top:
+            return top;
         }
     }
 
@@ -127,27 +118,27 @@ extension BoundingFrustum {
         let m44 = matrix.elements.columns.3[3]
 
         // near
-        _near = Plane(Vector3(-m14 - m13, -m24 - m23, -m34 - m33), -m44 - m43)
+        _near = Plane(Vector3(m14 + m13, m24 + m23, m34 + m33), m44 + m43)
         _ = _near.normalize()
 
         // far
-        _far = Plane(Vector3(m13 - m14, m23 - m24, m33 - m34), m43 - m44)
+        _far = Plane(Vector3(m14 - m13, m24 - m23, m34 - m33), m44 - m43)
         _ = _far.normalize()
 
         // left
-        _left = Plane(Vector3(-m14 - m11, -m24 - m21, -m34 - m31), -m44 - m41)
+        _left = Plane(Vector3(m14 + m11, m24 + m21, m34 + m31), m44 + m41)
         _ = _left.normalize()
 
         // right
-        _right = Plane(Vector3(m11 - m14, m21 - m24, m31 - m34), m41 - m44)
+        _right = Plane(Vector3(m14 - m11, m24 - m21, m34 - m31), m44 - m41)
         _ = _right.normalize()
 
         // top
-        _top = Plane(Vector3(m12 - m14, m22 - m24, m32 - m34), m42 - m44)
+        _top = Plane(Vector3(m14 + m12, m24 + m22, m34 + m32), m44 + m42)
         _ = _top.normalize()
 
         // bottom
-        _bottom = Plane(Vector3(-m14 - m12, -m24 - m22, -m34 - m32), -m44 - m42)
+        _bottom = Plane(Vector3(m14 - m12, m24 - m22, m34 - m32), m44 - m42)
         _ = _bottom.normalize()
     }
 

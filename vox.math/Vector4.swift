@@ -64,6 +64,10 @@ extension Vector4 {
         Vector4(left.elements + right.elements)
     }
 
+    static func +=(left: inout Vector4, right: Vector4) {
+        left.elements += right.elements
+    }
+
     /// Determines the difference between two vectors.
     /// - Parameters:
     ///   - left: The first vector to subtract
@@ -71,6 +75,10 @@ extension Vector4 {
     /// - Returns: The difference between two vectors
     static func -(left: Vector4, right: Vector4) -> Vector4 {
         Vector4(left.elements - right.elements)
+    }
+
+    static func -=(left: inout Vector4, right: Vector4) {
+        left.elements -= right.elements
     }
 
     /// Determines the product of two vectors.
@@ -82,6 +90,10 @@ extension Vector4 {
         Vector4(left.elements * right.elements)
     }
 
+    static func *=(left: inout Vector4, right: Vector4) {
+        left.elements += right.elements
+    }
+
     /// Scale a vector by the given value.
     /// - Parameters:
     ///   - left: The vector to scale
@@ -89,6 +101,10 @@ extension Vector4 {
     /// - Returns: The scaled vector
     static func *(left: Vector4, s: Float) -> Vector4 {
         Vector4(left.elements * s)
+    }
+
+    static func *=(left: inout Vector4, right: Float) {
+        left.elements += right
     }
 
     /// Determines the divisor of two vectors.
@@ -100,6 +116,10 @@ extension Vector4 {
         Vector4(left.elements / right.elements)
     }
 
+    static func /=(left: inout Vector4, right: Vector4) {
+        left.elements /= right.elements
+    }
+
     /// Scale a vector by the given value.
     /// - Parameters:
     ///   - left: The vector to scale
@@ -109,6 +129,10 @@ extension Vector4 {
         Vector4(left.elements / s)
     }
 
+    static func /=(left: inout Vector4, right: Float) {
+        left.elements /= right
+    }
+
     /// Reverses the direction of a given vector.
     /// - Parameters:
     ///   - left: The vector to negate
@@ -116,7 +140,9 @@ extension Vector4 {
     static prefix func -(left: Vector4) -> Vector4 {
         Vector4(-left.elements)
     }
+}
 
+extension Vector4 {
     /// Determines the dot product of two vectors.
     /// - Parameters:
     ///   - left: The first vector to dot

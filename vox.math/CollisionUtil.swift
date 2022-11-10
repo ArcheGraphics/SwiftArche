@@ -7,6 +7,33 @@
 import Foundation
 
 class CollisionUtil {
+    /// Calculate the intersection point of three plane.
+    /// - Parameters:
+    ///   - p1: Plane 1
+    ///   - p2: Plane 2
+    ///   - p3: Plane 3
+    /// - Returns: intersection point
+    static func intersectionPointThreePlanes(p1: Plane, p2: Plane, p3: Plane) -> Vector3 {
+        let p1Nor = p1.normal;
+        let p2Nor = p2.normal;
+        let p3Nor = p3.normal;
+
+        var tempVec30 = Vector3.cross(left: p2Nor, right: p3Nor);
+        var tempVec31 = Vector3.cross(left: p3Nor, right: p1Nor);
+        var tempVec32 = Vector3.cross(left: p1Nor, right: p2Nor);
+
+        let a = -Vector3.dot(left: p1Nor, right: tempVec30);
+        let b = -Vector3.dot(left: p2Nor, right: tempVec31);
+        let c = -Vector3.dot(left: p3Nor, right: tempVec32);
+
+        tempVec30 *= p1.distance / a
+        tempVec31 *= p2.distance / b
+        tempVec32 *= p3.distance / c
+
+        return tempVec30 + tempVec31 + tempVec32
+    }
+
+
     /// Calculate the distance from a point to a plane.
     /// - Parameters:
     ///   - plane: The plane
@@ -304,7 +331,7 @@ class CollisionUtil {
         let max = box.max
 
         for i in 0..<6 {
-            let plane = frustum.getPlane(index: i)!
+            let plane = frustum.getPlane(face: FrustumFace(rawValue: i) ?? FrustumFace.Top)
             let normal = plane.normal
             let back = Vector3(normal.x >= 0 ? min.x : max.x,
                     normal.y >= 0 ? min.y : max.y,
@@ -330,7 +357,7 @@ class CollisionUtil {
         var result = ContainmentType.Contains
 
         for i in 0..<6 {
-            let plane = frustum.getPlane(index: i)!
+            let plane = frustum.getPlane(face: FrustumFace(rawValue: i) ?? FrustumFace.Top)
             let normal = plane.normal
 
             if (normal.x >= 0) {
@@ -355,11 +382,11 @@ class CollisionUtil {
                 back.z = max.z
             }
 
-            if (CollisionUtil.intersectsPlaneAndPoint(plane: plane, point: Vector3(back)) == PlaneIntersectionType.Front) {
+            if (CollisionUtil.intersectsPlaneAndPoint(plane: plane, point: Vector3(front)) == PlaneIntersectionType.Back) {
                 return ContainmentType.Disjoint
             }
 
-            if (CollisionUtil.intersectsPlaneAndPoint(plane: plane, point: Vector3(front)) == PlaneIntersectionType.Front) {
+            if (CollisionUtil.intersectsPlaneAndPoint(plane: plane, point: Vector3(back)) == PlaneIntersectionType.Back) {
                 result = ContainmentType.Intersects
             }
         }
@@ -376,9 +403,9 @@ class CollisionUtil {
         var result = ContainmentType.Contains
 
         for i in 0..<6 {
-            let plane = frustum.getPlane(index: i)!
+            let plane = frustum.getPlane(face: FrustumFace(rawValue: i) ?? FrustumFace.Top)
             let intersectionType = CollisionUtil.intersectsPlaneAndSphere(plane: plane, sphere: sphere)
-            if (intersectionType == PlaneIntersectionType.Front) {
+            if (intersectionType == PlaneIntersectionType.Back) {
                 return ContainmentType.Disjoint
             } else if (intersectionType == PlaneIntersectionType.Intersecting) {
                 result = ContainmentType.Intersects

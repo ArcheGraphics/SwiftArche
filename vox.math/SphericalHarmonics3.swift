@@ -15,6 +15,40 @@ struct SphericalHarmonics3 {
     /// The coefficients of SphericalHarmonics3.
     var coefficients: [Float] = [Float](repeating: 0, count: 27)
 
+    /// Scale the coefficients.
+    /// - Parameters:
+    ///   - sh: The sh
+    ///   - s: The amount by which to scale the SphericalHarmonics3
+    static func *(sh: inout SphericalHarmonics3, s: Float) {
+        sh.coefficients[0] *= s
+        sh.coefficients[1] *= s
+        sh.coefficients[2] *= s
+        sh.coefficients[3] *= s
+        sh.coefficients[4] *= s
+        sh.coefficients[5] *= s
+        sh.coefficients[6] *= s
+        sh.coefficients[7] *= s
+        sh.coefficients[8] *= s
+        sh.coefficients[9] *= s
+        sh.coefficients[10] *= s
+        sh.coefficients[11] *= s
+        sh.coefficients[12] *= s
+        sh.coefficients[13] *= s
+        sh.coefficients[14] *= s
+        sh.coefficients[15] *= s
+        sh.coefficients[16] *= s
+        sh.coefficients[17] *= s
+        sh.coefficients[18] *= s
+        sh.coefficients[19] *= s
+        sh.coefficients[20] *= s
+        sh.coefficients[21] *= s
+        sh.coefficients[22] *= s
+        sh.coefficients[23] *= s
+        sh.coefficients[24] *= s
+        sh.coefficients[25] *= s
+        sh.coefficients[26] *= s
+    }
+
     /// Add light to SphericalHarmonics3.
     /// - Parameters:
     ///   - direction: Light direction
@@ -87,6 +121,40 @@ struct SphericalHarmonics3 {
         coefficients[26] += b * bv8
     }
 
+    /// Set the value of this spherical harmonics by an array.
+    /// - Parameters:
+    ///   - array: The array
+    ///   - offset: The start offset of the array
+    mutating func set(array: [Float], offset: Int = 0) {
+        coefficients[0] = array[offset]
+        coefficients[1] = array[1 + offset]
+        coefficients[2] = array[2 + offset]
+        coefficients[3] = array[3 + offset]
+        coefficients[4] = array[4 + offset]
+        coefficients[5] = array[5 + offset]
+        coefficients[6] = array[6 + offset]
+        coefficients[7] = array[7 + offset]
+        coefficients[8] = array[8 + offset]
+        coefficients[9] = array[9 + offset]
+        coefficients[10] = array[10 + offset]
+        coefficients[11] = array[11 + offset]
+        coefficients[12] = array[12 + offset]
+        coefficients[13] = array[13 + offset]
+        coefficients[14] = array[14 + offset]
+        coefficients[15] = array[15 + offset]
+        coefficients[16] = array[16 + offset]
+        coefficients[17] = array[17 + offset]
+        coefficients[18] = array[18 + offset]
+        coefficients[19] = array[19 + offset]
+        coefficients[20] = array[20 + offset]
+        coefficients[21] = array[21 + offset]
+        coefficients[22] = array[22 + offset]
+        coefficients[23] = array[23 + offset]
+        coefficients[24] = array[24 + offset]
+        coefficients[25] = array[25 + offset]
+        coefficients[26] = array[26 + offset]
+    }
+
     /// Evaluates the color for the specified direction.
     /// - Parameters:
     ///   - direction: Specified direction
@@ -147,72 +215,6 @@ struct SphericalHarmonics3 {
         b += coe[14] * bv4 + coe[17] * bv5 + coe[20] * bv6 + coe[23] * bv7 + coe[26] * bv8
 
         return Color(r, g, b, 1.0)
-    }
-
-    /// Scale the coefficients.
-    /// - Parameter s: The amount by which to scale the SphericalHarmonics3
-    mutating func scale(s: Float) {
-        coefficients[0] *= s
-        coefficients[1] *= s
-        coefficients[2] *= s
-        coefficients[3] *= s
-        coefficients[4] *= s
-        coefficients[5] *= s
-        coefficients[6] *= s
-        coefficients[7] *= s
-        coefficients[8] *= s
-        coefficients[9] *= s
-        coefficients[10] *= s
-        coefficients[11] *= s
-        coefficients[12] *= s
-        coefficients[13] *= s
-        coefficients[14] *= s
-        coefficients[15] *= s
-        coefficients[16] *= s
-        coefficients[17] *= s
-        coefficients[18] *= s
-        coefficients[19] *= s
-        coefficients[20] *= s
-        coefficients[21] *= s
-        coefficients[22] *= s
-        coefficients[23] *= s
-        coefficients[24] *= s
-        coefficients[25] *= s
-        coefficients[26] *= s
-    }
-
-    /// Set the value of this spherical harmonics by an array.
-    /// - Parameters:
-    ///   - array: The array
-    ///   - offset: The start offset of the array
-    mutating func set(array: [Float], offset: Int = 0) {
-        coefficients[0] = array[offset]
-        coefficients[1] = array[1 + offset]
-        coefficients[2] = array[2 + offset]
-        coefficients[3] = array[3 + offset]
-        coefficients[4] = array[4 + offset]
-        coefficients[5] = array[5 + offset]
-        coefficients[6] = array[6 + offset]
-        coefficients[7] = array[7 + offset]
-        coefficients[8] = array[8 + offset]
-        coefficients[9] = array[9 + offset]
-        coefficients[10] = array[10 + offset]
-        coefficients[11] = array[11 + offset]
-        coefficients[12] = array[12 + offset]
-        coefficients[13] = array[13 + offset]
-        coefficients[14] = array[14 + offset]
-        coefficients[15] = array[15 + offset]
-        coefficients[16] = array[16 + offset]
-        coefficients[17] = array[17 + offset]
-        coefficients[18] = array[18 + offset]
-        coefficients[19] = array[19 + offset]
-        coefficients[20] = array[20 + offset]
-        coefficients[21] = array[21 + offset]
-        coefficients[22] = array[22 + offset]
-        coefficients[23] = array[23 + offset]
-        coefficients[24] = array[24 + offset]
-        coefficients[25] = array[25 + offset]
-        coefficients[26] = array[26 + offset]
     }
 
     /// Clone the value of this spherical harmonics to an array.

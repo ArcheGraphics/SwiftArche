@@ -50,6 +50,10 @@ extension Vector2 {
         Vector2(left.elements + right.elements)
     }
 
+    static func +=(left: inout Vector2, right: Vector2) {
+        left.elements += right.elements
+    }
+
     /// Determines the difference between two vectors.
     /// - Parameters:
     ///   - left: The first vector to subtract
@@ -57,6 +61,10 @@ extension Vector2 {
     /// - Returns: The difference between two vectors
     static func -(left: Vector2, right: Vector2) -> Vector2 {
         Vector2(left.elements - right.elements)
+    }
+
+    static func -=(left: inout Vector2, right: Vector2) {
+        left.elements -= right.elements
     }
 
     /// Determines the product of two vectors.
@@ -68,6 +76,10 @@ extension Vector2 {
         Vector2(left.elements * right.elements)
     }
 
+    static func *=(left: inout Vector2, right: Vector2) {
+        left.elements *= right.elements
+    }
+
     /// Scale a vector by the given value.
     /// - Parameters:
     ///   - left: The vector to scale
@@ -75,6 +87,10 @@ extension Vector2 {
     /// - Returns: The scaled vector
     static func *(left: Vector2, s: Float) -> Vector2 {
         Vector2(left.elements * s)
+    }
+
+    static func *=(left: inout Vector2, right: Float) {
+        left.elements *= right
     }
 
     /// Determines the divisor of two vectors.
@@ -86,6 +102,10 @@ extension Vector2 {
         Vector2(left.elements / right.elements)
     }
 
+    static func /=(left: inout Vector2, right: Vector2) {
+        left.elements /= right.elements
+    }
+
     /// Determines the divisor of two vectors.
     /// - Parameters:
     ///   - left: The first vector to divide
@@ -95,6 +115,12 @@ extension Vector2 {
         Vector2(left.elements / right)
     }
 
+    static func /=(left: inout Vector2, right: Float) {
+        left.elements /= right
+    }
+}
+
+extension Vector2 {
     /// Reverses the direction of a given vector.
     /// - Parameters:
     ///   - left: The vector to negate

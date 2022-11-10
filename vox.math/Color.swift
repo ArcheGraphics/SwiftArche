@@ -55,6 +55,47 @@ struct Color {
 }
 
 extension Color {
+    /// Determines the sum of two colors.
+    /// - Parameters:
+    ///   - left: The first color to add
+    ///   - right: The second color to add
+    /// - Returns: The sum of two colors
+    static func +(left: Color, right: Color) -> Color {
+        Color(left.elements + right.elements)
+    }
+
+    static func +=(left: inout Color, right: Color) {
+        left.elements += right.elements
+    }
+
+    /// Determines the difference between two colors.
+    /// - Parameters:
+    ///   - left: The first color to subtract
+    ///   - right: The second color to subtract
+    /// - Returns: The difference between two colors
+    static func -(left: Color, right: Color) -> Color {
+        Color(left.elements - right.elements)
+    }
+
+    static func -=(left: inout Color, right: Color) {
+        left.elements -= right.elements
+    }
+
+    /// Scale a color by the given value.
+    /// - Parameters:
+    ///   - left: The color to scale
+    ///   - s: The amount by which to scale the color
+    /// - Returns: The scaled color
+    static func *(left: Color, s: Float) -> Color {
+        Color(left.elements * s)
+    }
+
+    static func *=(left: inout Color, right: Float) {
+        left.elements *= right
+    }
+}
+
+extension Color {
     /// Modify a value from the gamma space to the linear space.
     /// - Parameter value: The value in gamma space
     /// - Returns: The value in linear space
@@ -101,33 +142,6 @@ extension Color {
                 MathUtil.equals(left.g, right.g) &&
                 MathUtil.equals(left.b, right.b) &&
                 MathUtil.equals(left.a, right.a)
-    }
-
-    /// Determines the sum of two colors.
-    /// - Parameters:
-    ///   - left: The first color to add
-    ///   - right: The second color to add
-    /// - Returns: The sum of two colors
-    static func +(left: Color, right: Color) -> Color {
-        Color(left.elements + right.elements)
-    }
-
-    /// Determines the difference between two colors.
-    /// - Parameters:
-    ///   - left: The first color to subtract
-    ///   - right: The second color to subtract
-    /// - Returns: The difference between two colors
-    static func -(left: Color, right: Color) -> Color {
-        Color(left.elements - right.elements)
-    }
-
-    /// Scale a color by the given value.
-    /// - Parameters:
-    ///   - left: The color to scale
-    ///   - s: The amount by which to scale the color
-    /// - Returns: The scaled color
-    static func *(left: Color, s: Float) -> Color {
-        Color(left.elements * s)
     }
 
     ///
