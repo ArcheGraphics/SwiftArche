@@ -44,7 +44,7 @@ extension Matrix3x3 {
     /// - Parameters:
     ///   - left: The first vector to add
     ///   - right: The second vector to add
-    ///   - out: The sum of two vectors
+    /// - Returns: The sum of two vectors
     static func +(left: Matrix3x3, right: Matrix3x3) -> Matrix3x3 {
         Matrix3x3(left.elements + right.elements)
     }
@@ -53,7 +53,7 @@ extension Matrix3x3 {
     /// - Parameters:
     ///   - left: The first vector to subtract
     ///   - right: The second vector to subtract
-    ///   - out: The difference between two vectors
+    /// - Returns: The difference between two vectors
     static func -(left: Matrix3x3, right: Matrix3x3) -> Matrix3x3 {
         Matrix3x3(left.elements - right.elements)
     }
@@ -62,7 +62,7 @@ extension Matrix3x3 {
     /// - Parameters:
     ///   - left: The first vector to multiply
     ///   - right: The second vector to multiply
-    ///   - out: The product of two vectors
+    /// - Returns: The product of two vectors
     static func *(left: Matrix3x3, right: Matrix3x3) -> Matrix3x3 {
         Matrix3x3(left.elements * right.elements)
     }
@@ -89,7 +89,7 @@ extension Matrix3x3 {
     ///   - start: The first matrix
     ///   - end: The second matrix
     ///   - t: The blend amount where 0 returns start and 1 end
-    ///   - out: The result of linear blending between two matrices
+    /// - Returns: The result of linear blending between two matrices
     static func lerp(start: Matrix3x3, end: Matrix3x3, t: Float) -> Matrix3x3 {
         Matrix3x3(simd_linear_combination(1 - t, start.elements, t, end.elements))
     }
@@ -97,7 +97,7 @@ extension Matrix3x3 {
     /// Calculate a rotation matrix from a quaternion.
     /// - Parameters:
     ///   - quaternion: The quaternion used to calculate the matrix
-    ///   - out: The calculated rotation matrix
+    /// - Returns: The calculated rotation matrix
     static func rotationQuaternion(quaternion: Quaternion) -> Matrix3x3 {
         Matrix3x3(matrix_float3x3(quaternion.elements))
     }
@@ -105,7 +105,7 @@ extension Matrix3x3 {
     /// Calculate a matrix from scale vector.
     /// - Parameters:
     ///   - s: The scale vector
-    ///   - out: The calculated matrix
+    /// - Returns: The calculated matrix
     static func scaling(s: Vector2) -> Matrix3x3 {
         Matrix3x3(matrix_float3x3(diagonal: SIMD3<Float>(s.x, s.y, 1)))
     }
@@ -113,7 +113,7 @@ extension Matrix3x3 {
     /// Calculate a matrix from translation vector.
     /// - Parameters:
     ///   - translation: The translation vector
-    ///   - out: The calculated matrix
+    /// - Returns: The calculated matrix
     static func translation(translation: Vector2) -> Matrix3x3 {
         var elements = matrix_float3x3(diagonal: SIMD3<Float>(1, 1, 1))
         elements.columns.2[0] = translation.x
@@ -125,7 +125,7 @@ extension Matrix3x3 {
     /// Calculate the inverse of the specified matrix.
     /// - Parameters:
     ///   - a: The matrix whose inverse is to be calculated
-    ///   - out: The inverse of the specified matrix
+    /// - Returns: The inverse of the specified matrix
     static func invert(a: Matrix3x3) -> Matrix3x3 {
         Matrix3x3(a.elements.inverse)
     }
@@ -135,7 +135,7 @@ extension Matrix3x3 {
     /// The calculation process is the transpose matrix of the inverse matrix.
     /// - Parameters:
     ///   - mat4: The 4x4 matrix
-    ///   - out: The 3x3 normal matrix
+    /// - Returns: The 3x3 normal matrix
     static func normalMatrix(mat4: Matrix) -> Matrix3x3 {
         let a11 = mat4.elements.columns.0[0]
         let a12 = mat4.elements.columns.0[1]
@@ -174,23 +174,23 @@ extension Matrix3x3 {
         det = 1.0 / det
 
         return Matrix3x3(m11: (a22 * b11 - a23 * b10 + a24 * b09) * det,
-                         m12: (a23 * b08 - a21 * b11 - a24 * b07) * det,
-                         m13: (a21 * b10 - a22 * b08 + a24 * b06) * det,
-                         
-                         m21: (a13 * b10 - a12 * b11 - a14 * b09) * det,
-                         m22: (a11 * b11 - a13 * b08 + a14 * b07) * det,
-                         m23: (a12 * b08 - a11 * b10 - a14 * b06) * det,
-                         
-                         m31: (a42 * b05 - a43 * b04 + a44 * b03) * det,
-                         m32: (a43 * b02 - a41 * b05 - a44 * b01) * det,
-                         m33: (a41 * b04 - a42 * b02 + a44 * b00) * det)
+                m12: (a23 * b08 - a21 * b11 - a24 * b07) * det,
+                m13: (a21 * b10 - a22 * b08 + a24 * b06) * det,
+
+                m21: (a13 * b10 - a12 * b11 - a14 * b09) * det,
+                m22: (a11 * b11 - a13 * b08 + a14 * b07) * det,
+                m23: (a12 * b08 - a11 * b10 - a14 * b06) * det,
+
+                m31: (a42 * b05 - a43 * b04 + a44 * b03) * det,
+                m32: (a43 * b02 - a41 * b05 - a44 * b01) * det,
+                m33: (a41 * b04 - a42 * b02 + a44 * b00) * det)
     }
 
     /// The specified matrix rotates around an angle.
     /// - Parameters:
     ///   - a: The specified matrix
     ///   - r: The rotation angle in radians
-    ///   - out: The rotated matrix
+    /// - Returns: The rotated matrix
     static func rotate(a: Matrix3x3, r: Float) -> Matrix3x3 {
         let s = sin(r)
         let c = cos(r)
@@ -206,23 +206,23 @@ extension Matrix3x3 {
         let a33 = a.elements.columns.2[2]
 
         return Matrix3x3(m11: c * a11 + s * a21,
-                         m12: c * a12 + s * a22,
-                         m13: c * a13 + s * a23,
-                         
-                         m21: c * a21 - s * a11,
-                         m22: c * a22 - s * a12,
-                         m23: c * a23 - s * a13,
-                         
-                         m31: a31,
-                         m32: a32,
-                         m33: a33)
+                m12: c * a12 + s * a22,
+                m13: c * a13 + s * a23,
+
+                m21: c * a21 - s * a11,
+                m22: c * a22 - s * a12,
+                m23: c * a23 - s * a13,
+
+                m31: a31,
+                m32: a32,
+                m33: a33)
     }
 
     /// Scale a matrix by a given vector.
     /// - Parameters:
     ///   - m: The matrix
     ///   - s: The given vector
-    ///   - out: The scaled matrix
+    /// - Returns: The scaled matrix
     static func scale(m: Matrix3x3, s: Vector2) -> Matrix3x3 {
         var elements = m.elements
         elements.columns.0 *= s.x
@@ -234,7 +234,7 @@ extension Matrix3x3 {
     /// - Parameters:
     ///   - m: The matrix
     ///   - translation: The given vector
-    ///   - out: The translated matrix
+    /// - Returns: The translated matrix
     static func translate(m: Matrix3x3, translation: Vector2) -> Matrix3x3 {
         let x = translation.x
         let y = translation.y
@@ -249,7 +249,7 @@ extension Matrix3x3 {
     /// Calculate the transpose of the specified matrix.
     /// - Parameters:
     ///   - a: The specified matrix
-    ///   - out: The transpose of the specified matrix
+    /// - Returns: The transpose of the specified matrix
     static func transpose(a: Matrix3x3) -> Matrix3x3 {
         Matrix3x3(a.elements.transpose)
     }
@@ -260,8 +260,8 @@ extension Matrix3x3 {
 extension Matrix3x3 {
     /// Set the value of this matrix, and return this matrix.
     mutating func set(m11: Float, m12: Float, m13: Float,
-                           m21: Float, m22: Float, m23: Float,
-                           m31: Float, m32: Float, m33: Float
+                      m21: Float, m22: Float, m23: Float,
+                      m31: Float, m32: Float, m33: Float
     ) -> Matrix3x3 {
         elements.columns.0 = SIMD3<Float>(m11, m12, m13)
         elements.columns.1 = SIMD3<Float>(m21, m22, m23)
@@ -306,22 +306,6 @@ extension Matrix3x3 {
         return self
     }
 
-    /// Clone the value of this matrix to an array.
-    /// - Parameters:
-    ///   - out: The array
-    ///   - outOffset: The start offset of the array
-    func toArray(out: inout [Float], outOffset: Int = 0) {
-        out[outOffset] = elements.columns.0[0]
-        out[outOffset + 1] = elements.columns.0[1]
-        out[outOffset + 2] = elements.columns.0[2]
-        out[outOffset + 3] = elements.columns.1[0]
-        out[outOffset + 4] = elements.columns.1[1]
-        out[outOffset + 5] = elements.columns.1[2]
-        out[outOffset + 6] = elements.columns.2[0]
-        out[outOffset + 7] = elements.columns.2[1]
-        out[outOffset + 8] = elements.columns.2[2]
-    }
-
     /// Determines the sum of this matrix and the specified matrix.
     /// - Parameter right: The specified matrix
     /// - Returns: This matrix that store the sum of the two matrices
@@ -344,12 +328,6 @@ extension Matrix3x3 {
     mutating func multiply(right: Matrix3x3) -> Matrix3x3 {
         self = self * right;
         return self
-    }
-
-    /// Calculate a determinant of this matrix.
-    /// - Returns: The determinant of this matrix
-    func determinant() -> Float {
-        elements.determinant
     }
 
     /// Identity this matrix.
@@ -396,5 +374,29 @@ extension Matrix3x3 {
     mutating func transpose() -> Matrix3x3 {
         self = Matrix3x3.transpose(a: self)
         return self
+    }
+}
+
+extension Matrix3x3 {
+    /// Clone the value of this matrix to an array.
+    /// - Parameters:
+    ///   - out: The array
+    ///   - outOffset: The start offset of the array
+    func toArray(out: inout [Float], outOffset: Int = 0) {
+        out[outOffset] = elements.columns.0[0]
+        out[outOffset + 1] = elements.columns.0[1]
+        out[outOffset + 2] = elements.columns.0[2]
+        out[outOffset + 3] = elements.columns.1[0]
+        out[outOffset + 4] = elements.columns.1[1]
+        out[outOffset + 5] = elements.columns.1[2]
+        out[outOffset + 6] = elements.columns.2[0]
+        out[outOffset + 7] = elements.columns.2[1]
+        out[outOffset + 8] = elements.columns.2[2]
+    }
+
+    /// Calculate a determinant of this matrix.
+    /// - Returns: The determinant of this matrix
+    func determinant() -> Float {
+        elements.determinant
     }
 }

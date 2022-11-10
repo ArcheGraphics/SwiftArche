@@ -167,7 +167,7 @@ class QuaternionTests: XCTestCase {
 
     func testStaticScale() {
         let a = Quaternion(3, 4, 5, 0)
-        let out = Quaternion.scale(left: a, s: 3)
+        let out = a * 3
         XCTAssertEqual(out.x, 9)
         XCTAssertEqual(out.y, 12)
         XCTAssertEqual(out.z, 15)

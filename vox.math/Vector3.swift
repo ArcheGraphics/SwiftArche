@@ -48,7 +48,7 @@ extension Vector3 {
     /// - Parameters:
     ///   - left: The first vector to add
     ///   - right: The second vector to add
-    ///   - out: The sum of two vectors
+    /// - Returns: The sum of two vectors
     static func +(left: Vector3, right: Vector3) -> Vector3 {
         Vector3(left.elements + right.elements)
     }
@@ -57,7 +57,7 @@ extension Vector3 {
     /// - Parameters:
     ///   - left: The first vector to subtract
     ///   - right: The second vector to subtract
-    ///   - out: The difference between two vectors
+    /// - Returns: The difference between two vectors
     static func -(left: Vector3, right: Vector3) -> Vector3 {
         Vector3(left.elements - right.elements)
     }
@@ -66,7 +66,7 @@ extension Vector3 {
     /// - Parameters:
     ///   - left: The first vector to multiply
     ///   - right: The second vector to multiply
-    ///   - out: The product of two vectors
+    /// - Returns: The product of two vectors
     static func *(left: Vector3, right: Vector3) -> Vector3 {
         Vector3(left.elements * right.elements)
     }
@@ -75,7 +75,7 @@ extension Vector3 {
     /// - Parameters:
     ///   - left: The vector to scale
     ///   - s: The amount by which to scale the vector
-    ///   - out: The scaled vector
+    /// - Returns: The scaled vector
     static func *(left: Vector3, s: Float) -> Vector3 {
         Vector3(left.elements * s)
     }
@@ -84,7 +84,7 @@ extension Vector3 {
     /// - Parameters:
     ///   - left: The first vector to divide
     ///   - right: The second vector to divide
-    ///   - out: The divisor of two vectors
+    /// - Returns: The divisor of two vectors
     static func /(left: Vector3, right: Vector3) -> Vector3 {
         Vector3(left.elements / right.elements)
     }
@@ -93,9 +93,17 @@ extension Vector3 {
     /// - Parameters:
     ///   - left: The first vector to divide
     ///   - right: The second vector to divide
-    ///   - out: The divisor of two vectors
+    /// - Returns: The divisor of two vectors
     static func /(left: Vector3, right: Float) -> Vector3 {
         Vector3(left.elements / right)
+    }
+
+    /// Reverses the direction of a given vector.
+    /// - Parameters:
+    ///   - left: The vector to negate
+    /// - Returns: The vector facing in the opposite direction
+    static prefix func -(left: Vector3) -> Vector3 {
+        Vector3(-left.elements)
     }
 
     /// Determines the dot product of two vectors.
@@ -111,7 +119,7 @@ extension Vector3 {
     /// - Parameters:
     ///   - left: The first vector to cross
     ///   - right: The second vector to cross
-    ///   - out: The cross product of two vectors
+    /// - Returns: The cross product of two vectors
     static func cross(left: Vector3, right: Vector3) -> Vector3 {
         Vector3(simd_cross(left.elements, right.elements))
     }
@@ -148,7 +156,7 @@ extension Vector3 {
     ///   - left: The first vector
     ///   - right: The second vector
     ///   - t: The blend amount where 0 returns left and 1 right
-    ///   - out: The result of linear blending between two vectors
+    /// - Returns: The result of linear blending between two vectors
     static func lerp(left: Vector3, right: Vector3, t: Float) -> Vector3 {
         Vector3(mix(left.elements, right.elements, t: t));
     }
@@ -157,7 +165,7 @@ extension Vector3 {
     /// - Parameters:
     ///   - left: The first vector
     ///   - right: The second vector
-    ///   - out: The vector containing the largest components of the specified vectors
+    /// - Returns: The vector containing the largest components of the specified vectors
     static func max(left: Vector3, right: Vector3) -> Vector3 {
         Vector3(simd_max(left.elements, right.elements))
     }
@@ -166,23 +174,15 @@ extension Vector3 {
     /// - Parameters:
     ///   - left: The first vector
     ///   - right: The second vector
-    ///   - out: The vector containing the smallest components of the specified vectors
+    /// - Returns: The vector containing the smallest components of the specified vectors
     static func min(left: Vector3, right: Vector3) -> Vector3 {
         Vector3(simd_min(left.elements, right.elements))
-    }
-
-    /// Reverses the direction of a given vector.
-    /// - Parameters:
-    ///   - left: The vector to negate
-    ///   - out: The vector facing in the opposite direction
-    static func negate(left: Vector3) -> Vector3 {
-        Vector3(-left.elements)
     }
 
     /// Converts the vector into a unit vector.
     /// - Parameters:
     ///   - left: The vector to normalize
-    ///   - out: The normalized vector
+    /// - Returns: The normalized vector
     static func normalize(left: Vector3) -> Vector3 {
         Vector3(simd_normalize(left.elements))
     }
@@ -200,7 +200,7 @@ extension Vector3 {
     /// - Parameters:
     ///   - v: The normal vector to transform
     ///   - m: The transform matrix
-    ///   - out: The transformed normal
+    /// - Returns: The transformed normal
     static func transformNormal(v: Vector3, m: Matrix) -> Vector3 {
         let x = v.x
         let y = v.y
@@ -214,7 +214,7 @@ extension Vector3 {
     /// - Parameters:
     ///   - v: The vector to transform
     ///   - m: The transform matrix
-    ///   - out: The transformed vector3
+    /// - Returns:The transformed vector3
     static func transformToVec3(v: Vector3, m: Matrix) -> Vector3 {
         let x = v.x
         let y = v.y
@@ -229,7 +229,7 @@ extension Vector3 {
     /// - Parameters:
     ///   - v: The vector to transform
     ///   - m: The transform matrix
-    ///   - out: The transformed vector4
+    /// - Returns: The transformed vector4
     static func transformToVec4(v: Vector3, m: Matrix) -> Vector4 {
         let x = v.x
         let y = v.y
@@ -251,7 +251,7 @@ extension Vector3 {
     /// - Parameters:
     ///   - v: The coordinate vector to transform
     ///   - m: The transform matrix
-    ///   - out: The transformed coordinates
+    /// - Returns: The transformed coordinates
     static func transformCoordinate(v: Vector3, m: Matrix) -> Vector3 {
         let x = v.x
         let y = v.y
@@ -268,7 +268,7 @@ extension Vector3 {
     /// - Parameters:
     ///   - v: The vector to transform
     ///   - quaternion: The transform quaternion
-    ///   - out: The transformed vector
+    /// - Returns: The transformed vector
     static func transformByQuat(v: Vector3, quaternion: Quaternion) -> Vector3 {
         let x = v.x
         let y = v.y
@@ -349,18 +349,6 @@ extension Vector3 {
         return self
     }
 
-    /// Calculate the length of this vector.
-    /// - Returns: The length of this vector
-    func length() -> Float {
-        simd_length(elements)
-    }
-
-    /// Calculate the squared length of this vector.
-    /// - Returns: The squared length of this vector
-    func lengthSquared() -> Float {
-        simd_length_squared(elements)
-    }
-
 
     /// Reverses the direction of this vector.
     /// - Returns: This vector
@@ -382,6 +370,18 @@ extension Vector3 {
     mutating func scale(s: Float) -> Vector3 {
         elements *= s
         return self
+    }
+
+    /// Calculate the length of this vector.
+    /// - Returns: The length of this vector
+    func length() -> Float {
+        simd_length(elements)
+    }
+
+    /// Calculate the squared length of this vector.
+    /// - Returns: The squared length of this vector
+    func lengthSquared() -> Float {
+        simd_length_squared(elements)
     }
 
     /// Clone the value of this vector to an array.

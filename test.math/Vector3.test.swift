@@ -116,7 +116,7 @@ class Vector3Tests: XCTestCase {
 
     func testStaticNegate() {
         let a = Vector3(4, -4, 0)
-        let out = Vector3.negate(left: a)
+        let out = -a
         XCTAssertEqual(out.x, -4)
         XCTAssertEqual(out.y, 4)
         XCTAssertEqual(out.z, 0)
@@ -130,7 +130,7 @@ class Vector3Tests: XCTestCase {
 
     func testStaticScale() {
         let a = Vector3(3, 4, 5)
-        let out = Vector3.scale(left: a, s: 3)
+        let out = a * 3
         XCTAssertEqual(out.x, 9)
         XCTAssertEqual(out.y, 12)
         XCTAssertEqual(out.z, 15)

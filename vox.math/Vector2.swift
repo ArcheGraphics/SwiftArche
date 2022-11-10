@@ -45,7 +45,7 @@ extension Vector2 {
     /// - Parameters:
     ///   - left: The first vector to add
     ///   - right: The second vector to add
-    ///   - out: The sum of two vectors
+    /// - Returns: The sum of two vectors
     static func +(left: Vector2, right: Vector2) -> Vector2 {
         Vector2(left.elements + right.elements)
     }
@@ -54,7 +54,7 @@ extension Vector2 {
     /// - Parameters:
     ///   - left: The first vector to subtract
     ///   - right: The second vector to subtract
-    ///   - out: The difference between two vectors
+    /// - Returns: The difference between two vectors
     static func -(left: Vector2, right: Vector2) -> Vector2 {
         Vector2(left.elements - right.elements)
     }
@@ -63,18 +63,44 @@ extension Vector2 {
     /// - Parameters:
     ///   - left: The first vector to multiply
     ///   - right: The second vector to multiply
-    ///   - out: The product of two vectors
+    /// - Returns: The product of two vectors
     static func *(left: Vector2, right: Vector2) -> Vector2 {
         Vector2(left.elements * right.elements)
+    }
+
+    /// Scale a vector by the given value.
+    /// - Parameters:
+    ///   - left: The vector to scale
+    ///   - s: The amount by which to scale the vector
+    /// - Returns: The scaled vector
+    static func *(left: Vector2, s: Float) -> Vector2 {
+        Vector2(left.elements * s)
     }
 
     /// Determines the divisor of two vectors.
     /// - Parameters:
     ///   - left: The first vector to divide
     ///   - right: The second vector to divide
-    ///   - out: The divisor of two vectors
+    /// - Returns: The divisor of two vectors
     static func /(left: Vector2, right: Vector2) -> Vector2 {
         Vector2(left.elements / right.elements)
+    }
+
+    /// Determines the divisor of two vectors.
+    /// - Parameters:
+    ///   - left: The first vector to divide
+    ///   - right: The second vector to divide
+    /// - Returns: The divisor of two vectors
+    static func /(left: Vector2, right: Float) -> Vector2 {
+        Vector2(left.elements / right)
+    }
+
+    /// Reverses the direction of a given vector.
+    /// - Parameters:
+    ///   - left: The vector to negate
+    /// - Returns: The vector facing in the opposite direction
+    static prefix func -(left: Vector2) -> Vector2 {
+        Vector2(-left.elements)
     }
 
     /// Determines the dot product of two vectors.
@@ -118,7 +144,7 @@ extension Vector2 {
     ///   - left: The first vector
     ///   - right: The second vector
     ///   - t: The blend amount where 0 returns left and 1 right
-    ///   - out: The result of linear blending between two vectors
+    /// - Returns: The result of linear blending between two vectors
     static func lerp(left: Vector2, right: Vector2, t: Float) -> Vector2 {
         Vector2(mix(left.elements, right.elements, t: t))
     }
@@ -127,7 +153,7 @@ extension Vector2 {
     /// - Parameters:
     ///   - left: The first vector
     ///   - right: The second vector
-    ///   - out: The vector containing the largest components of the specified vectors
+    /// - Returns: The vector containing the largest components of the specified vectors
     static func max(left: Vector2, right: Vector2) -> Vector2 {
         Vector2(simd_max(left.elements, right.elements))
     }
@@ -136,34 +162,17 @@ extension Vector2 {
     /// - Parameters:
     ///   - left: The first vector
     ///   - right: The second vector
-    ///   - out: The vector containing the smallest components of the specified vectors
+    /// - Returns: The vector containing the smallest components of the specified vectors
     static func min(left: Vector2, right: Vector2) -> Vector2 {
         Vector2(simd_min(left.elements, right.elements))
-    }
-
-    /// Reverses the direction of a given vector.
-    /// - Parameters:
-    ///   - left: The vector to negate
-    ///   - out: The vector facing in the opposite direction
-    static func negate(left: Vector2) -> Vector2 {
-        Vector2(-left.elements)
     }
 
     /// Converts the vector into a unit vector.
     /// - Parameters:
     ///   - left: The vector to normalize
-    ///   - out: The normalized vector
+    /// - Returns: The normalized vector
     static func normalize(left: Vector2) -> Vector2 {
         Vector2(simd_normalize(left.elements))
-    }
-
-    /// Scale a vector by the given value.
-    /// - Parameters:
-    ///   - left: The vector to scale
-    ///   - s: The amount by which to scale the vector
-    ///   - out: The scaled vector
-    static func scale(left: Vector2, s: Float) -> Vector2 {
-        Vector2(left.elements * s)
     }
 }
 
@@ -222,19 +231,6 @@ extension Vector2 {
         return self
     }
 
-    /// Calculate the length of this vector.
-    /// - Returns: The length of this vector
-    func length() -> Float {
-        simd_length(elements)
-    }
-
-    /// Calculate the squared length of this vector.
-    /// - Returns: The squared length of this vector
-    func lengthSquared() -> Float {
-        simd_length_squared(elements)
-    }
-
-
     /// Reverses the direction of this vector.
     /// - Returns: This vector
     mutating func negate() -> Vector2 {
@@ -255,6 +251,20 @@ extension Vector2 {
     mutating func scale(s: Float) -> Vector2 {
         elements *= s
         return self
+    }
+}
+
+extension Vector2 {
+    /// Calculate the length of this vector.
+    /// - Returns: The length of this vector
+    func length() -> Float {
+        simd_length(elements)
+    }
+
+    /// Calculate the squared length of this vector.
+    /// - Returns: The squared length of this vector
+    func lengthSquared() -> Float {
+        simd_length_squared(elements)
     }
 
     /// Clone the value of this vector to an array.

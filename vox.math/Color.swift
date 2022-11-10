@@ -107,7 +107,7 @@ extension Color {
     /// - Parameters:
     ///   - left: The first color to add
     ///   - right: The second color to add
-    ///   - out: The sum of two colors
+    /// - Returns: The sum of two colors
     static func +(left: Color, right: Color) -> Color {
         Color(left.elements + right.elements)
     }
@@ -125,7 +125,7 @@ extension Color {
     /// - Parameters:
     ///   - left: The color to scale
     ///   - s: The amount by which to scale the color
-    ///   - out: The scaled color
+    /// - Returns: The scaled color
     static func *(left: Color, s: Float) -> Color {
         Color(left.elements * s)
     }
