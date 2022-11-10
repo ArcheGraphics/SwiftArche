@@ -6,6 +6,7 @@
 
 import simd
 
+/// Describes a 2D-vector.
 struct Vector2 {
     /// An array containing the elements of the vector
     var elements: SIMD2<Float>

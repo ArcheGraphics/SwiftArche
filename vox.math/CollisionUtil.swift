@@ -6,6 +6,7 @@
 
 import Foundation
 
+/// Contains static methods to help in determining intersections, containment, etc.
 class CollisionUtil {
     /// Calculate the intersection point of three plane.
     /// - Parameters:

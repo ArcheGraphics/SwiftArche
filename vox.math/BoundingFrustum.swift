@@ -74,6 +74,10 @@ struct BoundingFrustum {
 }
 
 extension BoundingFrustum {
+    func getPlane(index: Int) -> Plane {
+        getPlane(face: FrustumFace(rawValue: index) ?? FrustumFace.Top)
+    }
+    
     /// Get the plane by the given face.
     /// - Parameter face - The frustum face
     /// - Returns: The plane get

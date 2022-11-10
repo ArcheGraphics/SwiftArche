@@ -6,6 +6,7 @@
 
 import Foundation
 
+/// A bounding sphere.
 struct BoundingSphere {
     /// The center point of the sphere.
     public var _center: Vector3 = Vector3()
