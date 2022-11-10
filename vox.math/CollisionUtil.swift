@@ -334,10 +334,10 @@ class CollisionUtil {
         for i in 0..<6 {
             let plane = frustum.getPlane(face: FrustumFace(rawValue: i) ?? FrustumFace.Top)
             let normal = plane.normal
-            let back = Vector3(normal.x >= 0 ? min.x : max.x,
-                    normal.y >= 0 ? min.y : max.y,
-                    normal.z >= 0 ? min.z : max.z)
-            if (Vector3.dot(left: plane.normal, right: back) > -plane.distance) {
+            let back = Vector3(normal.x >= 0 ? max.x : min.x,
+                    normal.y >= 0 ? max.y : min.y,
+                    normal.z >= 0 ? max.z : min.z)
+            if (Vector3.dot(left: plane.normal, right: back) < -plane.distance) {
                 return false
             }
         }
