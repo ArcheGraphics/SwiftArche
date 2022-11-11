@@ -581,11 +581,11 @@ extension Transform {
     }
 
     private func _isContainDirtyFlags(_ targetDirtyFlags: Int) -> Bool {
-        return (_dirtyFlag & targetDirtyFlags) == targetDirtyFlags
+        (_dirtyFlag & targetDirtyFlags) == targetDirtyFlags
     }
 
     private func _isContainDirtyFlag(_ type: Int) -> Bool {
-        return (_dirtyFlag & type) != 0
+        (_dirtyFlag & type) != 0
     }
 
     private func _setDirtyFlagTrue(_ type: Int) {

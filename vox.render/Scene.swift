@@ -203,7 +203,7 @@ public class Scene: EngineObject {
         _destroy();
 
         engine.sceneManager._allScenes.removeAll { (v: Scene) in
-            return v === self
+            v === self
         }
     }
 }
