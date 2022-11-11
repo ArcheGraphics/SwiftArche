@@ -7,19 +7,19 @@
 import Foundation
 
 /// Represents a plane in three dimensional space.
-struct Plane {
+public struct Plane {
     /// The normal of the plane.
-    public var _normal: Vector3 = Vector3()
+    var _normal: Vector3 = Vector3()
     /// The distance of the plane along its normal to the origin.
-    public var _distance: Float = 0
+    var _distance: Float = 0
 
-    var normal: Vector3 {
+    public var normal: Vector3 {
         get {
             _normal
         }
     }
 
-    var distance: Float {
+    public var distance: Float {
         get {
             _distance
         }
@@ -29,7 +29,7 @@ struct Plane {
     /// - Parameters:
     ///   - normal: The normal vector
     ///   - distance: The distance of the plane along its normal to the origin
-    init(_ normal: Vector3? = nil, _ distance: Float = 0) {
+    public init(_ normal: Vector3? = nil, _ distance: Float = 0) {
         if normal != nil {
             _normal = normal!
         }
@@ -42,7 +42,7 @@ extension Plane {
     /// - Parameters:
     ///   - p: The specified plane
     /// - Returns: A normalized version of the specified plane
-    static func normalize(p: Plane) -> Plane {
+    public static func normalize(p: Plane) -> Plane {
         let factor = 1.0 / p.normal.length()
         return Plane(p.normal * factor, p.distance * factor)
     }
@@ -53,7 +53,7 @@ extension Plane {
     ///   - point1: The second point
     ///   - point2: The third point
     /// - Returns: The calculated plane
-    static func fromPoints(point0: Vector3, point1: Vector3, point2: Vector3) -> Plane {
+    public static func fromPoints(point0: Vector3, point1: Vector3, point2: Vector3) -> Plane {
         let x0 = point0.x
         let y0 = point0.y
         let z0 = point0.z
@@ -79,7 +79,7 @@ extension Plane {
 extension Plane {
     /// Normalize the normal vector of this plane.
     /// - Returns: The plane after normalize
-    mutating func normalize() -> Plane {
+    public mutating func normalize() -> Plane {
         self = Plane.normalize(p: self)
         return self
     }

@@ -7,14 +7,14 @@
 import Foundation
 
 /// Contains static methods to help in determining intersections, containment, etc.
-class CollisionUtil {
+public class CollisionUtil {
     /// Calculate the intersection point of three plane.
     /// - Parameters:
     ///   - p1: Plane 1
     ///   - p2: Plane 2
     ///   - p3: Plane 3
     /// - Returns: intersection point
-    static func intersectionPointThreePlanes(p1: Plane, p2: Plane, p3: Plane) -> Vector3 {
+    public static func intersectionPointThreePlanes(p1: Plane, p2: Plane, p3: Plane) -> Vector3 {
         let p1Nor = p1.normal;
         let p2Nor = p2.normal;
         let p3Nor = p3.normal;
@@ -40,7 +40,7 @@ class CollisionUtil {
     ///   - plane: The plane
     ///   - point: The point
     /// - Returns: The distance from a point to a plane
-    static func distancePlaneAndPoint(plane: Plane, point: Vector3) -> Float {
+    public static func distancePlaneAndPoint(plane: Plane, point: Vector3) -> Float {
         Vector3.dot(left: plane.normal, right: point) + plane.distance
     }
 
@@ -49,7 +49,7 @@ class CollisionUtil {
     ///   - plane: The plane
     ///   - point: The point
     /// - Returns: The intersection type
-    static func intersectsPlaneAndPoint(plane: Plane, point: Vector3) -> PlaneIntersectionType {
+    public static func intersectsPlaneAndPoint(plane: Plane, point: Vector3) -> PlaneIntersectionType {
         let distance = CollisionUtil.distancePlaneAndPoint(plane: plane, point: point)
         if (distance > 0) {
             return PlaneIntersectionType.Front
@@ -66,7 +66,7 @@ class CollisionUtil {
     ///   - plane: The plane
     ///   - box: The box
     /// - Returns: The intersection type
-    static func intersectsPlaneAndBox(plane: Plane, box: BoundingBox) -> PlaneIntersectionType {
+    public static func intersectsPlaneAndBox(plane: Plane, box: BoundingBox) -> PlaneIntersectionType {
         let min = box.min
         let max = box.max
         let normal = plane.normal
@@ -111,7 +111,7 @@ class CollisionUtil {
     ///   - plane: The plane
     ///   - sphere: The sphere
     /// - Returns: The intersection type
-    static func intersectsPlaneAndSphere(plane: Plane, sphere: BoundingSphere) -> PlaneIntersectionType {
+    public static func intersectsPlaneAndSphere(plane: Plane, sphere: BoundingSphere) -> PlaneIntersectionType {
         let center = sphere.center
         let radius = sphere.radius
         let distance = CollisionUtil.distancePlaneAndPoint(plane: plane, point: center)
@@ -129,7 +129,7 @@ class CollisionUtil {
     ///   - ray: The ray
     ///   - plane: The plane
     /// - Returns: The distance from ray to plane if intersecting, -1 otherwise
-    static func intersectsRayAndPlane(ray: Ray, plane: Plane) -> Float {
+    public static func intersectsRayAndPlane(ray: Ray, plane: Plane) -> Float {
         let normal = plane.normal
         let zeroTolerance = MathUtil.zeroTolerance
 
@@ -158,7 +158,7 @@ class CollisionUtil {
     ///   - ray: The ray
     ///   - box: The box
     /// - Returns: The distance from ray to box if intersecting, -1 otherwise
-    static func intersectsRayAndBox(ray: Ray, box: BoundingBox) -> Float {
+    public static func intersectsRayAndBox(ray: Ray, box: BoundingBox) -> Float {
         let zeroTolerance = MathUtil.zeroTolerance
         let origin = ray.origin
         let direction = ray.direction
@@ -250,7 +250,7 @@ class CollisionUtil {
     ///   - ray: The ray
     ///   - sphere: The sphere
     /// - Returns: The distance from ray to sphere if intersecting, -1 otherwise
-    static func intersectsRayAndSphere(ray: Ray, sphere: BoundingSphere) -> Float {
+    public static func intersectsRayAndSphere(ray: Ray, sphere: BoundingSphere) -> Float {
         let origin = ray.origin
         let direction = ray.direction
         let center = sphere.center
@@ -282,7 +282,7 @@ class CollisionUtil {
     ///   - boxA: The first box to check
     ///   - boxB: The second box to check
     /// - Returns: True if the boxes intersect, false otherwise
-    static func intersectsBoxAndBox(boxA: BoundingBox, boxB: BoundingBox) -> Bool {
+    public static func intersectsBoxAndBox(boxA: BoundingBox, boxB: BoundingBox) -> Bool {
         if (boxA.min.x > boxB.max.x || boxB.min.x > boxA.max.x) {
             return false
         }
@@ -299,7 +299,7 @@ class CollisionUtil {
     ///   - sphereA: The first sphere to check
     ///   - sphereB: The second sphere to check
     /// - Returns: True if the spheres intersect, false otherwise
-    static func intersectsSphereAndSphere(sphereA: BoundingSphere, sphereB: BoundingSphere) -> Bool {
+    public static func intersectsSphereAndSphere(sphereA: BoundingSphere, sphereB: BoundingSphere) -> Bool {
         let radiisum = sphereA.radius + sphereB.radius
         return Vector3.distanceSquared(left: sphereA.center, right: sphereB.center) < radiisum * radiisum
     }
@@ -309,7 +309,7 @@ class CollisionUtil {
     ///   - sphere: The sphere to check
     ///   - box: The box to check
     /// - Returns: True if the sphere and the box intersect, false otherwise
-    static func intersectsSphereAndBox(sphere: BoundingSphere, box: BoundingBox) -> Bool {
+    public static func intersectsSphereAndBox(sphere: BoundingSphere, box: BoundingBox) -> Bool {
         let center = sphere.center
 
         let closestPoint = Vector3(
@@ -327,7 +327,7 @@ class CollisionUtil {
     ///   - frustum: The frustum
     ///   - box:  The box
     /// - Returns: True if bounding box intersects with this frustum, false otherwise
-    static func intersectsFrustumAndBox(frustum: BoundingFrustum, box: BoundingBox) -> Bool {
+    public static func intersectsFrustumAndBox(frustum: BoundingFrustum, box: BoundingBox) -> Bool {
         let min = box.min
         let max = box.max
 
@@ -350,7 +350,7 @@ class CollisionUtil {
     ///   - frustum: The frustum
     ///   - box: The box
     /// - Returns: The containment type
-    static func frustumContainsBox(frustum: BoundingFrustum, box: BoundingBox) -> ContainmentType {
+    public static func frustumContainsBox(frustum: BoundingFrustum, box: BoundingBox) -> ContainmentType {
         let min = box.min
         let max = box.max
         var front = SIMD3<Float>()
@@ -400,7 +400,7 @@ class CollisionUtil {
     ///   - frustum: The frustum
     ///   - sphere: The sphere
     /// - Returns: The containment type
-    static func frustumContainsSphere(frustum: BoundingFrustum, sphere: BoundingSphere) -> ContainmentType {
+    public static func frustumContainsSphere(frustum: BoundingFrustum, sphere: BoundingSphere) -> ContainmentType {
         var result = ContainmentType.Contains
 
         for i in 0..<6 {

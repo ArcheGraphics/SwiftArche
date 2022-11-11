@@ -11,15 +11,15 @@ import Foundation
 /// https://graphics.stanford.edu/papers/envmap/envmap.pdf
 /// http://www.ppsloan.org/publications/StupidSH36.pdf
 /// https://google.github.io/filament/Filament.md.html#annex/sphericalharmonics
-struct SphericalHarmonics3 {
+public struct SphericalHarmonics3 {
     /// The coefficients of SphericalHarmonics3.
-    var coefficients: [Float] = [Float](repeating: 0, count: 27)
+    public var coefficients: [Float] = [Float](repeating: 0, count: 27)
 
     /// Scale the coefficients.
     /// - Parameters:
     ///   - sh: The sh
     ///   - s: The amount by which to scale the SphericalHarmonics3
-    static func *=(sh: inout SphericalHarmonics3, s: Float) {
+    public static func *=(sh: inout SphericalHarmonics3, s: Float) {
         sh.coefficients[0] *= s
         sh.coefficients[1] *= s
         sh.coefficients[2] *= s
@@ -54,7 +54,7 @@ struct SphericalHarmonics3 {
     ///   - direction: Light direction
     ///   - color: Light color
     ///   - deltaSolidAngle: The delta solid angle of the light
-    mutating func addLight(direction: Vector3, color: Color, deltaSolidAngle: Float) {
+    public mutating func addLight(direction: Vector3, color: Color, deltaSolidAngle: Float) {
         /**
          * Implements `EvalSHBasis` from [Projection from Cube maps] in http://www.ppsloan.org/publications/StupidSH36.pdf.
          *
@@ -125,7 +125,7 @@ struct SphericalHarmonics3 {
     /// - Parameters:
     ///   - array: The array
     ///   - offset: The start offset of the array
-    mutating func set(array: [Float], offset: Int = 0) {
+    public mutating func set(array: [Float], offset: Int = 0) {
         coefficients[0] = array[offset]
         coefficients[1] = array[1 + offset]
         coefficients[2] = array[2 + offset]
@@ -159,7 +159,7 @@ struct SphericalHarmonics3 {
     /// - Parameters:
     ///   - direction: Specified direction
     /// - Returns: Out color
-    func evaluate(direction: Vector3) -> Color {
+    public func evaluate(direction: Vector3) -> Color {
         /**
          * Equations based on data from: http://ppsloan.org/publications/StupidSH36.pdf
          *
@@ -221,7 +221,7 @@ struct SphericalHarmonics3 {
     /// - Parameters:
     ///   - out: The array
     ///   - outOffset: The start offset of the array
-    func toArray(out: inout [Float], outOffset: Int = 0) {
+    public func toArray(out: inout [Float], outOffset: Int = 0) {
         let s = coefficients
 
         out[0 + outOffset] = s[0]

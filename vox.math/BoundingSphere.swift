@@ -7,20 +7,20 @@
 import Foundation
 
 /// A bounding sphere.
-struct BoundingSphere {
+public struct BoundingSphere {
     /// The center point of the sphere.
-    public var _center: Vector3 = Vector3()
+    var _center: Vector3 = Vector3()
 
     /// The radius of the sphere.
-    public var _radius: Float = 0
+    var _radius: Float = 0
 
-    var center: Vector3 {
+    public var center: Vector3 {
         get {
             _center
         }
     }
 
-    var radius: Float {
+    public var radius: Float {
         get {
             _radius
         }
@@ -30,7 +30,7 @@ struct BoundingSphere {
     /// - Parameters:
     ///   - center: The center point of the sphere
     ///   - radius: The radius of the sphere
-    init(_ center: Vector3? = nil, _ radius: Float = 0) {
+    public init(_ center: Vector3? = nil, _ radius: Float = 0) {
         if center != nil {
             _center = center!
         }
@@ -43,7 +43,7 @@ extension BoundingSphere {
     /// - Parameters:
     ///   - points: The given points
     /// - Returns: The calculated bounding sphere
-    static func fromPoints(points: [Vector3]) -> BoundingSphere {
+    public static func fromPoints(points: [Vector3]) -> BoundingSphere {
         if (points.count == 0) {
             fatalError("points must be array and length must > 0")
         }
@@ -72,7 +72,7 @@ extension BoundingSphere {
     /// - Parameters:
     ///   - box: The given box
     /// - Returns: The calculated bounding sphere
-    static func fromBox(box: BoundingBox) -> BoundingSphere {
+    public static func fromBox(box: BoundingBox) -> BoundingSphere {
         let min = box.min
         let max = box.max
         let center = Vector3((min.x + max.x) * 0.5, (min.y + max.y) * 0.5, (min.z + max.z) * 0.5)

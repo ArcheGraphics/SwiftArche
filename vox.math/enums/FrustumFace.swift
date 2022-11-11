@@ -7,7 +7,7 @@
 import Foundation
 
 /// Frustum face
-public enum FrustumFace : Int {
+public enum FrustumFace: Int {
     /// Near face
     case Near
     /// Far face

@@ -7,36 +7,36 @@
 import simd
 
 /// Describes a 3D-vector.
-struct Vector3 {
+public struct Vector3 {
     /// An array containing the elements of the vector
     var elements: SIMD3<Float>
 
-    var x: Float {
+    public var x: Float {
         get {
             elements.x
         }
     }
 
-    var y: Float {
+    public var y: Float {
         get {
             elements.y
         }
     }
 
-    var z: Float {
+    public var z: Float {
         get {
             elements.z
         }
     }
 
-    init(_ x: Float = 0, _ y: Float = 0, _ z: Float = 0) {
+    public init(_ x: Float = 0, _ y: Float = 0, _ z: Float = 0) {
         elements = SIMD3<Float>(x, y, z)
     }
 
     /// Constructor of Vector3.
     /// - Parameters:
     ///   - array: The component of the vector
-    init(_ array: SIMD3<Float>) {
+    public init(_ array: SIMD3<Float>) {
         elements = array
     }
 }
@@ -49,11 +49,11 @@ extension Vector3 {
     ///   - left: The first vector to add
     ///   - right: The second vector to add
     /// - Returns: The sum of two vectors
-    static func +(left: Vector3, right: Vector3) -> Vector3 {
+    public static func +(left: Vector3, right: Vector3) -> Vector3 {
         Vector3(left.elements + right.elements)
     }
 
-    static func +=(left: inout Vector3, right: Vector3) {
+    public static func +=(left: inout Vector3, right: Vector3) {
         left.elements += right.elements
     }
 
@@ -62,11 +62,11 @@ extension Vector3 {
     ///   - left: The first vector to subtract
     ///   - right: The second vector to subtract
     /// - Returns: The difference between two vectors
-    static func -(left: Vector3, right: Vector3) -> Vector3 {
+    public static func -(left: Vector3, right: Vector3) -> Vector3 {
         Vector3(left.elements - right.elements)
     }
 
-    static func -=(left: inout Vector3, right: Vector3) {
+    public static func -=(left: inout Vector3, right: Vector3) {
         left.elements -= right.elements
     }
 
@@ -75,11 +75,11 @@ extension Vector3 {
     ///   - left: The first vector to multiply
     ///   - right: The second vector to multiply
     /// - Returns: The product of two vectors
-    static func *(left: Vector3, right: Vector3) -> Vector3 {
+    public static func *(left: Vector3, right: Vector3) -> Vector3 {
         Vector3(left.elements * right.elements)
     }
 
-    static func *=(left: inout Vector3, right: Vector3) {
+    public static func *=(left: inout Vector3, right: Vector3) {
         left.elements *= right.elements
     }
 
@@ -88,11 +88,11 @@ extension Vector3 {
     ///   - left: The vector to scale
     ///   - s: The amount by which to scale the vector
     /// - Returns: The scaled vector
-    static func *(left: Vector3, s: Float) -> Vector3 {
+    public static func *(left: Vector3, s: Float) -> Vector3 {
         Vector3(left.elements * s)
     }
 
-    static func *=(left: inout Vector3, right: Float) {
+    public static func *=(left: inout Vector3, right: Float) {
         left.elements *= right
     }
 
@@ -101,11 +101,11 @@ extension Vector3 {
     ///   - left: The first vector to divide
     ///   - right: The second vector to divide
     /// - Returns: The divisor of two vectors
-    static func /(left: Vector3, right: Vector3) -> Vector3 {
+    public static func /(left: Vector3, right: Vector3) -> Vector3 {
         Vector3(left.elements / right.elements)
     }
 
-    static func /=(left: inout Vector3, right: Vector3) {
+    public static func /=(left: inout Vector3, right: Vector3) {
         left.elements /= right.elements
     }
 
@@ -114,11 +114,11 @@ extension Vector3 {
     ///   - left: The first vector to divide
     ///   - right: The second vector to divide
     /// - Returns: The divisor of two vectors
-    static func /(left: Vector3, right: Float) -> Vector3 {
+    public static func /(left: Vector3, right: Float) -> Vector3 {
         Vector3(left.elements / right)
     }
 
-    static func /=(left: inout Vector3, right: Float) {
+    public static func /=(left: inout Vector3, right: Float) {
         left.elements /= right
     }
 
@@ -126,7 +126,7 @@ extension Vector3 {
     /// - Parameters:
     ///   - left: The vector to negate
     /// - Returns: The vector facing in the opposite direction
-    static prefix func -(left: Vector3) -> Vector3 {
+    public static prefix func -(left: Vector3) -> Vector3 {
         Vector3(-left.elements)
     }
 }
@@ -137,7 +137,7 @@ extension Vector3 {
     ///   - left: The first vector to dot
     ///   - right: The second vector to dot
     /// - Returns: The dot product of two vectors
-    static func dot(left: Vector3, right: Vector3) -> Float {
+    public static func dot(left: Vector3, right: Vector3) -> Float {
         simd_dot(left.elements, right.elements)
     }
 
@@ -146,7 +146,7 @@ extension Vector3 {
     ///   - left: The first vector to cross
     ///   - right: The second vector to cross
     /// - Returns: The cross product of two vectors
-    static func cross(left: Vector3, right: Vector3) -> Vector3 {
+    public static func cross(left: Vector3, right: Vector3) -> Vector3 {
         Vector3(simd_cross(left.elements, right.elements))
     }
 
@@ -155,7 +155,7 @@ extension Vector3 {
     ///   - left: The first vector
     ///   - right: The second vector
     /// - Returns: The distance of two vectors
-    static func distance(left: Vector3, right: Vector3) -> Float {
+    public static func distance(left: Vector3, right: Vector3) -> Float {
         simd_distance(left.elements, right.elements)
     }
 
@@ -164,7 +164,7 @@ extension Vector3 {
     ///   - left: The first vector
     ///   - right: The second vector
     /// - Returns: The squared distance of two vectors
-    static func distanceSquared(left: Vector3, right: Vector3) -> Float {
+    public static func distanceSquared(left: Vector3, right: Vector3) -> Float {
         simd_distance_squared(left.elements, right.elements)
     }
 
@@ -173,7 +173,7 @@ extension Vector3 {
     ///   - left: The first vector to compare
     ///   - right: The second vector to compare
     /// - Returns: True if the specified vectors are equals, false otherwise
-    static func equals(left: Vector3, right: Vector3) -> Bool {
+    public static func equals(left: Vector3, right: Vector3) -> Bool {
         MathUtil.equals(left.x, right.x) && MathUtil.equals(left.y, right.y) && MathUtil.equals(left.z, right.z)
     }
 
@@ -183,7 +183,7 @@ extension Vector3 {
     ///   - right: The second vector
     ///   - t: The blend amount where 0 returns left and 1 right
     /// - Returns: The result of linear blending between two vectors
-    static func lerp(left: Vector3, right: Vector3, t: Float) -> Vector3 {
+    public static func lerp(left: Vector3, right: Vector3, t: Float) -> Vector3 {
         Vector3(mix(left.elements, right.elements, t: t));
     }
 
@@ -192,7 +192,7 @@ extension Vector3 {
     ///   - left: The first vector
     ///   - right: The second vector
     /// - Returns: The vector containing the largest components of the specified vectors
-    static func max(left: Vector3, right: Vector3) -> Vector3 {
+    public static func max(left: Vector3, right: Vector3) -> Vector3 {
         Vector3(simd_max(left.elements, right.elements))
     }
 
@@ -201,7 +201,7 @@ extension Vector3 {
     ///   - left: The first vector
     ///   - right: The second vector
     /// - Returns: The vector containing the smallest components of the specified vectors
-    static func min(left: Vector3, right: Vector3) -> Vector3 {
+    public static func min(left: Vector3, right: Vector3) -> Vector3 {
         Vector3(simd_min(left.elements, right.elements))
     }
 
@@ -209,7 +209,7 @@ extension Vector3 {
     /// - Parameters:
     ///   - left: The vector to normalize
     /// - Returns: The normalized vector
-    static func normalize(left: Vector3) -> Vector3 {
+    public static func normalize(left: Vector3) -> Vector3 {
         Vector3(simd_normalize(left.elements))
     }
 }
@@ -227,7 +227,7 @@ extension Vector3 {
     ///   - v: The normal vector to transform
     ///   - m: The transform matrix
     /// - Returns: The transformed normal
-    static func transformNormal(v: Vector3, m: Matrix) -> Vector3 {
+    public static func transformNormal(v: Vector3, m: Matrix) -> Vector3 {
         let x = v.x
         let y = v.y
         let z = v.z
@@ -241,7 +241,7 @@ extension Vector3 {
     ///   - v: The vector to transform
     ///   - m: The transform matrix
     /// - Returns:The transformed vector3
-    static func transformToVec3(v: Vector3, m: Matrix) -> Vector3 {
+    public static func transformToVec3(v: Vector3, m: Matrix) -> Vector3 {
         let x = v.x
         let y = v.y
         let z = v.z
@@ -256,7 +256,7 @@ extension Vector3 {
     ///   - v: The vector to transform
     ///   - m: The transform matrix
     /// - Returns: The transformed vector4
-    static func transformToVec4(v: Vector3, m: Matrix) -> Vector4 {
+    public static func transformToVec4(v: Vector3, m: Matrix) -> Vector4 {
         let x = v.x
         let y = v.y
         let z = v.z
@@ -278,7 +278,7 @@ extension Vector3 {
     ///   - v: The coordinate vector to transform
     ///   - m: The transform matrix
     /// - Returns: The transformed coordinates
-    static func transformCoordinate(v: Vector3, m: Matrix) -> Vector3 {
+    public static func transformCoordinate(v: Vector3, m: Matrix) -> Vector3 {
         let x = v.x
         let y = v.y
         let z = v.z
@@ -295,7 +295,7 @@ extension Vector3 {
     ///   - v: The vector to transform
     ///   - quaternion: The transform quaternion
     /// - Returns: The transformed vector
-    static func transformByQuat(v: Vector3, quaternion: Quaternion) -> Vector3 {
+    public static func transformByQuat(v: Vector3, quaternion: Quaternion) -> Vector3 {
         let x = v.x
         let y = v.y
         let z = v.z
@@ -326,7 +326,7 @@ extension Vector3 {
     ///   - y: The y component of the vector
     ///   - z: The z component of the vector
     /// - Returns: This vector
-    mutating func set(x: Float, y: Float, z: Float) -> Vector3 {
+    public mutating func set(x: Float, y: Float, z: Float) -> Vector3 {
         elements = SIMD3<Float>(x, y, z)
         return self
     }
@@ -336,7 +336,7 @@ extension Vector3 {
     ///   - array: The array
     ///   - offset: The start offset of the array
     /// - Returns: This vector
-    mutating func set(array: Array<Float>, offset: Int = 0) -> Vector3 {
+    public mutating func set(array: Array<Float>, offset: Int = 0) -> Vector3 {
         elements = SIMD3<Float>(array[offset],
                 array[offset + 1],
                 array[offset + 2])
@@ -346,7 +346,7 @@ extension Vector3 {
     /// Determines the sum of this vector and the specified vector.
     /// - Parameter right: The specified vector
     /// - Returns: This vector
-    mutating func add(right: Vector3) -> Vector3 {
+    public mutating func add(right: Vector3) -> Vector3 {
         elements += right.elements
         return self
     }
@@ -354,7 +354,7 @@ extension Vector3 {
     /// Determines the difference of this vector and the specified vector.
     /// - Parameter right: The specified vector
     /// - Returns: This vector
-    mutating func subtract(right: Vector3) -> Vector3 {
+    public mutating func subtract(right: Vector3) -> Vector3 {
         elements -= right.elements
         return self
     }
@@ -362,7 +362,7 @@ extension Vector3 {
     /// Determines the product of this vector and the specified vector.
     /// - Parameter right: The specified vector
     /// - Returns: This vector
-    mutating func multiply(right: Vector3) -> Vector3 {
+    public mutating func multiply(right: Vector3) -> Vector3 {
         elements *= right.elements
         return self
     }
@@ -370,7 +370,7 @@ extension Vector3 {
     /// Determines the divisor of this vector and the specified vector.
     /// - Parameter right: The specified vector
     /// - Returns: This vector
-    mutating func divide(right: Vector3) -> Vector3 {
+    public mutating func divide(right: Vector3) -> Vector3 {
         elements /= right.elements
         return self
     }
@@ -378,14 +378,14 @@ extension Vector3 {
 
     /// Reverses the direction of this vector.
     /// - Returns: This vector
-    mutating func negate() -> Vector3 {
+    public mutating func negate() -> Vector3 {
         elements = -elements
         return self
     }
 
     /// Converts this vector into a unit vector.
     /// - Returns: This vector
-    mutating func normalize() -> Vector3 {
+    public mutating func normalize() -> Vector3 {
         elements = simd_normalize(elements)
         return self
     }
@@ -393,20 +393,20 @@ extension Vector3 {
     /// Scale this vector by the given value.
     /// - Parameter s: The amount by which to scale the vector
     /// - Returns: This vector
-    mutating func scale(s: Float) -> Vector3 {
+    public mutating func scale(s: Float) -> Vector3 {
         elements *= s
         return self
     }
 
     /// Calculate the length of this vector.
     /// - Returns: The length of this vector
-    func length() -> Float {
+    public func length() -> Float {
         simd_length(elements)
     }
 
     /// Calculate the squared length of this vector.
     /// - Returns: The squared length of this vector
-    func lengthSquared() -> Float {
+    public func lengthSquared() -> Float {
         simd_length_squared(elements)
     }
 
@@ -414,7 +414,7 @@ extension Vector3 {
     /// - Parameters:
     ///   - out: The array
     ///   - outOffset: The start offset of the array
-    func toArray(out: inout [Float], outOffset: Int = 0) {
+    public func toArray(out: inout [Float], outOffset: Int = 0) {
         out[outOffset] = x
         out[outOffset + 1] = y
         out[outOffset + 2] = z
@@ -431,7 +431,7 @@ extension Vector3 {
     /// rather than location because normal vectors should not be translated.
     /// - Parameter m: The transform matrix
     /// - Returns: This vector
-    mutating func transformNormal(m: Matrix) -> Vector3 {
+    public mutating func transformNormal(m: Matrix) -> Vector3 {
         self = Vector3.transformNormal(v: self, m: m)
         return self
     }
@@ -439,7 +439,7 @@ extension Vector3 {
     /// This vector performs a transformation using the given 4x4 matrix.
     /// - Parameter m: The transform matrix
     /// - Returns: This vector
-    mutating func transformToVec3(m: Matrix) -> Vector3 {
+    public mutating func transformToVec3(m: Matrix) -> Vector3 {
         self = Vector3.transformToVec3(v: self, m: m)
         return self
     }
@@ -453,7 +453,7 @@ extension Vector3 {
     /// with coordinates as the w component can safely be ignored.
     /// - Parameter m: The transform matrix
     /// - Returns: This vector
-    mutating func transformCoordinate(m: Matrix) -> Vector3 {
+    public mutating func transformCoordinate(m: Matrix) -> Vector3 {
         self = Vector3.transformCoordinate(v: self, m: m)
         return self
     }
@@ -461,7 +461,7 @@ extension Vector3 {
     /// This vector performs a transformation using the given quaternion.
     /// - Parameter quaternion: The transform quaternion
     /// - Returns: This vector
-    mutating func transformByQuat(quaternion: Quaternion) -> Vector3 {
+    public mutating func transformByQuat(quaternion: Quaternion) -> Vector3 {
         self = Vector3.transformByQuat(v: self, quaternion: quaternion)
         return self
     }

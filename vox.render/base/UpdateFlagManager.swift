@@ -29,7 +29,7 @@ class UpdateFlagManager {
     /// - Parameters:
     ///   - type: Event type, usually in the form of enumeration
     ///   - param: Event param
-    func dispatch(type: Int?, param: AnyObject?) {
+    func dispatch(type: Int? = nil, param: AnyObject? = nil) {
         for item in _updateFlags {
             item.dispatch(bit: type, param: param)
         }

@@ -7,19 +7,19 @@
 import Foundation
 
 /// Axis Aligned Bound Box (AABB).
-struct BoundingBox {
+public struct BoundingBox {
     /// The minimum point of the box.
     var _min: Vector3 = Vector3()
     /// The maximum point of the box.
     var _max: Vector3 = Vector3()
 
-    var min: Vector3 {
+    public var min: Vector3 {
         get {
             _min
         }
     }
 
-    var max: Vector3 {
+    public var max: Vector3 {
         get {
             _max
         }
@@ -29,7 +29,7 @@ struct BoundingBox {
     /// - Parameters:
     ///   - min: The minimum point of the box
     ///   - max: The maximum point of the box
-    init(_ min: Vector3? = nil, _ max: Vector3? = nil) {
+    public init(_ min: Vector3? = nil, _ max: Vector3? = nil) {
         if min != nil {
             _min = min!
         }
@@ -47,7 +47,7 @@ extension BoundingBox {
     ///   - center: The center point
     ///   - extent: The extent of the bounding box
     /// - Returns: The calculated bounding box
-    static func fromCenterAndExtent(center: Vector3, extent: Vector3) -> BoundingBox {
+    public static func fromCenterAndExtent(center: Vector3, extent: Vector3) -> BoundingBox {
         BoundingBox(center - extent, center + extent)
     }
 
@@ -55,7 +55,7 @@ extension BoundingBox {
     /// - Parameters:
     ///   - points: The given points
     /// - Returns: The calculated bounding box
-    static func fromPoints(points: [Vector3]) -> BoundingBox {
+    public static func fromPoints(points: [Vector3]) -> BoundingBox {
         if (points.count == 0) {
             fatalError("points must be array and length must > 0")
         }
@@ -73,7 +73,7 @@ extension BoundingBox {
     /// - Parameters:
     ///   - sphere: The given sphere
     /// - Returns: The calculated bounding box
-    static func fromSphere(sphere: BoundingSphere) -> BoundingBox {
+    public static func fromSphere(sphere: BoundingSphere) -> BoundingBox {
         let center = sphere.center
         let radius = sphere.radius
         return BoundingBox(Vector3(center.x - radius, center.y - radius, center.z - radius),
@@ -85,7 +85,7 @@ extension BoundingBox {
     ///   - source: The original bounding box
     ///   - matrix: The transform to apply to the bounding box
     /// - Returns: The transformed bounding box
-    static func transform(source: BoundingBox, matrix: Matrix) -> BoundingBox {
+    public static func transform(source: BoundingBox, matrix: Matrix) -> BoundingBox {
         // https://zeux.io/2010/10/17/aabb-from-obb-with-component-wise-abs/
         var center = source.getCenter()
         var extent = source.getExtent()
@@ -96,8 +96,8 @@ extension BoundingBox {
         let z = extent.z
 
         extent = Vector3(abs(x * matrix.elements.columns.0[0]) + abs(y * matrix.elements.columns.1[0]) + abs(z * matrix.elements.columns.2[0]),
-         abs(x * matrix.elements.columns.0[1]) + abs(y * matrix.elements.columns.1[1]) + abs(z * matrix.elements.columns.2[1]),
-         abs(x * matrix.elements.columns.0[2]) + abs(y * matrix.elements.columns.1[2]) + abs(z * matrix.elements.columns.2[2]))
+                abs(x * matrix.elements.columns.0[1]) + abs(y * matrix.elements.columns.1[1]) + abs(z * matrix.elements.columns.2[1]),
+                abs(x * matrix.elements.columns.0[2]) + abs(y * matrix.elements.columns.1[2]) + abs(z * matrix.elements.columns.2[2]))
 
         // set min、max
         return BoundingBox(center - extent, center + extent)
@@ -108,7 +108,7 @@ extension BoundingBox {
     ///   - box1: The first box to merge
     ///   - box2: The second box to merge
     /// - Returns: The merged bounding box
-    static func merge(box1: BoundingBox, box2: BoundingBox) -> BoundingBox {
+    public static func merge(box1: BoundingBox, box2: BoundingBox) -> BoundingBox {
         BoundingBox(Vector3.min(left: box1.min, right: box2.min), Vector3.max(left: box1.max, right: box2.max))
     }
 }
@@ -116,19 +116,19 @@ extension BoundingBox {
 extension BoundingBox {
     /// Get the center point of this bounding box.
     /// - Returns: The center point of this bounding box
-    func getCenter() -> Vector3 {
+    public func getCenter() -> Vector3 {
         (min + max) * 0.5
     }
 
     /// Get the extent of this bounding box.
     /// - Returns: The extent of this bounding box
-    func getExtent() -> Vector3 {
+    public func getExtent() -> Vector3 {
         (max - min) * 0.5
     }
 
     /// Get the eight corners of this bounding box.
     /// - Returns: An array of points representing the eight corners of this bounding box
-    func getCorners() -> [Vector3] {
+    public func getCorners() -> [Vector3] {
         let minX = min.x
         let minY = min.y
         let minZ = min.z
@@ -153,7 +153,7 @@ extension BoundingBox {
     /// Transform a bounding box.
     /// - Parameter matrix: The transform to apply to the bounding box
     /// - Returns: The transformed bounding box
-    mutating func transform(matrix: Matrix) -> BoundingBox {
+    public mutating func transform(matrix: Matrix) -> BoundingBox {
         self = BoundingBox.transform(source: self, matrix: matrix)
         return self
     }

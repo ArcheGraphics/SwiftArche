@@ -7,7 +7,7 @@
 import Foundation
 
 /// A bounding frustum.
-struct BoundingFrustum {
+public struct BoundingFrustum {
     /// The near plane of this frustum.
     var _near: Plane
     /// The far plane of this frustum.
@@ -21,37 +21,37 @@ struct BoundingFrustum {
     /// The bottom plane of this frustum.
     var _bottom: Plane
 
-    var near: Plane {
+    public var near: Plane {
         get {
             _near
         }
     }
 
-    var far: Plane {
+    public var far: Plane {
         get {
             _far
         }
     }
 
-    var left: Plane {
+    public var left: Plane {
         get {
             _left
         }
     }
 
-    var right: Plane {
+    public var right: Plane {
         get {
             _right
         }
     }
 
-    var top: Plane {
+    public var top: Plane {
         get {
             _top
         }
     }
 
-    var bottom: Plane {
+    public var bottom: Plane {
         get {
             _bottom
         }
@@ -59,7 +59,7 @@ struct BoundingFrustum {
 
     /// Constructor of BoundingFrustum.
     /// - Parameter matrix: The view-projection matrix
-    init(matrix: Matrix? = nil) {
+    public init(matrix: Matrix? = nil) {
         _near = Plane()
         _far = Plane()
         _left = Plane()
@@ -74,14 +74,14 @@ struct BoundingFrustum {
 }
 
 extension BoundingFrustum {
-    func getPlane(index: Int) -> Plane {
+    public func getPlane(index: Int) -> Plane {
         getPlane(face: FrustumFace(rawValue: index) ?? FrustumFace.Top)
     }
-    
+
     /// Get the plane by the given face.
     /// - Parameter face - The frustum face
     /// - Returns: The plane get
-    func getPlane(face: FrustumFace) -> Plane {
+    public func getPlane(face: FrustumFace) -> Plane {
         switch (face) {
         case FrustumFace.Near:
             return near;

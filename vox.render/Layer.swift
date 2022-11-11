@@ -7,7 +7,7 @@
 import Foundation
 
 /// Layer, used for bit operations.
-enum Layer: Int {
+public enum Layer: Int {
     /// Layer 0.
     case Layer0 = 0x1
     /// Layer 1.
