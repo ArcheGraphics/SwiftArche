@@ -26,14 +26,14 @@ public final class Entity: EngineObject {
     internal var _siblingIndex: Int = -1
 
     private var _parent: Entity? = nil
-    private var _activeChangedComponents: [Component]?
+    private var _activeChangedComponents: [Component] = []
 
     /// Create a entity.
     /// - Parameters:
     ///   - engine: The engine the entity belongs to.
-    ///   - name: Optional
-    init(_ engine: Engine, _ name: String?) {
-        self.name = name != nil ? name! : ""
+    ///   - name: The name
+    init(_ engine: Engine, _ name: String = "") {
+        self.name = name
         super.init(engine)
 
         transform = addComponent()
@@ -78,36 +78,7 @@ public final class Entity: EngineObject {
             _parent
         }
         set {
-            if (newValue !== _parent) {
-                let oldParent = _removeFromParent()
-                _parent = newValue
-                let newParent = _parent
-                if (newParent != nil) {
-                    newParent!._children.append(self)
-                    let parentScene = newParent!._scene
-                    if (_scene !== parentScene) {
-                        Entity._traverseSetOwnerScene(self, parentScene!)
-                    }
-
-                    if (newParent!._isActiveInHierarchy) {
-                        if !_isActiveInHierarchy && _isActive {
-                            _processActive()
-                        }
-                    } else {
-                        if _isActiveInHierarchy {
-                            _processInActive()
-                        }
-                    }
-                } else {
-                    if _isActiveInHierarchy {
-                        _processInActive()
-                    }
-                    if (oldParent != nil) {
-                        Entity._traverseSetOwnerScene(self, nil)
-                    }
-                }
-                _setTransformDirty()
-            }
+            _setParent(newValue)
         }
     }
 
@@ -129,6 +100,23 @@ public final class Entity: EngineObject {
     var scene: Scene {
         get {
             _scene
+        }
+    }
+
+    var siblingIndex: Int {
+        get {
+            _siblingIndex
+        }
+        set {
+            if (_siblingIndex == -1) {
+                fatalError("The entity ${this.name} is not in the hierarchy");
+            }
+
+            if _isRoot {
+                _setSiblingIndex(&_scene._rootEntities, newValue)
+            } else {
+                _setSiblingIndex(&_parent!._children, newValue)
+            }
         }
     }
 
@@ -182,20 +170,74 @@ public final class Entity: EngineObject {
     /// Add child entity.
     /// - Parameter child: The child entity which want to be added.
     func addChild(_ child: Entity) {
-        child.parent = self
+        if (child._isRoot) {
+            child._scene._removeFromEntityList(child);
+            child._isRoot = false;
+
+            _addToChildrenList(nil, child);
+            child._parent = self;
+
+            let newScene = _scene;
+            if (child._scene !== newScene) {
+                Entity._traverseSetOwnerScene(child, newScene);
+            }
+
+            if (_isActiveInHierarchy) {
+                if !child._isActiveInHierarchy && child._isActive {
+                    child._processActive()
+                }
+            } else {
+                if child._isActiveInHierarchy {
+                    child._processInActive()
+                }
+            }
+
+            child._setTransformDirty();
+        } else {
+            child._setParent(self, nil);
+        }
+    }
+
+    func addChild(_ index: Int, _ child: Entity) {
+        if (child._isRoot) {
+            child._scene._removeFromEntityList(child);
+            child._isRoot = false;
+
+            _addToChildrenList(index, child);
+            child._parent = self;
+
+            let newScene = _scene;
+            if (child._scene !== newScene) {
+                Entity._traverseSetOwnerScene(child, newScene);
+            }
+
+            if (_isActiveInHierarchy) {
+                if !child._isActiveInHierarchy && child._isActive {
+                    child._processActive()
+                }
+            } else {
+                if child._isActiveInHierarchy {
+                    child._processInActive()
+                }
+            }
+
+            child._setTransformDirty();
+        } else {
+            child._setParent(self, index);
+        }
     }
 
     /// Remove child entity.
     /// - Parameter child: The child entity which want to be removed.
     func removeChild(_ child: Entity) {
-        child.parent = nil
+        child._setParent(nil);
     }
 
     /// Find child entity by index.
     /// - Parameter index: The index of the child entity.
     /// - Returns: The component which be found.
     func getChild(_ index: Int) -> Entity {
-        return _children[index]
+        _children[index]
     }
 
     /// Find child entity by name.
@@ -236,7 +278,7 @@ public final class Entity: EngineObject {
     /// Create child entity.
     /// - Parameter name: The child entity's name.
     /// - Returns: The child entity.
-    func createChild(_ name: String? = nil) -> Entity {
+    func createChild(_ name: String = "") -> Entity {
         let child = Entity(engine, name)
         child.layer = layer
         child.parent = self
@@ -245,16 +287,14 @@ public final class Entity: EngineObject {
 
     /// Clear children entities.
     func clearChildren() {
-        var children = _children
-        for i in 0..<children.count {
-            let child = children[i]
+        for child in _children {
             child._parent = nil
             if child._isActiveInHierarchy {
                 child._processInActive()
             }
             Entity._traverseSetOwnerScene(child, nil) // Must after child._processInActive().
         }
-        children = []
+        _children = []
     }
 
     /// Clone
@@ -286,25 +326,27 @@ public final class Entity: EngineObject {
 
     /// Destroy self.
     override func destroy() {
-        let abilityArray = _components
-        for i in 0..<abilityArray.count {
-            abilityArray[i].destroy()
+        if (_destroyed) {
+            return;
+        }
+
+        super.destroy()
+        for component in _components {
+            component.destroy()
         }
         _components = []
 
-        let children = _children
-        for i in 0..<children.count {
-            children[i].destroy()
+        for child in _children {
+            child.destroy()
         }
         _children = []
 
-        if (_parent != nil) {
-            var parentChildren = _parent!._children
-            parentChildren.removeAll { entity in
-                entity === self
-            }
+        if (_isRoot) {
+            _scene._removeFromEntityList(self);
+            _isRoot = false;
+        } else {
+            _removeFromParent();
         }
-        _parent = nil
     }
 }
 
@@ -312,9 +354,7 @@ public final class Entity: EngineObject {
 
 extension Entity {
     internal func _removeComponent(_ component: Component) {
-        //todo  ComponentsDependencies._removeCheck(this, component.constructor as any)
-        var components = _components
-        components.removeAll { value in
+        _components.removeAll { value in
             value === component
         }
     }
@@ -332,33 +372,33 @@ extension Entity {
         script._entityScriptsIndex = -1
     }
 
-    internal func _removeFromParent() -> Entity? {
+    internal func _removeFromParent() {
         let oldParent = _parent
         if (oldParent != nil) {
-            var oldParentChildren = oldParent!._children
-            oldParentChildren.removeAll { entity in
-                entity === self
+            oldParent!._children.remove(at: _siblingIndex)
+            for index in _siblingIndex..<oldParent!._children.count {
+                oldParent!._children[index]._siblingIndex = oldParent!._children[index]._siblingIndex - 1;
             }
-            _parent = nil
+            _parent = nil;
+            _siblingIndex = -1;
         }
-        return oldParent
     }
 
     internal func _processActive() {
-        if (_activeChangedComponents != nil) {
+        if (_activeChangedComponents.isEmpty) {
             fatalError("Note: can't set the 'main inActive entity' active in hierarchy, if the operation is in main inActive entity or it's children script's onDisable Event.")
         }
         _activeChangedComponents = _engine._componentsManager.getActiveChangedTempList()
-        _setActiveInHierarchy(&_activeChangedComponents!)
+        _setActiveInHierarchy(&_activeChangedComponents)
         _setActiveComponents(true)
     }
 
     internal func _processInActive() {
-        if (_activeChangedComponents != nil) {
+        if (_activeChangedComponents.isEmpty) {
             fatalError("Note: can't set the 'main active entity' inActive in hierarchy, if the operation is in main active entity or it's children script's onEnable Event.")
         }
         _activeChangedComponents = _engine._componentsManager.getActiveChangedTempList()
-        _setInActiveInHierarchy(&_activeChangedComponents!)
+        _setInActiveInHierarchy(&_activeChangedComponents)
         _setActiveComponents(false)
     }
 }
@@ -366,36 +406,86 @@ extension Entity {
 //MARK:- Private Methods
 
 extension Entity {
+    private func _addToChildrenList(_ index: Int?, _ child: Entity) {
+        let childCount = _children.count;
+        if (index == nil) {
+            child._siblingIndex = childCount;
+            _children.append(child);
+        } else {
+            if (index! < 0 || index! > childCount) {
+                fatalError()
+            }
+            child._siblingIndex = index!;
+            _children[index!] = child
+            for i in index! + 1..<childCount + 1 {
+                _children[i]._siblingIndex = _children[i]._siblingIndex + 1;
+            }
+        }
+    }
+
+    private func _setParent(_ parent: Entity?, _ siblingIndex: Int? = nil) {
+        let oldParent = _parent;
+        if (parent !== oldParent) {
+            _removeFromParent();
+            _parent = parent;
+            if (parent != nil) {
+                parent!._addToChildrenList(siblingIndex, self);
+
+                let parentScene = parent!._scene;
+                if (_scene !== parentScene) {
+                    Entity._traverseSetOwnerScene(self, parentScene);
+                }
+
+                if (parent!._isActiveInHierarchy) {
+                    if !_isActiveInHierarchy && _isActive {
+                        _processActive()
+                    }
+                } else {
+                    if _isActiveInHierarchy {
+                        _processInActive()
+                    }
+                }
+            } else {
+                if _isActiveInHierarchy {
+                    _processInActive()
+                }
+                if (oldParent != nil) {
+                    Entity._traverseSetOwnerScene(self, nil);
+                }
+            }
+            _setTransformDirty();
+        }
+    }
+
     private func _getComponentsInChildren<T: Component>(_ results: inout [T]) {
-        for i in 0..<_components.count {
-            let component = _components[i]
+        for component in _components {
             if (component is T) {
                 results.append(component as! T)
             }
         }
-        for i in 0..<_children.count {
-            _children[i]._getComponentsInChildren(&results)
+
+        for child in _children {
+            child._getComponentsInChildren(&results)
         }
     }
 
     private func _setActiveComponents(_ isActive: Bool) {
-        var activeChangedComponents = _activeChangedComponents
-        for i in 0..<activeChangedComponents!.count {
-            activeChangedComponents![i]._setActive(isActive)
+        for activeChangedComponent in _activeChangedComponents {
+            activeChangedComponent._setActive(isActive)
         }
-        _engine._componentsManager.putActiveChangedTempList(&activeChangedComponents!)
+
+        _engine._componentsManager.putActiveChangedTempList(&_activeChangedComponents)
         _activeChangedComponents = []
     }
 
     private func _setActiveInHierarchy(_ activeChangedComponents: inout [Component]) {
         _isActiveInHierarchy = true
-        let components = _components
-        for i in 0..<components.count {
-            activeChangedComponents.append(components[i])
+        for component in _components {
+            if component.enabled || !component._awoken {
+                activeChangedComponents.append(component)
+            }
         }
-        let children = _children
-        for i in 0..<children.count {
-            let child = children[i]
+        for child in _children {
             if child.isActive {
                 child._setActiveInHierarchy(&activeChangedComponents)
             }
@@ -404,13 +494,12 @@ extension Entity {
 
     private func _setInActiveInHierarchy(_ activeChangedComponents: inout [Component]) {
         _isActiveInHierarchy = false
-        let components = _components
-        for i in 0..<components.count {
-            activeChangedComponents.append(components[i])
+        for component in _components {
+            if component.enabled {
+                activeChangedComponents.append(component)
+            }
         }
-        let children = _children
-        for i in 0..<children.count {
-            let child = children[i]
+        for child in _children {
             if child.isActive {
                 child._setInActiveInHierarchy(&activeChangedComponents)
             }
@@ -426,15 +515,36 @@ extension Entity {
             }
         }
     }
+
+    private func _setSiblingIndex(_ sibling: inout [Entity], _ target: Int) {
+        let target = Swift.min(target, sibling.count - 1);
+        if (target < 0) {
+            fatalError()
+        }
+        if (_siblingIndex != target) {
+            let oldIndex = _siblingIndex;
+            if (target < oldIndex) {
+                for i in target...oldIndex {
+                    let child = i == target ? self : sibling[i - 1];
+                    sibling[i] = child;
+                    child._siblingIndex = i;
+                }
+            } else {
+                for i in oldIndex...target {
+                    let child = i == target ? self : sibling[i + 1];
+                    sibling[i] = child;
+                    child._siblingIndex = i;
+                }
+            }
+        }
+    }
 }
 
 //MARK:- Static Methods
 
 extension Entity {
     internal static func _findChildByName(_ root: Entity, _ name: String) -> Entity? {
-        let children = root._children
-        for i in 0..<children.count {
-            let child = children[i]
+        for child in root._children {
             if (child.name == name) {
                 return child
             }
@@ -444,9 +554,8 @@ extension Entity {
 
     internal static func _traverseSetOwnerScene(_ entity: Entity, _ scene: Scene?) {
         entity._scene = scene
-        let children = entity._children
-        for i in 0..<entity.childCount {
-            _traverseSetOwnerScene(children[i], scene)
+        for child in entity._children {
+            _traverseSetOwnerScene(child, scene)
         }
     }
 }

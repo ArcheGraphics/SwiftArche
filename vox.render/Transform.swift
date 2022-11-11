@@ -1,9 +1,8 @@
+//  Copyright (c) 2022 Feng Yang
 //
-//  Transform.swift
-//  vox.render
-//
-//  Created by 杨丰 on 2021/9/6.
-//
+//  I am making my contributions/submissions to this project solely in my
+//  personal capacity and am not conveying any rights to any intellectual
+//  property of any third parties.
 
 import Foundation
 import vox_math
@@ -20,11 +19,11 @@ public class Transform: Component {
     private var _lossyWorldScale: Vector3 = Vector3(1, 1, 1)
     private var _localMatrix: Matrix = Matrix()
     private var _worldMatrix: Matrix = Matrix()
-    private var _updateFlagManager: UpdateFlagManager = UpdateFlagManager()
     private var _isParentDirty: Bool = true
     private var _parentTransformCache: Transform? = nil
-
     private var _dirtyFlag: Int = TransformFlag.WmWpWeWqWs.rawValue
+
+    var _updateFlagManager: UpdateFlagManager = UpdateFlagManager()
 }
 
 //MARK:- Get/Set Property
@@ -80,7 +79,6 @@ extension Transform {
             if (_isContainDirtyFlag(TransformFlag.LocalEuler.rawValue)) {
                 _rotation = _rotationQuaternion.toEuler()
                 _rotation *= MathUtil.radToDegreeFactor // radians to degrees
-
                 _setDirtyFlagFalse(TransformFlag.LocalEuler.rawValue)
             }
             return _rotation
@@ -133,9 +131,9 @@ extension Transform {
         }
         set {
             _rotationQuaternion = newValue
-            self._setDirtyFlagTrue(TransformFlag.LocalMatrix.rawValue | TransformFlag.LocalEuler.rawValue)
-            self._setDirtyFlagFalse(TransformFlag.LocalQuat.rawValue)
-            self._updateWorldRotationFlag()
+            _setDirtyFlagTrue(TransformFlag.LocalMatrix.rawValue | TransformFlag.LocalEuler.rawValue)
+            _setDirtyFlagFalse(TransformFlag.LocalQuat.rawValue)
+            _updateWorldRotationFlag()
         }
     }
 
@@ -158,8 +156,8 @@ extension Transform {
             _worldRotationQuaternion = newValue
             let parent = _getParentTransform()
             if (parent != nil) {
-                let _tempQuat0 = Quaternion.invert(a: parent!.worldRotationQuaternion)
-                _rotationQuaternion = newValue * _tempQuat0
+                let invParentQuaternion = Quaternion.invert(a: parent!.worldRotationQuaternion)
+                _rotationQuaternion = invParentQuaternion * newValue
             } else {
                 _rotationQuaternion = newValue
             }
@@ -214,6 +212,9 @@ extension Transform {
         set {
             _localMatrix = newValue
             _ = _localMatrix.decompose(translation: &_position, rotation: &_rotationQuaternion, scale: &_scale)
+            position = _position
+            rotationQuaternion = _rotationQuaternion
+            scale = _scale
             _setDirtyFlagTrue(TransformFlag.LocalEuler.rawValue)
             _setDirtyFlagFalse(TransformFlag.LocalMatrix.rawValue)
             _updateAllWorldFlag()
@@ -239,7 +240,7 @@ extension Transform {
             _worldMatrix = newValue
             let parent = _getParentTransform()
             if (parent != nil) {
-                _localMatrix = newValue * Matrix.invert(a: parent!.worldMatrix)
+                _localMatrix = Matrix.invert(a: parent!.worldMatrix) * newValue
             } else {
                 _localMatrix = newValue
             }
@@ -356,8 +357,8 @@ extension Transform {
     /// - Parameters:
     ///   - translation: Direction and distance of translation
     ///   - relativeToLocal: Relative to local space
-    func translate(_ translation: Vector3, _ relativeToLocal: Bool?) {
-        _translate(translation, relativeToLocal ?? true)
+    func translate(_ translation: Vector3, _ relativeToLocal: Bool = true) {
+        _translate(translation, relativeToLocal)
     }
 
     /// Translate along the passed X, Y, Z value.
@@ -366,16 +367,16 @@ extension Transform {
     ///   - y: Translate direction and distance along y axis
     ///   - z: Translate direction and distance along z axis
     ///   - relativeToLocal: Relative to local space
-    func translate(_ x: Float, _ y: Float, _ z: Float, _ relativeToLocal: Bool?) {
-        _translate(Vector3(x, y, z), relativeToLocal ?? true)
+    func translate(_ x: Float, _ y: Float, _ z: Float, _ relativeToLocal: Bool = true) {
+        _translate(Vector3(x, y, z), relativeToLocal)
     }
 
     /// Rotate around the passed Vector3.
     /// - Parameters:
     ///   - rotation: Euler angle in degrees
     ///   - relativeToLocal: Relative to local space
-    func rotate(_ rotation: Vector3, _ relativeToLocal: Bool?) {
-        _rotateXYZ(rotation.x, rotation.y, rotation.z, relativeToLocal ?? true)
+    func rotate(_ rotation: Vector3, _ relativeToLocal: Bool = true) {
+        _rotateXYZ(rotation.x, rotation.y, rotation.z, relativeToLocal)
     }
 
     /// Rotate around the passed Vector3.
@@ -384,8 +385,8 @@ extension Transform {
     ///   - y: Rotation along y axis, in degrees
     ///   - z: Rotation along z axis, in degrees
     ///   - relativeToLocal: Relative to local space
-    func rotate(_ x: Float, _ y: Float, _ z: Float, _ relativeToLocal: Bool?) {
-        _rotateXYZ(x, y, z, relativeToLocal ?? true)
+    func rotate(_ x: Float, _ y: Float, _ z: Float, _ relativeToLocal: Bool = true) {
+        _rotateXYZ(x, y, z, relativeToLocal)
     }
 
     /// Rotate around the specified axis according to the specified angle.
@@ -394,8 +395,7 @@ extension Transform {
     ///   - angle: Rotate angle in degrees
     ///   - relativeToLocal: Relative to local space
     func rotateByAxis(axis: Vector3, angle: Float, relativeToLocal: Bool = true) {
-        let rad = angle * MathUtil.degreeToRadFactor
-        let _tempQuat0 = Quaternion.rotationAxisAngle(axis: axis, rad: rad)
+        let _tempQuat0 = Quaternion.rotationAxisAngle(axis: axis, rad: angle * MathUtil.degreeToRadFactor)
         _rotateByQuat(_tempQuat0, relativeToLocal)
     }
 
@@ -459,6 +459,18 @@ extension Transform {
         _updateAllWorldFlag()
     }
 
+    internal func _isFrontFaceInvert() -> Bool {
+        let scale = lossyWorldScale;
+        var isInvert = scale.x < 0;
+        if scale.y < 0 {
+            isInvert = !isInvert
+        }
+        if scale.z < 0 {
+            isInvert = !isInvert
+        }
+        return isInvert;
+    }
+
 
     /// Get worldMatrix: Will trigger the worldMatrix update of itself and all parent entities.
     /// Get worldPosition: Will trigger the worldMatrix, local position update of itself and the worldMatrix update of all parent entities.
@@ -468,7 +480,7 @@ extension Transform {
             _worldAssociatedChange(TransformFlag.WmWp.rawValue)
             let nodeChildren = _entity._children
             for i in 0..<nodeChildren.count {
-                nodeChildren[i].transform?._updateWorldPositionFlag()
+                nodeChildren[i].transform._updateWorldPositionFlag()
             }
         }
     }
@@ -483,7 +495,7 @@ extension Transform {
             _worldAssociatedChange(TransformFlag.WmWeWq.rawValue)
             let nodeChildren = _entity._children
             for i in 0..<nodeChildren.count {
-                nodeChildren[i].transform?._updateWorldPositionAndRotationFlag() // Rotation update of parent entity will trigger world position and rotation update of all child entity.
+                nodeChildren[i].transform._updateWorldPositionAndRotationFlag() // Rotation update of parent entity will trigger world position and rotation update of all child entity.
             }
         }
     }
@@ -498,7 +510,7 @@ extension Transform {
             _worldAssociatedChange(TransformFlag.WmWpWeWq.rawValue)
             let nodeChildren = _entity._children
             for i in 0..<nodeChildren.count {
-                nodeChildren[i].transform?._updateWorldPositionAndRotationFlag()
+                nodeChildren[i].transform._updateWorldPositionAndRotationFlag()
             }
         }
     }
@@ -512,7 +524,7 @@ extension Transform {
             _worldAssociatedChange(TransformFlag.WmWs.rawValue)
             let nodeChildren = _entity._children
             for i in 0..<nodeChildren.count {
-                nodeChildren[i].transform?._updateWorldPositionAndScaleFlag()
+                nodeChildren[i].transform._updateWorldPositionAndScaleFlag()
             }
         }
     }
@@ -526,7 +538,7 @@ extension Transform {
             _worldAssociatedChange(TransformFlag.WmWpWs.rawValue)
             let nodeChildren = _entity._children
             for i in 0..<nodeChildren.count {
-                nodeChildren[i].transform?._updateWorldPositionAndScaleFlag()
+                nodeChildren[i].transform._updateWorldPositionAndScaleFlag()
             }
         }
     }
@@ -537,7 +549,7 @@ extension Transform {
             _worldAssociatedChange(TransformFlag.WmWpWeWqWs.rawValue)
             let nodeChildren = _entity._children
             for i in 0..<nodeChildren.count {
-                nodeChildren[i].transform?._updateAllWorldFlag()
+                nodeChildren[i].transform._updateAllWorldFlag()
             }
         }
     }
@@ -601,10 +613,11 @@ extension Transform {
 
     private func _translate(_ translation: Vector3, _ relativeToLocal: Bool = true) {
         if (relativeToLocal) {
-            position = _position.add(right: translation)
+            _worldPosition += Vector3.transformByQuat(v: translation, quaternion: worldRotationQuaternion);
         } else {
-            worldPosition = _worldPosition.add(right: translation)
+            _worldPosition += translation
         }
+        worldPosition = _worldPosition
     }
 
     private func _rotateXYZ(_ x: Float, _ y: Float, _ z: Float, _ relativeToLocal: Bool = true) {

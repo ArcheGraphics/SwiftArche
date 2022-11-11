@@ -53,7 +53,7 @@ public class Scene: EngineObject {
     /// Create root entity.
     /// - Parameter name: Entity name
     /// - Returns: Entity
-    func createRootEntity(_ name: String? = nil) -> Entity {
+    func createRootEntity(_ name: String = "") -> Entity {
         let entity = Entity(_engine, name)
         addRootEntity(entity)
         return entity
@@ -67,7 +67,7 @@ public class Scene: EngineObject {
         // let entity become root
         if (!isRoot) {
             entity._isRoot = true
-            _ = entity._removeFromParent()
+            entity._removeFromParent()
         }
 
         // add or remove from scene's rootEntities
@@ -104,7 +104,7 @@ public class Scene: EngineObject {
         // let entity become root
         if (!isRoot) {
             entity._isRoot = true
-            _ = entity._removeFromParent()
+            entity._removeFromParent()
         }
 
         // add or remove from scene's rootEntities
