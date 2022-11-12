@@ -7,23 +7,23 @@
 import Metal
 
 /// Material.
-class Material {
+public class Material {
     /// Name.
-    var name: String = ""
+    public var name: String = ""
     /// Shader data.
-    var shaderData: ShaderData
+    public var shaderData: ShaderData
 
     /// Shader used by the material.
-    var shader: [ShaderPass] = []
+    public var shader: [ShaderPass] = []
 
-    func getRenderState(_ index: Int) -> RenderState {
+    public func getRenderState(_ index: Int) -> RenderState {
         shader[index].renderState!
     }
 
     /// Create a material instance.
     /// - Parameters:
     ///   - device: Metal Device
-    init(_ device: MTLDevice) {
+    public init(_ device: MTLDevice) {
         shaderData = ShaderData(device)
     }
 }
