@@ -40,6 +40,18 @@ public final class Entity: EngineObject {
         _inverseWorldMatFlag = transform.registerWorldChangeFlag()
     }
 
+    deinit {
+        _components = []
+        _children = []
+
+        if (_isRoot) {
+            _scene._removeFromEntityList(self);
+            _isRoot = false;
+        } else {
+            _removeFromParent();
+        }
+    }
+
     private var _invModelMatrix: Matrix = Matrix()
     private var _inverseWorldMatFlag: BoolUpdateFlag!
 
@@ -322,31 +334,6 @@ public final class Entity: EngineObject {
         }
 
         return cloneEntity
-    }
-
-    /// Destroy self.
-    override func destroy() {
-        if (_destroyed) {
-            return;
-        }
-
-        super.destroy()
-        for component in _components {
-            component.destroy()
-        }
-        _components = []
-
-        for child in _children {
-            child.destroy()
-        }
-        _children = []
-
-        if (_isRoot) {
-            _scene._removeFromEntityList(self);
-            _isRoot = false;
-        } else {
-            _removeFromParent();
-        }
     }
 }
 

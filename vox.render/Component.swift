@@ -19,7 +19,16 @@ public class Component: EngineObject {
         super.init(entity.engine)
     }
 
-//MARK:- Get/Set Methods
+    /// Destroy this instance.
+    deinit {
+        _entity._removeComponent(self)
+        if (_entity.isActiveInHierarchy) {
+            if _enabled {
+                _onDisable()
+            }
+        }
+        _onDestroy()
+    }
 
     /// Indicates whether the component is enabled.
     public var enabled: Bool {
@@ -43,13 +52,6 @@ public class Component: EngineObject {
         }
     }
 
-    /// Indicates whether the component is destroyed.
-    public override var destroyed: Bool {
-        get {
-            _destroyed
-        }
-    }
-
     /// The entity which the component belongs to.
     public var entity: Entity {
         get {
@@ -63,25 +65,6 @@ public class Component: EngineObject {
             _entity.scene
         }
     }
-
-//MARK:- Public Methods
-
-    /// Destroy this instance.
-    public override func destroy() {
-        if (_destroyed) {
-            return
-        }
-        _entity._removeComponent(self)
-        if (_entity.isActiveInHierarchy) {
-            if _enabled {
-                _onDisable()
-            }
-        }
-        _destroyed = true
-        _onDestroy()
-    }
-
-//MARK:- Internal Methods
 
     func _onAwake() {
     }

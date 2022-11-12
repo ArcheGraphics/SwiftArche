@@ -19,14 +19,6 @@ public class BlendState {
     func _apply(_ pipelineDescriptor: MTLRenderPipelineDescriptor,
                 _ renderEncoder: MTLRenderCommandEncoder) {
         let enabled = targetBlendState.enabled
-        let colorBlendOperation = targetBlendState.colorBlendOperation
-        let alphaBlendOperation = targetBlendState.alphaBlendOperation
-        let sourceColorBlendFactor = targetBlendState.sourceColorBlendFactor
-        let destinationColorBlendFactor = targetBlendState.destinationColorBlendFactor
-        let sourceAlphaBlendFactor = targetBlendState.sourceAlphaBlendFactor
-        let destinationAlphaBlendFactor = targetBlendState.destinationAlphaBlendFactor
-        let colorWriteMask = targetBlendState.colorWriteMask
-
         if (enabled) {
             pipelineDescriptor.colorAttachments[0].isBlendingEnabled = true
         } else {
@@ -35,21 +27,21 @@ public class BlendState {
 
         if (enabled) {
             // apply blend factor.
-            pipelineDescriptor.colorAttachments[0].sourceRGBBlendFactor = sourceColorBlendFactor
-            pipelineDescriptor.colorAttachments[0].destinationRGBBlendFactor = destinationColorBlendFactor
-            pipelineDescriptor.colorAttachments[0].sourceAlphaBlendFactor = sourceAlphaBlendFactor
-            pipelineDescriptor.colorAttachments[0].destinationAlphaBlendFactor = destinationAlphaBlendFactor
+            pipelineDescriptor.colorAttachments[0].sourceRGBBlendFactor = targetBlendState.sourceColorBlendFactor
+            pipelineDescriptor.colorAttachments[0].destinationRGBBlendFactor = targetBlendState.destinationColorBlendFactor
+            pipelineDescriptor.colorAttachments[0].sourceAlphaBlendFactor = targetBlendState.sourceAlphaBlendFactor
+            pipelineDescriptor.colorAttachments[0].destinationAlphaBlendFactor = targetBlendState.destinationAlphaBlendFactor
 
             // apply blend operation.
-            pipelineDescriptor.colorAttachments[0].rgbBlendOperation = colorBlendOperation
-            pipelineDescriptor.colorAttachments[0].alphaBlendOperation = alphaBlendOperation
+            pipelineDescriptor.colorAttachments[0].rgbBlendOperation = targetBlendState.colorBlendOperation
+            pipelineDescriptor.colorAttachments[0].alphaBlendOperation = targetBlendState.alphaBlendOperation
 
             // apply blend color.
             renderEncoder.setBlendColor(red: blendColor.r, green: blendColor.g, blue: blendColor.b, alpha: blendColor.a)
         }
 
         // apply color mask.
-        pipelineDescriptor.colorAttachments[0].writeMask = colorWriteMask
+        pipelineDescriptor.colorAttachments[0].writeMask = targetBlendState.colorWriteMask
 
         // apply alpha to coverage.
         if (alphaToCoverage) {

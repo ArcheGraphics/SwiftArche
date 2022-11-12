@@ -50,6 +50,16 @@ public class Scene: EngineObject {
         super.init(engine)
     }
 
+    deinit {
+        if _isActiveInEngine {
+            _engine.sceneManager.activeScene = nil
+        }
+        engine.sceneManager._allScenes.removeAll { (v: Scene) in
+            v === self
+        }
+        _rootEntities = []
+    }
+
     /// Create root entity.
     /// - Parameter name: Entity name
     /// - Returns: Entity
@@ -193,19 +203,6 @@ public class Scene: EngineObject {
         }
         return nil
     }
-
-    /// Destroy this scene.
-    override func destroy() {
-        if (_destroyed) {
-            return;
-        }
-
-        _destroy();
-
-        engine.sceneManager._allScenes.removeAll { (v: Scene) in
-            v === self
-        }
-    }
 }
 
 //MARK:- Internal Members
@@ -234,16 +231,6 @@ extension Scene {
         }
         entity._siblingIndex = -1;
     }
-
-    func _destroy() {
-        if _isActiveInEngine {
-            _engine.sceneManager.activeScene = nil
-        }
-        while (rootEntitiesCount > 0) {
-            _rootEntities[0].destroy();
-        }
-    }
-
 }
 
 //MARK:- Private Members

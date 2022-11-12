@@ -51,12 +51,3 @@ public class SceneManager {
     public func loadScene(url: String, destroyOldScene: Bool = true) {
     }
 }
-
-extension SceneManager {
-    func _destroyAllScene() {
-        for scene in _allScenes {
-            scene._destroy()
-        }
-        _allScenes.removeAll()
-    }
-}
