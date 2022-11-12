@@ -31,8 +31,8 @@ public class UnlitMaterial: BaseMaterial {
         }
         set {
             _baseTexture = newValue
+            shaderData.setImageView(UnlitMaterial._baseTextureProp, UnlitMaterial._baseSamplerProp, newValue)
             if newValue != nil {
-                shaderData.setImageView(UnlitMaterial._baseTextureProp, UnlitMaterial._baseSamplerProp, newValue!)
                 shaderData.enableMacro(HAS_BASE_TEXTURE)
             } else {
                 shaderData.disableMacro(HAS_BASE_TEXTURE)
@@ -51,10 +51,8 @@ public class UnlitMaterial: BaseMaterial {
         }
     }
 
-    /// Create a unlit material instance.
-    /// - Parameter device: Engine to which the material belongs
-    public override init(_ device: MTLDevice) {
-        super.init(device)
+    public override init(_ device: MTLDevice, _ name: String) {
+        super.init(device, name)
 
         shaderData.enableMacro(OMIT_NORMAL)
         shaderData.enableMacro(NEED_TILINGOFFSET)

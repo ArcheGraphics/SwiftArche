@@ -52,22 +52,35 @@ public class ShaderData {
         }
     }
 
-    public func setImageView(_ textureName: String, _ samplerName: String, _ value: MTLTexture) {
-        _imageViews[textureName] = value
-        let sampler = _samplers.firstIndex { (key: String, value: MTLSamplerDescriptor) in
-            key == samplerName
-        }
-        if sampler == nil {
-            _samplers[samplerName] = ShaderData._defaultSamplerDesc
+    public func setImageView(_ textureName: String, _ samplerName: String, _ value: MTLTexture?) {
+        if value != nil {
+            _imageViews[textureName] = value
+            let sampler = _samplers.firstIndex { (key: String, value: MTLSamplerDescriptor) in
+                key == samplerName
+            }
+            if sampler == nil {
+                _samplers[samplerName] = ShaderData._defaultSamplerDesc
+            }
+        } else {
+            _imageViews.removeValue(forKey: textureName)
+            _samplers.removeValue(forKey: samplerName)
         }
     }
 
-    public func setImageView(_ name: String, _ value: MTLTexture) {
-        _imageViews[name] = value
+    public func setImageView(_ name: String, _ value: MTLTexture?) {
+        if value != nil {
+            _imageViews[name] = value
+        } else {
+            _imageViews.removeValue(forKey: name)
+        }
     }
 
-    public func setSampler(_ name: String, _ value: MTLSamplerDescriptor) {
-        _samplers[name] = value
+    public func setSampler(_ name: String, _ value: MTLSamplerDescriptor?) {
+        if value != nil {
+            _samplers[name] = value
+        } else {
+            _samplers.removeValue(forKey: name)
+        }
     }
 }
 

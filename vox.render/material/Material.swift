@@ -23,7 +23,9 @@ public class Material {
     /// Create a material instance.
     /// - Parameters:
     ///   - device: Metal Device
-    public init(_ device: MTLDevice) {
+    ///   - name: Material name
+    public init(_ device: MTLDevice, _ name: String = "") {
         shaderData = ShaderData(device)
+        self.name = name
     }
 }
