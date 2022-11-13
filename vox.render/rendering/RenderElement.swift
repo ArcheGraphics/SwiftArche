@@ -9,15 +9,15 @@ import Metal
 /// Render element.
 struct RenderElement {
     /// Render component.
-    var renderer: Renderer!
+    var renderer: Renderer
     /// Material.
-    var material: Material!
+    var material: Material
     /// Shader Pass
-    var shaderPass: ShaderPass!
+    var shaderPass: ShaderPass
     /// Mesh.
-    var mesh: Mesh!
+    var mesh: Mesh
     /// Sub mesh.
-    var subMesh: SubMesh!
+    var subMesh: SubMesh
 
     init(_ renderer: Renderer, _ mesh: Mesh, _ subMesh: SubMesh, _ material: Material, _ shaderPass: ShaderPass) {
         self.renderer = renderer
