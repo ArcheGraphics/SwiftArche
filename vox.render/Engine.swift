@@ -11,6 +11,7 @@ let logger = Logger(label: "com.arche.main")
 
 public class Engine {
     let _componentsManager: ComponentsManager = ComponentsManager()
+    let _lightManager = LightManager()
     var sceneManager: SceneManager!
     var canvas: Canvas
     var device: MTLDevice

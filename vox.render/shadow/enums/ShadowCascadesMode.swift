@@ -7,7 +7,7 @@
 import Foundation
 
 /// Number of cascades to use for directional light shadows.
-enum ShadowCascadesMode: Int {
+public  enum ShadowCascadesMode: Int {
     /// No cascades
     case NoCascades = 1
     /// Two cascades
