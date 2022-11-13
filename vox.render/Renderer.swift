@@ -65,7 +65,7 @@ public class Renderer: Component {
     public var bounds: BoundingBox {
         get {
             if (_dirtyUpdateFlag & RendererUpdateFlags.WorldVolume.rawValue != 0) {
-                _updateBounds(_bounds);
+                _updateBounds(&_bounds);
                 _dirtyUpdateFlag &= ~RendererUpdateFlags.WorldVolume.rawValue;
             }
             return _bounds;
@@ -187,7 +187,7 @@ public class Renderer: Component {
         entity.transform._updateFlagManager.addFlag(flag: listener)
     }
 
-    func _updateBounds(_ worldBounds: BoundingBox) {
+    func _updateBounds(_ worldBounds: inout BoundingBox) {
     }
 
     func _render(_ renderPipeline: RenderPipeline) {

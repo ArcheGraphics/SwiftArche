@@ -369,7 +369,7 @@ extension ModelMesh {
         desc.format = .float3
         desc.offset = 0
         desc.bufferIndex = 0
-        descriptor.attributes[ValueChanged.Position.rawValue] = desc
+        descriptor.attributes[Int(Position.rawValue)] = desc
 
         var offset = 12
         var elementCount = 3
@@ -378,7 +378,7 @@ extension ModelMesh {
             desc.format = .float3
             desc.offset = offset
             desc.bufferIndex = 0
-            descriptor.attributes[ValueChanged.Normal.rawValue] = desc
+            descriptor.attributes[Int(Normal.rawValue)] = desc
             offset += MemoryLayout<Float>.stride * 3
             elementCount += 3
         }
@@ -387,7 +387,7 @@ extension ModelMesh {
             desc.format = .float4
             desc.offset = offset
             desc.bufferIndex = 0
-            descriptor.attributes[ValueChanged.Color.rawValue] = desc
+            descriptor.attributes[Int(Color_0.rawValue)] = desc
             offset += MemoryLayout<Float>.stride * 4
             elementCount += 4
         }
@@ -396,7 +396,7 @@ extension ModelMesh {
             desc.format = .float4
             desc.offset = offset
             desc.bufferIndex = 0
-            descriptor.attributes[ValueChanged.BoneWeight.rawValue] = desc
+            descriptor.attributes[Int(Weights_0.rawValue)] = desc
             offset += MemoryLayout<Float>.stride * 4
             elementCount += 4
         }
@@ -405,7 +405,7 @@ extension ModelMesh {
             desc.format = .float4
             desc.offset = offset
             desc.bufferIndex = 0
-            descriptor.attributes[ValueChanged.BoneIndex.rawValue] = desc
+            descriptor.attributes[Int(Joints_0.rawValue)] = desc
             offset += MemoryLayout<u_short>.stride * 4
             elementCount += 4
         }
@@ -414,7 +414,7 @@ extension ModelMesh {
             desc.format = .float4
             desc.offset = offset
             desc.bufferIndex = 0
-            descriptor.attributes[ValueChanged.Tangent.rawValue] = desc
+            descriptor.attributes[Int(Tangent.rawValue)] = desc
             offset += MemoryLayout<Float>.stride * 4
             elementCount += 4
         }
@@ -423,7 +423,7 @@ extension ModelMesh {
             desc.format = .float2
             desc.offset = offset
             desc.bufferIndex = 0
-            descriptor.attributes[ValueChanged.UV.rawValue] = desc
+            descriptor.attributes[Int(UV_0.rawValue)] = desc
             offset += MemoryLayout<Float>.stride * 2
             elementCount += 2
         }
@@ -432,7 +432,7 @@ extension ModelMesh {
             desc.format = .float2
             desc.offset = offset
             desc.bufferIndex = 0
-            descriptor.attributes[ValueChanged.UV1.rawValue] = desc
+            descriptor.attributes[Int(UV_1.rawValue)] = desc
             offset += MemoryLayout<Float>.stride * 2
             elementCount += 2
         }
@@ -441,7 +441,7 @@ extension ModelMesh {
             desc.format = .float2
             desc.offset = offset
             desc.bufferIndex = 0
-            descriptor.attributes[ValueChanged.UV2.rawValue] = desc
+            descriptor.attributes[Int(UV_2.rawValue)] = desc
             offset += MemoryLayout<Float>.stride * 2
             elementCount += 2
         }
@@ -450,7 +450,7 @@ extension ModelMesh {
             desc.format = .float2
             desc.offset = offset
             desc.bufferIndex = 0
-            descriptor.attributes[ValueChanged.UV3.rawValue] = desc
+            descriptor.attributes[Int(UV_3.rawValue)] = desc
             offset += MemoryLayout<Float>.stride * 2
             elementCount += 2
         }
@@ -459,7 +459,7 @@ extension ModelMesh {
             desc.format = .float2
             desc.offset = offset
             desc.bufferIndex = 0
-            descriptor.attributes[ValueChanged.UV4.rawValue] = desc
+            descriptor.attributes[Int(UV_4.rawValue)] = desc
             offset += MemoryLayout<Float>.stride * 2
             elementCount += 2
         }
@@ -468,7 +468,7 @@ extension ModelMesh {
             desc.format = .float2
             desc.offset = offset
             desc.bufferIndex = 0
-            descriptor.attributes[ValueChanged.UV5.rawValue] = desc
+            descriptor.attributes[Int(UV_5.rawValue)] = desc
             offset += MemoryLayout<Float>.stride * 2
             elementCount += 2
         }
@@ -477,7 +477,7 @@ extension ModelMesh {
             desc.format = .float2
             desc.offset = offset
             desc.bufferIndex = 0
-            descriptor.attributes[ValueChanged.UV6.rawValue] = desc
+            descriptor.attributes[Int(UV_6.rawValue)] = desc
             offset += MemoryLayout<Float>.stride * 2
             elementCount += 2
         }
@@ -486,7 +486,7 @@ extension ModelMesh {
             desc.format = .float2
             desc.offset = offset
             desc.bufferIndex = 0
-            descriptor.attributes[ValueChanged.UV7.rawValue] = desc
+            descriptor.attributes[Int(UV_7.rawValue)] = desc
             offset += MemoryLayout<Float>.stride * 2
             elementCount += 2
         }

@@ -5,3 +5,4 @@
 //  property of any third parties.
 
 #import "macro_name.h"
+#import "shader_common.h"
