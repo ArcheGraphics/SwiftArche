@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="GitToolBoxProjectSettings">
+    <option name="autoFetchEnabledOverride">
+      <BoolValueOverride>
+        <option name="enabled" value="true" />
+      </BoolValueOverride>
+    </option>
+    <option name="autoFetchIntervalMinutesOverride">
+      <IntValueOverride>
+        <option name="enabled" value="true" />
+        <option name="value" value="15" />
+      </IntValueOverride>
+    </option>
+    <option name="autoFetchOnBranchSwitchOverride">
+      <BoolValueOverride>
+        <option name="enabled" value="true" />
+      </BoolValueOverride>
+    </option>
+    <option name="commitDialogBranchCompletionOverride">
+      <BoolValueOverride>
+        <option name="enabled" value="true" />
+      </BoolValueOverride>
+    </option>
+    <option name="commitDialogGitmojiCompletionOverride">
+      <BoolValueOverride>
+        <option name="enabled" value="true" />
+      </BoolValueOverride>
+    </option>
+    <option name="commitDialogGitmojiUnicodeCompletionOverride">
+      <BoolValueOverride>
+        <option name="enabled" value="true" />
+      </BoolValueOverride>
+    </option>
+    <option name="commitMessageIssueKeyValidationOverride">
+      <BoolValueOverride>
+        <option name="enabled" value="true" />
+      </BoolValueOverride>
+    </option>
+    <option name="commitMessageValidationEnabledOverride">
+      <BoolValueOverride>
+        <option name="enabled" value="true" />
+      </BoolValueOverride>
+    </option>
+    <option name="referencePointForStatusOverride">
+      <ReferencePointForStatusOverride>
+        <option name="enabled" value="true" />
+      </ReferencePointForStatusOverride>
+    </option>
+  </component>
+</project>

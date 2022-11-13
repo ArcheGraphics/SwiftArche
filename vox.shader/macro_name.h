@@ -56,18 +56,8 @@ typedef enum {
     HAS_SH = 30,
     HAS_SPECULAR_ENV = 31,
 
-    // Particle Render
-    HAS_PARTICLE_TEXTURE = 32,
-    NEED_ROTATE_TO_VELOCITY = 33,
-    NEED_USE_ORIGIN_COLOR = 34,
-    NEED_SCALE_BY_LIFE_TIME = 35,
-    NEED_FADE_IN = 36,
-    NEED_FADE_OUT = 37,
-    IS_2D = 38,
-
     // Shadow
-    NEED_GENERATE_SHADOW_MAP = 39,
-    SHADOW_MAP_COUNT = 40,
+    NEED_RECEIVE_SHADOWS = 32,
 
     TOTAL_COUNT = 41,
 } MacroName;

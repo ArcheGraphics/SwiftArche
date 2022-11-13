@@ -7,7 +7,7 @@
 import Foundation
 
 /// The Background mode enumeration.
-enum BackgroundMode {
+public enum BackgroundMode {
     /// Solid color.
     case SolidColor
     /// Sky

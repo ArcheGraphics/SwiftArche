@@ -68,18 +68,8 @@ internal class ShaderMacroCollection {
         HAS_SH: (0, .bool),
         HAS_SPECULAR_ENV: (0, .bool),
 
-        // Particle Render
-        HAS_PARTICLE_TEXTURE: (0, .bool),
-        NEED_ROTATE_TO_VELOCITY: (0, .bool),
-        NEED_USE_ORIGIN_COLOR: (0, .bool),
-        NEED_SCALE_BY_LIFE_TIME: (0, .bool),
-        NEED_FADE_IN: (0, .bool),
-        NEED_FADE_OUT: (0, .bool),
-        IS_2D: (0, .bool),
-
         // Shadow
-        NEED_GENERATE_SHADOW_MAP: (0, .bool),
-        SHADOW_MAP_COUNT: (0, .int),
+        NEED_RECEIVE_SHADOWS: (0, .bool),
     ]
 
     static var defaultFunctionConstant = ShaderMacroCollection.createDefaultFunction()
@@ -122,7 +112,8 @@ extension ShaderMacroCollection: Hashable {
     func hash(into hasher: inout Hasher) {
         _value.sorted { l, r in
                     l.key.rawValue < r.key.rawValue
-                }.forEach { (key: MacroName, value: (Int, MTLDataType)) in
+                }
+                .forEach { (key: MacroName, value: (Int, MTLDataType)) in
                     hasher.combine(key)
                     hasher.combine(value.0)
                 }

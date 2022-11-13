@@ -56,13 +56,4 @@ constant bool hasSpotLight = spotLightCount > 0;
 constant bool hasSH [[function_constant(HAS_SH)]];
 constant bool hasSpecularEnv [[function_constant(HAS_SPECULAR_ENV)]];
 
-constant bool hasParticleTexture [[function_constant(HAS_PARTICLE_TEXTURE)]];
-constant bool needRotateToVelocity [[function_constant(NEED_ROTATE_TO_VELOCITY)]];
-constant bool needUseOriginColor [[function_constant(NEED_USE_ORIGIN_COLOR)]];
-constant bool needScaleByLifetime [[function_constant(NEED_SCALE_BY_LIFE_TIME)]];
-constant bool needFadeIn [[function_constant(NEED_FADE_IN)]];
-constant bool needFadeOut [[function_constant(NEED_FADE_OUT)]];
-constant bool is2D [[function_constant(IS_2D)]];
-
-constant bool needGenerateShadowMap [[function_constant(NEED_GENERATE_SHADOW_MAP)]];
-constant int shadowMapCount [[function_constant(SHADOW_MAP_COUNT)]];
+constant bool needReceiveShadow [[function_constant(NEED_RECEIVE_SHADOWS)]];

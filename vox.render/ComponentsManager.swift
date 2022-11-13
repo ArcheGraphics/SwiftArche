@@ -11,15 +11,30 @@ class ComponentsManager {
     // Script
     private var _onStartScripts: DisorderedArray<Script> = DisorderedArray()
     private var _onUpdateScripts: DisorderedArray<Script> = DisorderedArray()
-    private var _onLateUpdateScripts: DisorderedArray<Script> = DisorderedArray()
     private var _disableScripts: [Script] = [];
     private var _destroyScripts: [Script] = [];
+
+    // Render
+    var _renderers: DisorderedArray<Renderer> = DisorderedArray()
 
     // Delay dispose active/inActive Pool
     private var _componentsContainerPool: [[Component]] = [[]]
 }
 
 extension ComponentsManager {
+    func addRenderer(_ renderer: Renderer) {
+        renderer._rendererIndex = _renderers.length
+        _renderers.add(renderer)
+    }
+
+    func removeRenderer(_ renderer: Renderer) {
+        let replaced = _renderers.deleteByIndex(renderer._rendererIndex)
+        if replaced != nil {
+            replaced!._rendererIndex = renderer._rendererIndex
+        }
+        renderer._rendererIndex = -1
+    }
+
     func addOnStartScript(_ script: Script) {
         script._onStartIndex = _onStartScripts.length
         _onStartScripts.add(script)
@@ -46,19 +61,6 @@ extension ComponentsManager {
         script._onUpdateIndex = -1
     }
 
-    func addOnLateUpdateScript(_ script: Script) {
-        script._onLateUpdateIndex = _onLateUpdateScripts.length
-        _onLateUpdateScripts.add(script)
-    }
-
-    func removeOnLateUpdateScript(_ script: Script) {
-        let replaced = _onLateUpdateScripts.deleteByIndex(script._onLateUpdateIndex)
-        if replaced != nil {
-            replaced!._onLateUpdateIndex = script._onLateUpdateIndex
-        }
-        script._onLateUpdateIndex = -1
-    }
-
     func addDisableScript(component: Script) {
         _disableScripts.append(component);
     }
@@ -68,6 +70,13 @@ extension ComponentsManager {
     }
 
     //MARK: - Execute Components
+
+    func callRendererOnUpdate(_ deltaTime: Float) {
+        let elements = _renderers._elements
+        for i in 0..<_renderers.length {
+            elements[i]!.update(deltaTime)
+        }
+    }
 
     func callScriptOnStart() {
         let onStartScripts = _onStartScripts
@@ -97,12 +106,26 @@ extension ComponentsManager {
     }
 
     func callScriptOnLateUpdate(_ deltaTime: Float) {
-        let elements = _onLateUpdateScripts._elements
-        for i in 0..<_onLateUpdateScripts.length {
+        let elements = _onUpdateScripts._elements
+        for i in 0..<_onUpdateScripts.length {
             let element = elements[i]!
             if (element._started) {
                 element.onLateUpdate(deltaTime)
             }
+        }
+    }
+
+    func callCameraOnBeginRender(_ camera: Camera) {
+        let camComps = camera.entity._scripts
+        for i in 0..<camComps.length {
+            camComps.get(i)?.onBeginRender(camera)
+        }
+    }
+
+    func callCameraOnEndRender(_ camera: Camera) {
+        let camComps = camera.entity._scripts
+        for i in 0..<camComps.length {
+            camComps.get(i)?.onEndRender(camera)
         }
     }
 

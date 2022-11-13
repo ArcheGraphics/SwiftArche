@@ -6,10 +6,13 @@
 
 import Foundation
 
-/// Color Space.
-public enum ColorSpace {
-    /// Linear color space.
-    case   Linear
-    /// Gamma color space.
-    case  Gamma
+public class RenderPipeline {
+    var camera: Camera
+
+    public init(_ camera: Camera) {
+        self.camera = camera
+    }
+
+    public func render() {
+    }
 }

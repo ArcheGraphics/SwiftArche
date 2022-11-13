@@ -7,7 +7,7 @@
 import Foundation
 
 /// Filling mode of background texture.
-enum BackgroundTextureFillMode {
+public enum BackgroundTextureFillMode {
     /// Maintain the aspect ratio and scale the texture to fit the width of the canvas.
     case  AspectFitWidth
     /// Maintain the aspect ratio and scale the texture to fit the height of the canvas.

@@ -204,7 +204,7 @@ public final class Entity: EngineObject {
                 }
             }
 
-            child._setTransformDirty();
+            child.transform._parentChange()
         } else {
             child._setParent(self, nil);
         }
@@ -232,8 +232,7 @@ public final class Entity: EngineObject {
                     child._processInActive()
                 }
             }
-
-            child._setTransformDirty();
+            child.transform._parentChange()
         } else {
             child._setParent(self, index);
         }
@@ -440,7 +439,7 @@ extension Entity {
                     Entity._traverseSetOwnerScene(self, nil);
                 }
             }
-            _setTransformDirty();
+            transform._parentChange()
         }
     }
 
@@ -489,16 +488,6 @@ extension Entity {
         for child in _children {
             if child.isActive {
                 child._setInActiveInHierarchy(&activeChangedComponents)
-            }
-        }
-    }
-
-    private func _setTransformDirty() {
-        if (transform != nil) {
-            transform!._parentChange()
-        } else {
-            for i in 0..<_children.count {
-                _children[i]._setTransformDirty()
             }
         }
     }

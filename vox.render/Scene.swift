@@ -11,6 +11,11 @@ public class Scene: EngineObject {
     /// Scene name.
     public var name: String
 
+    /// The background of the scene.
+    public var background: Background = Background();
+    /// Scene-related shader data.
+    public var shaderData: ShaderData
+
     /** If cast shadows. */
     public var castShadows: Bool = true;
     /** The resolution of the shadow maps. */
@@ -22,6 +27,7 @@ public class Scene: EngineObject {
     /** Max Shadow distance. */
     public var shadowDistance: Float = 50;
 
+    var _activeCameras: [Camera] = []
     var _isActiveInEngine: Bool = false
     var _rootEntities: [Entity] = []
 
@@ -47,6 +53,7 @@ public class Scene: EngineObject {
     ///   - name: Name
     init(_ engine: Engine, _ name: String = "") {
         self.name = name
+        shaderData = ShaderData(engine.device)
         super.init(engine)
     }
 
@@ -208,6 +215,23 @@ public class Scene: EngineObject {
 //MARK:- Internal Members
 
 extension Scene {
+    internal func _attachRenderCamera(_ camera: Camera) {
+        let index = _activeCameras.firstIndex { cam in
+            cam === camera
+        }
+        if (index == nil) {
+            _activeCameras.append(camera)
+        } else {
+            logger.warning("Camera already attached.")
+        }
+    }
+
+    internal func _detachRenderCamera(_ camera: Camera) {
+        _activeCameras.removeAll { cam in
+            cam === camera
+        }
+    }
+
     func _processActive(_ active: Bool) {
         _isActiveInEngine = active
         let rootEntities = _rootEntities

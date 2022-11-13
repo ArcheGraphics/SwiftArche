@@ -11,7 +11,6 @@ public class Script: Component {
     var _started: Bool = false
     var _onStartIndex: Int = -1
     var _onUpdateIndex: Int = -1
-    var _onLateUpdateIndex: Int = -1
     var _onPhysicsUpdateIndex: Int = -1;
     var _onPreRenderIndex: Int = -1
     var _onPostRenderIndex: Int = -1
@@ -40,6 +39,16 @@ public class Script: Component {
     public func onLateUpdate(_ deltaTime: Float) {
     }
 
+    /// Called before camera rendering, called per camera.
+    /// - Parameter camera: Current camera.
+    func onBeginRender(_ camera: Camera) {
+    }
+
+    /// Called after camera rendering, called per camera.
+    /// - Parameter camera: Current camera.
+    func onEndRender(_ camera: Camera) {
+    }
+
     /// Called when be disabled.
     public func onDisable() {
     }
@@ -61,7 +70,6 @@ public class Script: Component {
                 componentsManager.addOnStartScript(self)
             }
             componentsManager.addOnUpdateScript(self)
-            componentsManager.addOnLateUpdateScript(self)
             _entity._addScript(self)
         }
         onEnable()
@@ -80,7 +88,6 @@ public class Script: Component {
     func _handlingInValid() {
         let componentsManager = engine._componentsManager;
         componentsManager.removeOnUpdateScript(self);
-        componentsManager.removeOnLateUpdateScript(self);
 
         _entity._removeScript(self);
         _waitHandlingInValid = false;

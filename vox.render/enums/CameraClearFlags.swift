@@ -7,7 +7,7 @@
 import Foundation
 
 /// Camera clear flags enumeration.
-enum CameraClearFlags: Int {
+public enum CameraClearFlags: Int {
     /// Do nothing.
     case  None = 0x0
     /// Clear color with scene background.
