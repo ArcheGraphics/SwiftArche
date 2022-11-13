@@ -47,9 +47,7 @@ public class ShaderData {
         }
 
         let pointer = buffer.contents().bindMemory(to: T.self, capacity: MemoryLayout<T>.size * data.count)
-        data.withUnsafeBufferPointer { buffer in
-            pointer.assign(from: buffer.baseAddress!, count: data.count)
-        }
+        pointer.assign(from: data, count: data.count)
     }
 
     public func setImageView(_ textureName: String, _ samplerName: String, _ value: MTLTexture?) {

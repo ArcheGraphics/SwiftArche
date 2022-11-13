@@ -14,4 +14,10 @@ public class SubMesh {
     public var count: Int = 0
     /// Drawing topology.
     public var topology: MTLPrimitiveType = .triangle
+
+    public init(_ start: Int, _ count: Int, _ topology: MTLPrimitiveType) {
+        self.start = start
+        self.count = count
+        self.topology = topology
+    }
 }
