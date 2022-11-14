@@ -41,6 +41,7 @@ constant bool hasEmissiveTexture [[function_constant(HAS_EMISSIVE_TEXTURE)]];
 constant bool hasOcclusionTexture [[function_constant(HAS_OCCLUSION_TEXTURE)]];
 constant bool hasClearCoatTexture [[function_constant(HAS_CLEARCOAT_TEXTURE)]];
 constant bool hasClearCoatRoughnessTexture [[function_constant(HAS_CLEARCOAT_ROUGHNESS_TEXTURE)]];
+constant bool hasClearCoatNormalTexture [[function_constant(HAS_CLEARCOAT_NORMAL_TEXTURE)]];
 constant bool hasSpecularGlossinessTexture [[function_constant(HAS_SPECULAR_GLOSSINESS_TEXTURE)]];
 constant bool hasRoughnessMetallicTexture [[function_constant(HAS_ROUGHNESS_METALLIC_TEXTURE)]];
 constant bool hasSpecularTexture [[function_constant(HAS_SPECULAR_TEXTURE)]];

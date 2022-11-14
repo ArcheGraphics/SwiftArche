@@ -11,6 +11,7 @@
 using namespace metal;
 #include "function_constant.h"
 #include "type_common.h"
+#include "normal_shading.h"
 
 class PBRShading {
 public:
@@ -38,9 +39,6 @@ public:
         float clearCoat [[function_constant(isClearCoat)]];
         float clearCoatRoughness [[function_constant(isClearCoat)]];
     };
-    
-    PBRShading(device float4* u_shadowSplitSpheres, device matrix_float4x4* u_shadowMatrices,
-               depth2d<float> u_shadowMap, sampler s, float4 u_shadowMapSize, float3 u_shadowInfo);
     
 private:
     // MARK: - BRDF
@@ -86,16 +84,76 @@ private:
     
     void addTotalDirectRadiance(Geometry geometry, Material material, thread ReflectedLight& reflectedLight);
     
+    // MARK: - Helper
+    float computeSpecularOcclusion(float ambientOcclusion, float roughness, float dotNV);
+
+    float getAARoughnessFactor(float3 normal);
+
+    void initGeometry();
+    
+    void initMaterial();
+    
 private:
+    Geometry geometry;
+    Material material;
+    
+    NormalShading normalShading;
+    
     device DirectLightData* directLight;
     device PointLightData* pointLight;
     device SpotLightData* spotLight;
     
+    float u_alphaCutoff;
+    float4 u_baseColor;
+    float u_metal;
+    float u_roughness;
+    float3 u_PBRSpecularColor;
+    float u_glossiness;
+    float3 u_emissiveColor;
+    
+    float u_clearCoat;
+    float u_clearCoatRoughness;
+    
+    float u_normalIntensity;
+    float u_occlusionIntensity;
+    float u_occlusionTextureCoord;
+    
+    texture2d<float> u_baseTexture;
+    sampler u_baseSampler;
+    
+    texture2d<float> u_normalTexture;
+    sampler u_normalSampler;
+    
+    texture2d<float> u_emissiveTexture;
+    sampler u_emissiveSampler;
+    
+    texture2d<float> u_roughnessMetallicTexture;
+    sampler u_roughnessMetallicSampler;
+    
+    texture2d<float> u_specularGlossinessTexture;
+    sampler u_specularGlossinessSampler;
+    
+    texture2d<float> u_occlusionTexture;
+    sampler u_occlusionSampler;
+    
+    texture2d<float> u_clearCoatTexture;
+    sampler u_clearCoatSampler;
+    
+    texture2d<float> u_clearCoatRoughnessTexture;
+    sampler u_clearCoatRoughnessSampler;
+    
+    texture2d<float> u_clearCoatNormalTexture;
+    sampler u_clearCoatNormalSampler;
+
+    float4 v_color;
+    float2 v_uv;
+    float3 u_cameraPos;
     float3 view_pos;
+    
     device float4* u_shadowSplitSpheres;
     device matrix_float4x4* u_shadowMatrices;
     depth2d<float> u_shadowMap;
-    sampler s;
+    sampler u_shadowMapSampler;
     float4 u_shadowMapSize;
     float3 u_shadowInfo;
 };

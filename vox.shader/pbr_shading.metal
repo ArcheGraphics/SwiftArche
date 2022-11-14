@@ -10,19 +10,6 @@
 
 using namespace metal;
 
-PBRShading::PBRShading(device float4* u_shadowSplitSpheres, device matrix_float4x4* u_shadowMatrices,
-                       depth2d<float> u_shadowMap, sampler s, float4 u_shadowMapSize, float3 u_shadowInfo):
-u_shadowSplitSpheres(u_shadowSplitSpheres),
-u_shadowMatrices(u_shadowMatrices),
-u_shadowMap(u_shadowMap),
-s(s),
-u_shadowMapSize(u_shadowMapSize),
-u_shadowInfo(u_shadowInfo)
-{
-    
-}
-
-
 // MARK: - BRDF
 float PBRShading::F_Schlick(float dotLH) {
     return 0.04 + 0.96 * (pow(1.0 - dotLH, 5.0));
@@ -194,7 +181,7 @@ void PBRShading::addTotalDirectRadiance(Geometry geometry, Material material, th
         shadowAttenuation = 1.0;
         if (needCalculateShadow) {
             shadowAttenuation *= sampleShadowMap(view_pos, u_shadowSplitSpheres, u_shadowMatrices,
-                                                 u_shadowMap, s, u_shadowMapSize, u_shadowInfo);
+                                                 u_shadowMap, u_shadowMapSampler, u_shadowMapSize, u_shadowInfo);
             sunIndex = int(u_shadowInfo.z);
         }
         
@@ -220,3 +207,114 @@ void PBRShading::addTotalDirectRadiance(Geometry geometry, Material material, th
     }
 }
 
+// MARK: - Helper
+float PBRShading::computeSpecularOcclusion(float ambientOcclusion, float roughness, float dotNV ) {
+    return saturate( pow( dotNV + ambientOcclusion, exp2( - 16.0 * roughness - 1.0 ) ) - 1.0 + ambientOcclusion );
+}
+
+float PBRShading::getAARoughnessFactor(float3 normal) {
+    // Kaplanyan 2016, "Stable specular highlights"
+    // Tokuyoshi 2017, "Error Reduction and Simplification for Shading Anti-Aliasing"
+    // Tokuyoshi and Kaplanyan 2019, "Improved Geometric Specular Antialiasing"
+    float3 dxy = max( abs(dfdx(normal)), abs(dfdy(normal)) );
+    return 0.04 + max( max(dxy.x, dxy.y), dxy.z );
+}
+
+void PBRShading::initGeometry(){
+    geometry.position = view_pos;
+    geometry.viewDir =  normalize(u_cameraPos - view_pos);
+    
+    matrix_float3x3 tbn;
+    if (hasNormalTexture || hasClearCoatNormalTexture) {
+        tbn = normalShading.getTBN();
+    }
+    
+    if (hasNormalTexture) {
+        geometry.normal = normalShading.getNormalByNormalTexture(tbn, u_normalTexture, u_normalSampler,
+                                                                 u_normalIntensity, v_uv);
+    } else {
+        geometry.normal = normalShading.getNormal();
+    }
+    
+    geometry.dotNV = saturate( dot(geometry.normal, geometry.viewDir) );
+    
+    if (isClearCoat) {
+        if (hasClearCoatNormalTexture) {
+            geometry.clearCoatNormal = normalShading.getNormalByNormalTexture(tbn, u_clearCoatNormalTexture,
+                                                                              u_clearCoatNormalSampler, u_normalIntensity, v_uv);
+        } else {
+            geometry.clearCoatNormal = normalShading.getNormal();
+        }
+        geometry.clearCoatDotNV = saturate( dot(geometry.clearCoatNormal, geometry.viewDir) );
+    }
+}
+
+void PBRShading::initMaterial(){
+    float4 baseColor = u_baseColor;
+    float metal = u_metal;
+    float roughness = u_roughness;
+    float3 specularColor = u_PBRSpecularColor;
+    float glossiness = u_glossiness;
+    float alphaCutoff = u_alphaCutoff;
+    
+    if (hasBaseTexture) {
+        float4 baseTextureColor = u_baseTexture.sample(u_baseSampler, v_uv);
+#ifndef OASIS_COLORSPACE_GAMMA
+        baseTextureColor = gammaToLinear(baseTextureColor);
+#endif
+        baseColor *= baseTextureColor;
+    }
+    
+    if (hasVertexColor) {
+        baseColor *= v_color;
+    }
+    
+    if (needAlphaCutoff) {
+        if( baseColor.a < alphaCutoff ) {
+            discard_fragment();
+        }
+    }
+    
+    if (hasRoughnessMetallicTexture) {
+        float4 metalRoughMapColor = u_roughnessMetallicTexture.sample(u_roughnessMetallicSampler, v_uv );
+        roughness *= metalRoughMapColor.g;
+        metal *= metalRoughMapColor.b;
+    }
+    
+    if (hasSpecularGlossinessTexture) {
+        float4 specularGlossinessColor = u_specularGlossinessTexture.sample(u_specularGlossinessSampler, v_uv );
+#ifndef OASIS_COLORSPACE_GAMMA
+        specularGlossinessColor = gammaToLinear(specularGlossinessColor);
+#endif
+        specularColor *= specularGlossinessColor.rgb;
+        glossiness *= specularGlossinessColor.a;
+    }
+    
+    if (isMetallicWorkFlow) {
+        material.diffuseColor = baseColor.rgb * ( 1.0 - metal );
+        material.specularColor = mix( float3( 0.04), baseColor.rgb, metal );
+        material.roughness = roughness;
+    } else {
+        float specularStrength = max( max( specularColor.r, specularColor.g ), specularColor.b );
+        material.diffuseColor = baseColor.rgb * ( 1.0 - specularStrength );
+        material.specularColor = specularColor;
+        material.roughness = 1.0 - glossiness;
+    }
+    
+    material.roughness = max(material.roughness, getAARoughnessFactor(geometry.normal));
+    
+    if (isClearCoat) {
+        material.clearCoat = u_clearCoat;
+        material.clearCoatRoughness = u_clearCoatRoughness;
+        if (hasClearCoatTexture) {
+            material.clearCoat *= u_clearCoatTexture.sample(u_clearCoatSampler, v_uv ).r;
+        }
+        if (hasClearCoatRoughnessTexture) {
+            material.clearCoatRoughness *= u_clearCoatRoughnessTexture.sample(u_clearCoatRoughnessSampler, v_uv ).g;
+        }
+        material.clearCoat = saturate( material.clearCoat );
+        material.clearCoatRoughness = max(material.clearCoatRoughness, getAARoughnessFactor(geometry.clearCoatNormal));
+    }
+    
+    material.opacity = baseColor.a;
+}
