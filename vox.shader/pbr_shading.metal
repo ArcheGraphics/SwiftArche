@@ -4,18 +4,31 @@
 //  personal capacity and am not conveying any rights to any intellectual
 //  property of any third parties.
 
-#include <metal_stdlib>
-using namespace metal;
-#include "pbr_common.h"
+#include "pbr_shading.h"
 #include "function_common.h"
 #include "shadow/shadow_frag_share.h"
 
+using namespace metal;
+
+PBRShading::PBRShading(device float4* u_shadowSplitSpheres, device matrix_float4x4* u_shadowMatrices,
+                       depth2d<float> u_shadowMap, sampler s, float4 u_shadowMapSize, float3 u_shadowInfo):
+u_shadowSplitSpheres(u_shadowSplitSpheres),
+u_shadowMatrices(u_shadowMatrices),
+u_shadowMap(u_shadowMap),
+s(s),
+u_shadowMapSize(u_shadowMapSize),
+u_shadowInfo(u_shadowInfo)
+{
+    
+}
+
+
 // MARK: - BRDF
-float F_Schlick(float dotLH) {
+float PBRShading::F_Schlick(float dotLH) {
     return 0.04 + 0.96 * (pow(1.0 - dotLH, 5.0));
 }
 
-float3 F_Schlick(float3 specularColor, float dotLH) {
+float3 PBRShading::F_Schlick(float3 specularColor, float dotLH) {
     // Original approximation by Christophe Schlick '94
     // float fresnel = pow( 1.0 - dotLH, 5.0 );
     
@@ -28,7 +41,7 @@ float3 F_Schlick(float3 specularColor, float dotLH) {
 
 // Moving Frostbite to Physically Based Rendering 3.0 - page 12, listing 2
 // https://seblagarde.files.wordpress.com/2015/07/course_notes_moving_frostbite_to_pbr_v32.pdf
-float G_GGX_SmithCorrelated(float alpha, float dotNL, float dotNV) {
+float PBRShading::G_GGX_SmithCorrelated(float alpha, float dotNL, float dotNV) {
     float a2 = pow2(alpha);
     
     // dotNL and dotNV are explicitly swapped. This is not a mistake.
@@ -41,14 +54,14 @@ float G_GGX_SmithCorrelated(float alpha, float dotNL, float dotNV) {
 // Microfacet Models for Refraction through Rough Surfaces - equation (33)
 // http://graphicrants.blogspot.com/2013/08/specular-brdf-reference.html
 // alpha is "roughness squared" in Disney’s reparameterization
-float D_GGX(float alpha, float dotNH) {
+float PBRShading::D_GGX(float alpha, float dotNH) {
     float a2 = pow2( alpha );
     float denom = pow2(dotNH) * (a2 - 1.0) + 1.0; // avoid alpha = 0 with dotNH = 1
     return M_1_PI_F * a2 / pow2(denom);
 }
 
 // GGX Distribution, Schlick Fresnel, GGX-Smith Visibility
-float3 BRDF_Specular_GGX(float3 incidentDirection, float3 viewDir, float3 normal, float3 specularColor, float roughness) {
+float3 PBRShading::BRDF_Specular_GGX(float3 incidentDirection, float3 viewDir, float3 normal, float3 specularColor, float roughness) {
     float alpha = pow2(roughness); // UE4's roughness
     
     float3 halfDir = normalize(incidentDirection + viewDir);
@@ -65,12 +78,12 @@ float3 BRDF_Specular_GGX(float3 incidentDirection, float3 viewDir, float3 normal
     return F * (G * D);
 }
 
-float3 BRDF_Diffuse_Lambert(float3 diffuseColor) {
+float3 PBRShading::BRDF_Diffuse_Lambert(float3 diffuseColor) {
     return M_1_PI_F * diffuseColor;
 }
 
 // MARK: - IBL
-float3 getLightProbeIrradiance(float3 sh[9], float3 normal){
+float3 PBRShading::getLightProbeIrradiance(float3 sh[9], float3 normal){
     normal.x = -normal.x;
     float3 result = sh[0] +
     sh[1] * (normal.y) +
@@ -88,7 +101,7 @@ float3 getLightProbeIrradiance(float3 sh[9], float3 normal){
 }
 
 // ref: https://www.unrealengine.com/blog/physically-based-shading-on-mobile - environmentBRDF for GGX on mobile
-float3 envBRDFApprox(float3 specularColor,float roughness, float dotNV ) {
+float3 PBRShading::envBRDFApprox(float3 specularColor,float roughness, float dotNV ) {
     const float4 c0 = float4(-1, -0.0275, -0.572, 0.022);
     const float4 c1 = float4(1, 0.0425, 1.04, -0.04);
     float4 r = roughness * c0 + c1;
@@ -97,12 +110,12 @@ float3 envBRDFApprox(float3 specularColor,float roughness, float dotNV ) {
     return specularColor * AB.x + AB.y;
 }
 
-float getSpecularMIPLevel(float roughness, int maxMIPLevel ) {
+float PBRShading::getSpecularMIPLevel(float roughness, int maxMIPLevel ) {
     return roughness * float(maxMIPLevel);
 }
 
-float3 getLightProbeRadiance(float3 viewDir, float3 normal, float roughness, int maxMIPLevel, float specularIntensity,
-                             sampler u_env_specularSampler, texturecube<float> u_env_specularTexture) {
+float3 PBRShading::getLightProbeRadiance(float3 viewDir, float3 normal, float roughness, int maxMIPLevel, float specularIntensity,
+                                         sampler u_env_specularSampler, texturecube<float> u_env_specularTexture) {
     if (hasSpecularEnv) {
         float3 reflectVec = reflect( -viewDir, normal );
         reflectVec.x = -reflectVec.x; // TextureCube is left-hand,so x need inverse
@@ -116,7 +129,7 @@ float3 getLightProbeRadiance(float3 viewDir, float3 normal, float roughness, int
 }
 
 // MARK: - Irradiance
-void addDirectRadiance(float3 incidentDirection, float3 color, Geometry geometry, Material material, thread ReflectedLight& reflectedLight) {
+void PBRShading::addDirectRadiance(float3 incidentDirection, float3 color, Geometry geometry, Material material, thread ReflectedLight& reflectedLight) {
     float attenuation = 1.0;
     
     if (isClearCoat) {
@@ -138,15 +151,15 @@ void addDirectRadiance(float3 incidentDirection, float3 color, Geometry geometry
     
 }
 
-void addDirectionalDirectLightRadiance(DirectLight directionalLight, Geometry geometry,
-                                       Material material, thread ReflectedLight& reflectedLight) {
+void PBRShading::addDirectionalDirectLightRadiance(DirectLight directionalLight, Geometry geometry,
+                                                   Material material, thread ReflectedLight& reflectedLight) {
     float3 color = directionalLight.color;
     float3 direction = -directionalLight.direction;
     addDirectRadiance( direction, color, geometry, material, reflectedLight );
 }
 
-void addPointDirectLightRadiance(PointLight pointLight, Geometry geometry,
-                                 Material material, thread ReflectedLight& reflectedLight) {
+void PBRShading::addPointDirectLightRadiance(PointLight pointLight, Geometry geometry,
+                                             Material material, thread ReflectedLight& reflectedLight) {
     
     float3 lVector = pointLight.position - geometry.position;
     float3 direction = normalize(lVector);
@@ -157,7 +170,7 @@ void addPointDirectLightRadiance(PointLight pointLight, Geometry geometry,
     addDirectRadiance( direction, color, geometry, material, reflectedLight );
 }
 
-void addSpotDirectLightRadiance(SpotLight spotLight, Geometry geometry, Material material, thread ReflectedLight& reflectedLight) {
+void PBRShading::addSpotDirectLightRadiance(SpotLight spotLight, Geometry geometry, Material material, thread ReflectedLight& reflectedLight) {
     float3 lVector = spotLight.position - geometry.position;
     float3 direction = normalize(lVector);
     
@@ -173,17 +186,14 @@ void addSpotDirectLightRadiance(SpotLight spotLight, Geometry geometry, Material
     addDirectRadiance(direction, color, geometry, material, reflectedLight);
 }
 
-void addTotalDirectRadiance(Geometry geometry, Material material, thread ReflectedLight& reflectedLight,
-                            device DirectLight* directLight, device PointLight* pointLight, device SpotLight* spotLight,
-                            float3 v_pos, device float4* u_shadowSplitSpheres, device matrix_float4x4* u_shadowMatrices,
-                            depth2d<float> u_shadowMap, sampler s, float4 u_shadowMapSize, float3 u_shadowInfo){
+void PBRShading::addTotalDirectRadiance(Geometry geometry, Material material, thread ReflectedLight& reflectedLight) {
     float shadowAttenuation = 1.0;
     int sunIndex = 0;
     
     if (hasDirectLight) {
         shadowAttenuation = 1.0;
         if (needCalculateShadow) {
-            shadowAttenuation *= sampleShadowMap(v_pos, u_shadowSplitSpheres, u_shadowMatrices,
+            shadowAttenuation *= sampleShadowMap(view_pos, u_shadowSplitSpheres, u_shadowMatrices,
                                                  u_shadowMap, s, u_shadowMapSize, u_shadowInfo);
             sunIndex = int(u_shadowInfo.z);
         }
@@ -209,3 +219,4 @@ void addTotalDirectRadiance(Geometry geometry, Material material, thread Reflect
         addSpotDirectLightRadiance(spotLight[i], geometry, material, reflectedLight);
     }
 }
+
