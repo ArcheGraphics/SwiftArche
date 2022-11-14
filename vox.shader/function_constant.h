@@ -19,10 +19,9 @@ constant bool notOmitNormalAndHasNormal = !omitNormal && hasNormal;
 constant bool notOmitNormalAndHasTangent = !omitNormal && hasTangent;
 
 constant bool hasBlendShape [[function_constant(HAS_BLENDSHAPE)]];
+constant int blendShapeCount [[function_constant(BLENDSHAPE_COUNT)]];
 constant bool hasBlendShapeNormal [[function_constant(HAS_BLENDSHAPE_NORMAL)]];
 constant bool hasBlendShapeTangent [[function_constant(HAS_BLENDSHAPE_TANGENT)]];
-constant bool hasBlendShapeAndHasBlendShapeNormal = hasBlendShape && hasBlendShapeNormal;
-constant bool hasBlendShapeAndhasBlendShapeTangent = hasBlendShape && hasBlendShapeTangent;
 
 constant bool hasSkin [[function_constant(HAS_SKIN)]];
 constant bool hasJointTexture [[function_constant(HAS_JOINT_TEXTURE)]];

@@ -17,5 +17,8 @@ float4 gammaToLinear(float4 srgbIn);
 
 float4 linearToGamma(float4 linearIn);
 
-float4x4 getJointMatrix(sampler smp, texture2d<float> joint_tex,
-                        float index, int u_jointCount);
+float4x4 getJointMatrix(texture2d<float> joint_tex, float index, int u_jointCount);
+
+float3 getBlendShapeVertexElement(int blendShapeIndex, int vertexElementIndex,
+                                  int3 u_blendShapeTextureInfo,
+                                  texture2d_array<float> u_blendShapeTexture);

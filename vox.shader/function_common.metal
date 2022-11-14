@@ -22,16 +22,24 @@ float4 linearToGamma(float4 linearIn) {
     return float4(pow(linearIn.rgb, float3(1.0 / 2.2)), linearIn.a);
 }
 
-float4x4 getJointMatrix(sampler smp, texture2d<float> joint_tex,
+float4x4 getJointMatrix(texture2d<float> joint_tex,
                         float index, int u_jointCount) {
     float base = index / u_jointCount;
     float hf = 0.5 / u_jointCount;
     float v = base + hf;
     
-    float4 m0 = joint_tex.sample(smp, float2(0.125, v));
-    float4 m1 = joint_tex.sample(smp, float2(0.375, v));
-    float4 m2 = joint_tex.sample(smp, float2(0.625, v));
-    float4 m3 = joint_tex.sample(smp, float2(0.875, v));
+    float4 m0 = joint_tex.read(ushort2(0.125 * joint_tex.get_width(), v));
+    float4 m1 = joint_tex.read(ushort2(0.375 * joint_tex.get_width(), v));
+    float4 m2 = joint_tex.read(ushort2(0.625 * joint_tex.get_width(), v));
+    float4 m3 = joint_tex.read(ushort2(0.875 * joint_tex.get_width(), v));
     
     return float4x4(m0, m1, m2, m3);
+}
+
+float3 getBlendShapeVertexElement(int blendShapeIndex, int vertexElementIndex,
+                                  int3 u_blendShapeTextureInfo,
+                                  texture2d_array<float> u_blendShapeTexture) {
+    int y = vertexElementIndex / u_blendShapeTextureInfo.y;
+    int x = vertexElementIndex - y * u_blendShapeTextureInfo.y;
+    return  u_blendShapeTexture.read(ushort2(x, y), blendShapeIndex).xyz;
 }

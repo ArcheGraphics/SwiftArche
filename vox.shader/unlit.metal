@@ -16,13 +16,17 @@ typedef struct {
 } VertexOut;
 
 vertex VertexOut vertex_unlit(const VertexIn in [[stage_in]],
-                              constant matrix_float4x4 &u_MVPMat [[buffer(7)]],
-                              constant float4 &u_tilingOffset [[buffer(8)]],
-                              sampler u_jointSampler [[sampler(0), function_constant(hasSkinAndHasJointTexture)]],
+                              uint v_id [[vertex_id]],
+                              constant matrix_float4x4 &u_MVPMat [[buffer(3)]],
+                              constant float4 &u_tilingOffset [[buffer(4)]],
+                              // skin
                               texture2d<float> u_jointTexture [[texture(0), function_constant(hasSkinAndHasJointTexture)]],
-                              constant int &u_jointCount [[buffer(11), function_constant(hasSkinAndHasJointTexture)]],
-                              constant matrix_float4x4 *u_jointMatrix [[buffer(12), function_constant(hasSkinNotHasJointTexture)]],
-                              constant float *u_blendShapeWeights [[buffer(13), function_constant(hasBlendShape)]]) {
+                              constant int &u_jointCount [[buffer(5), function_constant(hasSkinAndHasJointTexture)]],
+                              constant matrix_float4x4 *u_jointMatrix [[buffer(6), function_constant(hasSkinNotHasJointTexture)]],
+                              // morph
+                              texture2d_array<float> u_blendShapeTexture [[texture(1), function_constant(hasBlendShape)]],
+                              constant int3 &u_blendShapeTextureInfo [[buffer(7), function_constant(hasBlendShape)]],
+                              constant float *u_blendShapeWeights [[buffer(8), function_constant(hasBlendShape)]]) {
     VertexOut out;
     
     // begin position
@@ -30,10 +34,12 @@ vertex VertexOut vertex_unlit(const VertexIn in [[stage_in]],
     
     //blendshape
     if (hasBlendShape) {
-        position.xyz += in.POSITION_BS0 * u_blendShapeWeights[0];
-        position.xyz += in.POSITION_BS1 * u_blendShapeWeights[1];
-        position.xyz += in.POSITION_BS2 * u_blendShapeWeights[2];
-        position.xyz += in.POSITION_BS3 * u_blendShapeWeights[3];
+        int vertexOffset = v_id * u_blendShapeTextureInfo.x;
+        for(int i = 0; i < blendShapeCount; i++){
+            int vertexElementOffset = vertexOffset;
+            float weight = u_blendShapeWeights[i];
+            position.xyz += getBlendShapeVertexElement(i, vertexElementOffset, u_blendShapeTextureInfo ,u_blendShapeTexture) * weight;
+        }
     }
     
     //skinning
@@ -41,10 +47,10 @@ vertex VertexOut vertex_unlit(const VertexIn in [[stage_in]],
         matrix_float4x4 skinMatrix;
         if (hasJointTexture) {
             skinMatrix =
-            in.WEIGHTS_0.x * getJointMatrix(u_jointSampler, u_jointTexture, in.JOINTS_0.x, u_jointCount) +
-            in.WEIGHTS_0.y * getJointMatrix(u_jointSampler, u_jointTexture, in.JOINTS_0.y, u_jointCount) +
-            in.WEIGHTS_0.z * getJointMatrix(u_jointSampler, u_jointTexture, in.JOINTS_0.z, u_jointCount) +
-            in.WEIGHTS_0.w * getJointMatrix(u_jointSampler, u_jointTexture, in.JOINTS_0.w, u_jointCount);
+            in.WEIGHTS_0.x * getJointMatrix(u_jointTexture, in.JOINTS_0.x, u_jointCount) +
+            in.WEIGHTS_0.y * getJointMatrix(u_jointTexture, in.JOINTS_0.y, u_jointCount) +
+            in.WEIGHTS_0.z * getJointMatrix(u_jointTexture, in.JOINTS_0.z, u_jointCount) +
+            in.WEIGHTS_0.w * getJointMatrix(u_jointTexture, in.JOINTS_0.w, u_jointCount);
         } else {
             skinMatrix =
             in.WEIGHTS_0.x * u_jointMatrix[int(in.JOINTS_0.x)] +
@@ -73,14 +79,12 @@ vertex VertexOut vertex_unlit(const VertexIn in [[stage_in]],
 fragment float4 fragment_unlit(VertexOut in [[stage_in]],
                                constant float4 &u_baseColor [[buffer(0)]],
                                constant float &u_alphaCutoff [[buffer(1)]],
+                               sampler u_baseSampler [[sampler(0), function_constant(hasBaseTexture)]],
                                texture2d<float> u_baseTexture [[texture(0), function_constant(hasBaseTexture)]]) {
-    constexpr sampler textureSampler(coord::normalized, filter::linear,
-                                     address::repeat, compare_func:: less);
-    
     float4 baseColor = u_baseColor;
     
     if (hasBaseTexture) {
-        baseColor *= u_baseTexture.sample(textureSampler, in.v_uv);
+        baseColor *= u_baseTexture.sample(u_baseSampler, in.v_uv);
     }
     
     if (needAlphaCutoff) {

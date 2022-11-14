@@ -16,16 +16,4 @@ typedef struct {
     float4 JOINTS_0 [[attribute(Joints_0), function_constant(hasSkin)]];
     float4 TANGENT [[attribute(Tangent), function_constant(notOmitNormalAndHasTangent)]];
     float2 TEXCOORD_0 [[attribute(UV_0), function_constant(hasUV)]];
-    float3 POSITION_BS0 [[attribute(10), function_constant(hasBlendShape)]];
-    float3 POSITION_BS1 [[attribute(11), function_constant(hasBlendShape)]];
-    float3 POSITION_BS2 [[attribute(12), function_constant(hasBlendShape)]];
-    float3 POSITION_BS3 [[attribute(13), function_constant(hasBlendShape)]];
-    float3 NORMAL_BS0 [[attribute(16), function_constant(hasBlendShapeAndHasBlendShapeNormal)]];
-    float3 NORMAL_BS1 [[attribute(17), function_constant(hasBlendShapeAndHasBlendShapeNormal)]];
-    float3 NORMAL_BS2 [[attribute(18), function_constant(hasBlendShapeAndHasBlendShapeNormal)]];
-    float3 NORMAL_BS3 [[attribute(19), function_constant(hasBlendShapeAndHasBlendShapeNormal)]];
-    float3 TANGENT_BS0 [[attribute(20), function_constant(hasBlendShapeAndhasBlendShapeTangent)]];
-    float3 TANGENT_BS1 [[attribute(21), function_constant(hasBlendShapeAndhasBlendShapeTangent)]];
-    float3 TANGENT_BS2 [[attribute(22), function_constant(hasBlendShapeAndhasBlendShapeTangent)]];
-    float3 TANGENT_BS3 [[attribute(23), function_constant(hasBlendShapeAndhasBlendShapeTangent)]];
 } VertexIn;
