@@ -7,13 +7,13 @@
 import Foundation
 
 /// Determines which type of shadows should be used.
-public  enum ShadowType {
+public enum ShadowType : Int {
     /// Disable Shadows.
-    case None
+    case None = 0
     /// Hard Shadows Only.
-    case Hard
+    case Hard = 1
     /// Cast "soft" shadows with low range.
-    case SoftLow
+    case SoftLow = 2
     /// Cast "soft" shadows with large range.
-    case SoftHigh
+    case SoftHigh = 3
 }

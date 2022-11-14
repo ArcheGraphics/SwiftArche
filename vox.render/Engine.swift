@@ -15,6 +15,7 @@ public class Engine {
     var sceneManager: SceneManager!
     var canvas: Canvas
     var device: MTLDevice
+    var _macroCollection: ShaderMacroCollection = ShaderMacroCollection();
 
     init(canvas: Canvas) {
         self.canvas = canvas
