@@ -6,6 +6,33 @@
 
 #pragma once
 
+#include "function_constant.h"
+
+struct ReflectedLight {
+    float3 directDiffuse;
+    float3 directSpecular;
+    float3 indirectDiffuse;
+    float3 indirectSpecular;
+};
+
+struct Geometry {
+    float3 position;
+    float3 normal;
+    float3 viewDir;
+    float dotNV;
+    float3 clearCoatNormal [[function_constant(isClearCoat)]];
+    float clearCoatDotNV [[function_constant(isClearCoat)]];
+};
+
+struct Material {
+    float3 diffuseColor;
+    float roughness;
+    float3 specularColor;
+    float opacity;
+    float clearCoat [[function_constant(isClearCoat)]];
+    float clearCoatRoughness [[function_constant(isClearCoat)]];
+};
+
 // MARK: - BRDF
 float F_Schlick(float dotLH);
 
@@ -24,3 +51,18 @@ float D_GGX(float alpha, float dotNH);
 float3 BRDF_Specular_GGX(float3 incidentDirection, float3 viewDir, float3 normal, float3 specularColor, float roughness);
 
 float3 BRDF_Diffuse_Lambert(float3 diffuseColor);
+
+// MARK: - IBL
+float3 getLightProbeIrradiance(float3 sh[9], float3 normal);
+
+// ref: https://www.unrealengine.com/blog/physically-based-shading-on-mobile - environmentBRDF for GGX on mobile
+float3 envBRDFApprox(float3 specularColor,float roughness, float dotNV);
+
+float getSpecularMIPLevel(float roughness, int maxMIPLevel);
+
+float3 getLightProbeRadiance(float3 viewDir, float3 normal, float roughness, int maxMIPLevel, float specularIntensity,
+                             sampler u_env_specularSampler, texturecube<float> u_env_specularTexture);
+
+// MARK: - Irradiance
+void addDirectRadiance(float3 incidentDirection, float3 color, Geometry geometry,
+                       Material material, thread ReflectedLight& reflectedLight);
