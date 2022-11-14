@@ -16,10 +16,10 @@ using namespace metal;
 class PBRShading {
 public:
     struct ReflectedLight {
-        float3 directDiffuse;
-        float3 directSpecular;
-        float3 indirectDiffuse;
-        float3 indirectSpecular;
+        float3 directDiffuse = float3(0.0);
+        float3 directSpecular = float3(0.0);
+        float3 indirectDiffuse = float3(0.0);
+        float3 indirectSpecular = float3(0.0);
     };
     
     struct Geometry {
@@ -72,17 +72,15 @@ private:
                                  sampler u_env_specularSampler, texturecube<float> u_env_specularTexture);
     
     // MARK: - Irradiance
-    void addDirectRadiance(float3 incidentDirection, float3 color, Geometry geometry, Material material, thread ReflectedLight& reflectedLight);
+    void addDirectRadiance(float3 incidentDirection, float3 color);
     
-    void addDirectionalDirectLightRadiance(DirectLightData directionalLight, Geometry geometry,
-                                           Material material, thread ReflectedLight& reflectedLight);
+    void addDirectionalDirectLightRadiance(DirectLightData directionalLight);
     
-    void addPointDirectLightRadiance(PointLightData pointLight, Geometry geometry,
-                                     Material material, thread ReflectedLight& reflectedLight);
+    void addPointDirectLightRadiance(PointLightData pointLight);
     
-    void addSpotDirectLightRadiance(SpotLightData spotLight, Geometry geometry, Material material, thread ReflectedLight& reflectedLight);
+    void addSpotDirectLightRadiance(SpotLightData spotLight);
     
-    void addTotalDirectRadiance(Geometry geometry, Material material, thread ReflectedLight& reflectedLight);
+    void addTotalDirectRadiance();
     
     // MARK: - Helper
     float computeSpecularOcclusion(float ambientOcclusion, float roughness, float dotNV);
@@ -96,7 +94,8 @@ private:
 private:
     Geometry geometry;
     Material material;
-    
+    ReflectedLight reflectedLight;
+
     NormalShading normalShading;
     
     device DirectLightData* directLight;

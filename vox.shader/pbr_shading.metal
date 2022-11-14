@@ -116,7 +116,7 @@ float3 PBRShading::getLightProbeRadiance(float3 viewDir, float3 normal, float ro
 }
 
 // MARK: - Irradiance
-void PBRShading::addDirectRadiance(float3 incidentDirection, float3 color, Geometry geometry, Material material, thread ReflectedLight& reflectedLight) {
+void PBRShading::addDirectRadiance(float3 incidentDirection, float3 color) {
     float attenuation = 1.0;
     
     if (isClearCoat) {
@@ -138,15 +138,13 @@ void PBRShading::addDirectRadiance(float3 incidentDirection, float3 color, Geome
     
 }
 
-void PBRShading::addDirectionalDirectLightRadiance(DirectLightData directionalLight, Geometry geometry,
-                                                   Material material, thread ReflectedLight& reflectedLight) {
+void PBRShading::addDirectionalDirectLightRadiance(DirectLightData directionalLight) {
     float3 color = directionalLight.color;
     float3 direction = -directionalLight.direction;
-    addDirectRadiance( direction, color, geometry, material, reflectedLight );
+    addDirectRadiance(direction, color);
 }
 
-void PBRShading::addPointDirectLightRadiance(PointLightData pointLight, Geometry geometry,
-                                             Material material, thread ReflectedLight& reflectedLight) {
+void PBRShading::addPointDirectLightRadiance(PointLightData pointLight) {
     
     float3 lVector = pointLight.position - geometry.position;
     float3 direction = normalize(lVector);
@@ -154,10 +152,10 @@ void PBRShading::addPointDirectLightRadiance(PointLightData pointLight, Geometry
     float3 color = pointLight.color;
     color *= clamp(1.0 - pow(lightDistance/pointLight.distance, 4.0), 0.0, 1.0);
     
-    addDirectRadiance( direction, color, geometry, material, reflectedLight );
+    addDirectRadiance(direction, color);
 }
 
-void PBRShading::addSpotDirectLightRadiance(SpotLightData spotLight, Geometry geometry, Material material, thread ReflectedLight& reflectedLight) {
+void PBRShading::addSpotDirectLightRadiance(SpotLightData spotLight) {
     float3 lVector = spotLight.position - geometry.position;
     float3 direction = normalize(lVector);
     
@@ -170,10 +168,10 @@ void PBRShading::addSpotDirectLightRadiance(SpotLightData spotLight, Geometry ge
     float3 color = spotLight.color;
     color *= spotEffect * decayEffect;
     
-    addDirectRadiance(direction, color, geometry, material, reflectedLight);
+    addDirectRadiance(direction, color);
 }
 
-void PBRShading::addTotalDirectRadiance(Geometry geometry, Material material, thread ReflectedLight& reflectedLight) {
+void PBRShading::addTotalDirectRadiance() {
     float shadowAttenuation = 1.0;
     int sunIndex = 0;
     
@@ -193,17 +191,17 @@ void PBRShading::addTotalDirectRadiance(Geometry geometry, Material material, th
                     directionalLight.color *= shadowAttenuation;
                 }
                 directionalLight.direction = directLight[i].direction;
-                addDirectionalDirectLightRadiance( directionalLight, geometry, material, reflectedLight );
+                addDirectionalDirectLightRadiance( directionalLight);
             }
         }
     }
     
     for (int i = 0; i < pointLightCount; i++) {
-        addPointDirectLightRadiance(pointLight[i], geometry, material, reflectedLight);
+        addPointDirectLightRadiance(pointLight[i]);
     }
     
     for ( int i = 0; i < spotLightCount; i ++ ) {
-        addSpotDirectLightRadiance(spotLight[i], geometry, material, reflectedLight);
+        addSpotDirectLightRadiance(spotLight[i]);
     }
 }
 
