@@ -17,7 +17,8 @@ typedef struct {
 
 vertex VertexOut vertex_unlit(const VertexIn in [[stage_in]],
                               uint v_id [[vertex_id]],
-                              constant matrix_float4x4 &u_MVPMat [[buffer(3)]],
+                              constant CameraData &u_camera [[buffer(2)]],
+                              constant RendererData &u_renderer [[buffer(3)]],
                               constant float4 &u_tilingOffset [[buffer(4)]],
                               // skin
                               texture2d<float> u_jointTexture [[texture(0), function_constant(hasSkinAndHasJointTexture)]],
@@ -71,7 +72,7 @@ vertex VertexOut vertex_unlit(const VertexIn in [[stage_in]],
         out.v_uv = out.v_uv * u_tilingOffset.xy + u_tilingOffset.zw;
     }
     
-    out.position = u_MVPMat * position;
+    out.position = u_camera.u_VPMat * u_renderer.u_modelMat * position;
     
     return out;
 }

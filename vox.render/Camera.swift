@@ -8,15 +8,6 @@ import Metal
 import vox_math
 
 public class Camera: Component {
-    struct CameraData {
-        var u_viewMat = Matrix()
-        var u_projMat = Matrix()
-        var u_VPMat = Matrix()
-        var u_viewInvMat = Matrix()
-        var u_projInvMat = Matrix()
-        var u_cameraPos = Vector3()
-    }
-
     private var _cameraData = CameraData()
     private static var _cameraProperty = "u_camera"
 
@@ -60,6 +51,7 @@ public class Camera: Component {
     private var _viewport: Vector4 = Vector4(0, 0, 1, 1)
     private var _lastAspectSize: Vector2 = Vector2(0, 0)
     private var _invViewProjMat: Matrix = Matrix();
+    private var _inverseProjectionMatrix: Matrix = Matrix();
 
     /// Near clip plane - the closest point to the camera when rendering occurs.
     public var nearClipPlane: Float {
@@ -287,7 +279,6 @@ extension Camera {
     ///   - out: Ray
     /// - Returns: Ray
     public func viewportPointToRay(_ point: Vector2, _ out: Ray) -> Ray {
-        let invViewProjMat = invViewProjMat
         // Use the intersection of the near clipping plane as the origin point.
         out.origin = _innerViewportToWorldPoint(point.x, point.y, 0.0, invViewProjMat);
         // Use the intersection of the far clipping plane as the origin point.
@@ -411,12 +402,12 @@ extension Camera {
     }
 
     private func _updateShaderData() {
-        _cameraData.u_viewInvMat = _transform.worldMatrix
-        _cameraData.u_viewInvMat = _transform.worldMatrix
-        _cameraData.u_viewMat = viewMatrix
-        _cameraData.u_projInvMat = inverseProjectionMatrix
-        _cameraData.u_projMat = projectionMatrix
-        _cameraData.u_VPMat = projectionMatrix * viewMatrix
+        _cameraData.u_viewInvMat = _transform.worldMatrix.elements
+        _cameraData.u_projInvMat = inverseProjectionMatrix.elements
+        _cameraData.u_viewMat = viewMatrix.elements
+        _cameraData.u_projMat = projectionMatrix.elements
+        _cameraData.u_VPMat = (projectionMatrix * viewMatrix).elements
+        _cameraData.u_cameraPos = _transform.worldPosition.internalVector3
         shaderData.setData(Camera._cameraProperty, _cameraData)
     }
 
@@ -436,9 +427,9 @@ extension Camera {
         get {
             if (_isInvProjMatDirty) {
                 _isInvProjMatDirty = false
-                _cameraData.u_projInvMat = Matrix.invert(a: projectionMatrix)
+                _inverseProjectionMatrix = Matrix.invert(a: projectionMatrix)
             }
-            return _cameraData.u_projInvMat
+            return _inverseProjectionMatrix
         }
     }
 }

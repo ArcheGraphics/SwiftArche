@@ -9,12 +9,6 @@ import vox_math
 
 /// Renderable component.
 public class Renderer: Component {
-    struct RendererData {
-        var u_localMat = Matrix()
-        var u_modelMat = Matrix()
-        var u_normalMat = Matrix()
-    };
-
     /// ShaderData related to renderer.
     public var shaderData: ShaderData
     /// Whether it is clipped by the frustum, needs to be turned on camera.enableFrustumCulling.
@@ -34,7 +28,7 @@ public class Renderer: Component {
     var _dirtyUpdateFlag: Int = 0
     var _receiveShadows: Bool = true
 
-    static private let _renderProperty = "u_rendererData"
+    static private let _renderProperty = "u_renderer"
     private var _rendererData = RendererData()
 
     /// Whether receive shadow.
@@ -173,10 +167,10 @@ public class Renderer: Component {
     func _updateShaderData(_ cameraInfo: CameraInfo) {
         let worldMatrix = entity.transform.worldMatrix
 
-        _rendererData.u_modelMat = worldMatrix
-        _rendererData.u_localMat = entity.transform.localMatrix
+        _rendererData.u_modelMat = worldMatrix.elements
+        _rendererData.u_localMat = entity.transform.localMatrix.elements
         var normalMatrix = Matrix.invert(a: worldMatrix)
-        _rendererData.u_normalMat = normalMatrix.transpose()
+        _rendererData.u_normalMat = normalMatrix.transpose().elements
 
         shaderData.setData(Renderer._renderProperty, _rendererData)
     }

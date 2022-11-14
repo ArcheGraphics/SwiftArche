@@ -52,3 +52,18 @@ struct DirectLightData {
     vector_float3 color;
     vector_float3 direction;
 };
+
+struct CameraData {
+    matrix_float4x4 u_viewMat;
+    matrix_float4x4 u_projMat;
+    matrix_float4x4 u_VPMat;
+    matrix_float4x4 u_viewInvMat;
+    matrix_float4x4 u_projInvMat;
+    vector_float3 u_cameraPos;
+};
+
+struct RendererData {
+    matrix_float4x4 u_localMat;
+    matrix_float4x4 u_modelMat;
+    matrix_float4x4 u_normalMat;
+};
