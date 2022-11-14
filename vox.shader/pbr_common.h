@@ -7,6 +7,7 @@
 #pragma once
 
 #include "function_constant.h"
+#include "light_common.h"
 
 struct ReflectedLight {
     float3 directDiffuse;

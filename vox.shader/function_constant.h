@@ -56,5 +56,9 @@ constant bool hasSpotLight = spotLightCount > 0;
 
 constant bool hasSH [[function_constant(HAS_SH)]];
 constant bool hasSpecularEnv [[function_constant(HAS_SPECULAR_ENV)]];
+constant bool needDecodeEnvRGBM [[function_constant(DECODE_ENV_RGBM)]];
 
 constant bool needReceiveShadow [[function_constant(NEED_RECEIVE_SHADOWS)]];
+constant int cascadeCount [[function_constant(CASCADED_COUNT)]];
+constant bool hasCascadeShadowMap [[function_constant(CASCADED_SHADOW_MAP)]];
+constant int shadowMode [[function_constant(SHADOW_MODE)]];

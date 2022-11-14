@@ -114,6 +114,7 @@ float3 getLightProbeRadiance(float3 viewDir, float3 normal, float roughness, int
     }
 }
 
+// MARK: - Irradiance
 void addDirectRadiance(float3 incidentDirection, float3 color, Geometry geometry, Material material, thread ReflectedLight& reflectedLight) {
     float attenuation = 1.0;
     
@@ -134,4 +135,39 @@ void addDirectRadiance(float3 incidentDirection, float3 color, Geometry geometry
                                                                                   geometry.normal, material.specularColor, material.roughness);
     reflectedLight.directDiffuse += attenuation * irradiance * BRDF_Diffuse_Lambert( material.diffuseColor );
     
+}
+
+void addDirectionalDirectLightRadiance(DirectLight directionalLight, Geometry geometry,
+                                       Material material, thread ReflectedLight& reflectedLight) {
+    float3 color = directionalLight.color;
+    float3 direction = -directionalLight.direction;
+    addDirectRadiance( direction, color, geometry, material, reflectedLight );
+}
+
+void addPointDirectLightRadiance(PointLight pointLight, Geometry geometry,
+                                 Material material, thread ReflectedLight& reflectedLight) {
+
+    float3 lVector = pointLight.position - geometry.position;
+    float3 direction = normalize(lVector);
+    float lightDistance = length(lVector);
+    float3 color = pointLight.color;
+    color *= clamp(1.0 - pow(lightDistance/pointLight.distance, 4.0), 0.0, 1.0);
+    
+    addDirectRadiance( direction, color, geometry, material, reflectedLight );
+}
+
+void addSpotDirectLightRadiance(SpotLight spotLight, Geometry geometry, Material material, thread ReflectedLight& reflectedLight) {
+    float3 lVector = spotLight.position - geometry.position;
+    float3 direction = normalize(lVector);
+
+    float lightDistance = length(lVector);
+    float angleCos = dot(direction, -spotLight.direction);
+
+    float spotEffect = smoothstep(spotLight.penumbraCos, spotLight.angleCos, angleCos);
+    float decayEffect = clamp(1.0 - pow(lightDistance/spotLight.distance, 4.0), 0.0, 1.0);
+
+    float3 color = spotLight.color;
+    color *= spotEffect * decayEffect;
+    
+    addDirectRadiance(direction, color, geometry, material, reflectedLight);
 }

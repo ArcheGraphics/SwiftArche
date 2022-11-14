@@ -6,6 +6,7 @@
 
 #pragma once
 
+#import <simd/simd.h>
 #include <metal_stdlib>
 using namespace metal;
 
@@ -22,3 +23,9 @@ float4x4 getJointMatrix(texture2d<float> joint_tex, float index, int u_jointCoun
 float3 getBlendShapeVertexElement(int blendShapeIndex, int vertexElementIndex,
                                   int3 u_blendShapeTextureInfo,
                                   texture2d_array<float> u_blendShapeTexture);
+
+matrix_float2x2 inverse(matrix_float2x2 m);
+
+matrix_float3x3 inverse(matrix_float3x3 m);
+
+matrix_float4x4 inverse(matrix_float4x4 m);
