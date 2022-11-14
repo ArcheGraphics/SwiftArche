@@ -4,12 +4,11 @@
 //  personal capacity and am not conveying any rights to any intellectual
 //  property of any third parties.
 
-import Foundation
+#pragma once
 
-/// Color Space.
-public enum ColorSpace {
-    /// Linear color space.
-    case Linear
-    /// Gamma color space.
-    case Gamma
-}
+#include <metal_stdlib>
+using namespace metal;
+
+float4x4 getJointMatrix(sampler smp, texture2d<float> joint_tex,
+                        float index, int u_jointCount);
+

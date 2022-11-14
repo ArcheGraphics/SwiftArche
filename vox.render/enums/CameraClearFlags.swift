@@ -9,7 +9,7 @@ import Foundation
 /// Camera clear flags enumeration.
 public enum CameraClearFlags: Int {
     /// Do nothing.
-    case  None = 0x0
+    case None = 0x0
     /// Clear color with scene background.
     case Color = 0x1
     /// Clear depth only.
@@ -18,12 +18,12 @@ public enum CameraClearFlags: Int {
     case Stencil = 0x4
 
     /// Clear color with scene background and depth.
-    case  ColorDepth = 0x3
+    case ColorDepth = 0x3
     /// Clear color with scene background and stencil.
     case ColorStencil = 0x5
     /// Clear depth and stencil. */
-    case  DepthStencil = 0x6
+    case DepthStencil = 0x6
 
     /// Clear color with scene background, depth, and stencil.
-    case  All = 0x7
+    case All = 0x7
 }

@@ -6,10 +6,8 @@
 
 import Foundation
 
-/// Color Space.
-public enum ColorSpace {
-    /// Linear color space.
-    case Linear
-    /// Gamma color space.
-    case Gamma
+/// Render settings.
+protocol EngineSettings {
+    /// Color space
+    var colorSpace: ColorSpace? { get }
 }
