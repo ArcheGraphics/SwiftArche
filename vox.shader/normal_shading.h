@@ -12,11 +12,11 @@ using namespace metal;
 
 class NormalShading {
 public:
-    NormalShading(matrix_float3x3 v_TBN);
-    
-    NormalShading(float3 v_pos, float2 v_uv, bool isFrontFacing);
-    
-    NormalShading(float3 v_pos, float2 v_uv);
+    matrix_float3x3 v_TBN;
+    float3 v_normal;
+    float3 v_pos;
+    float2 v_uv;
+    bool isFrontFacing;
     
     float3 getNormal();
     
@@ -24,11 +24,4 @@ public:
     
     float3 getNormalByNormalTexture(matrix_float3x3 tbn, texture2d<float> normalTexture, sampler s,
                                     float normalIntensity, float2 uv);
-    
-private:
-    matrix_float3x3 v_TBN;
-    float3 v_normal;
-    float3 v_pos;
-    float2 v_uv;
-    bool isFrontFacing;
 };

@@ -4,8 +4,9 @@
 //  personal capacity and am not conveying any rights to any intellectual
 //  property of any third parties.
 
-#include <metal_stdlib>
+#include "shadow_shading.h"
 using namespace metal;
+#include "../function_constant.h"
 
 // ------------------------------------------------------------------
 //  PCF Filtering Tent Functions
@@ -18,7 +19,7 @@ using namespace metal;
 // | \
 // ----    <-- length of this side is "triangleHeight"
 // _ _ _ _ <-- texels
-float sampleShadowGetIRTriangleTexelArea(float triangleHeight) {
+float ShadowShading::sampleShadowGetIRTriangleTexelArea(float triangleHeight) {
     return triangleHeight - 0.5;
 }
 
@@ -30,7 +31,7 @@ float sampleShadowGetIRTriangleTexelArea(float triangleHeight) {
 // _ _ _ _ <-- texels
 // X Y Z W <-- result indices (in computedArea.xyzw and computedAreaUncut.xyzw)
 // Top point at (right,top) in a texel,left bottom point at (middle,middle) in a texel,right bottom point at (middle,middle) in a texel.
-void sampleShadowGetTexelAreasTent3x3(float offset, thread float4& computedArea, thread float4& computedAreaUncut) {
+void ShadowShading::sampleShadowGetTexelAreasTent3x3(float offset, thread float4& computedArea, thread float4& computedAreaUncut) {
     // Compute the exterior areas,a and h is same.
     float a = offset + 0.5;
     float offsetSquaredHalved = a * a * 0.5;
@@ -60,7 +61,7 @@ void sampleShadowGetTexelAreasTent3x3(float offset, thread float4& computedArea,
 // _ _ _ _ _ _ <-- texels
 // 0 1 2 3 4 5 <-- computed area indices (in texelsWeights[])
 // Top point at (right,top) in a texel,left bottom point at (middle,middle) in a texel,right bottom point at (middle,middle) in a texel.
-void sampleShadowGetTexelWeightsTent5x5(float offset, thread float3& texelsWeightsA, thread float3& texelsWeightsB) {
+void ShadowShading::sampleShadowGetTexelWeightsTent5x5(float offset, thread float3& texelsWeightsA, thread float3& texelsWeightsB) {
     float4 areaFrom3texelTriangle;
     float4 areaUncutFrom3texelTriangle;
     sampleShadowGetTexelAreasTent3x3(offset, areaFrom3texelTriangle, areaUncutFrom3texelTriangle);
@@ -77,7 +78,8 @@ void sampleShadowGetTexelWeightsTent5x5(float offset, thread float3& texelsWeigh
 }
 
 // 5x5 Tent filter (45 degree sloped triangles in U and V)
-void sampleShadowComputeSamplesTent5x5(float4 shadowMapTextureTexelSize, float2 coord, thread float* fetchesWeights, thread float2* fetchesUV) {
+void ShadowShading::sampleShadowComputeSamplesTent5x5(float4 shadowMapTextureTexelSize, float2 coord,
+                                                      thread float* fetchesWeights, thread float2* fetchesUV) {
     // tent base is 5x5 base thus covering from 25 to 36 texels, thus we need 9 bilinear PCF fetches
     float2 tentCenterInTexelSpace = coord.xy * shadowMapTextureTexelSize.zw;
     float2 centerOfFetchesInTexelSpace = floor(tentCenterInTexelSpace + 0.5);
@@ -119,4 +121,82 @@ void sampleShadowComputeSamplesTent5x5(float4 shadowMapTextureTexelSize, float2 
     fetchesWeights[6] = fetchesWeightsU.x * fetchesWeightsV.z;
     fetchesWeights[7] = fetchesWeightsU.y * fetchesWeightsV.z;
     fetchesWeights[8] = fetchesWeightsU.z * fetchesWeightsV.z;
+}
+
+// MARK: - Sampler
+int ShadowShading::computeCascadeIndex(float3 positionWS) {
+    float3 fromCenter0 = positionWS - u_shadowSplitSpheres[0].xyz;
+    float3 fromCenter1 = positionWS - u_shadowSplitSpheres[1].xyz;
+    float3 fromCenter2 = positionWS - u_shadowSplitSpheres[2].xyz;
+    float3 fromCenter3 = positionWS - u_shadowSplitSpheres[3].xyz;
+    
+    float4 comparison = float4(dot(fromCenter0, fromCenter0) < u_shadowSplitSpheres[0].w,
+                               dot(fromCenter1, fromCenter1) < u_shadowSplitSpheres[1].w,
+                               dot(fromCenter2, fromCenter2) < u_shadowSplitSpheres[2].w,
+                               dot(fromCenter3, fromCenter3) < u_shadowSplitSpheres[3].w);
+    comparison.yzw = clamp(comparison.yzw - comparison.xyz,0.0,1.0);//keep the nearest
+    float4 indexCoefficient = float4(4.0,3.0,2.0,1.0);
+    int index = 4 - int(dot(comparison, indexCoefficient));
+    return index;
+}
+
+float3 ShadowShading::getShadowCoord() {
+    int cascadeIndex = computeCascadeIndex(v_pos);
+    matrix_float4x4 shadowMatrix = u_shadowMatrices[cascadeIndex];
+    float4 shadowCoord = shadowMatrix * float4(v_pos, 1.0);
+    return shadowCoord.xyz / shadowCoord.w;
+}
+
+float ShadowShading::sampleShadowMapFiltered4(float3 shadowCoord) {
+    float attenuation;
+    float4 attenuation4;
+    float2 offset = u_shadowMapSize.xy/2.0;
+    float3 shadowCoord0 = shadowCoord + float3(-offset,0.0);
+    float3 shadowCoord1 = shadowCoord + float3(offset.x,-offset.y,0.0);
+    float3 shadowCoord2 = shadowCoord + float3(-offset.x,offset.y,0.0);
+    float3 shadowCoord3 = shadowCoord + float3(offset,0.0);
+    attenuation4.x = u_shadowMap.sample_compare(u_shadowMapSampler, shadowCoord0.xy, shadowCoord0.z);
+    attenuation4.y = u_shadowMap.sample_compare(u_shadowMapSampler, shadowCoord1.xy, shadowCoord1.z);
+    attenuation4.z = u_shadowMap.sample_compare(u_shadowMapSampler, shadowCoord2.xy, shadowCoord2.z);
+    attenuation4.w = u_shadowMap.sample_compare(u_shadowMapSampler, shadowCoord3.xy, shadowCoord3.z);
+    attenuation = dot(attenuation4, float4(0.25));
+    return attenuation;
+}
+
+float ShadowShading::sampleShadowMapFiltered9(float3 shadowCoord) {
+    float attenuation;
+    float fetchesWeights[9];
+    float2 fetchesUV[9];
+    sampleShadowComputeSamplesTent5x5(u_shadowMapSize, shadowCoord.xy, fetchesWeights, fetchesUV);
+    attenuation = fetchesWeights[0] * u_shadowMap.sample_compare(u_shadowMapSampler, fetchesUV[0].xy, shadowCoord.z);
+    attenuation += fetchesWeights[1] * u_shadowMap.sample_compare(u_shadowMapSampler, fetchesUV[1].xy, shadowCoord.z);
+    attenuation += fetchesWeights[2] * u_shadowMap.sample_compare(u_shadowMapSampler, fetchesUV[2].xy, shadowCoord.z);
+    attenuation += fetchesWeights[3] * u_shadowMap.sample_compare(u_shadowMapSampler, fetchesUV[3].xy, shadowCoord.z);
+    attenuation += fetchesWeights[4] * u_shadowMap.sample_compare(u_shadowMapSampler, fetchesUV[4].xy, shadowCoord.z);
+    attenuation += fetchesWeights[5] * u_shadowMap.sample_compare(u_shadowMapSampler, fetchesUV[5].xy, shadowCoord.z);
+    attenuation += fetchesWeights[6] * u_shadowMap.sample_compare(u_shadowMapSampler, fetchesUV[6].xy, shadowCoord.z);
+    attenuation += fetchesWeights[7] * u_shadowMap.sample_compare(u_shadowMapSampler, fetchesUV[7].xy, shadowCoord.z);
+    attenuation += fetchesWeights[8] * u_shadowMap.sample_compare(u_shadowMapSampler, fetchesUV[8].xy, shadowCoord.z);
+    return attenuation;
+}
+
+float ShadowShading::sampleShadowMap() {
+    float3 shadowCoord = getShadowCoord();
+    float attenuation = 1.0;
+    if(shadowCoord.z > 0.0 && shadowCoord.z < 1.0) {
+        if (shadowMode == 1) {
+            attenuation = u_shadowMap.sample_compare(u_shadowMapSampler, shadowCoord.xy, shadowCoord.z);
+        }
+        
+        if (shadowMode == 2) {
+            attenuation = sampleShadowMapFiltered4(shadowCoord);
+        }
+        
+        if (shadowMode == 3) {
+            attenuation = sampleShadowMapFiltered9(shadowCoord);
+        }
+        
+        attenuation = mix(1.0, attenuation, u_shadowInfo.x);
+    }
+    return attenuation;
 }

@@ -7,18 +7,6 @@
 #include "normal_shading.h"
 #include "function_constant.h"
 
-NormalShading::NormalShading(matrix_float3x3 v_TBN):
-v_TBN(v_TBN) {
-}
-
-NormalShading::NormalShading(float3 v_pos, float2 v_uv, bool isFrontFacing):
-v_pos(v_pos), v_uv(v_uv), isFrontFacing(isFrontFacing) {
-}
-
-NormalShading::NormalShading(float3 v_pos, float2 v_uv):
-v_pos(v_pos), v_uv(v_uv) {
-}
-
 float3 NormalShading::getNormal() {
     float3 normal;
     if (hasNormal) {

@@ -6,7 +6,6 @@
 
 #include "pbr_shading.h"
 #include "function_common.h"
-#include "shadow/shadow_frag_share.h"
 
 using namespace metal;
 
@@ -70,7 +69,7 @@ float3 PBRShading::BRDF_Diffuse_Lambert(float3 diffuseColor) {
 }
 
 // MARK: - IBL
-float3 PBRShading::getLightProbeIrradiance(float3 sh[9], float3 normal){
+float3 PBRShading::getLightProbeIrradiance(device float3* sh, float3 normal){
     normal.x = -normal.x;
     float3 result = sh[0] +
     sh[1] * (normal.y) +
@@ -101,15 +100,14 @@ float PBRShading::getSpecularMIPLevel(float roughness, int maxMIPLevel ) {
     return roughness * float(maxMIPLevel);
 }
 
-float3 PBRShading::getLightProbeRadiance(float3 viewDir, float3 normal, float roughness, int maxMIPLevel, float specularIntensity,
-                                         sampler u_env_specularSampler, texturecube<float> u_env_specularTexture) {
+float3 PBRShading::getLightProbeRadiance(float3 normal, float roughness) {
     if (hasSpecularEnv) {
-        float3 reflectVec = reflect( -viewDir, normal );
+        float3 reflectVec = reflect( -geometry.viewDir, normal );
         reflectVec.x = -reflectVec.x; // TextureCube is left-hand,so x need inverse
         
-        float specularMIPLevel = getSpecularMIPLevel(roughness, maxMIPLevel );
+        float specularMIPLevel = getSpecularMIPLevel(roughness, u_envMapLight.mipMapLevel );
         float4 envMapColor = u_env_specularTexture.sample(u_env_specularSampler, reflectVec, level(specularMIPLevel));
-        return envMapColor.rgb * specularIntensity;
+        return envMapColor.rgb * u_envMapLight.specularIntensity;
     } else {
         return float3(0);
     }
@@ -178,8 +176,7 @@ void PBRShading::addTotalDirectRadiance() {
     if (hasDirectLight) {
         shadowAttenuation = 1.0;
         if (needCalculateShadow) {
-            shadowAttenuation *= sampleShadowMap(view_pos, u_shadowSplitSpheres, u_shadowMatrices,
-                                                 u_shadowMap, u_shadowMapSampler, u_shadowMapSize, u_shadowInfo);
+            shadowAttenuation *= shadowShading.sampleShadowMap();
             sunIndex = int(u_shadowInfo.z);
         }
         
@@ -317,6 +314,75 @@ void PBRShading::initMaterial(){
     material.opacity = baseColor.a;
 }
 
+float4 PBRShading::execute() {
+    initGeometry();
+    initMaterial();
+    
+    // Direct Light
+    addTotalDirectRadiance();
+    
+    // IBL diffuse
+    float3 irradiance = float3(0.0);
+    if (hasSH) {
+        float3 irradiance = getLightProbeIrradiance(u_env_sh, geometry.normal);
+#ifdef OASIS_COLORSPACE_GAMMA
+        irradiance = linearToGamma(vec4(irradiance, 1.0)).rgb;
+#endif
+        irradiance *= u_envMapLight.diffuseIntensity;
+    } else {
+        float3 irradiance = u_envMapLight.diffuse * u_envMapLight.diffuseIntensity;
+        irradiance *= M_PI_F;
+    }
+    
+    reflectedLight.indirectDiffuse += irradiance * BRDF_Diffuse_Lambert( material.diffuseColor );
+    
+    // IBL specular
+    float3 radiance = getLightProbeRadiance(geometry.normal, material.roughness);
+    float radianceAttenuation = 1.0;
+    
+    if (isClearCoat) {
+        float3 clearCoatRadiance = getLightProbeRadiance(geometry.clearCoatNormal, material.clearCoatRoughness);
+        
+        reflectedLight.indirectSpecular += clearCoatRadiance * material.clearCoat * envBRDFApprox(float3( 0.04 ), material.clearCoatRoughness, geometry.clearCoatDotNV);
+        radianceAttenuation -= material.clearCoat * F_Schlick(geometry.clearCoatDotNV);
+    }
+    
+    reflectedLight.indirectSpecular += radianceAttenuation * radiance * envBRDFApprox(material.specularColor, material.roughness, geometry.dotNV );
+    
+    
+    // Occlusion
+    if (hasOcclusionTexture) {
+        float2 aoUV = v_uv;
+        float ambientOcclusion = (u_occlusionTexture.sample(u_occlusionSampler, aoUV).r - 1.0) * u_occlusionIntensity + 1.0;
+        reflectedLight.indirectDiffuse *= ambientOcclusion;
+        if (hasSpecularEnv) {
+            reflectedLight.indirectSpecular *= computeSpecularOcclusion(ambientOcclusion, material.roughness, geometry.dotNV);
+        }
+    }
+    
+    // Emissive
+    float3 emissiveRadiance = u_emissiveColor;
+    if (hasEmissiveTexture) {
+        float4 emissiveColor = u_emissiveTexture.sample(u_emissiveSampler, v_uv);
+#ifndef OASIS_COLORSPACE_GAMMA
+        emissiveColor = gammaToLinear(emissiveColor);
+#endif
+        emissiveRadiance *= emissiveColor.rgb;
+    }
+    
+    float3 totalRadiance = reflectedLight.directDiffuse +
+    reflectedLight.indirectDiffuse +
+    reflectedLight.directSpecular +
+    reflectedLight.indirectSpecular +
+    emissiveRadiance;
+    
+    float4 targetColor = float4(totalRadiance, material.opacity);
+#ifndef OASIS_COLORSPACE_GAMMA
+    targetColor = linearToGamma(targetColor);
+#endif
+    return targetColor;
+}
+
 // MARK: - Entry
 
 typedef struct {
@@ -341,14 +407,15 @@ fragment float4 fragment_pbr(VertexOut in [[stage_in]],
                              constant matrix_float4x4 &u_MVPMat [[buffer(5)]],
                              constant matrix_float4x4 &u_normalMat [[buffer(6)]],
                              constant float3 &u_cameraPos [[buffer(7)]],
+                             // direct light
                              device DirectLightData *u_directLight [[buffer(8), function_constant(hasDirectLight)]],
                              device PointLightData *u_pointLight [[buffer(9), function_constant(hasPointLight)]],
                              device SpotLightData *u_spotLight [[buffer(10), function_constant(hasSpotLight)]],
-                             // pbr_envmap_light_frag_define
+                             // indirect light
                              constant EnvMapLight &u_envMapLight [[buffer(12)]],
                              constant float3 *u_env_sh [[buffer(13), function_constant(hasSH)]],
                              texturecube<float> u_env_specularTexture [[texture(1), function_constant(hasSpecularEnv)]],
-                             texture2d<float> samplerBRDFLUT [[texture(3)]],
+                             sampler u_env_specularSampler [[sampler(1), function_constant(hasSpecularEnv)]],
                              //pbr base frag define
                              constant float &u_alphaCutoff [[buffer(14)]],
                              constant float4 &u_baseColor [[buffer(15)]],
@@ -360,12 +427,26 @@ fragment float4 fragment_pbr(VertexOut in [[stage_in]],
                              constant float &u_normalIntensity [[buffer(21)]],
                              constant float &u_occlusionStrength [[buffer(22)]],
                              // pbr_texture_frag_define
-                             texture2d<float> u_baseColorTexture [[texture(4), function_constant(hasBaseTexture)]],
-                             texture2d<float> u_normalTexture [[texture(5), function_constant(hasNormalTexture)]],
-                             texture2d<float> u_emissiveTexture [[texture(6), function_constant(hasEmissiveTexture)]],
-                             texture2d<float> u_metallicRoughnessTexture [[texture(7), function_constant(hasRoughnessMetallicTexture)]],
-                             texture2d<float> u_specularGlossinessTexture [[texture(8), function_constant(hasSpecularGlossinessTexture)]],
-                             texture2d<float> u_occlusionTexture [[texture(9), function_constant(hasOcclusionTexture)]],
+                             texture2d<float> u_baseColorTexture [[texture(2), function_constant(hasBaseTexture)]],
+                             sampler u_baseColorSampler [[sampler(2), function_constant(hasBaseTexture)]],
+                             texture2d<float> u_normalTexture [[texture(3), function_constant(hasNormalTexture)]],
+                             sampler u_normalSampler [[sampler(3), function_constant(hasNormalTexture)]],
+                             texture2d<float> u_emissiveTexture [[texture(4), function_constant(hasEmissiveTexture)]],
+                             sampler u_emissiveSampler [[sampler(4), function_constant(hasEmissiveTexture)]],
+                             texture2d<float> u_metallicRoughnessTexture [[texture(5), function_constant(hasRoughnessMetallicTexture)]],
+                             sampler u_metallicRoughnessSampler [[sampler(5), function_constant(hasRoughnessMetallicTexture)]],
+                             texture2d<float> u_specularGlossinessTexture [[texture(6), function_constant(hasSpecularGlossinessTexture)]],
+                             sampler u_specularGlossineseSampler [[sampler(6), function_constant(hasSpecularGlossinessTexture)]],
+                             texture2d<float> u_occlusionTexture [[texture(7), function_constant(hasOcclusionTexture)]],
+                             sampler u_occlusionSampler [[sampler(7), function_constant(hasOcclusionTexture)]],
+                             texture2d<float> u_clearCoatTexture [[texture(8), function_constant(hasClearCoatTexture)]],
+                             sampler u_clearCoatSampler [[sampler(8), function_constant(hasClearCoatTexture)]],
+                             texture2d<float> u_clearCoatNormalTexture [[texture(9), function_constant(hasClearCoatNormalTexture)]],
+                             sampler u_clearCoatNormalSampler [[sampler(9), function_constant(hasClearCoatNormalTexture)]],
+                             texture2d<float> u_clearCoatRoghnessTexture [[texture(10), function_constant(hasClearCoatRoughnessTexture)]],
+                             sampler u_clearCoatRoghnessSampler [[sampler(10), function_constant(hasClearCoatRoughnessTexture)]],
                              bool is_front_face [[front_facing]]) {
-    return float4(0.0);
+    PBRShading shading;
+    
+    return shading.execute();
 }

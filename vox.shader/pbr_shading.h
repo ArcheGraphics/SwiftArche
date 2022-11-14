@@ -12,6 +12,7 @@ using namespace metal;
 #include "function_constant.h"
 #include "type_common.h"
 #include "normal_shading.h"
+#include "shadow/shadow_shading.h"
 
 class PBRShading {
 public:
@@ -40,6 +41,8 @@ public:
         float clearCoatRoughness [[function_constant(isClearCoat)]];
     };
     
+    float4 execute();
+    
 private:
     // MARK: - BRDF
     float F_Schlick(float dotLH);
@@ -61,15 +64,14 @@ private:
     float3 BRDF_Diffuse_Lambert(float3 diffuseColor);
     
     // MARK: - IBL
-    float3 getLightProbeIrradiance(float3 sh[9], float3 normal);
+    float3 getLightProbeIrradiance(device float3* sh, float3 normal);
     
     // ref: https://www.unrealengine.com/blog/physically-based-shading-on-mobile - environmentBRDF for GGX on mobile
     float3 envBRDFApprox(float3 specularColor,float roughness, float dotNV);
     
     float getSpecularMIPLevel(float roughness, int maxMIPLevel);
     
-    float3 getLightProbeRadiance(float3 viewDir, float3 normal, float roughness, int maxMIPLevel, float specularIntensity,
-                                 sampler u_env_specularSampler, texturecube<float> u_env_specularTexture);
+    float3 getLightProbeRadiance(float3 normal, float roughness);
     
     // MARK: - Irradiance
     void addDirectRadiance(float3 incidentDirection, float3 color);
@@ -84,9 +86,9 @@ private:
     
     // MARK: - Helper
     float computeSpecularOcclusion(float ambientOcclusion, float roughness, float dotNV);
-
+    
     float getAARoughnessFactor(float3 normal);
-
+    
     void initGeometry();
     
     void initMaterial();
@@ -95,12 +97,19 @@ private:
     Geometry geometry;
     Material material;
     ReflectedLight reflectedLight;
-
+    
+public:
     NormalShading normalShading;
+    ShadowShading shadowShading;
     
     device DirectLightData* directLight;
     device PointLightData* pointLight;
     device SpotLightData* spotLight;
+    
+    EnvMapLight u_envMapLight;
+    device float3* u_env_sh;
+    texturecube<float> u_env_specularTexture;
+    sampler u_env_specularSampler;
     
     float u_alphaCutoff;
     float4 u_baseColor;
@@ -143,7 +152,7 @@ private:
     
     texture2d<float> u_clearCoatNormalTexture;
     sampler u_clearCoatNormalSampler;
-
+    
     float4 v_color;
     float2 v_uv;
     float3 u_cameraPos;
