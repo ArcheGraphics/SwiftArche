@@ -192,6 +192,7 @@
 /* Begin PBXFileReference section */
 		043E2C9C2920D0BC0057BDD1 /* type_common.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = type_common.h; sourceTree = "<group>"; };
 		043E2C9F29212E8C0057BDD1 /* Light.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Light.swift; sourceTree = "<group>"; };
+		3E0F7B0A2921E3CE00C4A843 /* shader_common.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = shader_common.h; sourceTree = "<group>"; };
 		3E67EDC5291B2F7600ED60C8 /* SwiftArche.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SwiftArche.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		3E67EDC8291B2F7600ED60C8 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		3E67EDCA291B2F7600ED60C8 /* Shaders.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = Shaders.metal; sourceTree = "<group>"; };
@@ -511,6 +512,7 @@
 				3E67EEC7291F978900ED60C8 /* function_constant.h */,
 				3E67EED22921DB3F00ED60C8 /* function_common.h */,
 				3E67EED32921DB4A00ED60C8 /* function_common.metal */,
+				3E0F7B0A2921E3CE00C4A843 /* shader_common.h */,
 				3E67EED02921D9C800ED60C8 /* unlit.metal */,
 			);
 			path = vox.shader;

@@ -6,6 +6,22 @@
 
 #include "function_common.h"
 
+float pow2(float x) {
+    return x * x;
+}
+
+float4 RGBMToLinear(float4 value, float maxRange) {
+    return float4(value.rgb * value.a * maxRange, 1.0);
+}
+
+float4 gammaToLinear(float4 srgbIn) {
+    return float4(pow(srgbIn.rgb, float3(2.2)), srgbIn.a);
+}
+
+float4 linearToGamma(float4 linearIn) {
+    return float4(pow(linearIn.rgb, float3(1.0 / 2.2)), linearIn.a);
+}
+
 float4x4 getJointMatrix(sampler smp, texture2d<float> joint_tex,
                         float index, int u_jointCount) {
     float base = index / u_jointCount;
