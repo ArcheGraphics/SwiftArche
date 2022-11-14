@@ -8,13 +8,8 @@ import vox_math
 
 /// Directional light.
 public class DirectLight: Light {
-    struct LightData {
-        var color = Vector3()
-        var direction = Vector3()
-    }
-
     private static let _directLightProperty = "u_directLight"
-    private static var _combinedData: [LightData] = [LightData](repeating: LightData(), count: Light._maxLight)
+    private static var _combinedData: [DirectLightData] = [DirectLightData](repeating: DirectLightData(), count: Light._maxLight)
 
     static func _updateShaderData(_ shaderData: ShaderData) {
         shaderData.setData(DirectLight._directLightProperty, DirectLight._combinedData);
@@ -36,7 +31,7 @@ public class DirectLight: Light {
 
     func _appendData(_ lightIndex: Int) {
         DirectLight._combinedData[lightIndex].color = _getLightColor()
-        DirectLight._combinedData[lightIndex].direction = direction
+        DirectLight._combinedData[lightIndex].direction = direction.internalVector3
     }
 
     override func _onEnable() {

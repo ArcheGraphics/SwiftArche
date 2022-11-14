@@ -8,14 +8,8 @@ import vox_math
 
 /// Point light.
 public class PointLight: Light {
-    struct LightData {
-        var color = Vector3()
-        var position = Vector3()
-        var distance: Float = 0
-    }
-
     private static let _pointLightProperty = "u_pointLight"
-    private static var _combinedData: [LightData] = [LightData](repeating: LightData(), count: Light._maxLight)
+    private static var _combinedData: [PointLightData] = [PointLightData](repeating: PointLightData(), count: Light._maxLight)
 
     static func _updateShaderData(_ shaderData: ShaderData) {
         shaderData.setData(PointLight._pointLightProperty, PointLight._combinedData);
@@ -26,7 +20,7 @@ public class PointLight: Light {
 
     func _appendData(_ lightIndex: Int) {
         PointLight._combinedData[lightIndex].color = _getLightColor()
-        PointLight._combinedData[lightIndex].position = entity.transform.worldPosition
+        PointLight._combinedData[lightIndex].position = entity.transform.worldPosition.internalVector3
         PointLight._combinedData[lightIndex].distance = distance
     }
 

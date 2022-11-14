@@ -9,14 +9,8 @@ import vox_math
 
 /// Ambient light.
 public class AmbientLight {
-    struct EnvMapLight {
-        var diffuse = Vector3(0.212, 0.227, 0.259)
-        var mipMapLevel: Int = 0
-        var diffuseIntensity: Float = 1.0
-        var specularIntensity: Float = 1.0
-    }
-
-    private var _envMapLight = EnvMapLight()
+    private var _envMapLight = EnvMapLight(diffuse: vector_float3(0.212, 0.227, 0.259), mipMapLevel: 0,
+                                           diffuseIntensity: 1.0, specularIntensity: 1.0)
     private static let _envMapProperty = "u_envMapLight"
 
     private var _diffuseSphericalHarmonics: SphericalHarmonics3?
@@ -62,10 +56,10 @@ public class AmbientLight {
     /// - Remark: Effective when diffuse reflection mode is `DiffuseMode.SolidColor`.
     public var diffuseSolidColor: Vector3 {
         get {
-            _envMapLight.diffuse
+            Vector3(_envMapLight.diffuse)
         }
         set {
-            _envMapLight.diffuse = newValue
+            _envMapLight.diffuse = newValue.internalVector3
         }
     }
 
@@ -155,7 +149,7 @@ public class AmbientLight {
     private func _setSpecularTexture(_ sceneShaderData: ShaderData) {
         if (_specularTexture != nil) {
             sceneShaderData.setImageView(AmbientLight._specularTextureProperty, AmbientLight._specularSamplerProperty, _specularTexture)
-            _envMapLight.mipMapLevel = _specularTexture!.mipmapLevelCount
+            _envMapLight.mipMapLevel = Int32(_specularTexture!.mipmapLevelCount)
             sceneShaderData.setData(AmbientLight._envMapProperty, _envMapLight)
             sceneShaderData.enableMacro(HAS_SPECULAR_ENV)
         } else {

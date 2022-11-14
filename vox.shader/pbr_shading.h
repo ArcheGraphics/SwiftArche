@@ -6,11 +6,11 @@
 
 #pragma once
 
-#include "function_constant.h"
-#include "light_common.h"
 #include <simd/simd.h>
 #include <metal_stdlib>
 using namespace metal;
+#include "function_constant.h"
+#include "type_common.h"
 
 class PBRShading {
 public:
@@ -76,20 +76,20 @@ private:
     // MARK: - Irradiance
     void addDirectRadiance(float3 incidentDirection, float3 color, Geometry geometry, Material material, thread ReflectedLight& reflectedLight);
     
-    void addDirectionalDirectLightRadiance(DirectLight directionalLight, Geometry geometry,
+    void addDirectionalDirectLightRadiance(DirectLightData directionalLight, Geometry geometry,
                                            Material material, thread ReflectedLight& reflectedLight);
     
-    void addPointDirectLightRadiance(PointLight pointLight, Geometry geometry,
+    void addPointDirectLightRadiance(PointLightData pointLight, Geometry geometry,
                                      Material material, thread ReflectedLight& reflectedLight);
     
-    void addSpotDirectLightRadiance(SpotLight spotLight, Geometry geometry, Material material, thread ReflectedLight& reflectedLight);
+    void addSpotDirectLightRadiance(SpotLightData spotLight, Geometry geometry, Material material, thread ReflectedLight& reflectedLight);
     
     void addTotalDirectRadiance(Geometry geometry, Material material, thread ReflectedLight& reflectedLight);
     
 private:
-    device DirectLight* directLight;
-    device PointLight* pointLight;
-    device SpotLight* spotLight;
+    device DirectLightData* directLight;
+    device PointLightData* pointLight;
+    device SpotLightData* spotLight;
     
     float3 view_pos;
     device float4* u_shadowSplitSpheres;

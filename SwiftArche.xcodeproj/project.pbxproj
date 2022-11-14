@@ -199,7 +199,6 @@
 		043E2C9F29212E8C0057BDD1 /* Light.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Light.swift; sourceTree = "<group>"; };
 		3E0F7B0A2921E3CE00C4A843 /* shader_common.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = shader_common.h; sourceTree = "<group>"; };
 		3E0F7B0B2921F63B00C4A843 /* skybox.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = skybox.metal; sourceTree = "<group>"; };
-		3E0F7B1029220DFE00C4A843 /* light_common.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = light_common.h; sourceTree = "<group>"; };
 		3E0F7B1329220F8C00C4A843 /* shadowmap.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = shadowmap.metal; sourceTree = "<group>"; };
 		3E0F7B15292229CD00C4A843 /* shadow_sample_tent.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = shadow_sample_tent.metal; sourceTree = "<group>"; };
 		3E0F7B1729222A6500C4A843 /* shadow_sample_tent.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = shadow_sample_tent.h; sourceTree = "<group>"; };
@@ -541,7 +540,6 @@
 				3E0F7B0A2921E3CE00C4A843 /* shader_common.h */,
 				3E67EED02921D9C800ED60C8 /* unlit.metal */,
 				3E0F7B0B2921F63B00C4A843 /* skybox.metal */,
-				3E0F7B1029220DFE00C4A843 /* light_common.h */,
 				3E0F7B1D2922375800C4A843 /* pbr_shading.h */,
 				3E0F7B1B2922374400C4A843 /* pbr_shading.metal */,
 			);

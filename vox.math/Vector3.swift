@@ -28,6 +28,12 @@ public struct Vector3 {
             elements.z
         }
     }
+    
+    public var internalVector3: SIMD3<Float> {
+        get {
+            elements
+        }
+    }
 
     public init(_ x: Float = 0, _ y: Float = 0, _ z: Float = 0) {
         elements = SIMD3<Float>(x, y, z)

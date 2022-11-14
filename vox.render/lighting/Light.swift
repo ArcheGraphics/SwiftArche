@@ -46,8 +46,8 @@ public class Light: Component {
         Matrix()
     }
 
-    func _getLightColor() -> Vector3 {
+    func _getLightColor() -> SIMD3<Float> {
         let c = color * intensity
-        return Vector3(c.r, c.g, c.b)
+        return SIMD3<Float>(c.r, c.g, c.b)
     }
 }

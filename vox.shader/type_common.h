@@ -28,10 +28,9 @@ typedef enum {
 
 struct EnvMapLight {
     vector_float3 diffuse;
+    int mipMapLevel;
     float diffuseIntensity;
     float specularIntensity;
-    int mipMapLevel;
-    matrix_float4x4 transformMatrix;
 };
 
 struct PointLightData {
@@ -42,10 +41,10 @@ struct PointLightData {
 
 struct SpotLightData {
     vector_float3 color;
-    vector_float3 position;
-    vector_float3 direction;
     float distance;
+    vector_float3 position;
     float angleCos;
+    vector_float3 direction;
     float penumbraCos;
 };
 

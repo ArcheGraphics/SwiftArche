@@ -8,17 +8,8 @@ import vox_math
 
 /// Spot light.
 public class SpotLight: Light {
-    struct LightData {
-        var color = Vector3()
-        var distance: Float = 0
-        var position = Vector3()
-        var angleCos: Float = 0
-        var direction = Vector3()
-        var penumbraCos: Float = 0
-    }
-
     private static let _directLightProperty = "u_directLight"
-    private static var _combinedData: [LightData] = [LightData](repeating: LightData(), count: Light._maxLight)
+    private static var _combinedData: [SpotLightData] = [SpotLightData](repeating: SpotLightData(), count: Light._maxLight)
 
     static func _updateShaderData(_ shaderData: ShaderData) {
         shaderData.setData(SpotLight._directLightProperty, SpotLight._combinedData);
@@ -50,8 +41,8 @@ public class SpotLight: Light {
 
     internal func _appendData(_ lightIndex: Int) {
         SpotLight._combinedData[lightIndex].color = _getLightColor()
-        SpotLight._combinedData[lightIndex].position = entity.transform.worldPosition
-        SpotLight._combinedData[lightIndex].direction = direction
+        SpotLight._combinedData[lightIndex].position = entity.transform.worldPosition.internalVector3
+        SpotLight._combinedData[lightIndex].direction = direction.internalVector3
         SpotLight._combinedData[lightIndex].distance = distance
         SpotLight._combinedData[lightIndex].angleCos = cos(angle)
         SpotLight._combinedData[lightIndex].penumbraCos = cos(angle + penumbra)

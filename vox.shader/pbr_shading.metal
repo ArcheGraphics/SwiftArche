@@ -151,14 +151,14 @@ void PBRShading::addDirectRadiance(float3 incidentDirection, float3 color, Geome
     
 }
 
-void PBRShading::addDirectionalDirectLightRadiance(DirectLight directionalLight, Geometry geometry,
+void PBRShading::addDirectionalDirectLightRadiance(DirectLightData directionalLight, Geometry geometry,
                                                    Material material, thread ReflectedLight& reflectedLight) {
     float3 color = directionalLight.color;
     float3 direction = -directionalLight.direction;
     addDirectRadiance( direction, color, geometry, material, reflectedLight );
 }
 
-void PBRShading::addPointDirectLightRadiance(PointLight pointLight, Geometry geometry,
+void PBRShading::addPointDirectLightRadiance(PointLightData pointLight, Geometry geometry,
                                              Material material, thread ReflectedLight& reflectedLight) {
     
     float3 lVector = pointLight.position - geometry.position;
@@ -170,7 +170,7 @@ void PBRShading::addPointDirectLightRadiance(PointLight pointLight, Geometry geo
     addDirectRadiance( direction, color, geometry, material, reflectedLight );
 }
 
-void PBRShading::addSpotDirectLightRadiance(SpotLight spotLight, Geometry geometry, Material material, thread ReflectedLight& reflectedLight) {
+void PBRShading::addSpotDirectLightRadiance(SpotLightData spotLight, Geometry geometry, Material material, thread ReflectedLight& reflectedLight) {
     float3 lVector = spotLight.position - geometry.position;
     float3 direction = normalize(lVector);
     
@@ -198,7 +198,7 @@ void PBRShading::addTotalDirectRadiance(Geometry geometry, Material material, th
             sunIndex = int(u_shadowInfo.z);
         }
         
-        DirectLight directionalLight;
+        DirectLightData directionalLight;
         for (int i = 0; i < directLightCount; i++) {
             directionalLight.color = directLight[i].color;
             if (needCalculateShadow) {
