@@ -8,6 +8,7 @@
 using namespace metal;
 #include "pbr_common.h"
 #include "function_common.h"
+#include "shadow/shadow_frag_share.h"
 
 // MARK: - BRDF
 float F_Schlick(float dotLH) {
@@ -146,7 +147,7 @@ void addDirectionalDirectLightRadiance(DirectLight directionalLight, Geometry ge
 
 void addPointDirectLightRadiance(PointLight pointLight, Geometry geometry,
                                  Material material, thread ReflectedLight& reflectedLight) {
-
+    
     float3 lVector = pointLight.position - geometry.position;
     float3 direction = normalize(lVector);
     float lightDistance = length(lVector);
@@ -159,15 +160,52 @@ void addPointDirectLightRadiance(PointLight pointLight, Geometry geometry,
 void addSpotDirectLightRadiance(SpotLight spotLight, Geometry geometry, Material material, thread ReflectedLight& reflectedLight) {
     float3 lVector = spotLight.position - geometry.position;
     float3 direction = normalize(lVector);
-
+    
     float lightDistance = length(lVector);
     float angleCos = dot(direction, -spotLight.direction);
-
+    
     float spotEffect = smoothstep(spotLight.penumbraCos, spotLight.angleCos, angleCos);
     float decayEffect = clamp(1.0 - pow(lightDistance/spotLight.distance, 4.0), 0.0, 1.0);
-
+    
     float3 color = spotLight.color;
     color *= spotEffect * decayEffect;
     
     addDirectRadiance(direction, color, geometry, material, reflectedLight);
+}
+
+void addTotalDirectRadiance(Geometry geometry, Material material, thread ReflectedLight& reflectedLight,
+                            device DirectLight* directLight, device PointLight* pointLight, device SpotLight* spotLight,
+                            float3 v_pos, device float4* u_shadowSplitSpheres, device matrix_float4x4* u_shadowMatrices,
+                            depth2d<float> u_shadowMap, sampler s, float4 u_shadowMapSize, float3 u_shadowInfo){
+    float shadowAttenuation = 1.0;
+    int sunIndex = 0;
+    
+    if (hasDirectLight) {
+        shadowAttenuation = 1.0;
+        if (needCalculateShadow) {
+            shadowAttenuation *= sampleShadowMap(v_pos, u_shadowSplitSpheres, u_shadowMatrices,
+                                                 u_shadowMap, s, u_shadowMapSize, u_shadowInfo);
+            sunIndex = int(u_shadowInfo.z);
+        }
+        
+        DirectLight directionalLight;
+        for (int i = 0; i < directLightCount; i++) {
+            directionalLight.color = directLight[i].color;
+            if (needCalculateShadow) {
+                if (i == sunIndex) {
+                    directionalLight.color *= shadowAttenuation;
+                }
+                directionalLight.direction = directLight[i].direction;
+                addDirectionalDirectLightRadiance( directionalLight, geometry, material, reflectedLight );
+            }
+        }
+    }
+    
+    for (int i = 0; i < pointLightCount; i++) {
+        addPointDirectLightRadiance(pointLight[i], geometry, material, reflectedLight);
+    }
+    
+    for ( int i = 0; i < spotLightCount; i ++ ) {
+        addSpotDirectLightRadiance(spotLight[i], geometry, material, reflectedLight);
+    }
 }

@@ -62,3 +62,4 @@ constant bool needReceiveShadow [[function_constant(NEED_RECEIVE_SHADOWS)]];
 constant int cascadeCount [[function_constant(CASCADED_COUNT)]];
 constant bool hasCascadeShadowMap [[function_constant(CASCADED_SHADOW_MAP)]];
 constant int shadowMode [[function_constant(SHADOW_MODE)]];
+constant bool needCalculateShadow = hasCascadeShadowMap && needReceiveShadow;

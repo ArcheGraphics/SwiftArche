@@ -12,6 +12,8 @@
 		3E0F7B0C2921F63B00C4A843 /* skybox.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3E0F7B0B2921F63B00C4A843 /* skybox.metal */; };
 		3E0F7B0F292200E100C4A843 /* pbr_common.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3E0F7B0E292200E100C4A843 /* pbr_common.metal */; };
 		3E0F7B1429220F8C00C4A843 /* shadowmap.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3E0F7B1329220F8C00C4A843 /* shadowmap.metal */; };
+		3E0F7B16292229CD00C4A843 /* shadow_sample_tent.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3E0F7B15292229CD00C4A843 /* shadow_sample_tent.metal */; };
+		3E0F7B1929222AC000C4A843 /* shadow_frag_share.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3E0F7B1829222AC000C4A843 /* shadow_frag_share.metal */; };
 		3E67EDC9291B2F7600ED60C8 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E67EDC8291B2F7600ED60C8 /* AppDelegate.swift */; };
 		3E67EDD3291B2F7600ED60C8 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3E67EDD1291B2F7600ED60C8 /* Main.storyboard */; };
 		3E67EDD5291B2F7800ED60C8 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3E67EDD4291B2F7800ED60C8 /* Assets.xcassets */; };
@@ -201,6 +203,10 @@
 		3E0F7B0E292200E100C4A843 /* pbr_common.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = pbr_common.metal; sourceTree = "<group>"; };
 		3E0F7B1029220DFE00C4A843 /* light_common.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = light_common.h; sourceTree = "<group>"; };
 		3E0F7B1329220F8C00C4A843 /* shadowmap.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = shadowmap.metal; sourceTree = "<group>"; };
+		3E0F7B15292229CD00C4A843 /* shadow_sample_tent.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = shadow_sample_tent.metal; sourceTree = "<group>"; };
+		3E0F7B1729222A6500C4A843 /* shadow_sample_tent.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = shadow_sample_tent.h; sourceTree = "<group>"; };
+		3E0F7B1829222AC000C4A843 /* shadow_frag_share.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = shadow_frag_share.metal; sourceTree = "<group>"; };
+		3E0F7B1A2922347700C4A843 /* shadow_frag_share.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = shadow_frag_share.h; sourceTree = "<group>"; };
 		3E67EDC5291B2F7600ED60C8 /* SwiftArche.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SwiftArche.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		3E67EDC8291B2F7600ED60C8 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		3E67EDCA291B2F7600ED60C8 /* Shaders.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = Shaders.metal; sourceTree = "<group>"; };
@@ -431,6 +437,10 @@
 			isa = PBXGroup;
 			children = (
 				3E0F7B1329220F8C00C4A843 /* shadowmap.metal */,
+				3E0F7B1729222A6500C4A843 /* shadow_sample_tent.h */,
+				3E0F7B15292229CD00C4A843 /* shadow_sample_tent.metal */,
+				3E0F7B1A2922347700C4A843 /* shadow_frag_share.h */,
+				3E0F7B1829222AC000C4A843 /* shadow_frag_share.metal */,
 			);
 			path = shadow;
 			sourceTree = "<group>";
@@ -1069,6 +1079,8 @@
 			files = (
 				3E67EED42921DB4A00ED60C8 /* function_common.metal in Sources */,
 				3E0F7B1429220F8C00C4A843 /* shadowmap.metal in Sources */,
+				3E0F7B1929222AC000C4A843 /* shadow_frag_share.metal in Sources */,
+				3E0F7B16292229CD00C4A843 /* shadow_sample_tent.metal in Sources */,
 				3E0F7B0F292200E100C4A843 /* pbr_common.metal in Sources */,
 				3E67EED12921D9C800ED60C8 /* unlit.metal in Sources */,
 				3E0F7B0C2921F63B00C4A843 /* skybox.metal in Sources */,
