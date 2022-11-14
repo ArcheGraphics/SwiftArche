@@ -316,3 +316,56 @@ void PBRShading::initMaterial(){
     
     material.opacity = baseColor.a;
 }
+
+// MARK: - Entry
+
+typedef struct {
+    float4 position [[position]];
+    float3 v_pos [[function_constant(needWorldPos)]];
+    float2 v_uv;
+    float4 v_color [[function_constant(hasVertexColor)]];
+    float3 normalW [[function_constant(hasNormalAndHasTangentAndHasNormalTexture)]];
+    float3 tangentW [[function_constant(hasNormalAndHasTangentAndHasNormalTexture)]];
+    float3 bitangentW [[function_constant(hasNormalAndHasTangentAndHasNormalTexture)]];
+    float3 v_normal [[function_constant(hasNormalNotHasTangentOrHasNormalTexture)]];
+    float3 view_pos;
+} VertexOut;
+
+fragment float4 fragment_pbr(VertexOut in [[stage_in]],
+                             // common_frag
+                             constant matrix_float4x4 &u_localMat [[buffer(0)]],
+                             constant matrix_float4x4 &u_modelMat [[buffer(1)]],
+                             constant matrix_float4x4 &u_viewMat [[buffer(2)]],
+                             constant matrix_float4x4 &u_projMat [[buffer(3)]],
+                             constant matrix_float4x4 &u_MVMat [[buffer(4)]],
+                             constant matrix_float4x4 &u_MVPMat [[buffer(5)]],
+                             constant matrix_float4x4 &u_normalMat [[buffer(6)]],
+                             constant float3 &u_cameraPos [[buffer(7)]],
+                             device DirectLightData *u_directLight [[buffer(8), function_constant(hasDirectLight)]],
+                             device PointLightData *u_pointLight [[buffer(9), function_constant(hasPointLight)]],
+                             device SpotLightData *u_spotLight [[buffer(10), function_constant(hasSpotLight)]],
+                             // pbr_envmap_light_frag_define
+                             constant EnvMapLight &u_envMapLight [[buffer(12)]],
+                             constant float3 *u_env_sh [[buffer(13), function_constant(hasSH)]],
+                             texturecube<float> u_env_specularTexture [[texture(1), function_constant(hasSpecularEnv)]],
+                             texture2d<float> samplerBRDFLUT [[texture(3)]],
+                             //pbr base frag define
+                             constant float &u_alphaCutoff [[buffer(14)]],
+                             constant float4 &u_baseColor [[buffer(15)]],
+                             constant float &u_metal [[buffer(16)]],
+                             constant float &u_roughness [[buffer(17)]],
+                             constant float3 &u_specularColor [[buffer(18)]],
+                             constant float &u_glossiness [[buffer(19)]],
+                             constant float3 &u_emissiveColor [[buffer(20)]],
+                             constant float &u_normalIntensity [[buffer(21)]],
+                             constant float &u_occlusionStrength [[buffer(22)]],
+                             // pbr_texture_frag_define
+                             texture2d<float> u_baseColorTexture [[texture(4), function_constant(hasBaseTexture)]],
+                             texture2d<float> u_normalTexture [[texture(5), function_constant(hasNormalTexture)]],
+                             texture2d<float> u_emissiveTexture [[texture(6), function_constant(hasEmissiveTexture)]],
+                             texture2d<float> u_metallicRoughnessTexture [[texture(7), function_constant(hasRoughnessMetallicTexture)]],
+                             texture2d<float> u_specularGlossinessTexture [[texture(8), function_constant(hasSpecularGlossinessTexture)]],
+                             texture2d<float> u_occlusionTexture [[texture(9), function_constant(hasOcclusionTexture)]],
+                             bool is_front_face [[front_facing]]) {
+    return float4(0.0);
+}
