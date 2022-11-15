@@ -4,7 +4,7 @@
 //  personal capacity and am not conveying any rights to any intellectual
 //  property of any third parties.
 
-import Foundation
+import Metal
 
 public class DevicePipeline {
     static func _compareFromNearToFar(a: RenderElement, b: RenderElement) -> Bool {
@@ -20,20 +20,21 @@ public class DevicePipeline {
     var _transparentQueue: [RenderElement] = []
     var _alphaTestQueue: [RenderElement] = []
     var _resourceCache: ResourceCache
+    var _renderPassDescriptor = MTLRenderPassDescriptor()
+    var _renderPass: RenderPass!
 
     public init(_ camera: Camera) {
         _resourceCache = ResourceCache(camera.engine.device)
         self.camera = camera
+        _renderPass = RenderPass(_renderPassDescriptor, self)
     }
 
     public func commit() {
-        _opaqueQueue.removeAll()
-        _alphaTestQueue.removeAll()
-        _transparentQueue.removeAll()
-        callRender(camera._cameraInfo)
-        _opaqueQueue.sort(by: DevicePipeline._compareFromNearToFar);
-        _alphaTestQueue.sort(by: DevicePipeline._compareFromNearToFar);
-        _transparentQueue.sort(by: DevicePipeline._compareFromFarToNear);
+        guard let commandBuffer = camera.engine.commandQueue.makeCommandBuffer() else {
+            return
+        }
+        _renderPass.draw(commandBuffer)
+        commandBuffer.commit()
     }
 
     func callRender(_ cameraInfo: CameraInfo) {

@@ -12,31 +12,31 @@ public class RenderPass {
 
     weak var pipeline: DevicePipeline!
 
-    var subpasses: [Subpass] {
+    public var subpasses: [Subpass] {
         get {
             _subpasses
         }
     }
 
-    var descriptor: MTLRenderPassDescriptor {
+    public var descriptor: MTLRenderPassDescriptor {
         get {
             _descriptor
         }
     }
 
-    init(_ descriptor: MTLRenderPassDescriptor, _ pipeline: DevicePipeline) {
+    public init(_ descriptor: MTLRenderPassDescriptor, _ pipeline: DevicePipeline) {
         _descriptor = descriptor
         self.pipeline = pipeline
     }
 
     /// Appends a subpass to the pipeline
     /// - Parameter subpass: Subpass to append
-    func addSubpass(_ subpass: Subpass) {
+    public func addSubpass(_ subpass: Subpass) {
         subpass.setRenderPass(self)
         _subpasses.append(subpass)
     }
 
-    func draw(commandBuffer: MTLCommandBuffer, label: String = "") {
+    func draw(_ commandBuffer: MTLCommandBuffer, _ label: String = "") {
         assert(_subpasses.count > 0)
         guard let encoder = commandBuffer.makeRenderCommandEncoder(descriptor: _descriptor) else {
             return

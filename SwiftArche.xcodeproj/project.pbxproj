@@ -81,6 +81,7 @@
 		43D8C4BD989F77A020725E4C /* Subpass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8C5BA82AE969237F234DC /* Subpass.swift */; };
 		43D8C51244720F80CFE1E7FB /* ShadowType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8CE5D7B75CB684EC5EC1B /* ShadowType.swift */; };
 		43D8C519A137AB2E23BBC897 /* CameraClearFlags.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8C08D2843709803F5744E /* CameraClearFlags.swift */; };
+		43D8C52A399C01C7FA561389 /* ForwardSubpass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8C0EA6C54B16C4DBBDB8C /* ForwardSubpass.swift */; };
 		43D8C56AFF29A4383C0F6DFF /* Scene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8C4A35ABF161ABDDD3AF5 /* Scene.swift */; };
 		43D8C5E6930F1AE28E2C7572 /* BackgroundMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8CAFD194E70DEE643C226 /* BackgroundMode.swift */; };
 		43D8C64F87A019BFA0DE1CC0 /* BoolUpdateFlag.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8CAED3B1AFD13451D2107 /* BoolUpdateFlag.swift */; };
@@ -299,6 +300,7 @@
 		43D8C050955DD1855EEBFE8E /* BlendState.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BlendState.swift; sourceTree = "<group>"; };
 		43D8C08D2843709803F5744E /* CameraClearFlags.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CameraClearFlags.swift; sourceTree = "<group>"; };
 		43D8C0E825225EDCF4195D57 /* PrimitiveMesh.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PrimitiveMesh.swift; sourceTree = "<group>"; };
+		43D8C0EA6C54B16C4DBBDB8C /* ForwardSubpass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ForwardSubpass.swift; sourceTree = "<group>"; };
 		43D8C11CC2C81E2597C1A743 /* ListenerUpdateFlag .swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "ListenerUpdateFlag .swift"; sourceTree = "<group>"; };
 		43D8C15F86CB93FDBB5AB528 /* ComputePass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ComputePass.swift; sourceTree = "<group>"; };
 		43D8C16C159DE4ABBC466DA3 /* RasterState.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RasterState.swift; sourceTree = "<group>"; };
@@ -452,6 +454,14 @@
 				04ED07DD292284FD00DD55AB /* shadow_shading.metal */,
 			);
 			path = shadow;
+			sourceTree = "<group>";
+		};
+		3E0F7B202923584A00C4A843 /* subpasses */ = {
+			isa = PBXGroup;
+			children = (
+				43D8C0EA6C54B16C4DBBDB8C /* ForwardSubpass.swift */,
+			);
+			path = subpasses;
 			sourceTree = "<group>";
 		};
 		3E67EDBC291B2F7600ED60C8 = {
@@ -769,15 +779,16 @@
 		3E67EECA291FD7E700ED60C8 /* rendering */ = {
 			isa = PBXGroup;
 			children = (
-				43D8CD34E1337864CB67AF7E /* ResourceCache.swift */,
-				E63B14B2CEF6930B88416E69 /* DevicePipeline.swift */,
 				E63B16A52D7461C2352D44C3 /* RenderElement.swift */,
-				3E0F7B1E292331B000C4A843 /* ReflectionUniform.swift */,
-				43D8C4992F109CE7A2BD9E97 /* RenderPipelineState.swift */,
-				43D8C5458496A0164715E24D /* ComputePipelineState.swift */,
+				E63B14B2CEF6930B88416E69 /* DevicePipeline.swift */,
 				43D8C15F86CB93FDBB5AB528 /* ComputePass.swift */,
 				43D8C51FABA0980F27EB7615 /* RenderPass.swift */,
 				43D8C5BA82AE969237F234DC /* Subpass.swift */,
+				3E0F7B202923584A00C4A843 /* subpasses */,
+				3E0F7B1E292331B000C4A843 /* ReflectionUniform.swift */,
+				43D8C4992F109CE7A2BD9E97 /* RenderPipelineState.swift */,
+				43D8C5458496A0164715E24D /* ComputePipelineState.swift */,
+				43D8CD34E1337864CB67AF7E /* ResourceCache.swift */,
 			);
 			path = rendering;
 			sourceTree = "<group>";
@@ -1179,6 +1190,7 @@
 				43D8C88ACAE60431C443C85C /* ComputePass.swift in Sources */,
 				43D8C3009A7DB108E86AD131 /* RenderPass.swift in Sources */,
 				43D8C4BD989F77A020725E4C /* Subpass.swift in Sources */,
+				43D8C52A399C01C7FA561389 /* ForwardSubpass.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

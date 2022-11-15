@@ -15,6 +15,7 @@ public class Engine {
     var sceneManager: SceneManager!
     var canvas: Canvas
     var device: MTLDevice
+    var commandQueue: MTLCommandQueue;
     var _macroCollection: ShaderMacroCollection = ShaderMacroCollection()
         
     init(canvas: Canvas) {
@@ -23,6 +24,10 @@ public class Engine {
             fatalError("Unable to create default Metal Device")
         }
         self.device = device
+        guard let commandQueue = device.makeCommandQueue() else {
+            fatalError("Unable to create default Metal Device")
+        }
+        self.commandQueue = commandQueue
         sceneManager = SceneManager(engine: self)
     }
     

@@ -7,13 +7,11 @@
 import Metal
 
 public class Subpass {
-    private weak var _renderPass: RenderPass!
+    weak var _renderPass: RenderPass!
 
     func setRenderPass(_ renderPass: RenderPass) {
         _renderPass = renderPass
     }
 
-    func draw(_ encoder: MTLRenderCommandEncoder) {
-
-    }
+    func draw(_ encoder: MTLRenderCommandEncoder) {}
 }
