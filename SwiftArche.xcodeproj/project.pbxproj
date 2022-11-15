@@ -74,9 +74,11 @@
 		43D8C2536A00B262EB4FDFFA /* ShaderPass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8CF0197AE3A016BC6AA64 /* ShaderPass.swift */; };
 		43D8C27938D6DB364069F77A /* BoundingSphere.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8C994E210CFEEA2560E05 /* BoundingSphere.swift */; };
 		43D8C28F840B36CAA2638716 /* RasterState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8C16C159DE4ABBC466DA3 /* RasterState.swift */; };
+		43D8C3009A7DB108E86AD131 /* RenderPass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8C51FABA0980F27EB7615 /* RenderPass.swift */; };
 		43D8C3F95E3065DFFE4D2176 /* BoundingBox.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8C42B88ACC2E2114AF177 /* BoundingBox.swift */; };
 		43D8C43B0AD7A8EAF529892C /* Component.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8CFA6FC902338A11A5E3A /* Component.swift */; };
 		43D8C4A0C09957580D8029FA /* RenderQueueType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8CE9FAF602FC33389337A /* RenderQueueType.swift */; };
+		43D8C4BD989F77A020725E4C /* Subpass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8C5BA82AE969237F234DC /* Subpass.swift */; };
 		43D8C51244720F80CFE1E7FB /* ShadowType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8CE5D7B75CB684EC5EC1B /* ShadowType.swift */; };
 		43D8C519A137AB2E23BBC897 /* CameraClearFlags.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8C08D2843709803F5744E /* CameraClearFlags.swift */; };
 		43D8C56AFF29A4383C0F6DFF /* Scene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8C4A35ABF161ABDDD3AF5 /* Scene.swift */; };
@@ -315,8 +317,10 @@
 		43D8C4C1A94B6732BDC31049 /* SceneManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SceneManager.swift; sourceTree = "<group>"; };
 		43D8C4FB7FE01E2F173F67CA /* ShadowResolution.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ShadowResolution.swift; sourceTree = "<group>"; };
 		43D8C518C7B03C3787F9676C /* DepthState.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DepthState.swift; sourceTree = "<group>"; };
+		43D8C51FABA0980F27EB7615 /* RenderPass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RenderPass.swift; sourceTree = "<group>"; };
 		43D8C5458496A0164715E24D /* ComputePipelineState.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ComputePipelineState.swift; sourceTree = "<group>"; };
 		43D8C55ADD0B573F9BE441A2 /* StencilState.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StencilState.swift; sourceTree = "<group>"; };
+		43D8C5BA82AE969237F234DC /* Subpass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Subpass.swift; sourceTree = "<group>"; };
 		43D8C604A7750ECC5ACB625F /* SubMesh.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SubMesh.swift; sourceTree = "<group>"; };
 		43D8C6552637EBD197C3A253 /* RenderFace.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RenderFace.swift; sourceTree = "<group>"; };
 		43D8C6C6BAB6A28F4761BFCC /* ModelMesh.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ModelMesh.swift; sourceTree = "<group>"; };
@@ -772,6 +776,8 @@
 				43D8C4992F109CE7A2BD9E97 /* RenderPipelineState.swift */,
 				43D8C5458496A0164715E24D /* ComputePipelineState.swift */,
 				43D8C15F86CB93FDBB5AB528 /* ComputePass.swift */,
+				43D8C51FABA0980F27EB7615 /* RenderPass.swift */,
+				43D8C5BA82AE969237F234DC /* Subpass.swift */,
 			);
 			path = rendering;
 			sourceTree = "<group>";
@@ -1171,6 +1177,8 @@
 				43D8C16073098E7394206F0E /* RenderPipelineState.swift in Sources */,
 				43D8CF9A819FABF732156575 /* ComputePipelineState.swift in Sources */,
 				43D8C88ACAE60431C443C85C /* ComputePass.swift in Sources */,
+				43D8C3009A7DB108E86AD131 /* RenderPass.swift in Sources */,
+				43D8C4BD989F77A020725E4C /* Subpass.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
