@@ -25,5 +25,5 @@ class ShadowSliceData {
 
     // bounding sphere
     var splitBoundSphere: BoundingSphere = BoundingSphere(Vector3(), 0.0)
-    var sphereCenterZ: Int = 0
+    var sphereCenterZ: Float = 0
 }

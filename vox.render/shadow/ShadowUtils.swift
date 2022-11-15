@@ -27,8 +27,6 @@ class ShadowUtils {
             m41: 0.5, m42: 0.5, m43: 0.5, m44: 1.0
     )
     private static var _frustumCorners: [Vector3] = [Vector3](repeating: Vector3(), count: 8)
-    private static var _adjustNearPlane: Plane = Plane(Vector3())
-    private static var _adjustFarPlane: Plane = Plane(Vector3())
     private static var _backPlaneFaces: [FrustumFace] = [FrustumFace](repeating: .Near, count: 5)
 
     /** near, far, left, right, bottom, top  */
@@ -122,9 +120,9 @@ class ShadowUtils {
         for i in 0..<cullPlaneCount {
             let plane = cullPlanes[i]
             let normal = plane.normal
-            if (normal.x * (normal.x >= 0.0 ? max.x : min.x) +
-                    normal.y * (normal.y >= 0.0 ? max.y : min.y) +
-                    normal.z * (normal.z >= 0.0 ? max.z : min.z) <
+            if (normal.x * (normal.x >= 0.0 ? bounds.max.x : bounds.min.x) +
+                    normal.y * (normal.y >= 0.0 ? bounds.max.y : bounds.min.y) +
+                    normal.z * (normal.z >= 0.0 ? bounds.max.z : bounds.min.z) <
                     -plane.distance
                ) {
                 return false
@@ -160,9 +158,7 @@ class ShadowUtils {
             radius = 0.5 * sqrt(farSNear * farSNear + 2.0 * (far * far + near * near) * k2 + farANear * farANear * k2 * k2)
         }
 
-        let center = shadowSliceData.splitBoundSphere.center
-        shadowSliceData.splitBoundSphere.radius = radius
-        hadowSliceData.splitBoundSphere.center = forward * centerZ + camera.entity.transform.worldPosition
+        shadowSliceData.splitBoundSphere = BoundingSphere(forward * centerZ + camera.entity.transform.worldPosition, radius)
         shadowSliceData.sphereCenterZ = centerZ
     }
 
@@ -172,86 +168,200 @@ class ShadowUtils {
                                                   direction: Vector3,
                                                   shadowSliceData: ShadowSliceData) {
         // http://lspiroengine.com/?p=187
-        let frustumCorners = ShadowUtils._frustumCorners
-        let backPlaneFaces = ShadowUtils._backPlaneFaces
-        let planeNeighbors = ShadowUtils._frustumPlaneNeighbors
-        let twoPlaneCorners = ShadowUtils._frustumTwoPlaneCorners
-        let out = shadowSliceData.cullPlanes
-
         // cameraFrustumPlanes is share
-        let near = cameraFrustum.getPlane(FrustumFace.Near)
-        let far = cameraFrustum.getPlane(FrustumFace.Far)
-        let left = cameraFrustum.getPlane(FrustumFace.Left)
-        let right = cameraFrustum.getPlane(FrustumFace.Right)
-        let bottom = cameraFrustum.getPlane(FrustumFace.Bottom)
-        let top = cameraFrustum.getPlane(FrustumFace.Top)
+        let near = cameraFrustum.getPlane(face: FrustumFace.Near)
+        let far = cameraFrustum.getPlane(face: FrustumFace.Far)
+        let left = cameraFrustum.getPlane(face: FrustumFace.Left)
+        let right = cameraFrustum.getPlane(face: FrustumFace.Right)
+        let bottom = cameraFrustum.getPlane(face: FrustumFace.Bottom)
+        let top = cameraFrustum.getPlane(face: FrustumFace.Top)
 
         // adjustment the near/far plane
         let splitNearDistance = splitDistance - cameraNear
-        let splitNear = ShadowUtils._adjustNearPlane
-        let splitFar = ShadowUtils._adjustFarPlane
-        splitNear.normal = near.normal
-        splitFar.normal = far.normal
-        splitNear.distance = near.distance - splitNearDistance
+        let splitNear = Plane(near.normal, near.distance - splitNearDistance)
         // do a clamp if the sphere is out of range the far plane
-        splitFar.distance = Math.min(
-                -near.distance + shadowSliceData.sphereCenterZ + shadowSliceData.splitBoundSphere.radius,
-                far.distance
-        )
+        let splitFar = Plane(far.normal, min(-near.distance + shadowSliceData.sphereCenterZ + shadowSliceData.splitBoundSphere.radius, far.distance))
 
-        CollisionUtil.intersectionPointThreePlanes(splitNear, bottom, right, frustumCorners[FrustumCorner.nearBottomRight])
-        CollisionUtil.intersectionPointThreePlanes(splitNear, top, right, frustumCorners[FrustumCorner.nearTopRight])
-        CollisionUtil.intersectionPointThreePlanes(splitNear, top, left, frustumCorners[FrustumCorner.nearTopLeft])
-        CollisionUtil.intersectionPointThreePlanes(splitNear, bottom, left, frustumCorners[FrustumCorner.nearBottomLeft])
-        CollisionUtil.intersectionPointThreePlanes(splitFar, bottom, right, frustumCorners[FrustumCorner.FarBottomRight])
-        CollisionUtil.intersectionPointThreePlanes(splitFar, top, right, frustumCorners[FrustumCorner.FarTopRight])
-        CollisionUtil.intersectionPointThreePlanes(splitFar, top, left, frustumCorners[FrustumCorner.FarTopLeft])
-        CollisionUtil.intersectionPointThreePlanes(splitFar, bottom, left, frustumCorners[FrustumCorner.FarBottomLeft])
+        ShadowUtils._frustumCorners[FrustumCorner.nearBottomRight.rawValue] = CollisionUtil.intersectionPointThreePlanes(p1: splitNear, p2: bottom, p3: right)
+        ShadowUtils._frustumCorners[FrustumCorner.nearTopRight.rawValue] = CollisionUtil.intersectionPointThreePlanes(p1: splitNear, p2: top, p3: right)
+        ShadowUtils._frustumCorners[FrustumCorner.nearTopLeft.rawValue] = CollisionUtil.intersectionPointThreePlanes(p1: splitNear, p2: top, p3: left)
+        ShadowUtils._frustumCorners[FrustumCorner.nearBottomLeft.rawValue] = CollisionUtil.intersectionPointThreePlanes(p1: splitNear, p2: bottom, p3: left)
+        ShadowUtils._frustumCorners[FrustumCorner.FarBottomRight.rawValue] = CollisionUtil.intersectionPointThreePlanes(p1: splitFar, p2: bottom, p3: right)
+        ShadowUtils._frustumCorners[FrustumCorner.FarTopRight.rawValue] = CollisionUtil.intersectionPointThreePlanes(p1: splitFar, p2: top, p3: right)
+        ShadowUtils._frustumCorners[FrustumCorner.FarTopLeft.rawValue] = CollisionUtil.intersectionPointThreePlanes(p1: splitFar, p2: top, p3: left)
+        ShadowUtils._frustumCorners[FrustumCorner.FarBottomLeft.rawValue] = CollisionUtil.intersectionPointThreePlanes(p1: splitFar, p2: bottom, p3: left)
 
-        let backIndex = 0
+        var backIndex = 0
         for i in 0..<6 {
             // maybe 3、4、5(light eye is at far, forward is near, or orthographic camera is any axis)
             let plane: Plane
             switch (i) {
-            case FrustumFace.Near:
+            case FrustumFace.Near.rawValue:
                 plane = splitNear
                 break
-            case FrustumFace.Far:
+            case FrustumFace.Far.rawValue:
                 plane = splitFar
                 break
             default:
-                plane = cameraFrustum.getPlane(i)
+                plane = cameraFrustum.getPlane(index: i)
                 break
             }
-            if (Vector3.dot(plane.normal, direction) < 0.0) {
-                out[backIndex] = plane
-                backPlaneFaces[backIndex] = i
-                backIndex++
+            if (Vector3.dot(left: plane.normal, right: direction) < 0.0) {
+                shadowSliceData.cullPlanes[backIndex] = plane
+                ShadowUtils._backPlaneFaces[backIndex] = FrustumFace(rawValue: i)!
+                backIndex += 1
             }
         }
 
-        let edgeIndex = backIndex
+        var edgeIndex = backIndex
         for i in 0..<backIndex {
-            let backFace = backPlaneFaces[i]
-            let neighborFaces = planeNeighbors[backFace]
+            let backFace = ShadowUtils._backPlaneFaces[i]
+            let neighborFaces = ShadowUtils._frustumPlaneNeighbors[backFace.rawValue]
             for j in 0..<4 {
                 let neighborFace = neighborFaces[j]
-                let notBackFace = true
+                var notBackFace = true
                 for k in 0..<backIndex {
-                    if (neighborFace == backPlaneFaces[k]) {
+                    if (neighborFace == ShadowUtils._backPlaneFaces[k]) {
                         notBackFace = false
                         break
                     }
                 }
                 if (notBackFace) {
-                    let corners = twoPlaneCorners[backFace][neighborFace]
-                    let point0 = frustumCorners[corners[0]]
-                    let point1 = frustumCorners[corners[1]]
-                    Plane.fromPoints(point0, point1, point0 + direction, out[edgeIndex++])
+                    let corners: [FrustumCorner] = ShadowUtils._frustumTwoPlaneCorners[backFace.rawValue][neighborFace.rawValue]
+                    let point0 = ShadowUtils._frustumCorners[corners[0].rawValue]
+                    let point1 = ShadowUtils._frustumCorners[corners[1].rawValue]
+                    shadowSliceData.cullPlanes[edgeIndex] = Plane.fromPoints(point0: point0, point1: point1, point2: point0 + direction)
+                    edgeIndex += 1
                 }
             }
         }
         shadowSliceData.cullPlaneCount = edgeIndex
     }
 
+    static func getDirectionalLightMatrices(lightUp: Vector3,
+                                            lightSide: Vector3,
+                                            lightForward: Vector3,
+                                            cascadeIndex: Int,
+                                            nearPlane: Float,
+                                            shadowResolution: Int,
+                                            shadowSliceData: ShadowSliceData) -> [Float] {
+        let boundSphere = shadowSliceData.splitBoundSphere
+        shadowSliceData.resolution = shadowResolution
+
+        // To solve shadow swimming problem.
+        let center = boundSphere.center
+        let radius = boundSphere.radius
+        let halfShadowResolution = shadowResolution / 2
+        // Add border to project edge pixel PCF.
+        // Improve:the clip planes not consider the border,but I think is OK,because the object can clip is not continuous.
+        let borderRadius: Float = (radius * Float(halfShadowResolution)) / (Float(halfShadowResolution) - ShadowUtils.atlasBorderSize)
+        let borderDiam = borderRadius * 2.0
+        let sizeUnit = Float(shadowResolution) / borderDiam
+        let radiusUnit = borderDiam / Float(shadowResolution)
+        let upLen = ceil(Vector3.dot(left: center, right: lightUp) * sizeUnit) * radiusUnit
+        let sideLen = ceil(Vector3.dot(left: center, right: lightSide) * sizeUnit) * radiusUnit
+        let forwardLen = Vector3.dot(left: center, right: lightForward)
+        let newCenter = Vector3(lightUp.x * upLen + lightSide.x * sideLen + lightForward.x * forwardLen,
+                lightUp.y * upLen + lightSide.y * sideLen + lightForward.y * forwardLen,
+                lightUp.z * upLen + lightSide.z * sideLen + lightForward.z * forwardLen)
+        shadowSliceData.splitBoundSphere = BoundingSphere(newCenter, radius)
+
+        // Direction light use shadow pancaking tech,do special dispose with nearPlane.
+        let virtualCamera = shadowSliceData.virtualCamera
+        virtualCamera.position = center - lightForward * (radius + nearPlane)
+        virtualCamera.viewMatrix = Matrix.lookAt(eye: virtualCamera.position, target: center, up: lightUp)
+        virtualCamera.projectionMatrix = Matrix.ortho(
+                left: -borderRadius,
+                right: borderRadius,
+                bottom: -borderRadius,
+                top: borderRadius,
+                near: 0.0,
+                far: radius * 2.0 + nearPlane
+        )
+
+        virtualCamera.viewProjectionMatrix = virtualCamera.projectionMatrix * virtualCamera.viewMatrix
+//        Utils._floatMatrixMultiply(
+//                ShadowUtils._shadowMapCoordMatrix,
+//                viewProjectionMatrix.elements,
+//                0,
+//                outShadowMatrices,
+//                cascadeIndex * 16
+//        )
+        return []
+    }
+
+    static func getMaxTileResolutionInAtlas(atlasWidth: Int, atlasHeight: Int, tileCount: Int) -> Int {
+        var resolution = min(atlasWidth, atlasHeight)
+        var currentTileCount = atlasWidth / resolution * atlasHeight / resolution
+        while (currentTileCount < tileCount) {
+            resolution = resolution >> 1
+            currentTileCount = atlasWidth / resolution * atlasHeight / resolution
+        }
+        return resolution
+    }
+
+    static func getShadowBias(light: DirectLight, projectionMatrix: Matrix, shadowResolution: Int) -> Vector2 {
+        // Frustum size is guaranteed to be a cube as we wrap shadow frustum around a sphere
+        // elements[0] = 2.0 / (right - left)
+        let frustumSize: Float = 2.0 / projectionMatrix.elements.columns.0[0]
+
+        // depth and normal bias scale is in shadowmap texel size in world space
+        let texelSize: Float = frustumSize / Float(shadowResolution)
+        var depthBias: Float = -light.shadowBias * texelSize
+        var normalBias: Float = -light.shadowNormalBias * texelSize
+
+        if (light.shadowType == ShadowType.SoftHigh) {
+            // TODO: depth and normal bias assume sample is no more than 1 texel away from shadowmap
+            // This is not true with PCF. Ideally we need to do either
+            // cone base bias (based on distance to center sample)
+            // or receiver place bias based on derivatives.
+            // For now we scale it by the PCF kernel size (5x5)
+            let kernelRadius: Float = 2.5
+            depthBias *= kernelRadius
+            normalBias *= kernelRadius
+        }
+        return Vector2(depthBias, normalBias)
+    }
+
+    /**
+   * Apply shadow slice scale and offset
+   */
+    static func applySliceTransform(tileSize: Int,
+                                    atlasWidth: Int,
+                                    atlasHeight: Int,
+                                    cascadeIndex: Int,
+                                    atlasOffset: Vector2) -> [Float] {
+        var slice = simd_float4x4()
+
+        let oneOverAtlasWidth: Float = 1.0 / Float(atlasWidth)
+        let oneOverAtlasHeight: Float = 1.0 / Float(atlasHeight)
+        let scaleX: Float = Float(tileSize) * oneOverAtlasWidth
+        let scaleY: Float = Float(tileSize) * oneOverAtlasHeight
+        let offsetX: Float = atlasOffset.x * oneOverAtlasWidth
+        let offsetY: Float = atlasOffset.y * oneOverAtlasHeight
+
+        slice.columns.0[0] = scaleX
+        slice.columns.0[1] = 0
+        slice.columns.0[2] = 0
+        slice.columns.0[3] = 0
+
+        slice.columns.1[0] = 0
+        slice.columns.1[1] = scaleY
+        slice.columns.1[2] = 0
+        slice.columns.1[3] = 0
+
+        slice.columns.2[0] = 0
+        slice.columns.2[1] = 0
+        slice.columns.2[2] = 1
+        slice.columns.2[3] = 0
+
+        slice.columns.3[0] = offsetX
+        slice.columns.3[1] = offsetY
+        slice.columns.3[2] = 0
+        slice.columns.3[3] = 1
+
+        let offset = cascadeIndex * 16
+        // Utils._floatMatrixMultiply(sliceMatrix, outShadowMatrices, offset, outShadowMatrices, offset)
+        return []
+    }
 }
