@@ -6,6 +6,7 @@
 
 #include "pbr_shading.h"
 #include "function_common.h"
+#include "shader_common.h"
 
 using namespace metal;
 
@@ -396,6 +397,128 @@ typedef struct {
     float3 v_normal [[function_constant(hasNormalNotHasTangentOrHasNormalTexture)]];
 } VertexOut;
 
+vertex VertexOut vertex_pbr(const VertexIn in [[stage_in]],
+                            uint v_id [[vertex_id]],
+                            constant CameraData &u_camera [[buffer(2)]],
+                            constant RendererData &u_renderer [[buffer(3)]],
+                            constant float4 &u_tilingOffset [[buffer(4)]],
+                            // skin
+                            texture2d<float> u_jointTexture [[texture(0), function_constant(hasSkinAndHasJointTexture)]],
+                            constant int &u_jointCount [[buffer(5), function_constant(hasSkinAndHasJointTexture)]],
+                            constant matrix_float4x4 *u_jointMatrix [[buffer(6), function_constant(hasSkinNotHasJointTexture)]],
+                            // morph
+                            texture2d_array<float> u_blendShapeTexture [[texture(1), function_constant(hasBlendShape)]],
+                            constant int3 &u_blendShapeTextureInfo [[buffer(7), function_constant(hasBlendShape)]],
+                            constant float *u_blendShapeWeights [[buffer(8), function_constant(hasBlendShape)]]) {
+    VertexOut out;
+    
+    // begin position
+    float4 position = float4( in.POSITION, 1.0);
+    
+    //begin normal
+    float3 normal;
+    float4 tangent;
+    if (!omitNormal) {
+        if (hasNormal) {
+            normal = in.NORMAL;
+        }
+        if (hasTangent) {
+            tangent = in.TANGENT;
+        }
+    }
+    
+    //blendshape
+    if (hasBlendShape) {
+        int vertexOffset = v_id * u_blendShapeTextureInfo.x;
+        for(int i = 0; i < blendShapeCount; i++){
+            int vertexElementOffset = vertexOffset;
+            float weight = u_blendShapeWeights[i];
+            position.xyz += getBlendShapeVertexElement(i, vertexElementOffset, u_blendShapeTextureInfo ,u_blendShapeTexture) * weight;
+            
+            if (!omitNormal) {
+                if (hasNormal && hasBlendShapeNormal) {
+                    vertexElementOffset += 1;
+                    normal += getBlendShapeVertexElement(i, vertexElementOffset, u_blendShapeTextureInfo ,u_blendShapeTexture) * weight;
+                }
+                
+                if (hasNormal && hasBlendShapeTangent && (hasNormalTexture || hasClearCoatNormalTexture)) {
+                    vertexElementOffset += 1;
+                    tangent.xyz += getBlendShapeVertexElement(i, vertexElementOffset, u_blendShapeTextureInfo ,u_blendShapeTexture) * weight;
+                }
+            }
+        }
+    }
+    
+    //skinning
+    if (hasSkin) {
+        matrix_float4x4 skinMatrix;
+        if (hasJointTexture) {
+            skinMatrix =
+            in.WEIGHTS_0.x * getJointMatrix(u_jointTexture, in.JOINTS_0.x, u_jointCount) +
+            in.WEIGHTS_0.y * getJointMatrix(u_jointTexture, in.JOINTS_0.y, u_jointCount) +
+            in.WEIGHTS_0.z * getJointMatrix(u_jointTexture, in.JOINTS_0.z, u_jointCount) +
+            in.WEIGHTS_0.w * getJointMatrix(u_jointTexture, in.JOINTS_0.w, u_jointCount);
+        } else {
+            skinMatrix =
+            in.WEIGHTS_0.x * u_jointMatrix[int(in.JOINTS_0.x)] +
+            in.WEIGHTS_0.y * u_jointMatrix[int(in.JOINTS_0.y)] +
+            in.WEIGHTS_0.z * u_jointMatrix[int(in.JOINTS_0.z)] +
+            in.WEIGHTS_0.w * u_jointMatrix[int(in.JOINTS_0.w)];
+        }
+        position = skinMatrix * position;
+        
+        if (hasNormal && !omitNormal) {
+            matrix_float3x3 skinNormalMatrix = inverse(matrix_float3x3(skinMatrix[0][0], skinMatrix[0][1], skinMatrix[0][2],
+                                                                       skinMatrix[1][0], skinMatrix[1][1], skinMatrix[1][2],
+                                                                       skinMatrix[2][0], skinMatrix[2][1], skinMatrix[2][2]));
+            normal = normal * skinNormalMatrix;
+            if (hasTangent && (hasNormalTexture || hasClearCoatNormalTexture)) {
+                tangent.xyz = tangent.xyz * skinNormalMatrix;
+            }
+        }
+    }
+    
+    // uv
+    if (hasUV) {
+        out.v_uv = in.TEXCOORD_0;
+    } else {
+        out.v_uv = float2(0.0, 0.0);
+    }
+    if (needTilingOffset) {
+        out.v_uv = out.v_uv * u_tilingOffset.xy + u_tilingOffset.zw;
+    }
+    
+    // color
+    if (hasVertexColor) {
+        out.v_color = in.COLOR_0;
+    }
+    
+    // normal
+    if (!omitNormal) {
+        if (hasNormal) {
+            auto u_normalMat = float3x3(u_renderer.u_normalMat.columns[0].xyz,
+                                        u_renderer.u_normalMat.columns[1].xyz,
+                                        u_renderer.u_normalMat.columns[2].xyz);
+            out.v_normal = normalize(u_normalMat * normal);
+            if (hasTangent && (hasNormalTexture || hasClearCoatNormalTexture)) {
+                out.normalW = normalize(u_normalMat * normal.xyz);
+                out.tangentW = normalize(u_normalMat * tangent.xyz);
+                out.bitangentW = cross(out.normalW, out.tangentW) * tangent.w;
+            }
+        }
+    }
+    
+    // world pos
+    if (needWorldPos) {
+        float4 temp_pos = u_renderer.u_modelMat * position;
+        out.v_pos = temp_pos.xyz / temp_pos.w;
+    }
+    
+    out.position = u_camera.u_VPMat * u_renderer.u_modelMat * position;
+    
+    return out;
+}
+
 fragment float4 fragment_pbr(VertexOut in [[stage_in]],
                              // common_frag
                              constant CameraData &u_camera [[buffer(0)]],
@@ -434,88 +557,132 @@ fragment float4 fragment_pbr(VertexOut in [[stage_in]],
                              texture2d<float> u_clearCoatRoghnessTexture [[texture(10), function_constant(hasClearCoatRoughnessTexture)]],
                              sampler u_clearCoatRoghnessSampler [[sampler(10), function_constant(hasClearCoatRoughnessTexture)]],
                              // shadow
-                             constant float4* u_shadowSplitSpheres [[buffer(11)]],
-                             constant matrix_float4x4* u_shadowMatrices [[buffer(12)]],
-                             constant float4 &u_shadowMapSize [[buffer(13)]],
-                             constant float3 &u_shadowInfo [[buffer(14)]],
-                             depth2d<float> u_shadowMap [[texture(11)]],
-                             sampler u_shadowMapSampler [[sampler(11)]],
+                             constant float4* u_shadowSplitSpheres [[buffer(11), function_constant(needCalculateShadow)]],
+                             constant matrix_float4x4* u_shadowMatrices [[buffer(12), function_constant(needCalculateShadow)]],
+                             constant float4 &u_shadowMapSize [[buffer(13), function_constant(needCalculateShadow)]],
+                             constant float3 &u_shadowInfo [[buffer(14), function_constant(needCalculateShadow)]],
+                             depth2d<float> u_shadowMap [[texture(11), function_constant(needCalculateShadow)]],
+                             sampler u_shadowMapSampler [[sampler(11), function_constant(needCalculateShadow)]],
                              bool is_front_face [[front_facing]]) {
     PBRShading shading;
     
     shading.normalShading.isFrontFacing = is_front_face;
-    shading.normalShading.v_normal = in.v_normal;
-    shading.normalShading.v_pos = in.v_pos;
-    if (hasNormalAndHasTangentAndHasNormalTexture) {
-        shading.normalShading.v_TBN = matrix_float3x3(in.tangentW, in.bitangentW, in.normalW);
+    if (needWorldPos) {
+        shading.normalShading.v_pos = in.v_pos;
+    }
+    if (!omitNormal) {
+        if (hasNormal) {
+            shading.normalShading.v_normal = in.v_normal;
+            if (hasTangent && (hasNormalTexture || hasClearCoatNormalTexture)) {
+                shading.normalShading.v_TBN = matrix_float3x3(in.tangentW, in.bitangentW, in.normalW);
+            }
+        }
     }
     
-    shading.shadowShading.v_pos = in.v_pos;
-    shading.shadowShading.u_shadowMap = u_shadowMap;
-    shading.shadowShading.u_shadowMapSampler = u_shadowMapSampler;
-    shading.shadowShading.u_shadowInfo = u_shadowInfo;
-    shading.shadowShading.u_shadowMapSize = u_shadowMapSize;
-    shading.shadowShading.u_shadowMatrices = u_shadowMatrices;
-    shading.shadowShading.u_shadowSplitSpheres = u_shadowSplitSpheres;
+    if (needWorldPos) {
+        shading.shadowShading.v_pos = in.v_pos;
+    }
+    
+    if (needCalculateShadow) {
+        shading.shadowShading.u_shadowMap = u_shadowMap;
+        shading.shadowShading.u_shadowMapSampler = u_shadowMapSampler;
+        shading.shadowShading.u_shadowInfo = u_shadowInfo;
+        shading.shadowShading.u_shadowMapSize = u_shadowMapSize;
+        shading.shadowShading.u_shadowMatrices = u_shadowMatrices;
+        shading.shadowShading.u_shadowSplitSpheres = u_shadowSplitSpheres;
+    }
+    
+    if (hasDirectLight) {
+        shading.directLight = u_directLight;
+    }
+    if (hasSpotLight) {
+        shading.spotLight = u_spotLight;
+    }
+    if (hasPointLight) {
+        shading.pointLight = u_pointLight;
+    }
     
     shading.u_envMapLight = u_envMapLight;
-    shading.u_env_sh = u_env_sh;
-    shading.u_env_specularSampler = u_env_specularSampler;
-    shading.u_env_specularTexture = u_env_specularTexture;
+    if (hasSH) {
+        shading.u_env_sh = u_env_sh;
+    }
+    if (hasSpecularEnv) {
+        shading.u_env_specularSampler = u_env_specularSampler;
+        shading.u_env_specularTexture = u_env_specularTexture;
+    }
     
     shading.u_alphaCutoff = u_alphaCutoff;
     shading.u_baseColor = u_pbrBase.baseColor;
-    shading.u_metal = u_pbr.metallic;
-    shading.u_roughness = u_pbr.roughness;
-    shading.u_PBRSpecularColor = u_pbrSpecular.specularColor;
-    shading.u_glossiness = u_pbrSpecular.glossiness;
     shading.u_emissiveColor = u_pbrBase.emissiveColor;
-    
-    shading.u_clearCoat = u_pbrBase.clearCoat;
-    shading.u_clearCoatRoughness = u_pbrBase.clearCoatRoughness;
-    
     shading.u_normalIntensity = u_pbrBase.normalTextureIntensity;
     shading.u_occlusionIntensity = u_pbrBase.occlusionTextureIntensity;
     shading.u_occlusionTextureCoord = u_pbrBase.occlusionTextureCoord;
     
-    shading.u_baseTexture = u_baseColorTexture;
-    shading.u_baseSampler = u_baseColorSampler;
+    if (isMetallicWorkFlow) {
+        shading.u_metal = u_pbr.metallic;
+        shading.u_roughness = u_pbr.roughness;
+    } else {
+        shading.u_PBRSpecularColor = u_pbrSpecular.specularColor;
+        shading.u_glossiness = u_pbrSpecular.glossiness;
+    }
     
-    shading.u_normalTexture = u_normalTexture;
-    shading.u_normalSampler = u_normalSampler;
+    if (isClearCoat) {
+        shading.u_clearCoat = u_pbrBase.clearCoat;
+        shading.u_clearCoatRoughness = u_pbrBase.clearCoatRoughness;
+    }
     
-    shading.u_emissiveTexture = u_emissiveTexture;
-    shading.u_emissiveSampler = u_emissiveSampler;
+    if (hasBaseTexture) {
+        shading.u_baseTexture = u_baseColorTexture;
+        shading.u_baseSampler = u_baseColorSampler;
+    }
     
-    shading.u_roughnessMetallicTexture = u_metallicRoughnessTexture;
-    shading.u_roughnessMetallicSampler = u_metallicRoughnessSampler;
+    if (hasNormalTexture) {
+        shading.u_normalTexture = u_normalTexture;
+        shading.u_normalSampler = u_normalSampler;
+    }
     
-    shading.u_specularGlossinessTexture = u_specularGlossinessTexture;
-    shading.u_specularGlossinessSampler = u_specularGlossineseSampler;
+    if (hasEmissiveTexture) {
+        shading.u_emissiveTexture = u_emissiveTexture;
+        shading.u_emissiveSampler = u_emissiveSampler;
+    }
     
-    shading.u_occlusionTexture = u_occlusionTexture;
-    shading.u_occlusionSampler = u_occlusionSampler;
+    if (hasRoughnessMetallicTexture) {
+        shading.u_roughnessMetallicTexture = u_metallicRoughnessTexture;
+        shading.u_roughnessMetallicSampler = u_metallicRoughnessSampler;
+    }
     
-    shading.u_clearCoatTexture = u_clearCoatTexture;
-    shading.u_clearCoatSampler = u_clearCoatSampler;
+    if (hasSpecularGlossinessTexture) {
+        shading.u_specularGlossinessTexture = u_specularGlossinessTexture;
+        shading.u_specularGlossinessSampler = u_specularGlossineseSampler;
+    }
     
-    shading.u_clearCoatNormalTexture = u_clearCoatNormalTexture;
-    shading.u_clearCoatNormalSampler = u_clearCoatNormalSampler;
+    if (hasOcclusionTexture) {
+        shading.u_occlusionTexture = u_occlusionTexture;
+        shading.u_occlusionSampler = u_occlusionSampler;
+    }
     
-    shading.u_clearCoatRoughnessTexture = u_clearCoatRoghnessTexture;
-    shading.u_clearCoatRoughnessSampler = u_clearCoatRoghnessSampler;
+    if (hasClearCoatTexture) {
+        shading.u_clearCoatTexture = u_clearCoatTexture;
+        shading.u_clearCoatSampler = u_clearCoatSampler;
+    }
     
-    shading.u_shadowMap = u_shadowMap;
-    shading.u_shadowMapSampler = u_shadowMapSampler;
-    shading.u_shadowInfo = u_shadowInfo;
-    shading.u_shadowMatrices = u_shadowMatrices;
-    shading.u_shadowMapSize = u_shadowMapSize;
-    shading.u_shadowSplitSpheres = u_shadowSplitSpheres;
+    if (hasClearCoatNormalTexture) {
+        shading.u_clearCoatNormalTexture = u_clearCoatNormalTexture;
+        shading.u_clearCoatNormalSampler = u_clearCoatNormalSampler;
+    }
     
-    shading.v_color = in.v_color;
+    if (hasClearCoatRoughnessTexture) {
+        shading.u_clearCoatRoughnessTexture = u_clearCoatRoghnessTexture;
+        shading.u_clearCoatRoughnessSampler = u_clearCoatRoghnessSampler;
+    }
+    
+    if (hasVertexColor) {
+        shading.v_color = in.v_color;
+    }
     shading.v_uv = in.v_uv;
     shading.u_cameraPos = u_camera.u_cameraPos;
-    shading.view_pos = in.v_pos;
-    
+    if (needWorldPos) {
+        shading.view_pos = in.v_pos;
+    }
     return shading.execute();
 }
