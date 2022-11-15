@@ -33,6 +33,12 @@ public struct Vector4 {
             elements.w
         }
     }
+    
+    public var internalVector4: SIMD4<Float> {
+        get {
+            elements
+        }
+    }
 
     /// Constructor of Vector4.
     /// - Parameters:

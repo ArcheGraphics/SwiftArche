@@ -8,21 +8,13 @@ import Metal
 import vox_math
 
 public class PBRBaseMaterial: BaseMaterial {
-    struct PBRBaseData {
-        var baseColor: Color = Color(1, 1, 1, 1)
-
-        var emissiveColor: Vector3 = Vector3(0, 0, 0)
-        var normalTextureIntensity: Float = 1
-
-        var occlusionTextureIntensity: Float = 1
-        var occlusionTextureCoord: TextureCoordinate = .UV0
-        var clearCoat: Float = 0
-        var clearCoatRoughness: Float = 0
-
-        var tilingOffset: Vector4 = Vector4(1, 1, 0, 0)
-    }
-
-    private var _pbrBaseData = PBRBaseData()
+    private var _pbrBaseData = PBRBaseData(baseColor: vector_float4(1, 1, 1, 1),
+                                           emissiveColor: vector_float3(0, 0, 0),
+                                           normalTextureIntensity: 1,
+                                           occlusionTextureIntensity: 1,
+                                           occlusionTextureCoord: TextureCoordinate.UV0.rawValue,
+                                           clearCoat: 0, clearCoatRoughness: 0,
+                                           tilingOffset: vector_float4(1, 1, 0, 0))
     private static let _pbrBaseProp = "u_pbrBase"
 
     private var _baseTexture: MTLTexture?
@@ -49,11 +41,11 @@ public class PBRBaseMaterial: BaseMaterial {
     /// Base color.
     public var baseColor: Color {
         get {
-            _pbrBaseData.baseColor
+            Color(_pbrBaseData.baseColor)
         }
 
         set {
-            _pbrBaseData.baseColor = newValue
+            _pbrBaseData.baseColor = newValue.internalColor
             shaderData.setData(PBRBaseMaterial._pbrBaseProp, _pbrBaseData)
         }
     }
@@ -113,11 +105,11 @@ public class PBRBaseMaterial: BaseMaterial {
     /// Emissive color.
     public var emissiveColor: Vector3 {
         get {
-            _pbrBaseData.emissiveColor
+            Vector3(_pbrBaseData.emissiveColor)
         }
 
         set {
-            _pbrBaseData.emissiveColor = newValue
+            _pbrBaseData.emissiveColor = newValue.internalVector3
             shaderData.setData(PBRBaseMaterial._pbrBaseProp, _pbrBaseData)
         }
     }
@@ -177,11 +169,11 @@ public class PBRBaseMaterial: BaseMaterial {
     /// Occlusion texture uv coordinate.
     public var occlusionTextureCoord: TextureCoordinate {
         get {
-            _pbrBaseData.occlusionTextureCoord
+            TextureCoordinate(rawValue: _pbrBaseData.occlusionTextureCoord)!
         }
 
         set {
-            _pbrBaseData.occlusionTextureCoord = newValue
+            _pbrBaseData.occlusionTextureCoord = newValue.rawValue
             shaderData.setData(PBRBaseMaterial._pbrBaseProp, _pbrBaseData)
         }
     }
@@ -189,11 +181,11 @@ public class PBRBaseMaterial: BaseMaterial {
     /// Tiling and offset of main textures.
     public var tilingOffset: Vector4 {
         get {
-            _pbrBaseData.tilingOffset
+            Vector4(_pbrBaseData.tilingOffset)
         }
 
         set {
-            _pbrBaseData.tilingOffset = newValue
+            _pbrBaseData.tilingOffset = newValue.internalVector4
             shaderData.setData(PBRBaseMaterial._pbrBaseProp, _pbrBaseData)
         }
     }

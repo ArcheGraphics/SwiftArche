@@ -8,13 +8,8 @@ import Metal
 import vox_math
 
 public class PBRSpecularMaterial: PBRBaseMaterial {
-    struct PBRSpecularData {
-        var specularColor = Vector3(1, 1, 1)
-        var glossiness: Float = 1
-    }
-
-    private var _pbrSpecularData = PBRSpecularData()
-    private static var _pbrSpecularProp = "u_pbrSpecularData"
+    private var _pbrSpecularData = PBRSpecularData(specularColor: vector_float3(1, 1, 1), glossiness: 1)
+    private static var _pbrSpecularProp = "u_pbrSpecular"
 
     private var _specularGlossinessTexture: MTLTexture?
     private static var _specularGlossinessTextureProp = "u_specularGlossinessTexture"
@@ -23,11 +18,11 @@ public class PBRSpecularMaterial: PBRBaseMaterial {
     /// Specular color.
     public var specularColor: Vector3 {
         get {
-            _pbrSpecularData.specularColor
+            Vector3(_pbrSpecularData.specularColor)
         }
 
         set {
-            _pbrSpecularData.specularColor = newValue
+            _pbrSpecularData.specularColor = newValue.internalVector3
             shaderData.setData(PBRSpecularMaterial._pbrSpecularProp, _pbrSpecularData)
         }
     }

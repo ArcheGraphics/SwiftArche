@@ -35,6 +35,12 @@ public struct Color {
             elements.w
         }
     }
+    
+    public var internalColor: SIMD4<Float> {
+        get {
+            elements
+        }
+    }
 
     /// Constructor of Color.
     /// - Parameters:

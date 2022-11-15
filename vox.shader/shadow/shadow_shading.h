@@ -60,9 +60,9 @@ private:
 
     
 public:
-    float3 v_pos;
-    device float4* u_shadowSplitSpheres;
-    device matrix_float4x4* u_shadowMatrices;
+    float3 v_pos; // world pose
+    constant float4* u_shadowSplitSpheres;
+    constant matrix_float4x4* u_shadowMatrices;
     depth2d<float> u_shadowMap;
     sampler u_shadowMapSampler;
     float4 u_shadowMapSize;

@@ -7,7 +7,7 @@
 import Foundation
 
 /// Texture UV coordinate.
-public enum TextureCoordinate: Int {
+public enum TextureCoordinate: Int32 {
     case UV0 = 0
     case UV1 = 1
     case UV2 = 2

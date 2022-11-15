@@ -8,16 +8,8 @@ import Metal
 
 /// PBR (Metallic-Roughness Workflow) Material.
 public class PBRMaterial: PBRBaseMaterial {
-    struct PBRData {
-        var metallic: Float = 1
-        var roughness: Float = 1
-        // aligned pad
-        var pad1: Float = 0
-        var pad2: Float = 0
-    }
-
-    private var _pbrData = PBRData()
-    private static let _pbrProp = "u_pbrProp"
+    private var _pbrData = PBRData(metallic: 1, roughness: 1, pad1: 0, pad2: 0)
+    private static let _pbrProp = "u_pbr"
 
     private var _metallicRoughnessTexture: MTLTexture?
     private static let _roughnessMetallicTextureProp = "u_roughnessMetallicTexture"

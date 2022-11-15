@@ -64,7 +64,7 @@ private:
     float3 BRDF_Diffuse_Lambert(float3 diffuseColor);
     
     // MARK: - IBL
-    float3 getLightProbeIrradiance(device float3* sh, float3 normal);
+    float3 getLightProbeIrradiance(float3 normal);
     
     // ref: https://www.unrealengine.com/blog/physically-based-shading-on-mobile - environmentBRDF for GGX on mobile
     float3 envBRDFApprox(float3 specularColor,float roughness, float dotNV);
@@ -102,12 +102,12 @@ public:
     NormalShading normalShading;
     ShadowShading shadowShading;
     
-    device DirectLightData* directLight;
-    device PointLightData* pointLight;
-    device SpotLightData* spotLight;
+    constant DirectLightData* directLight;
+    constant PointLightData* pointLight;
+    constant SpotLightData* spotLight;
     
     EnvMapLight u_envMapLight;
-    device float3* u_env_sh;
+    constant float3* u_env_sh;
     texturecube<float> u_env_specularTexture;
     sampler u_env_specularSampler;
     
@@ -158,8 +158,8 @@ public:
     float3 u_cameraPos;
     float3 view_pos;
     
-    device float4* u_shadowSplitSpheres;
-    device matrix_float4x4* u_shadowMatrices;
+    constant float4* u_shadowSplitSpheres;
+    constant matrix_float4x4* u_shadowMatrices;
     depth2d<float> u_shadowMap;
     sampler u_shadowMapSampler;
     float4 u_shadowMapSize;

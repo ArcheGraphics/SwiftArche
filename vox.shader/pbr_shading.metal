@@ -69,18 +69,18 @@ float3 PBRShading::BRDF_Diffuse_Lambert(float3 diffuseColor) {
 }
 
 // MARK: - IBL
-float3 PBRShading::getLightProbeIrradiance(device float3* sh, float3 normal){
+float3 PBRShading::getLightProbeIrradiance(float3 normal){
     normal.x = -normal.x;
-    float3 result = sh[0] +
-    sh[1] * (normal.y) +
-    sh[2] * (normal.z) +
-    sh[3] * (normal.x) +
+    float3 result = u_env_sh[0] +
+    u_env_sh[1] * (normal.y) +
+    u_env_sh[2] * (normal.z) +
+    u_env_sh[3] * (normal.x) +
     
-    sh[4] * (normal.y * normal.x) +
-    sh[5] * (normal.y * normal.z) +
-    sh[6] * (3.0 * normal.z * normal.z - 1.0) +
-    sh[7] * (normal.z * normal.x) +
-    sh[8] * (normal.x * normal.x - normal.y * normal.y);
+    u_env_sh[4] * (normal.y * normal.x) +
+    u_env_sh[5] * (normal.y * normal.z) +
+    u_env_sh[6] * (3.0 * normal.z * normal.z - 1.0) +
+    u_env_sh[7] * (normal.z * normal.x) +
+    u_env_sh[8] * (normal.x * normal.x - normal.y * normal.y);
     
     return max(result, float3(0.0));
     
@@ -324,7 +324,7 @@ float4 PBRShading::execute() {
     // IBL diffuse
     float3 irradiance = float3(0.0);
     if (hasSH) {
-        float3 irradiance = getLightProbeIrradiance(u_env_sh, geometry.normal);
+        float3 irradiance = getLightProbeIrradiance(geometry.normal);
 #ifdef OASIS_COLORSPACE_GAMMA
         irradiance = linearToGamma(vec4(irradiance, 1.0)).rgb;
 #endif
@@ -394,38 +394,26 @@ typedef struct {
     float3 tangentW [[function_constant(hasNormalAndHasTangentAndHasNormalTexture)]];
     float3 bitangentW [[function_constant(hasNormalAndHasTangentAndHasNormalTexture)]];
     float3 v_normal [[function_constant(hasNormalNotHasTangentOrHasNormalTexture)]];
-    float3 view_pos;
 } VertexOut;
 
 fragment float4 fragment_pbr(VertexOut in [[stage_in]],
                              // common_frag
-                             constant matrix_float4x4 &u_localMat [[buffer(0)]],
-                             constant matrix_float4x4 &u_modelMat [[buffer(1)]],
-                             constant matrix_float4x4 &u_viewMat [[buffer(2)]],
-                             constant matrix_float4x4 &u_projMat [[buffer(3)]],
-                             constant matrix_float4x4 &u_MVMat [[buffer(4)]],
-                             constant matrix_float4x4 &u_MVPMat [[buffer(5)]],
-                             constant matrix_float4x4 &u_normalMat [[buffer(6)]],
-                             constant float3 &u_cameraPos [[buffer(7)]],
+                             constant CameraData &u_camera [[buffer(0)]],
+                             constant RendererData &u_renderer [[buffer(1)]],
                              // direct light
-                             device DirectLightData *u_directLight [[buffer(8), function_constant(hasDirectLight)]],
-                             device PointLightData *u_pointLight [[buffer(9), function_constant(hasPointLight)]],
-                             device SpotLightData *u_spotLight [[buffer(10), function_constant(hasSpotLight)]],
+                             constant DirectLightData *u_directLight [[buffer(2), function_constant(hasDirectLight)]],
+                             constant PointLightData *u_pointLight [[buffer(3), function_constant(hasPointLight)]],
+                             constant SpotLightData *u_spotLight [[buffer(4), function_constant(hasSpotLight)]],
                              // indirect light
-                             constant EnvMapLight &u_envMapLight [[buffer(12)]],
-                             constant float3 *u_env_sh [[buffer(13), function_constant(hasSH)]],
+                             constant EnvMapLight &u_envMapLight [[buffer(5)]],
+                             constant float3 *u_env_sh [[buffer(6), function_constant(hasSH)]],
                              texturecube<float> u_env_specularTexture [[texture(1), function_constant(hasSpecularEnv)]],
                              sampler u_env_specularSampler [[sampler(1), function_constant(hasSpecularEnv)]],
                              //pbr base frag define
-                             constant float &u_alphaCutoff [[buffer(14)]],
-                             constant float4 &u_baseColor [[buffer(15)]],
-                             constant float &u_metal [[buffer(16)]],
-                             constant float &u_roughness [[buffer(17)]],
-                             constant float3 &u_specularColor [[buffer(18)]],
-                             constant float &u_glossiness [[buffer(19)]],
-                             constant float3 &u_emissiveColor [[buffer(20)]],
-                             constant float &u_normalIntensity [[buffer(21)]],
-                             constant float &u_occlusionStrength [[buffer(22)]],
+                             constant float& u_alphaCutoff [[buffer(7)]],
+                             constant PBRBaseData &u_pbrBase [[buffer(8)]],
+                             constant PBRData &u_pbr [[buffer(9)]],
+                             constant PBRSpecularData &u_pbrSpecular [[buffer(10)]],
                              // pbr_texture_frag_define
                              texture2d<float> u_baseColorTexture [[texture(2), function_constant(hasBaseTexture)]],
                              sampler u_baseColorSampler [[sampler(2), function_constant(hasBaseTexture)]],
@@ -445,8 +433,89 @@ fragment float4 fragment_pbr(VertexOut in [[stage_in]],
                              sampler u_clearCoatNormalSampler [[sampler(9), function_constant(hasClearCoatNormalTexture)]],
                              texture2d<float> u_clearCoatRoghnessTexture [[texture(10), function_constant(hasClearCoatRoughnessTexture)]],
                              sampler u_clearCoatRoghnessSampler [[sampler(10), function_constant(hasClearCoatRoughnessTexture)]],
+                             // shadow
+                             constant float4* u_shadowSplitSpheres [[buffer(11)]],
+                             constant matrix_float4x4* u_shadowMatrices [[buffer(12)]],
+                             constant float4 &u_shadowMapSize [[buffer(13)]],
+                             constant float3 &u_shadowInfo [[buffer(14)]],
+                             depth2d<float> u_shadowMap [[texture(11)]],
+                             sampler u_shadowMapSampler [[sampler(11)]],
                              bool is_front_face [[front_facing]]) {
     PBRShading shading;
+    
+    shading.normalShading.isFrontFacing = is_front_face;
+    shading.normalShading.v_normal = in.v_normal;
+    shading.normalShading.v_pos = in.v_pos;
+    if (hasNormalAndHasTangentAndHasNormalTexture) {
+        shading.normalShading.v_TBN = matrix_float3x3(in.tangentW, in.bitangentW, in.normalW);
+    }
+    
+    shading.shadowShading.v_pos = in.v_pos;
+    shading.shadowShading.u_shadowMap = u_shadowMap;
+    shading.shadowShading.u_shadowMapSampler = u_shadowMapSampler;
+    shading.shadowShading.u_shadowInfo = u_shadowInfo;
+    shading.shadowShading.u_shadowMapSize = u_shadowMapSize;
+    shading.shadowShading.u_shadowMatrices = u_shadowMatrices;
+    shading.shadowShading.u_shadowSplitSpheres = u_shadowSplitSpheres;
+    
+    shading.u_envMapLight = u_envMapLight;
+    shading.u_env_sh = u_env_sh;
+    shading.u_env_specularSampler = u_env_specularSampler;
+    shading.u_env_specularTexture = u_env_specularTexture;
+    
+    shading.u_alphaCutoff = u_alphaCutoff;
+    shading.u_baseColor = u_pbrBase.baseColor;
+    shading.u_metal = u_pbr.metallic;
+    shading.u_roughness = u_pbr.roughness;
+    shading.u_PBRSpecularColor = u_pbrSpecular.specularColor;
+    shading.u_glossiness = u_pbrSpecular.glossiness;
+    shading.u_emissiveColor = u_pbrBase.emissiveColor;
+    
+    shading.u_clearCoat = u_pbrBase.clearCoat;
+    shading.u_clearCoatRoughness = u_pbrBase.clearCoatRoughness;
+    
+    shading.u_normalIntensity = u_pbrBase.normalTextureIntensity;
+    shading.u_occlusionIntensity = u_pbrBase.occlusionTextureIntensity;
+    shading.u_occlusionTextureCoord = u_pbrBase.occlusionTextureCoord;
+    
+    shading.u_baseTexture = u_baseColorTexture;
+    shading.u_baseSampler = u_baseColorSampler;
+    
+    shading.u_normalTexture = u_normalTexture;
+    shading.u_normalSampler = u_normalSampler;
+    
+    shading.u_emissiveTexture = u_emissiveTexture;
+    shading.u_emissiveSampler = u_emissiveSampler;
+    
+    shading.u_roughnessMetallicTexture = u_metallicRoughnessTexture;
+    shading.u_roughnessMetallicSampler = u_metallicRoughnessSampler;
+    
+    shading.u_specularGlossinessTexture = u_specularGlossinessTexture;
+    shading.u_specularGlossinessSampler = u_specularGlossineseSampler;
+    
+    shading.u_occlusionTexture = u_occlusionTexture;
+    shading.u_occlusionSampler = u_occlusionSampler;
+    
+    shading.u_clearCoatTexture = u_clearCoatTexture;
+    shading.u_clearCoatSampler = u_clearCoatSampler;
+    
+    shading.u_clearCoatNormalTexture = u_clearCoatNormalTexture;
+    shading.u_clearCoatNormalSampler = u_clearCoatNormalSampler;
+    
+    shading.u_clearCoatRoughnessTexture = u_clearCoatRoghnessTexture;
+    shading.u_clearCoatRoughnessSampler = u_clearCoatRoghnessSampler;
+    
+    shading.u_shadowMap = u_shadowMap;
+    shading.u_shadowMapSampler = u_shadowMapSampler;
+    shading.u_shadowInfo = u_shadowInfo;
+    shading.u_shadowMatrices = u_shadowMatrices;
+    shading.u_shadowMapSize = u_shadowMapSize;
+    shading.u_shadowSplitSpheres = u_shadowSplitSpheres;
+    
+    shading.v_color = in.v_color;
+    shading.v_uv = in.v_uv;
+    shading.u_cameraPos = u_camera.u_cameraPos;
+    shading.view_pos = in.v_pos;
     
     return shading.execute();
 }

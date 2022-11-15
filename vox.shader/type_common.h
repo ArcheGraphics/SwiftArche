@@ -26,6 +26,22 @@ typedef enum {
     UV_7 = 14,
 } Attributes;
 
+struct CameraData {
+    matrix_float4x4 u_viewMat;
+    matrix_float4x4 u_projMat;
+    matrix_float4x4 u_VPMat;
+    matrix_float4x4 u_viewInvMat;
+    matrix_float4x4 u_projInvMat;
+    vector_float3 u_cameraPos;
+};
+
+struct RendererData {
+    matrix_float4x4 u_localMat;
+    matrix_float4x4 u_modelMat;
+    matrix_float4x4 u_normalMat;
+};
+
+// MARK: - Light
 struct EnvMapLight {
     vector_float3 diffuse;
     int mipMapLevel;
@@ -53,17 +69,30 @@ struct DirectLightData {
     vector_float3 direction;
 };
 
-struct CameraData {
-    matrix_float4x4 u_viewMat;
-    matrix_float4x4 u_projMat;
-    matrix_float4x4 u_VPMat;
-    matrix_float4x4 u_viewInvMat;
-    matrix_float4x4 u_projInvMat;
-    vector_float3 u_cameraPos;
+// MARK: - Material
+struct PBRBaseData {
+    vector_float4 baseColor;
+
+    vector_float3 emissiveColor;
+    float normalTextureIntensity;
+
+    float occlusionTextureIntensity;
+    int occlusionTextureCoord;
+    float clearCoat;
+    float clearCoatRoughness;
+
+    vector_float4 tilingOffset;
 };
 
-struct RendererData {
-    matrix_float4x4 u_localMat;
-    matrix_float4x4 u_modelMat;
-    matrix_float4x4 u_normalMat;
+struct PBRData {
+    float metallic;
+    float roughness;
+    // aligned pad
+    float pad1;
+    float pad2;
+};
+
+struct PBRSpecularData {
+    vector_float3 specularColor;
+    float glossiness;
 };
