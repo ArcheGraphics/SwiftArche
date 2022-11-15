@@ -18,6 +18,35 @@ public class ShaderData {
         _device = device
     }
 
+    func bindData(_ commandEncoder: MTLComputeCommandEncoder,
+                  _ reflectionUniforms: [ReflectionUniform],
+                  _ resourceCache: ResourceCache) {
+        for uniform in reflectionUniforms {
+            switch uniform.bindingType {
+            case .buffer:
+                let buffer = _shaderBuffers[uniform.name]
+                if buffer != nil {
+                    commandEncoder.setBuffer(buffer!, offset: 0, index: uniform.location)
+                }
+                break
+            case .texture:
+                let image = _imageViews[uniform.name]
+                if image != nil {
+                    commandEncoder.setTexture(image!, index: uniform.location)
+                }
+                break
+            case .sampler:
+                let sampler = _samplers[uniform.name]
+                if sampler != nil {
+                    commandEncoder.setSamplerState(resourceCache.requestSamplers(sampler!), index: uniform.location)
+                }
+                break
+            default:
+                break
+            }
+        }
+    }
+
     public func setData<T>(_ property: String, _ data: T) {
         let value = _shaderBuffers.first { (key: String, value: MTLBuffer) in
             key == property
@@ -85,7 +114,7 @@ public class ShaderData {
 extension ShaderData {
     /// Enable macro.
     /// - Parameter name: Macro name
-    func enableMacro(_ name: MacroName) {
+    public func enableMacro(_ name: MacroName) {
         _macroCollection._value[name] = (1, .bool)
     }
 
@@ -93,13 +122,13 @@ extension ShaderData {
     /// - Parameters:
     ///   - name: Macro name
     ///   - value: Macro value
-    func enableMacro(_ name: MacroName, _ value: (Int, MTLDataType)) {
+    public func enableMacro(_ name: MacroName, _ value: (Int, MTLDataType)) {
         _macroCollection._value[name] = value
     }
 
     /// Disable macro
     /// - Parameter name: Macro name
-    func disableMacro(_ name: MacroName) {
+    public func disableMacro(_ name: MacroName) {
         _macroCollection._value.removeValue(forKey: name)
     }
 }

@@ -32,6 +32,9 @@ public class ComputePass {
         for shaderPass in shader {
             _pipelineDescriptor.computeFunction =  _devicePipeline._resourceCache.requestShaderModule(shaderPass, compileMacros)[0]
             let pipelineState = _devicePipeline._resourceCache.requestComputePipeline(_pipelineDescriptor)
+            for shaderData in data {
+                shaderData.bindData(commandEncoder, pipelineState.uniformBlock, _devicePipeline._resourceCache)
+            }
             commandEncoder.setComputePipelineState(pipelineState.handle)
 
             let nWidth = min(threadsPerGridX, pipelineState.handle.threadExecutionWidth)
