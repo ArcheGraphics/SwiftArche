@@ -9,15 +9,15 @@ import Foundation
 /// Frustum face
 public enum FrustumFace: Int {
     /// Near face
-    case Near
+    case Near = 0
     /// Far face
-    case Far
+    case Far = 1
     /// Left face
-    case Left
+    case Left = 2
     /// Right face
-    case Right
+    case Right = 3
     /// Bottom face
-    case Bottom
+    case Bottom = 4
     /// Top face
-    case Top
+    case Top = 5
 }

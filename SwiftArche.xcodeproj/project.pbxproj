@@ -134,6 +134,7 @@
 		E63B1E93014B86D51FF16C4F /* DevicePipeline.swift in Sources */ = {isa = PBXBuildFile; fileRef = E63B14B2CEF6930B88416E69 /* DevicePipeline.swift */; };
 		E63B1F3B6D23E8286F457252 /* DiffuseMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = E63B126D86D1150480AF5E59 /* DiffuseMode.swift */; };
 		E63B1F9026B97044A0275D9D /* CameraInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = E63B1C1C8ED26073E32F6F4E /* CameraInfo.swift */; };
+		E63B1FBDADAAF1E683C7D956 /* ShadowUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = E63B1E675A77F63B0AF79089 /* ShadowUtils.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -372,6 +373,7 @@
 		E63B1C063F24A5B0A3B30FF9 /* PointLight.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PointLight.swift; sourceTree = "<group>"; };
 		E63B1C1C8ED26073E32F6F4E /* CameraInfo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CameraInfo.swift; sourceTree = "<group>"; };
 		E63B1CB34D0218B55ACB3457 /* Canvas.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Canvas.swift; sourceTree = "<group>"; };
+		E63B1E675A77F63B0AF79089 /* ShadowUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ShadowUtils.swift; sourceTree = "<group>"; };
 		E63B1F46484BADF6ED42AB6C /* InputManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InputManager.swift; sourceTree = "<group>"; };
 		E63B1F6CBBF500DC5175715F /* MeshRenderer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MeshRenderer.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -726,6 +728,7 @@
 			children = (
 				3E67EEBE291DCB8300ED60C8 /* enums */,
 				E63B133737E2EA928107632F /* ShadowSliceData.swift */,
+				E63B1E675A77F63B0AF79089 /* ShadowUtils.swift */,
 			);
 			path = shadow;
 			sourceTree = "<group>";
@@ -1195,6 +1198,7 @@
 				43D8C4BD989F77A020725E4C /* Subpass.swift in Sources */,
 				43D8C52A399C01C7FA561389 /* ForwardSubpass.swift in Sources */,
 				E63B1992B1C2F658B6C75B36 /* GeometrySubpass.swift in Sources */,
+				E63B1FBDADAAF1E683C7D956 /* ShadowUtils.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
