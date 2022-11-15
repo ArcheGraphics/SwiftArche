@@ -143,7 +143,7 @@ public class Renderer: Component {
         componentsManager.removeRenderer(self)
     }
 
-    func _prepareRender(_ cameraInfo: CameraInfo, _ renderPipeline: RenderPipeline) {
+    func _prepareRender(_ cameraInfo: CameraInfo, _ renderPipeline: DevicePipeline) {
         var boundsCenter = bounds.getCenter()
 
         if (cameraInfo.isOrthographic) {
@@ -184,7 +184,7 @@ public class Renderer: Component {
     func _updateBounds(_ worldBounds: inout BoundingBox) {
     }
 
-    func _render(_ renderPipeline: RenderPipeline) {
+    func _render(_ devicePipeline: DevicePipeline) {
     }
 
     func _onTransformChanged(type: Int?, object: AnyObject?) -> Void {

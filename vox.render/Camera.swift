@@ -30,7 +30,7 @@ public class Camera: Component {
 
     var _globalShaderMacro: ShaderMacroCollection = ShaderMacroCollection()
     var _frustum: BoundingFrustum = BoundingFrustum()
-    var _renderPipeline: RenderPipeline!
+    var _devicePipeline: DevicePipeline!
     var _cameraInfo = CameraInfo()
 
     private var _isProjMatSetting = false
@@ -213,7 +213,7 @@ public class Camera: Component {
         shaderData = ShaderData(entity.engine.device)
 
         super.init(entity)
-        _renderPipeline = RenderPipeline(self)
+        _devicePipeline = DevicePipeline(self)
     }
 
     override func _onEnable() {
@@ -382,7 +382,7 @@ extension Camera {
                 _globalShaderMacro
         )
 
-        _renderPipeline.render()
+        _devicePipeline.commit()
     }
 }
 

@@ -43,7 +43,7 @@ public class MeshRenderer: Renderer {
         }
     }
 
-    override func _render(_ renderPipeline: RenderPipeline) {
+    override func _render(_ devicePipeline: DevicePipeline) {
         if (_mesh != nil) {
             if (_dirtyUpdateFlag & MeshRendererUpdateFlags.VertexElementMacro.rawValue != 0) {
                 let vertexDescriptor = mesh!._vertexDescriptor
@@ -77,7 +77,7 @@ public class MeshRenderer: Renderer {
                 }
                 if (material != nil) {
                     for j in 0..<material!.shader.count {
-                        renderPipeline.pushPrimitive(RenderElement(self, mesh!, subMeshes[i], material!, material!.shader[j]))
+                        devicePipeline.pushPrimitive(RenderElement(self, mesh!, subMeshes[i], material!, material!.shader[j]))
                     }
                 }
             }

@@ -6,7 +6,7 @@
 
 import Foundation
 
-public class RenderPipeline {
+public class DevicePipeline {
     static func _compareFromNearToFar(a: RenderElement, b: RenderElement) -> Bool {
         a.renderer.priority > b.renderer.priority || a.renderer._distanceForSort > b.renderer._distanceForSort;
     }
@@ -26,14 +26,14 @@ public class RenderPipeline {
         self.camera = camera
     }
 
-    public func render() {
+    public func commit() {
         _opaqueQueue.removeAll()
         _alphaTestQueue.removeAll()
         _transparentQueue.removeAll()
         callRender(camera._cameraInfo)
-        _opaqueQueue.sort(by: RenderPipeline._compareFromNearToFar);
-        _alphaTestQueue.sort(by: RenderPipeline._compareFromNearToFar);
-        _transparentQueue.sort(by: RenderPipeline._compareFromFarToNear);
+        _opaqueQueue.sort(by: DevicePipeline._compareFromNearToFar);
+        _alphaTestQueue.sort(by: DevicePipeline._compareFromNearToFar);
+        _transparentQueue.sort(by: DevicePipeline._compareFromFarToNear);
     }
 
     func callRender(_ cameraInfo: CameraInfo) {
