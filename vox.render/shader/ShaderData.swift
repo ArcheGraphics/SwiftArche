@@ -18,35 +18,6 @@ public class ShaderData {
         _device = device
     }
 
-    func bindData(_ commandEncoder: MTLComputeCommandEncoder,
-                  _ reflectionUniforms: [ReflectionUniform],
-                  _ resourceCache: ResourceCache) {
-        for uniform in reflectionUniforms {
-            switch uniform.bindingType {
-            case .buffer:
-                let buffer = _shaderBuffers[uniform.name]
-                if buffer != nil {
-                    commandEncoder.setBuffer(buffer!, offset: 0, index: uniform.location)
-                }
-                break
-            case .texture:
-                let image = _imageViews[uniform.name]
-                if image != nil {
-                    commandEncoder.setTexture(image!, index: uniform.location)
-                }
-                break
-            case .sampler:
-                let sampler = _samplers[uniform.name]
-                if sampler != nil {
-                    commandEncoder.setSamplerState(resourceCache.requestSamplers(sampler!), index: uniform.location)
-                }
-                break
-            default:
-                break
-            }
-        }
-    }
-
     public func setData<T>(_ property: String, _ data: T) {
         let value = _shaderBuffers.first { (key: String, value: MTLBuffer) in
             key == property
@@ -130,5 +101,80 @@ extension ShaderData {
     /// - Parameter name: Macro name
     public func disableMacro(_ name: MacroName) {
         _macroCollection._value.removeValue(forKey: name)
+    }
+}
+
+extension ShaderData {
+    func bindData(_ commandEncoder: MTLComputeCommandEncoder,
+                  _ reflectionUniforms: [ReflectionUniform],
+                  _ resourceCache: ResourceCache) {
+        for uniform in reflectionUniforms {
+            switch uniform.bindingType {
+            case .buffer:
+                let buffer = _shaderBuffers[uniform.name]
+                if buffer != nil {
+                    commandEncoder.setBuffer(buffer!, offset: 0, index: uniform.location)
+                }
+                break
+            case .texture:
+                let image = _imageViews[uniform.name]
+                if image != nil {
+                    commandEncoder.setTexture(image!, index: uniform.location)
+                }
+                break
+            case .sampler:
+                let sampler = _samplers[uniform.name]
+                if sampler != nil {
+                    commandEncoder.setSamplerState(resourceCache.requestSamplers(sampler!), index: uniform.location)
+                }
+                break
+            default:
+                break
+            }
+        }
+    }
+
+    func bindData(_ commandEncoder: MTLRenderCommandEncoder,
+                  _ reflectionUniforms: [ReflectionUniform],
+                  _ resourceCache: ResourceCache) {
+        for uniform in reflectionUniforms {
+            switch uniform.bindingType {
+            case .buffer:
+                let buffer = _shaderBuffers[uniform.name]
+                if buffer != nil {
+                    if uniform.functionType == .vertex {
+                        commandEncoder.setVertexBuffer(buffer!, offset: 0, index: uniform.location)
+                    }
+                    if uniform.functionType == .fragment {
+                        commandEncoder.setFragmentBuffer(buffer!, offset: 0, index: uniform.location)
+                    }
+                }
+                break
+            case .texture:
+                let image = _imageViews[uniform.name]
+                if image != nil {
+                    if uniform.functionType == .vertex {
+                        commandEncoder.setVertexTexture(image!, index: uniform.location)
+                    }
+                    if uniform.functionType == .fragment {
+                        commandEncoder.setFragmentTexture(image!, index: uniform.location)
+                    }
+                }
+                break
+            case .sampler:
+                let sampler = _samplers[uniform.name]
+                if sampler != nil {
+                    if uniform.functionType == .vertex {
+                        commandEncoder.setVertexSamplerState(resourceCache.requestSamplers(sampler!), index: uniform.location)
+                    }
+                    if uniform.functionType == .fragment {
+                        commandEncoder.setFragmentSamplerState(resourceCache.requestSamplers(sampler!), index: uniform.location)
+                    }
+                }
+                break
+            default:
+                break
+            }
+        }
     }
 }
