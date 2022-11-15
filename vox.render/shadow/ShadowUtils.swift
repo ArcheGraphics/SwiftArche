@@ -244,7 +244,8 @@ class ShadowUtils {
                                             cascadeIndex: Int,
                                             nearPlane: Float,
                                             shadowResolution: Int,
-                                            shadowSliceData: ShadowSliceData) -> [Float] {
+                                            shadowSliceData: ShadowSliceData,
+                                            outShadowMatrices: inout [Float]) {
         let boundSphere = shadowSliceData.splitBoundSphere
         shadowSliceData.resolution = shadowResolution
 
@@ -280,14 +281,11 @@ class ShadowUtils {
         )
 
         virtualCamera.viewProjectionMatrix = virtualCamera.projectionMatrix * virtualCamera.viewMatrix
-//        Utils._floatMatrixMultiply(
-//                ShadowUtils._shadowMapCoordMatrix,
-//                viewProjectionMatrix.elements,
-//                0,
-//                outShadowMatrices,
-//                cascadeIndex * 16
-//        )
-        return []
+        Utils._floatMatrixMultiply(
+                ShadowUtils._shadowMapCoordMatrix.elements * virtualCamera.viewProjectionMatrix.elements,
+                &outShadowMatrices,
+                cascadeIndex * 16
+        )
     }
 
     static func getMaxTileResolutionInAtlas(atlasWidth: Int, atlasHeight: Int, tileCount: Int) -> Int {
@@ -323,14 +321,13 @@ class ShadowUtils {
         return Vector2(depthBias, normalBias)
     }
 
-    /**
-   * Apply shadow slice scale and offset
-   */
+    /// Apply shadow slice scale and offset
     static func applySliceTransform(tileSize: Int,
                                     atlasWidth: Int,
                                     atlasHeight: Int,
                                     cascadeIndex: Int,
-                                    atlasOffset: Vector2) -> [Float] {
+                                    atlasOffset: Vector2,
+                                    outShadowMatrices: inout [Float]) {
         var slice = simd_float4x4()
 
         let oneOverAtlasWidth: Float = 1.0 / Float(atlasWidth)
@@ -361,7 +358,6 @@ class ShadowUtils {
         slice.columns.3[3] = 1
 
         let offset = cascadeIndex * 16
-        // Utils._floatMatrixMultiply(sliceMatrix, outShadowMatrices, offset, outShadowMatrices, offset)
-        return []
+         Utils._floatMatrixMultiply(slice, outShadowMatrices, offset, &outShadowMatrices, offset)
     }
 }
