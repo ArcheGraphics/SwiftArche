@@ -49,6 +49,37 @@ public class Script: Component {
     func onEndRender(_ camera: Camera) {
     }
 
+    /// Called when the pointer is down while over the ColliderShape.
+    /// - Parameter pointer: The pointer that triggered
+    func onPointerDown(_ pointer: Pointer) {
+    }
+
+    /// Called when the pointer is up while over the ColliderShape.
+    /// - Parameter pointer: The pointer that triggered
+    func onPointerUp(_ pointer: Pointer) {
+    }
+
+    /// Called when the pointer is down and up with the same collider.
+    /// - Parameter pointer: The pointer that triggered
+    func onPointerClick(_ pointer: Pointer) {
+    }
+
+    /// Called when the pointer is enters the ColliderShape.
+    /// - Parameter pointer: The pointer that triggered
+    func onPointerEnter(_ pointer: Pointer) {
+    }
+
+    /// Called when the pointer is no longer over the ColliderShape.
+    /// - Parameter pointer: The pointer that triggered
+    func onPointerExit(_ pointer: Pointer) {
+    }
+
+    /// - Remark: onPointerDrag is called every frame while the pointer is down.
+    /// Called when the pointer is down while over the ColliderShape and is still holding down.
+    /// - Parameter pointer: The pointer that triggered
+    func onPointerDrag(_ pointer: Pointer) {
+    }
+
     /// Called when be disabled.
     public func onDisable() {
     }

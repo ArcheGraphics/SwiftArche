@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		04176A792925295B00B1775A /* PointerButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = E63B1323D02AE5FF4E20C301 /* PointerButton.swift */; };
+		04176A7A2925295B00B1775A /* Pointer.swift in Sources */ = {isa = PBXBuildFile; fileRef = E63B111B2848B79F0F440F00 /* Pointer.swift */; };
 		043E2C9B2920AAD00057BDD1 /* Logging in Frameworks */ = {isa = PBXBuildFile; productRef = 043E2C9A2920AAD00057BDD1 /* Logging */; };
 		043E2CA029212E8C0057BDD1 /* Light.swift in Sources */ = {isa = PBXBuildFile; fileRef = 043E2C9F29212E8C0057BDD1 /* Light.swift */; };
 		04ED07DA29226E9C00DD55AB /* normal_shading.metal in Sources */ = {isa = PBXBuildFile; fileRef = 04ED07D929226E9C00DD55AB /* normal_shading.metal */; };
@@ -370,7 +372,9 @@
 		43D8CF92C29A209C3AB9C9C6 /* Mesh.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Mesh.swift; sourceTree = "<group>"; };
 		43D8CFA6FC902338A11A5E3A /* Component.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Component.swift; sourceTree = "<group>"; };
 		E63B106FED41DA853C5CF292 /* LightManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LightManager.swift; sourceTree = "<group>"; };
+		E63B111B2848B79F0F440F00 /* Pointer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Pointer.swift; sourceTree = "<group>"; };
 		E63B126D86D1150480AF5E59 /* DiffuseMode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DiffuseMode.swift; sourceTree = "<group>"; };
+		E63B1323D02AE5FF4E20C301 /* PointerButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PointerButton.swift; sourceTree = "<group>"; };
 		E63B133737E2EA928107632F /* ShadowSliceData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ShadowSliceData.swift; sourceTree = "<group>"; };
 		E63B137ECF549DD9A20BBC68 /* Background.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Background.swift; sourceTree = "<group>"; };
 		E63B14B2CEF6930B88416E69 /* DevicePipeline.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DevicePipeline.swift; sourceTree = "<group>"; };
@@ -439,6 +443,31 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		04176A762925274800B1775A /* input */ = {
+			isa = PBXGroup;
+			children = (
+				04176A782925276300B1775A /* pointer */,
+				04176A772925275C00B1775A /* enums */,
+			);
+			path = input;
+			sourceTree = "<group>";
+		};
+		04176A772925275C00B1775A /* enums */ = {
+			isa = PBXGroup;
+			children = (
+				E63B1323D02AE5FF4E20C301 /* PointerButton.swift */,
+			);
+			path = enums;
+			sourceTree = "<group>";
+		};
+		04176A782925276300B1775A /* pointer */ = {
+			isa = PBXGroup;
+			children = (
+				E63B111B2848B79F0F440F00 /* Pointer.swift */,
+			);
+			path = pointer;
+			sourceTree = "<group>";
+		};
 		043E2C9D2920D6360057BDD1 /* lighting */ = {
 			isa = PBXGroup;
 			children = (
@@ -617,6 +646,7 @@
 				E63B137ECF549DD9A20BBC68 /* Background.swift */,
 				3E0F7B212924607E00C4A843 /* sky */,
 				3E0F7B222924804700C4A843 /* background */,
+				04176A762925274800B1775A /* input */,
 				3E67EEA9291CEBDF00ED60C8 /* Layer.swift */,
 				E63B1CB34D0218B55ACB3457 /* Canvas.swift */,
 				E63B1F46484BADF6ED42AB6C /* InputManager.swift */,
@@ -1202,6 +1232,7 @@
 				43D8CAC028040C7520C6C8FA /* PBRBaseMaterial.swift in Sources */,
 				43D8C92AEBFA1FB64A9B4AA9 /* TextureCoordinate.swift in Sources */,
 				43D8CCC670BB10844D82AFF0 /* PBRMaterial.swift in Sources */,
+				04176A7A2925295B00B1775A /* Pointer.swift in Sources */,
 				43D8CCBC80181D80F3E9A7CA /* PBRSpecularMaterial.swift in Sources */,
 				43D8CA3CFB85DE87A2237A01 /* IndexBufferBinding.swift in Sources */,
 				43D8C24FBA43B612E59B13DE /* SubMesh.swift in Sources */,
@@ -1233,6 +1264,7 @@
 				43D8C52A399C01C7FA561389 /* ForwardSubpass.swift in Sources */,
 				E63B1992B1C2F658B6C75B36 /* GeometrySubpass.swift in Sources */,
 				E63B1FBDADAAF1E683C7D956 /* ShadowUtils.swift in Sources */,
+				04176A792925295B00B1775A /* PointerButton.swift in Sources */,
 				43D8C3CBCD898731E5D5AE0F /* Utils.swift in Sources */,
 				43D8C4BD6BB477FAF132C5DE /* SkyBoxMaterial.swift in Sources */,
 				43D8C3BA1BA3519EE26FB708 /* SkySubpass.swift in Sources */,

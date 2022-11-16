@@ -30,6 +30,7 @@ public class Canvas: MTKView {
         ])
     }
 
+    // MARK: - RawEvent
     public override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
     }
 
@@ -53,14 +54,4 @@ public class Canvas: MTKView {
 
     public override func pressesCancelled(_ presses: Set<UIPress>, with event: UIPressesEvent?) {
     }
-
-    public override func motionBegan(_ motion: UIEvent.EventSubtype, with event: UIEvent?) {
-    }
-
-    public override func motionEnded(_ motion: UIEvent.EventSubtype, with event: UIEvent?) {
-    }
-
-    public override func motionCancelled(_ motion: UIEvent.EventSubtype, with event: UIEvent?) {
-    }
-
 }
