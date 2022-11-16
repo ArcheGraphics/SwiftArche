@@ -25,7 +25,6 @@
 		3E67EDEF291B2F7800ED60C8 /* SwiftArcheUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E67EDEE291B2F7800ED60C8 /* SwiftArcheUITestsLaunchTests.swift */; };
 		3E67EE16291B313300ED60C8 /* libvox.render.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E67EE09291B304700ED60C8 /* libvox.render.a */; };
 		3E67EE54291B3CC800ED60C8 /* Meshes in Resources */ = {isa = PBXBuildFile; fileRef = 3E67EE53291B3CC700ED60C8 /* Meshes */; };
-		3E67EE59291B3E7900ED60C8 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E67EE1B291B397800ED60C8 /* ViewController.swift */; };
 		3E67EE66291B7A1000ED60C8 /* Vector2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E67EE65291B7A1000ED60C8 /* Vector2.swift */; };
 		3E67EE68291B94FC00ED60C8 /* Vector3.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E67EE67291B94FC00ED60C8 /* Vector3.swift */; };
 		3E67EE6A291B952200ED60C8 /* Vector4.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E67EE69291B952200ED60C8 /* Vector4.swift */; };
@@ -123,6 +122,7 @@
 		43D8CF98C05E60C0A40F11E4 /* StencilState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8C55ADD0B573F9BE441A2 /* StencilState.swift */; };
 		43D8CF9A819FABF732156575 /* ComputePipelineState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8C5458496A0164715E24D /* ComputePipelineState.swift */; };
 		43D8CFDE172582A4463B835E /* PrimitiveMesh.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8C0E825225EDCF4195D57 /* PrimitiveMesh.swift */; };
+		E63B123A289AA1AE61CCA67E /* PrimitiveApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = E63B17AB94CBF9AAB3956248 /* PrimitiveApp.swift */; };
 		E63B12FD0D692DA50726EADC /* Camera.swift in Sources */ = {isa = PBXBuildFile; fileRef = E63B1AAE575CDDFFC0A8CD28 /* Camera.swift */; };
 		E63B137938CDF22136EACAB5 /* ShadowSliceData.swift in Sources */ = {isa = PBXBuildFile; fileRef = E63B133737E2EA928107632F /* ShadowSliceData.swift */; };
 		E63B14D2E9B0CBB43162CB35 /* InputManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E63B1F46484BADF6ED42AB6C /* InputManager.swift */; };
@@ -377,6 +377,7 @@
 		E63B16052FDB98D0BF992CD0 /* SpotLight.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SpotLight.swift; sourceTree = "<group>"; };
 		E63B16A52D7461C2352D44C3 /* RenderElement.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RenderElement.swift; sourceTree = "<group>"; };
 		E63B1745FC89A9CED5D9BA52 /* Renderer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Renderer.swift; sourceTree = "<group>"; };
+		E63B17AB94CBF9AAB3956248 /* PrimitiveApp.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PrimitiveApp.swift; sourceTree = "<group>"; };
 		E63B180F182B0FABE01911CA /* DirectLight.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DirectLight.swift; sourceTree = "<group>"; };
 		E63B18EF061EC5A645E66939 /* GeometrySubpass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GeometrySubpass.swift; sourceTree = "<group>"; };
 		E63B1AAE575CDDFFC0A8CD28 /* Camera.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Camera.swift; sourceTree = "<group>"; };
@@ -539,7 +540,6 @@
 				3E67EE1F291B3A2A00ED60C8 /* UtilityExtensions */,
 				3E67EE1D291B3A0E00ED60C8 /* Utilities */,
 				3E67EDCD291B2F7600ED60C8 /* ARRenderer.swift */,
-				3E67EDC8291B2F7600ED60C8 /* AppDelegate.swift */,
 				3E67EE1B291B397800ED60C8 /* ViewController.swift */,
 				3E67EDCF291B2F7600ED60C8 /* ARViewController.swift */,
 				3E67EE55291B3D8600ED60C8 /* SwiftArche.entitlements */,
@@ -547,6 +547,8 @@
 				3E67EDD6291B2F7800ED60C8 /* LaunchScreen.storyboard */,
 				3E67EE53291B3CC700ED60C8 /* Meshes */,
 				3E67EDD4291B2F7800ED60C8 /* Assets.xcassets */,
+				3E67EDC8291B2F7600ED60C8 /* AppDelegate.swift */,
+				E63B17AB94CBF9AAB3956248 /* PrimitiveApp.swift */,
 			);
 			path = SwiftArche;
 			sourceTree = "<group>";
@@ -1115,8 +1117,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				3E67EE59291B3E7900ED60C8 /* ViewController.swift in Sources */,
 				3E67EDC9291B2F7600ED60C8 /* AppDelegate.swift in Sources */,
+				E63B123A289AA1AE61CCA67E /* PrimitiveApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

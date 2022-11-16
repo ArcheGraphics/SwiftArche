@@ -6,23 +6,61 @@
 
 import MetalKit
 
-class Canvas: MTKView {
+public class Canvas: MTKView {
     var inputManager: InputManager?
-
-    typealias EventHandler = (AppleEvent) -> Void
-    var mouseDownEvents: [EventHandler] = []
-    var mouseUpEvents: [EventHandler] = []
-    var rightMouseDownEvents: [EventHandler] = []
-    var rightMouseUpEvents: [EventHandler] = []
-
-    typealias KeyboardHandler = (KeyboardControl) -> Void
-    var keyboardDownEvents: [KeyboardHandler] = []
-
-    init() {
-        super.init(frame: .zero, device: nil)
-    }
 
     required init(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+
+    public init(frame frameRect: CGRect) {
+        super.init(frame: frameRect, device: nil)
+        translatesAutoresizingMaskIntoConstraints = false
+        depthStencilPixelFormat = MTLPixelFormat.depth32Float_stencil8
+        colorPixelFormat = MTLPixelFormat.bgra8Unorm
+    }
+
+    public func setParentView(_ view: UIView) {
+        view.addSubview(self)
+        NSLayoutConstraint.activate([
+            topAnchor.constraint(equalTo: view.topAnchor),
+            leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            bottomAnchor.constraint(equalTo: view.bottomAnchor)
+        ])
+    }
+
+    public override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+    }
+
+    public override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
+    }
+
+    public override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
+    }
+
+    public override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
+    }
+
+    public override func pressesBegan(_ presses: Set<UIPress>, with event: UIPressesEvent?) {
+    }
+
+    public override func pressesChanged(_ presses: Set<UIPress>, with event: UIPressesEvent?) {
+    }
+
+    public override func pressesEnded(_ presses: Set<UIPress>, with event: UIPressesEvent?) {
+    }
+
+    public override func pressesCancelled(_ presses: Set<UIPress>, with event: UIPressesEvent?) {
+    }
+
+    public override func motionBegan(_ motion: UIEvent.EventSubtype, with event: UIEvent?) {
+    }
+
+    public override func motionEnded(_ motion: UIEvent.EventSubtype, with event: UIEvent?) {
+    }
+
+    public override func motionCancelled(_ motion: UIEvent.EventSubtype, with event: UIEvent?) {
+    }
+
 }

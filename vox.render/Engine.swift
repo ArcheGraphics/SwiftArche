@@ -14,15 +14,16 @@ let logger = Logger(label: "com.arche.main")
 public class Engine: NSObject {
     let _componentsManager: ComponentsManager = ComponentsManager()
     let _lightManager = LightManager()
-    var sceneManager: SceneManager!
     var canvas: Canvas
     var session: ARSession?
-    var device: MTLDevice
     var library: MTLLibrary!
     var commandQueue: MTLCommandQueue
     var _macroCollection: ShaderMacroCollection = ShaderMacroCollection()
 
-    init(canvas: Canvas, session: ARSession? = nil) {
+    public var device: MTLDevice
+    public var sceneManager: SceneManager!
+
+    public init(canvas: Canvas, session: ARSession? = nil) {
         self.session = session
         self.canvas = canvas
         guard let device = MTLCreateSystemDefaultDevice() else {
