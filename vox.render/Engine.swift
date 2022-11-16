@@ -16,12 +16,14 @@ public class Engine: NSObject {
     let _lightManager = LightManager()
     var sceneManager: SceneManager!
     var canvas: Canvas
+    var session: ARSession?
     var device: MTLDevice
     var library: MTLLibrary!
-    var commandQueue: MTLCommandQueue;
+    var commandQueue: MTLCommandQueue
     var _macroCollection: ShaderMacroCollection = ShaderMacroCollection()
 
-    init(canvas: Canvas) {
+    init(canvas: Canvas, session: ARSession? = nil) {
+        self.session = session
         self.canvas = canvas
         guard let device = MTLCreateSystemDefaultDevice() else {
             fatalError("Unable to create default Metal Device")
@@ -29,9 +31,9 @@ public class Engine: NSObject {
         self.device = device
 
         // Load all the shader files with a metal file extension in the project
-        let libraryURL = Bundle.main.url(forResource: "vox.shader", withExtension: "metallib")!;
+        let libraryURL = Bundle.main.url(forResource: "vox.shader", withExtension: "metallib")!
         do {
-            library = try device.makeLibrary(URL: libraryURL);
+            library = try device.makeLibrary(URL: libraryURL)
         } catch let error {
             fatalError("Error creating MetalKit mesh, error \(error)")
         }
@@ -43,6 +45,8 @@ public class Engine: NSObject {
 
         super.init()
         sceneManager = SceneManager(engine: self)
+        canvas.delegate = self
+        session?.delegate = self
     }
 
     /// Update the engine loop manually. If you call engine.run(), you generally don't need to call this function.

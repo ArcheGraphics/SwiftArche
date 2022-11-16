@@ -10,7 +10,7 @@ import Foundation
 public class SceneManager {
     var _allScenes: [Scene] = []
     var _activeScene: Scene?
-    private var _engine: Engine
+    private weak var _engine: Engine!
 
     /// The activated scene.
     public var activeScene: Scene? {
