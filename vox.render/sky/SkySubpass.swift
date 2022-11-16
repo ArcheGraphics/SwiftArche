@@ -7,7 +7,7 @@
 import Metal
 import vox_math
 
-public class Sky: Subpass {
+public class SkySubpass: Subpass {
     private static var _epsilon: Float = 1e-6
 
     /// Material of the sky.
@@ -66,7 +66,7 @@ public class Sky: Subpass {
         var projectionMatrix: Matrix = Matrix(
                 m11: 1, m12: 0, m13: 0, m14: 0,
                 m21: 0, m22: 1, m23: 0, m24: 0,
-                m31: 0, m32: 0, m33: Sky._epsilon - 1, m34: -1,
+                m31: 0, m32: 0, m33: SkySubpass._epsilon - 1, m34: -1,
                 m41: 0, m42: 0, m43: 0, m44: 0
         )
         // epsilon-infinity projection matrix http://terathon.com/gdc07_lengyel.pdf

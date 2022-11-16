@@ -21,5 +21,9 @@ public class Background {
 
     /// Background sky.
     /// - Remark: When `mode` is `BackgroundMode.Sky`, the property will take effects.
-    public var sky: Sky = Sky()
+    public var sky: SkySubpass?
+
+    /// Background texture
+    /// - Remark: When `mode` is `BackgroundMode.Texture`, the property will take effects.
+    public var texture: BackgroundSubpass?
 }

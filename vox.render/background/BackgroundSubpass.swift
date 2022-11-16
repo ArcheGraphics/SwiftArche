@@ -8,10 +8,15 @@ import Metal
 import vox_math
 
 public class BackgroundSubpass: Subpass {
-    var _textureFillMode: BackgroundTextureFillMode = BackgroundTextureFillMode.AspectFitHeight
-    var _mesh: ModelMesh!
-
-    private var _canvas: Canvas
+    private var _textureFillMode: BackgroundTextureFillMode = BackgroundTextureFillMode.AspectFitHeight
+    private var _mesh: ModelMesh!
+    private let _canvas: Canvas
+    private let _shaderMacro = ShaderMacroCollection()
+    private let _depthStencilDescriptor = MTLDepthStencilDescriptor()
+    private let _pipelineDescriptor = MTLRenderPipelineDescriptor()
+    private let _shader: ShaderPass
+    private var _pso: RenderPipelineState!
+    private var _depthStencilState: MTLDepthStencilState!
 
     /// Background texture.
     /// - Remark: When `mode` is `BackgroundMode.Texture`, the property will take effects.
@@ -34,8 +39,52 @@ public class BackgroundSubpass: Subpass {
     /// - Parameter engine:  Engine Which the background belongs to.
     public init(_ engine: Engine) {
         _canvas = engine.canvas
+        _shader = ShaderPass(engine.library, "vertex_background", "fragment_background")
+        _shader.renderState!.depthState.compareFunction = MTLCompareFunction.lessEqual
         super.init()
         _mesh = _createPlane(engine)
+    }
+
+    func prepare(_ encoder: MTLRenderCommandEncoder) {
+        let pipeline = _renderPass.pipeline!
+
+        _pipelineDescriptor.label = "Background Pipeline"
+        _pipelineDescriptor.colorAttachments[0].pixelFormat = .bgra8Unorm
+        _pipelineDescriptor.depthAttachmentPixelFormat = .depth24Unorm_stencil8
+        _pipelineDescriptor.stencilAttachmentPixelFormat = .depth24Unorm_stencil8
+
+        let functions = pipeline._resourceCache.requestShaderModule(_shader, _shaderMacro)
+        _pipelineDescriptor.vertexFunction = functions[0]
+        _pipelineDescriptor.fragmentFunction = functions[1]
+        _pipelineDescriptor.vertexDescriptor = _mesh._vertexDescriptor
+        _shader.renderState!._apply(_pipelineDescriptor, _depthStencilDescriptor, encoder, false)
+
+        _pso = pipeline._resourceCache.requestGraphicsPipeline(_pipelineDescriptor)
+        _depthStencilState = pipeline._resourceCache.requestDepthStencilState(_depthStencilDescriptor)
+    }
+
+    override func draw(_ encoder: MTLRenderCommandEncoder) {
+        encoder.pushDebugGroup("Background")
+        if (_pso == nil) {
+            prepare(encoder)
+        }
+
+        encoder.setRenderPipelineState(_pso.handle)
+        encoder.setDepthStencilState(_depthStencilState)
+
+        var index = 0
+        for buffer in _mesh._vertexBufferBindings {
+            encoder.setVertexBuffer(buffer, offset: 0, index: index)
+            index += 1
+        }
+
+        let subMesh = _mesh.subMesh!
+        let indexBufferBinding = _mesh._indexBufferBinding
+        encoder.drawIndexedPrimitives(type: subMesh.topology, indexCount: subMesh.count,
+                indexType: indexBufferBinding!.format, indexBuffer: indexBufferBinding!.buffer,
+                indexBufferOffset: 0, instanceCount: _mesh._instanceCount)
+
+        encoder.popDebugGroup()
     }
 
     private func _resizeBackgroundTexture() {

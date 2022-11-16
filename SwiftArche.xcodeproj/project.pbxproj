@@ -15,6 +15,7 @@
 		3E0F7B1429220F8C00C4A843 /* shadowmap.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3E0F7B1329220F8C00C4A843 /* shadowmap.metal */; };
 		3E0F7B1C2922374400C4A843 /* pbr_shading.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3E0F7B1B2922374400C4A843 /* pbr_shading.metal */; };
 		3E0F7B1F292331B000C4A843 /* ReflectionUniform.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E0F7B1E292331B000C4A843 /* ReflectionUniform.swift */; };
+		3E0F7B242924834B00C4A843 /* background_shading.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3E0F7B232924834B00C4A843 /* background_shading.metal */; };
 		3E67EDC9291B2F7600ED60C8 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E67EDC8291B2F7600ED60C8 /* AppDelegate.swift */; };
 		3E67EDD3291B2F7600ED60C8 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3E67EDD1291B2F7600ED60C8 /* Main.storyboard */; };
 		3E67EDD5291B2F7800ED60C8 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3E67EDD4291B2F7800ED60C8 /* Assets.xcassets */; };
@@ -76,7 +77,7 @@
 		43D8C28F840B36CAA2638716 /* RasterState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8C16C159DE4ABBC466DA3 /* RasterState.swift */; };
 		43D8C2D06DBDF6CCA1ECC6B3 /* BackgroundSubpass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8C16E408A6BA2D7B12F79 /* BackgroundSubpass.swift */; };
 		43D8C3009A7DB108E86AD131 /* RenderPass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8C51FABA0980F27EB7615 /* RenderPass.swift */; };
-		43D8C3BA1BA3519EE26FB708 /* Sky.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8C79ABCF9ABA390011DDA /* Sky.swift */; };
+		43D8C3BA1BA3519EE26FB708 /* SkySubpass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8C79ABCF9ABA390011DDA /* SkySubpass.swift */; };
 		43D8C3CBCD898731E5D5AE0F /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8C2F52B73258B53E1454E /* Utils.swift */; };
 		43D8C3F95E3065DFFE4D2176 /* BoundingBox.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8C42B88ACC2E2114AF177 /* BoundingBox.swift */; };
 		43D8C43B0AD7A8EAF529892C /* Component.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8CFA6FC902338A11A5E3A /* Component.swift */; };
@@ -220,6 +221,7 @@
 		3E0F7B1B2922374400C4A843 /* pbr_shading.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = pbr_shading.metal; sourceTree = "<group>"; };
 		3E0F7B1D2922375800C4A843 /* pbr_shading.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = pbr_shading.h; sourceTree = "<group>"; };
 		3E0F7B1E292331B000C4A843 /* ReflectionUniform.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReflectionUniform.swift; sourceTree = "<group>"; };
+		3E0F7B232924834B00C4A843 /* background_shading.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = background_shading.metal; sourceTree = "<group>"; };
 		3E67EDC5291B2F7600ED60C8 /* SwiftArche.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SwiftArche.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		3E67EDC8291B2F7600ED60C8 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		3E67EDCA291B2F7600ED60C8 /* Shaders.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = Shaders.metal; sourceTree = "<group>"; };
@@ -337,7 +339,7 @@
 		43D8C6C6BAB6A28F4761BFCC /* ModelMesh.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ModelMesh.swift; sourceTree = "<group>"; };
 		43D8C6C773338777192951EB /* TextureCoordinate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TextureCoordinate.swift; sourceTree = "<group>"; };
 		43D8C6D2A37C7B97B84BA40F /* BoundingFrustum.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BoundingFrustum.swift; sourceTree = "<group>"; };
-		43D8C79ABCF9ABA390011DDA /* Sky.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Sky.swift; sourceTree = "<group>"; };
+		43D8C79ABCF9ABA390011DDA /* SkySubpass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SkySubpass.swift; sourceTree = "<group>"; };
 		43D8C8107866246F85355CE7 /* ShaderMacroCollection.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ShaderMacroCollection.swift; sourceTree = "<group>"; };
 		43D8C81ED4A36F7C36F6048E /* AmbientLight.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AmbientLight.swift; sourceTree = "<group>"; };
 		43D8C860A954154FCBE6973D /* EngineObject.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EngineObject.swift; sourceTree = "<group>"; };
@@ -481,7 +483,7 @@
 			isa = PBXGroup;
 			children = (
 				43D8C43BFC4AB360256EB2BF /* SkyBoxMaterial.swift */,
-				43D8C79ABCF9ABA390011DDA /* Sky.swift */,
+				43D8C79ABCF9ABA390011DDA /* SkySubpass.swift */,
 			);
 			path = sky;
 			sourceTree = "<group>";
@@ -592,6 +594,7 @@
 				04ED07D929226E9C00DD55AB /* normal_shading.metal */,
 				3E67EED02921D9C800ED60C8 /* unlit_shading.metal */,
 				3E0F7B0B2921F63B00C4A843 /* skybox_shading.metal */,
+				3E0F7B232924834B00C4A843 /* background_shading.metal */,
 				3E0F7B1D2922375800C4A843 /* pbr_shading.h */,
 				3E0F7B1B2922374400C4A843 /* pbr_shading.metal */,
 			);
@@ -1139,6 +1142,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				3E67EED42921DB4A00ED60C8 /* function_common.metal in Sources */,
+				3E0F7B242924834B00C4A843 /* background_shading.metal in Sources */,
 				3E0F7B1429220F8C00C4A843 /* shadowmap.metal in Sources */,
 				04ED07DA29226E9C00DD55AB /* normal_shading.metal in Sources */,
 				04ED07DE292284FD00DD55AB /* shadow_shading.metal in Sources */,
@@ -1229,7 +1233,7 @@
 				E63B1FBDADAAF1E683C7D956 /* ShadowUtils.swift in Sources */,
 				43D8C3CBCD898731E5D5AE0F /* Utils.swift in Sources */,
 				43D8C4BD6BB477FAF132C5DE /* SkyBoxMaterial.swift in Sources */,
-				43D8C3BA1BA3519EE26FB708 /* Sky.swift in Sources */,
+				43D8C3BA1BA3519EE26FB708 /* SkySubpass.swift in Sources */,
 				43D8C2D06DBDF6CCA1ECC6B3 /* BackgroundSubpass.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
