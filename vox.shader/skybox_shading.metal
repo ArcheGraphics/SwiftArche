@@ -29,12 +29,13 @@ vertex VertexOut vertex_skybox(const VertexIn in [[stage_in]],
 }
 
 fragment float4 fragment_skybox(VertexOut in [[stage_in]],
-                                constant float4 &u_cubeDecodeParam [[buffer(2)]],
+                                constant bool &u_textureDecodeRGBM [[buffer(2)]],
+                                constant float &u_RGBMDecodeFactor [[buffer(3)]],
                                 sampler u_cubeSampler [[sampler(0)]],
                                 texturecube<float> u_cubeTexture [[texture(0)]]) {
     float4 textureColor = u_cubeTexture.sample(u_cubeSampler, in.v_cubeUV);
-    if (u_cubeDecodeParam.x > 0) {
-        textureColor = RGBMToLinear(textureColor, u_cubeDecodeParam.y);
+    if (u_textureDecodeRGBM) {
+        textureColor = RGBMToLinear(textureColor, u_RGBMDecodeFactor);
     }
     
     return textureColor;

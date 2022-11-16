@@ -59,8 +59,8 @@ public class PBRSpecularMaterial: PBRBaseMaterial {
         shaderData.setSampler(PBRSpecularMaterial._specularGlossinessSamplerProp, value)
     }
 
-    public override init(_ device: MTLDevice, _ name: String = "") {
-        super.init(device, name)
+    public override init(_ engine: Engine, _ name: String = "") {
+        super.init(engine, name)
         shaderData.setData(PBRSpecularMaterial._pbrSpecularProp, _pbrSpecularData)
     }
 }

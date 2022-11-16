@@ -15,6 +15,7 @@ public class Engine {
     var sceneManager: SceneManager!
     var canvas: Canvas
     var device: MTLDevice
+    var library: MTLLibrary!
     var commandQueue: MTLCommandQueue;
     var _macroCollection: ShaderMacroCollection = ShaderMacroCollection()
         
@@ -24,6 +25,15 @@ public class Engine {
             fatalError("Unable to create default Metal Device")
         }
         self.device = device
+
+        // Load all the shader files with a metal file extension in the project
+        let libraryURL = Bundle.main.url(forResource: "vox.shader", withExtension: "metallib")!;
+        do {
+            library = try device.makeLibrary(URL: libraryURL);
+        } catch let error {
+            fatalError("Error creating MetalKit mesh, error \(error)")
+        }
+
         guard let commandQueue = device.makeCommandQueue() else {
             fatalError("Unable to create default Metal Device")
         }

@@ -79,6 +79,7 @@
 		43D8C3F95E3065DFFE4D2176 /* BoundingBox.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8C42B88ACC2E2114AF177 /* BoundingBox.swift */; };
 		43D8C43B0AD7A8EAF529892C /* Component.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8CFA6FC902338A11A5E3A /* Component.swift */; };
 		43D8C4A0C09957580D8029FA /* RenderQueueType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8CE9FAF602FC33389337A /* RenderQueueType.swift */; };
+		43D8C4BD6BB477FAF132C5DE /* SkyBoxMaterial.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8C43BFC4AB360256EB2BF /* SkyBoxMaterial.swift */; };
 		43D8C4BD989F77A020725E4C /* Subpass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8C5BA82AE969237F234DC /* Subpass.swift */; };
 		43D8C51244720F80CFE1E7FB /* ShadowType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8CE5D7B75CB684EC5EC1B /* ShadowType.swift */; };
 		43D8C519A137AB2E23BBC897 /* CameraClearFlags.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8C08D2843709803F5744E /* CameraClearFlags.swift */; };
@@ -316,6 +317,7 @@
 		43D8C38B710691B861E8D39F /* Plane.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Plane.swift; sourceTree = "<group>"; };
 		43D8C3D9132283C53EF428E3 /* macro_name.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = macro_name.h; sourceTree = "<group>"; };
 		43D8C42B88ACC2E2114AF177 /* BoundingBox.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BoundingBox.swift; sourceTree = "<group>"; };
+		43D8C43BFC4AB360256EB2BF /* SkyBoxMaterial.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SkyBoxMaterial.swift; sourceTree = "<group>"; };
 		43D8C4566766B1715A426CE1 /* Engine.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Engine.swift; sourceTree = "<group>"; };
 		43D8C47F9E632415594858C6 /* ShadowCascadesMode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ShadowCascadesMode.swift; sourceTree = "<group>"; };
 		43D8C4992F109CE7A2BD9E97 /* RenderPipelineState.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RenderPipelineState.swift; sourceTree = "<group>"; };
@@ -471,6 +473,14 @@
 			path = subpasses;
 			sourceTree = "<group>";
 		};
+		3E0F7B212924607E00C4A843 /* sky */ = {
+			isa = PBXGroup;
+			children = (
+				43D8C43BFC4AB360256EB2BF /* SkyBoxMaterial.swift */,
+			);
+			path = sky;
+			sourceTree = "<group>";
+		};
 		3E67EDBC291B2F7600ED60C8 = {
 			isa = PBXGroup;
 			children = (
@@ -586,6 +596,7 @@
 				3E67EECA291FD7E700ED60C8 /* rendering */,
 				043E2C9D2920D6360057BDD1 /* lighting */,
 				3E67EEBD291DCB6B00ED60C8 /* shadow */,
+				3E0F7B212924607E00C4A843 /* sky */,
 				3E67EEA9291CEBDF00ED60C8 /* Layer.swift */,
 				E63B1CB34D0218B55ACB3457 /* Canvas.swift */,
 				E63B1F46484BADF6ED42AB6C /* InputManager.swift */,
@@ -1203,6 +1214,7 @@
 				E63B1992B1C2F658B6C75B36 /* GeometrySubpass.swift in Sources */,
 				E63B1FBDADAAF1E683C7D956 /* ShadowUtils.swift in Sources */,
 				43D8C3CBCD898731E5D5AE0F /* Utils.swift in Sources */,
+				43D8C4BD6BB477FAF132C5DE /* SkyBoxMaterial.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

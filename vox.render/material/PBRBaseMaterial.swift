@@ -279,8 +279,10 @@ public class PBRBaseMaterial: BaseMaterial {
         shaderData.setSampler(PBRBaseMaterial._clearCoatNormalSamplerProp, value)
     }
 
-    public override init(_ device: MTLDevice, _ name: String = "") {
-        super.init(device, name)
+    public init(_ engine: Engine, _ name: String = "") {
+        super.init(engine.device, name)
+        shader.append(ShaderPass(engine.library, "vertex_pbr", "fragment_pbr"))
+
         shaderData.enableMacro(NEED_WORLDPOS)
         shaderData.enableMacro(NEED_TILINGOFFSET)
         shaderData.setData(PBRBaseMaterial._pbrBaseProp, _pbrBaseData)
