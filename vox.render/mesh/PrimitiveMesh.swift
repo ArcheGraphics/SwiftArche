@@ -11,16 +11,16 @@ import vox_math
 class PrimitiveMesh {
     /// Create a sphere mesh.
     /// - Parameters:
-    ///   - device: Engine
+    ///   - engine: Engine
     ///   - radius: Sphere radius
     ///   - segments: Number of segments
     ///   - noLongerAccessible: No longer access the vertices of the mesh after creation
     /// - Returns: Sphere model mesh
-    static func createSphere(_ device: MTLDevice,
+    static func createSphere(_ engine: Engine,
                              _ radius: Float = 0.5,
                              _ segments: Int = 18,
                              _ noLongerAccessible: Bool = true) -> ModelMesh {
-        let mesh = ModelMesh(device)
+        let mesh = ModelMesh(engine)
         let segments = max(2, segments)
 
         let count = segments + 1
@@ -82,24 +82,24 @@ class PrimitiveMesh {
         }
 
         mesh.bounds = BoundingBox(Vector3(-radius, -radius, -radius), Vector3(radius, radius, radius))
-        PrimitiveMesh._initialize(device, mesh, positions, normals, uvs, indices, noLongerAccessible)
+        PrimitiveMesh._initialize(engine, mesh, positions, normals, uvs, indices, noLongerAccessible)
         return mesh
     }
 
     /// Create a cuboid mesh.
     /// - Parameters:
-    ///   - device: Engine
+    ///   - engine: Engine
     ///   - width: Cuboid width
     ///   - height: Cuboid height
     ///   - depth: Cuboid depth
     ///   - noLongerAccessible: No longer access the vertices of the mesh after creation
     /// - Returns: Cuboid model mesh
-    static func createCuboid(_ device: MTLDevice,
+    static func createCuboid(_ engine: Engine,
                              _ width: Float = 1,
                              _ height: Float = 1,
                              _ depth: Float = 1,
                              _ noLongerAccessible: Bool = true) -> ModelMesh {
-        let mesh = ModelMesh(device)
+        let mesh = ModelMesh(engine)
 
         let halfWidth: Float = width / 2
         let halfHeight: Float = height / 2
@@ -235,27 +235,27 @@ class PrimitiveMesh {
         indices[35] = 21
 
         mesh.bounds = BoundingBox(Vector3(-halfWidth, -halfHeight, -halfDepth), Vector3(halfWidth, halfHeight, halfDepth))
-        PrimitiveMesh._initialize(device, mesh, positions, normals, uvs,
+        PrimitiveMesh._initialize(engine, mesh, positions, normals, uvs,
                 indices, noLongerAccessible)
         return mesh
     }
 
     /// Create a plane mesh.
     /// - Parameters:
-    ///   - device: Engine
+    ///   - engine: Engine
     ///   - width: Plane width
     ///   - height: Plane height
     ///   - horizontalSegments: Plane horizontal segments
     ///   - verticalSegments: Plane vertical segments
     ///   - noLongerAccessible: No longer access the vertices of the mesh after creation
     /// - Returns: Plane model mesh
-    static func createPlane(_ device: MTLDevice,
+    static func createPlane(_ engine: Engine,
                             _ width: Float = 1,
                             _ height: Float = 1,
                             _ horizontalSegments: Int = 1,
                             _ verticalSegments: Int = 1,
                             _ noLongerAccessible: Bool = true) -> ModelMesh {
-        let mesh = ModelMesh(device)
+        let mesh = ModelMesh(engine)
         let horizontalSegments = max(1, horizontalSegments)
         let verticalSegments = max(1, verticalSegments)
 
@@ -313,13 +313,13 @@ class PrimitiveMesh {
         }
 
         mesh.bounds = BoundingBox(Vector3(-halfWidth, 0, -halfWidth), Vector3(halfWidth, 0, halfWidth))
-        PrimitiveMesh._initialize(device, mesh, positions, normals, uvs, indices, noLongerAccessible)
+        PrimitiveMesh._initialize(engine, mesh, positions, normals, uvs, indices, noLongerAccessible)
         return mesh
     }
 
     /// Create a cylinder mesh.
     /// - Parameters:
-    ///   - device: Engine
+    ///   - engine: Engine
     ///   - radiusTop: The radius of top cap
     ///   - radiusBottom: The radius of bottom cap
     ///   - height: The height of torso
@@ -327,14 +327,14 @@ class PrimitiveMesh {
     ///   - heightSegments: Cylinder height segments
     ///   - noLongerAccessible: No longer access the vertices of the mesh after creation
     /// - Returns: Cylinder model mesh
-    static func createCylinder(_ device: MTLDevice,
+    static func createCylinder(_ engine: Engine,
                                _ radiusTop: Float = 0.5,
                                _ radiusBottom: Float = 0.5,
                                _ height: Float = 2,
                                _ radialSegments: Int = 20,
                                _ heightSegments: Int = 1,
                                _ noLongerAccessible: Bool = true) -> ModelMesh {
-        let mesh = ModelMesh(device)
+        let mesh = ModelMesh(engine)
 
         let radialCount = radialSegments + 1
         let verticalCount = heightSegments + 1
@@ -481,13 +481,13 @@ class PrimitiveMesh {
         let radiusMax = max(radiusTop, radiusBottom)
         mesh.bounds = BoundingBox(Vector3(-radiusMax, -halfHeight, -radiusMax), Vector3(radiusMax, halfHeight, radiusMax))
 
-        PrimitiveMesh._initialize(device, mesh, positions, normals, uvs, indices, noLongerAccessible)
+        PrimitiveMesh._initialize(engine, mesh, positions, normals, uvs, indices, noLongerAccessible)
         return mesh
     }
 
     /// Create a torus mesh.
     /// - Parameters:
-    ///   - device: Engine
+    ///   - engine: Engine
     ///   - radius: Torus radius
     ///   - tubeRadius: Torus tube
     ///   - radialSegments: Torus radial segments
@@ -495,14 +495,14 @@ class PrimitiveMesh {
     ///   - arc: Central angle
     ///   - noLongerAccessible: No longer access the vertices of the mesh after creation
     /// - Returns: Torus model mesh
-    static func createTorus(_ device: MTLDevice,
+    static func createTorus(_ engine: Engine,
                             _ radius: Float = 0.5,
                             _ tubeRadius: Float = 0.1,
                             _ radialSegments: Int = 30,
                             _ tubularSegments: Int = 30,
                             _ arc: Float = 360,
                             _ noLongerAccessible: Bool = true) -> ModelMesh {
-        let mesh = ModelMesh(device)
+        let mesh = ModelMesh(engine)
 
         let vertexCount = (radialSegments + 1) * (tubularSegments + 1)
         let rectangleCount = radialSegments * tubularSegments
@@ -570,26 +570,26 @@ class PrimitiveMesh {
         mesh.bounds = BoundingBox(Vector3(-outerRadius, -outerRadius, -tubeRadius),
                 Vector3(outerRadius, outerRadius, tubeRadius))
 
-        PrimitiveMesh._initialize(device, mesh, positions, normals, uvs, indices, noLongerAccessible)
+        PrimitiveMesh._initialize(engine, mesh, positions, normals, uvs, indices, noLongerAccessible)
         return mesh
     }
 
     /// Create a cone mesh.
     /// - Parameters:
-    ///   - device: Engine
+    ///   - engine: Engine
     ///   - radius: The radius of cap
     ///   - height: The height of torso
     ///   - radialSegments: Cylinder radial segments
     ///   - heightSegments: Cylinder height segments
     ///   - noLongerAccessible: No longer access the vertices of the mesh after creation
     /// - Returns: Cone model mesh
-    static func createCone(_ device: MTLDevice,
+    static func createCone(_ engine: Engine,
                            _ radius: Float = 0.5,
                            _ height: Float = 2,
                            _ radialSegments: Int = 20,
                            _ heightSegments: Int = 1,
                            _ noLongerAccessible: Bool = true) -> ModelMesh {
-        let mesh = ModelMesh(device)
+        let mesh = ModelMesh(engine)
 
         let radialCount = radialSegments + 1
         let verticalCount = heightSegments + 1
@@ -701,26 +701,26 @@ class PrimitiveMesh {
         mesh.bounds = BoundingBox(Vector3(-radius, -halfHeight, -radius),
                 Vector3(radius, halfHeight, radius))
 
-        PrimitiveMesh._initialize(device, mesh, positions, normals, uvs, indices, noLongerAccessible)
+        PrimitiveMesh._initialize(engine, mesh, positions, normals, uvs, indices, noLongerAccessible)
         return mesh
     }
 
     /// Create a capsule mesh.
     /// - Parameters:
-    ///   - device: Engine
+    ///   - engine: Engine
     ///   - radius: The radius of the two hemispherical ends
     ///   - height: The height of the cylindrical part, measured between the centers of the hemispherical ends
     ///   - radialSegments: Hemispherical end radial segments
     ///   - heightSegments: Cylindrical part height segments
     ///   - noLongerAccessible: No longer access the vertices of the mesh after creation
     /// - Returns: Capsule model mesh
-    static func createCapsule(_ device: MTLDevice,
+    static func createCapsule(_ engine: Engine,
                               _ radius: Float = 0.5,
                               _ height: Float = 2,
                               _ radialSegments: Int = 6,
                               _ heightSegments: Int = 1,
                               _ noLongerAccessible: Bool = true) -> ModelMesh {
-        let mesh = ModelMesh(device)
+        let mesh = ModelMesh(engine)
 
         let radialSegments = max(2, radialSegments)
 
@@ -819,7 +819,7 @@ class PrimitiveMesh {
         )
 
         mesh.bounds = BoundingBox(Vector3(-radius, -radius - halfHeight, -radius), Vector3(radius, radius + halfHeight, radius))
-        PrimitiveMesh._initialize(device, mesh, positions, normals, uvs, indices, noLongerAccessible)
+        PrimitiveMesh._initialize(engine, mesh, positions, normals, uvs, indices, noLongerAccessible)
         return mesh
     }
 
@@ -887,7 +887,7 @@ class PrimitiveMesh {
 }
 
 extension PrimitiveMesh {
-    private static func _initialize(_ device: MTLDevice,
+    private static func _initialize(_ engine: Engine,
                                     _ mesh: ModelMesh,
                                     _ positions: [Vector3],
                                     _ normals: [Vector3],

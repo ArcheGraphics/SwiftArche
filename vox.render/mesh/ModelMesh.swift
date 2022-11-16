@@ -54,10 +54,10 @@ class ModelMesh: Mesh {
 
     /// Create a model mesh.
     /// - Parameters:
-    ///   - device: Metal Device
+    ///   - engine: Engine
     ///   - name: Mesh name
-    init(_ device: MTLDevice, _ name: String = "") {
-        _device = device
+    init(_ engine: Engine, _ name: String = "") {
+        _device = engine.device
         super.init()
         self.name = name
     }
