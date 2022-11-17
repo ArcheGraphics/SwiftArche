@@ -1,0 +1,3 @@
+[submodule "third_party/physx"]
+	path = third_party/physx
+	url = https://github.com/ArcheGraphics/PhysX
