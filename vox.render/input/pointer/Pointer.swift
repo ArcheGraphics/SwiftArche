@@ -23,8 +23,8 @@ public class Pointer {
     public var deltaPosition: Vector2 = Vector2()
     var _events: [UITouch] = []
     var _uniqueID: Int = 0
-    var _upMap: [Int] = []
-    var _downMap: [Int] = []
+    var _upMap: [Int] = [0, 0]
+    var _downMap: [Int] = [0, 0]
     var _upList: [PointerButton] = []
     var _downList: [PointerButton] = []
     private var _currentPressedEntity: Entity?
@@ -34,7 +34,7 @@ public class Pointer {
         self.id = id
     }
 
-    func _firePointerExitAndEnter(rayCastEntity: Entity?) {
+    func _firePointerExitAndEnter(_ rayCastEntity: Entity?) {
         if (_currentEnteredEntity !== rayCastEntity) {
             if (_currentEnteredEntity != nil) {
                 let scripts = _currentEnteredEntity!._scripts
@@ -58,7 +58,7 @@ public class Pointer {
         }
     }
 
-    func _firePointerDown(rayCastEntity: Entity?) {
+    func _firePointerDown(_ rayCastEntity: Entity?) {
         if (rayCastEntity != nil) {
             let scripts = rayCastEntity!._scripts
             for i in 0..<scripts.length {
@@ -83,7 +83,7 @@ public class Pointer {
         }
     }
 
-    func _firePointerUpAndClick(rayCastEntity: Entity?) {
+    func _firePointerUpAndClick(_ rayCastEntity: Entity?) {
         if (_currentPressedEntity != nil) {
             let sameTarget = _currentPressedEntity === rayCastEntity
             let scripts = _currentPressedEntity!._scripts
