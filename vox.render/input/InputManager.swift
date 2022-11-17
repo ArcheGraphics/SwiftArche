@@ -20,7 +20,7 @@ public class InputManager {
         }
     }
 
-    init(_ engine: Engine) {
+    init(engine: Engine) {
         _pointerManager = PointerManager(engine)
         _initialized = true
     }

@@ -23,6 +23,7 @@ public class Engine: NSObject {
     public var device: MTLDevice
     public var sceneManager: SceneManager!
     public var physicsManager: PhysicsManager!
+    public var inputManager: InputManager!
 
     public init(canvas: Canvas, session: ARSession? = nil) {
         self.session = session
@@ -48,6 +49,7 @@ public class Engine: NSObject {
         super.init()
         sceneManager = SceneManager(engine: self)
         physicsManager = PhysicsManager(engine: self)
+        inputManager = InputManager(engine: self)
         canvas.delegate = self
         session?.delegate = self
     }
@@ -62,8 +64,8 @@ public class Engine: NSObject {
             }
 
             componentsManager.callScriptOnStart()
-            // physicsManager._initialized && physicsManager._update(deltaTime / 1000.0)
-            // inputManager._update()
+            physicsManager._update(deltaTime)
+            inputManager._update()
             componentsManager.callScriptOnUpdate(deltaTime)
             // componentsManager.callAnimationUpdate(deltaTime)
             componentsManager.callScriptOnLateUpdate(deltaTime)

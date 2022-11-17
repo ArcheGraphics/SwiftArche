@@ -8,6 +8,9 @@ import vox_math
 import UIKit
 
 class PointerManager {
+    private static var _tempRay: Ray = Ray()
+    private static var _tempHitResult: HitResult = HitResult()
+
     var _pointers: [Pointer] = []
     var _buttons: Int = PointerButton.None.rawValue
     var _upList: [PointerButton] = []
@@ -154,6 +157,28 @@ class PointerManager {
     }
 
     private func _pointerRayCast(_ normalizedX: Float, _ normalizedY: Float) -> Entity? {
-        nil
+        let cameras = _engine.sceneManager.activeScene!._activeCameras
+        for i in 0..<cameras.count {
+            let camera = cameras[i]
+            if (!camera.enabled || camera.renderTarget != nil) {
+                continue
+            }
+            let vpX = camera.viewport.x
+            let vpY = camera.viewport.y
+            let vpW = camera.viewport.z
+            let vpH = camera.viewport.w
+            if (normalizedX >= vpX && normalizedY >= vpY && normalizedX - vpX <= vpW && normalizedY - vpY <= vpH) {
+                let point = Vector2((normalizedX - vpX) / vpW, (normalizedY - vpY) / vpH)
+                if (_engine.physicsManager.raycast(
+                        camera.viewportPointToRay(point, PointerManager._tempRay),
+                        Float.greatestFiniteMagnitude,
+                        camera.cullingMask, PointerManager._tempHitResult)) {
+                    return PointerManager._tempHitResult.entity
+                } else if ((camera.clearFlags.rawValue & CameraClearFlags.Color.rawValue) != 0) {
+                    return nil
+                }
+            }
+        }
+        return nil
     }
 }
