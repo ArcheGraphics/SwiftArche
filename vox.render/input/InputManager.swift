@@ -10,7 +10,7 @@ import Foundation
 public class InputManager {
     /// Sometimes the input module will not be initialized, such as off-screen rendering.
     private var _initialized: Bool = false
-    private var _curFrameCount: Int = 0
+    private var _curFrameCount: UInt64 = 0
     private var _pointerManager: PointerManager
 
     /// Pointer list.
@@ -60,7 +60,7 @@ public class InputManager {
     func _update() {
         if (_initialized) {
             _curFrameCount += 1
-            _pointerManager._update(_curFrameCount)
+            _pointerManager._update()
         }
     }
 }

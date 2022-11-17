@@ -9,10 +9,7 @@ import UIKit
 
 class PointerManager {
     var _pointers: [Pointer] = []
-    var _multiPointerEnabled: Bool = true
     var _buttons: Int = PointerButton.None.rawValue
-    var _upMap: [Int] = [0, 0]
-    var _downMap: [Int] = [0, 0]
     var _upList: [PointerButton] = []
     var _downList: [PointerButton] = []
 
@@ -27,7 +24,7 @@ class PointerManager {
         _canvas = engine.canvas
     }
 
-    func _update(_ frameCount: Int) {
+    func _update() {
         /** Clean up the pointer released in the previous frame. */
         var lastIndex = _pointers.count - 1
         if (lastIndex >= 0) {
@@ -64,7 +61,7 @@ class PointerManager {
                 let pointer = _pointers[i]
                 pointer._upList = []
                 pointer._downList = []
-                _updatePointer(frameCount, pointer, Float(_canvas.bounds.width), Float(_canvas.bounds.height))
+                _updatePointer(pointer, Float(_canvas.bounds.width), Float(_canvas.bounds.height))
                 _buttons |= pointer.pressedButtons.rawValue
             }
         }
@@ -85,7 +82,7 @@ class PointerManager {
             return _pointers[index]
         } else {
             let lastCount = _pointers.count
-            if (lastCount == 0 || _multiPointerEnabled) {
+            if (lastCount == 0 || _canvas.isMultipleTouchEnabled) {
                 // Get Pointer smallest index.
                 var i = 0
                 while i < lastCount {
@@ -108,8 +105,7 @@ class PointerManager {
         }
     }
 
-    private func _updatePointer(_ frameCount: Int, _ pointer: Pointer,
-                                _ canvasW: Float, _ canvasH: Float) {
+    private func _updatePointer(_ pointer: Pointer, _ canvasW: Float, _ canvasH: Float) {
         let events = pointer._events
         let position = pointer.position
         let length = events.count
@@ -126,23 +122,18 @@ class PointerManager {
             pointer._firePointerExitAndEnter(rayCastEntity)
             for i in 0..<length {
                 let event = events[i]
-                let button = 1
                 pointer.button = .Primary
                 pointer.pressedButtons = .Primary
                 switch (event.phase) {
                 case .began:
                     _downList.append(.Primary)
-                    _downMap[button] = frameCount
                     pointer._downList.append(.Primary)
-                    pointer._downMap[button] = frameCount
                     pointer.phase = .began
                     pointer._firePointerDown(rayCastEntity)
                     break
                 case .ended:
                     _upList.append(.Primary)
-                    _upMap[button] = frameCount
                     pointer._upList.append(.Primary)
-                    pointer._upMap[button] = frameCount
                     pointer.phase = .ended
                     pointer._firePointerUpAndClick(rayCastEntity)
                     break

@@ -23,8 +23,6 @@ public class Pointer {
     public var deltaPosition: Vector2 = Vector2()
     var _events: [UITouch] = []
     var _uniqueID: Int = 0
-    var _upMap: [Int] = [0, 0]
-    var _downMap: [Int] = [0, 0]
     var _upList: [PointerButton] = []
     var _downList: [PointerButton] = []
     private var _currentPressedEntity: Entity?
