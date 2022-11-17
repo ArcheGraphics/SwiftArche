@@ -49,6 +49,42 @@ public class Script: Component {
     func onEndRender(_ camera: Camera) {
     }
 
+    /// Called before physics calculations, the number of times is related to the physical update frequency.
+    func onPhysicsUpdate() {
+    }
+
+    /// Called when the collision enter.
+    /// - Parameter other: ColliderShape
+    func onTriggerEnter(_ other: ColliderShape) {
+    }
+
+    /// Called when the collision stay.
+    /// - Remark: onTriggerStay is called every frame while the collision stay.
+    /// - Parameter other:ColliderShape
+    func onTriggerExit(_ other: ColliderShape) {
+    }
+
+    /// Called when the collision exit.
+    /// - Parameter other: ColliderShape
+    func onTriggerStay(_ other: ColliderShape) {
+    }
+
+    /// Called when the collision enter.
+    /// - Parameter other: ColliderShape
+    func onCollisionEnter(_ other: ColliderShape) {
+    }
+
+    /// Called when the collision stay.
+    /// - Remark: onTriggerStay is called every frame while the collision stay.
+    /// - Parameter other: ColliderShape
+    func onCollisionExit(_ other: ColliderShape) {
+    }
+
+    /// Called when the collision exit.
+    /// - Parameter other: ColliderShape
+    func onCollisionStay(_ other: ColliderShape) {
+    }
+
     /// Called when the pointer is down while over the ColliderShape.
     /// - Parameter pointer: The pointer that triggered
     func onPointerDown(_ pointer: Pointer) {

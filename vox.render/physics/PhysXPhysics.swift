@@ -34,6 +34,10 @@ class PhysXPhysics {
         PhysXStaticCollider(position, rotation)
     }
 
+    static func createCharacterController() -> PhysXCharacterController {
+        PhysXCharacterController()
+    }
+
     static func createPhysicsMaterial(_ staticFriction: Float,
                                       _ dynamicFriction: Float,
                                       _ bounciness: Float,

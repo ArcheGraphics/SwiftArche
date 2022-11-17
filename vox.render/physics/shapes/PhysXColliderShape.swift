@@ -35,7 +35,7 @@ class PhysXColliderShape {
     var _id: UInt32!
     var _contactOffset: Float = 0
 
-    func setRotation(value: Vector3) {
+    func setRotation(_ value: Vector3) {
         _rotation = value
         _physxRotation = Quaternion.rotationYawPitchRoll(yaw: value.x, pitch: value.y, roll: value.z)
         if (_axis != nil) {
@@ -54,7 +54,7 @@ class PhysXColliderShape {
         fatalError("use subClass")
     }
 
-    func setContactOffset(offset: Float) {
+    func setContactOffset(_ offset: Float) {
         _contactOffset = offset
         _pxShape.setContactOffset(offset)
 

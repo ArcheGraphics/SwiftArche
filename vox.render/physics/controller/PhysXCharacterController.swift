@@ -6,7 +6,7 @@
 
 import vox_math
 
-class PhysXCharacterController {
+class PhysXCharacterController: PhysXCollider {
     var _id: UInt32!
     var _pxController: CPxController!
     var _pxManager: PhysXPhysicsManager!

@@ -115,6 +115,16 @@ extension ComponentsManager {
         }
     }
 
+    func callScriptOnPhysicsUpdate() {
+        let elements = _onUpdateScripts._elements
+        for i in 0..<_onUpdateScripts.length {
+            let element = elements[i]!
+            if (!element._waitHandlingInValid && element._started) {
+                element.onPhysicsUpdate();
+            }
+        }
+    }
+
     func callCameraOnBeginRender(_ camera: Camera) {
         let camComps = camera.entity._scripts
         for i in 0..<camComps.length {

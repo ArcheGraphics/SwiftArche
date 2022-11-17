@@ -22,6 +22,7 @@ public class Engine: NSObject {
 
     public var device: MTLDevice
     public var sceneManager: SceneManager!
+    public var physicsManager: PhysicsManager!
 
     public init(canvas: Canvas, session: ARSession? = nil) {
         self.session = session
@@ -46,6 +47,7 @@ public class Engine: NSObject {
 
         super.init()
         sceneManager = SceneManager(engine: self)
+        physicsManager = PhysicsManager(engine: self)
         canvas.delegate = self
         session?.delegate = self
     }

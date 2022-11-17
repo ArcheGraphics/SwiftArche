@@ -114,7 +114,7 @@ class PhysXPhysicsManager {
         _pxScene.removeActor(with: collider._pxActor)
     }
 
-    func addCharacterController(characterController: PhysXCharacterController) {
+    func addCharacterController(_ characterController: PhysXCharacterController) {
         let lastPXManager = characterController._pxManager
         let shape = characterController._shape
         if (shape != nil) {
@@ -129,7 +129,7 @@ class PhysXPhysicsManager {
         characterController._pxManager = self
     }
 
-    func removeCharacterController(characterController: PhysXCharacterController) {
+    func removeCharacterController(_ characterController: PhysXCharacterController) {
         if (characterController._shape != nil) {
             _pxScene.removeActor(with: characterController._pxController.getActor())
         }
