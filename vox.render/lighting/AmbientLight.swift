@@ -59,7 +59,7 @@ public class AmbientLight {
             Vector3(_envMapLight.diffuse)
         }
         set {
-            _envMapLight.diffuse = newValue.internalVector3
+            _envMapLight.diffuse = newValue.internalValue
         }
     }
 

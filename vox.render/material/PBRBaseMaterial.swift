@@ -45,7 +45,7 @@ public class PBRBaseMaterial: BaseMaterial {
         }
 
         set {
-            _pbrBaseData.baseColor = newValue.internalColor
+            _pbrBaseData.baseColor = newValue.internalValue
             shaderData.setData(PBRBaseMaterial._pbrBaseProp, _pbrBaseData)
         }
     }
@@ -109,7 +109,7 @@ public class PBRBaseMaterial: BaseMaterial {
         }
 
         set {
-            _pbrBaseData.emissiveColor = newValue.internalVector3
+            _pbrBaseData.emissiveColor = newValue.internalValue
             shaderData.setData(PBRBaseMaterial._pbrBaseProp, _pbrBaseData)
         }
     }
@@ -185,7 +185,7 @@ public class PBRBaseMaterial: BaseMaterial {
         }
 
         set {
-            _pbrBaseData.tilingOffset = newValue.internalVector4
+            _pbrBaseData.tilingOffset = newValue.internalValue
             shaderData.setData(PBRBaseMaterial._pbrBaseProp, _pbrBaseData)
         }
     }

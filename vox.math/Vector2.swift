@@ -23,6 +23,12 @@ public struct Vector2 {
         }
     }
 
+    public var internalValue: SIMD2<Float> {
+        get {
+            elements
+        }
+    }
+
     /// Constructor of Vector2.
     /// - Parameters:
     ///   - x: The x component of the vector, default 0

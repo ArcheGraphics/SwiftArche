@@ -4,5 +4,10 @@
 //  personal capacity and am not conveying any rights to any intellectual
 //  property of any third parties.
 
-#import "macro_name.h"
-#import "type_common.h"
+import vox_math
+
+extension CPxTolerancesScale {
+    static func new() -> CPxTolerancesScale {
+        CPxTolerancesScale(length: 1.0, speed: 10.0)
+    }
+}

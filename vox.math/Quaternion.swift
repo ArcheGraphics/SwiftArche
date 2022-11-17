@@ -46,6 +46,12 @@ public struct Quaternion {
         }
     }
 
+    public var internalValue: simd_quatf {
+        get {
+            elements
+        }
+    }
+
     /// Constructor of Quaternion.
     /// - Parameters:
     ///   - x: The x component of the quaternion, default 0

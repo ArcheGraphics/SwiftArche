@@ -29,7 +29,7 @@ public struct Vector3 {
         }
     }
     
-    public var internalVector3: SIMD3<Float> {
+    public var internalValue: SIMD3<Float> {
         get {
             elements
         }

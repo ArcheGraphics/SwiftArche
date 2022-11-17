@@ -20,7 +20,7 @@ public class PointLight: Light {
 
     func _appendData(_ lightIndex: Int) {
         PointLight._combinedData[lightIndex].color = _getLightColor()
-        PointLight._combinedData[lightIndex].position = entity.transform.worldPosition.internalVector3
+        PointLight._combinedData[lightIndex].position = entity.transform.worldPosition.internalValue
         PointLight._combinedData[lightIndex].distance = distance
     }
 

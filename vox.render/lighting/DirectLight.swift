@@ -31,7 +31,7 @@ public class DirectLight: Light {
 
     func _appendData(_ lightIndex: Int) {
         DirectLight._combinedData[lightIndex].color = _getLightColor()
-        DirectLight._combinedData[lightIndex].direction = direction.internalVector3
+        DirectLight._combinedData[lightIndex].direction = direction.internalValue
     }
 
     override func _onEnable() {

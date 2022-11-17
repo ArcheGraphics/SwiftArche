@@ -34,7 +34,7 @@ public struct Vector4 {
         }
     }
     
-    public var internalVector4: SIMD4<Float> {
+    public var internalValue: SIMD4<Float> {
         get {
             elements
         }

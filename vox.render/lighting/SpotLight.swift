@@ -41,8 +41,8 @@ public class SpotLight: Light {
 
     internal func _appendData(_ lightIndex: Int) {
         SpotLight._combinedData[lightIndex].color = _getLightColor()
-        SpotLight._combinedData[lightIndex].position = entity.transform.worldPosition.internalVector3
-        SpotLight._combinedData[lightIndex].direction = direction.internalVector3
+        SpotLight._combinedData[lightIndex].position = entity.transform.worldPosition.internalValue
+        SpotLight._combinedData[lightIndex].direction = direction.internalValue
         SpotLight._combinedData[lightIndex].distance = distance
         SpotLight._combinedData[lightIndex].angleCos = cos(angle)
         SpotLight._combinedData[lightIndex].penumbraCos = cos(angle + penumbra)

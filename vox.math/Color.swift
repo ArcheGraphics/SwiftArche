@@ -36,7 +36,7 @@ public struct Color {
         }
     }
     
-    public var internalColor: SIMD4<Float> {
+    public var internalValue: SIMD4<Float> {
         get {
             elements
         }

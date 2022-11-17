@@ -22,7 +22,7 @@ public class PBRSpecularMaterial: PBRBaseMaterial {
         }
 
         set {
-            _pbrSpecularData.specularColor = newValue.internalVector3
+            _pbrSpecularData.specularColor = newValue.internalValue
             shaderData.setData(PBRSpecularMaterial._pbrSpecularProp, _pbrSpecularData)
         }
     }
