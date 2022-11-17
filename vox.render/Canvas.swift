@@ -31,6 +31,7 @@ public class Canvas: MTKView {
     }
 
     // MARK: - RawEvent
+
     public override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
     }
 

@@ -84,17 +84,17 @@ extension BoundingFrustum {
     public func getPlane(face: FrustumFace) -> Plane {
         switch (face) {
         case FrustumFace.Near:
-            return near;
+            return near
         case FrustumFace.Far:
-            return far;
+            return far
         case FrustumFace.Left:
-            return left;
+            return left
         case FrustumFace.Right:
-            return right;
+            return right
         case FrustumFace.Bottom:
-            return bottom;
+            return bottom
         case FrustumFace.Top:
-            return top;
+            return top
         }
     }
 

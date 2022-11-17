@@ -405,41 +405,41 @@ extension Transform {
     ///   - worldUp: Up direction in world space, default is Vector3(0, 1, 0)
     func lookAt(targetPosition: Vector3, worldUp: Vector3?) {
         var zAxis = worldPosition - targetPosition
-        var axisLen = zAxis.length();
+        var axisLen = zAxis.length()
         if (axisLen <= MathUtil.zeroTolerance) {
             // The current position and the target position are almost the same.
-            return;
+            return
         }
         zAxis /= axisLen
         var xAxis = Vector3()
         if (worldUp != nil) {
-            xAxis = Vector3.cross(left: worldUp!, right: zAxis);
+            xAxis = Vector3.cross(left: worldUp!, right: zAxis)
         } else {
-            _ = xAxis.set(x: zAxis.z, y: 0, z: -zAxis.x);
+            _ = xAxis.set(x: zAxis.z, y: 0, z: -zAxis.x)
         }
-        axisLen = xAxis.length();
+        axisLen = xAxis.length()
         if (axisLen <= MathUtil.zeroTolerance) {
             // @todo:
             // 1.worldUp is（0,0,0）
             // 2.worldUp is parallel to zAxis
-            return;
+            return
         }
         xAxis /= axisLen
-        let yAxis = Vector3.cross(left: zAxis, right: xAxis);
+        let yAxis = Vector3.cross(left: zAxis, right: xAxis)
 
         var rotMat = Matrix()
-        rotMat.elements.columns.0[0] = xAxis.x;
-        rotMat.elements.columns.0[1] = xAxis.y;
-        rotMat.elements.columns.0[2] = xAxis.z;
+        rotMat.elements.columns.0[0] = xAxis.x
+        rotMat.elements.columns.0[1] = xAxis.y
+        rotMat.elements.columns.0[2] = xAxis.z
 
-        rotMat.elements.columns.1[0] = yAxis.x;
-        rotMat.elements.columns.1[1] = yAxis.y;
-        rotMat.elements.columns.1[2] = yAxis.z;
+        rotMat.elements.columns.1[0] = yAxis.x
+        rotMat.elements.columns.1[1] = yAxis.y
+        rotMat.elements.columns.1[2] = yAxis.z
 
-        rotMat.elements.columns.2[0] = zAxis.x;
-        rotMat.elements.columns.2[1] = zAxis.y;
-        rotMat.elements.columns.2[2] = zAxis.z;
-        _worldRotationQuaternion = rotMat.getRotation();
+        rotMat.elements.columns.2[0] = zAxis.x
+        rotMat.elements.columns.2[1] = zAxis.y
+        rotMat.elements.columns.2[2] = zAxis.z
+        _worldRotationQuaternion = rotMat.getRotation()
     }
 
     /// Register world transform change flag.
@@ -460,15 +460,15 @@ extension Transform {
     }
 
     internal func _isFrontFaceInvert() -> Bool {
-        let scale = lossyWorldScale;
-        var isInvert = scale.x < 0;
+        let scale = lossyWorldScale
+        var isInvert = scale.x < 0
         if scale.y < 0 {
             isInvert = !isInvert
         }
         if scale.z < 0 {
             isInvert = !isInvert
         }
-        return isInvert;
+        return isInvert
     }
 
 
@@ -613,7 +613,7 @@ extension Transform {
 
     private func _translate(_ translation: Vector3, _ relativeToLocal: Bool = true) {
         if (relativeToLocal) {
-            _worldPosition += Vector3.transformByQuat(v: translation, quaternion: worldRotationQuaternion);
+            _worldPosition += Vector3.transformByQuat(v: translation, quaternion: worldRotationQuaternion)
         } else {
             _worldPosition += translation
         }

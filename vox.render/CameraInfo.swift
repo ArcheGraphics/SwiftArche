@@ -7,12 +7,12 @@
 import vox_math
 
 class CameraInfo {
-    var position: Vector3 = Vector3();
-    var viewMatrix: Matrix = Matrix();
-    var projectionMatrix: Matrix = Matrix();
-    var viewProjectionMatrix: Matrix = Matrix();
+    var position: Vector3 = Vector3()
+    var viewMatrix: Matrix = Matrix()
+    var projectionMatrix: Matrix = Matrix()
+    var viewProjectionMatrix: Matrix = Matrix()
 
-    var isOrthographic: Bool = false;
+    var isOrthographic: Bool = false
     /// Only orthography mode use.
-    var forward: Vector3 = Vector3();
+    var forward: Vector3 = Vector3()
 }

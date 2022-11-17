@@ -7,7 +7,7 @@
 import Foundation
 
 /// Determines which type of shadows should be used.
-public enum ShadowType : Int {
+public enum ShadowType: Int {
     /// Disable Shadows.
     case None = 0
     /// Hard Shadows Only.

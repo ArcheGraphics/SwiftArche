@@ -12,7 +12,7 @@ public class PointLight: Light {
     private static var _combinedData: [PointLightData] = [PointLightData](repeating: PointLightData(), count: Light._maxLight)
 
     static func _updateShaderData(_ shaderData: ShaderData) {
-        shaderData.setData(PointLight._pointLightProperty, PointLight._combinedData);
+        shaderData.setData(PointLight._pointLightProperty, PointLight._combinedData)
     }
 
     /// Defines a distance cutoff at which the light's intensity must be considered zero.

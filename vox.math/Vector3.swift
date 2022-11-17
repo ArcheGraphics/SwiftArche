@@ -28,7 +28,7 @@ public struct Vector3 {
             elements.z
         }
     }
-    
+
     public var internalValue: SIMD3<Float> {
         get {
             elements
@@ -190,7 +190,7 @@ extension Vector3 {
     ///   - t: The blend amount where 0 returns left and 1 right
     /// - Returns: The result of linear blending between two vectors
     public static func lerp(left: Vector3, right: Vector3, t: Float) -> Vector3 {
-        Vector3(mix(left.elements, right.elements, t: t));
+        Vector3(mix(left.elements, right.elements, t: t))
     }
 
     /// Calculate a vector containing the largest components of the specified vectors.

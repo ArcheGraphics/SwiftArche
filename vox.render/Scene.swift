@@ -278,7 +278,7 @@ extension Scene {
             }
         }
     }
-    
+
     func _updateShaderData() {
         let lightManager = _engine._lightManager
 

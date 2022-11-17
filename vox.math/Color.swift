@@ -35,7 +35,7 @@ public struct Color {
             elements.w
         }
     }
-    
+
     public var internalValue: SIMD4<Float> {
         get {
             elements
@@ -213,22 +213,22 @@ extension Color {
     /// Gets the brightness.
     /// - Returns: The Hue-Saturation-Brightness (HSB) saturation for this
     public func getBrightness() -> Float {
-        var max = r;
-        var min = r;
+        var max = r
+        var min = r
         if (g > max) {
-            max = g;
+            max = g
         }
         if (b > max) {
-            max = b;
+            max = b
         }
 
         if (g < min) {
-            min = g;
+            min = g
         }
         if (b < min) {
-            min = b;
+            min = b
         }
 
-        return (max + min) / 2;
+        return (max + min) / 2
     }
 }

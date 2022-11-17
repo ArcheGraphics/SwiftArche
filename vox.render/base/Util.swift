@@ -16,13 +16,13 @@ func removeFromArray<T: AnyObject>(array: inout [T], item: T) -> Bool {
         v === item
     }
     if (index == nil) {
-        return false;
+        return false
     }
-    let last = array.count - 1;
+    let last = array.count - 1
     if (index! != last) {
-        let end = array[last];
-        array[index!] = end;
+        let end = array[last]
+        array[index!] = end
     }
-    array.removeLast();
-    return true;
+    array.removeLast()
+    return true
 }

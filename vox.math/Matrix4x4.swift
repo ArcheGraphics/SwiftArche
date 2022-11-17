@@ -126,7 +126,7 @@ extension Matrix {
         matrix.elements.columns.3[0] = translation.x
         matrix.elements.columns.3[1] = translation.y
         matrix.elements.columns.3[2] = translation.z
-        return matrix;
+        return matrix
     }
 
     /// Calculate an affine matrix.
@@ -372,7 +372,7 @@ extension Matrix {
         let x = v.x
         let y = v.y
         let z = v.z
-        var elements = simd_float4x4();
+        var elements = simd_float4x4()
         elements.columns.0 = m.elements.columns.0
         elements.columns.1 = m.elements.columns.1
         elements.columns.2 = m.elements.columns.2

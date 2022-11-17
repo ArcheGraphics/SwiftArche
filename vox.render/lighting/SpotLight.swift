@@ -12,7 +12,7 @@ public class SpotLight: Light {
     private static var _combinedData: [SpotLightData] = [SpotLightData](repeating: SpotLightData(), count: Light._maxLight)
 
     static func _updateShaderData(_ shaderData: ShaderData) {
-        shaderData.setData(SpotLight._directLightProperty, SpotLight._combinedData);
+        shaderData.setData(SpotLight._directLightProperty, SpotLight._combinedData)
     }
 
     /// Defines a distance cutoff at which the light's intensity must be considered zero.
@@ -35,8 +35,8 @@ public class SpotLight: Light {
     }
 
     override func _getShadowProjectionMatrix() -> Matrix {
-        let fov = Swift.min(Float.pi / 2, angle * 2 * sqrt(2));
-        return Matrix.perspective(fovy: fov, aspect: 1, near: shadowNearPlane, far: distance + shadowNearPlane);
+        let fov = Swift.min(Float.pi / 2, angle * 2 * sqrt(2))
+        return Matrix.perspective(fovy: fov, aspect: 1, near: shadowNearPlane, far: distance + shadowNearPlane)
     }
 
     internal func _appendData(_ lightIndex: Int) {

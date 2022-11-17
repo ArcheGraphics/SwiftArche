@@ -174,7 +174,7 @@ enum CPxRigidBodyFlag {
 /// @param value The new boolean value for the flag.
 - (void)setRigidDynamicLockFlag:(enum CPxRigidDynamicLockFlag)flag value:(bool)value;
 
-- (void)setRigidDynamicLockFlags:(int) flags;
+- (void)setRigidDynamicLockFlags:(int)flags;
 
 /// Sets the wake counter for the actor.
 /// @param wakeCounterValue Wake counter value.

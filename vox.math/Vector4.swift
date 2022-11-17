@@ -33,7 +33,7 @@ public struct Vector4 {
             elements.w
         }
     }
-    
+
     public var internalValue: SIMD4<Float> {
         get {
             elements

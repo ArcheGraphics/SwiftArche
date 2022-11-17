@@ -23,12 +23,12 @@ class PhysXCapsuleColliderShape: PhysXColliderShape {
         _halfHeight = height * 0.5
         super.init()
 
-        _axis = Quaternion(0, 0, PhysXColliderShape.halfSqrt, PhysXColliderShape.halfSqrt);
+        _axis = Quaternion(0, 0, PhysXColliderShape.halfSqrt, PhysXColliderShape.halfSqrt)
         _physxRotation = _axis!
 
         _pxGeometry = CPxCapsuleGeometry(radius: _radius, halfHeight: _halfHeight)
-        _initialize(material, uniqueID);
-        _setLocalPose();
+        _initialize(material, uniqueID)
+        _setLocalPose()
     }
 
     func setRadius(_ value: Float) {
@@ -47,7 +47,7 @@ class PhysXCapsuleColliderShape: PhysXColliderShape {
         _pxShape.setGeometry(_pxGeometry)
 
         for i in 0..<_controllers.length {
-            (_controllers.get(i)!._pxController as! CPxCapsuleController).setRadius(value);
+            (_controllers.get(i)!._pxController as! CPxCapsuleController).setRadius(value)
         }
     }
 
@@ -67,7 +67,7 @@ class PhysXCapsuleColliderShape: PhysXColliderShape {
         _pxShape.setGeometry(_pxGeometry)
 
         for i in 0..<_controllers.length {
-            (_controllers.get(i)!._pxController as! CPxCapsuleController).setHeight(value);
+            (_controllers.get(i)!._pxController as! CPxCapsuleController).setHeight(value)
         }
     }
 
@@ -78,15 +78,15 @@ class PhysXCapsuleColliderShape: PhysXColliderShape {
             _ = _axis!.set(x: 0, y: 0, z: 0, w: 1)
             break
         case ColliderShapeUpAxis.Y:
-            _ = _axis!.set(x: 0, y: 0, z: PhysXColliderShape.halfSqrt, w: PhysXColliderShape.halfSqrt);
+            _ = _axis!.set(x: 0, y: 0, z: PhysXColliderShape.halfSqrt, w: PhysXColliderShape.halfSqrt)
             break
         case ColliderShapeUpAxis.Z:
-            _ = _axis!.set(x: 0, y: PhysXColliderShape.halfSqrt, z: 0, w: PhysXColliderShape.halfSqrt);
+            _ = _axis!.set(x: 0, y: PhysXColliderShape.halfSqrt, z: 0, w: PhysXColliderShape.halfSqrt)
             break
         }
 
         if (_rotation != nil) {
-            _physxRotation = Quaternion.rotationYawPitchRoll(yaw: _rotation!.x, pitch: _rotation!.y, roll: _rotation!.z);
+            _physxRotation = Quaternion.rotationYawPitchRoll(yaw: _rotation!.x, pitch: _rotation!.y, roll: _rotation!.z)
             _physxRotation = _physxRotation * _axis!
         } else {
             _physxRotation = _axis!

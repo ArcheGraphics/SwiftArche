@@ -10,7 +10,7 @@ import vox_math
 /// Ambient light.
 public class AmbientLight {
     private var _envMapLight = EnvMapLight(diffuse: vector_float3(0.212, 0.227, 0.259), mipMapLevel: 0,
-                                           diffuseIntensity: 1.0, specularIntensity: 1.0)
+            diffuseIntensity: 1.0, specularIntensity: 1.0)
     private static let _envMapProperty = "u_envMapLight"
 
     private var _diffuseSphericalHarmonics: SphericalHarmonics3?

@@ -11,11 +11,11 @@ public class Script: Component {
     var _started: Bool = false
     var _onStartIndex: Int = -1
     var _onUpdateIndex: Int = -1
-    var _onPhysicsUpdateIndex: Int = -1;
+    var _onPhysicsUpdateIndex: Int = -1
     var _onPreRenderIndex: Int = -1
     var _onPostRenderIndex: Int = -1
-    var _entityScriptsIndex: Int = -1;
-    var _waitHandlingInValid: Bool = false;
+    var _entityScriptsIndex: Int = -1
+    var _waitHandlingInValid: Bool = false
 
     /// Called when be enabled first time, only once.
     public func onAwake() {
@@ -130,7 +130,7 @@ public class Script: Component {
 
     override func _onEnable() {
         if (_waitHandlingInValid) {
-            _waitHandlingInValid = false;
+            _waitHandlingInValid = false
         } else {
             let componentsManager = engine._componentsManager
             if (!_started) {
@@ -143,20 +143,20 @@ public class Script: Component {
     }
 
     override func _onDisable() {
-        _waitHandlingInValid = true;
-        _engine._componentsManager.addDisableScript(component: self);
+        _waitHandlingInValid = true
+        _engine._componentsManager.addDisableScript(component: self)
         onDisable()
     }
 
     override func _onDestroy() {
-        _engine._componentsManager.addDestroyScript(component: self);
+        _engine._componentsManager.addDestroyScript(component: self)
     }
 
     func _handlingInValid() {
-        let componentsManager = engine._componentsManager;
-        componentsManager.removeOnUpdateScript(self);
+        let componentsManager = engine._componentsManager
+        componentsManager.removeOnUpdateScript(self)
 
-        _entity._removeScript(self);
-        _waitHandlingInValid = false;
+        _entity._removeScript(self)
+        _waitHandlingInValid = false
     }
 }

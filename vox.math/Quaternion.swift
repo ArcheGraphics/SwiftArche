@@ -149,7 +149,7 @@ extension Quaternion {
     ///   - rad: The rotation angle in radians
     /// - Returns: The quaternion after rotate
     public static func rotationAxisAngle(axis: Vector3, rad: Float) -> Quaternion {
-        var axis = axis;
+        var axis = axis
         return Quaternion(simd_quatf(angle: rad, axis: axis.normalize().elements))
     }
 

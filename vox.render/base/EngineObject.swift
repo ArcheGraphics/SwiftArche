@@ -29,6 +29,6 @@ public class EngineObject {
     }
 
     deinit {
-        // _engine.resourceManager?._deleteAsset(this);
+        // _engine.resourceManager?._deleteAsset(this)
     }
 }

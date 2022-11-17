@@ -8,11 +8,11 @@ import Metal
 
 public class DevicePipeline {
     static func _compareFromNearToFar(a: RenderElement, b: RenderElement) -> Bool {
-        a.renderer.priority > b.renderer.priority || a.renderer._distanceForSort > b.renderer._distanceForSort;
+        a.renderer.priority > b.renderer.priority || a.renderer._distanceForSort > b.renderer._distanceForSort
     }
 
     static func _compareFromFarToNear(a: RenderElement, b: RenderElement) -> Bool {
-        a.renderer.priority > b.renderer.priority || b.renderer._distanceForSort > a.renderer._distanceForSort;
+        a.renderer.priority > b.renderer.priority || b.renderer._distanceForSort > a.renderer._distanceForSort
     }
 
     var camera: Camera
@@ -38,7 +38,7 @@ public class DevicePipeline {
     }
 
     func callRender(_ cameraInfo: CameraInfo) {
-        let renderers = camera.engine._componentsManager._renderers;
+        let renderers = camera.engine._componentsManager._renderers
         for i in 0..<renderers.length {
             let renderer = renderers.get(i)!
 

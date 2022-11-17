@@ -9,12 +9,12 @@ import vox_math
 
 public class PBRBaseMaterial: BaseMaterial {
     private var _pbrBaseData = PBRBaseData(baseColor: vector_float4(1, 1, 1, 1),
-                                           emissiveColor: vector_float3(0, 0, 0),
-                                           normalTextureIntensity: 1,
-                                           occlusionTextureIntensity: 1,
-                                           occlusionTextureCoord: TextureCoordinate.UV0.rawValue,
-                                           clearCoat: 0, clearCoatRoughness: 0,
-                                           tilingOffset: vector_float4(1, 1, 0, 0))
+            emissiveColor: vector_float3(0, 0, 0),
+            normalTextureIntensity: 1,
+            occlusionTextureIntensity: 1,
+            occlusionTextureCoord: TextureCoordinate.UV0.rawValue,
+            clearCoat: 0, clearCoatRoughness: 0,
+            tilingOffset: vector_float4(1, 1, 0, 0))
     private static let _pbrBaseProp = "u_pbrBase"
 
     private var _baseTexture: MTLTexture?

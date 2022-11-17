@@ -22,13 +22,13 @@ class UpdateFlag {
     }
 
     func destroy() {
-        _removeFromManagers();
-        _flagManagers = [];
+        _removeFromManagers()
+        _flagManagers = []
     }
 
     private func _removeFromManagers() {
         for flagManager in _flagManagers {
-            _ = removeFromArray(array: &flagManager._updateFlags, item: self);
+            _ = removeFromArray(array: &flagManager._updateFlags, item: self)
         }
     }
 }

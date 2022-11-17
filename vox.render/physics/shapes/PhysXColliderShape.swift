@@ -89,8 +89,8 @@ class PhysXColliderShape {
     }
 
     func _initialize(_ material: PhysXPhysicsMaterial, _ id: UInt32) {
-        _id = id;
-        _pxMaterial = material._pxMaterial;
+        _id = id
+        _pxMaterial = material._pxMaterial
         _pxShape = PhysXPhysics._pxPhysics.createShape(
                 with: _pxGeometry,
                 material: material._pxMaterial,

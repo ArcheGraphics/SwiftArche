@@ -169,7 +169,7 @@
     static_cast<PxRigidDynamic *>(super.c_actor)->setRigidDynamicLockFlag(PxRigidDynamicLockFlag::Enum(flag), value);
 }
 
-- (void)setRigidDynamicLockFlags:(int) flags {
+- (void)setRigidDynamicLockFlags:(int)flags {
     static_cast<PxRigidDynamic *>(super.c_actor)->setRigidDynamicLockFlags(PxRigidDynamicLockFlags(flags));
 }
 

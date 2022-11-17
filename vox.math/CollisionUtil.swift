@@ -15,17 +15,17 @@ public class CollisionUtil {
     ///   - p3: Plane 3
     /// - Returns: intersection point
     public static func intersectionPointThreePlanes(p1: Plane, p2: Plane, p3: Plane) -> Vector3 {
-        let p1Nor = p1.normal;
-        let p2Nor = p2.normal;
-        let p3Nor = p3.normal;
+        let p1Nor = p1.normal
+        let p2Nor = p2.normal
+        let p3Nor = p3.normal
 
-        var tempVec30 = Vector3.cross(left: p2Nor, right: p3Nor);
-        var tempVec31 = Vector3.cross(left: p3Nor, right: p1Nor);
-        var tempVec32 = Vector3.cross(left: p1Nor, right: p2Nor);
+        var tempVec30 = Vector3.cross(left: p2Nor, right: p3Nor)
+        var tempVec31 = Vector3.cross(left: p3Nor, right: p1Nor)
+        var tempVec32 = Vector3.cross(left: p1Nor, right: p2Nor)
 
-        let a = -Vector3.dot(left: p1Nor, right: tempVec30);
-        let b = -Vector3.dot(left: p2Nor, right: tempVec31);
-        let c = -Vector3.dot(left: p3Nor, right: tempVec32);
+        let a = -Vector3.dot(left: p1Nor, right: tempVec30)
+        let b = -Vector3.dot(left: p2Nor, right: tempVec31)
+        let c = -Vector3.dot(left: p3Nor, right: tempVec32)
 
         tempVec30 *= p1.distance / a
         tempVec31 *= p2.distance / b

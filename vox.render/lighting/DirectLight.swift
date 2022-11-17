@@ -12,7 +12,7 @@ public class DirectLight: Light {
     private static var _combinedData: [DirectLightData] = [DirectLightData](repeating: DirectLightData(), count: Light._maxLight)
 
     static func _updateShaderData(_ shaderData: ShaderData) {
-        shaderData.setData(DirectLight._directLightProperty, DirectLight._combinedData);
+        shaderData.setData(DirectLight._directLightProperty, DirectLight._combinedData)
     }
 
     /// Get direction.

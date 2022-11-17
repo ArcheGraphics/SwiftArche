@@ -50,8 +50,8 @@ public class Camera: Component {
     private var _isInvViewProjDirty: BoolUpdateFlag
     private var _viewport: Vector4 = Vector4(0, 0, 1, 1)
     private var _lastAspectSize: Vector2 = Vector2(0, 0)
-    private var _invViewProjMat: Matrix = Matrix();
-    private var _inverseProjectionMatrix: Matrix = Matrix();
+    private var _invViewProjMat: Matrix = Matrix()
+    private var _inverseProjectionMatrix: Matrix = Matrix()
 
     /// Near clip plane - the closest point to the camera when rendering occurs.
     public var nearClipPlane: Float {
@@ -140,7 +140,7 @@ public class Camera: Component {
         get {
             if (_isViewMatrixDirty.flag) {
                 _isViewMatrixDirty.flag = false
-                _cameraInfo.viewMatrix = Matrix.rotationTranslation(quaternion: _transform.worldRotationQuaternion, translation: _transform.worldPosition);
+                _cameraInfo.viewMatrix = Matrix.rotationTranslation(quaternion: _transform.worldRotationQuaternion, translation: _transform.worldPosition)
                 _ = _cameraInfo.viewMatrix.invert()
             }
             return _cameraInfo.viewMatrix
@@ -244,11 +244,11 @@ extension Camera {
     /// - Returns: A point in the viewport space, X and Y are the viewport space coordinates, Z is the viewport depth,
     //    the near clipping plane is 0, the far clipping plane is 1, and W is the world unit distance from the camera
     public func worldToViewportPoint(_ point: Vector3) -> Vector3 {
-        let cameraPoint = Vector3.transformCoordinate(v: point, m: viewMatrix);
-        let viewportPoint = Vector3.transformToVec4(v: cameraPoint, m: projectionMatrix);
+        let cameraPoint = Vector3.transformCoordinate(v: point, m: viewMatrix)
+        let viewportPoint = Vector3.transformToVec4(v: cameraPoint, m: projectionMatrix)
 
-        let w = viewportPoint.w;
-        return Vector3((viewportPoint.x / w + 1.0) * 0.5, (1.0 - viewportPoint.y / w) * 0.5, -cameraPoint.z);
+        let w = viewportPoint.w
+        return Vector3((viewportPoint.x / w + 1.0) * 0.5, (1.0 - viewportPoint.y / w) * 0.5, -cameraPoint.z)
     }
 
     /// Transform a point from viewport space to world space.
@@ -257,20 +257,20 @@ extension Camera {
     ///   The near clipping plane is 0, and the far clipping plane is 1
     /// - Returns: Point in world space
     public func viewportToWorldPoint(_ point: Vector3) -> Vector3 {
-        let nf = 1 / (nearClipPlane - farClipPlane);
+        let nf = 1 / (nearClipPlane - farClipPlane)
 
-        var z: Float;
+        var z: Float
         if (isOrthographic) {
-            z = -point.z * 2 * nf;
-            z += (farClipPlane + nearClipPlane) * nf;
+            z = -point.z * 2 * nf
+            z += (farClipPlane + nearClipPlane) * nf
         } else {
-            let pointZ = point.z;
-            z = -pointZ * (nearClipPlane + farClipPlane) * nf;
-            z += 2 * nearClipPlane * farClipPlane * nf;
-            z = z / pointZ;
+            let pointZ = point.z
+            z = -pointZ * (nearClipPlane + farClipPlane) * nf
+            z += 2 * nearClipPlane * farClipPlane * nf
+            z = z / pointZ
         }
 
-        return _innerViewportToWorldPoint(point.x, point.y, (z + 1.0) / 2.0, invViewProjMat);
+        return _innerViewportToWorldPoint(point.x, point.y, (z + 1.0) / 2.0, invViewProjMat)
     }
 
     /// Generate a ray by a point in viewport.
@@ -280,12 +280,12 @@ extension Camera {
     /// - Returns: Ray
     public func viewportPointToRay(_ point: Vector2, _ out: Ray) -> Ray {
         // Use the intersection of the near clipping plane as the origin point.
-        out.origin = _innerViewportToWorldPoint(point.x, point.y, 0.0, invViewProjMat);
+        out.origin = _innerViewportToWorldPoint(point.x, point.y, 0.0, invViewProjMat)
         // Use the intersection of the far clipping plane as the origin point.
-        out.direction = _innerViewportToWorldPoint(point.x, point.y, 1.0, invViewProjMat);
+        out.direction = _innerViewportToWorldPoint(point.x, point.y, 1.0, invViewProjMat)
         out.direction = out.direction - out.origin
-        _ = out.direction.normalize();
-        return out;
+        _ = out.direction.normalize()
+        return out
     }
 
     /// Transform the X and Y coordinates of a point from screen space to viewport space
@@ -398,7 +398,7 @@ extension Camera {
         // Depth is a normalized value, 0 is nearPlane, 1 is farClipPlane.
         // Transform to clipping space matrix
         let clipPoint = Vector3(x * 2 - 1, 1 - y * 2, z * 2 - 1)
-        return Vector3.transformCoordinate(v: clipPoint, m: invViewProjMat);
+        return Vector3.transformCoordinate(v: clipPoint, m: invViewProjMat)
     }
 
     private func _updateShaderData() {

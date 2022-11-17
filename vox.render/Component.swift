@@ -11,7 +11,7 @@ public class Component: EngineObject {
     var _entity: Entity
     var _awoken: Bool = false
 
-    private var _phasedActive: Bool = false;
+    private var _phasedActive: Bool = false
     private var _enabled: Bool = true
 
     required init(_ entity: Entity) {
@@ -82,20 +82,20 @@ public class Component: EngineObject {
         if (value) {
             // Awake condition is un awake && current entity is active in hierarchy
             if (!_awoken && entity._isActiveInHierarchy) {
-                _awoken = true;
-                _onAwake();
+                _awoken = true
+                _onAwake()
             }
             // Developer maybe do `isActive = false` in `onAwake` method
             // Enable condition is phased active state is false && current compoment is active in hierarchy
             if (!_phasedActive && entity._isActiveInHierarchy && _enabled) {
-                _phasedActive = true;
-                _onEnable();
+                _phasedActive = true
+                _onEnable()
             }
         } else {
             // Disable condition is phased active state is true && current compoment is inActive in hierarchy
             if (_phasedActive && !(entity._isActiveInHierarchy && _enabled)) {
-                _phasedActive = false;
-                _onDisable();
+                _phasedActive = false
+                _onDisable()
             }
         }
     }

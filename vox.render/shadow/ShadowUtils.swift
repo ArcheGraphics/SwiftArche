@@ -358,6 +358,6 @@ class ShadowUtils {
         slice.columns.3[3] = 1
 
         let offset = cascadeIndex * 16
-         Utils._floatMatrixMultiply(slice, outShadowMatrices, offset, &outShadowMatrices, offset)
+        Utils._floatMatrixMultiply(slice, outShadowMatrices, offset, &outShadowMatrices, offset)
     }
 }

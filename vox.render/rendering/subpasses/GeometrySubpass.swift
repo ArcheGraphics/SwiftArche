@@ -19,14 +19,14 @@ public class GeometrySubpass: Subpass {
     }
 
     override func draw(_ encoder: MTLRenderCommandEncoder) {
-        encoder.pushDebugGroup("Draw Element");
+        encoder.pushDebugGroup("Draw Element")
         drawElement(encoder)
-        encoder.popDebugGroup();
+        encoder.popDebugGroup()
     }
 
     func _drawElement(_ encoder: MTLRenderCommandEncoder, _ element: RenderElement) {
         let pipeline = _renderPass.pipeline!
-        let mesh = element.mesh;
+        let mesh = element.mesh
         let subMesh = element.subMesh
 
         let pipelineDescriptor = MTLRenderPipelineDescriptor()
@@ -36,9 +36,9 @@ public class GeometrySubpass: Subpass {
         ShaderMacroCollection.unionCollection(element.material.shaderData._macroCollection,
                 element.renderer.shaderData._macroCollection, shaderMacro)
 
-        let functions = pipeline._resourceCache.requestShaderModule(element.shaderPass, shaderMacro);
-        pipelineDescriptor.vertexFunction = functions[0];
-        pipelineDescriptor.fragmentFunction = functions[1];
+        let functions = pipeline._resourceCache.requestShaderModule(element.shaderPass, shaderMacro)
+        pipelineDescriptor.vertexFunction = functions[0]
+        pipelineDescriptor.fragmentFunction = functions[1]
 
         pipelineDescriptor.vertexDescriptor = mesh._vertexDescriptor
         element.shaderPass.renderState!._apply(pipelineDescriptor, depthStencilDescriptor, encoder, false)
@@ -51,7 +51,7 @@ public class GeometrySubpass: Subpass {
         encoder.setRenderPipelineState(pso.handle)
 
         encoder.setDepthStencilState(pipeline._resourceCache.requestDepthStencilState(depthStencilDescriptor))
-        var index = 0;
+        var index = 0
         for buffer in mesh._vertexBufferBindings {
             encoder.setVertexBuffer(buffer, offset: 0, index: index)
             index += 1

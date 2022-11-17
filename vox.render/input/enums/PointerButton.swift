@@ -52,4 +52,4 @@ let _pointerDec2BinMap = [
     PointerButton.XButton6,
     PointerButton.XButton7,
     PointerButton.XButton8
-];
+]

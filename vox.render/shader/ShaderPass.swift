@@ -42,7 +42,7 @@ public class ShaderPass {
             target.destinationAlphaBlendFactor = .oneMinusSourceAlpha
             target.colorBlendOperation = .add
             target.alphaBlendOperation = .add
-            break;
+            break
         case BlendMode.Additive:
             target.sourceColorBlendFactor = .sourceAlpha
             target.destinationColorBlendFactor = .one
@@ -50,7 +50,7 @@ public class ShaderPass {
             target.destinationAlphaBlendFactor = .oneMinusSourceAlpha
             target.colorBlendOperation = .add
             target.alphaBlendOperation = .add
-            break;
+            break
         }
     }
 
@@ -59,29 +59,29 @@ public class ShaderPass {
     public func setRenderFace(_ renderFace: RenderFace) {
         switch (renderFace) {
         case RenderFace.Front:
-            _renderState!.rasterState.cullMode = .back;
-            break;
+            _renderState!.rasterState.cullMode = .back
+            break
         case RenderFace.Back:
-            _renderState!.rasterState.cullMode = .front;
-            break;
+            _renderState!.rasterState.cullMode = .front
+            break
         case RenderFace.Double:
-            _renderState!.rasterState.cullMode = .none;
-            break;
+            _renderState!.rasterState.cullMode = .none
+            break
         }
     }
 
     /// Set if is transparent of the shader pass render state.
     /// - Parameter type: RenderQueueType
     func setRenderQueueType(_ type: RenderQueueType) {
-        _renderState!.renderQueueType = RenderQueueType.Transparent;
+        _renderState!.renderQueueType = RenderQueueType.Transparent
         switch type {
         case RenderQueueType.Transparent:
-            _renderState!.blendState.targetBlendState.enabled = true;
-            _renderState!.depthState.writeEnabled = false;
+            _renderState!.blendState.targetBlendState.enabled = true
+            _renderState!.depthState.writeEnabled = false
             break
         case RenderQueueType.Opaque, RenderQueueType.AlphaTest:
-            _renderState!.blendState.targetBlendState.enabled = false;
-            _renderState!.depthState.writeEnabled = true;
+            _renderState!.blendState.targetBlendState.enabled = false
+            _renderState!.depthState.writeEnabled = true
         }
     }
 

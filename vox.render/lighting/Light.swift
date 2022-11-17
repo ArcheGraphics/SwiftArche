@@ -24,14 +24,14 @@ public class Light: Component {
     /// Shadow intensity, the larger the value, the clearer and darker the shadow.
     public var shadowStrength: Float = 1.0
     // Light Color.
-    public var color: Color = Color(1, 1, 1, 1);
+    public var color: Color = Color(1, 1, 1, 1)
 
-    var _lightIndex: Int = -1;
+    var _lightIndex: Int = -1
 
     /// View matrix.
     public var viewMatrix: Matrix {
         get {
-            Matrix.invert(a: entity.transform.worldMatrix);
+            Matrix.invert(a: entity.transform.worldMatrix)
         }
     }
 

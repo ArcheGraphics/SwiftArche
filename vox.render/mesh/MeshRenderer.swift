@@ -16,7 +16,7 @@ public class MeshRenderer: Renderer {
             _mesh
         }
         set {
-            let lastMesh = _mesh;
+            let lastMesh = _mesh
             if (lastMesh != nil) {
                 let listener = ListenerUpdateFlag()
                 listener.listener = _onMeshChanged
@@ -25,10 +25,10 @@ public class MeshRenderer: Renderer {
             if (newValue != nil) {
                 let listener = ListenerUpdateFlag()
                 listener.listener = _onMeshChanged
-                newValue!._updateFlagManager.addFlag(flag: listener);
+                newValue!._updateFlagManager.addFlag(flag: listener)
                 _dirtyUpdateFlag |= MeshRendererUpdateFlags.All.rawValue
             }
-            _mesh = newValue;
+            _mesh = newValue
         }
     }
 
@@ -64,7 +64,7 @@ public class MeshRenderer: Renderer {
                 if vertexDescriptor.attributes[Int(Color_0.rawValue)].format != .invalid {
                     shaderData.enableMacro(HAS_VERTEXCOLOR)
                 }
-                _dirtyUpdateFlag &= ~MeshRendererUpdateFlags.VertexElementMacro.rawValue;
+                _dirtyUpdateFlag &= ~MeshRendererUpdateFlags.VertexElementMacro.rawValue
             }
 
             let subMeshes = mesh!.subMeshes

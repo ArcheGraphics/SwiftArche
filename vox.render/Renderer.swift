@@ -14,14 +14,14 @@ public class Renderer: Component {
     /// Whether it is clipped by the frustum, needs to be turned on camera.enableFrustumCulling.
     public var isCulled: Bool = false
     /// Whether cast shadow.
-    public var castShadows: Bool = true;
+    public var castShadows: Bool = true
     /// The render priority of the renderer, lower values are rendered first and higher values are rendered last.
     public var priority: Int = 0
 
     var _distanceForSort: Float = 0
     var _onUpdateIndex: Int = -1
     var _rendererIndex: Int = -1
-    var _globalShaderMacro: ShaderMacroCollection = ShaderMacroCollection();
+    var _globalShaderMacro: ShaderMacroCollection = ShaderMacroCollection()
     var _bounds: BoundingBox = BoundingBox(Vector3(), Vector3())
 
     var _materials: [Material?] = []
@@ -39,11 +39,11 @@ public class Renderer: Component {
         set {
             if (_receiveShadows != newValue) {
                 if (newValue) {
-                    shaderData.enableMacro(NEED_RECEIVE_SHADOWS);
+                    shaderData.enableMacro(NEED_RECEIVE_SHADOWS)
                 } else {
-                    shaderData.disableMacro(NEED_RECEIVE_SHADOWS);
+                    shaderData.disableMacro(NEED_RECEIVE_SHADOWS)
                 }
-                _receiveShadows = newValue;
+                _receiveShadows = newValue
             }
         }
     }
@@ -59,10 +59,10 @@ public class Renderer: Component {
     public var bounds: BoundingBox {
         get {
             if (_dirtyUpdateFlag & RendererUpdateFlags.WorldVolume.rawValue != 0) {
-                _updateBounds(&_bounds);
-                _dirtyUpdateFlag &= ~RendererUpdateFlags.WorldVolume.rawValue;
+                _updateBounds(&_bounds)
+                _dirtyUpdateFlag &= ~RendererUpdateFlags.WorldVolume.rawValue
             }
-            return _bounds;
+            return _bounds
         }
     }
 
@@ -148,20 +148,20 @@ public class Renderer: Component {
 
         if (cameraInfo.isOrthographic) {
             boundsCenter = boundsCenter - cameraInfo.position
-            _distanceForSort = Vector3.dot(left: boundsCenter, right: cameraInfo.forward);
+            _distanceForSort = Vector3.dot(left: boundsCenter, right: cameraInfo.forward)
         } else {
-            _distanceForSort = Vector3.distanceSquared(left: boundsCenter, right: cameraInfo.position);
+            _distanceForSort = Vector3.distanceSquared(left: boundsCenter, right: cameraInfo.position)
         }
 
-        _updateShaderData(cameraInfo);
-        _render(renderPipeline);
+        _updateShaderData(cameraInfo)
+        _render(renderPipeline)
 
         // union camera global macro and renderer macro.
         ShaderMacroCollection.unionCollection(
                 renderPipeline.camera._globalShaderMacro,
                 shaderData._macroCollection,
                 _globalShaderMacro
-        );
+        )
     }
 
     func _updateShaderData(_ cameraInfo: CameraInfo) {
@@ -188,7 +188,7 @@ public class Renderer: Component {
     }
 
     func _onTransformChanged(type: Int?, object: AnyObject?) -> Void {
-        _dirtyUpdateFlag |= RendererUpdateFlags.WorldVolume.rawValue;
+        _dirtyUpdateFlag |= RendererUpdateFlags.WorldVolume.rawValue
     }
 }
 

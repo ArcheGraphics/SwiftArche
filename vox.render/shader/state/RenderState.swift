@@ -17,7 +17,7 @@ public class RenderState {
     /// Raster state.
     public var rasterState: RasterState = RasterState()
     /// Render queue type.
-    public var renderQueueType: RenderQueueType = RenderQueueType.Opaque;
+    public var renderQueueType: RenderQueueType = RenderQueueType.Opaque
 
     func _apply(_ pipelineDescriptor: MTLRenderPipelineDescriptor,
                 _ depthStencilDescriptor: MTLDepthStencilDescriptor,

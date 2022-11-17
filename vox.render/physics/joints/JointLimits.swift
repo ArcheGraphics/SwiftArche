@@ -9,14 +9,14 @@ import Foundation
 /// JointLimits is used to limit the joints angle.
 public struct JointLimits {
     /// The upper angular limit (in degrees) of the joint. */
-    var max: Float = 0;
+    var max: Float = 0
     /// The lower angular limit (in degrees) of the joint. */
-    var min: Float = 0;
+    var min: Float = 0
     /// Distance inside the limit value at which the limit will be considered to be active by the solver. */
-    var contactDistance: Float = -1;
+    var contactDistance: Float = -1
 
     /// The spring forces used to reach the target position. */
-    var stiffness: Float = 0;
+    var stiffness: Float = 0
     /// The damper force uses to dampen the spring. */
-    var damping: Float = 0;
+    var damping: Float = 0
 }

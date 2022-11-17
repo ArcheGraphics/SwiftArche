@@ -11,8 +11,8 @@ class ComponentsManager {
     // Script
     private var _onStartScripts: DisorderedArray<Script> = DisorderedArray()
     private var _onUpdateScripts: DisorderedArray<Script> = DisorderedArray()
-    private var _disableScripts: [Script] = [];
-    private var _destroyScripts: [Script] = [];
+    private var _disableScripts: [Script] = []
+    private var _destroyScripts: [Script] = []
 
     // Render
     var _renderers: DisorderedArray<Renderer> = DisorderedArray()
@@ -62,11 +62,11 @@ extension ComponentsManager {
     }
 
     func addDisableScript(component: Script) {
-        _disableScripts.append(component);
+        _disableScripts.append(component)
     }
 
     func addDestroyScript(component: Script) {
-        _destroyScripts.append(component);
+        _destroyScripts.append(component)
     }
 
     //MARK: - Execute Components
@@ -120,7 +120,7 @@ extension ComponentsManager {
         for i in 0..<_onUpdateScripts.length {
             let element = elements[i]!
             if (!element._waitHandlingInValid && element._started) {
-                element.onPhysicsUpdate();
+                element.onPhysicsUpdate()
             }
         }
     }
@@ -140,17 +140,17 @@ extension ComponentsManager {
     }
 
     func handlingInvalidScripts() {
-        var length = _disableScripts.count;
+        var length = _disableScripts.count
         if (length > 0) {
             for disableScript in _disableScripts {
                 if (disableScript._waitHandlingInValid) {
-                    disableScript._handlingInValid();
+                    disableScript._handlingInValid()
                 }
             }
             _disableScripts.removeAll()
         }
 
-        length = _destroyScripts.count;
+        length = _destroyScripts.count
         if (length > 0) {
             for destroyScript in _destroyScripts {
                 destroyScript.onDestroy()

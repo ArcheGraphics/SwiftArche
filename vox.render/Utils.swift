@@ -28,7 +28,7 @@ class Utils {
         oe[offset + 14] = value.columns.3[2]
         oe[offset + 15] = value.columns.3[3]
     }
-    
+
     static func _floatMatrixMultiply(_ le: simd_float4x4, _ re: [Float], _ rOffset: Int,
                                      _ oe: inout [Float], _ offset: Int) {
         let l11 = le.columns.0[0], l12 = le.columns.0[1], l13 = le.columns.0[2], l14 = le.columns.0[3],

@@ -12,16 +12,16 @@ class UpdateFlagManager {
     /// Add a UpdateFlag.
     /// - Parameter flag: The UpdateFlag.
     func addFlag(flag: UpdateFlag) {
-        _updateFlags.append(flag);
-        flag._flagManagers.append(self);
+        _updateFlags.append(flag)
+        flag._flagManagers.append(self)
     }
 
     /// Remove a UpdateFlag.
     /// - Parameter flag: The UpdateFlag.
     func removeFlag(flag: UpdateFlag) {
-        let success = removeFromArray(array: &_updateFlags, item: flag);
+        let success = removeFromArray(array: &_updateFlags, item: flag)
         if (success) {
-            _ = removeFromArray(array: &flag._flagManagers, item: self);
+            _ = removeFromArray(array: &flag._flagManagers, item: self)
         }
     }
 

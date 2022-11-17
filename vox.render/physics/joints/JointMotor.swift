@@ -9,11 +9,11 @@ import Foundation
 /// The JointMotor is used to motorize a joint.
 public class JointMotor {
     /// The motor will apply a force up to force to achieve targetVelocity.
-    var targetVelocity: Float = 0;
+    var targetVelocity: Float = 0
     /// The force limit
     var forceLimit: Float = Float.greatestFiniteMagnitude
     /// Gear ration for the motor
-    var gearRation: Float = 1.0;
+    var gearRation: Float = 1.0
     /// If freeSpin is enabled the motor will only accelerate but never slow down.
-    var freeSpin: Bool = false;
+    var freeSpin: Bool = false
 }

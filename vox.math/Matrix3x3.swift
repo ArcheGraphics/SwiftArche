@@ -330,7 +330,7 @@ extension Matrix3x3 {
     /// - Parameter right: The specified matrix
     /// - Returns: This matrix that store the sum of the two matrices
     public mutating func add(right: Matrix3x3) -> Matrix3x3 {
-        self = self + right;
+        self = self + right
         return self
     }
 
@@ -338,7 +338,7 @@ extension Matrix3x3 {
     /// - Parameter right: The specified matrix
     /// - Returns: This matrix that store the difference between the two matrices
     public mutating func subtract(right: Matrix3x3) -> Matrix3x3 {
-        self = self - right;
+        self = self - right
         return self
     }
 
@@ -346,7 +346,7 @@ extension Matrix3x3 {
     /// - Parameter right: The specified matrix
     /// - Returns: This matrix that store the product of the two matrices
     public mutating func multiply(right: Matrix3x3) -> Matrix3x3 {
-        self = self * right;
+        self = self * right
         return self
     }
 

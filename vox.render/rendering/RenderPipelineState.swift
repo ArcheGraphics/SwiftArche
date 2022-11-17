@@ -24,7 +24,7 @@ class RenderPipelineState {
         }
     }
 
-    init(_ device: MTLDevice, _ descriptor:MTLRenderPipelineDescriptor) {
+    init(_ device: MTLDevice, _ descriptor: MTLRenderPipelineDescriptor) {
         do {
             _handle = try device.makeRenderPipelineState(descriptor: descriptor,
                     options: MTLPipelineOption.argumentInfo, reflection: &_reflection)

@@ -45,10 +45,10 @@ public final class Entity: EngineObject {
         _children = []
 
         if (_isRoot) {
-            _scene._removeFromEntityList(self);
-            _isRoot = false;
+            _scene._removeFromEntityList(self)
+            _isRoot = false
         } else {
-            _removeFromParent();
+            _removeFromParent()
         }
     }
 
@@ -121,7 +121,7 @@ public final class Entity: EngineObject {
         }
         set {
             if (_siblingIndex == -1) {
-                fatalError("The entity ${this.name} is not in the hierarchy");
+                fatalError("The entity ${this.name} is not in the hierarchy")
             }
 
             if _isRoot {
@@ -183,15 +183,15 @@ public final class Entity: EngineObject {
     /// - Parameter child: The child entity which want to be added.
     func addChild(_ child: Entity) {
         if (child._isRoot) {
-            child._scene._removeFromEntityList(child);
-            child._isRoot = false;
+            child._scene._removeFromEntityList(child)
+            child._isRoot = false
 
-            _addToChildrenList(nil, child);
-            child._parent = self;
+            _addToChildrenList(nil, child)
+            child._parent = self
 
-            let newScene = _scene;
+            let newScene = _scene
             if (child._scene !== newScene) {
-                Entity._traverseSetOwnerScene(child, newScene);
+                Entity._traverseSetOwnerScene(child, newScene)
             }
 
             if (_isActiveInHierarchy) {
@@ -206,21 +206,21 @@ public final class Entity: EngineObject {
 
             child.transform._parentChange()
         } else {
-            child._setParent(self, nil);
+            child._setParent(self, nil)
         }
     }
 
     func addChild(_ index: Int, _ child: Entity) {
         if (child._isRoot) {
-            child._scene._removeFromEntityList(child);
-            child._isRoot = false;
+            child._scene._removeFromEntityList(child)
+            child._isRoot = false
 
-            _addToChildrenList(index, child);
-            child._parent = self;
+            _addToChildrenList(index, child)
+            child._parent = self
 
-            let newScene = _scene;
+            let newScene = _scene
             if (child._scene !== newScene) {
-                Entity._traverseSetOwnerScene(child, newScene);
+                Entity._traverseSetOwnerScene(child, newScene)
             }
 
             if (_isActiveInHierarchy) {
@@ -234,14 +234,14 @@ public final class Entity: EngineObject {
             }
             child.transform._parentChange()
         } else {
-            child._setParent(self, index);
+            child._setParent(self, index)
         }
     }
 
     /// Remove child entity.
     /// - Parameter child: The child entity which want to be removed.
     func removeChild(_ child: Entity) {
-        child._setParent(nil);
+        child._setParent(nil)
     }
 
     /// Find child entity by index.
@@ -363,10 +363,10 @@ extension Entity {
         if (oldParent != nil) {
             oldParent!._children.remove(at: _siblingIndex)
             for index in _siblingIndex..<oldParent!._children.count {
-                oldParent!._children[index]._siblingIndex = oldParent!._children[index]._siblingIndex - 1;
+                oldParent!._children[index]._siblingIndex = oldParent!._children[index]._siblingIndex - 1
             }
-            _parent = nil;
-            _siblingIndex = -1;
+            _parent = nil
+            _siblingIndex = -1
         }
     }
 
@@ -393,33 +393,33 @@ extension Entity {
 
 extension Entity {
     private func _addToChildrenList(_ index: Int?, _ child: Entity) {
-        let childCount = _children.count;
+        let childCount = _children.count
         if (index == nil) {
-            child._siblingIndex = childCount;
-            _children.append(child);
+            child._siblingIndex = childCount
+            _children.append(child)
         } else {
             if (index! < 0 || index! > childCount) {
                 fatalError()
             }
-            child._siblingIndex = index!;
+            child._siblingIndex = index!
             _children[index!] = child
             for i in index! + 1..<childCount + 1 {
-                _children[i]._siblingIndex = _children[i]._siblingIndex + 1;
+                _children[i]._siblingIndex = _children[i]._siblingIndex + 1
             }
         }
     }
 
     private func _setParent(_ parent: Entity?, _ siblingIndex: Int? = nil) {
-        let oldParent = _parent;
+        let oldParent = _parent
         if (parent !== oldParent) {
-            _removeFromParent();
-            _parent = parent;
+            _removeFromParent()
+            _parent = parent
             if (parent != nil) {
-                parent!._addToChildrenList(siblingIndex, self);
+                parent!._addToChildrenList(siblingIndex, self)
 
-                let parentScene = parent!._scene;
+                let parentScene = parent!._scene
                 if (_scene !== parentScene) {
-                    Entity._traverseSetOwnerScene(self, parentScene);
+                    Entity._traverseSetOwnerScene(self, parentScene)
                 }
 
                 if (parent!._isActiveInHierarchy) {
@@ -436,7 +436,7 @@ extension Entity {
                     _processInActive()
                 }
                 if (oldParent != nil) {
-                    Entity._traverseSetOwnerScene(self, nil);
+                    Entity._traverseSetOwnerScene(self, nil)
                 }
             }
             transform._parentChange()
@@ -493,23 +493,23 @@ extension Entity {
     }
 
     private func _setSiblingIndex(_ sibling: inout [Entity], _ target: Int) {
-        let target = Swift.min(target, sibling.count - 1);
+        let target = Swift.min(target, sibling.count - 1)
         if (target < 0) {
             fatalError()
         }
         if (_siblingIndex != target) {
-            let oldIndex = _siblingIndex;
+            let oldIndex = _siblingIndex
             if (target < oldIndex) {
                 for i in target...oldIndex {
-                    let child = i == target ? self : sibling[i - 1];
-                    sibling[i] = child;
-                    child._siblingIndex = i;
+                    let child = i == target ? self : sibling[i - 1]
+                    sibling[i] = child
+                    child._siblingIndex = i
                 }
             } else {
                 for i in oldIndex...target {
-                    let child = i == target ? self : sibling[i + 1];
-                    sibling[i] = child;
-                    child._siblingIndex = i;
+                    let child = i == target ? self : sibling[i + 1]
+                    sibling[i] = child
+                    child._siblingIndex = i
                 }
             }
         }

@@ -77,7 +77,7 @@ public class Mesh {
     }
 
     private func _onBoundsChanged() {
-        _updateFlagManager.dispatch(type: MeshModifyFlags.Bounds.rawValue);
+        _updateFlagManager.dispatch(type: MeshModifyFlags.Bounds.rawValue)
     }
 }
 

@@ -19,9 +19,9 @@ class ModelMesh: Mesh {
     private var _indicesFormat: MTLIndexType?
     private var _vertexSlotChanged: Bool = true
     private var _vertexChangeFlag: Int = 0
-    private var _indicesChangeFlag: Bool = false;
-    private var _vertexStrideFloat: Float = 0;
-    private var _lastUploadVertexCount: Int = -1;
+    private var _indicesChangeFlag: Bool = false
+    private var _vertexStrideFloat: Float = 0
+    private var _lastUploadVertexCount: Int = -1
 
     private var _positions: [Vector3] = []
     private var _normals: [Vector3]? = nil
@@ -310,7 +310,7 @@ extension ModelMesh {
         }
         _indices16 = indices
         _indicesFormat = .uint16
-        _indicesChangeFlag = true;
+        _indicesChangeFlag = true
     }
 
     /// Set indices for the mesh.
@@ -321,7 +321,7 @@ extension ModelMesh {
         }
         _indices32 = indices
         _indicesFormat = .uint32
-        _indicesChangeFlag = true;
+        _indicesChangeFlag = true
     }
 
     /// Upload Mesh Data to the graphics API.
@@ -358,8 +358,8 @@ extension ModelMesh {
         }
 
         if (noLongerAccessible) {
-            _accessible = false;
-            _releaseCache();
+            _accessible = false
+            _releaseCache()
         }
     }
 
