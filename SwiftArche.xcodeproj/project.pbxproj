@@ -183,6 +183,7 @@
 		43D8CADB4B67723B29652D92 /* Engine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8C4566766B1715A426CE1 /* Engine.swift */; };
 		43D8CB093928BE8DF054C48C /* HitResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8C05C2BF0796E12C8C94F /* HitResult.swift */; };
 		43D8CB6C869DD874CFBF194E /* CharacterController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8C7BBBFCE83FF47BEC229 /* CharacterController.swift */; };
+		43D8CBA99DE9C9B9CDDF0BA0 /* HingeJointFlag.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8C0115848492526783538 /* HingeJointFlag.swift */; };
 		43D8CBD7534ED79625118AE2 /* ShaderMacroCollection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8C8107866246F85355CE7 /* ShaderMacroCollection.swift */; };
 		43D8CC46810990E2EF50CBB6 /* AmbientLight.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8C81ED4A36F7C36F6048E /* AmbientLight.swift */; };
 		43D8CCBC80181D80F3E9A7CA /* PBRSpecularMaterial.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8CF832B10514687D4B543 /* PBRSpecularMaterial.swift */; };
@@ -195,6 +196,7 @@
 		43D8CE3EDC00CFA80A4D4A03 /* ComponentsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8CBD211AE3455DEC0CD13 /* ComponentsManager.swift */; };
 		43D8CE559C09812B32CB1E26 /* ModelMesh.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8C6C6BAB6A28F4761BFCC /* ModelMesh.swift */; };
 		43D8CE61BE3200DB2073AC80 /* BlendMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8CA31635DEBED25A020C1 /* BlendMode.swift */; };
+		43D8CE87291403475D35B720 /* HingeJoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8CC19DC68A0E0162A339D /* HingeJoint.swift */; };
 		43D8CEB260A901EEBF6423DE /* JointMotor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8C607434E7C4086A0C91A /* JointMotor.swift */; };
 		43D8CEC103063AE1BE61B2A8 /* BoundingFrustum.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8C6D2A37C7B97B84BA40F /* BoundingFrustum.swift */; };
 		43D8CEF8E23C12D9326BDA90 /* ColorSpace.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8CF595B22621DDE5D976D /* ColorSpace.swift */; };
@@ -525,6 +527,7 @@
 		3E67EED02921D9C800ED60C8 /* unlit_shading.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = unlit_shading.metal; sourceTree = "<group>"; };
 		3E67EED22921DB3F00ED60C8 /* function_common.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = function_common.h; sourceTree = "<group>"; };
 		3E67EED32921DB4A00ED60C8 /* function_common.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = function_common.metal; sourceTree = "<group>"; };
+		43D8C0115848492526783538 /* HingeJointFlag.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HingeJointFlag.swift; sourceTree = "<group>"; };
 		43D8C050955DD1855EEBFE8E /* BlendState.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BlendState.swift; sourceTree = "<group>"; };
 		43D8C05C2BF0796E12C8C94F /* HitResult.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HitResult.swift; sourceTree = "<group>"; };
 		43D8C08D2843709803F5744E /* CameraClearFlags.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CameraClearFlags.swift; sourceTree = "<group>"; };
@@ -586,6 +589,7 @@
 		43D8CB23455968ACCFC0E47E /* JointLimits.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JointLimits.swift; sourceTree = "<group>"; };
 		43D8CB4D62123269161B355A /* Util.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Util.swift; sourceTree = "<group>"; };
 		43D8CBD211AE3455DEC0CD13 /* ComponentsManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ComponentsManager.swift; sourceTree = "<group>"; };
+		43D8CC19DC68A0E0162A339D /* HingeJoint.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HingeJoint.swift; sourceTree = "<group>"; };
 		43D8CC2F6FD53A7EB63662AF /* RenderState.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RenderState.swift; sourceTree = "<group>"; };
 		43D8CCB2A648F061CDDB2136 /* PBRMaterial.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PBRMaterial.swift; sourceTree = "<group>"; };
 		43D8CD1CF732CB93CE0380DE /* EngineSettings.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EngineSettings.swift; sourceTree = "<group>"; };
@@ -920,6 +924,7 @@
 				3E0F7C81292607AB00C4A843 /* PhysicsMaterialCombineMode.swift */,
 				43D8C890FF41EDC96C909FC5 /* ControllerNonWalkableMode.swift */,
 				43D8C4C743C5C9882240C555 /* ControllerCollisionFlag.swift */,
+				43D8C0115848492526783538 /* HingeJointFlag.swift */,
 			);
 			path = enums;
 			sourceTree = "<group>";
@@ -940,6 +945,7 @@
 				43D8CB23455968ACCFC0E47E /* JointLimits.swift */,
 				43D8C607434E7C4086A0C91A /* JointMotor.swift */,
 				43D8C54936F3EFC16FD740F6 /* SpringJoint.swift */,
+				43D8CC19DC68A0E0162A339D /* HingeJoint.swift */,
 			);
 			path = joints;
 			sourceTree = "<group>";
@@ -1821,6 +1827,8 @@
 				43D8C8DA95DABECFDE06AC41 /* JointLimits.swift in Sources */,
 				43D8CEB260A901EEBF6423DE /* JointMotor.swift in Sources */,
 				43D8C986FF4865C01080A94A /* SpringJoint.swift in Sources */,
+				43D8CE87291403475D35B720 /* HingeJoint.swift in Sources */,
+				43D8CBA99DE9C9B9CDDF0BA0 /* HingeJointFlag.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

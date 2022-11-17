@@ -29,7 +29,7 @@ class PhysXHingeJoint: PhysXJoint {
         _setLocalPose(0, _swingOffset, axisRotationQuaternion)
     }
 
-    func setSwingOffset(value: Vector3) {
+    func setSwingOffset(_ value: Vector3) {
         _swingOffset = value
         _setLocalPose(1, _swingOffset, _axisRotationQuaternion)
     }
@@ -42,27 +42,27 @@ class PhysXHingeJoint: PhysXJoint {
         Vector3((_pxJoint as! CPxRevoluteJoint).getVelocity())
     }
 
-    func setHardLimit(lowerLimit: Float, upperLimit: Float, contactDist: Float) {
+    func setHardLimit(_ lowerLimit: Float, _ upperLimit: Float, _ contactDist: Float) {
         (_pxJoint as! CPxRevoluteJoint).setLimit(CPxJointAngularLimitPair(hardLimit: lowerLimit, upperLimit, contactDist))
     }
 
-    func setSoftLimit(lowerLimit: Float, upperLimit: Float, stiffness: Float, damping: Float) {
+    func setSoftLimit(_ lowerLimit: Float, _ upperLimit: Float, _ stiffness: Float, _ damping: Float) {
         (_pxJoint as! CPxRevoluteJoint).setLimit(CPxJointAngularLimitPair(softLimit: lowerLimit, upperLimit, CPxSpring(stiffness: stiffness, damping)))
     }
 
-    func setDriveVelocity(velocity: Float) {
+    func setDriveVelocity(_ velocity: Float) {
         (_pxJoint as! CPxRevoluteJoint).setDriveVelocity(velocity)
     }
 
-    func setDriveForceLimit(limit: Float) {
+    func setDriveForceLimit(_ limit: Float) {
         (_pxJoint as! CPxRevoluteJoint).setDriveForceLimit(limit)
     }
 
-    func setDriveGearRatio(ratio: Float) {
+    func setDriveGearRatio(_ ratio: Float) {
         (_pxJoint as! CPxRevoluteJoint).setDriveGearRatio(ratio)
     }
 
-    func setHingeJointFlag(flag: UInt32, value: Bool) {
+    func setHingeJointFlag(_ flag: UInt32, _ value: Bool) {
         (_pxJoint as! CPxRevoluteJoint).setRevoluteJointFlag(CPxRevoluteJointFlag(flag), value)
     }
 }
