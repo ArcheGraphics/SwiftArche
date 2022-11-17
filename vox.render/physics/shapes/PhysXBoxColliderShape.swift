@@ -8,15 +8,14 @@ import vox_math
 
 /// Box collider shape in PhysX.
 class PhysXBoxColliderShape: PhysXColliderShape {
-    private static var _tempHalfExtents = Vector3()
-    private var _halfSize: Vector3 = Vector3()
+    var _halfSize: Vector3 = Vector3()
 
     /// Init Box Shape and alloc PhysX objects.
     /// - Parameters:
     ///   - uniqueID: UniqueID mark Shape.
     ///   - size: Size of Shape.
     ///   - material: Material of PhysXCollider.
-    init(_ uniqueID: Int, _ size: Vector3, _ material: PhysXPhysicsMaterial) {
+    init(_ uniqueID: UInt32, _ size: Vector3, _ material: PhysXPhysicsMaterial) {
         _ = _halfSize.set(x: size.x * 0.5, y: size.y * 0.5, z: size.z * 0.5)
         super.init()
 
@@ -25,19 +24,27 @@ class PhysXBoxColliderShape: PhysXColliderShape {
                 hy: _halfSize.y * _scale.y,
                 hz: _halfSize.z * _scale.z
         )
-        _allocShape(material)
+        _initialize(material, uniqueID)
         _setLocalPose()
-        setUniqueID(uniqueID)
     }
 
     func setSize(_ size: Vector3) {
         _ = _halfSize.set(x: size.x * 0.5, y: size.y * 0.5, z: size.z * 0.5)
         (_pxGeometry as! CPxBoxGeometry).halfExtents = (_halfSize * _scale).internalValue
         _pxShape.setGeometry(_pxGeometry)
+
+        for i in 0..<_controllers.length {
+            let pxController = _controllers.get(i)!._pxController as! CPxBoxController
+            pxController.setHalfHeight(_halfSize.x)
+            pxController.setHalfSideExtent(_halfSize.y)
+            pxController.setHalfForwardExtent(_halfSize.z)
+        }
     }
 
     override func setWorldScale(_ scale: Vector3) {
         _scale = scale
+        _setLocalPose()
+
         (_pxGeometry as! CPxBoxGeometry).halfExtents = (_halfSize * _scale).internalValue
         _pxShape.setGeometry(_pxGeometry)
     }

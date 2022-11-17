@@ -7,7 +7,7 @@
 import vox_math
 
 /// The collision detection mode constants used for PhysXDynamicCollider.collisionDetectionMode.
-enum CollisionDetectionMode : Int {
+enum CollisionDetectionMode: Int {
     /// Continuous collision detection is off for this dynamic collider.
     case Discrete
     /// Continuous collision detection is on for colliding with static mesh geometry.
@@ -123,8 +123,8 @@ class PhysXDynamicCollider: PhysXCollider {
         }
     }
 
-    func setFreezeRotation(_ value: Bool) {
-        setConstraints(DynamicColliderConstraints.FreezeRotation, value)
+    func setConstraints(flags: Int32) {
+        (_pxActor as! CPxRigidDynamic).setRigidDynamicLockFlags(flags)
     }
 
     func addForce(_ force: Vector3) {
@@ -140,14 +140,22 @@ class PhysXDynamicCollider: PhysXCollider {
     }
 
     func movePosition(_ value: Vector3) {
-        (_pxActor as! CPxRigidDynamic).setKinematicTarget(value.internalValue, rotation: simd_quatf(ix: 0, iy: 0, iz: 0, r: 1))
+        var position = SIMD3<Float>()
+        var rotation = simd_quatf()
+        _pxActor.getGlobalPose(&position, rotation: &rotation)
+
+        (_pxActor as! CPxRigidDynamic).setKinematicTarget(value.internalValue, rotation: rotation)
     }
 
     func moveRotation(_ value: Quaternion) {
-        (_pxActor as! CPxRigidDynamic).setKinematicTarget([0, 0, 0], rotation: value.internalValue)
+        var position = SIMD3<Float>()
+        var rotation = simd_quatf()
+        _pxActor.getGlobalPose(&position, rotation: &rotation)
+
+        (_pxActor as! CPxRigidDynamic).setKinematicTarget(position, rotation: value.internalValue)
     }
 
-    func putToSleep() {
+    func sleep() {
         (_pxActor as! CPxRigidDynamic).putToSleep()
     }
 

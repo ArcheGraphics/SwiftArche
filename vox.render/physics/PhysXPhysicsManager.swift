@@ -16,7 +16,9 @@ enum QueryFlag: Int {
 
 /// A manager is a collection of bodies and constraints which can interact.
 class PhysXPhysicsManager {
+    var _pxControllerManager: CPxControllerManager?
     private var _pxScene: CPxScene!
+
     private var _onContactEnter: ((Int, Int) -> Void)!
     private var _onContactExit: ((Int, Int) -> Void)!
     private var _onContactStay: ((Int, Int) -> Void)!
@@ -41,9 +43,25 @@ class PhysXPhysicsManager {
         _onTriggerExit = onTriggerExit
         _onTriggerStay = onTriggerStay
 
-        _pxScene = PhysXPhysics._pxPhysics.createScene({ (obj1: CPxShape?, obj2: CPxShape?) in },
-                onContactExit: { (obj1: CPxShape?, obj2: CPxShape?) in },
-                onContactStay: { (obj1: CPxShape?, obj2: CPxShape?) in },
+        _pxScene = PhysXPhysics._pxPhysics.createScene(
+                {
+                    [self] (obj1: CPxShape?, obj2: CPxShape?) in
+                    let index1 = Int(obj1!.getQueryFilterData(0))
+                    let index2 = Int(obj2!.getQueryFilterData(0))
+                    _onContactEnter(index1, index2)
+                },
+                onContactExit: {
+                    [self] (obj1: CPxShape?, obj2: CPxShape?) in
+                    let index1 = Int(obj1!.getQueryFilterData(0))
+                    let index2 = Int(obj2!.getQueryFilterData(0))
+                    _onContactExit(index1, index2)
+                },
+                onContactStay: { [self]
+                (obj1: CPxShape?, obj2: CPxShape?) in
+                    let index1 = Int(obj1!.getQueryFilterData(0))
+                    let index2 = Int(obj2!.getQueryFilterData(0))
+                    _onContactStay(index1, index2)
+                },
                 onTriggerEnter: { [self] (obj1: CPxShape?, obj2: CPxShape?) in
                     let index1 = Int(obj1!.getQueryFilterData(0))
                     let index2 = Int(obj2!.getQueryFilterData(0))
@@ -74,11 +92,18 @@ class PhysXPhysicsManager {
     }
 
     func addColliderShape(_ colliderShape: PhysXColliderShape) {
-        _eventMap[colliderShape._id] = [:]
+        _eventMap[Int(colliderShape._id!)] = [:]
     }
 
     func removeColliderShape(_ colliderShape: PhysXColliderShape) {
-        _eventMap.removeValue(forKey: colliderShape._id)
+        for i in 0..<_currentEvents.length {
+            let event = _currentEvents.get(i)!
+            if (event.index1 == colliderShape._id || event.index2 == colliderShape._id) {
+                _ = _currentEvents.deleteByIndex(i)
+                _eventPool.append(event)
+            }
+        }
+        _eventMap.removeValue(forKey: Int(colliderShape._id!))
     }
 
     func addCollider(_ collider: PhysXCollider) {
@@ -89,18 +114,26 @@ class PhysXPhysicsManager {
         _pxScene.removeActor(with: collider._pxActor)
     }
 
-    func addCharacterController(_ characterController: PhysXCharacterController) {
-        _eventMap[characterController._id] = [:]
+    func addCharacterController(characterController: PhysXCharacterController) {
+        let lastPXManager = characterController._pxManager
+        let shape = characterController._shape
+        if (shape != nil) {
+            if (lastPXManager !== self) {
+                if lastPXManager != nil {
+                    characterController._destroyPXController()
+                }
+                characterController._createPXController(self, shape!)
+            }
+            _pxScene.addActor(with: characterController._pxController.getActor())
+        }
+        characterController._pxManager = self
     }
 
-    func removeCharacterController(_ characterController: PhysXCharacterController) {
-        _eventMap.removeValue(forKey: characterController._id)
-    }
-
-    func createControllerManager() -> PhysXCharacterControllerManager {
-        let manager = PhysXCharacterControllerManager()
-        manager._pxControllerManager = _pxScene.createControllerManager()
-        return manager
+    func removeCharacterController(characterController: PhysXCharacterController) {
+        if (characterController._shape != nil) {
+            _pxScene.removeActor(with: characterController._pxController.getActor())
+        }
+        characterController._pxManager = nil
     }
 
     func update(_ elapsedTime: Float) {
@@ -133,6 +166,13 @@ class PhysXPhysicsManager {
         return result
     }
 
+    func _getControllerManager() -> CPxControllerManager {
+        if (_pxControllerManager == nil) {
+            _pxControllerManager = _pxScene.createControllerManager()
+        }
+        return _pxControllerManager!
+    }
+
     private func _simulate(_ elapsedTime: Float) {
         _pxScene.simulate(elapsedTime)
     }
@@ -142,28 +182,30 @@ class PhysXPhysicsManager {
     }
 
     private func _getTrigger(_ index1: Int, _ index2: Int) -> TriggerEvent {
-        let event = _eventPool.count != 0 ? _eventPool.popLast() : TriggerEvent(index1, index2)
-        _eventMap[index1]![index2] = event!
-        return event!
+        var event: TriggerEvent
+        if _eventPool.count != 0 {
+            event = _eventPool.popLast()!
+            event.index1 = index1
+            event.index2 = index2
+        } else {
+            event = TriggerEvent(index1, index2)
+        }
+        _eventMap[index1]![index2] = event
+        return event
     }
 
     private func _fireEvent() {
-        var i = 0
-        var n = _currentEvents.length
-        while i < n {
+        for i in 0..<_currentEvents.length {
             let event = _currentEvents.get(i)!
             if (event.state == TriggerEventState.Enter) {
-                _onTriggerEnter!(event.index1, event.index2)
+                _onTriggerEnter(event.index1, event.index2)
                 event.state = TriggerEventState.Stay
-                i += 1
             } else if (event.state == TriggerEventState.Stay) {
-                _onTriggerStay!(event.index1, event.index2)
-                i += 1
+                _onTriggerStay(event.index1, event.index2)
             } else if (event.state == TriggerEventState.Exit) {
-                _onTriggerExit!(event.index1, event.index2)
+                _onTriggerExit(event.index1, event.index2)
                 _ = _currentEvents.deleteByIndex(i)
                 _eventPool.append(event)
-                n -= 1
             }
         }
     }
@@ -181,7 +223,6 @@ class TriggerEvent {
     var state: TriggerEventState
     var index1: Int
     var index2: Int
-    var needUpdate: Bool = false
 
     required init() {
         index1 = 0

@@ -7,7 +7,7 @@
 		<key>SwiftArche.xcscheme_^#shared#^_</key>
 		<dict>
 			<key>orderHint</key>
-			<integer>4</integer>
+			<integer>5</integer>
 		</dict>
 		<key>test.math.xcscheme</key>
 		<dict>
@@ -22,7 +22,7 @@
 		<key>vox.physics.xcscheme</key>
 		<dict>
 			<key>orderHint</key>
-			<integer>5</integer>
+			<integer>4</integer>
 		</dict>
 		<key>vox.render.xcscheme</key>
 		<dict>

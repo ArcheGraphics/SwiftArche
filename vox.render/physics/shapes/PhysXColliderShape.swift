@@ -20,20 +20,29 @@ enum ShapeFlag: UInt8 {
 class PhysXColliderShape {
     static var halfSqrt: Float = 0.70710678118655
 
-    var _position: Vector3 = Vector3()
-    var _rotation: Quaternion = Quaternion(0, 0, PhysXColliderShape.halfSqrt, PhysXColliderShape.halfSqrt)
     var _scale: Vector3 = Vector3(1, 1, 1)
+    var _position: Vector3 = Vector3()
+    var _rotation: Vector3? = nil
+    var _axis: Quaternion? = nil
+    var _physxRotation: Quaternion = Quaternion()
 
     private var _shapeFlags: UInt8 = ShapeFlag.SCENE_QUERY_SHAPE.rawValue | ShapeFlag.SIMULATION_SHAPE.rawValue
-    private var _pxMaterial: CPxMaterial!
 
-    internal var _pxShape: CPxShape!
-    internal var _pxGeometry: CPxGeometry!
-    internal var _id: Int!
+    var _controllers: DisorderedArray<PhysXCharacterController> = DisorderedArray()
+    var _pxMaterial: CPxMaterial!
+    var _pxShape: CPxShape!
+    var _pxGeometry: CPxGeometry!
+    var _id: UInt32!
+    var _contactOffset: Float = 0
 
-    func setUniqueID(_ id: Int) {
-        _id = id
-        _pxShape.setQueryFilterData(UInt32(id), w1: 0, w2: 0, w3: 0)
+    func setRotation(value: Vector3) {
+        _rotation = value
+        _physxRotation = Quaternion.rotationYawPitchRoll(yaw: value.x, pitch: value.y, roll: value.z)
+        if (_axis != nil) {
+            _physxRotation = _physxRotation * _axis!
+        }
+        _ = _physxRotation.normalize()
+        _setLocalPose()
     }
 
     func setPosition(_ position: Vector3) {
@@ -43,6 +52,15 @@ class PhysXColliderShape {
 
     func setWorldScale(_ scale: Vector3) {
         fatalError("use subClass")
+    }
+
+    func setContactOffset(offset: Float) {
+        _contactOffset = offset
+        _pxShape.setContactOffset(offset)
+
+        for i in 0..<_controllers.length {
+            _controllers.get(i)!._pxController.setContactOffset(offset)
+        }
     }
 
     func setMaterial(_ material: PhysXPhysicsMaterial) {
@@ -61,22 +79,25 @@ class PhysXColliderShape {
         _setShapeFlags(_shapeFlags)
     }
 
-    internal func _setShapeFlags(_ flags: UInt8) {
+    func _setShapeFlags(_ flags: UInt8) {
         _shapeFlags = flags
         _pxShape.setFlags(_shapeFlags)
     }
 
     func _setLocalPose() {
-        _pxShape.setLocalPose(_position.internalValue, rotation: _rotation.internalValue)
+        _pxShape.setLocalPose((_position * _scale).internalValue, rotation: _physxRotation.internalValue)
     }
 
-    func _allocShape(_ material: PhysXPhysicsMaterial) {
+    func _initialize(_ material: PhysXPhysicsMaterial, _ id: UInt32) {
+        _id = id;
+        _pxMaterial = material._pxMaterial;
         _pxShape = PhysXPhysics._pxPhysics.createShape(
                 with: _pxGeometry,
                 material: material._pxMaterial,
                 isExclusive: true,
                 shapeFlags: _shapeFlags
         )
+        _pxShape.setQueryFilterData(id, w1: 0, w2: 0, w3: 0)
     }
 
     private func _modifyFlag(_ flag: UInt8, _ value: Bool) {

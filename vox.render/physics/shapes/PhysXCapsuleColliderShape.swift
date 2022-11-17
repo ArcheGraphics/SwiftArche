@@ -8,8 +8,8 @@ import vox_math
 
 /// Capsule collider shape in PhysX.
 class PhysXCapsuleColliderShape: PhysXColliderShape {
-    private var _radius: Float
-    private var _halfHeight: Float
+    var _radius: Float
+    var _halfHeight: Float
     private var _upAxis: ColliderShapeUpAxis = ColliderShapeUpAxis.Y
 
     /// Init PhysXCollider and alloc PhysX objects.
@@ -18,16 +18,17 @@ class PhysXCapsuleColliderShape: PhysXColliderShape {
     ///   - radius: Radius of CapsuleCollider
     ///   - height: Height of CapsuleCollider
     ///   - material: Material of PhysXCollider
-    init(_ uniqueID: Int, _ radius: Float, _ height: Float, _ material: PhysXPhysicsMaterial) {
+    init(_ uniqueID: UInt32, _ radius: Float, _ height: Float, _ material: PhysXPhysicsMaterial) {
         _radius = radius
         _halfHeight = height * 0.5
-
         super.init()
 
+        _axis = Quaternion(0, 0, PhysXColliderShape.halfSqrt, PhysXColliderShape.halfSqrt);
+        _physxRotation = _axis!
+
         _pxGeometry = CPxCapsuleGeometry(radius: _radius, halfHeight: _halfHeight)
-        _allocShape(material)
-        _setLocalPose()
-        setUniqueID(uniqueID)
+        _initialize(material, uniqueID);
+        _setLocalPose();
     }
 
     func setRadius(_ value: Float) {
@@ -44,6 +45,10 @@ class PhysXCapsuleColliderShape: PhysXColliderShape {
             break
         }
         _pxShape.setGeometry(_pxGeometry)
+
+        for i in 0..<_controllers.length {
+            (_controllers.get(i)!._pxController as! CPxCapsuleController).setRadius(value);
+        }
     }
 
     func setHeight(_ value: Float) {
@@ -60,25 +65,39 @@ class PhysXCapsuleColliderShape: PhysXColliderShape {
             break
         }
         _pxShape.setGeometry(_pxGeometry)
+
+        for i in 0..<_controllers.length {
+            (_controllers.get(i)!._pxController as! CPxCapsuleController).setHeight(value);
+        }
     }
 
     func setUpAxis(_ upAxis: Int) {
         _upAxis = ColliderShapeUpAxis(rawValue: upAxis)!
         switch (_upAxis) {
         case ColliderShapeUpAxis.X:
-            _ = _rotation.set(x: 0, y: 0, z: 0, w: 1)
+            _ = _axis!.set(x: 0, y: 0, z: 0, w: 1)
             break
         case ColliderShapeUpAxis.Y:
-            _ = _rotation.set(x: 0, y: 0, z: PhysXColliderShape.halfSqrt, w: PhysXColliderShape.halfSqrt)
+            _ = _axis!.set(x: 0, y: 0, z: PhysXColliderShape.halfSqrt, w: PhysXColliderShape.halfSqrt);
             break
         case ColliderShapeUpAxis.Z:
-            _ = _rotation.set(x: 0, y: PhysXColliderShape.halfSqrt, z: 0, w: PhysXColliderShape.halfSqrt)
+            _ = _axis!.set(x: 0, y: PhysXColliderShape.halfSqrt, z: 0, w: PhysXColliderShape.halfSqrt);
             break
+        }
+
+        if (_rotation != nil) {
+            _physxRotation = Quaternion.rotationYawPitchRoll(yaw: _rotation!.x, pitch: _rotation!.y, roll: _rotation!.z);
+            _physxRotation = _physxRotation * _axis!
+        } else {
+            _physxRotation = _axis!
         }
         _setLocalPose()
     }
 
     override func setWorldScale(_ scale: Vector3) {
+        _scale = scale
+        _setLocalPose()
+
         switch (_upAxis) {
         case ColliderShapeUpAxis.X:
             (_pxGeometry as! CPxCapsuleGeometry).radius = _radius * max(scale.y, scale.z)

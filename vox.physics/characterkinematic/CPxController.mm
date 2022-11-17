@@ -18,6 +18,10 @@
     return self;
 }
 
+- (void)dealloc {
+    _c_controller->release();
+}
+
 - (enum CPxControllerShapeType)getType {
     return CPxControllerShapeType(_c_controller->getType());
 }

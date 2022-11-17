@@ -21,6 +21,10 @@
     return self;
 }
 
+- (void)dealloc {
+    _c_actor->release();
+}
+
 - (bool)attachShapeWithShape:(CPxShape *)shape {
     return _c_actor->attachShape(*shape.c_shape);
 }

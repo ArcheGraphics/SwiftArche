@@ -7,45 +7,62 @@
 import vox_math
 
 class PhysXHingeJoint: PhysXJoint {
-    init(_ actor0: PhysXCollider?, _ position0: Vector3, _ rotation0: Quaternion,
-         _ actor1: PhysXCollider?, _ position1: Vector3, _ rotation1: Quaternion) {
+    private var _axisRotationQuaternion = Quaternion()
+    private var _swingOffset = Vector3()
+    private var _velocity = Vector3()
+
+    init(_ collider: PhysXCollider?) {
         super.init()
         _pxJoint = PhysXPhysics._pxPhysics.createRevoluteJoint(
-                actor0?._pxActor ?? nil, position0.internalValue, rotation0.internalValue,
-                actor1?._pxActor ?? nil, position1.internalValue, rotation1.internalValue)
+                nil ?? nil, SIMD3<Float>(), simd_quatf(),
+                collider?._pxActor ?? nil, SIMD3<Float>(), simd_quatf()
+        )
     }
 
-    func setHardLimit(_ lowerLimit: Float, _ upperLimit: Float, _ contactDist: Float) {
+    func setAxis(_ value: Vector3) {
+        var value = value
+        _ = value.normalize()
+        let angle = acos(Vector3.dot(left: Vector3(1, 0, 0), right: value))
+        let xAxis = Vector3.cross(left: Vector3(1, 0, 0), right: value)
+        let axisRotationQuaternion = Quaternion.rotationAxisAngle(axis: xAxis, rad: angle)
+
+        _setLocalPose(0, _swingOffset, axisRotationQuaternion)
+    }
+
+    func setSwingOffset(value: Vector3) {
+        _swingOffset = value
+        _setLocalPose(1, _swingOffset, _axisRotationQuaternion)
+    }
+
+    func getAngle() -> Float {
+        (_pxJoint as! CPxRevoluteJoint).getAngle()
+    }
+
+    func getVelocity() -> Vector3 {
+        Vector3((_pxJoint as! CPxRevoluteJoint).getVelocity())
+    }
+
+    func setHardLimit(lowerLimit: Float, upperLimit: Float, contactDist: Float) {
         (_pxJoint as! CPxRevoluteJoint).setLimit(CPxJointAngularLimitPair(hardLimit: lowerLimit, upperLimit, contactDist))
     }
 
-    func setSoftLimit(_ lowerLimit: Float, _ upperLimit: Float, _ stiffness: Float, _ damping: Float) {
-        (_pxJoint as! CPxRevoluteJoint).setLimit(
-                CPxJointAngularLimitPair(softLimit: lowerLimit, upperLimit,
-                        CPxSpring(stiffness: stiffness, damping)))
+    func setSoftLimit(lowerLimit: Float, upperLimit: Float, stiffness: Float, damping: Float) {
+        (_pxJoint as! CPxRevoluteJoint).setLimit(CPxJointAngularLimitPair(softLimit: lowerLimit, upperLimit, CPxSpring(stiffness: stiffness, damping)))
     }
 
-    func setDriveVelocity(_ velocity: Float) {
+    func setDriveVelocity(velocity: Float) {
         (_pxJoint as! CPxRevoluteJoint).setDriveVelocity(velocity)
     }
 
-    func setDriveForceLimit(_ limit: Float) {
+    func setDriveForceLimit(limit: Float) {
         (_pxJoint as! CPxRevoluteJoint).setDriveForceLimit(limit)
     }
 
-    func setDriveGearRatio(_ ratio: Float) {
+    func setDriveGearRatio(ratio: Float) {
         (_pxJoint as! CPxRevoluteJoint).setDriveGearRatio(ratio)
     }
 
-    func setRevoluteJointFlag(_ flag: Int, _ value: Bool) {
-        (_pxJoint as! CPxRevoluteJoint).setRevoluteJointFlag(CPxRevoluteJointFlag(UInt32(flag)), value)
-    }
-
-    func setProjectionLinearTolerance(_ tolerance: Float) {
-        (_pxJoint as! CPxRevoluteJoint).setProjectionLinearTolerance(tolerance)
-    }
-
-    func setProjectionAngularTolerance(_ tolerance: Float) {
-        (_pxJoint as! CPxRevoluteJoint).setProjectionAngularTolerance(tolerance)
+    func setHingeJointFlag(flag: UInt32, value: Bool) {
+        (_pxJoint as! CPxRevoluteJoint).setRevoluteJointFlag(CPxRevoluteJointFlag(flag), value)
     }
 }

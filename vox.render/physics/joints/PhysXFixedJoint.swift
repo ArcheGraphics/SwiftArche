@@ -7,12 +7,12 @@
 import vox_math
 
 class PhysXFixedJoint: PhysXJoint {
-    init(_ actor0: PhysXCollider?, _ position0: Vector3, _ rotation0: Quaternion,
-         _ actor1: PhysXCollider?, _ position1: Vector3, _ rotation1: Quaternion) {
+    init(_ collider: PhysXCollider?) {
         super.init()
         _pxJoint = PhysXPhysics._pxPhysics.createFixedJoint(
-                actor0?._pxActor ?? nil, position0.internalValue, rotation0.internalValue,
-                actor1?._pxActor ?? nil, position1.internalValue, rotation1.internalValue)
+                nil ?? nil, SIMD3<Float>(), simd_quatf(),
+                collider?._pxActor ?? nil, SIMD3<Float>(), simd_quatf()
+        )
     }
 
     func setProjectionLinearTolerance(_ tolerance: Float) {

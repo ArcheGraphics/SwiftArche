@@ -21,6 +21,10 @@
     return self;
 }
 
+- (void)dealloc {
+    _c_shape->release();
+}
+
 - (void)setFlags:(uint8_t)inFlags {
     _c_shape->setFlags(PxShapeFlags(inFlags));
 }
@@ -44,6 +48,10 @@
     _c_shape->setMaterials(materials.data(), static_cast<PxU16>(materials.size()));
 }
 
+- (void)setContactOffset:(float)contactOffset {
+    _c_shape->setContactOffset(contactOffset);
+}
+
 - (int)getQueryFilterData:(int)index {
     switch (index) {
         case 0:
@@ -60,10 +68,6 @@
 
         case 3:
             return _c_shape->getQueryFilterData().word3;
-            break;
-
-        default:
-            assert(false && "out of bounds");
             break;
     }
     return -1;

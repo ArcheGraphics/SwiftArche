@@ -25,4 +25,6 @@
 
 - (int)getQueryFilterData:(int)index;
 
+- (void)setContactOffset:(float)contactOffset;
+
 @end

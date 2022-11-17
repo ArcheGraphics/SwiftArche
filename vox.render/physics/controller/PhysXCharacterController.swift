@@ -7,23 +7,23 @@
 import vox_math
 
 class PhysXCharacterController {
-    internal var _id: Int!
-    internal var _pxController: CPxController!
+    var _id: UInt32!
+    var _pxController: CPxController!
+    var _pxManager: PhysXPhysicsManager!
+    var _shape: PhysXColliderShape!
 
     func move(_ disp: Vector3, _ minDist: Float, _ elapsedTime: Float) -> UInt8 {
         _pxController.move(disp.internalValue, minDist, elapsedTime)
     }
 
-    func isSetControllerCollisionFlag(_ flags: UInt8, _ flag: Int) -> Bool {
-        _pxController.isSetControllerCollisionFlag(flags, CPxControllerCollisionFlag(UInt32(flag)))
+    func setWorldPosition(_ position: Vector3) {
+        if _pxController != nil {
+            _pxController.setPosition(position.internalValue)
+        }
     }
 
-    func setPosition(_ position: Vector3) -> Bool {
-        _pxController.setPosition(position.internalValue)
-    }
-
-    func setFootPosition(_ position: Vector3) {
-        _pxController.setFootPosition(position.internalValue)
+    func getWorldPosition() -> Vector3 {
+        Vector3(_pxController.getPosition())
     }
 
     func setStepOffset(_ offset: Float) {
@@ -34,10 +34,6 @@ class PhysXCharacterController {
         _pxController.setNonWalkableMode(CPxControllerNonWalkableMode(UInt32(flag)))
     }
 
-    func setContactOffset(_ offset: Float) {
-        _pxController.setContactOffset(offset)
-    }
-
     func setUpDirection(_ up: Vector3) {
         _pxController.setUpDirection(up.internalValue)
     }
@@ -46,20 +42,45 @@ class PhysXCharacterController {
         _pxController.setSlopeLimit(slopeLimit)
     }
 
-    func invalidateCache() {
-        _pxController.invalidateCache()
+    func addShape(shape: PhysXColliderShape) {
+        if _pxManager != nil {
+            _createPXController(_pxManager, shape)
+        }
+        _shape = shape
+        shape._controllers.add(self)
     }
 
-    func resize(_ height: Float) {
-        _pxController.resize(height)
+    func removeShape(shape: PhysXColliderShape) {
+        _destroyPXController()
+        _shape = nil
+        shape._controllers.delete(self)
     }
 
-    func setUniqueID(_ id: Int) {
-        _id = id
-        _pxController.setQueryFilterData(UInt32(id), w1: 0, w2: 0, w3: 0)
+    func _createPXController(_ pxManager: PhysXPhysicsManager, _ shape: PhysXColliderShape) {
+        if (shape is PhysXBoxColliderShape) {
+            let desc = CPxBoxControllerDesc()
+            desc.halfHeight = (shape as! PhysXBoxColliderShape)._halfSize.x
+            desc.halfSideExtent = (shape as! PhysXBoxColliderShape)._halfSize.y
+            desc.halfForwardExtent = (shape as! PhysXBoxColliderShape)._halfSize.z
+            desc.material = shape._pxMaterial
+            _pxController = pxManager._getControllerManager().createController(desc)
+        } else if (shape is PhysXCapsuleColliderShape) {
+            let desc = CPxCapsuleControllerDesc()
+            desc.radius = (shape as! PhysXCapsuleColliderShape)._radius
+            desc.height = (shape as! PhysXCapsuleColliderShape)._halfHeight * 2
+            desc.climbingMode = CPxCapsuleClimbingMode(1) // constraint mode
+            desc.material = shape._pxMaterial
+            _pxController = pxManager._getControllerManager().createController(desc)
+        } else {
+            fatalError("unsupported shape type")
+        }
+
+        _pxController.setQueryFilterData(shape._id, w1: 0, w2: 0, w3: 0)
     }
 
-    func getPosition() -> Vector3 {
-        Vector3(_pxController.getPosition())
+    func _destroyPXController() {
+        if (_pxController != nil) {
+            _pxController = nil
+        }
     }
 }

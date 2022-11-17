@@ -19,6 +19,10 @@
     return self;
 }
 
+- (void)dealloc {
+    _c_joint->release();
+}
+
 - (void)setActors:(CPxRigidActor *_Nullable)actor0 :(CPxRigidActor *_Nullable)actor1 {
     _c_joint->setActors(actor0 != nullptr ? actor0.c_actor : nullptr, actor1 != nullptr ? actor1.c_actor : nullptr);
 }

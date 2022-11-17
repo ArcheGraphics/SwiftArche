@@ -19,7 +19,8 @@ class PhysXCollider {
     }
 
     func setWorldTransform(_ position: Vector3, _ rotation: Quaternion) {
-        _pxActor.setGlobalPose(position.internalValue, rotation: rotation.internalValue)
+        var rotation = rotation
+        _pxActor.setGlobalPose(position.internalValue, rotation: rotation.normalize().internalValue)
     }
 
     func getWorldTransform(_ outPosition: inout Vector3, _ outRotation: inout Quaternion) {

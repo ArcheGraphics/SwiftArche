@@ -7,37 +7,53 @@
 import vox_math
 
 class PhysXJoint {
-    internal var _pxJoint: CPxJoint!
+    var _pxJoint: CPxJoint!
+    var _collider: PhysXCollider?
+    private var _connectedAnchor = Vector3()
+    private var _breakForce: Float = Float.greatestFiniteMagnitude
+    private var _breakTorque: Float = Float.greatestFiniteMagnitude
 
-    func setActors(_ actor0: PhysXCollider?, _ actor1: PhysXCollider?) {
-        _pxJoint.setActors(actor0?._pxActor, actor1?._pxActor)
+    func setConnectedCollider(value: PhysXCollider?) {
+        _pxJoint.setActors(value?._pxActor, _collider?._pxActor)
     }
 
-    func setLocalPose(_ actor: Int, _ position: Vector3, _ rotation: Quaternion) {
-        _pxJoint.setLocalPose(CPxJointActorIndex(UInt32(actor)), position.internalValue, rotation: rotation.internalValue)
+    func setConnectedAnchor(value: Vector3) {
+        _connectedAnchor = value
+        _setLocalPose(0, value, Quaternion())
     }
 
-    func setBreakForce(_ force: Float, _ torque: Float) {
-        _pxJoint.setBreakForce(force, torque)
+    func setConnectedMassScale(value: Float) {
+        _pxJoint.setInvMassScale0(1 / value)
     }
 
-    func setConstraintFlag(_ flags: Int, _ value: Bool) {
-        _pxJoint.setConstraintFlag(CPxConstraintFlag(UInt32(flags)), value)
+    func setConnectedInertiaScale(value: Float) {
+        _pxJoint.setInvInertiaScale0(1 / value)
     }
 
-    func setInvMassScale0(_ invMassScale: Float) {
-        _pxJoint.setInvMassScale0(invMassScale)
+    func setMassScale(value: Float) {
+        _pxJoint.setInvMassScale1(1 / value)
     }
 
-    func setInvInertiaScale0(_ invInertiaScale: Float) {
-        _pxJoint.setInvInertiaScale0(invInertiaScale)
+    func setInertiaScale(value: Float) {
+        _pxJoint.setInvInertiaScale1(1 / value)
     }
 
-    func setInvMassScale1(_ invMassScale: Float) {
-        _pxJoint.setInvMassScale1(invMassScale)
+    func setBreakForce(_ value: Float) {
+        _breakForce = value
+        _pxJoint.setBreakForce(_breakForce, _breakTorque)
     }
 
-    func setInvInertiaScale1(_ invInertiaScale: Float) {
-        _pxJoint.setInvInertiaScale1(invInertiaScale)
+    func setBreakTorque(value: Float) {
+        _breakTorque = value
+        _pxJoint.setBreakForce(_breakForce, _breakTorque)
+    }
+
+    /// Set the joint local pose for an actor.
+    /// - Parameters:
+    ///   - actor: 0 for the first actor, 1 for the second actor.
+    ///   - position: the local position for the actor this joint
+    ///   - rotation: the local rotation for the actor this joint
+    func _setLocalPose(_ actor: UInt32, _ position: Vector3, _ rotation: Quaternion) {
+        _pxJoint.setLocalPose(CPxJointActorIndex(actor), position.internalValue, rotation: rotation.internalValue)
     }
 }

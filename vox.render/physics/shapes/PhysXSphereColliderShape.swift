@@ -16,15 +16,14 @@ class PhysXSphereColliderShape: PhysXColliderShape {
     ///   - uniqueID: UniqueID mark collider
     ///   - radius: Size of SphereCollider
     ///   - material: Material of PhysXCollider
-    init(_ uniqueID: Int, _ radius: Float, _ material: PhysXPhysicsMaterial) {
+    init(_ uniqueID: UInt32, _ radius: Float, _ material: PhysXPhysicsMaterial) {
         _radius = radius
 
         super.init()
 
         _pxGeometry = CPxSphereGeometry(radius: _radius * _maxScale)
-        _allocShape(material)
+        _initialize(material, uniqueID)
         _setLocalPose()
-        setUniqueID(uniqueID)
     }
 
     func setRadius(_ value: Float) {
@@ -34,6 +33,9 @@ class PhysXSphereColliderShape: PhysXColliderShape {
     }
 
     override func setWorldScale(_ scale: Vector3) {
+        _scale = scale
+        _setLocalPose()
+
         _maxScale = max(scale.x, max(scale.x, scale.y))
         (_pxGeometry as! CPxSphereGeometry).radius = _radius * _maxScale
         _pxShape.setGeometry(_pxGeometry)

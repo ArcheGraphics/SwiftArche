@@ -169,6 +169,10 @@
     static_cast<PxRigidDynamic *>(super.c_actor)->setRigidDynamicLockFlag(PxRigidDynamicLockFlag::Enum(flag), value);
 }
 
+- (void)setRigidDynamicLockFlags:(int) flags {
+    static_cast<PxRigidDynamic *>(super.c_actor)->setRigidDynamicLockFlags(PxRigidDynamicLockFlags(flags));
+}
+
 - (void)setWakeCounter:(float)wakeCounterValue {
     static_cast<PxRigidDynamic *>(super.c_actor)->setWakeCounter(wakeCounterValue);
 }

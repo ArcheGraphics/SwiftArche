@@ -12,22 +12,18 @@ class PhysXPlaneColliderShape: PhysXColliderShape {
     /// - Parameters:
     ///   - uniqueID: UniqueID mark collider
     ///   - material: Material of PhysXCollider
-    init(_ uniqueID: Int, _ material: PhysXPhysicsMaterial) {
+    init(_ uniqueID: UInt32, _ material: PhysXPhysicsMaterial) {
         super.init()
 
+        _axis = Quaternion(0, 0, PhysXColliderShape.halfSqrt, PhysXColliderShape.halfSqrt)
+        _physxRotation = _axis!
         _pxGeometry = CPxPlaneGeometry()
-        _allocShape(material)
-        _setLocalPose()
-        setUniqueID(uniqueID)
-    }
-
-    func setRotation(_ value: Vector3) {
-        _rotation = Quaternion.rotationYawPitchRoll(yaw: value.x, pitch: value.y, roll: value.z)
-        _rotation = Quaternion.rotateZ(quaternion: _rotation, rad: Float.pi * 0.5)
-        _ = _rotation.normalize()
+        _initialize(material, uniqueID)
         _setLocalPose()
     }
 
     override func setWorldScale(_ scale: Vector3) {
+        _scale = scale
+        _setLocalPose()
     }
 }

@@ -7,12 +7,22 @@
 import vox_math
 
 class PhysXSpringJoint: PhysXJoint {
-    init(_ actor0: PhysXCollider?, _ position0: Vector3, _ rotation0: Quaternion,
-         _ actor1: PhysXCollider?, _ position1: Vector3, _ rotation1: Quaternion) {
+    private var _swingOffset = Vector3()
+
+    init(_ collider: PhysXCollider?) {
         super.init()
         _pxJoint = PhysXPhysics._pxPhysics.createDistanceJoint(
-                actor0?._pxActor ?? nil, position0.internalValue, rotation0.internalValue,
-                actor1?._pxActor ?? nil, position1.internalValue, rotation1.internalValue)
+                nil ?? nil, SIMD3<Float>(), simd_quatf(),
+                collider?._pxActor ?? nil, SIMD3<Float>(), simd_quatf()
+        )
+        (_pxJoint as! CPxDistanceJoint).setDistanceJointFlag(CPxDistanceJointFlag(1), true) // enable max distance
+        (_pxJoint as! CPxDistanceJoint).setDistanceJointFlag(CPxDistanceJointFlag(2), true) // enable min distance
+        (_pxJoint as! CPxDistanceJoint).setDistanceJointFlag(CPxDistanceJointFlag(4), true) // enable spring
+    }
+
+    func setSwingOffset(value: Vector3) {
+        _swingOffset = value
+        _setLocalPose(1, value, Quaternion())
     }
 
     func setMinDistance(_ distance: Float) {
@@ -33,9 +43,5 @@ class PhysXSpringJoint: PhysXJoint {
 
     func setDamping(_ damping: Float) {
         (_pxJoint as! CPxDistanceJoint).setDamping(damping)
-    }
-
-    func setDistanceJointFlag(_ flag: Int, _ value: Bool) {
-        (_pxJoint as! CPxDistanceJoint).setDistanceJointFlag(CPxDistanceJointFlag(UInt32(flag)), value)
     }
 }

@@ -46,73 +46,37 @@ class PhysXPhysics {
 
     //MARK: - Collider Shape
 
-    static func createBoxColliderShape(_ uniqueID: Int, _ size: Vector3,
+    static func createBoxColliderShape(_ uniqueID: UInt32, _ size: Vector3,
                                        _ material: PhysXPhysicsMaterial) -> PhysXBoxColliderShape {
         PhysXBoxColliderShape(uniqueID, size, material)
     }
 
-    static func createSphereColliderShape(_ uniqueID: Int, _ radius: Float,
+    static func createSphereColliderShape(_ uniqueID: UInt32, _ radius: Float,
                                           _ material: PhysXPhysicsMaterial) -> PhysXSphereColliderShape {
         PhysXSphereColliderShape(uniqueID, radius, material)
     }
 
-    static func createPlaneColliderShape(_ uniqueID: Int,
+    static func createPlaneColliderShape(_ uniqueID: UInt32,
                                          _ material: PhysXPhysicsMaterial) -> PhysXPlaneColliderShape {
         PhysXPlaneColliderShape(uniqueID, material)
     }
 
-    static func createCapsuleColliderShape(_ uniqueID: Int, _ radius: Float, _ height: Float,
+    static func createCapsuleColliderShape(_ uniqueID: UInt32, _ radius: Float, _ height: Float,
                                            _ material: PhysXPhysicsMaterial) -> PhysXCapsuleColliderShape {
         PhysXCapsuleColliderShape(uniqueID, radius, height, material)
     }
 
     //MARK: - Joint
 
-    static func createFixedJoint(_ actor0: PhysXCollider?, _ position0: Vector3, _ rotation0: Quaternion,
-                                 _ actor1: PhysXCollider?, _ position1: Vector3, _ rotation1: Quaternion) -> PhysXFixedJoint {
-        PhysXFixedJoint((actor0 ?? nil), position0, rotation0, (actor1 ?? nil), position1, rotation1)
+    static func createFixedJoint(_ collider: PhysXCollider) -> PhysXFixedJoint {
+        PhysXFixedJoint(collider)
     }
 
-    static func createHingeJoint(_ actor0: PhysXCollider?, _ position0: Vector3, _ rotation0: Quaternion,
-                                 _ actor1: PhysXCollider?, _ position1: Vector3, _ rotation1: Quaternion) -> PhysXHingeJoint {
-        PhysXHingeJoint((actor0 ?? nil), position0, rotation0, (actor1 ?? nil), position1, rotation1)
+    static func createHingeJoint(_ collider: PhysXCollider) -> PhysXHingeJoint {
+        PhysXHingeJoint(collider)
     }
 
-    static func createSphericalJoint(_ actor0: PhysXCollider?, _ position0: Vector3, _ rotation0: Quaternion,
-                                     _ actor1: PhysXCollider?, _ position1: Vector3, _ rotation1: Quaternion) -> PhysXSphericalJoint {
-        PhysXSphericalJoint((actor0 ?? nil), position0, rotation0, (actor1 ?? nil), position1, rotation1)
-    }
-
-    static func createSpringJoint(_ actor0: PhysXCollider?, _ position0: Vector3, _ rotation0: Quaternion,
-                                  _ actor1: PhysXCollider?, _ position1: Vector3, _ rotation1: Quaternion) -> PhysXSpringJoint {
-        PhysXSpringJoint((actor0 ?? nil), position0, rotation0, (actor1 ?? nil), position1, rotation1)
-    }
-
-    static func createTranslationalJoint(_ actor0: PhysXCollider?, _ position0: Vector3, _ rotation0: Quaternion,
-                                         _ actor1: PhysXCollider?, _ position1: Vector3, _ rotation1: Quaternion) -> PhysXTranslationalJoint {
-        PhysXTranslationalJoint((actor0 ?? nil), position0, rotation0, (actor1 ?? nil), position1, rotation1)
-    }
-
-    static func createConfigurableJoint(_ actor0: PhysXCollider?, _ position0: Vector3, _ rotation0: Quaternion,
-                                        _ actor1: PhysXCollider?, _ position1: Vector3, _ rotation1: Quaternion) -> PhysXConfigurableJoint {
-        PhysXConfigurableJoint((actor0 ?? nil), position0, rotation0, (actor1 ?? nil), position1, rotation1)
-    }
-
-    //MARK: - Character Controller
-
-    static func createBoxCharacterControllerDesc() -> PhysXBoxCharacterControllerDesc {
-        PhysXBoxCharacterControllerDesc()
-    }
-
-    static func createCapsuleCharacterControllerDesc() -> PhysXCapsuleCharacterControllerDesc {
-        PhysXCapsuleCharacterControllerDesc()
-    }
-
-    static func createBoxObstacle() -> PhysXBoxObstacle {
-        PhysXBoxObstacle()
-    }
-
-    static func createCapsuleObstacle() -> PhysXCapsuleObstacle {
-        PhysXCapsuleObstacle()
+    static func createSpringJoint(_ collider: PhysXCollider) -> PhysXSpringJoint {
+        PhysXSpringJoint(collider)
     }
 }
