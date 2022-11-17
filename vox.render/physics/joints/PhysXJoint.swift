@@ -13,28 +13,28 @@ class PhysXJoint {
     private var _breakForce: Float = Float.greatestFiniteMagnitude
     private var _breakTorque: Float = Float.greatestFiniteMagnitude
 
-    func setConnectedCollider(value: PhysXCollider?) {
+    func setConnectedCollider(_ value: PhysXCollider?) {
         _pxJoint.setActors(value?._pxActor, _collider?._pxActor)
     }
 
-    func setConnectedAnchor(value: Vector3) {
+    func setConnectedAnchor(_ value: Vector3) {
         _connectedAnchor = value
         _setLocalPose(0, value, Quaternion())
     }
 
-    func setConnectedMassScale(value: Float) {
+    func setConnectedMassScale(_ value: Float) {
         _pxJoint.setInvMassScale0(1 / value)
     }
 
-    func setConnectedInertiaScale(value: Float) {
+    func setConnectedInertiaScale(_ value: Float) {
         _pxJoint.setInvInertiaScale0(1 / value)
     }
 
-    func setMassScale(value: Float) {
+    func setMassScale(_ value: Float) {
         _pxJoint.setInvMassScale1(1 / value)
     }
 
-    func setInertiaScale(value: Float) {
+    func setInertiaScale(_ value: Float) {
         _pxJoint.setInvInertiaScale1(1 / value)
     }
 
@@ -43,7 +43,7 @@ class PhysXJoint {
         _pxJoint.setBreakForce(_breakForce, _breakTorque)
     }
 
-    func setBreakTorque(value: Float) {
+    func setBreakTorque(_ value: Float) {
         _breakTorque = value
         _pxJoint.setBreakForce(_breakForce, _breakTorque)
     }

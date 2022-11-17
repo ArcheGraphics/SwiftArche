@@ -20,7 +20,7 @@ class PhysXSpringJoint: PhysXJoint {
         (_pxJoint as! CPxDistanceJoint).setDistanceJointFlag(CPxDistanceJointFlag(4), true) // enable spring
     }
 
-    func setSwingOffset(value: Vector3) {
+    func setSwingOffset(_ value: Vector3) {
         _swingOffset = value
         _setLocalPose(1, value, Quaternion())
     }
