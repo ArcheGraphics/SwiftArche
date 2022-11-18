@@ -9,15 +9,10 @@ import ARKit
 import vox_math
 
 public class ARSubpass: Subpass {
-    // Captured image texture cache
-    var capturedImageTextureCache: CVMetalTextureCache!
-    var capturedImageTextureY: CVMetalTexture?
-    var capturedImageTextureCbCr: CVMetalTexture?
-
     var capturedImagePipelineState: MTLRenderPipelineState!
     var capturedImageDepthState: MTLDepthStencilState!
     var imagePlaneVertexBuffer: MTLBuffer!
-    weak var engine: Engine!
+    weak var arManager: ARManager!
 
     var viewportSize: CGSize = CGSize()
     var viewportSizeDidChange: Bool = true
@@ -31,7 +26,7 @@ public class ARSubpass: Subpass {
     ]
 
     init(_ engine: Engine) {
-        self.engine = engine
+        arManager = engine.arManager
         super.init()
 
         // Create a vertex descriptor for our image plane vertex buffer
@@ -76,11 +71,6 @@ public class ARSubpass: Subpass {
         capturedImageDepthStateDescriptor.isDepthWriteEnabled = false
         capturedImageDepthState = engine.device.makeDepthStencilState(descriptor: capturedImageDepthStateDescriptor)
 
-        // Create captured image texture cache
-        var textureCache: CVMetalTextureCache?
-        CVMetalTextureCacheCreate(nil, nil, engine.device, nil, &textureCache)
-        capturedImageTextureCache = textureCache
-
         viewportSize = engine.canvas.bounds.size
         let updateFlag = ListenerUpdateFlag()
         updateFlag.listener = resize
@@ -88,17 +78,16 @@ public class ARSubpass: Subpass {
     }
 
     override func draw(_ encoder: MTLRenderCommandEncoder) {
-        guard let currentFrame = engine.arManager!.session.currentFrame else {
+        guard let currentFrame = arManager.session.currentFrame else {
             return
         }
 
-        updateCapturedImageTextures(frame: currentFrame)
         if viewportSizeDidChange {
             viewportSizeDidChange = false
             updateImagePlane(frame: currentFrame)
         }
 
-        guard let textureY = capturedImageTextureY, let textureCbCr = capturedImageTextureCbCr else {
+        guard let textureY = arManager.capturedImageTextureY, let textureCbCr = arManager.capturedImageTextureCbCr else {
             return
         }
 
@@ -140,31 +129,5 @@ public class ARSubpass: Subpass {
             vertexData[textureCoordIndex] = Float(transformedCoord.x)
             vertexData[textureCoordIndex + 1] = Float(transformedCoord.y)
         }
-    }
-
-    private func updateCapturedImageTextures(frame: ARFrame) {
-        // Create two textures (Y and CbCr) from the provided frame's captured image
-        let pixelBuffer = frame.capturedImage
-
-        if (CVPixelBufferGetPlaneCount(pixelBuffer) < 2) {
-            return
-        }
-
-        capturedImageTextureY = createTexture(fromPixelBuffer: pixelBuffer, pixelFormat: .r8Unorm, planeIndex: 0)
-        capturedImageTextureCbCr = createTexture(fromPixelBuffer: pixelBuffer, pixelFormat: .rg8Unorm, planeIndex: 1)
-    }
-
-    private func createTexture(fromPixelBuffer pixelBuffer: CVPixelBuffer, pixelFormat: MTLPixelFormat, planeIndex: Int) -> CVMetalTexture? {
-        let width = CVPixelBufferGetWidthOfPlane(pixelBuffer, planeIndex)
-        let height = CVPixelBufferGetHeightOfPlane(pixelBuffer, planeIndex)
-
-        var texture: CVMetalTexture? = nil
-        let status = CVMetalTextureCacheCreateTextureFromImage(nil, capturedImageTextureCache, pixelBuffer, nil, pixelFormat, width, height, planeIndex, &texture)
-
-        if status != kCVReturnSuccess {
-            texture = nil
-        }
-
-        return texture
     }
 }

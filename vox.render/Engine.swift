@@ -90,7 +90,7 @@ public class Engine: NSObject {
         }
     }
 
-    public init(canvas: Canvas, arManager: ARManager? = nil) {
+    public init(canvas: Canvas) {
         self.canvas = canvas
         guard let device = MTLCreateSystemDefaultDevice() else {
             fatalError("Unable to create default Metal Device")
@@ -111,19 +111,18 @@ public class Engine: NSObject {
         self.commandQueue = commandQueue
 
         super.init()
-        _arManager = arManager
-        _sceneManager = SceneManager(engine: self)
+        canvas.delegate = self
         _physicsManager = PhysicsManager(engine: self)
         _inputManager = InputManager(engine: self)
-        canvas.delegate = self
+        _sceneManager = SceneManager(engine: self)
+        _sceneManager.activeScene = Scene(self, "DefaultScene")
+    }
 
-        // add default scene
-        let scene = Scene(self, "DefaultScene")
-        if _arManager != nil {
-            scene.background.mode = .AR
-            scene.background.ar = ARSubpass(self)
-        }
-        _sceneManager.activeScene = scene
+    public func initArSession() {
+        _arManager = ARManager(device)
+        let scene = _sceneManager.activeScene!
+        scene.background.mode = .AR
+        scene.background.ar = ARSubpass(self)
     }
 
     /// Execution engine loop.
@@ -157,11 +156,12 @@ public class Engine: NSObject {
     }
 
     func _render(_ scene: Scene) {
-        let cameras = scene._activeCameras
+        arManager?.update(_time.deltaTime)
         _componentsManager.callRendererOnUpdate(_time.deltaTime)
 
         scene._updateShaderData()
 
+        let cameras = scene._activeCameras
         if (cameras.count > 0) {
             for camera in cameras {
                 _componentsManager.callCameraOnBeginRender(camera)

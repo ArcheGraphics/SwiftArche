@@ -5,23 +5,91 @@
 //  property of any third parties.
 
 import ARKit
+import vox_math
 
 public class ARManager: NSObject {
     let _session = ARSession()
+    // Captured image texture cache
+    var capturedImageTextureCache: CVMetalTextureCache!
+    var capturedImageTextureY: CVMetalTexture?
+    var capturedImageTextureCbCr: CVMetalTexture?
+    private var _onUpdateScripts: DisorderedArray<Script> = DisorderedArray()
 
+    public var camera: Camera? = nil
     public var session: ARSession {
         get {
             _session
         }
     }
 
-    public override init() {
+    public init(_ device: MTLDevice) {
         super.init()
+        // Create captured image texture cache
+        var textureCache: CVMetalTextureCache?
+        CVMetalTextureCacheCreate(nil, nil, device, nil, &textureCache)
+        capturedImageTextureCache = textureCache
         _session.delegate = self
     }
 
-    func update() {
+    func addOnUpdateScript(_ script: Script) {
+        script._onUpdateIndex = _onUpdateScripts.length
+        _onUpdateScripts.add(script)
+    }
 
+    func removeOnUpdateScript(_ script: Script) {
+        let replaced = _onUpdateScripts.deleteByIndex(script._onUpdateIndex)
+        if replaced != nil {
+            replaced!._onUpdateIndex = script._onUpdateIndex
+        }
+        script._onUpdateIndex = -1
+    }
+
+    func update(_ deltaTime: Float) {
+        guard let currentFrame = session.currentFrame else {
+            return
+        }
+
+        if camera != nil {
+            let arCamera = currentFrame.camera
+            var viewMatrix = Matrix(arCamera.viewMatrix(for: .landscapeRight))
+            camera!.entity.transform.worldMatrix = viewMatrix.invert()
+            camera!.projectionMatrix = Matrix(arCamera.projectionMatrix(for: .landscapeRight, viewportSize: camera!.engine.canvas.bounds.size,
+                    zNear: CGFloat(camera!.nearClipPlane), zFar: CGFloat(camera!.farClipPlane)))
+
+            let elements = _onUpdateScripts._elements
+            for i in 0..<_onUpdateScripts.length {
+                let element = elements[i]!
+                if (element._started) {
+                    element.onARUpdate(deltaTime, currentFrame)
+                }
+            }
+        }
+    }
+
+    private func updateCapturedImageTextures(frame: ARFrame) {
+        // Create two textures (Y and CbCr) from the provided frame's captured image
+        let pixelBuffer = frame.capturedImage
+
+        if (CVPixelBufferGetPlaneCount(pixelBuffer) < 2) {
+            return
+        }
+
+        capturedImageTextureY = createTexture(fromPixelBuffer: pixelBuffer, pixelFormat: .r8Unorm, planeIndex: 0)
+        capturedImageTextureCbCr = createTexture(fromPixelBuffer: pixelBuffer, pixelFormat: .rg8Unorm, planeIndex: 1)
+    }
+
+    private func createTexture(fromPixelBuffer pixelBuffer: CVPixelBuffer, pixelFormat: MTLPixelFormat, planeIndex: Int) -> CVMetalTexture? {
+        let width = CVPixelBufferGetWidthOfPlane(pixelBuffer, planeIndex)
+        let height = CVPixelBufferGetHeightOfPlane(pixelBuffer, planeIndex)
+
+        var texture: CVMetalTexture? = nil
+        let status = CVMetalTextureCacheCreateTextureFromImage(nil, capturedImageTextureCache, pixelBuffer, nil, pixelFormat, width, height, planeIndex, &texture)
+
+        if status != kCVReturnSuccess {
+            texture = nil
+        }
+
+        return texture
     }
 }
 
@@ -32,6 +100,7 @@ extension ARManager: ARSessionDelegate {
     ///   - session: The session being run.
     ///   - frame: The frame that has been updated.
     public func session(_ session: ARSession, didUpdate frame: ARFrame) {
+        updateCapturedImageTextures(frame: frame)
     }
 
     /// This is called when new anchors are added to the session.

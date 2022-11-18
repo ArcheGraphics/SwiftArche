@@ -4,7 +4,7 @@
 //  personal capacity and am not conveying any rights to any intellectual
 //  property of any third parties.
 
-import Foundation
+import ARKit
 
 /// Script class, used for logic writing.
 public class Script: Component {
@@ -37,6 +37,12 @@ public class Script: Component {
     /// Called after the onUpdate finished, called frame by frame.
     /// - Parameter deltaTime: The deltaTime when the script update.
     public func onLateUpdate(_ deltaTime: Float) {
+    }
+
+    /// Called after the onLateUpdate finished, called frame by frame.
+    /// - Parameter deltaTime: The deltaTime when the script update.
+    /// - Parameter frame: The ARFrame when the script update.
+    public func onARUpdate(_ deltaTime: Float, _ frame: ARFrame) {
     }
 
     /// Called before camera rendering, called per camera.
@@ -137,6 +143,7 @@ public class Script: Component {
                 componentsManager.addOnStartScript(self)
             }
             componentsManager.addOnUpdateScript(self)
+            engine.arManager?.addOnUpdateScript(self)
             _entity._addScript(self)
         }
         onEnable()
@@ -153,8 +160,8 @@ public class Script: Component {
     }
 
     func _handlingInValid() {
-        let componentsManager = engine._componentsManager
-        componentsManager.removeOnUpdateScript(self)
+        engine._componentsManager.removeOnUpdateScript(self)
+        engine.arManager?.removeOnUpdateScript(self)
 
         _entity._removeScript(self)
         _waitHandlingInValid = false

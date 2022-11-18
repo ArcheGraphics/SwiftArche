@@ -11,15 +11,14 @@ import vox_render
 class PrimitiveApp: UIViewController {
     var canvas: Canvas!
     var engine: Engine!
-    var arManager: ARManager!
 
     override func viewDidLoad() {
         super.viewDidLoad()
         canvas = Canvas(frame: view.frame)
         canvas.setParentView(view)
 
-        arManager = ARManager()
-        engine = Engine(canvas: canvas, arManager: arManager)
+        engine = Engine(canvas: canvas)
+        engine.initArSession()
 
         let scene = engine.sceneManager.activeScene!
         let root = scene.createRootEntity()
