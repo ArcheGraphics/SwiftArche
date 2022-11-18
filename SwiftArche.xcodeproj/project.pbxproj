@@ -210,6 +210,7 @@
 		43D8CF98C05E60C0A40F11E4 /* StencilState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8C55ADD0B573F9BE441A2 /* StencilState.swift */; };
 		43D8CF9A819FABF732156575 /* ComputePipelineState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8C5458496A0164715E24D /* ComputePipelineState.swift */; };
 		43D8CFDE172582A4463B835E /* PrimitiveMesh.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8C0E825225EDCF4195D57 /* PrimitiveMesh.swift */; };
+		E63B117E5A0F83C02B55118B /* BufferPool.swift in Sources */ = {isa = PBXBuildFile; fileRef = E63B1681537252EE5F41F0EF /* BufferPool.swift */; };
 		E63B123A289AA1AE61CCA67E /* PrimitiveApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = E63B17AB94CBF9AAB3956248 /* PrimitiveApp.swift */; };
 		E63B12FD0D692DA50726EADC /* Camera.swift in Sources */ = {isa = PBXBuildFile; fileRef = E63B1AAE575CDDFFC0A8CD28 /* Camera.swift */; };
 		E63B137938CDF22136EACAB5 /* ShadowSliceData.swift in Sources */ = {isa = PBXBuildFile; fileRef = E63B133737E2EA928107632F /* ShadowSliceData.swift */; };
@@ -650,6 +651,7 @@
 		E63B157B585744B9603C1D21 /* ARSubpass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ARSubpass.swift; sourceTree = "<group>"; };
 		E63B15E4F3B202601AC06114 /* BackgroundMode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BackgroundMode.swift; sourceTree = "<group>"; };
 		E63B16052FDB98D0BF992CD0 /* SpotLight.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SpotLight.swift; sourceTree = "<group>"; };
+		E63B1681537252EE5F41F0EF /* BufferPool.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BufferPool.swift; sourceTree = "<group>"; };
 		E63B16A52D7461C2352D44C3 /* RenderElement.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RenderElement.swift; sourceTree = "<group>"; };
 		E63B1745FC89A9CED5D9BA52 /* Renderer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Renderer.swift; sourceTree = "<group>"; };
 		E63B17AB94CBF9AAB3956248 /* PrimitiveApp.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PrimitiveApp.swift; sourceTree = "<group>"; };
@@ -1407,6 +1409,7 @@
 				43D8C6C6BAB6A28F4761BFCC /* ModelMesh.swift */,
 				43D8C0E825225EDCF4195D57 /* PrimitiveMesh.swift */,
 				E63B1F6CBBF500DC5175715F /* MeshRenderer.swift */,
+				E63B1681537252EE5F41F0EF /* BufferPool.swift */,
 			);
 			path = mesh;
 			sourceTree = "<group>";
@@ -1903,6 +1906,7 @@
 				E63B1F8DA7DEA3BF63D648CF /* ARManager.swift in Sources */,
 				E63B1828A10683FFA47122A8 /* CascadedShadowSubpass.swift in Sources */,
 				E63B14041298E8A7482B9FAC /* ShadowManager.swift in Sources */,
+				E63B117E5A0F83C02B55118B /* BufferPool.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -9,6 +9,8 @@ import Metal
 public class ShaderData {
     private var _device: MTLDevice
     private var _shaderBuffers: [String: BufferView] = [:]
+    private var _shaderBufferFunctors: [String: () -> BufferView] = [:]
+    private var _shaderBufferPools: [String: BufferAllocation] = [:]
     private var _imageViews: [String: MTLTexture] = [:]
     private var _samplers: [String: MTLSamplerDescriptor] = [:]
     static private var _defaultSamplerDesc: MTLSamplerDescriptor = MTLSamplerDescriptor()
@@ -16,6 +18,14 @@ public class ShaderData {
 
     public init(_ device: MTLDevice) {
         _device = device
+    }
+
+    public func setBufferFunctor(_ property: String, _ functor: @escaping () -> BufferView) {
+        _shaderBufferFunctors[property] = functor
+    }
+
+    public func setData(_ property: String, _ value: BufferAllocation) {
+        _shaderBufferPools[property] = value
     }
 
     public func setData<T>(_ property: String, _ data: T) {
@@ -115,6 +125,14 @@ extension ShaderData {
                 let buffer = _shaderBuffers[uniform.name]
                 if buffer != nil {
                     commandEncoder.setBuffer(buffer!.buffer, offset: 0, index: uniform.location)
+                }
+                let bufferPool = _shaderBufferPools[uniform.name]
+                if bufferPool != nil {
+                    commandEncoder.setBuffer(bufferPool!.buffer, offset: bufferPool!.offset, index: uniform.location)
+                }
+                let bufferFunctor = _shaderBufferFunctors[uniform.name]
+                if bufferFunctor != nil {
+                    commandEncoder.setBuffer(bufferFunctor!().buffer, offset: 0, index: uniform.location)
                 }
                 break
             case .texture:

@@ -9,6 +9,7 @@ import Metal
 import simd
 
 class CascadedShadowSubpass: GeometrySubpass {
+    private static let _lightViewProjMatProperty = "u_lightViewProjMat"
     private static let _lightShadowBiasProperty = "u_shadowBias"
     private static let _lightDirectionProperty = "u_lightDirection"
 
@@ -35,10 +36,12 @@ class CascadedShadowSubpass: GeometrySubpass {
     // strength, null, lightIndex
     private var _shadowInfos = SIMD3<Float>()
     private var _shaderPass: ShaderPass
+    private var _bufferPool: BufferPool
 
     init(_ camera: Camera) {
         _camera = camera
-        _shaderPass = ShaderPass(camera.engine.library, "vertex_shadowmap", nil);
+        _shaderPass = ShaderPass(camera.engine.library, "vertex_shadowmap", nil)
+        _bufferPool = BufferPool(camera.engine.device, MemoryLayout<Matrix>.size * 4)
         super.init()
     }
 
@@ -48,6 +51,7 @@ class CascadedShadowSubpass: GeometrySubpass {
     }
 
     override func drawElement(_ encoder: MTLRenderCommandEncoder) {
+        _bufferPool.reset()
         _existShadowMap = false
         _renderDirectShadowMap(encoder)
 
@@ -105,6 +109,7 @@ class CascadedShadowSubpass: GeometrySubpass {
         let shadowCascades = _camera.scene.shadowCascades.rawValue
         let boundSphere = _shadowSliceData.splitBoundSphere
         let sunLightIndex = _camera.engine._lightManager._getSunLightIndex()
+        let bufferBlock = _bufferPool.requestBufferBlock(minimum_size: 4 * MemoryLayout<Matrix>.size)
 
         if (sunLightIndex != -1) {
             let light = _camera.scene._sunLight
@@ -155,7 +160,7 @@ class CascadedShadowSubpass: GeometrySubpass {
                             outShadowMatrices: &_shadowMatrices
                     )
                 }
-                _updateSingleShadowCasterShaderData((light as! DirectLight), _shadowSliceData)
+                _updateSingleShadowCasterShaderData(bufferBlock, (light as! DirectLight), _shadowSliceData)
 
                 // upload pre-cascade infos.
                 let center = boundSphere.center
@@ -251,15 +256,17 @@ class CascadedShadowSubpass: GeometrySubpass {
         shaderData.setData(CascadedShadowSubpass._shadowMapSize, _shadowMapSize)
     }
 
-    private func _updateSingleShadowCasterShaderData(_ light: DirectLight, _ shadowSliceData: ShadowSliceData) {
-        let virtualCamera = shadowSliceData.virtualCamera;
-        let shadowBias = ShadowUtils.getShadowBias(light: light, projectionMatrix: virtualCamera.projectionMatrix, shadowResolution: _shadowTileResolution);
+    private func _updateSingleShadowCasterShaderData(_ bufferBlock: BufferBlock, _ light: DirectLight, _ shadowSliceData: ShadowSliceData) {
+        let virtualCamera = shadowSliceData.virtualCamera
+        let shadowBias = ShadowUtils.getShadowBias(light: light, projectionMatrix: virtualCamera.projectionMatrix, shadowResolution: _shadowTileResolution)
 
-        let sceneShaderData = _camera.scene.shaderData;
-        sceneShaderData.setData(CascadedShadowSubpass._lightShadowBiasProperty, shadowBias);
-        sceneShaderData.setData(CascadedShadowSubpass._lightDirectionProperty, light.direction);
+        let sceneShaderData = _camera.scene.shaderData
+        sceneShaderData.setData(CascadedShadowSubpass._lightShadowBiasProperty, shadowBias)
+        sceneShaderData.setData(CascadedShadowSubpass._lightDirectionProperty, light.direction)
 
-        // context.applyVirtualCamera(virtualCamera);
+        let allocation = bufferBlock.allocate(MemoryLayout<Matrix>.size)!
+        allocation.update(shadowSliceData.virtualCamera.viewProjectionMatrix)
+        sceneShaderData.setData(CascadedShadowSubpass._lightViewProjMatProperty, allocation)
     }
 
 }
