@@ -107,11 +107,18 @@ public class Engine: NSObject {
 
         super.init()
         _sceneManager = SceneManager(engine: self)
-        _sceneManager.activeScene = Scene(self, "DefaultScene");
         _physicsManager = PhysicsManager(engine: self)
         _inputManager = InputManager(engine: self)
         canvas.delegate = self
         session?.delegate = self
+
+        // add default scene
+        let scene = Scene(self, "DefaultScene")
+        if session != nil {
+            scene.background.mode = .AR
+            scene.background.ar = ARSubpass()
+        }
+        _sceneManager.activeScene = scene
     }
 
     /// Execution engine loop.

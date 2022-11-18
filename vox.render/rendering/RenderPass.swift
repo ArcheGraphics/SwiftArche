@@ -7,7 +7,7 @@
 import Metal
 
 public class RenderPass {
-    private var _descriptor: MTLRenderPassDescriptor
+    private var _descriptor: MTLRenderPassDescriptor!
     private var _subpasses: [Subpass] = []
 
     weak var pipeline: DevicePipeline!
@@ -24,8 +24,7 @@ public class RenderPass {
         }
     }
 
-    public init(_ descriptor: MTLRenderPassDescriptor, _ pipeline: DevicePipeline) {
-        _descriptor = descriptor
+    public init(_ pipeline: DevicePipeline) {
         self.pipeline = pipeline
     }
 
@@ -36,9 +35,15 @@ public class RenderPass {
         _subpasses.append(subpass)
     }
 
-    func draw(_ commandBuffer: MTLCommandBuffer, _ label: String = "") {
-        assert(_subpasses.count > 0)
-        guard let encoder = commandBuffer.makeRenderCommandEncoder(descriptor: _descriptor) else {
+    public func removeSubpass(_ subpass: Subpass) {
+        _subpasses.removeAll { (v: Subpass) in
+            v === subpass
+        }
+    }
+
+    func draw(_ commandBuffer: MTLCommandBuffer, _ descriptor: MTLRenderPassDescriptor, _ label: String = "") {
+        _descriptor = descriptor
+        guard let encoder = commandBuffer.makeRenderCommandEncoder(descriptor: descriptor) else {
             return
         }
         encoder.label = label

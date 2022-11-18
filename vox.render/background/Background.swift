@@ -26,4 +26,8 @@ public class Background {
     /// Background texture
     /// - Remark: When `mode` is `BackgroundMode.Texture`, the property will take effects.
     public var texture: BackgroundSubpass?
+
+    /// Background ar.
+    /// - Remark: When `mode` is `BackgroundMode.AR`, the property will take effects.
+    public var ar: ARSubpass?
 }

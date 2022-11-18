@@ -20,21 +20,65 @@ public class DevicePipeline {
     var _transparentQueue: [RenderElement] = []
     var _alphaTestQueue: [RenderElement] = []
     var _resourceCache: ResourceCache
-    var _renderPassDescriptor = MTLRenderPassDescriptor()
-    var _renderPass: RenderPass!
+    var _backgroundSubpass: Subpass?
+    public var mainRenderPass: RenderPass!
 
     public init(_ camera: Camera) {
         _resourceCache = ResourceCache(camera.engine.device)
         self.camera = camera
-        _renderPass = RenderPass(_renderPassDescriptor, self)
+        mainRenderPass = RenderPass(self)
+        mainRenderPass.addSubpass(ForwardSubpass())
     }
 
     public func commit() {
-        guard let commandBuffer = camera.engine.commandQueue.makeCommandBuffer() else {
-            return
+        let background = camera.scene.background
+        _changeBackground(background)
+
+        let canvas = camera.engine.canvas
+        if let commandBuffer = camera.engine.commandQueue.makeCommandBuffer(),
+           let renderPassDescriptor = canvas.currentRenderPassDescriptor,
+           let currentDrawable = canvas.currentDrawable {
+
+            if background.mode == BackgroundMode.SolidColor {
+                renderPassDescriptor.colorAttachments[0].clearColor = MTLClearColor(
+                        red: Double(background.solidColor.r),
+                        green: Double(background.solidColor.g),
+                        blue: Double(background.solidColor.b),
+                        alpha: Double(background.solidColor.a)
+                )
+            }
+            mainRenderPass.draw(commandBuffer, camera.renderTarget != nil ? camera.renderTarget! : renderPassDescriptor)
+
+            commandBuffer.present(currentDrawable)
+            commandBuffer.commit()
         }
-        _renderPass.draw(commandBuffer)
-        commandBuffer.commit()
+    }
+
+    private func _changeBackground(_ background: Background) {
+        var backgroundSubpass: Subpass? = nil
+        switch background.mode {
+        case .Sky:
+            backgroundSubpass = background.sky
+            break
+        case .Texture:
+            backgroundSubpass = background.texture
+            break
+        case .AR:
+            backgroundSubpass = background.ar
+            break
+        case .SolidColor:
+            backgroundSubpass = nil
+        }
+
+        if backgroundSubpass !== _backgroundSubpass {
+            if _backgroundSubpass != nil {
+                mainRenderPass.removeSubpass(_backgroundSubpass!)
+            }
+            if backgroundSubpass != nil {
+                mainRenderPass.addSubpass(backgroundSubpass!)
+            }
+            _backgroundSubpass = backgroundSubpass
+        }
     }
 
     func callRender(_ cameraInfo: CameraInfo) {

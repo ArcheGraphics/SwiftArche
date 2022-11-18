@@ -14,4 +14,6 @@ public enum BackgroundMode {
     case Sky
     /// Texture
     case Texture
+    /// AR
+    case AR
 }
