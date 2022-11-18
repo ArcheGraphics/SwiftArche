@@ -22,10 +22,12 @@ public class DevicePipeline {
     var _resourceCache: ResourceCache
     var _backgroundSubpass: Subpass?
     public var mainRenderPass: RenderPass!
+    public var shadowManager: ShadowManager!
 
     public init(_ camera: Camera) {
         _resourceCache = ResourceCache(camera.engine.device)
         self.camera = camera
+        shadowManager = ShadowManager(self)
         mainRenderPass = RenderPass(self)
         mainRenderPass.addSubpass(ForwardSubpass())
     }
@@ -36,6 +38,8 @@ public class DevicePipeline {
 
         let canvas = camera.engine.canvas
         if let renderPassDescriptor = canvas.currentRenderPassDescriptor {
+            shadowManager.draw(commandBuffer)
+
             if background.mode == BackgroundMode.SolidColor {
                 renderPassDescriptor.colorAttachments[0].clearColor = MTLClearColor(
                         red: Double(background.solidColor.r),

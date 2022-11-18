@@ -7,7 +7,7 @@
 import vox_math
 
 class ShadowSliceData {
-    var resolution: Int = 0
+    var resolution: UInt32 = 0
     var virtualCamera: CameraInfo = CameraInfo()
     var cullPlanes: [Plane] = [
         Plane(Vector3()),

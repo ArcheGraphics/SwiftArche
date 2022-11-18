@@ -38,7 +38,9 @@ public class GeometrySubpass: Subpass {
 
         let functions = pipeline._resourceCache.requestShaderModule(element.shaderPass, shaderMacro)
         pipelineDescriptor.vertexFunction = functions[0]
-        pipelineDescriptor.fragmentFunction = functions[1]
+        if functions.count == 2 {
+            pipelineDescriptor.fragmentFunction = functions[1]
+        }
 
         pipelineDescriptor.vertexDescriptor = mesh._vertexDescriptor
         element.shaderPass.renderState!._apply(pipelineDescriptor, depthStencilDescriptor, encoder, false)

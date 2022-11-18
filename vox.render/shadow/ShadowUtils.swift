@@ -243,9 +243,9 @@ class ShadowUtils {
                                             lightForward: Vector3,
                                             cascadeIndex: Int,
                                             nearPlane: Float,
-                                            shadowResolution: Int,
+                                            shadowResolution: UInt32,
                                             shadowSliceData: ShadowSliceData,
-                                            outShadowMatrices: inout [Float]) {
+                                            outShadowMatrices: inout [simd_float4x4]) {
         let boundSphere = shadowSliceData.splitBoundSphere
         shadowSliceData.resolution = shadowResolution
 
@@ -281,14 +281,11 @@ class ShadowUtils {
         )
 
         virtualCamera.viewProjectionMatrix = virtualCamera.projectionMatrix * virtualCamera.viewMatrix
-        Utils._floatMatrixMultiply(
-                ShadowUtils._shadowMapCoordMatrix.elements * virtualCamera.viewProjectionMatrix.elements,
-                &outShadowMatrices,
-                cascadeIndex * 16
+        outShadowMatrices[cascadeIndex] = ShadowUtils._shadowMapCoordMatrix.elements * virtualCamera.viewProjectionMatrix.elements
         )
     }
 
-    static func getMaxTileResolutionInAtlas(atlasWidth: Int, atlasHeight: Int, tileCount: Int) -> Int {
+    static func getMaxTileResolutionInAtlas(atlasWidth: UInt32, atlasHeight: UInt32, tileCount: Int) -> UInt32 {
         var resolution = min(atlasWidth, atlasHeight)
         var currentTileCount = atlasWidth / resolution * atlasHeight / resolution
         while (currentTileCount < tileCount) {
@@ -298,7 +295,7 @@ class ShadowUtils {
         return resolution
     }
 
-    static func getShadowBias(light: DirectLight, projectionMatrix: Matrix, shadowResolution: Int) -> Vector2 {
+    static func getShadowBias(light: DirectLight, projectionMatrix: Matrix, shadowResolution: UInt32) -> Vector2 {
         // Frustum size is guaranteed to be a cube as we wrap shadow frustum around a sphere
         // elements[0] = 2.0 / (right - left)
         let frustumSize: Float = 2.0 / projectionMatrix.elements.columns.0[0]
@@ -322,12 +319,12 @@ class ShadowUtils {
     }
 
     /// Apply shadow slice scale and offset
-    static func applySliceTransform(tileSize: Int,
+    static func applySliceTransform(tileSize: UInt32,
                                     atlasWidth: Int,
                                     atlasHeight: Int,
                                     cascadeIndex: Int,
                                     atlasOffset: Vector2,
-                                    outShadowMatrices: inout [Float]) {
+                                    outShadowMatrices: inout [simd_float4x4]) {
         var slice = simd_float4x4()
 
         let oneOverAtlasWidth: Float = 1.0 / Float(atlasWidth)
@@ -357,7 +354,6 @@ class ShadowUtils {
         slice.columns.3[2] = 0
         slice.columns.3[3] = 1
 
-        let offset = cascadeIndex * 16
-        Utils._floatMatrixMultiply(slice, outShadowMatrices, offset, &outShadowMatrices, offset)
+        outShadowMatrices[cascadeIndex] *= slice
     }
 }

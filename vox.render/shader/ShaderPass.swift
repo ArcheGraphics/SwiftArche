@@ -23,8 +23,12 @@ public class ShaderPass {
         _library = library
     }
 
-    public init(_ library: MTLLibrary, _ vertexSource: String, _ fragmentSource: String) {
-        _shaders = [vertexSource, fragmentSource]
+    public init(_ library: MTLLibrary, _ vertexSource: String, _ fragmentSource: String?) {
+        if fragmentSource == nil {
+            _shaders = [vertexSource]
+        } else {
+            _shaders = [vertexSource, fragmentSource!]
+        }
         _library = library
         _renderState = RenderState()
         setBlendMode(.Normal)
