@@ -30,51 +30,49 @@ public class Engine: NSObject {
     private var _isPaused: Bool = true;
 
     /// Settings of Engine.
-    var settings: EngineSettings? {
+    public var settings: EngineSettings? {
         get {
             _settings
         }
     }
 
     /// Get the Metal device.
-    var device: MTLDevice {
+    public var device: MTLDevice {
         get {
             _device
         }
     }
 
     /// Get the scene manager.
-    var sceneManager: SceneManager {
+    public var sceneManager: SceneManager {
         get {
             _sceneManager
         }
     }
 
     /// Get the input manager.
-    var physicsManager: PhysicsManager {
+    public var physicsManager: PhysicsManager {
         get {
             _physicsManager
         }
     }
 
     /// Get the input manager.
-    var inputManager: InputManager {
+    public var inputManager: InputManager {
         get {
             _inputManager
         }
     }
 
     /// Get the timer.
-    var time: Time {
+    public var time: Time {
         get {
             _time
         }
     }
 
-    /**
-   * Whether the engine is paused.
-   */
-    var isPaused: Bool {
+    /// Whether the engine is paused.
+    public var isPaused: Bool {
         get {
             _isPaused
         }
@@ -117,7 +115,7 @@ public class Engine: NSObject {
     }
 
     /// Execution engine loop.
-    func run() {
+    public func run() {
         isPaused = false
     }
 

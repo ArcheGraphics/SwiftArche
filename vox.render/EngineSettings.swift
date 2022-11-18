@@ -7,7 +7,7 @@
 import Foundation
 
 /// Render settings.
-protocol EngineSettings {
+public protocol EngineSettings {
     /// Color space
     var colorSpace: ColorSpace? { get }
 }
