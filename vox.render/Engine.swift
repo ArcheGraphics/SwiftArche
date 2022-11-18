@@ -12,18 +12,79 @@ import Logging
 let logger = Logger(label: "com.arche.main")
 
 public class Engine: NSObject {
+    let canvas: Canvas
+    let session: ARSession?
+    let library: MTLLibrary!
+    let commandQueue: MTLCommandQueue
+    let _macroCollection: ShaderMacroCollection = ShaderMacroCollection()
     let _componentsManager: ComponentsManager = ComponentsManager()
     let _lightManager = LightManager()
-    var canvas: Canvas
-    var session: ARSession?
-    var library: MTLLibrary!
-    var commandQueue: MTLCommandQueue
-    var _macroCollection: ShaderMacroCollection = ShaderMacroCollection()
 
-    public var device: MTLDevice
-    public var sceneManager: SceneManager!
-    public var physicsManager: PhysicsManager!
-    public var inputManager: InputManager!
+    private var _time: Time = Time();
+    private var _settings: EngineSettings? = nil
+    private var _device: MTLDevice
+    private var _sceneManager: SceneManager!
+    private var _physicsManager: PhysicsManager!
+    private var _inputManager: InputManager!
+
+    private var _isPaused: Bool = true;
+
+    /// Settings of Engine.
+    var settings: EngineSettings? {
+        get {
+            _settings
+        }
+    }
+
+    /// Get the Metal device.
+    var device: MTLDevice {
+        get {
+            _device
+        }
+    }
+
+    /// Get the scene manager.
+    var sceneManager: SceneManager {
+        get {
+            _sceneManager
+        }
+    }
+
+    /// Get the input manager.
+    var physicsManager: PhysicsManager {
+        get {
+            _physicsManager
+        }
+    }
+
+    /// Get the input manager.
+    var inputManager: InputManager {
+        get {
+            _inputManager
+        }
+    }
+
+    /// Get the timer.
+    var time: Time {
+        get {
+            _time
+        }
+    }
+
+    /**
+   * Whether the engine is paused.
+   */
+    var isPaused: Bool {
+        get {
+            _isPaused
+        }
+        set {
+            _isPaused = newValue
+            if !newValue {
+                _time.reset()
+            }
+        }
+    }
 
     public init(canvas: Canvas, session: ARSession? = nil) {
         self.session = session
@@ -31,7 +92,7 @@ public class Engine: NSObject {
         guard let device = MTLCreateSystemDefaultDevice() else {
             fatalError("Unable to create default Metal Device")
         }
-        self.device = device
+        _device = device
 
         // Load all the shader files with a metal file extension in the project
         let libraryURL = Bundle.main.url(forResource: "vox.shader", withExtension: "metallib")!
@@ -47,36 +108,47 @@ public class Engine: NSObject {
         self.commandQueue = commandQueue
 
         super.init()
-        sceneManager = SceneManager(engine: self)
-        physicsManager = PhysicsManager(engine: self)
-        inputManager = InputManager(engine: self)
+        _sceneManager = SceneManager(engine: self)
+        _sceneManager.activeScene = Scene(self, "DefaultScene");
+        _physicsManager = PhysicsManager(engine: self)
+        _inputManager = InputManager(engine: self)
         canvas.delegate = self
         session?.delegate = self
     }
 
-    /// Update the engine loop manually. If you call engine.run(), you generally don't need to call this function.
-    func update(_ deltaTime: Float) {
-        let scene = sceneManager._activeScene
-        let componentsManager = _componentsManager
-        if (scene != nil) {
-            scene!._activeCameras.sort { camera1, camera2 in
-                camera1.priority > camera2.priority
-            }
-
-            componentsManager.callScriptOnStart()
-            physicsManager._update(deltaTime)
-            inputManager._update()
-            componentsManager.callScriptOnUpdate(deltaTime)
-            // componentsManager.callAnimationUpdate(deltaTime)
-            componentsManager.callScriptOnLateUpdate(deltaTime)
-            _render(scene!, deltaTime)
-        }
-        componentsManager.handlingInvalidScripts()
+    /// Execution engine loop.
+    func run() {
+        isPaused = false
     }
 
-    func _render(_ scene: Scene, _ deltaTime: Float) {
+    /// Update the engine loop manually. If you call engine.run(), you generally don't need to call this function.
+    func update() {
+        let deltaTime = time.deltaTime;
+        time.tick();
+
+        if !_isPaused {
+            let scene = _sceneManager._activeScene
+            let componentsManager = _componentsManager
+            if (scene != nil) {
+                scene!._activeCameras.sort { camera1, camera2 in
+                    camera1.priority > camera2.priority
+                }
+
+                componentsManager.callScriptOnStart()
+                _physicsManager._update(deltaTime)
+                _inputManager._update()
+                componentsManager.callScriptOnUpdate(deltaTime)
+                // componentsManager.callAnimationUpdate(deltaTime)
+                componentsManager.callScriptOnLateUpdate(deltaTime)
+                _render(scene!)
+            }
+            componentsManager.handlingInvalidScripts()
+        }
+    }
+
+    func _render(_ scene: Scene) {
         let cameras = scene._activeCameras
-        _componentsManager.callRendererOnUpdate(deltaTime)
+        _componentsManager.callRendererOnUpdate(_time.deltaTime)
 
         scene._updateShaderData()
 
@@ -106,6 +178,7 @@ extension Engine: MTKViewDelegate {
     /// - Remark: Called on the delegate when it is asked to render into the view
     /// - Parameter view:  MTKView which called this method
     public func draw(in view: MTKView) {
+        update()
     }
 }
 

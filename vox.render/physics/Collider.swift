@@ -35,7 +35,7 @@ public class Collider: Component {
                 oldCollider!.removeShape(shape)
             }
             _shapes.append(shape)
-            engine.physicsManager!._addColliderShape(shape)
+            engine.physicsManager._addColliderShape(shape)
             _nativeCollider.addShape(shape._nativeShape)
             shape._collider = self
         }
@@ -51,7 +51,7 @@ public class Collider: Component {
         if (index != nil) {
             _shapes.remove(at: index!)
             _nativeCollider.removeShape(shape._nativeShape)
-            engine.physicsManager!._removeColliderShape(shape)
+            engine.physicsManager._removeColliderShape(shape)
             shape._collider = nil
         }
     }
@@ -60,7 +60,7 @@ public class Collider: Component {
     public func clearShapes() {
         for i in 0..<_shapes.count {
             _nativeCollider.removeShape(shapes[i]._nativeShape)
-            engine.physicsManager!._removeColliderShape(shapes[i])
+            engine.physicsManager._removeColliderShape(shapes[i])
         }
         _shapes = []
     }
@@ -84,12 +84,12 @@ public class Collider: Component {
 
 
     override func _onEnable() {
-        engine.physicsManager!._addCollider(self)
+        engine.physicsManager._addCollider(self)
     }
 
 
     override func _onDisable() {
-        engine.physicsManager!._removeCollider(self)
+        engine.physicsManager._removeCollider(self)
     }
 
     override func _onDestroy() {
