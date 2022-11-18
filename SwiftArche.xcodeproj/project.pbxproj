@@ -224,6 +224,7 @@
 		E63B1E40E988F3A3BE5E6518 /* MeshRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = E63B1F6CBBF500DC5175715F /* MeshRenderer.swift */; };
 		E63B1E93014B86D51FF16C4F /* DevicePipeline.swift in Sources */ = {isa = PBXBuildFile; fileRef = E63B14B2CEF6930B88416E69 /* DevicePipeline.swift */; };
 		E63B1F3B6D23E8286F457252 /* DiffuseMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = E63B126D86D1150480AF5E59 /* DiffuseMode.swift */; };
+		E63B1F8DA7DEA3BF63D648CF /* ARManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E63B1EC7C4950E84EA889876 /* ARManager.swift */; };
 		E63B1F9026B97044A0275D9D /* CameraInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = E63B1C1C8ED26073E32F6F4E /* CameraInfo.swift */; };
 		E63B1FBDADAAF1E683C7D956 /* ShadowUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = E63B1E675A77F63B0AF79089 /* ShadowUtils.swift */; };
 /* End PBXBuildFile section */
@@ -630,6 +631,7 @@
 		E63B1C1C8ED26073E32F6F4E /* CameraInfo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CameraInfo.swift; sourceTree = "<group>"; };
 		E63B1CB34D0218B55ACB3457 /* Canvas.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Canvas.swift; sourceTree = "<group>"; };
 		E63B1E675A77F63B0AF79089 /* ShadowUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ShadowUtils.swift; sourceTree = "<group>"; };
+		E63B1EC7C4950E84EA889876 /* ARManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ARManager.swift; sourceTree = "<group>"; };
 		E63B1F6CBBF500DC5175715F /* MeshRenderer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MeshRenderer.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -722,6 +724,7 @@
 			isa = PBXGroup;
 			children = (
 				E63B157B585744B9603C1D21 /* ARSubpass.swift */,
+				E63B1EC7C4950E84EA889876 /* ARManager.swift */,
 			);
 			path = ar;
 			sourceTree = "<group>";
@@ -1849,6 +1852,7 @@
 				E63B1BFA1631AA40350A60FB /* BackgroundMode.swift in Sources */,
 				E63B17993C8FDA068381D526 /* BackgroundTextureFillMode.swift in Sources */,
 				E63B1D742AB1372E53F63989 /* Background.swift in Sources */,
+				E63B1F8DA7DEA3BF63D648CF /* ARManager.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

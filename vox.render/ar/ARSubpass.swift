@@ -88,7 +88,7 @@ public class ARSubpass: Subpass {
     }
 
     override func draw(_ encoder: MTLRenderCommandEncoder) {
-        guard let currentFrame = engine.session!.currentFrame else {
+        guard let currentFrame = engine.arManager!.session.currentFrame else {
             return
         }
 
