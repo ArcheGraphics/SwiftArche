@@ -30,15 +30,12 @@ public class DevicePipeline {
         mainRenderPass.addSubpass(ForwardSubpass())
     }
 
-    public func commit() {
+    public func commit(_ commandBuffer: MTLCommandBuffer) {
         let background = camera.scene.background
         _changeBackground(background)
 
         let canvas = camera.engine.canvas
-        if let commandBuffer = camera.engine.commandQueue.makeCommandBuffer(),
-           let renderPassDescriptor = canvas.currentRenderPassDescriptor,
-           let currentDrawable = canvas.currentDrawable {
-
+        if let renderPassDescriptor = canvas.currentRenderPassDescriptor {
             if background.mode == BackgroundMode.SolidColor {
                 renderPassDescriptor.colorAttachments[0].clearColor = MTLClearColor(
                         red: Double(background.solidColor.r),
@@ -48,9 +45,6 @@ public class DevicePipeline {
                 )
             }
             mainRenderPass.draw(commandBuffer, camera.renderTarget != nil ? camera.renderTarget! : renderPassDescriptor)
-
-            commandBuffer.present(currentDrawable)
-            commandBuffer.commit()
         }
     }
 

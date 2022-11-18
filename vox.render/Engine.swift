@@ -163,10 +163,15 @@ public class Engine: NSObject {
 
         let cameras = scene._activeCameras
         if (cameras.count > 0) {
-            for camera in cameras {
-                _componentsManager.callCameraOnBeginRender(camera)
-                camera.render()
-                _componentsManager.callCameraOnEndRender(camera)
+            if let commandBuffer = commandQueue.makeCommandBuffer(),
+               let currentDrawable = canvas.currentDrawable {
+                for camera in cameras {
+                    _componentsManager.callCameraOnBeginRender(camera)
+                    camera.render(commandBuffer)
+                    _componentsManager.callCameraOnEndRender(camera)
+                }
+                commandBuffer.present(currentDrawable)
+                commandBuffer.commit()
             }
         } else {
             logger.debug("NO active camera.")
