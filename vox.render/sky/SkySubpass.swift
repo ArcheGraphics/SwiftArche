@@ -26,8 +26,8 @@ public class SkySubpass: Subpass {
 
         _pipelineDescriptor.label = "Skybox Pipeline"
         _pipelineDescriptor.colorAttachments[0].pixelFormat = .bgra8Unorm
-        _pipelineDescriptor.depthAttachmentPixelFormat = .depth24Unorm_stencil8
-        _pipelineDescriptor.stencilAttachmentPixelFormat = .depth24Unorm_stencil8
+        _pipelineDescriptor.depthAttachmentPixelFormat = .depth32Float_stencil8
+        _pipelineDescriptor.stencilAttachmentPixelFormat = .depth32Float_stencil8
 
         let functions = pipeline._resourceCache.requestShaderModule(material.shader[0], _shaderMacro)
         _pipelineDescriptor.vertexFunction = functions[0]

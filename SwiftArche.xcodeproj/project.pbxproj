@@ -11,6 +11,11 @@
 		04176A7A2925295B00B1775A /* Pointer.swift in Sources */ = {isa = PBXBuildFile; fileRef = E63B111B2848B79F0F440F00 /* Pointer.swift */; };
 		04176A7B292717D900B1775A /* Time.swift in Sources */ = {isa = PBXBuildFile; fileRef = E63B17B65377F894AAEF5610 /* Time.swift */; };
 		04176A7D2927343900B1775A /* ar_shading.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3E67EDCA291B2F7600ED60C8 /* ar_shading.metal */; };
+		04176ACE29275DBD00B1775A /* libvox.math.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E67EE5E291B799900ED60C8 /* libvox.math.a */; };
+		04176ACF29275DBE00B1775A /* libvox.physics.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E0F7BB92925FBBF00C4A843 /* libvox.physics.a */; };
+		04176AD329275F3900B1775A /* libc++.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 04176AD029275F3800B1775A /* libc++.tbd */; };
+		04176AD429275F3900B1775A /* libc++abi.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 04176AD129275F3800B1775A /* libc++abi.tbd */; };
+		04176AD529275F3B00B1775A /* libc++.1.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 04176AD229275F3800B1775A /* libc++.1.tbd */; };
 		043E2C9B2920AAD00057BDD1 /* Logging in Frameworks */ = {isa = PBXBuildFile; productRef = 043E2C9A2920AAD00057BDD1 /* Logging */; };
 		043E2CA029212E8C0057BDD1 /* Light.swift in Sources */ = {isa = PBXBuildFile; fileRef = 043E2C9F29212E8C0057BDD1 /* Light.swift */; };
 		04ED07DA29226E9C00DD55AB /* normal_shading.metal in Sources */ = {isa = PBXBuildFile; fileRef = 04ED07D929226E9C00DD55AB /* normal_shading.metal */; };
@@ -230,6 +235,20 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		04176ACA29275DB700B1775A /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 3E67EDBD291B2F7600ED60C8 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 3E67EE5D291B799900ED60C8;
+			remoteInfo = vox.math;
+		};
+		04176ACC29275DB700B1775A /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 3E67EDBD291B2F7600ED60C8 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 3E0F7BB82925FBBF00C4A843;
+			remoteInfo = vox.physics;
+		};
 		3E0F7C852926126000C4A843 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 3E67EDBD291B2F7600ED60C8 /* Project object */;
@@ -312,6 +331,16 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		04176ABF29275CD300B1775A /* libPhysXExtensions_static_64.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libPhysXExtensions_static_64.a; path = third_party/physx/physx/bin/ios.arm_64/debug/libPhysXExtensions_static_64.a; sourceTree = "<group>"; };
+		04176AC029275CD400B1775A /* libPhysX_static_64.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libPhysX_static_64.a; path = third_party/physx/physx/bin/ios.arm_64/debug/libPhysX_static_64.a; sourceTree = "<group>"; };
+		04176AC129275CD400B1775A /* libPhysXFoundation_static_64.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libPhysXFoundation_static_64.a; path = third_party/physx/physx/bin/ios.arm_64/debug/libPhysXFoundation_static_64.a; sourceTree = "<group>"; };
+		04176AC229275CD500B1775A /* libPhysXPvdSDK_static_64.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libPhysXPvdSDK_static_64.a; path = third_party/physx/physx/bin/ios.arm_64/debug/libPhysXPvdSDK_static_64.a; sourceTree = "<group>"; };
+		04176AC329275CD500B1775A /* libPhysXCharacterKinematic_static_64.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libPhysXCharacterKinematic_static_64.a; path = third_party/physx/physx/bin/ios.arm_64/debug/libPhysXCharacterKinematic_static_64.a; sourceTree = "<group>"; };
+		04176AC429275CD500B1775A /* libPhysXCommon_static_64.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libPhysXCommon_static_64.a; path = third_party/physx/physx/bin/ios.arm_64/debug/libPhysXCommon_static_64.a; sourceTree = "<group>"; };
+		04176AC729275D1F00B1775A /* bin */ = {isa = PBXFileReference; lastKnownFileType = folder; name = bin; path = third_party/physx/physx/bin; sourceTree = "<group>"; };
+		04176AD029275F3800B1775A /* libc++.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libc++.tbd"; path = "Platforms/MacOSX.platform/Developer/SDKs/MacOSX13.0.sdk/usr/lib/libc++.tbd"; sourceTree = DEVELOPER_DIR; };
+		04176AD129275F3800B1775A /* libc++abi.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libc++abi.tbd"; path = "Platforms/MacOSX.platform/Developer/SDKs/MacOSX13.0.sdk/usr/lib/libc++abi.tbd"; sourceTree = DEVELOPER_DIR; };
+		04176AD229275F3800B1775A /* libc++.1.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libc++.1.tbd"; path = "Platforms/MacOSX.platform/Developer/SDKs/MacOSX13.0.sdk/usr/lib/libc++.1.tbd"; sourceTree = DEVELOPER_DIR; };
 		043E2C9C2920D0BC0057BDD1 /* type_common.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = type_common.h; sourceTree = "<group>"; };
 		043E2C9F29212E8C0057BDD1 /* Light.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Light.swift; sourceTree = "<group>"; };
 		04ED07D929226E9C00DD55AB /* normal_shading.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = normal_shading.metal; sourceTree = "<group>"; };
@@ -647,6 +676,11 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				04176AD329275F3900B1775A /* libc++.tbd in Frameworks */,
+				04176AD429275F3900B1775A /* libc++abi.tbd in Frameworks */,
+				04176AD529275F3B00B1775A /* libc++.1.tbd in Frameworks */,
+				04176ACE29275DBD00B1775A /* libvox.math.a in Frameworks */,
+				04176ACF29275DBE00B1775A /* libvox.physics.a in Frameworks */,
 				3E67EE16291B313300ED60C8 /* libvox.render.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1142,6 +1176,16 @@
 		3E67EE15291B313300ED60C8 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				04176AD229275F3800B1775A /* libc++.1.tbd */,
+				04176AD029275F3800B1775A /* libc++.tbd */,
+				04176AD129275F3800B1775A /* libc++abi.tbd */,
+				04176AC729275D1F00B1775A /* bin */,
+				04176AC029275CD400B1775A /* libPhysX_static_64.a */,
+				04176AC329275CD500B1775A /* libPhysXCharacterKinematic_static_64.a */,
+				04176AC429275CD500B1775A /* libPhysXCommon_static_64.a */,
+				04176ABF29275CD300B1775A /* libPhysXExtensions_static_64.a */,
+				04176AC129275CD400B1775A /* libPhysXFoundation_static_64.a */,
+				04176AC229275CD500B1775A /* libPhysXPvdSDK_static_64.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -1396,6 +1440,8 @@
 			buildRules = (
 			);
 			dependencies = (
+				04176ACB29275DB700B1775A /* PBXTargetDependency */,
+				04176ACD29275DB700B1775A /* PBXTargetDependency */,
 				3E67EE14291B312B00ED60C8 /* PBXTargetDependency */,
 			);
 			name = SwiftArche;
@@ -1906,6 +1952,16 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		04176ACB29275DB700B1775A /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 3E67EE5D291B799900ED60C8 /* vox.math */;
+			targetProxy = 04176ACA29275DB700B1775A /* PBXContainerItemProxy */;
+		};
+		04176ACD29275DB700B1775A /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 3E0F7BB82925FBBF00C4A843 /* vox.physics */;
+			targetProxy = 04176ACC29275DB700B1775A /* PBXContainerItemProxy */;
+		};
 		3E0F7C862926126000C4A843 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 3E0F7BB82925FBBF00C4A843 /* vox.physics */;
@@ -2202,7 +2258,19 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
+				LIBRARY_SEARCH_PATHS = (
+					./third_party/physx/physx/bin/ios.arm_64/debug,
+					"$(PROJECT_DIR)/third_party/physx/physx/bin/ios.arm_64/debug",
+				);
 				MARKETING_VERSION = 1.0;
+				OTHER_LDFLAGS = (
+					"-lPhysX_static_64",
+					"-lPhysXCommon_static_64",
+					"-lPhysXFoundation_static_64",
+					"-lPhysXPvdSDK_static_64",
+					"-lPhysXExtensions_static_64",
+					"-lPhysXCharacterKinematic_static_64",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = archegraphics.Flex;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
@@ -2239,7 +2307,19 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
+				LIBRARY_SEARCH_PATHS = (
+					./third_party/physx/physx/bin/ios.arm_64/debug,
+					"$(PROJECT_DIR)/third_party/physx/physx/bin/ios.arm_64/debug",
+				);
 				MARKETING_VERSION = 1.0;
+				OTHER_LDFLAGS = (
+					"-lPhysX_static_64",
+					"-lPhysXCommon_static_64",
+					"-lPhysXFoundation_static_64",
+					"-lPhysXPvdSDK_static_64",
+					"-lPhysXExtensions_static_64",
+					"-lPhysXCharacterKinematic_static_64",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = archegraphics.Flex;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";

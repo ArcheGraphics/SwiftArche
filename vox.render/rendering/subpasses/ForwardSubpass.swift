@@ -11,8 +11,8 @@ public class ForwardSubpass: GeometrySubpass {
                           _ depthStencilDescriptor: MTLDepthStencilDescriptor) {
         pipelineDescriptor.label = "Forward Pipeline"
         pipelineDescriptor.colorAttachments[0].pixelFormat = .bgra8Unorm
-        pipelineDescriptor.depthAttachmentPixelFormat = .depth24Unorm_stencil8
-        pipelineDescriptor.stencilAttachmentPixelFormat = .depth24Unorm_stencil8
+        pipelineDescriptor.depthAttachmentPixelFormat = .depth32Float_stencil8
+        pipelineDescriptor.stencilAttachmentPixelFormat = .depth32Float_stencil8
     }
 
     override func drawElement(_ encoder: MTLRenderCommandEncoder) {
