@@ -7,23 +7,18 @@
 import Foundation
 
 /// Used to update tags.
-class UpdateFlag {
+public class UpdateFlag {
     var _flagManagers: [UpdateFlagManager] = []
+
+    deinit {
+        _removeFromManagers()
+        _flagManagers = []
+    }
 
     /// - Parameters: Dispatch.
     ///   - bit: Bit
     ///   - param: Parameter
-    func dispatch(bit: Int?, param: AnyObject?) {
-    }
-
-    func clearFromManagers() {
-        _removeFromManagers()
-        _flagManagers.removeAll()
-    }
-
-    func destroy() {
-        _removeFromManagers()
-        _flagManagers = []
+    public func dispatch(bit: Int?, param: AnyObject?) {
     }
 
     private func _removeFromManagers() {

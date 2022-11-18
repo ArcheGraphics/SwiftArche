@@ -6,19 +6,19 @@
 
 import Foundation
 
-class UpdateFlagManager {
+public class UpdateFlagManager {
     var _updateFlags: [UpdateFlag] = []
 
     /// Add a UpdateFlag.
     /// - Parameter flag: The UpdateFlag.
-    func addFlag(flag: UpdateFlag) {
+    public func addFlag(flag: UpdateFlag) {
         _updateFlags.append(flag)
         flag._flagManagers.append(self)
     }
 
     /// Remove a UpdateFlag.
     /// - Parameter flag: The UpdateFlag.
-    func removeFlag(flag: UpdateFlag) {
+    public func removeFlag(flag: UpdateFlag) {
         let success = removeFromArray(array: &_updateFlags, item: flag)
         if (success) {
             _ = removeFromArray(array: &flag._flagManagers, item: self)
@@ -29,7 +29,7 @@ class UpdateFlagManager {
     /// - Parameters:
     ///   - type: Event type, usually in the form of enumeration
     ///   - param: Event param
-    func dispatch(type: Int? = nil, param: AnyObject? = nil) {
+    public func dispatch(type: Int? = nil, param: AnyObject? = nil) {
         for item in _updateFlags {
             item.dispatch(bit: type, param: param)
         }

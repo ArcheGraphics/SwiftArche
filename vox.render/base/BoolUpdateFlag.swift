@@ -6,10 +6,10 @@
 
 import Foundation
 
-class BoolUpdateFlag: UpdateFlag {
-    var flag: Bool = true
+public class BoolUpdateFlag: UpdateFlag {
+    public var flag: Bool = true
 
-    override func dispatch(bit: Int?, param: AnyObject?) {
+    public override func dispatch(bit: Int?, param: AnyObject?) {
         flag = true
     }
 }

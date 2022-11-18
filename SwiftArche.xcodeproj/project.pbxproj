@@ -10,6 +10,7 @@
 		04176A792925295B00B1775A /* PointerButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = E63B1323D02AE5FF4E20C301 /* PointerButton.swift */; };
 		04176A7A2925295B00B1775A /* Pointer.swift in Sources */ = {isa = PBXBuildFile; fileRef = E63B111B2848B79F0F440F00 /* Pointer.swift */; };
 		04176A7B292717D900B1775A /* Time.swift in Sources */ = {isa = PBXBuildFile; fileRef = E63B17B65377F894AAEF5610 /* Time.swift */; };
+		04176A7D2927343900B1775A /* ar_shading.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3E67EDCA291B2F7600ED60C8 /* ar_shading.metal */; };
 		043E2C9B2920AAD00057BDD1 /* Logging in Frameworks */ = {isa = PBXBuildFile; productRef = 043E2C9A2920AAD00057BDD1 /* Logging */; };
 		043E2CA029212E8C0057BDD1 /* Light.swift in Sources */ = {isa = PBXBuildFile; fileRef = 043E2C9F29212E8C0057BDD1 /* Light.swift */; };
 		04ED07DA29226E9C00DD55AB /* normal_shading.metal in Sources */ = {isa = PBXBuildFile; fileRef = 04ED07D929226E9C00DD55AB /* normal_shading.metal */; };
@@ -449,7 +450,7 @@
 		3E0F7C96292664DF00C4A843 /* Collider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Collider.swift; sourceTree = "<group>"; };
 		3E67EDC5291B2F7600ED60C8 /* SwiftArche.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SwiftArche.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		3E67EDC8291B2F7600ED60C8 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		3E67EDCA291B2F7600ED60C8 /* Shaders.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = Shaders.metal; sourceTree = "<group>"; };
+		3E67EDCA291B2F7600ED60C8 /* ar_shading.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = ar_shading.metal; sourceTree = "<group>"; };
 		3E67EDCC291B2F7600ED60C8 /* ShaderTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ShaderTypes.h; sourceTree = "<group>"; };
 		3E67EDCD291B2F7600ED60C8 /* ARRenderer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ARRenderer.swift; sourceTree = "<group>"; };
 		3E67EDCF291B2F7600ED60C8 /* ARViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ARViewController.swift; sourceTree = "<group>"; };
@@ -1079,7 +1080,6 @@
 				3E67EE47291B3A7900ED60C8 /* AAPLShaderTypes.h */,
 				3E67EE48291B3A7A00ED60C8 /* AAPLShadow.metal */,
 				3E67EE44291B3A7900ED60C8 /* AAPLSkybox.metal */,
-				3E67EDCA291B2F7600ED60C8 /* Shaders.metal */,
 				3E67EDCC291B2F7600ED60C8 /* ShaderTypes.h */,
 				3E0F7B1229220F5D00C4A843 /* shadow */,
 				043E2C9C2920D0BC0057BDD1 /* type_common.h */,
@@ -1091,6 +1091,7 @@
 				04ED07DB29226EA800DD55AB /* normal_shading.h */,
 				04ED07D929226E9C00DD55AB /* normal_shading.metal */,
 				3E67EED02921D9C800ED60C8 /* unlit_shading.metal */,
+				3E67EDCA291B2F7600ED60C8 /* ar_shading.metal */,
 				3E0F7B0B2921F63B00C4A843 /* skybox_shading.metal */,
 				3E0F7B232924834B00C4A843 /* background_shading.metal */,
 				3E0F7B1D2922375800C4A843 /* pbr_shading.h */,
@@ -1705,6 +1706,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				3E67EED42921DB4A00ED60C8 /* function_common.metal in Sources */,
+				04176A7D2927343900B1775A /* ar_shading.metal in Sources */,
 				3E0F7B242924834B00C4A843 /* background_shading.metal in Sources */,
 				3E0F7B1429220F8C00C4A843 /* shadowmap.metal in Sources */,
 				04ED07DA29226E9C00DD55AB /* normal_shading.metal in Sources */,

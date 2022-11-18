@@ -116,7 +116,7 @@ public class Engine: NSObject {
         let scene = Scene(self, "DefaultScene")
         if session != nil {
             scene.background.mode = .AR
-            scene.background.ar = ARSubpass()
+            scene.background.ar = ARSubpass(self)
         }
         _sceneManager.activeScene = scene
     }
@@ -177,6 +177,7 @@ extension Engine: MTKViewDelegate {
     ///   - view: MTKView which called this method
     ///   - size: New drawable size in pixels
     public func mtkView(_ view: MTKView, drawableSizeWillChange size: CGSize) {
+        canvas.dispatchResize()
     }
 
     /// Called on the delegate when it is asked to render into the view

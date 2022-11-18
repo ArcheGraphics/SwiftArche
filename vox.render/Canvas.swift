@@ -8,6 +8,7 @@ import MetalKit
 
 public class Canvas: MTKView {
     var inputManager: InputManager?
+    public var updateFlagManager = UpdateFlagManager()
 
     required init(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
@@ -28,6 +29,10 @@ public class Canvas: MTKView {
             trailingAnchor.constraint(equalTo: view.trailingAnchor),
             bottomAnchor.constraint(equalTo: view.bottomAnchor)
         ])
+    }
+
+    public func dispatchResize() {
+        updateFlagManager.dispatch(type: nil, param: self)
     }
 
     // MARK: - RawEvent
