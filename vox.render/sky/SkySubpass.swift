@@ -82,7 +82,7 @@ public class SkySubpass: Subpass {
 
         var index = 0
         for buffer in mesh._vertexBufferBindings {
-            encoder.setVertexBuffer(buffer, offset: 0, index: index)
+            encoder.setVertexBuffer(buffer?.buffer, offset: 0, index: index)
             index += 1
         }
 

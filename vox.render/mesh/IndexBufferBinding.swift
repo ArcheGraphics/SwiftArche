@@ -8,12 +8,12 @@ import Metal
 
 /// Index buffer binding.
 public class IndexBufferBinding {
-    private var _buffer: MTLBuffer
+    private var _buffer: BufferView
     private var _format: MTLIndexType
 
     public var buffer: MTLBuffer {
         get {
-            _buffer
+            _buffer.buffer
         }
     }
 
@@ -23,7 +23,7 @@ public class IndexBufferBinding {
         }
     }
 
-    public init(_ buffer: MTLBuffer, _ format: MTLIndexType) {
+    public init(_ buffer: BufferView, _ format: MTLIndexType) {
         _buffer = buffer
         _format = format
     }

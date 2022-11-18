@@ -345,16 +345,12 @@ extension ModelMesh {
         }
         _vertexChangeFlag = ValueChanged.All.rawValue
         _updateVertices(vertices: &_vertices!)
-
-        let vertexBuffer = _device.makeBuffer(bytes: &_vertices!, length: vertexFloatCount * MemoryLayout<Float>.stride)
-        _setVertexBufferBinding(0, vertexBuffer!)
+        _setVertexBufferBinding(0, BufferView(device: _device, array: _vertices!))
 
         if _indicesFormat == MTLIndexType.uint16 {
-            let indexBuffer = _device.makeBuffer(bytes: &_indices16!, length: _indices16!.count * MemoryLayout<UInt16>.stride)
-            _setIndexBufferBinding(IndexBufferBinding(indexBuffer!, .uint16))
+            _setIndexBufferBinding(IndexBufferBinding(BufferView(device: _device, array: _indices16!), .uint16))
         } else {
-            let indexBuffer = _device.makeBuffer(bytes: &_indices32!, length: _indices32!.count * MemoryLayout<UInt32>.stride)
-            _setIndexBufferBinding(IndexBufferBinding(indexBuffer!, .uint32))
+            _setIndexBufferBinding(IndexBufferBinding(BufferView(device: _device, array: _indices32!), .uint32))
         }
 
         if (noLongerAccessible) {

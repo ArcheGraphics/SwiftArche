@@ -84,6 +84,7 @@
 		3E0F7C942926644F00C4A843 /* DynamicCollider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E0F7C912926644F00C4A843 /* DynamicCollider.swift */; };
 		3E0F7C952926644F00C4A843 /* StaticCollider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E0F7C922926644F00C4A843 /* StaticCollider.swift */; };
 		3E0F7C97292664DF00C4A843 /* Collider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E0F7C96292664DF00C4A843 /* Collider.swift */; };
+		3E0F7C9829270B6F00C4A843 /* BufferView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8C99F4B73069C1988F340 /* BufferView.swift */; };
 		3E67EDC9291B2F7600ED60C8 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E67EDC8291B2F7600ED60C8 /* AppDelegate.swift */; };
 		3E67EDD3291B2F7600ED60C8 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3E67EDD1291B2F7600ED60C8 /* Main.storyboard */; };
 		3E67EDD5291B2F7800ED60C8 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3E67EDD4291B2F7800ED60C8 /* Assets.xcassets */; };
@@ -475,7 +476,6 @@
 		3E67EE32291B3A4B00ED60C8 /* ModelIO+Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "ModelIO+Extensions.swift"; sourceTree = "<group>"; };
 		3E67EE36291B3A5200ED60C8 /* Transform.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Transform.swift; sourceTree = "<group>"; };
 		3E67EE37291B3A5200ED60C8 /* RenderDestination.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RenderDestination.swift; sourceTree = "<group>"; };
-		3E67EE38291B3A5200ED60C8 /* BufferView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BufferView.swift; sourceTree = "<group>"; };
 		3E67EE39291B3A5200ED60C8 /* Camera.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Camera.swift; sourceTree = "<group>"; };
 		3E67EE3E291B3A5A00ED60C8 /* SubMesh.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SubMesh.swift; sourceTree = "<group>"; };
 		3E67EE3F291B3A5A00ED60C8 /* Material.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Material.swift; sourceTree = "<group>"; };
@@ -580,6 +580,7 @@
 		43D8C8DEB27F4A68CF043663 /* Entity.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Entity.swift; sourceTree = "<group>"; };
 		43D8C90EA461838DF774912B /* Material.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Material.swift; sourceTree = "<group>"; };
 		43D8C994E210CFEEA2560E05 /* BoundingSphere.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BoundingSphere.swift; sourceTree = "<group>"; };
+		43D8C99F4B73069C1988F340 /* BufferView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BufferView.swift; sourceTree = "<group>"; };
 		43D8CA31635DEBED25A020C1 /* BlendMode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BlendMode.swift; sourceTree = "<group>"; };
 		43D8CAD23565A918160AFC1F /* PBRBaseMaterial.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PBRBaseMaterial.swift; sourceTree = "<group>"; };
 		43D8CAED3B1AFD13451D2107 /* BoolUpdateFlag.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BoolUpdateFlag.swift; sourceTree = "<group>"; };
@@ -1129,7 +1130,6 @@
 		3E67EE1D291B3A0E00ED60C8 /* Utilities */ = {
 			isa = PBXGroup;
 			children = (
-				3E67EE38291B3A5200ED60C8 /* BufferView.swift */,
 				3E67EE39291B3A5200ED60C8 /* Camera.swift */,
 				3E67EE37291B3A5200ED60C8 /* RenderDestination.swift */,
 				3E67EE36291B3A5200ED60C8 /* Transform.swift */,
@@ -1335,6 +1335,7 @@
 		3E67EECE29206B5E00ED60C8 /* mesh */ = {
 			isa = PBXGroup;
 			children = (
+				43D8C99F4B73069C1988F340 /* BufferView.swift */,
 				43D8CE8A8E58D526C10AC55F /* IndexBufferBinding.swift */,
 				43D8C604A7750ECC5ACB625F /* SubMesh.swift */,
 				43D8CF92C29A209C3AB9C9C6 /* Mesh.swift */,
@@ -1712,6 +1713,7 @@
 				3E67EEC4291DF16D00ED60C8 /* RenderTargetBlendState.swift in Sources */,
 				3E0F7C542926036F00C4A843 /* PhysXCollider.swift in Sources */,
 				043E2CA029212E8C0057BDD1 /* Light.swift in Sources */,
+				3E0F7C9829270B6F00C4A843 /* BufferView.swift in Sources */,
 				3E67EEB2291CF07E00ED60C8 /* Util.swift in Sources */,
 				3E0F7C6A2926039500C4A843 /* PhysXFixedJoint.swift in Sources */,
 				43D8C64F87A019BFA0DE1CC0 /* BoolUpdateFlag.swift in Sources */,

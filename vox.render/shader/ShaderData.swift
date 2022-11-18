@@ -8,7 +8,7 @@ import Metal
 
 public class ShaderData {
     private var _device: MTLDevice
-    private var _shaderBuffers: [String: MTLBuffer] = [:]
+    private var _shaderBuffers: [String: BufferView] = [:]
     private var _imageViews: [String: MTLTexture] = [:]
     private var _samplers: [String: MTLSamplerDescriptor] = [:]
     static private var _defaultSamplerDesc: MTLSamplerDescriptor = MTLSamplerDescriptor()
@@ -19,35 +19,36 @@ public class ShaderData {
     }
 
     public func setData<T>(_ property: String, _ data: T) {
-        let value = _shaderBuffers.first { (key: String, value: MTLBuffer) in
+        let value = _shaderBuffers.first { (key: String, value: BufferView) in
             key == property
         }
-        var buffer: MTLBuffer
         if value == nil {
-            buffer = _device.makeBuffer(length: MemoryLayout<T>.size)!
-            _shaderBuffers[property] = buffer
+            _shaderBuffers[property] = BufferView(device: _device, array: [data])
         } else {
-            buffer = value!.value
+            value!.value.assign(data)
         }
-
-        let pointer = buffer.contents().bindMemory(to: T.self, capacity: MemoryLayout<T>.size)
-        pointer.pointee = data
     }
 
     public func setData<T>(_ property: String, _ data: [T]) {
-        let value = _shaderBuffers.first { (key: String, value: MTLBuffer) in
+        let value = _shaderBuffers.first { (key: String, value: BufferView) in
             key == property
         }
-        var buffer: MTLBuffer
         if value == nil {
-            buffer = _device.makeBuffer(length: MemoryLayout<T>.size * data.count)!
-            _shaderBuffers[property] = buffer
+            _shaderBuffers[property] = BufferView(device: _device, array: data)
         } else {
-            buffer = value!.value
+            value!.value.assign(with: data)
         }
+    }
 
-        let pointer = buffer.contents().bindMemory(to: T.self, capacity: MemoryLayout<T>.size * data.count)
-        pointer.assign(from: data, count: data.count)
+    public func getData<T>(_ property: String, at index: Int = 0) -> T? {
+        let value = _shaderBuffers.first { (key: String, value: BufferView) in
+            key == property
+        }
+        if value == nil {
+            return nil
+        } else {
+            return value!.value[index]
+        }
     }
 
     public func setImageView(_ textureName: String, _ samplerName: String, _ value: MTLTexture?) {
@@ -113,7 +114,7 @@ extension ShaderData {
             case .buffer:
                 let buffer = _shaderBuffers[uniform.name]
                 if buffer != nil {
-                    commandEncoder.setBuffer(buffer!, offset: 0, index: uniform.location)
+                    commandEncoder.setBuffer(buffer!.buffer, offset: 0, index: uniform.location)
                 }
                 break
             case .texture:
@@ -143,10 +144,10 @@ extension ShaderData {
                 let buffer = _shaderBuffers[uniform.name]
                 if buffer != nil {
                     if uniform.functionType == .vertex {
-                        commandEncoder.setVertexBuffer(buffer!, offset: 0, index: uniform.location)
+                        commandEncoder.setVertexBuffer(buffer!.buffer, offset: 0, index: uniform.location)
                     }
                     if uniform.functionType == .fragment {
-                        commandEncoder.setFragmentBuffer(buffer!, offset: 0, index: uniform.location)
+                        commandEncoder.setFragmentBuffer(buffer!.buffer, offset: 0, index: uniform.location)
                     }
                 }
                 break
