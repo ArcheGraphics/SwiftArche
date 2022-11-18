@@ -44,5 +44,16 @@ public class ShadowManager {
     }
 
     private func _getAvailableRenderTarget() {
+        if (_depthTexture == nil ||
+                _depthTexture.width != Int(_cascadedShadowSubpass._shadowMapSize.x) ||
+                _depthTexture.height != Int(_cascadedShadowSubpass._shadowMapSize.y) ||
+                _depthTexture.pixelFormat != _cascadedShadowSubpass._shadowMapFormat) {
+            let descriptor = MTLTextureDescriptor()
+            descriptor.width = Int(_cascadedShadowSubpass._shadowMapSize.x)
+            descriptor.height = Int(_cascadedShadowSubpass._shadowMapSize.y)
+            descriptor.pixelFormat = _cascadedShadowSubpass._shadowMapFormat
+            descriptor.usage = MTLTextureUsage.renderTarget
+            _depthTexture = _camera.engine.device.makeTexture(descriptor: descriptor)
+        }
     }
 }

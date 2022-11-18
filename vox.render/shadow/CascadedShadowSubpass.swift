@@ -15,23 +15,22 @@ class CascadedShadowSubpass: GeometrySubpass {
     private static let _shadowMatricesProperty = "u_shadowMatrices"
     private static let _shadowMapSize = "u_shadowMapSize"
     private static let _shadowInfosProperty = "u_shadowInfo"
-    private static let _shadowMapsProperty = "u_shadowMap"
     private static let _shadowSplitSpheresProperty = "u_shadowSplitSpheres"
 
     private static var _maxCascades: Int = 4
     private static var _cascadesSplitDistance: [Float] = [Float](repeating: 0, count: CascadedShadowSubpass._maxCascades + 1)
 
     private let _camera: Camera
+    var _shadowMapFormat: MTLPixelFormat = .invalid
+    var _shadowMapSize: Vector4 = Vector4()
     private var _existShadowMap: Bool = false
     private var _shadowSliceData: ShadowSliceData = ShadowSliceData()
-    private var _shadowMapFormat: MTLPixelFormat = .invalid
     private var _shadowCascadeMode: ShadowCascadesMode = .NoCascades
     private var _shadowMapResolution: UInt32 = 0
     private var _shadowTileResolution: UInt32 = 0
-    private var _shadowMapSize: Vector4 = Vector4()
     private var _viewportOffsets: [Vector2] = [Vector2](repeatElement(Vector2(), count: 4))
     private var _splitBoundSpheres = [Float](repeating: 0, count: 4 * CascadedShadowSubpass._maxCascades)
-    /** The end is project prcision problem in shader. */
+    /** The end is project precision problem in shader. */
     private var _shadowMatrices = [simd_float4x4](repeating: simd_float4x4(), count: 4 + 1)
     // strength, null, lightIndex
     private var _shadowInfos = SIMD3<Float>()
@@ -39,8 +38,13 @@ class CascadedShadowSubpass: GeometrySubpass {
 
     init(_ camera: Camera) {
         _camera = camera
-        _shaderPass = ShaderPass(camera.engine.library, "shadow_map");
+        _shaderPass = ShaderPass(camera.engine.library, "vertex_shadowmap", nil);
         super.init()
+    }
+
+    override func prepare(_ pipelineDescriptor: MTLRenderPipelineDescriptor, _ depthStencilDescriptor: MTLDepthStencilDescriptor) {
+        pipelineDescriptor.label = "shadow map"
+        pipelineDescriptor.depthAttachmentPixelFormat = _shadowMapFormat
     }
 
     override func drawElement(_ encoder: MTLRenderCommandEncoder) {
@@ -96,7 +100,6 @@ class CascadedShadowSubpass: GeometrySubpass {
             }
         }
     }
-
 
     private func _renderDirectShadowMap(_ encoder: MTLRenderCommandEncoder) {
         let shadowCascades = _camera.scene.shadowCascades.rawValue

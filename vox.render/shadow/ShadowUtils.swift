@@ -282,7 +282,6 @@ class ShadowUtils {
 
         virtualCamera.viewProjectionMatrix = virtualCamera.projectionMatrix * virtualCamera.viewMatrix
         outShadowMatrices[cascadeIndex] = ShadowUtils._shadowMapCoordMatrix.elements * virtualCamera.viewProjectionMatrix.elements
-        )
     }
 
     static func getMaxTileResolutionInAtlas(atlasWidth: UInt32, atlasHeight: UInt32, tileCount: Int) -> UInt32 {
