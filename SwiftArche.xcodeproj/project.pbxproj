@@ -215,17 +215,26 @@
 		43D8CFDE172582A4463B835E /* PrimitiveMesh.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8C0E825225EDCF4195D57 /* PrimitiveMesh.swift */; };
 		E63B117E5A0F83C02B55118B /* BufferPool.swift in Sources */ = {isa = PBXBuildFile; fileRef = E63B1681537252EE5F41F0EF /* BufferPool.swift */; };
 		E63B123A289AA1AE61CCA67E /* PrimitiveApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = E63B17AB94CBF9AAB3956248 /* PrimitiveApp.swift */; };
+		E63B127381C36DE4C2CED2CE /* ScaleAnimationCurveOwnerAssembler.swift in Sources */ = {isa = PBXBuildFile; fileRef = E63B15D34993D901061CA7C9 /* ScaleAnimationCurveOwnerAssembler.swift */; };
 		E63B12FD0D692DA50726EADC /* Camera.swift in Sources */ = {isa = PBXBuildFile; fileRef = E63B1AAE575CDDFFC0A8CD28 /* Camera.swift */; };
 		E63B137938CDF22136EACAB5 /* ShadowSliceData.swift in Sources */ = {isa = PBXBuildFile; fileRef = E63B133737E2EA928107632F /* ShadowSliceData.swift */; };
+		E63B13BE4B83237308EB5629 /* AnimationClipCurveBinding.swift in Sources */ = {isa = PBXBuildFile; fileRef = E63B1A4BF0BC68838A754C44 /* AnimationClipCurveBinding.swift */; };
 		E63B14041298E8A7482B9FAC /* ShadowManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E63B110EAC5C5290512927D7 /* ShadowManager.swift */; };
+		E63B14A326E9FA494B7C98DA /* AnimationClip.swift in Sources */ = {isa = PBXBuildFile; fileRef = E63B106A9787C662E67CC2F3 /* AnimationClip.swift */; };
 		E63B1562D7DA439F207F8DB1 /* PointLight.swift in Sources */ = {isa = PBXBuildFile; fileRef = E63B1C063F24A5B0A3B30FF9 /* PointLight.swift */; };
+		E63B15A06315AA7A029E93AD /* AnimationCurveOwner.swift in Sources */ = {isa = PBXBuildFile; fileRef = E63B1D86522EAF76181DE8C0 /* AnimationCurveOwner.swift */; };
 		E63B15AE550BABADB0BEFA9E /* Renderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = E63B1745FC89A9CED5D9BA52 /* Renderer.swift */; };
 		E63B15C7EE0AD10494231AFF /* SpotLight.swift in Sources */ = {isa = PBXBuildFile; fileRef = E63B16052FDB98D0BF992CD0 /* SpotLight.swift */; };
 		E63B16D49F72F7475B37721F /* RenderElement.swift in Sources */ = {isa = PBXBuildFile; fileRef = E63B16A52D7461C2352D44C3 /* RenderElement.swift */; };
 		E63B17993C8FDA068381D526 /* BackgroundTextureFillMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = E63B19D8E23F234811FC6599 /* BackgroundTextureFillMode.swift */; };
 		E63B1816046796FD0B7C58DD /* Canvas.swift in Sources */ = {isa = PBXBuildFile; fileRef = E63B1CB34D0218B55ACB3457 /* Canvas.swift */; };
 		E63B1828A10683FFA47122A8 /* CascadedShadowSubpass.swift in Sources */ = {isa = PBXBuildFile; fileRef = E63B10D0E5E63C6772E58E3E /* CascadedShadowSubpass.swift */; };
+		E63B18AFE41CF0C5049F0A3A /* Keyframe.swift in Sources */ = {isa = PBXBuildFile; fileRef = E63B152B56D2F2BE0AE76CA0 /* Keyframe.swift */; };
 		E63B1992B1C2F658B6C75B36 /* GeometrySubpass.swift in Sources */ = {isa = PBXBuildFile; fileRef = E63B18EF061EC5A645E66939 /* GeometrySubpass.swift */; };
+		E63B1AA40375BFAABC560F95 /* GLTFResource.swift in Sources */ = {isa = PBXBuildFile; fileRef = E63B1CDA75FD90993E02BD74 /* GLTFResource.swift */; };
+		E63B1AF5F5856D17AF1FCB2D /* Skin.swift in Sources */ = {isa = PBXBuildFile; fileRef = E63B11EDE4BA4562BDFFF83D /* Skin.swift */; };
+		E63B1B6074B28D82BD562694 /* PositionAnimationCurveOwnerAssembler.swift in Sources */ = {isa = PBXBuildFile; fileRef = E63B1218D85B0A791054F368 /* PositionAnimationCurveOwnerAssembler.swift */; };
+		E63B1BE20BDA60B5E7AF0212 /* RotationAnimationCurveOwnerAssembler.swift in Sources */ = {isa = PBXBuildFile; fileRef = E63B1EE37678C9FA68DB06D9 /* RotationAnimationCurveOwnerAssembler.swift */; };
 		E63B1BFA1631AA40350A60FB /* BackgroundMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = E63B15E4F3B202601AC06114 /* BackgroundMode.swift */; };
 		E63B1C21D23A62BB4C35D54C /* LightManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E63B106FED41DA853C5CF292 /* LightManager.swift */; };
 		E63B1CE22CF7DC69867B49EF /* ARSubpass.swift in Sources */ = {isa = PBXBuildFile; fileRef = E63B157B585744B9603C1D21 /* ARSubpass.swift */; };
@@ -233,6 +242,7 @@
 		E63B1DF5B6407214A4BB1D46 /* DirectLight.swift in Sources */ = {isa = PBXBuildFile; fileRef = E63B180F182B0FABE01911CA /* DirectLight.swift */; };
 		E63B1E40E988F3A3BE5E6518 /* MeshRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = E63B1F6CBBF500DC5175715F /* MeshRenderer.swift */; };
 		E63B1E93014B86D51FF16C4F /* DevicePipeline.swift in Sources */ = {isa = PBXBuildFile; fileRef = E63B14B2CEF6930B88416E69 /* DevicePipeline.swift */; };
+		E63B1E94F236DAE62ED420BE /* IAnimationCurveOwnerAssembler.swift in Sources */ = {isa = PBXBuildFile; fileRef = E63B143DEB1100EAACC7A6F6 /* IAnimationCurveOwnerAssembler.swift */; };
 		E63B1F3B6D23E8286F457252 /* DiffuseMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = E63B126D86D1150480AF5E59 /* DiffuseMode.swift */; };
 		E63B1F8DA7DEA3BF63D648CF /* ARManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E63B1EC7C4950E84EA889876 /* ARManager.swift */; };
 		E63B1F9026B97044A0275D9D /* CameraInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = E63B1C1C8ED26073E32F6F4E /* CameraInfo.swift */; };
@@ -638,16 +648,22 @@
 		43D8CF92C29A209C3AB9C9C6 /* Mesh.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Mesh.swift; sourceTree = "<group>"; };
 		43D8CFA6FC902338A11A5E3A /* Component.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Component.swift; sourceTree = "<group>"; };
 		43D8CFC9BFA4F9B8CFA83B17 /* Joint.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Joint.swift; sourceTree = "<group>"; };
+		E63B106A9787C662E67CC2F3 /* AnimationClip.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AnimationClip.swift; sourceTree = "<group>"; };
 		E63B106FED41DA853C5CF292 /* LightManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LightManager.swift; sourceTree = "<group>"; };
 		E63B10D0E5E63C6772E58E3E /* CascadedShadowSubpass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CascadedShadowSubpass.swift; sourceTree = "<group>"; };
 		E63B110EAC5C5290512927D7 /* ShadowManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ShadowManager.swift; sourceTree = "<group>"; };
 		E63B111B2848B79F0F440F00 /* Pointer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Pointer.swift; sourceTree = "<group>"; };
+		E63B11EDE4BA4562BDFFF83D /* Skin.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Skin.swift; sourceTree = "<group>"; };
+		E63B1218D85B0A791054F368 /* PositionAnimationCurveOwnerAssembler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PositionAnimationCurveOwnerAssembler.swift; sourceTree = "<group>"; };
 		E63B126D86D1150480AF5E59 /* DiffuseMode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DiffuseMode.swift; sourceTree = "<group>"; };
 		E63B1323D02AE5FF4E20C301 /* PointerButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PointerButton.swift; sourceTree = "<group>"; };
 		E63B133737E2EA928107632F /* ShadowSliceData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ShadowSliceData.swift; sourceTree = "<group>"; };
 		E63B1432B9937ED43CD1DC28 /* Background.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Background.swift; sourceTree = "<group>"; };
+		E63B143DEB1100EAACC7A6F6 /* IAnimationCurveOwnerAssembler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IAnimationCurveOwnerAssembler.swift; sourceTree = "<group>"; };
 		E63B14B2CEF6930B88416E69 /* DevicePipeline.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DevicePipeline.swift; sourceTree = "<group>"; };
+		E63B152B56D2F2BE0AE76CA0 /* Keyframe.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Keyframe.swift; sourceTree = "<group>"; };
 		E63B157B585744B9603C1D21 /* ARSubpass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ARSubpass.swift; sourceTree = "<group>"; };
+		E63B15D34993D901061CA7C9 /* ScaleAnimationCurveOwnerAssembler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScaleAnimationCurveOwnerAssembler.swift; sourceTree = "<group>"; };
 		E63B15E4F3B202601AC06114 /* BackgroundMode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BackgroundMode.swift; sourceTree = "<group>"; };
 		E63B16052FDB98D0BF992CD0 /* SpotLight.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SpotLight.swift; sourceTree = "<group>"; };
 		E63B1681537252EE5F41F0EF /* BufferPool.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BufferPool.swift; sourceTree = "<group>"; };
@@ -658,12 +674,16 @@
 		E63B180F182B0FABE01911CA /* DirectLight.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DirectLight.swift; sourceTree = "<group>"; };
 		E63B18EF061EC5A645E66939 /* GeometrySubpass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GeometrySubpass.swift; sourceTree = "<group>"; };
 		E63B19D8E23F234811FC6599 /* BackgroundTextureFillMode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BackgroundTextureFillMode.swift; sourceTree = "<group>"; };
+		E63B1A4BF0BC68838A754C44 /* AnimationClipCurveBinding.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AnimationClipCurveBinding.swift; sourceTree = "<group>"; };
 		E63B1AAE575CDDFFC0A8CD28 /* Camera.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Camera.swift; sourceTree = "<group>"; };
 		E63B1C063F24A5B0A3B30FF9 /* PointLight.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PointLight.swift; sourceTree = "<group>"; };
 		E63B1C1C8ED26073E32F6F4E /* CameraInfo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CameraInfo.swift; sourceTree = "<group>"; };
 		E63B1CB34D0218B55ACB3457 /* Canvas.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Canvas.swift; sourceTree = "<group>"; };
+		E63B1CDA75FD90993E02BD74 /* GLTFResource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GLTFResource.swift; sourceTree = "<group>"; };
+		E63B1D86522EAF76181DE8C0 /* AnimationCurveOwner.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AnimationCurveOwner.swift; sourceTree = "<group>"; };
 		E63B1E675A77F63B0AF79089 /* ShadowUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ShadowUtils.swift; sourceTree = "<group>"; };
 		E63B1EC7C4950E84EA889876 /* ARManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ARManager.swift; sourceTree = "<group>"; };
+		E63B1EE37678C9FA68DB06D9 /* RotationAnimationCurveOwnerAssembler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RotationAnimationCurveOwnerAssembler.swift; sourceTree = "<group>"; };
 		E63B1F6CBBF500DC5175715F /* MeshRenderer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MeshRenderer.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -797,8 +817,48 @@
 				04462EE9292A149300F95387 /* GLTFAssetReader.h */,
 				04462EE7292A149200F95387 /* GLTFAssetReader.m */,
 				04462EF2292A1C6D00F95387 /* GLTFLoader.swift */,
+				E63B1CDA75FD90993E02BD74 /* GLTFResource.swift */,
 			);
 			path = loader;
+			sourceTree = "<group>";
+		};
+		04462EF4292A4DF400F95387 /* animation */ = {
+			isa = PBXGroup;
+			children = (
+				04462EF5292A518700F95387 /* internal */,
+				E63B106A9787C662E67CC2F3 /* AnimationClip.swift */,
+				E63B152B56D2F2BE0AE76CA0 /* Keyframe.swift */,
+				E63B1A4BF0BC68838A754C44 /* AnimationClipCurveBinding.swift */,
+			);
+			path = animation;
+			sourceTree = "<group>";
+		};
+		04462EF5292A518700F95387 /* internal */ = {
+			isa = PBXGroup;
+			children = (
+				04462EF6292A519100F95387 /* animationCurveOwner */,
+			);
+			path = internal;
+			sourceTree = "<group>";
+		};
+		04462EF6292A519100F95387 /* animationCurveOwner */ = {
+			isa = PBXGroup;
+			children = (
+				04462EF7292A519F00F95387 /* assembler */,
+				E63B1D86522EAF76181DE8C0 /* AnimationCurveOwner.swift */,
+			);
+			path = animationCurveOwner;
+			sourceTree = "<group>";
+		};
+		04462EF7292A519F00F95387 /* assembler */ = {
+			isa = PBXGroup;
+			children = (
+				E63B143DEB1100EAACC7A6F6 /* IAnimationCurveOwnerAssembler.swift */,
+				E63B1218D85B0A791054F368 /* PositionAnimationCurveOwnerAssembler.swift */,
+				E63B1EE37678C9FA68DB06D9 /* RotationAnimationCurveOwnerAssembler.swift */,
+				E63B15D34993D901061CA7C9 /* ScaleAnimationCurveOwnerAssembler.swift */,
+			);
+			path = assembler;
 			sourceTree = "<group>";
 		};
 		3E0F7B1229220F5D00C4A843 /* shadow */ = {
@@ -1161,6 +1221,7 @@
 				3E0F7C45292601C600C4A843 /* physics */,
 				04176A762925274800B1775A /* input */,
 				04462EE4292A145200F95387 /* loader */,
+				04462EF4292A4DF400F95387 /* animation */,
 				3E67EEA9291CEBDF00ED60C8 /* Layer.swift */,
 				E63B1CB34D0218B55ACB3457 /* Canvas.swift */,
 				43D8C4566766B1715A426CE1 /* Engine.swift */,
@@ -1413,6 +1474,7 @@
 				43D8C0E825225EDCF4195D57 /* PrimitiveMesh.swift */,
 				E63B1F6CBBF500DC5175715F /* MeshRenderer.swift */,
 				E63B1681537252EE5F41F0EF /* BufferPool.swift */,
+				E63B11EDE4BA4562BDFFF83D /* Skin.swift */,
 			);
 			path = mesh;
 			sourceTree = "<group>";
@@ -1913,6 +1975,16 @@
 				E63B1828A10683FFA47122A8 /* CascadedShadowSubpass.swift in Sources */,
 				E63B14041298E8A7482B9FAC /* ShadowManager.swift in Sources */,
 				E63B117E5A0F83C02B55118B /* BufferPool.swift in Sources */,
+				E63B1AA40375BFAABC560F95 /* GLTFResource.swift in Sources */,
+				E63B1AF5F5856D17AF1FCB2D /* Skin.swift in Sources */,
+				E63B14A326E9FA494B7C98DA /* AnimationClip.swift in Sources */,
+				E63B18AFE41CF0C5049F0A3A /* Keyframe.swift in Sources */,
+				E63B13BE4B83237308EB5629 /* AnimationClipCurveBinding.swift in Sources */,
+				E63B1E94F236DAE62ED420BE /* IAnimationCurveOwnerAssembler.swift in Sources */,
+				E63B15A06315AA7A029E93AD /* AnimationCurveOwner.swift in Sources */,
+				E63B1B6074B28D82BD562694 /* PositionAnimationCurveOwnerAssembler.swift in Sources */,
+				E63B1BE20BDA60B5E7AF0212 /* RotationAnimationCurveOwnerAssembler.swift in Sources */,
+				E63B127381C36DE4C2CED2CE /* ScaleAnimationCurveOwnerAssembler.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
