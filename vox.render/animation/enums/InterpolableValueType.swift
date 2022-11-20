@@ -6,9 +6,11 @@
 
 import Foundation
 
-protocol IAnimationCurveOwnerAssembler {
-    associatedtype V: KeyframeValueType
-    func initialize(owner: AnimationCurveOwner<V>)
-    func getTargetValue() -> V;
-    func setTargetValue(value: V)
+public enum InterpolableValueType {
+    case Float
+    case FloatArray
+    case Vector2
+    case Vector3
+    case Vector4
+    case Quaternion
 }
