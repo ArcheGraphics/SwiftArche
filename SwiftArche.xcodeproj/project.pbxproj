@@ -19,7 +19,6 @@
 		043E2C9B2920AAD00057BDD1 /* Logging in Frameworks */ = {isa = PBXBuildFile; productRef = 043E2C9A2920AAD00057BDD1 /* Logging */; };
 		043E2CA029212E8C0057BDD1 /* Light.swift in Sources */ = {isa = PBXBuildFile; fileRef = 043E2C9F29212E8C0057BDD1 /* Light.swift */; };
 		04462EEF292A149300F95387 /* GLTFAssetReader.m in Sources */ = {isa = PBXBuildFile; fileRef = 04462EE7292A149200F95387 /* GLTFAssetReader.m */; };
-		04462EF0292A149300F95387 /* GLTFWorkflowHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 04462EEB292A149300F95387 /* GLTFWorkflowHelper.m */; };
 		04462EF1292A149300F95387 /* GLTFAsset.m in Sources */ = {isa = PBXBuildFile; fileRef = 04462EEC292A149300F95387 /* GLTFAsset.m */; };
 		04ED07DA29226E9C00DD55AB /* normal_shading.metal in Sources */ = {isa = PBXBuildFile; fileRef = 04ED07D929226E9C00DD55AB /* normal_shading.metal */; };
 		04ED07DE292284FD00DD55AB /* shadow_shading.metal in Sources */ = {isa = PBXBuildFile; fileRef = 04ED07DD292284FD00DD55AB /* shadow_shading.metal */; };
@@ -348,11 +347,8 @@
 		04176AD229275F3800B1775A /* libc++.1.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libc++.1.tbd"; path = "Platforms/MacOSX.platform/Developer/SDKs/MacOSX13.0.sdk/usr/lib/libc++.1.tbd"; sourceTree = DEVELOPER_DIR; };
 		043E2C9C2920D0BC0057BDD1 /* type_common.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = type_common.h; sourceTree = "<group>"; };
 		043E2C9F29212E8C0057BDD1 /* Light.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Light.swift; sourceTree = "<group>"; };
-		04462EE5292A149200F95387 /* WorkflowShaders.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = WorkflowShaders.txt; sourceTree = "<group>"; };
-		04462EE6292A149200F95387 /* GLTFWorkflowHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GLTFWorkflowHelper.h; sourceTree = "<group>"; };
 		04462EE7292A149200F95387 /* GLTFAssetReader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GLTFAssetReader.m; sourceTree = "<group>"; };
 		04462EE9292A149300F95387 /* GLTFAssetReader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GLTFAssetReader.h; sourceTree = "<group>"; };
-		04462EEB292A149300F95387 /* GLTFWorkflowHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GLTFWorkflowHelper.m; sourceTree = "<group>"; };
 		04462EEC292A149300F95387 /* GLTFAsset.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GLTFAsset.m; sourceTree = "<group>"; };
 		04462EED292A149300F95387 /* GLTFTypes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GLTFTypes.h; sourceTree = "<group>"; };
 		04462EEE292A149300F95387 /* GLTFAsset.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GLTFAsset.h; sourceTree = "<group>"; };
@@ -798,9 +794,6 @@
 				04462EEC292A149300F95387 /* GLTFAsset.m */,
 				04462EE9292A149300F95387 /* GLTFAssetReader.h */,
 				04462EE7292A149200F95387 /* GLTFAssetReader.m */,
-				04462EE6292A149200F95387 /* GLTFWorkflowHelper.h */,
-				04462EEB292A149300F95387 /* GLTFWorkflowHelper.m */,
-				04462EE5292A149200F95387 /* WorkflowShaders.txt */,
 			);
 			path = loader;
 			sourceTree = "<group>";
@@ -1880,7 +1873,6 @@
 				3E0F7C4B2926030100C4A843 /* PhysXPhysics.swift in Sources */,
 				43D8C4BD989F77A020725E4C /* Subpass.swift in Sources */,
 				43D8C52A399C01C7FA561389 /* ForwardSubpass.swift in Sources */,
-				04462EF0292A149300F95387 /* GLTFWorkflowHelper.m in Sources */,
 				E63B1992B1C2F658B6C75B36 /* GeometrySubpass.swift in Sources */,
 				E63B1FBDADAAF1E683C7D956 /* ShadowUtils.swift in Sources */,
 				04176A792925295B00B1775A /* PointerButton.swift in Sources */,

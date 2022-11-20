@@ -44,6 +44,7 @@ extern int GLTFBytesPerComponentForComponentType(GLTFComponentType type);
 
 extern int GLTFComponentCountForDimension(GLTFValueDimension dim);
 
+//MARK: - GLTFObject
 GLTFKIT2_EXPORT
 @interface GLTFObject : NSObject
 
@@ -86,6 +87,7 @@ typedef BOOL (^GLTFFilterPredicate)(GLTFObject *entry, NSString *identifier, BOO
                                           attributeMap:(NSDictionary<NSString *, NSNumber *> *)attributes;
 @end
 
+//MARK: - GLTFAsset
 GLTFKIT2_EXPORT
 @interface GLTFAsset : GLTFObject
 
@@ -134,6 +136,7 @@ GLTFKIT2_EXPORT
 
 @class GLTFSparseStorage;
 
+//MARK: - GLTFAccessor
 GLTFKIT2_EXPORT
 @interface GLTFAccessor : GLTFObject
 
@@ -161,6 +164,7 @@ GLTFKIT2_EXPORT
 @class GLTFAnimationChannel;
 @class GLTFAnimationSampler;
 
+//MARK: - GLTFAnimation
 GLTFKIT2_EXPORT
 @interface GLTFAnimation : GLTFObject
 
@@ -174,6 +178,7 @@ GLTFKIT2_EXPORT
 
 @end
 
+//MARK: - GLTFAnimationTarget
 GLTFKIT2_EXPORT
 @interface GLTFAnimationTarget : GLTFObject
 
@@ -186,6 +191,7 @@ GLTFKIT2_EXPORT
 
 @end
 
+//MARK: - GLTFAnimationChannel
 GLTFKIT2_EXPORT
 @interface GLTFAnimationChannel : GLTFObject
 
@@ -199,6 +205,7 @@ GLTFKIT2_EXPORT
 
 @end
 
+//MARK: - GLTFAnimationSampler
 GLTFKIT2_EXPORT
 @interface GLTFAnimationSampler : GLTFObject
 
@@ -212,6 +219,7 @@ GLTFKIT2_EXPORT
 
 @end
 
+//MARK: - GLTFBuffer
 GLTFKIT2_EXPORT
 @interface GLTFBuffer : GLTFObject
 
@@ -227,6 +235,7 @@ GLTFKIT2_EXPORT
 
 @end
 
+//MARK: - GLTFBufferView
 GLTFKIT2_EXPORT
 @interface GLTFBufferView : GLTFObject
 
@@ -245,6 +254,7 @@ GLTFKIT2_EXPORT
 
 @end
 
+//MARK: - GLTFOrthographicProjectionParams
 GLTFKIT2_EXPORT
 @interface GLTFOrthographicProjectionParams : GLTFObject
 
@@ -253,6 +263,7 @@ GLTFKIT2_EXPORT
 
 @end
 
+//MARK: - GLTFPerspectiveProjectionParams
 GLTFKIT2_EXPORT
 @interface GLTFPerspectiveProjectionParams : GLTFObject
 
@@ -261,6 +272,7 @@ GLTFKIT2_EXPORT
 
 @end
 
+//MARK: - GLTFCamera
 GLTFKIT2_EXPORT
 @interface GLTFCamera : GLTFObject
 
@@ -275,6 +287,7 @@ GLTFKIT2_EXPORT
 
 @end
 
+//MARK: - GLTFImage
 GLTFKIT2_EXPORT
 @interface GLTFImage : GLTFObject
 
@@ -293,6 +306,7 @@ GLTFKIT2_EXPORT
 
 @end
 
+//MARK: - GLTFLight
 GLTFKIT2_EXPORT
 @interface GLTFLight : GLTFObject
 
@@ -311,6 +325,7 @@ GLTFKIT2_EXPORT
 
 @class GLTFTextureParams;
 
+//MARK: - GLTFPBRMetallicRoughnessParams
 GLTFKIT2_EXPORT
 @interface GLTFPBRMetallicRoughnessParams : GLTFObject
 
@@ -322,6 +337,7 @@ GLTFKIT2_EXPORT
 
 @end
 
+//MARK: - GLTFPBRSpecularGlossinessParams
 GLTFKIT2_EXPORT
 @interface GLTFPBRSpecularGlossinessParams : GLTFObject
 
@@ -333,7 +349,7 @@ GLTFKIT2_EXPORT
 
 @end
 
-
+//MARK: - GLTFClearcoatParams
 GLTFKIT2_EXPORT
 @interface GLTFClearcoatParams : GLTFObject
 
@@ -345,6 +361,7 @@ GLTFKIT2_EXPORT
 
 @end
 
+//MARK: - GLTFMaterial
 GLTFKIT2_EXPORT
 @interface GLTFMaterial : GLTFObject
 
@@ -364,6 +381,7 @@ GLTFKIT2_EXPORT
 
 @class GLTFPrimitive;
 
+//MARK: - GLTFMesh
 GLTFKIT2_EXPORT
 @interface GLTFMesh : GLTFObject
 
@@ -377,6 +395,7 @@ GLTFKIT2_EXPORT
 
 typedef NSDictionary<NSString *, GLTFAccessor *> GLTFMorphTarget;
 
+//MARK: - GLTFPrimitive
 GLTFKIT2_EXPORT
 @interface GLTFPrimitive : GLTFObject
 
@@ -397,6 +416,7 @@ GLTFKIT2_EXPORT
 
 @end
 
+//MARK: - GLTFNode
 GLTFKIT2_EXPORT
 @interface GLTFNode : GLTFObject
 
@@ -414,6 +434,7 @@ GLTFKIT2_EXPORT
 
 @end
 
+//MARK: - GLTFTextureSampler
 GLTFKIT2_EXPORT
 @interface GLTFTextureSampler : GLTFObject
 
@@ -424,6 +445,7 @@ GLTFKIT2_EXPORT
 
 @end
 
+//MARK: - GLTFScene
 GLTFKIT2_EXPORT
 @interface GLTFScene : GLTFObject
 
@@ -431,6 +453,7 @@ GLTFKIT2_EXPORT
 
 @end
 
+//MARK: - GLTFSkin
 GLTFKIT2_EXPORT
 @interface GLTFSkin : GLTFObject
 
@@ -444,6 +467,7 @@ GLTFKIT2_EXPORT
 
 @end
 
+//MARK: - GLTFSparseStorage
 GLTFKIT2_EXPORT
 @interface GLTFSparseStorage : GLTFObject
 
@@ -465,6 +489,7 @@ GLTFKIT2_EXPORT
 
 @end
 
+//MARK: - GLTFTextureTransform
 GLTFKIT2_EXPORT
 @interface GLTFTextureTransform : NSObject
 
@@ -477,6 +502,7 @@ GLTFKIT2_EXPORT
 
 @end
 
+//MARK: - GLTFTextureParams
 GLTFKIT2_EXPORT
 @interface GLTFTextureParams : NSObject
 
@@ -489,6 +515,7 @@ GLTFKIT2_EXPORT
 
 @end
 
+//MARK: - GLTFTexture
 GLTFKIT2_EXPORT
 @interface GLTFTexture : GLTFObject
 
