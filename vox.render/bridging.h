@@ -19,3 +19,5 @@
 #include "../vox.physics/shape/CPxPlaneGeometry.h"
 #include "../vox.physics/joint/CJointBridge.h"
 #include "../vox.physics/characterkinematic/CCharacterBridge.h"
+
+#include "loader/GLTFAsset.h"

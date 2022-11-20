@@ -1,3 +1,6 @@
 [submodule "third_party/physx"]
 	path = third_party/physx
 	url = https://github.com/ArcheGraphics/PhysX
+[submodule "third_party/cgltf"]
+	path = third_party/cgltf
+	url = https://github.com/jkuhlmann/cgltf.git

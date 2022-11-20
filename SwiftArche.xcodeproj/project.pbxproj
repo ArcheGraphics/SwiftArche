@@ -18,6 +18,9 @@
 		04176AD529275F3B00B1775A /* libc++.1.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 04176AD229275F3800B1775A /* libc++.1.tbd */; };
 		043E2C9B2920AAD00057BDD1 /* Logging in Frameworks */ = {isa = PBXBuildFile; productRef = 043E2C9A2920AAD00057BDD1 /* Logging */; };
 		043E2CA029212E8C0057BDD1 /* Light.swift in Sources */ = {isa = PBXBuildFile; fileRef = 043E2C9F29212E8C0057BDD1 /* Light.swift */; };
+		04462EEF292A149300F95387 /* GLTFAssetReader.m in Sources */ = {isa = PBXBuildFile; fileRef = 04462EE7292A149200F95387 /* GLTFAssetReader.m */; };
+		04462EF0292A149300F95387 /* GLTFWorkflowHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 04462EEB292A149300F95387 /* GLTFWorkflowHelper.m */; };
+		04462EF1292A149300F95387 /* GLTFAsset.m in Sources */ = {isa = PBXBuildFile; fileRef = 04462EEC292A149300F95387 /* GLTFAsset.m */; };
 		04ED07DA29226E9C00DD55AB /* normal_shading.metal in Sources */ = {isa = PBXBuildFile; fileRef = 04ED07D929226E9C00DD55AB /* normal_shading.metal */; };
 		04ED07DE292284FD00DD55AB /* shadow_shading.metal in Sources */ = {isa = PBXBuildFile; fileRef = 04ED07DD292284FD00DD55AB /* shadow_shading.metal */; };
 		3E0F7B0C2921F63B00C4A843 /* skybox_shading.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3E0F7B0B2921F63B00C4A843 /* skybox_shading.metal */; };
@@ -345,6 +348,14 @@
 		04176AD229275F3800B1775A /* libc++.1.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libc++.1.tbd"; path = "Platforms/MacOSX.platform/Developer/SDKs/MacOSX13.0.sdk/usr/lib/libc++.1.tbd"; sourceTree = DEVELOPER_DIR; };
 		043E2C9C2920D0BC0057BDD1 /* type_common.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = type_common.h; sourceTree = "<group>"; };
 		043E2C9F29212E8C0057BDD1 /* Light.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Light.swift; sourceTree = "<group>"; };
+		04462EE5292A149200F95387 /* WorkflowShaders.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = WorkflowShaders.txt; sourceTree = "<group>"; };
+		04462EE6292A149200F95387 /* GLTFWorkflowHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GLTFWorkflowHelper.h; sourceTree = "<group>"; };
+		04462EE7292A149200F95387 /* GLTFAssetReader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GLTFAssetReader.m; sourceTree = "<group>"; };
+		04462EE9292A149300F95387 /* GLTFAssetReader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GLTFAssetReader.h; sourceTree = "<group>"; };
+		04462EEB292A149300F95387 /* GLTFWorkflowHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GLTFWorkflowHelper.m; sourceTree = "<group>"; };
+		04462EEC292A149300F95387 /* GLTFAsset.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GLTFAsset.m; sourceTree = "<group>"; };
+		04462EED292A149300F95387 /* GLTFTypes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GLTFTypes.h; sourceTree = "<group>"; };
+		04462EEE292A149300F95387 /* GLTFAsset.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GLTFAsset.h; sourceTree = "<group>"; };
 		04ED07D929226E9C00DD55AB /* normal_shading.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = normal_shading.metal; sourceTree = "<group>"; };
 		04ED07DB29226EA800DD55AB /* normal_shading.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = normal_shading.h; sourceTree = "<group>"; };
 		04ED07DC292284A100DD55AB /* shadow_shading.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = shadow_shading.h; sourceTree = "<group>"; };
@@ -483,7 +494,6 @@
 		3E67EDC5291B2F7600ED60C8 /* SwiftArche.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SwiftArche.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		3E67EDC8291B2F7600ED60C8 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		3E67EDCA291B2F7600ED60C8 /* ar_shading.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = ar_shading.metal; sourceTree = "<group>"; };
-		3E67EDCC291B2F7600ED60C8 /* ShaderTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ShaderTypes.h; sourceTree = "<group>"; };
 		3E67EDCD291B2F7600ED60C8 /* ARRenderer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ARRenderer.swift; sourceTree = "<group>"; };
 		3E67EDCF291B2F7600ED60C8 /* ARViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ARViewController.swift; sourceTree = "<group>"; };
 		3E67EDD2291B2F7600ED60C8 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -515,15 +525,6 @@
 		3E67EE3E291B3A5A00ED60C8 /* SubMesh.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SubMesh.swift; sourceTree = "<group>"; };
 		3E67EE3F291B3A5A00ED60C8 /* Material.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Material.swift; sourceTree = "<group>"; };
 		3E67EE40291B3A5A00ED60C8 /* Mesh.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Mesh.swift; sourceTree = "<group>"; };
-		3E67EE44291B3A7900ED60C8 /* AAPLSkybox.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; path = AAPLSkybox.metal; sourceTree = "<group>"; };
-		3E67EE45291B3A7900ED60C8 /* AAPLDirectionalLight.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; path = AAPLDirectionalLight.metal; sourceTree = "<group>"; };
-		3E67EE46291B3A7900ED60C8 /* AAPLFairy.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; path = AAPLFairy.metal; sourceTree = "<group>"; };
-		3E67EE47291B3A7900ED60C8 /* AAPLShaderTypes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AAPLShaderTypes.h; sourceTree = "<group>"; };
-		3E67EE48291B3A7A00ED60C8 /* AAPLShadow.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; path = AAPLShadow.metal; sourceTree = "<group>"; };
-		3E67EE49291B3A7A00ED60C8 /* AAPLShaderCommon.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AAPLShaderCommon.h; sourceTree = "<group>"; };
-		3E67EE4A291B3A7A00ED60C8 /* AAPLGBuffer.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; path = AAPLGBuffer.metal; sourceTree = "<group>"; };
-		3E67EE4B291B3A7A00ED60C8 /* AAPLPointLights.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; path = AAPLPointLights.metal; sourceTree = "<group>"; };
-		3E67EE4C291B3A7A00ED60C8 /* AAPLConfig.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AAPLConfig.h; sourceTree = "<group>"; };
 		3E67EE53291B3CC700ED60C8 /* Meshes */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Meshes; sourceTree = "<group>"; };
 		3E67EE55291B3D8600ED60C8 /* SwiftArche.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = SwiftArche.entitlements; sourceTree = "<group>"; };
 		3E67EE5E291B799900ED60C8 /* libvox.math.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libvox.math.a; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -787,6 +788,21 @@
 				E63B126D86D1150480AF5E59 /* DiffuseMode.swift */,
 			);
 			path = enums;
+			sourceTree = "<group>";
+		};
+		04462EE4292A145200F95387 /* loader */ = {
+			isa = PBXGroup;
+			children = (
+				04462EED292A149300F95387 /* GLTFTypes.h */,
+				04462EEE292A149300F95387 /* GLTFAsset.h */,
+				04462EEC292A149300F95387 /* GLTFAsset.m */,
+				04462EE9292A149300F95387 /* GLTFAssetReader.h */,
+				04462EE7292A149200F95387 /* GLTFAssetReader.m */,
+				04462EE6292A149200F95387 /* GLTFWorkflowHelper.h */,
+				04462EEB292A149300F95387 /* GLTFWorkflowHelper.m */,
+				04462EE5292A149200F95387 /* WorkflowShaders.txt */,
+			);
+			path = loader;
 			sourceTree = "<group>";
 		};
 		3E0F7B1229220F5D00C4A843 /* shadow */ = {
@@ -1112,16 +1128,6 @@
 		3E67EDFE291B301700ED60C8 /* vox.shader */ = {
 			isa = PBXGroup;
 			children = (
-				3E67EE4C291B3A7A00ED60C8 /* AAPLConfig.h */,
-				3E67EE45291B3A7900ED60C8 /* AAPLDirectionalLight.metal */,
-				3E67EE46291B3A7900ED60C8 /* AAPLFairy.metal */,
-				3E67EE4A291B3A7A00ED60C8 /* AAPLGBuffer.metal */,
-				3E67EE4B291B3A7A00ED60C8 /* AAPLPointLights.metal */,
-				3E67EE49291B3A7A00ED60C8 /* AAPLShaderCommon.h */,
-				3E67EE47291B3A7900ED60C8 /* AAPLShaderTypes.h */,
-				3E67EE48291B3A7A00ED60C8 /* AAPLShadow.metal */,
-				3E67EE44291B3A7900ED60C8 /* AAPLSkybox.metal */,
-				3E67EDCC291B2F7600ED60C8 /* ShaderTypes.h */,
 				3E0F7B1229220F5D00C4A843 /* shadow */,
 				043E2C9C2920D0BC0057BDD1 /* type_common.h */,
 				43D8C3D9132283C53EF428E3 /* macro_name.h */,
@@ -1158,6 +1164,7 @@
 				3E0F7B222924804700C4A843 /* background */,
 				3E0F7C45292601C600C4A843 /* physics */,
 				04176A762925274800B1775A /* input */,
+				04462EE4292A145200F95387 /* loader */,
 				3E67EEA9291CEBDF00ED60C8 /* Layer.swift */,
 				E63B1CB34D0218B55ACB3457 /* Canvas.swift */,
 				43D8C4566766B1715A426CE1 /* Engine.swift */,
@@ -1873,6 +1880,7 @@
 				3E0F7C4B2926030100C4A843 /* PhysXPhysics.swift in Sources */,
 				43D8C4BD989F77A020725E4C /* Subpass.swift in Sources */,
 				43D8C52A399C01C7FA561389 /* ForwardSubpass.swift in Sources */,
+				04462EF0292A149300F95387 /* GLTFWorkflowHelper.m in Sources */,
 				E63B1992B1C2F658B6C75B36 /* GeometrySubpass.swift in Sources */,
 				E63B1FBDADAAF1E683C7D956 /* ShadowUtils.swift in Sources */,
 				04176A792925295B00B1775A /* PointerButton.swift in Sources */,
@@ -1882,6 +1890,7 @@
 				3E0F7C942926644F00C4A843 /* DynamicCollider.swift in Sources */,
 				3E0F7C6D2926039500C4A843 /* PhysXJoint.swift in Sources */,
 				43D8C3BA1BA3519EE26FB708 /* SkySubpass.swift in Sources */,
+				04462EF1292A149300F95387 /* GLTFAsset.m in Sources */,
 				43D8C2D06DBDF6CCA1ECC6B3 /* BackgroundSubpass.swift in Sources */,
 				43D8C21945D6381CFDBAF783 /* PointerManager.swift in Sources */,
 				43D8CE172B64A49B08156328 /* InputManager.swift in Sources */,
@@ -1892,6 +1901,7 @@
 				43D8CB6C869DD874CFBF194E /* CharacterController.swift in Sources */,
 				43D8CD3C7521C26895BB6BA7 /* ControllerNonWalkableMode.swift in Sources */,
 				43D8C9A73CD95F4EBB5E2263 /* ControllerCollisionFlag.swift in Sources */,
+				04462EEF292A149300F95387 /* GLTFAssetReader.m in Sources */,
 				43D8C0DDDACE043EA45EFCE1 /* Joint.swift in Sources */,
 				43D8C058C79C4CF107774FD3 /* FixedJoint.swift in Sources */,
 				43D8C8DA95DABECFDE06AC41 /* JointLimits.swift in Sources */,
@@ -2444,6 +2454,7 @@
 				SKIP_INSTALL = YES;
 				SWIFT_OBJC_BRIDGING_HEADER = vox.render/bridging.h;
 				SWIFT_VERSION = 5.0;
+				SYSTEM_HEADER_SEARCH_PATHS = ./third_party/cgltf;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -2458,6 +2469,7 @@
 				SKIP_INSTALL = YES;
 				SWIFT_OBJC_BRIDGING_HEADER = vox.render/bridging.h;
 				SWIFT_VERSION = 5.0;
+				SYSTEM_HEADER_SEARCH_PATHS = ./third_party/cgltf;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
