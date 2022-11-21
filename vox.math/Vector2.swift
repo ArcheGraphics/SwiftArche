@@ -29,6 +29,10 @@ public struct Vector2 {
         }
     }
 
+    public init() {
+        elements = SIMD2<Float>(0, 0)
+    }
+
     /// Constructor of Vector2.
     /// - Parameters:
     ///   - x: The x component of the vector, default 0

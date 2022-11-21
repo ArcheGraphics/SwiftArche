@@ -40,6 +40,10 @@ public struct Vector4 {
         }
     }
 
+    public init() {
+        elements = SIMD4<Float>(0, 0, 0, 0)
+    }
+
     /// Constructor of Vector4.
     /// - Parameters:
     ///   - x: The x component of the vector, default 0

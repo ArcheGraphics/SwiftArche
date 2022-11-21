@@ -153,5 +153,5 @@ class AnimationCurveOwner<V: KeyframeValueType, Calculator: IAnimationCurveCalcu
 
 struct IEvaluateData<V: KeyframeValueType> {
     var curKeyframeIndex: Int = 0
-    var value: V?
+    var value: V = V()
 }

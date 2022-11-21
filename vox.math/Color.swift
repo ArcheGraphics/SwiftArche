@@ -42,6 +42,10 @@ public struct Color {
         }
     }
 
+    public init() {
+        elements = SIMD4<Float>(1, 1, 1, 1)
+    }
+
     /// Constructor of Color.
     /// - Parameters:
     ///   - r: The red component of the color

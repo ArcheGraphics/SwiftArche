@@ -35,6 +35,10 @@ public struct Vector3 {
         }
     }
 
+    public init() {
+        elements = SIMD3<Float>(0, 0, 0)
+    }
+
     public init(_ x: Float = 0, _ y: Float = 0, _ z: Float = 0) {
         elements = SIMD3<Float>(x, y, z)
     }

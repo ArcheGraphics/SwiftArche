@@ -8,6 +8,12 @@ import vox_math
 
 protocol KeyframeValueType {
     associatedtype TangentType
+
+    init()
+}
+
+extension Bool: KeyframeValueType {
+    typealias TangentType = Bool
 }
 
 extension Float: KeyframeValueType {

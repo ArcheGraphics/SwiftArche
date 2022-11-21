@@ -52,6 +52,10 @@ public struct Quaternion {
         }
     }
 
+    public init() {
+        elements = simd_quatf(ix: 0, iy: 0, iz: 0, r: 1)
+    }
+
     /// Constructor of Quaternion.
     /// - Parameters:
     ///   - x: The x component of the quaternion, default 0
