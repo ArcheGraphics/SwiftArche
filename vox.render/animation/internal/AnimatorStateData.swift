@@ -7,6 +7,6 @@
 import Foundation
 
 internal class AnimatorStateData {
-    var curveOwners: [PropertyBase?] = []
+    var curveOwners: [AnimationCurveOwnerBase?] = []
     var eventHandlers: [AnimationEventHandler] = []
 }

@@ -14,8 +14,8 @@ public class Animator: Component {
     var _onUpdateIndex: Int = -1
 
     private var _animatorLayersData: [Int: AnimatorLayerData] = [:]
-    private var _crossOwnerCollection: [PropertyBase] = []
-    private var _animationCurveOwners: [[Int: PropertyBase]] = []
+    private var _crossOwnerCollection: [AnimationCurveOwnerBase] = []
+    private var _animationCurveOwners: [[Int: AnimationCurveOwnerBase]] = []
     private var _animationEventHandlerPool: [AnimationEventHandler] = []
 
     /// The playback speed of the Animator, 1.0 is normal playback speed.
@@ -133,15 +133,8 @@ public class Animator: Component {
         for propertyOwners in _animationCurveOwners {
             for property in propertyOwners {
                 let owner = property.value
-                switch owner.property {
-                case "position":
-                    let ownerType = owner as! AnimationCurveOwner<Vector3, AnimationVector3Curve>
-                    if ownerType.hasSavedDefaultValue {
-                        ownerType.revertDefaultValue()
-                    }
-                    break
-                default:
-                    break
+                if owner.hasSavedDefaultValue {
+                    owner.revertDefaultValue()
                 }
             }
         }
@@ -174,14 +167,7 @@ public class Animator: Component {
     private func _saveDefaultValues(_ stateData: AnimatorStateData) {
         let curveOwners = stateData.curveOwners
         for i in 0..<curveOwners.count {
-            if let owner = curveOwners[i] {
-                switch owner.property {
-                case "position":
-                    (owner as! AnimationCurveOwner<Vector3, AnimationVector3Curve>).saveDefaultValue()
-                default:
-                    break
-                }
-            }
+            curveOwners[i]?.saveDefaultValue()
         }
     }
 
@@ -229,32 +215,13 @@ public class Animator: Component {
         _crossOwnerCollection = []
     }
 
-    private func _addCrossCurveData(_ crossCurveData: inout [PropertyBase],
-                                    _ owner: PropertyBase,
+    private func _addCrossCurveData(_ crossCurveData: inout [AnimationCurveOwnerBase],
+                                    _ owner: AnimationCurveOwnerBase,
                                     _ curCurveIndex: Int,
                                     _ nextCurveIndex: Int) {
-        switch owner.property! {
-        case "position":
-            let ownerType = owner as! AnimationCurveOwner<Vector3, AnimationVector3Curve>
-            ownerType.crossSrcCurveIndex = curCurveIndex
-            ownerType.crossDestCurveIndex = nextCurveIndex
-            crossCurveData.append(owner)
-            break
-        case "rotation":
-            let ownerType = owner as! AnimationCurveOwner<Quaternion, AnimationQuaternionCurve>
-            ownerType.crossSrcCurveIndex = curCurveIndex
-            ownerType.crossDestCurveIndex = nextCurveIndex
-            crossCurveData.append(owner)
-            break
-        case "scale":
-            let ownerType = owner as! AnimationCurveOwner<Vector3, AnimationVector3Curve>
-            ownerType.crossSrcCurveIndex = curCurveIndex
-            ownerType.crossDestCurveIndex = nextCurveIndex
-            crossCurveData.append(owner)
-            break
-        default:
-            break
-        }
+        owner.crossSrcCurveIndex = curCurveIndex
+        owner.crossDestCurveIndex = nextCurveIndex
+        crossCurveData.append(owner)
     }
 
     private func _prepareCrossFading(_ animatorLayerData: AnimatorLayerData) {
@@ -281,35 +248,16 @@ public class Animator: Component {
         // Save current cross curve data owner fixed pose.
         for i in 0..<_crossOwnerCollection.count {
             let item = _crossOwnerCollection[i]
-            switch item.property {
-            case "position":
-                let itemType = item as! AnimationCurveOwner<Vector3, AnimationVector3Curve>
-                itemType.saveFixedPoseValue()
-                // Reset destCurveIndex When fixed pose crossFading again.
-                itemType.crossDestCurveIndex = -1
-                break
-            case "rotation":
-                let itemType = item as! AnimationCurveOwner<Quaternion, AnimationQuaternionCurve>
-                itemType.saveFixedPoseValue()
-                // Reset destCurveIndex When fixed pose crossFading again.
-                itemType.crossDestCurveIndex = -1
-                break
-            case "scale":
-                let itemType = item as! AnimationCurveOwner<Vector3, AnimationVector3Curve>
-                itemType.saveFixedPoseValue()
-                // Reset destCurveIndex When fixed pose crossFading again.
-                itemType.crossDestCurveIndex = -1
-                break
-            default:
-                break
-            }
+            item.saveFixedPoseValue()
+            // Reset destCurveIndex When fixed pose crossFading again.
+            item.crossDestCurveIndex = -1
         }
         // prepare dest AnimatorState cross data.
         _prepareDestCrossData(&_crossOwnerCollection, animatorLayerData.destPlayData, animatorLayerData.crossCurveMark, true)
     }
 
     private func _prepareSrcCrossData(
-            _ crossCurveData: inout [PropertyBase],
+            _ crossCurveData: inout [AnimationCurveOwnerBase],
             _ srcPlayData: AnimatorStatePlayData,
             _ crossCurveMark: Int,
             _ saveFixed: Bool
@@ -317,33 +265,10 @@ public class Animator: Component {
         let curveOwners = srcPlayData.stateData.curveOwners
         for i in 0..<curveOwners.count {
             if let owner = curveOwners[i] {
-                switch owner.property {
-                case "position":
-                    let ownerType = owner as! AnimationCurveOwner<Vector3, AnimationVector3Curve>
-                    ownerType.crossCurveMark = crossCurveMark
-                    ownerType.crossCurveDataIndex = crossCurveData.count
-                    if saveFixed {
-                        ownerType.saveFixedPoseValue()
-                    }
-                    break
-                case "rotation":
-                    let ownerType = owner as! AnimationCurveOwner<Quaternion, AnimationQuaternionCurve>
-                    ownerType.crossCurveMark = crossCurveMark
-                    ownerType.crossCurveDataIndex = crossCurveData.count
-                    if saveFixed {
-                        ownerType.saveFixedPoseValue()
-                    }
-                    break
-                case "scale":
-                    let ownerType = owner as! AnimationCurveOwner<Vector3, AnimationVector3Curve>
-                    ownerType.crossCurveMark = crossCurveMark
-                    ownerType.crossCurveDataIndex = crossCurveData.count
-                    if saveFixed {
-                        ownerType.saveFixedPoseValue()
-                    }
-                    break
-                default:
-                    break
+                owner.crossCurveMark = crossCurveMark
+                owner.crossCurveDataIndex = crossCurveData.count
+                if saveFixed {
+                    owner.saveFixedPoseValue()
                 }
                 _addCrossCurveData(&crossCurveData, owner, i, -1)
             }
@@ -351,7 +276,7 @@ public class Animator: Component {
     }
 
     private func _prepareDestCrossData(
-            _ crossCurveData: inout [PropertyBase],
+            _ crossCurveData: inout [AnimationCurveOwnerBase],
             _ destPlayData: AnimatorStatePlayData,
             _ crossCurveMark: Int,
             _ saveFixed: Bool
@@ -359,54 +284,17 @@ public class Animator: Component {
         let curveOwners = destPlayData.stateData.curveOwners
         for i in 0..<curveOwners.count {
             if let owner = curveOwners[i] {
-                switch owner.property {
-                case "position":
-                    let ownerType = owner as! AnimationCurveOwner<Vector3, AnimationVector3Curve>
-                    // Not include in previous AnimatorState.
-                    if (ownerType.crossCurveMark == crossCurveMark) {
-                        (crossCurveData[ownerType.crossCurveDataIndex] as! AnimationCurveOwner<Vector3, AnimationVector3Curve>).crossDestCurveIndex = i
-                    } else {
-                        ownerType.saveDefaultValue()
-                        if saveFixed {
-                            ownerType.saveFixedPoseValue()
-                        }
-                        ownerType.crossCurveMark = crossCurveMark
-                        ownerType.crossCurveDataIndex = crossCurveData.count
-                        _addCrossCurveData(&crossCurveData, owner, -1, i)
+                // Not include in previous AnimatorState.
+                if (owner.crossCurveMark == crossCurveMark) {
+                    crossCurveData[owner.crossCurveDataIndex].crossDestCurveIndex = i
+                } else {
+                    owner.saveDefaultValue()
+                    if saveFixed {
+                        owner.saveFixedPoseValue()
                     }
-                    break
-                case "rotation":
-                    let ownerType = owner as! AnimationCurveOwner<Quaternion, AnimationQuaternionCurve>
-                    // Not include in previous AnimatorState.
-                    if (ownerType.crossCurveMark == crossCurveMark) {
-                        (crossCurveData[ownerType.crossCurveDataIndex] as! AnimationCurveOwner<Quaternion, AnimationQuaternionCurve>).crossDestCurveIndex = i
-                    } else {
-                        ownerType.saveDefaultValue()
-                        if saveFixed {
-                            ownerType.saveFixedPoseValue()
-                        }
-                        ownerType.crossCurveMark = crossCurveMark
-                        ownerType.crossCurveDataIndex = crossCurveData.count
-                        _addCrossCurveData(&crossCurveData, owner, -1, i)
-                    }
-                    break
-                case "scale":
-                    let ownerType = owner as! AnimationCurveOwner<Vector3, AnimationVector3Curve>
-                    // Not include in previous AnimatorState.
-                    if (ownerType.crossCurveMark == crossCurveMark) {
-                        (crossCurveData[ownerType.crossCurveDataIndex] as! AnimationCurveOwner<Vector3, AnimationVector3Curve>).crossDestCurveIndex = i
-                    } else {
-                        ownerType.saveDefaultValue()
-                        if saveFixed {
-                            ownerType.saveFixedPoseValue()
-                        }
-                        ownerType.crossCurveMark = crossCurveMark
-                        ownerType.crossCurveDataIndex = crossCurveData.count
-                        _addCrossCurveData(&crossCurveData, owner, -1, i)
-                    }
-                    break
-                default:
-                    break
+                    owner.crossCurveMark = crossCurveMark
+                    owner.crossCurveDataIndex = crossCurveData.count
+                    _addCrossCurveData(&crossCurveData, owner, -1, i)
                 }
             }
         }
@@ -741,27 +629,8 @@ public class Animator: Component {
             let curveOwners = playData.stateData.curveOwners
             for i in 0..<curves.count {
                 if let owner = curveOwners[i] {
-                    switch owner.property {
-                    case "position":
-                        let ownerType = owner as! AnimationCurveOwner<Vector3, AnimationVector3Curve>
-                        if ownerType.hasSavedDefaultValue {
-                            ownerType.revertDefaultValue()
-                        }
-                        break
-                    case "rotation":
-                        let ownerType = owner as! AnimationCurveOwner<Quaternion, AnimationQuaternionCurve>
-                        if ownerType.hasSavedDefaultValue {
-                            ownerType.revertDefaultValue()
-                        }
-                        break
-                    case "scale":
-                        let ownerType = owner as! AnimationCurveOwner<Vector3, AnimationVector3Curve>
-                        if ownerType.hasSavedDefaultValue {
-                            ownerType.revertDefaultValue()
-                        }
-                        break
-                    default:
-                        break
+                    if owner.hasSavedDefaultValue {
+                        owner.revertDefaultValue()
                     }
                 }
             }

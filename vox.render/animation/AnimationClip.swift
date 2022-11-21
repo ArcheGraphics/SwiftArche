@@ -8,7 +8,7 @@ import Foundation
 
 /// Stores keyframe based animations.
 public class AnimationClip {
-    internal var _curveBindings: [PropertyBase] = []
+    internal var _curveBindings: [AnimationClipCurveBindingBase] = []
     private var _length: Float = 0
     private var _events: [AnimationEvent] = []
 
@@ -20,7 +20,7 @@ public class AnimationClip {
     }
 
     /// Animation curve bindings for this animation clip.
-    public var curveBindings: [PropertyBase] {
+    public var curveBindings: [AnimationClipCurveBindingBase] {
         get {
             _curveBindings
         }

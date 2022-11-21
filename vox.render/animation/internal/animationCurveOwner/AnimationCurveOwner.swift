@@ -6,32 +6,45 @@
 
 import vox_math
 
-public class AnimationCurveOwner<V: KeyframeValueType, Calculator: IAnimationCurveCalculator>: PropertyBase where Calculator.V == V {
-    var target: Entity
+public class AnimationCurveOwnerBase {
+    /// The name or path to the property being animated.
+    var property: String!
+    var target: Entity!
 
     var crossCurveMark: Int = 0
     var crossCurveDataIndex: Int = 0
-    var defaultValue: V!
-    var fixedPoseValue: V!
     var hasSavedDefaultValue: Bool = false
-    var baseEvaluateData: IEvaluateData<V> = IEvaluateData()
-
-    var crossEvaluateData: IEvaluateData<V> = IEvaluateData()
     var crossSrcCurveIndex: Int = 0
     var crossDestCurveIndex: Int = 0
+
+    public func revertDefaultValue() {
+    }
+
+    public func saveDefaultValue() {
+    }
+
+    public func saveFixedPoseValue() {
+    }
+}
+
+public class AnimationCurveOwner<V: KeyframeValueType, Calculator: IAnimationCurveCalculator>: AnimationCurveOwnerBase where Calculator.V == V {
+    var defaultValue: V!
+    var fixedPoseValue: V!
+    var baseEvaluateData: IEvaluateData<V> = IEvaluateData()
+    var crossEvaluateData: IEvaluateData<V> = IEvaluateData()
 
     var referenceTargetValue: V?
     private var _assembler: IAnimationCurveOwnerAssembler<V, Calculator>
 
     init(_ target: Entity, _ property: String,
          _ assembler: IAnimationCurveOwnerAssembler<V, Calculator>) {
-        self.target = target
         _assembler = assembler
 
         if (Calculator._isReferenceType) {
             referenceTargetValue = _assembler.getTargetValue()!
         }
         super.init()
+        self.target = target
         self.property = property
     }
 
@@ -104,11 +117,11 @@ public class AnimationCurveOwner<V: KeyframeValueType, Calculator: IAnimationCur
         _applyCrossValue(srcValue!, destValue!, crossWeight, layerWeight, additive);
     }
 
-    public func revertDefaultValue() {
+    public override func revertDefaultValue() {
         _assembler.setTargetValue(defaultValue)
     }
 
-    public func saveDefaultValue() {
+    public override func saveDefaultValue() {
         if (Calculator._isReferenceType) {
             _ = Calculator._copyValue(referenceTargetValue!, defaultValue)
         } else {
@@ -117,7 +130,7 @@ public class AnimationCurveOwner<V: KeyframeValueType, Calculator: IAnimationCur
         hasSavedDefaultValue = true
     }
 
-    public func saveFixedPoseValue() {
+    public override func saveFixedPoseValue() {
         if (Calculator._isReferenceType) {
             _ = Calculator._copyValue(referenceTargetValue!, fixedPoseValue)
         } else {

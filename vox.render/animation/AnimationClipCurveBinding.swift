@@ -6,16 +6,16 @@
 
 import vox_math
 
-public class PropertyBase {
+public class AnimationClipCurveBindingBase {
     /// The name or path to the property being animated.
     var property: String!
-}
-
-/// Associate AnimationCurve and the Entity
-class AnimationClipCurveBinding<V: KeyframeValueType, Calculator: IAnimationCurveCalculator>: PropertyBase where Calculator.V == V {
     /// Path to the entity this curve applies to. The relativePath is formatted similar to a pathname,
     /// * e.g. "root/spine/leftArm". If relativePath is empty it refers to the entity the animation clip is attached to.
     var relativePath: String!
+}
+
+/// Associate AnimationCurve and the Entity
+class AnimationClipCurveBinding<V: KeyframeValueType, Calculator: IAnimationCurveCalculator>: AnimationClipCurveBindingBase where Calculator.V == V {
     /// The class type of the component that is animated.
     var type: Component.Type!
     /// The animation curve.
