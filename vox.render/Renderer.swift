@@ -165,8 +165,10 @@ public class Renderer: Component {
     }
 
     func _updateShaderData(_ cameraInfo: CameraInfo) {
-        let worldMatrix = entity.transform.worldMatrix
+        _updateTransformShaderData(cameraInfo, entity.transform.worldMatrix)
+    }
 
+    func _updateTransformShaderData(_ cameraInfo: CameraInfo, _ worldMatrix: Matrix) {
         _rendererData.u_modelMat = worldMatrix.elements
         _rendererData.u_localMat = entity.transform.localMatrix.elements
         var normalMatrix = Matrix.invert(a: worldMatrix)

@@ -23,8 +23,10 @@ public class SkinnedMeshRenderer: MeshRenderer {
     private var _rootBone: Entity?
     private var _localBounds: BoundingBox = BoundingBox()
     private var _jointMatrixs: [simd_float4x4] = []
+    private var _jointBuffer: MTLBuffer?
     private var _jointTexture: MTLTexture?
     private var _jointEntities: [Entity] = []
+    private var _listenerFlag: ListenerUpdateFlag?
 
     var _condensedBlendShapeWeights: [Float] = []
 
@@ -86,15 +88,104 @@ public class SkinnedMeshRenderer: MeshRenderer {
     }
 
     override func _updateShaderData(_ cameraInfo: CameraInfo) {
+        let worldMatrix = _rootBone != nil ? _rootBone!.transform.worldMatrix : entity.transform.worldMatrix
+        _updateTransformShaderData(cameraInfo, worldMatrix)
+
+        if (!_useJointTexture && !_jointMatrixs.isEmpty) {
+            shaderData.setData(SkinnedMeshRenderer._jointMatrixProperty, _jointMatrixs)
+        }
+
+        let mesh = mesh as! ModelMesh
+        mesh._blendShapeManager._updateShaderData(shaderData, self)
     }
 
     override func _updateBounds(_ worldBounds: inout BoundingBox) {
+        if (_rootBone != nil) {
+            let worldMatrix = _rootBone!.transform.worldMatrix
+            worldBounds = BoundingBox.transform(source: localBounds, matrix: worldMatrix)
+        } else {
+            super._updateBounds(&worldBounds)
+        }
     }
 
     private func _createJointTexture() {
+        if (_jointTexture == nil) {
+            let descriptor = MTLTextureDescriptor()
+            descriptor.width = 4
+            descriptor.height = _jointEntities.count
+            descriptor.pixelFormat = .rgba32Float
+            descriptor.mipmapLevelCount = 1
+            _jointTexture = engine.device.makeTexture(descriptor: descriptor)
+            shaderData.enableMacro(HAS_JOINT_TEXTURE)
+            shaderData.setImageView(SkinnedMeshRenderer._jointSamplerProperty, "", _jointTexture)
+        }
+
+        if let commandBuffer = _engine.commandQueue.makeCommandBuffer(),
+           let commandEncoder = commandBuffer.makeBlitCommandEncoder() {
+            _jointBuffer!.contents().copyMemory(from: _jointMatrixs, byteCount: _jointMatrixs.count * MemoryLayout<simd_float4x4>.stride)
+            commandEncoder.copy(from: _jointBuffer!, sourceOffset: 0, sourceBytesPerRow: 0, sourceBytesPerImage: 0, sourceSize: MTLSize(),
+                    to: _jointTexture!, destinationSlice: 0, destinationLevel: 0, destinationOrigin: MTLOrigin())
+            commandEncoder.endEncoding()
+            commandBuffer.commit()
+        }
     }
 
     private func _initJoints() {
+        if (skin == nil) {
+            shaderData.disableMacro(HAS_SKIN)
+            return
+        }
+
+        let joints = skin!.joints
+        let jointCount = joints.count
+        var jointEntities: [Entity] = []
+        for i in 0..<jointCount {
+            jointEntities.append(_findByEntityName(entity, joints[i])!)
+        }
+        _jointEntities = jointEntities
+        _jointMatrixs = [simd_float4x4](repeating: simd_float4x4(), count: jointCount)
+        _jointBuffer = engine.device.makeBuffer(length: jointCount * MemoryLayout<simd_float4x4>.stride)
+
+        let lastRootBone = _rootBone
+        let rootBone = _findByEntityName(entity, skin!.skeleton)
+
+        if lastRootBone != nil {
+            lastRootBone!.transform._updateFlagManager.removeFlag(flag: _listenerFlag!)
+        }
+        _listenerFlag = ListenerUpdateFlag()
+        _listenerFlag!.listener = _onTransformChanged
+        rootBone!.transform._updateFlagManager.addFlag(flag: _listenerFlag!)
+
+        let rootIndex = joints.firstIndex { v in
+            v == skin!.skeleton
+        }
+        if (rootIndex != nil) {
+            _localBounds = BoundingBox.transform(source: _mesh!.bounds, matrix: skin!.inverseBindMatrices[rootIndex!])
+        } else {
+            // Root bone is not in joints list,we can only use default pose compute local bounds
+            // Default pose is slightly less accurate than bind pose
+            let inverseRootBone = Matrix.invert(a: rootBone!.transform.worldMatrix)
+            _localBounds = BoundingBox.transform(source: _mesh!.bounds, matrix: inverseRootBone)
+        }
+
+        _rootBone = rootBone
+
+        let maxJoints = Int(floor(Float(_maxVertexUniformVectors - 30) / 4.0))
+
+        if (jointCount != 0) {
+            shaderData.enableMacro(HAS_SKIN)
+            shaderData.setData(SkinnedMeshRenderer._jointCountProperty, jointCount)
+            if (jointCount > maxJoints) {
+                _useJointTexture = true
+            } else {
+                let maxJoints = max(SkinnedMeshRenderer._maxJoints, jointCount)
+                SkinnedMeshRenderer._maxJoints = maxJoints
+                shaderData.disableMacro(HAS_JOINT_TEXTURE)
+                shaderData.enableMacro(JOINTS_COUNT, (maxJoints, .int))
+            }
+        } else {
+            shaderData.disableMacro(HAS_SKIN)
+        }
     }
 
     private func _findByEntityName(_ rootEntity: Entity?, _ name: String) -> Entity? {
