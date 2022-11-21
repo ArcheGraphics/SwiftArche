@@ -8,7 +8,7 @@ import Foundation
 
 /// Stores keyframe based animations.
 class AnimationClip {
-    internal var _curveBindings: [AnimationClipCurveBinding] = []
+    internal var _curveBindings: [Any] = []
     private var _length: Float = 0
     private var _events: [AnimationEvent] = []
 
@@ -20,7 +20,7 @@ class AnimationClip {
     }
 
     /// Animation curve bindings for this animation clip.
-    var curveBindings: [AnimationClipCurveBinding] {
+    var curveBindings: [Any] {
         get {
             _curveBindings
         }
@@ -53,10 +53,12 @@ class AnimationClip {
     ///   - type: The class type of the component that is animated
     ///   - propertyName: The name to the property being animated
     ///   - curve: The animation curve
-    func addCurveBinding<T: Component>(_ relativePath: String,
-                                       _ type: T.Type,
-                                       _ propertyName: String,
-                                       _ curve: AnimationCurve) {
+    func addCurveBinding<T: Component,
+                        V: KeyframeValueType,
+                        Calculator: IAnimationCurveCalculator>(_ relativePath: String,
+                                                               _ type: T.Type,
+                                                               _ propertyName: String,
+                                                               _ curve: AnimationCurve<V, Calculator>) where Calculator.V == V {
         let property: AnimationProperty
         switch (propertyName) {
         case "position":
@@ -74,7 +76,7 @@ class AnimationClip {
         default:
             fatalError()
         }
-        let curveBinding = AnimationClipCurveBinding()
+        let curveBinding = AnimationClipCurveBinding<V, Calculator>()
         curveBinding.relativePath = relativePath
         curveBinding.type = type
         curveBinding.property = property
