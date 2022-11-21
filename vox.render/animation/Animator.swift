@@ -189,7 +189,7 @@ public class Animator: Component {
         for i in 0..<curves.count {
             let curve = curves[i]
             switch curve.property {
-            case "position":
+            case .Position:
                 let curveType = curve as! AnimationClipCurveBinding<Vector3, AnimationVector3Curve>
                 let targetEntity = curveType.relativePath == "" ? entity : entity.findByPath(curveType.relativePath)
                 if (targetEntity != nil) {
@@ -369,17 +369,17 @@ public class Animator: Component {
         for i in 0..<curveBindings.count {
             if let owner = curveOwners[i] {
                 switch owner.property {
-                case "position":
+                case .Position:
                     let ownerType = curveOwners[i] as! AnimationCurveOwner<Vector3, AnimationVector3Curve>
                     let curveBindingType = curveBindings[i] as! AnimationClipCurveBinding<Vector3, AnimationVector3Curve>
                     ownerType.evaluateAndApplyValue(curveBindingType.curve, clipTime, weight, additive)
                     break
-                case "rotation":
+                case .Rotation:
                     let ownerType = curveOwners[i] as! AnimationCurveOwner<Quaternion, AnimationQuaternionCurve>
                     let curveBindingType = curveBindings[i] as! AnimationClipCurveBinding<Quaternion, AnimationQuaternionCurve>
                     ownerType.evaluateAndApplyValue(curveBindingType.curve, clipTime, weight, additive)
                     break
-                case "scale":
+                case .Scale:
                     let ownerType = curveOwners[i] as! AnimationCurveOwner<Vector3, AnimationVector3Curve>
                     let curveBindingType = curveBindings[i] as! AnimationClipCurveBinding<Vector3, AnimationVector3Curve>
                     ownerType.evaluateAndApplyValue(curveBindingType.curve, clipTime, weight, additive)
@@ -468,7 +468,7 @@ public class Animator: Component {
         for i in 0..<_crossOwnerCollection.count {
             let crossCurveData = _crossOwnerCollection[i]
             switch crossCurveData.property {
-            case "position":
+            case .Position:
                 let crossCurveDataType = crossCurveData as! AnimationCurveOwner<Vector3, AnimationVector3Curve>
                 let crossSrcCurveIndex = crossCurveDataType.crossSrcCurveIndex
                 let crossDestCurveIndex = crossCurveDataType.crossDestCurveIndex
@@ -484,7 +484,7 @@ public class Animator: Component {
                         additive
                 )
                 break
-            case "rotation":
+            case .Rotation:
                 let crossCurveDataType = crossCurveData as! AnimationCurveOwner<Quaternion, AnimationQuaternionCurve>
                 let crossSrcCurveIndex = crossCurveDataType.crossSrcCurveIndex
                 let crossDestCurveIndex = crossCurveDataType.crossDestCurveIndex
@@ -500,7 +500,7 @@ public class Animator: Component {
                         additive
                 )
                 break
-            case "scale":
+            case .Scale:
                 let crossCurveDataType = crossCurveData as! AnimationCurveOwner<Vector3, AnimationVector3Curve>
                 let crossSrcCurveIndex = crossCurveDataType.crossSrcCurveIndex
                 let crossDestCurveIndex = crossCurveDataType.crossDestCurveIndex
@@ -562,7 +562,7 @@ public class Animator: Component {
         for i in 0..<_crossOwnerCollection.count {
             let crossCurveData = _crossOwnerCollection[i]
             switch crossCurveData.property {
-            case "position":
+            case .Position:
                 let crossCurveDataType = crossCurveData as! AnimationCurveOwner<Vector3, AnimationVector3Curve>
                 let crossDestCurveIndex = crossCurveDataType.crossDestCurveIndex
                 let curveType = curveBindings[crossDestCurveIndex] as! AnimationClipCurveBinding<Vector3, AnimationVector3Curve>
@@ -573,7 +573,7 @@ public class Animator: Component {
                         crossWeight,
                         weight,
                         additive)
-            case "rotation":
+            case .Rotation:
                 let crossCurveDataType = crossCurveData as! AnimationCurveOwner<Quaternion, AnimationQuaternionCurve>
                 let crossDestCurveIndex = crossCurveDataType.crossDestCurveIndex
                 let curveType = curveBindings[crossDestCurveIndex] as! AnimationClipCurveBinding<Quaternion, AnimationQuaternionCurve>
@@ -585,7 +585,7 @@ public class Animator: Component {
                         weight,
                         additive)
                 break
-            case "scale":
+            case .Scale:
                 let crossCurveDataType = crossCurveData as! AnimationCurveOwner<Vector3, AnimationVector3Curve>
                 let crossDestCurveIndex = crossCurveDataType.crossDestCurveIndex
                 let curveType = curveBindings[crossDestCurveIndex] as! AnimationClipCurveBinding<Vector3, AnimationVector3Curve>

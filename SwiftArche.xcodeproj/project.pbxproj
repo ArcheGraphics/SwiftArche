@@ -192,6 +192,7 @@
 		43D8C632EC69D73870ADE9D6 /* AnimationVector2Curve.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8CD76A9A600671D3BF2E0 /* AnimationVector2Curve.swift */; };
 		43D8C64F87A019BFA0DE1CC0 /* BoolUpdateFlag.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8CAED3B1AFD13451D2107 /* BoolUpdateFlag.swift */; };
 		43D8C6D77BE611782B2EC4EC /* Entity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8C8DEB27F4A68CF043663 /* Entity.swift */; };
+		43D8C70412541939D0EEEFD7 /* AnimationProperty.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8C0C969216545A2FA412C /* AnimationProperty.swift */; };
 		43D8C73C5DE246FB90B0C7CD /* ListenerUpdateFlag .swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8C11CC2C81E2597C1A743 /* ListenerUpdateFlag .swift */; };
 		43D8C7759AA52F6E7219BD79 /* AnimationVector4Curve.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8CF570103572D7FD65533 /* AnimationVector4Curve.swift */; };
 		43D8C77DD4198A013659D501 /* Mesh.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8CF92C29A209C3AB9C9C6 /* Mesh.swift */; };
@@ -619,6 +620,7 @@
 		43D8C079C8F46AD5B9A6547D /* IAnimationCurveOwnerAssembler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IAnimationCurveOwnerAssembler.swift; sourceTree = "<group>"; };
 		43D8C08D2843709803F5744E /* CameraClearFlags.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CameraClearFlags.swift; sourceTree = "<group>"; };
 		43D8C0C1445D6673F2644B5C /* ScaleAnimationCurveOwnerAssembler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScaleAnimationCurveOwnerAssembler.swift; sourceTree = "<group>"; };
+		43D8C0C969216545A2FA412C /* AnimationProperty.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AnimationProperty.swift; sourceTree = "<group>"; };
 		43D8C0D9906E3F91E7CCDF71 /* IAnimationCurveCalculator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IAnimationCurveCalculator.swift; sourceTree = "<group>"; };
 		43D8C0E825225EDCF4195D57 /* PrimitiveMesh.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PrimitiveMesh.swift; sourceTree = "<group>"; };
 		43D8C0EA6C54B16C4DBBDB8C /* ForwardSubpass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ForwardSubpass.swift; sourceTree = "<group>"; };
@@ -911,6 +913,7 @@
 				E63B13A68F9CBED679A302E7 /* LayerState.swift */,
 				E63B1CF7054BD8930E22492F /* PlayState.swift */,
 				E63B1D15496DFF9775F04BA0 /* WrapMode.swift */,
+				43D8C0C969216545A2FA412C /* AnimationProperty.swift */,
 			);
 			path = enums;
 			sourceTree = "<group>";
@@ -2117,6 +2120,7 @@
 				3E5D868C292B44BB00759BA9 /* AnimatorControllerLayer.swift in Sources */,
 				43D8CA34B1F2CB3690D38D8C /* RotationAnimationCurveOwnerAssembler.swift in Sources */,
 				43D8CD2BA2E5A9DE50147A42 /* ScaleAnimationCurveOwnerAssembler.swift in Sources */,
+				43D8C70412541939D0EEEFD7 /* AnimationProperty.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

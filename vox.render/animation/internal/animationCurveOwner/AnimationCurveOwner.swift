@@ -8,7 +8,7 @@ import vox_math
 
 public class AnimationCurveOwnerBase {
     /// The name or path to the property being animated.
-    var property: String!
+    var property: AnimationProperty!
     var target: Entity!
 
     var crossCurveMark: Int = 0
@@ -36,7 +36,7 @@ public class AnimationCurveOwner<V: KeyframeValueType, Calculator: IAnimationCur
     var referenceTargetValue: V?
     private var _assembler: IAnimationCurveOwnerAssembler<V, Calculator>
 
-    init(_ target: Entity, _ property: String,
+    init(_ target: Entity, _ property: AnimationProperty,
          _ assembler: IAnimationCurveOwnerAssembler<V, Calculator>) {
         _assembler = assembler
 

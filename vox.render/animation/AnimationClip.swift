@@ -57,7 +57,7 @@ public class AnimationClip {
                                V: KeyframeValueType,
                                Calculator: IAnimationCurveCalculator>(_ relativePath: String,
                                                                       _ type: T.Type,
-                                                                      _ propertyName: String,
+                                                                      _ propertyName: AnimationProperty,
                                                                       _ curve: AnimationCurve<V, Calculator>) where Calculator.V == V {
         let curveBinding = AnimationClipCurveBinding<V, Calculator>()
         curveBinding.relativePath = relativePath

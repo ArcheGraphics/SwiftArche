@@ -8,7 +8,7 @@ import vox_math
 
 public class AnimationClipCurveBindingBase {
     /// The name or path to the property being animated.
-    var property: String!
+    var property: AnimationProperty!
     /// Path to the entity this curve applies to. The relativePath is formatted similar to a pathname,
     /// * e.g. "root/spine/leftArm". If relativePath is empty it refers to the entity the animation clip is attached to.
     var relativePath: String!
@@ -24,7 +24,7 @@ class AnimationClipCurveBinding<V: KeyframeValueType, Calculator: IAnimationCurv
     private var _tempCurveOwner: [Int: AnimationCurveOwner<V, Calculator>] = [:]
 
     func _createCurveOwner(_ entity: Entity) -> AnimationCurveOwner<V, Calculator> where Calculator.V == Vector3 {
-        if property! == "position" {
+        if property! == .Position {
             let owner = AnimationCurveOwner<Vector3, Calculator>(entity, property, PositionAnimationCurveOwnerAssembler<Calculator>())
             Calculator._initializeOwner(owner)
             return owner
