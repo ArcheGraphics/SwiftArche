@@ -174,6 +174,7 @@
 		43D8C2536A00B262EB4FDFFA /* ShaderPass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8CF0197AE3A016BC6AA64 /* ShaderPass.swift */; };
 		43D8C27938D6DB364069F77A /* BoundingSphere.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8C994E210CFEEA2560E05 /* BoundingSphere.swift */; };
 		43D8C28F840B36CAA2638716 /* RasterState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8C16C159DE4ABBC466DA3 /* RasterState.swift */; };
+		43D8C2CB4F0700F837ACB006 /* BlendShape.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8CFDD1B4A08C860E37372 /* BlendShape.swift */; };
 		43D8C2D06DBDF6CCA1ECC6B3 /* BackgroundSubpass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8C16E408A6BA2D7B12F79 /* BackgroundSubpass.swift */; };
 		43D8C3009A7DB108E86AD131 /* RenderPass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8C51FABA0980F27EB7615 /* RenderPass.swift */; };
 		43D8C3BA1BA3519EE26FB708 /* SkySubpass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8C79ABCF9ABA390011DDA /* SkySubpass.swift */; };
@@ -201,6 +202,7 @@
 		43D8C88ACAE60431C443C85C /* ComputePass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8C15F86CB93FDBB5AB528 /* ComputePass.swift */; };
 		43D8C8CE36C33163DDB2FBD7 /* ResourceCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8CD34E1337864CB67AF7E /* ResourceCache.swift */; };
 		43D8C8DA95DABECFDE06AC41 /* JointLimits.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8CB23455968ACCFC0E47E /* JointLimits.swift */; };
+		43D8C90AE24197CDB540FB64 /* BlendShapeFrame.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8C9942022F6DC1C633DC6 /* BlendShapeFrame.swift */; };
 		43D8C90C0E2864B1E8311355 /* EngineSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8CD1CF732CB93CE0380DE /* EngineSettings.swift */; };
 		43D8C91C88772F8F3AB795F2 /* RenderFace.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8C6552637EBD197C3A253 /* RenderFace.swift */; };
 		43D8C92AEBFA1FB64A9B4AA9 /* TextureCoordinate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8C6C773338777192951EB /* TextureCoordinate.swift */; };
@@ -675,6 +677,7 @@
 		43D8C890FF41EDC96C909FC5 /* ControllerNonWalkableMode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ControllerNonWalkableMode.swift; sourceTree = "<group>"; };
 		43D8C8DEB27F4A68CF043663 /* Entity.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Entity.swift; sourceTree = "<group>"; };
 		43D8C90EA461838DF774912B /* Material.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Material.swift; sourceTree = "<group>"; };
+		43D8C9942022F6DC1C633DC6 /* BlendShapeFrame.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BlendShapeFrame.swift; sourceTree = "<group>"; };
 		43D8C994E210CFEEA2560E05 /* BoundingSphere.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BoundingSphere.swift; sourceTree = "<group>"; };
 		43D8C99F4B73069C1988F340 /* BufferView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BufferView.swift; sourceTree = "<group>"; };
 		43D8CA31635DEBED25A020C1 /* BlendMode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BlendMode.swift; sourceTree = "<group>"; };
@@ -706,6 +709,7 @@
 		43D8CF92C29A209C3AB9C9C6 /* Mesh.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Mesh.swift; sourceTree = "<group>"; };
 		43D8CFA6FC902338A11A5E3A /* Component.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Component.swift; sourceTree = "<group>"; };
 		43D8CFC9BFA4F9B8CFA83B17 /* Joint.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Joint.swift; sourceTree = "<group>"; };
+		43D8CFDD1B4A08C860E37372 /* BlendShape.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BlendShape.swift; sourceTree = "<group>"; };
 		E63B106A9787C662E67CC2F3 /* AnimationClip.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AnimationClip.swift; sourceTree = "<group>"; };
 		E63B106FED41DA853C5CF292 /* LightManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LightManager.swift; sourceTree = "<group>"; };
 		E63B10D0E5E63C6772E58E3E /* CascadedShadowSubpass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CascadedShadowSubpass.swift; sourceTree = "<group>"; };
@@ -893,12 +897,12 @@
 				04462F12292AEF4100F95387 /* AnimatorStateMachine.swift */,
 				04462F0E292AEF4100F95387 /* AnimatorStateTransition.swift */,
 				04462F0F292AEF4100F95387 /* StateMachineScript.swift */,
-				3E5D867B292B1BF500759BA9 /* animationCurve */,
-				04462EFB292AEEEE00F95387 /* internal */,
 				04462EFA292A555D00F95387 /* enums */,
+				04462EFB292AEEEE00F95387 /* internal */,
+				3E5D867B292B1BF500759BA9 /* animationCurve */,
 				E63B106A9787C662E67CC2F3 /* AnimationClip.swift */,
-				E63B152B56D2F2BE0AE76CA0 /* Keyframe.swift */,
 				E63B1A4BF0BC68838A754C44 /* AnimationClipCurveBinding.swift */,
+				E63B152B56D2F2BE0AE76CA0 /* Keyframe.swift */,
 			);
 			path = animation;
 			sourceTree = "<group>";
@@ -1581,6 +1585,8 @@
 				E63B1F6CBBF500DC5175715F /* MeshRenderer.swift */,
 				E63B1681537252EE5F41F0EF /* BufferPool.swift */,
 				E63B11EDE4BA4562BDFFF83D /* Skin.swift */,
+				43D8C9942022F6DC1C633DC6 /* BlendShapeFrame.swift */,
+				43D8CFDD1B4A08C860E37372 /* BlendShape.swift */,
 			);
 			path = mesh;
 			sourceTree = "<group>";
@@ -2121,6 +2127,8 @@
 				43D8CA34B1F2CB3690D38D8C /* RotationAnimationCurveOwnerAssembler.swift in Sources */,
 				43D8CD2BA2E5A9DE50147A42 /* ScaleAnimationCurveOwnerAssembler.swift in Sources */,
 				43D8C70412541939D0EEEFD7 /* AnimationProperty.swift in Sources */,
+				43D8C90AE24197CDB540FB64 /* BlendShapeFrame.swift in Sources */,
+				43D8C2CB4F0700F837ACB006 /* BlendShape.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

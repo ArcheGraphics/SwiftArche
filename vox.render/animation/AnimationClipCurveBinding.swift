@@ -15,7 +15,8 @@ public class AnimationClipCurveBindingBase {
 }
 
 /// Associate AnimationCurve and the Entity
-class AnimationClipCurveBinding<V: KeyframeValueType, Calculator: IAnimationCurveCalculator>: AnimationClipCurveBindingBase where Calculator.V == V {
+class AnimationClipCurveBinding<V: KeyframeValueType, Calculator: IAnimationCurveCalculator>:
+    AnimationClipCurveBindingBase where Calculator.V == V {
     /// The class type of the component that is animated.
     var type: Component.Type!
     /// The animation curve.
