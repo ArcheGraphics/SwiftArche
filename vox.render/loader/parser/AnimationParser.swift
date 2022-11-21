@@ -7,6 +7,6 @@
 import Foundation
 
 class AnimationParser : Parser {
-    override func parse(_ context: inout ParserContext) {
+    override func parse(_ context: ParserContext) {
     }
 }

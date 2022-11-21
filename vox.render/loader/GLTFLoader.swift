@@ -7,7 +7,7 @@
 import vox_math
 
 public class GLTFLoader {
-    static let defaultPipeline = GLTFLoader([
+    private static let defaultPipeline = GLTFLoader([
         Validator(),
         TextureParser(),
         MaterialParser(),
@@ -17,11 +17,10 @@ public class GLTFLoader {
         AnimationParser(),
         SceneParser()
     ]);
-
-    static let texturePipeline = GLTFLoader([TextureParser()]);
-    static let materialPipeline = GLTFLoader([TextureParser(), MaterialParser()]);
-    static let animationPipeline = GLTFLoader([EntityParser(), AnimationParser()]);
-    static let meshPipeline = GLTFLoader([MeshParser()]);
+    private static let texturePipeline = GLTFLoader([TextureParser()]);
+    private static let materialPipeline = GLTFLoader([TextureParser(), MaterialParser()]);
+    private static let animationPipeline = GLTFLoader([EntityParser(), AnimationParser()]);
+    private static let meshPipeline = GLTFLoader([MeshParser()]);
 
     private var _pipes: [Parser] = [];
 
@@ -29,20 +28,63 @@ public class GLTFLoader {
         _pipes = pipes
     }
 
-    func parse(_ resource: GLTFResource, keepMeshData: Bool) {
-        GLTFAsset.load(with: resource.url, options: [:]) { (progress, status, maybeAsset, maybeError, _) in
+    static func parse(_ engine: Engine, _ url: URL, _ callback: @escaping (GLTFResource) -> Void, _ keepMeshData: Bool = false) {
+        let context = ParserContext()
+        context.engine = engine
+        context.keepMeshData = keepMeshData
+        GLTFLoader.defaultPipeline._parse(url, context, callback)
+    }
+
+    static func parseTexture(_ engine: Engine, _ url: URL, _ textureIndex: Int,
+                             _ callback: @escaping (GLTFResource) -> Void, _ keepMeshData: Bool = false) {
+        let context = ParserContext()
+        context.engine = engine
+        context.keepMeshData = keepMeshData
+        context.textureIndex = textureIndex
+        GLTFLoader.texturePipeline._parse(url, context, callback)
+    }
+
+    static func parseMaterial(_ engine: Engine, _ url: URL, _ materialIndex: Int,
+                             _ callback: @escaping (GLTFResource) -> Void, _ keepMeshData: Bool = false) {
+        let context = ParserContext()
+        context.engine = engine
+        context.keepMeshData = keepMeshData
+        context.materialIndex = materialIndex
+        GLTFLoader.materialPipeline._parse(url, context, callback)
+    }
+
+    static func parseAnimation(_ engine: Engine, _ url: URL, _ animationIndex: Int,
+                              _ callback: @escaping (GLTFResource) -> Void, _ keepMeshData: Bool = false) {
+        let context = ParserContext()
+        context.engine = engine
+        context.keepMeshData = keepMeshData
+        context.animationIndex = animationIndex
+        GLTFLoader.animationPipeline._parse(url, context, callback)
+    }
+
+    static func parseMesh(_ engine: Engine, _ url: URL, _ meshIndex: Int, _ subMeshIndex:Int,
+                               _ callback: @escaping (GLTFResource) -> Void, _ keepMeshData: Bool = false) {
+        let context = ParserContext()
+        context.engine = engine
+        context.keepMeshData = keepMeshData
+        context.meshIndex = meshIndex
+        context.subMeshIndex = subMeshIndex
+        GLTFLoader.meshPipeline._parse(url, context, callback)
+    }
+
+    private func _parse(_ url: URL, _ context: ParserContext, _ callback: @escaping (GLTFResource) -> Void) {
+        GLTFAsset.load(with: url, options: [:]) { (progress, status, maybeAsset, maybeError, _) in
             DispatchQueue.main.async { [self] in
                 if status == .complete {
-                    resource.gltf = maybeAsset!
-                    var context = ParserContext()
-                    context.glTFResource = resource
-                    context.keepMeshData = keepMeshData
+                    context.glTFResource = GLTFResource()
+                    context.glTFResource.url = url
+                    context.glTFResource.gltf = maybeAsset!
                     for pipe in _pipes {
-                        pipe.parse(&context)
+                        pipe.parse(context)
                     }
-
+                    callback(context.glTFResource)
                 } else if let error = maybeError {
-                    print("Failed to load glTF asset: \(error)")
+                    logger.warning("Failed to load glTF asset: \(error)")
                 }
             }
         }

@@ -6,9 +6,10 @@
 
 import Foundation
 
-struct ParserContext {
+class ParserContext {
+    var engine: Engine!
     var glTFResource: GLTFResource!
-    var keepMeshData: Bool!
+    var keepMeshData: Bool = false
     var hasSkinned: Bool = false
     /** adapter subAsset */
     var textureIndex: Int?
@@ -16,5 +17,4 @@ struct ParserContext {
     var animationIndex: Int?
     var meshIndex: Int?
     var subMeshIndex: Int?
-    var defaultSceneRootOnly: Int?
 }
