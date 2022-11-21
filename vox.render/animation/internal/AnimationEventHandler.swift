@@ -6,7 +6,7 @@
 
 import Foundation
 
-struct AnimationEventHandler {
+internal struct AnimationEventHandler {
     var event: AnimationEvent!
     var handlers: [(AnyObject) -> Void] = []
 }

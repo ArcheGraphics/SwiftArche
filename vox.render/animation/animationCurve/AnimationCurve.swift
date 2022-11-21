@@ -7,16 +7,16 @@
 import vox_math
 
 /// Store a collection of Keyframes that can be evaluated over time.
-class AnimationCurve<V: KeyframeValueType, Calculator: IAnimationCurveCalculator> where Calculator.V == V {
+public class AnimationCurve<V: KeyframeValueType, Calculator: IAnimationCurveCalculator> where Calculator.V == V {
     /// All keys defined in the animation curve.
-    var keys: [Keyframe<V>] = []
+    public var keys: [Keyframe<V>] = []
 
     var _evaluateData: IEvaluateData<V> = IEvaluateData()
     var _length: Float = 0
     var _interpolation: InterpolationType
 
     /// The interpolationType of the animation curve.
-    var interpolation: InterpolationType {
+    public var interpolation: InterpolationType {
         get {
             _interpolation
         }
@@ -31,19 +31,19 @@ class AnimationCurve<V: KeyframeValueType, Calculator: IAnimationCurveCalculator
     }
 
     /// Animation curve length in seconds.
-    var length: Float {
+    public var length: Float {
         get {
             _length
         }
     }
 
-    init() {
+    public init() {
         _interpolation = Calculator._isInterpolationType ? InterpolationType.Linear : InterpolationType.Step
     }
 
     /// Add a new key to the curve.
     /// - Parameter key: The keyframe
-    func addKey(_ key: Keyframe<V>) {
+    public func addKey(_ key: Keyframe<V>) {
         keys.append(key)
         if (key.time > _length) {
             _length = key.time
@@ -55,13 +55,13 @@ class AnimationCurve<V: KeyframeValueType, Calculator: IAnimationCurveCalculator
 
     /// Evaluate the curve at time.
     /// - Parameter time: The time within the curve you want to evaluate
-    func evaluate(_ time: Float) -> V {
+    public func evaluate(_ time: Float) -> V {
         _evaluate(time, &_evaluateData)
     }
 
     /// Removes a key.
     /// - Parameter index: The index of the key to remove
-    func removeKey(_ index: Int) {
+    public func removeKey(_ index: Int) {
         keys.remove(at: index)
 
         var newLength: Float = 0

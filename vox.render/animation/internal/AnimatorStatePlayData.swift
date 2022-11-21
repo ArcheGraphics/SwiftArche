@@ -23,18 +23,26 @@ internal class AnimatorStatePlayData {
         self.currentEventIndex = 0
     }
 
-    func update() {
-        var time = frameTime
-        let duration = state.clipEndTime - state.clipStartTime
-        self.playState = AnimatorStatePlayState.Playing
-        if (time! > duration) {
-            if (state.wrapMode == WrapMode.Loop) {
-                time = time!.truncatingRemainder(dividingBy: duration)
-            } else {
-                time = duration
-                self.playState = AnimatorStatePlayState.Finished
+    func update(isBackwards: Bool) {
+        var time = frameTime!
+        let duration = state._getDuration();
+        playState = AnimatorStatePlayState.Playing;
+        if (state.wrapMode == WrapMode.Loop) {
+            time = duration != 0 ? time.truncatingRemainder(dividingBy: duration) : 0;
+        } else {
+            if (abs(time) > duration) {
+                time = time < 0 ? -duration : duration;
+                playState = AnimatorStatePlayState.Finished;
             }
         }
-        self.clipTime = time! + self.state.clipStartTime
+
+        if (isBackwards && time == 0) {
+            clipTime = state.clipEndTime * state.clip!.length;
+        } else {
+            if time < 0 {
+                time += duration
+            }
+            clipTime = time + state.clipStartTime * state.clip!.length;
+        }
     }
 }

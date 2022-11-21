@@ -6,7 +6,7 @@
 
 import Foundation
 
-protocol IAnimationCurveCalculator {
+public protocol IAnimationCurveCalculator {
     associatedtype V: KeyframeValueType
 
     static var _isReferenceType: Bool { get }

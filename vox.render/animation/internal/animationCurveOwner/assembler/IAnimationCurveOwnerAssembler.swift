@@ -6,14 +6,14 @@
 
 import Foundation
 
-class IAnimationCurveOwnerAssembler<V: KeyframeValueType, Calculator: IAnimationCurveCalculator> where Calculator.V == V {
-    func initialize(owner: AnimationCurveOwner<V, Calculator>) {
+public class IAnimationCurveOwnerAssembler<V: KeyframeValueType, Calculator: IAnimationCurveCalculator> where Calculator.V == V {
+    public func initialize(owner: AnimationCurveOwner<V, Calculator>) {
     }
 
-    func getTargetValue() -> V? {
+    public func getTargetValue() -> V? {
         nil
     }
 
-    func setTargetValue(_ value: V) {
+    public func setTargetValue(_ value: V) {
     }
 }

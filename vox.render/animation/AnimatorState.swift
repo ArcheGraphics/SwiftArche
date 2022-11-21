@@ -7,13 +7,13 @@
 import Foundation
 
 /// States are the basic building blocks of a state machine. Each state contains a AnimationClip which will play while the character is in that state.
-class AnimatorState {
+public class AnimatorState {
     /// The speed of the clip. 1 is normal speed, default 1.
-    var speed: Float = 1.0
+    public var speed: Float = 1.0
     /// The wrap mode used in the state.
-    var wrapMode: WrapMode = WrapMode.Loop
+    public var wrapMode: WrapMode = WrapMode.Loop
     /// The state's name
-    var name: String
+    public var name: String
 
     internal var _onStateEnterScripts: [StateMachineScript] = []
     internal var _onStateUpdateScripts: [StateMachineScript] = []
@@ -25,14 +25,14 @@ class AnimatorState {
     private var _transitions: [AnimatorStateTransition] = []
 
     /// The transitions that are going out of the state.
-    var transitions: [AnimatorStateTransition] {
+    public var transitions: [AnimatorStateTransition] {
         get {
             _transitions
         }
     }
 
     /// The clip that is being played by this animator state.
-    var clip: AnimationClip? {
+    public var clip: AnimationClip? {
         get {
             _clip
         }
@@ -43,7 +43,7 @@ class AnimatorState {
     }
 
     /// The clip start time the user set , default is 0.
-    var clipStartTime: Float {
+    public var clipStartTime: Float {
         get {
             _clipStartTime
         }
@@ -53,7 +53,7 @@ class AnimatorState {
     }
 
     /// The clip end time the user set , default is the clip duration.
-    var clipEndTime: Float {
+    public var clipEndTime: Float {
         get {
             _clipEndTime
         }
@@ -66,19 +66,19 @@ class AnimatorState {
 
     /// constructor
     /// - Parameter name: The state's name
-    init(_ name: String) {
+    public init(_ name: String) {
         self.name = name
     }
 
     /// Add an outgoing transition to the destination state.
     /// - Parameter transition: The transition
-    func addTransition(_ transition: AnimatorStateTransition) {
+    public func addTransition(_ transition: AnimatorStateTransition) {
         _transitions.append(transition)
     }
 
     /// Remove a transition from the state.
     /// - Parameter transition: The transition
-    func removeTransition(_ transition: AnimatorStateTransition) {
+    public func removeTransition(_ transition: AnimatorStateTransition) {
         _transitions.removeAll { t in
             t === transition
         }
@@ -86,7 +86,7 @@ class AnimatorState {
 
     /// Adds a state machine script class of type T to the AnimatorState.
     /// - Returns: The state machine script class of type T
-    func addStateMachineScript<T: StateMachineScript>(_ scriptType: T.Type) -> T {
+    public func addStateMachineScript<T: StateMachineScript>(_ scriptType: T.Type) -> T {
         let script = scriptType.init()
         script._state = self
 
@@ -98,13 +98,13 @@ class AnimatorState {
     }
 
     /// Clears all transitions from the state.
-    func clearTransitions() {
+    public func clearTransitions() {
         _transitions = []
     }
 
 
     internal func _getDuration() -> Float {
-        return _clipEndTime - _clipStartTime
+        _clipEndTime - _clipStartTime
     }
 
     internal func _removeStateMachineScript(_ script: StateMachineScript) {

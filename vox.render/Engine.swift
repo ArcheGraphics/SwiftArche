@@ -147,7 +147,7 @@ public class Engine: NSObject {
                 _physicsManager._update(deltaTime)
                 _inputManager._update()
                 componentsManager.callScriptOnUpdate(deltaTime)
-//                componentsManager.callAnimationUpdate(deltaTime)
+                componentsManager.callAnimationUpdate(deltaTime)
                 componentsManager.callScriptOnLateUpdate(deltaTime)
                 _render(scene!)
             }

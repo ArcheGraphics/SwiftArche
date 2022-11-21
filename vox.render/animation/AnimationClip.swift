@@ -7,27 +7,27 @@
 import Foundation
 
 /// Stores keyframe based animations.
-class AnimationClip {
-    internal var _curveBindings: [Any] = []
+public class AnimationClip {
+    internal var _curveBindings: [PropertyBase] = []
     private var _length: Float = 0
     private var _events: [AnimationEvent] = []
 
     /// Animation events for this animation clip.
-    var events: [AnimationEvent] {
+    public var events: [AnimationEvent] {
         get {
             _events
         }
     }
 
     /// Animation curve bindings for this animation clip.
-    var curveBindings: [Any] {
+    public var curveBindings: [PropertyBase] {
         get {
             _curveBindings
         }
     }
 
     /// Animation length in seconds.
-    var length: Float {
+    public var length: Float {
         get {
             _length
         }
@@ -35,7 +35,7 @@ class AnimationClip {
 
     /// Adds an animation event to the clip.
     /// - Parameter event: The animation event
-    func addEvent(_ event: AnimationEvent) {
+    public func addEvent(_ event: AnimationEvent) {
         _events.append(event)
         _events.sort { a, b in
             a.time - b.time > 0
@@ -43,7 +43,7 @@ class AnimationClip {
     }
 
     /// Clears all events from the clip.
-    func clearEvents() {
+    public func clearEvents() {
         _events = []
     }
 
@@ -53,37 +53,26 @@ class AnimationClip {
     ///   - type: The class type of the component that is animated
     ///   - propertyName: The name to the property being animated
     ///   - curve: The animation curve
-    func addCurveBinding<T: Component,
-                        V: KeyframeValueType,
-                        Calculator: IAnimationCurveCalculator>(_ relativePath: String,
-                                                               _ type: T.Type,
-                                                               _ propertyName: String,
-                                                               _ curve: AnimationCurve<V, Calculator>) where Calculator.V == V {
-        let property: AnimationProperty
-        switch (propertyName) {
-        case "position":
-            property = AnimationProperty.Position
-            break
-        case "rotation":
-            property = AnimationProperty.Rotation
-            break
-        case "scale":
-            property = AnimationProperty.Scale
-            break
-//        case "blendShapeWeights":
-//            property = AnimationProperty.BlendShapeWeights
-//            break
-        default:
-            fatalError()
-        }
+    public func addCurveBinding<T: Component,
+                               V: KeyframeValueType,
+                               Calculator: IAnimationCurveCalculator>(_ relativePath: String,
+                                                                      _ type: T.Type,
+                                                                      _ propertyName: String,
+                                                                      _ curve: AnimationCurve<V, Calculator>) where Calculator.V == V {
         let curveBinding = AnimationClipCurveBinding<V, Calculator>()
         curveBinding.relativePath = relativePath
         curveBinding.type = type
-        curveBinding.property = property
+        curveBinding.property = propertyName
         curveBinding.curve = curve
         if (curve.length > _length) {
             _length = curve.length
         }
         _curveBindings.append(curveBinding)
+    }
+
+    /// Clears all curve bindings from the clip.
+    public func clearCurveBindings() {
+        _curveBindings = []
+        _length = 0
     }
 }

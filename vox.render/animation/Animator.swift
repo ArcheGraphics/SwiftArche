@@ -7,37 +7,19 @@
 import vox_math
 
 /// The controller of the animation system.
-class Animator: Component {
-    private static var _animatorInfo: AnimatorStateInfo = AnimatorStateInfo()
-
+public class Animator: Component {
     var _animatorController: AnimatorController!
-    // @assignmentClone
-    var _speed: Float = 1.0
-    // @ignoreClone
-    var _controllerUpdateFlag: BoolUpdateFlag!
+    var _controllerUpdateFlag: BoolUpdateFlag?
 
     var _onUpdateIndex: Int = -1
 
-    // ignoreClone
     private var _animatorLayersData: [Int: AnimatorLayerData] = [:]
-    // @ignoreClone
-    private var _crossCurveDataCollection: [CrossCurveData] = []
-    // @ignoreClone
-    private var _animationCurveOwners: [Int: [AnimationProperty: AnimationCurveOwner]] = [:]
-    // @ignoreClone
-    private var _crossCurveDataPool: [CrossCurveData] = []
-    // @ignoreClone
+    private var _crossOwnerCollection: [PropertyBase] = []
+    private var _animationCurveOwners: [[Int: PropertyBase]] = []
     private var _animationEventHandlerPool: [AnimationEventHandler] = []
 
     /// The playback speed of the Animator, 1.0 is normal playback speed.
-    var speed: Float {
-        get {
-            _speed
-        }
-        set {
-            _speed = newValue
-        }
-    }
+    var speed: Float = 1.0
 
     /// All layers from the AnimatorController which belongs this Animator.
     var animatorController: AnimatorController {
@@ -46,6 +28,7 @@ class Animator: Component {
         }
         set {
             if (newValue !== _animatorController) {
+                _reset()
                 if _controllerUpdateFlag != nil {
                     _controllerUpdateFlag = nil
                 }
@@ -65,7 +48,7 @@ class Animator: Component {
             _clearPlayData()
         }
 
-        let animatorInfo = _getAnimatorStateInfo(stateName, layerIndex, Animator._animatorInfo)
+        let animatorInfo = _getAnimatorStateInfo(stateName, layerIndex)
         let state = animatorInfo.state
 
         if (state == nil) {
@@ -105,7 +88,7 @@ class Animator: Component {
             _clearPlayData()
         }
 
-        let state = _getAnimatorStateInfo(stateName, layerIndex, Animator._animatorInfo).state
+        let state = _getAnimatorStateInfo(stateName, layerIndex).state
         let manuallyTransition = _getAnimatorLayerData(layerIndex).manuallyTransition
         manuallyTransition.duration = normalizedTransitionDuration
         manuallyTransition.offset = normalizedTimeOffset
@@ -146,7 +129,26 @@ class Animator: Component {
         engine._componentsManager.removeOnUpdateAnimations(self)
     }
 
-    private func _getAnimatorStateInfo(_ stateName: String, _ layerIndex: Int, _ out: AnimatorStateInfo) -> AnimatorStateInfo {
+    func _reset() {
+        for propertyOwners in _animationCurveOwners {
+            for property in propertyOwners {
+                let owner = property.value
+                switch owner.property {
+                case "position":
+                    let ownerType = owner as! AnimationCurveOwner<Vector3, AnimationVector3Curve>
+                    if ownerType.hasSavedDefaultValue {
+                        ownerType.revertDefaultValue()
+                    }
+                    break
+                default:
+                    break
+                }
+            }
+        }
+        _clearPlayData()
+    }
+
+    private func _getAnimatorStateInfo(_ stateName: String, _ layerIndex: Int) -> AnimatorStateInfo {
         var layerIndex = layerIndex
         var state: AnimatorState? = nil
         if (_animatorController != nil) {
@@ -163,6 +165,7 @@ class Animator: Component {
                 state = layers[layerIndex].stateMachine.findStateByName(stateName)
             }
         }
+        var out = AnimatorStateInfo()
         out.layerIndex = layerIndex
         out.state = state
         return out
@@ -171,7 +174,14 @@ class Animator: Component {
     private func _saveDefaultValues(_ stateData: AnimatorStateData) {
         let curveOwners = stateData.curveOwners
         for i in 0..<curveOwners.count {
-            curveOwners[i].saveDefaultValue()
+            if let owner = curveOwners[i] {
+                switch owner.property {
+                case "position":
+                    (owner as! AnimationCurveOwner<Vector3, AnimationVector3Curve>).saveDefaultValue()
+                default:
+                    break
+                }
+            }
         }
     }
 
@@ -192,18 +202,20 @@ class Animator: Component {
         let curves = animatorState.clip!._curveBindings
         for i in 0..<curves.count {
             let curve = curves[i]
-            let targetEntity = curve.relativePath == "" ? entity : entity.findByPath(curve.relativePath)
-            let property = curve.property
-            let instanceId = targetEntity!.instanceId
-
-            if _animationCurveOwners[instanceId] == nil {
-                _animationCurveOwners[instanceId] = [:]
-            }
-
-            if _animationCurveOwners[instanceId]![property!] == nil {
-                let owner = AnimationCurveOwner(targetEntity!, curve.type, property!)
-                _animationCurveOwners[instanceId]![property!] = owner
-                animatorStateData.curveOwners[i] = owner
+            switch curve.property {
+            case "position":
+                let curveType = curve as! AnimationClipCurveBinding<Vector3, AnimationVector3Curve>
+                let targetEntity = curveType.relativePath == "" ? entity : entity.findByPath(curveType.relativePath)
+                if (targetEntity != nil) {
+                    let instanceId = targetEntity!.instanceId
+                    _animationCurveOwners[instanceId] = [:]
+                    animatorStateData.curveOwners[i] = curveType._createCurveOwner(targetEntity!)
+                } else {
+                    animatorStateData.curveOwners[i] = nil
+                }
+                break
+            default:
+                break
             }
         }
     }
@@ -214,31 +226,44 @@ class Animator: Component {
 
     private func _clearCrossData(_ animatorLayerData: AnimatorLayerData) {
         animatorLayerData.crossCurveMark += 1
-        _crossCurveDataCollection = []
-        _crossCurveDataPool = []
+        _crossOwnerCollection = []
     }
 
-    private func _addCrossCurveData(
-            _ crossCurveData: inout [CrossCurveData],
-            _ owner: AnimationCurveOwner,
-            _ curCurveIndex: Int,
-            _ nextCurveIndex: Int
-    ) {
-        var dataItem = CrossCurveData()
-        dataItem.curveOwner = owner
-        dataItem.srcCurveIndex = curCurveIndex
-        dataItem.destCurveIndex = nextCurveIndex
-        crossCurveData.append(dataItem)
+    private func _addCrossCurveData(_ crossCurveData: inout [PropertyBase],
+                                    _ owner: PropertyBase,
+                                    _ curCurveIndex: Int,
+                                    _ nextCurveIndex: Int) {
+        switch owner.property! {
+        case "position":
+            let ownerType = owner as! AnimationCurveOwner<Vector3, AnimationVector3Curve>
+            ownerType.crossSrcCurveIndex = curCurveIndex
+            ownerType.crossDestCurveIndex = nextCurveIndex
+            crossCurveData.append(owner)
+            break
+        case "rotation":
+            let ownerType = owner as! AnimationCurveOwner<Quaternion, AnimationQuaternionCurve>
+            ownerType.crossSrcCurveIndex = curCurveIndex
+            ownerType.crossDestCurveIndex = nextCurveIndex
+            crossCurveData.append(owner)
+            break
+        case "scale":
+            let ownerType = owner as! AnimationCurveOwner<Vector3, AnimationVector3Curve>
+            ownerType.crossSrcCurveIndex = curCurveIndex
+            ownerType.crossDestCurveIndex = nextCurveIndex
+            crossCurveData.append(owner)
+            break
+        default:
+            break
+        }
     }
-
 
     private func _prepareCrossFading(_ animatorLayerData: AnimatorLayerData) {
         let crossCurveMark = animatorLayerData.crossCurveMark
 
         // Add src cross curve data.
-        _prepareSrcCrossData(&_crossCurveDataCollection, animatorLayerData.srcPlayData, crossCurveMark, false)
+        _prepareSrcCrossData(&_crossOwnerCollection, animatorLayerData.srcPlayData, crossCurveMark, false)
         // Add dest cross curve data.
-        _prepareDestCrossData(&_crossCurveDataCollection, animatorLayerData.destPlayData, crossCurveMark, false)
+        _prepareDestCrossData(&_crossOwnerCollection, animatorLayerData.destPlayData, crossCurveMark, false)
     }
 
     private func _prepareStandbyCrossFading(_ animatorLayerData: AnimatorLayerData) {
@@ -246,85 +271,145 @@ class Animator: Component {
         let crossCurveMark = animatorLayerData.crossCurveMark
 
         // Standby have two sub state, one is never play, one is finished, never play srcPlayData is null.
-        _prepareSrcCrossData(&_crossCurveDataCollection, srcPlayData, crossCurveMark, true)
+        _prepareSrcCrossData(&_crossOwnerCollection, srcPlayData, crossCurveMark, true)
 
         // Add dest cross curve data.
-        _prepareDestCrossData(&_crossCurveDataCollection, animatorLayerData.destPlayData, crossCurveMark, true)
+        _prepareDestCrossData(&_crossOwnerCollection, animatorLayerData.destPlayData, crossCurveMark, true)
     }
 
     private func _prepareFixedPoseCrossFading(_ animatorLayerData: AnimatorLayerData) {
         // Save current cross curve data owner fixed pose.
-        for i in 0..<_crossCurveDataCollection.count {
-            _crossCurveDataCollection[i].curveOwner.saveFixedPoseValue()
-            // Reset destCurveIndex When fixed pose crossFading again.
-            _crossCurveDataCollection[i].destCurveIndex = -1
+        for i in 0..<_crossOwnerCollection.count {
+            let item = _crossOwnerCollection[i]
+            switch item.property {
+            case "position":
+                let itemType = item as! AnimationCurveOwner<Vector3, AnimationVector3Curve>
+                itemType.saveFixedPoseValue()
+                // Reset destCurveIndex When fixed pose crossFading again.
+                itemType.crossDestCurveIndex = -1
+                break
+            case "rotation":
+                let itemType = item as! AnimationCurveOwner<Quaternion, AnimationQuaternionCurve>
+                itemType.saveFixedPoseValue()
+                // Reset destCurveIndex When fixed pose crossFading again.
+                itemType.crossDestCurveIndex = -1
+                break
+            case "scale":
+                let itemType = item as! AnimationCurveOwner<Vector3, AnimationVector3Curve>
+                itemType.saveFixedPoseValue()
+                // Reset destCurveIndex When fixed pose crossFading again.
+                itemType.crossDestCurveIndex = -1
+                break
+            default:
+                break
+            }
         }
         // prepare dest AnimatorState cross data.
-        _prepareDestCrossData(&_crossCurveDataCollection, animatorLayerData.destPlayData, animatorLayerData.crossCurveMark, true)
+        _prepareDestCrossData(&_crossOwnerCollection, animatorLayerData.destPlayData, animatorLayerData.crossCurveMark, true)
     }
 
     private func _prepareSrcCrossData(
-            _ crossCurveData: inout [CrossCurveData],
+            _ crossCurveData: inout [PropertyBase],
             _ srcPlayData: AnimatorStatePlayData,
             _ crossCurveMark: Int,
             _ saveFixed: Bool
     ) {
         let curveOwners = srcPlayData.stateData.curveOwners
         for i in 0..<curveOwners.count {
-            let owner = curveOwners[i]
-            owner.crossCurveMark = crossCurveMark
-            owner.crossCurveIndex = crossCurveData.count
-            if saveFixed {
-                owner.saveFixedPoseValue()
+            if let owner = curveOwners[i] {
+                switch owner.property {
+                case "position":
+                    let ownerType = owner as! AnimationCurveOwner<Vector3, AnimationVector3Curve>
+                    ownerType.crossCurveMark = crossCurveMark
+                    ownerType.crossCurveDataIndex = crossCurveData.count
+                    if saveFixed {
+                        ownerType.saveFixedPoseValue()
+                    }
+                    break
+                case "rotation":
+                    let ownerType = owner as! AnimationCurveOwner<Quaternion, AnimationQuaternionCurve>
+                    ownerType.crossCurveMark = crossCurveMark
+                    ownerType.crossCurveDataIndex = crossCurveData.count
+                    if saveFixed {
+                        ownerType.saveFixedPoseValue()
+                    }
+                    break
+                case "scale":
+                    let ownerType = owner as! AnimationCurveOwner<Vector3, AnimationVector3Curve>
+                    ownerType.crossCurveMark = crossCurveMark
+                    ownerType.crossCurveDataIndex = crossCurveData.count
+                    if saveFixed {
+                        ownerType.saveFixedPoseValue()
+                    }
+                    break
+                default:
+                    break
+                }
+                _addCrossCurveData(&crossCurveData, owner, i, -1)
             }
-            _addCrossCurveData(&crossCurveData, owner, i, -1)
         }
     }
 
     private func _prepareDestCrossData(
-            _ crossCurveData: inout [CrossCurveData],
+            _ crossCurveData: inout [PropertyBase],
             _ destPlayData: AnimatorStatePlayData,
             _ crossCurveMark: Int,
             _ saveFixed: Bool
     ) {
         let curveOwners = destPlayData.stateData.curveOwners
         for i in 0..<curveOwners.count {
-            let owner = curveOwners[i]
-            // Not include in previous AnimatorState.
-            if (owner.crossCurveMark == crossCurveMark) {
-                crossCurveData[owner.crossCurveIndex].destCurveIndex = i
-            } else {
-                if saveFixed {
-                    owner.saveFixedPoseValue()
+            if let owner = curveOwners[i] {
+                switch owner.property {
+                case "position":
+                    let ownerType = owner as! AnimationCurveOwner<Vector3, AnimationVector3Curve>
+                    // Not include in previous AnimatorState.
+                    if (ownerType.crossCurveMark == crossCurveMark) {
+                        (crossCurveData[ownerType.crossCurveDataIndex] as! AnimationCurveOwner<Vector3, AnimationVector3Curve>).crossDestCurveIndex = i
+                    } else {
+                        ownerType.saveDefaultValue()
+                        if saveFixed {
+                            ownerType.saveFixedPoseValue()
+                        }
+                        ownerType.crossCurveMark = crossCurveMark
+                        ownerType.crossCurveDataIndex = crossCurveData.count
+                        _addCrossCurveData(&crossCurveData, owner, -1, i)
+                    }
+                    break
+                case "rotation":
+                    let ownerType = owner as! AnimationCurveOwner<Quaternion, AnimationQuaternionCurve>
+                    // Not include in previous AnimatorState.
+                    if (ownerType.crossCurveMark == crossCurveMark) {
+                        (crossCurveData[ownerType.crossCurveDataIndex] as! AnimationCurveOwner<Quaternion, AnimationQuaternionCurve>).crossDestCurveIndex = i
+                    } else {
+                        ownerType.saveDefaultValue()
+                        if saveFixed {
+                            ownerType.saveFixedPoseValue()
+                        }
+                        ownerType.crossCurveMark = crossCurveMark
+                        ownerType.crossCurveDataIndex = crossCurveData.count
+                        _addCrossCurveData(&crossCurveData, owner, -1, i)
+                    }
+                    break
+                case "scale":
+                    let ownerType = owner as! AnimationCurveOwner<Vector3, AnimationVector3Curve>
+                    // Not include in previous AnimatorState.
+                    if (ownerType.crossCurveMark == crossCurveMark) {
+                        (crossCurveData[ownerType.crossCurveDataIndex] as! AnimationCurveOwner<Vector3, AnimationVector3Curve>).crossDestCurveIndex = i
+                    } else {
+                        ownerType.saveDefaultValue()
+                        if saveFixed {
+                            ownerType.saveFixedPoseValue()
+                        }
+                        ownerType.crossCurveMark = crossCurveMark
+                        ownerType.crossCurveDataIndex = crossCurveData.count
+                        _addCrossCurveData(&crossCurveData, owner, -1, i)
+                    }
+                    break
+                default:
+                    break
                 }
-                owner.crossCurveMark = crossCurveMark
-                owner.crossCurveIndex = crossCurveData.count
-                _addCrossCurveData(&crossCurveData, owner, -1, i)
             }
         }
-    }
-
-    private func _evaluateCurve(
-            _ property: AnimationProperty,
-            _ curve: AnimationCurve,
-            _ time: Float,
-            _ additive: Bool
-    ) -> InterpolableValue {
-        let value = curve.evaluate(time)
-
-        if (additive) {
-            let baseValue = curve.keys[0].getValue()
-            switch (property) {
-            case AnimationProperty.Position:
-                return .Vector3(value.getVector3() - baseValue.getVector3())
-            case AnimationProperty.Rotation:
-                let rot = Quaternion.conjugate(a: baseValue.getQuaternion())
-                return .Quaternion(rot * value.getQuaternion())
-            case AnimationProperty.Scale:
-                return .Vector3(value.getVector3() / baseValue.getVector3())
-            }
-        }
-        return value
     }
 
     private func _getAnimatorLayerData(_ layerIndex: Int) -> AnimatorLayerData {
@@ -382,15 +467,45 @@ class Animator: Component {
         let state = playData.state!
         let lastPlayState = playData.playState
         let lastClipTime = playData.clipTime!
-        let curves = state.clip!._curveBindings
+        let curveBindings = state.clip!._curveBindings
 
-        playData.update()
+        playData.update(isBackwards: speed < 0)
 
         let clipTime = playData.clipTime!
         let playState = playData.playState
 
         if eventHandlers.count != 0 {
             _fireAnimationEvents(playData, eventHandlers, lastClipTime, clipTime)
+        }
+
+        for i in 0..<curveBindings.count {
+            if let owner = curveOwners[i] {
+                switch owner.property {
+                case "position":
+                    let ownerType = curveOwners[i] as! AnimationCurveOwner<Vector3, AnimationVector3Curve>
+                    let curveBindingType = curveBindings[i] as! AnimationClipCurveBinding<Vector3, AnimationVector3Curve>
+                    ownerType.evaluateAndApplyValue(curveBindingType.curve, clipTime, weight, additive)
+                    break
+                case "rotation":
+                    let ownerType = curveOwners[i] as! AnimationCurveOwner<Quaternion, AnimationQuaternionCurve>
+                    let curveBindingType = curveBindings[i] as! AnimationClipCurveBinding<Quaternion, AnimationQuaternionCurve>
+                    ownerType.evaluateAndApplyValue(curveBindingType.curve, clipTime, weight, additive)
+                    break
+                case "scale":
+                    let ownerType = curveOwners[i] as! AnimationCurveOwner<Vector3, AnimationVector3Curve>
+                    let curveBindingType = curveBindings[i] as! AnimationClipCurveBinding<Vector3, AnimationVector3Curve>
+                    ownerType.evaluateAndApplyValue(curveBindingType.curve, clipTime, weight, additive)
+                    break
+                default:
+                    break
+                }
+            }
+        }
+
+        playData.frameTime += state.speed * delta
+
+        if (playState == AnimatorStatePlayState.Finished) {
+            layerData.layerState = LayerState.Standby
         }
 
         if (lastPlayState == AnimatorStatePlayState.UnStarted) {
@@ -400,21 +515,6 @@ class Animator: Component {
             _callAnimatorScriptOnExit(state, layerIndex)
         } else {
             _callAnimatorScriptOnUpdate(state, layerIndex)
-        }
-
-        for i in 0..<curves.count {
-            let owner = curveOwners[i]
-            let value = _evaluateCurve(owner.property, curves[i].curve, clipTime, additive)
-            if (additive) {
-                _applyClipValueAdditive(owner, value, weight)
-            } else {
-                _applyClipValue(owner, value, weight)
-            }
-        }
-        playData.frameTime += state.speed * delta
-
-        if (playState == AnimatorStatePlayState.Finished) {
-            layerData.layerState = LayerState.Standby
         }
     }
 
@@ -446,8 +546,8 @@ class Animator: Component {
         if crossWeight >= 1.0 {
             crossWeight = 1.0
         }
-        srcPlayData.update()
-        destPlayData.update()
+        srcPlayData.update(isBackwards: speed < 0)
+        destPlayData.update(isBackwards: speed < 0)
 
         let srcClipTime = srcPlayData.clipTime!
         let destClipTime = destPlayData.clipTime!
@@ -477,50 +577,87 @@ class Animator: Component {
             _callAnimatorScriptOnUpdate(destState, layerIndex)
         }
 
-        for i in 0..<_crossCurveDataCollection.count {
-            let curveOwner = _crossCurveDataCollection[i].curveOwner!
-            let srcCurveIndex = _crossCurveDataCollection[i].srcCurveIndex!
-            let destCurveIndex = _crossCurveDataCollection[i].destCurveIndex!
-            let property = curveOwner.property
-            let defaultValue = curveOwner.defaultValue
-
-            let srcValue =
-                    srcCurveIndex >= 0
-                            ? _evaluateCurve(property, srcCurves[srcCurveIndex].curve, srcClipTime, additive)
-                            : defaultValue
-            let destValue =
-                    destCurveIndex >= 0
-                            ? _evaluateCurve(property, destCurves[destCurveIndex].curve, destClipTime, additive)
-                            : defaultValue
-
-            _applyCrossClipValue(curveOwner, srcValue, destValue, crossWeight, weight, additive)
+        for i in 0..<_crossOwnerCollection.count {
+            let crossCurveData = _crossOwnerCollection[i]
+            switch crossCurveData.property {
+            case "position":
+                let crossCurveDataType = crossCurveData as! AnimationCurveOwner<Vector3, AnimationVector3Curve>
+                let crossSrcCurveIndex = crossCurveDataType.crossSrcCurveIndex
+                let crossDestCurveIndex = crossCurveDataType.crossDestCurveIndex
+                let srcCurvesType = srcCurves[crossSrcCurveIndex] as! AnimationClipCurveBinding<Vector3, AnimationVector3Curve>
+                let destCurvesType = destCurves[crossDestCurveIndex] as! AnimationClipCurveBinding<Vector3, AnimationVector3Curve>
+                crossCurveDataType.crossFadeAndApplyValue(
+                        crossSrcCurveIndex >= 0 ? srcCurvesType.curve : nil,
+                        crossDestCurveIndex >= 0 ? destCurvesType.curve : nil,
+                        srcClipTime,
+                        destClipTime,
+                        crossWeight,
+                        weight,
+                        additive
+                )
+                break
+            case "rotation":
+                let crossCurveDataType = crossCurveData as! AnimationCurveOwner<Quaternion, AnimationQuaternionCurve>
+                let crossSrcCurveIndex = crossCurveDataType.crossSrcCurveIndex
+                let crossDestCurveIndex = crossCurveDataType.crossDestCurveIndex
+                let srcCurvesType = srcCurves[crossSrcCurveIndex] as! AnimationClipCurveBinding<Quaternion, AnimationQuaternionCurve>
+                let destCurvesType = destCurves[crossDestCurveIndex] as! AnimationClipCurveBinding<Quaternion, AnimationQuaternionCurve>
+                crossCurveDataType.crossFadeAndApplyValue(
+                        crossSrcCurveIndex >= 0 ? srcCurvesType.curve : nil,
+                        crossDestCurveIndex >= 0 ? destCurvesType.curve : nil,
+                        srcClipTime,
+                        destClipTime,
+                        crossWeight,
+                        weight,
+                        additive
+                )
+                break
+            case "scale":
+                let crossCurveDataType = crossCurveData as! AnimationCurveOwner<Vector3, AnimationVector3Curve>
+                let crossSrcCurveIndex = crossCurveDataType.crossSrcCurveIndex
+                let crossDestCurveIndex = crossCurveDataType.crossDestCurveIndex
+                let srcCurvesType = srcCurves[crossSrcCurveIndex] as! AnimationClipCurveBinding<Vector3, AnimationVector3Curve>
+                let destCurvesType = destCurves[crossDestCurveIndex] as! AnimationClipCurveBinding<Vector3, AnimationVector3Curve>
+                crossCurveDataType.crossFadeAndApplyValue(
+                        crossSrcCurveIndex >= 0 ? srcCurvesType.curve : nil,
+                        crossDestCurveIndex >= 0 ? destCurvesType.curve : nil,
+                        srcClipTime,
+                        destClipTime,
+                        crossWeight,
+                        weight,
+                        additive
+                )
+                break
+            default:
+                break
+            }
         }
-        _updateCrossFadeData(layerData, crossWeight, delta, false)
     }
 
-    private func _updateCrossFadeFromPose(
-            _ destPlayData: AnimatorStatePlayData,
-            _ layerData: AnimatorLayerData,
-            _ layerIndex: Int,
-            _ weight: Float,
-            _ delta: Float,
-            _ additive: Bool
-    ) {
+    private func _updateCrossFadeFromPose(_ destPlayData: AnimatorStatePlayData,
+                                          _ layerData: AnimatorLayerData,
+                                          _ layerIndex: Int,
+                                          _ weight: Float,
+                                          _ delta: Float,
+                                          _ additive: Bool) {
         let state = destPlayData.state!
         let stateData = destPlayData.stateData!
         let lastPlayState = destPlayData.playState
         let eventHandlers = stateData.eventHandlers
-        let curves = state.clip!._curveBindings
         let lastDestClipTime = destPlayData.clipTime!
+        let curveBindings = state.clip!._curveBindings
 
         var crossWeight = destPlayData.frameTime / (state._getDuration() * layerData.crossFadeTransition.duration)
         if crossWeight >= 1.0 {
             crossWeight = 1.0
         }
-        destPlayData.update()
+        destPlayData.update(isBackwards: speed < 0)
+
+        let playState = destPlayData.playState
+
+        _updateCrossFadeData(layerData, crossWeight, delta, true)
 
         let destClipTime = destPlayData.clipTime!
-
         if eventHandlers.count != 0 {
             _fireAnimationEvents(destPlayData, eventHandlers, lastDestClipTime, destClipTime)
         }
@@ -528,21 +665,53 @@ class Animator: Component {
         if (lastPlayState == AnimatorStatePlayState.UnStarted) {
             _callAnimatorScriptOnEnter(state, layerIndex)
         }
-        if (destPlayData.playState == AnimatorStatePlayState.Finished) {
+        if (playState == AnimatorStatePlayState.Finished) {
             _callAnimatorScriptOnExit(state, layerIndex)
         } else {
             _callAnimatorScriptOnUpdate(state, layerIndex)
         }
 
-        for i in 0..<_crossCurveDataCollection.count {
-            let curveOwner = _crossCurveDataCollection[i].curveOwner!
-            let destCurveIndex = _crossCurveDataCollection[i].destCurveIndex!
-            let destValue =
-                    destCurveIndex >= 0
-                            ? _evaluateCurve(curveOwner.property, curves[destCurveIndex].curve, destClipTime, additive)
-                            : curveOwner.defaultValue
+        for i in 0..<_crossOwnerCollection.count {
+            let crossCurveData = _crossOwnerCollection[i]
+            switch crossCurveData.property {
+            case "position":
+                let crossCurveDataType = crossCurveData as! AnimationCurveOwner<Vector3, AnimationVector3Curve>
+                let crossDestCurveIndex = crossCurveDataType.crossDestCurveIndex
+                let curveType = curveBindings[crossDestCurveIndex] as! AnimationClipCurveBinding<Vector3, AnimationVector3Curve>
 
-            _applyCrossClipValue(curveOwner, curveOwner.fixedPoseValue, destValue, crossWeight, weight, additive)
+                crossCurveDataType.crossFadeFromPoseAndApplyValue(
+                        crossDestCurveIndex >= 0 ? curveType.curve : nil,
+                        destClipTime,
+                        crossWeight,
+                        weight,
+                        additive)
+            case "rotation":
+                let crossCurveDataType = crossCurveData as! AnimationCurveOwner<Quaternion, AnimationQuaternionCurve>
+                let crossDestCurveIndex = crossCurveDataType.crossDestCurveIndex
+                let curveType = curveBindings[crossDestCurveIndex] as! AnimationClipCurveBinding<Quaternion, AnimationQuaternionCurve>
+
+                crossCurveDataType.crossFadeFromPoseAndApplyValue(
+                        crossDestCurveIndex >= 0 ? curveType.curve : nil,
+                        destClipTime,
+                        crossWeight,
+                        weight,
+                        additive)
+                break
+            case "scale":
+                let crossCurveDataType = crossCurveData as! AnimationCurveOwner<Vector3, AnimationVector3Curve>
+                let crossDestCurveIndex = crossCurveDataType.crossDestCurveIndex
+                let curveType = curveBindings[crossDestCurveIndex] as! AnimationClipCurveBinding<Vector3, AnimationVector3Curve>
+
+                crossCurveDataType.crossFadeFromPoseAndApplyValue(
+                        crossDestCurveIndex >= 0 ? curveType.curve : nil,
+                        destClipTime,
+                        crossWeight,
+                        weight,
+                        additive)
+                break
+            default:
+                break
+            }
         }
 
         _updateCrossFadeData(layerData, crossWeight, delta, true)
@@ -565,125 +734,43 @@ class Animator: Component {
         }
     }
 
-    private func _applyCrossClipValue(
-            _ owner: AnimationCurveOwner,
-            _ srcValue: InterpolableValue,
-            _ destValue: InterpolableValue,
-            _ crossWeight: Float,
-            _ layerWeight: Float,
-            _ additive: Bool
-    ) {
-        var value: InterpolableValue = .Float(0)
-        if (owner.type == Transform.self) {
-            switch (owner.property) {
-            case AnimationProperty.Position:
-                value = .Vector3(Vector3.lerp(left: srcValue.getVector3(), right: destValue.getVector3(), t: crossWeight))
-                break
-            case AnimationProperty.Rotation:
-                value = .Quaternion(Quaternion.slerp(start: srcValue.getQuaternion(), end: destValue.getQuaternion(), t: crossWeight))
-                break
-            case AnimationProperty.Scale:
-                value = .Vector3(Vector3.lerp(left: srcValue.getVector3(), right: destValue.getVector3(), t: crossWeight))
-                break
-            }
-        }
-
-        if (additive) {
-            _applyClipValueAdditive(owner, value, layerWeight)
-        } else {
-            _applyClipValue(owner, value, layerWeight)
-        }
-    }
-
-    private func _applyClipValue(_ owner: AnimationCurveOwner, _ value: InterpolableValue, _ weight: Float) {
-        if (owner.type == Transform.self) {
-            let transform = owner.target.transform
-            switch (owner.property) {
-            case AnimationProperty.Position:
-                if (weight == 1.0) {
-                    transform!.position = value.getVector3()
-                } else {
-                    transform!.position = Vector3.lerp(left: transform!.position, right: value.getVector3(), t: weight)
-                }
-                break
-            case AnimationProperty.Rotation:
-                if (weight == 1.0) {
-                    transform!.rotationQuaternion = value.getQuaternion()
-                } else {
-                    transform!.rotationQuaternion = Quaternion.slerp(start: transform!.rotationQuaternion, end: value.getQuaternion(), t: weight)
-                }
-                break
-            case AnimationProperty.Scale:
-                if (weight == 1.0) {
-                    transform!.scale = value.getVector3()
-                } else {
-                    transform!.scale = Vector3.lerp(left: transform!.scale, right: value.getVector3(), t: weight)
-                }
-                break
-            }
-        }
-//        else if (owner.type == SkinnedMeshRenderer.self) {
-//            switch (owner.property) {
-//            case AnimationProperty.BlendShapeWeights:
-//                (owner.component as! SkinnedMeshRenderer).blendShapeWeights = value.getFloatArray()
-//                break
-//            default:
-//                fatalError()
-//            }
-//        }
-    }
-
-    private func _applyClipValueAdditive(_ owner: AnimationCurveOwner, _ additiveValue: InterpolableValue, _ weight: Float) {
-        if (owner.type == Transform.self) {
-            let transform = owner.target.transform
-            switch (owner.property) {
-            case AnimationProperty.Position:
-                let additiveValue = additiveValue.getVector3()
-                transform!.position = transform!.position + additiveValue * weight
-                break
-            case AnimationProperty.Rotation:
-                let rotationQuaternion = transform!.rotationQuaternion
-                var additiveValue = additiveValue.getQuaternion()
-                additiveValue = AnimatorUtils.quaternionWeight(additiveValue, weight)
-                _ = additiveValue.normalize()
-                transform!.rotationQuaternion = rotationQuaternion * additiveValue
-                break
-            case AnimationProperty.Scale:
-                let scale = transform!.scale
-                transform!.scale = AnimatorUtils.scaleWeight(scale, weight) * additiveValue.getVector3()
-                break
-            }
-        }
-    }
-
     private func _revertDefaultValue(_ playData: AnimatorStatePlayData) {
         let clip = playData.state.clip
         if (clip != nil) {
             let curves = clip!._curveBindings
             let curveOwners = playData.stateData.curveOwners
             for i in 0..<curves.count {
-                let owner = curveOwners[i]
-                let transform = owner.target.transform
-                switch (owner.property) {
-                case AnimationProperty.Position:
-                    transform!.position = owner.defaultValue.getVector3()
-                    break
-                case AnimationProperty.Rotation:
-                    transform!.rotationQuaternion = owner.defaultValue.getQuaternion()
-                    break
-                case AnimationProperty.Scale:
-                    transform!.scale = owner.defaultValue.getVector3()
-                    break
+                if let owner = curveOwners[i] {
+                    switch owner.property {
+                    case "position":
+                        let ownerType = owner as! AnimationCurveOwner<Vector3, AnimationVector3Curve>
+                        if ownerType.hasSavedDefaultValue {
+                            ownerType.revertDefaultValue()
+                        }
+                        break
+                    case "rotation":
+                        let ownerType = owner as! AnimationCurveOwner<Quaternion, AnimationQuaternionCurve>
+                        if ownerType.hasSavedDefaultValue {
+                            ownerType.revertDefaultValue()
+                        }
+                        break
+                    case "scale":
+                        let ownerType = owner as! AnimationCurveOwner<Vector3, AnimationVector3Curve>
+                        if ownerType.hasSavedDefaultValue {
+                            ownerType.revertDefaultValue()
+                        }
+                        break
+                    default:
+                        break
+                    }
                 }
             }
         }
     }
 
-    private func _checkTransition(
-            _ stateData: AnimatorStatePlayData,
-            _ crossFadeTransition: AnimatorStateTransition,
-            _ layerIndex: Int
-    ) {
+    private func _checkTransition(_ stateData: AnimatorStatePlayData,
+                                  _ crossFadeTransition: AnimatorStateTransition,
+                                  _ layerIndex: Int) {
         let state = stateData.state
         let clipTime = stateData.clipTime
         let duration = state!._getDuration()
@@ -700,7 +787,7 @@ class Animator: Component {
 
     private func _crossFadeByTransition(_ transition: AnimatorStateTransition, _ layerIndex: Int) {
         let name = transition.destinationState.name
-        let animatorStateInfo = _getAnimatorStateInfo(name, layerIndex, Animator._animatorInfo)
+        let animatorStateInfo = _getAnimatorStateInfo(name, layerIndex)
         let crossState = animatorStateInfo.state
         if (crossState == nil) {
             return
@@ -722,7 +809,6 @@ class Animator: Component {
         _saveDefaultValues(animatorStateData)
 
         switch (layerState) {
-                // Maybe not play, maybe end.
         case LayerState.Standby:
             animatorLayerData.layerState = LayerState.FixedCrossFading
             _clearCrossData(animatorLayerData)
@@ -751,22 +837,36 @@ class Animator: Component {
             _ lastClipTime: Float,
             _ clipTime: Float
     ) {
-        // TODO: If play backward, not work.
-        if (clipTime < lastClipTime) {
-            _fireSubAnimationEvents(playState, eventHandlers, lastClipTime, playState.state.clipEndTime)
-            playState.currentEventIndex = 0
-            _fireSubAnimationEvents(playState, eventHandlers, playState.state.clipStartTime, clipTime)
+        let state = playState.state!
+        let clipDuration = state.clip!.length
+        if (speed >= 0) {
+            if (clipTime < lastClipTime) {
+                _fireSubAnimationEvents(playState, eventHandlers, lastClipTime, state.clipEndTime * clipDuration)
+                playState.currentEventIndex = 0
+                _fireSubAnimationEvents(playState, eventHandlers, state.clipStartTime * clipDuration, clipTime)
+            } else {
+                _fireSubAnimationEvents(playState, eventHandlers, lastClipTime, clipTime)
+            }
         } else {
-            _fireSubAnimationEvents(playState, eventHandlers, lastClipTime, clipTime)
+            if (clipTime > lastClipTime) {
+                _fireBackwardSubAnimationEvents(
+                        playState,
+                        eventHandlers,
+                        lastClipTime,
+                        state.clipStartTime * clipDuration
+                )
+                playState.currentEventIndex = eventHandlers.count - 1
+                _fireBackwardSubAnimationEvents(playState, eventHandlers, state.clipEndTime * clipDuration, clipTime)
+            } else {
+                _fireBackwardSubAnimationEvents(playState, eventHandlers, lastClipTime, clipTime)
+            }
         }
     }
 
-    private func _fireSubAnimationEvents(
-            _ playState: AnimatorStatePlayData,
-            _ eventHandlers: [AnimationEventHandler],
-            _ lastClipTime: Float,
-            _ curClipTime: Float
-    ) {
+    private func _fireSubAnimationEvents(_ playState: AnimatorStatePlayData,
+                                         _ eventHandlers: [AnimationEventHandler],
+                                         _ lastClipTime: Float,
+                                         _ curClipTime: Float) {
         for i in playState.currentEventIndex..<eventHandlers.count {
             let eventHandler = eventHandlers[i]
             let time = eventHandler.event.time
@@ -782,6 +882,29 @@ class Animator: Component {
                     handlers[j](parameter!)
                 }
                 playState.currentEventIndex = i + 1
+            }
+        }
+    }
+
+    private func _fireBackwardSubAnimationEvents(_ playState: AnimatorStatePlayData,
+                                                 _ eventHandlers: [AnimationEventHandler],
+                                                 _ lastClipTime: Float,
+                                                 _ curClipTime: Float) {
+        for eventIndex in 0..<playState.currentEventIndex {
+            let eventHandler = eventHandlers[eventIndex]
+            let time = eventHandler.event.time
+            let parameter = eventHandler.event.parameter
+
+            if (time < curClipTime) {
+                break
+            }
+
+            if (time <= lastClipTime) {
+                let handlers = eventHandler.handlers
+                for j in 0..<handlers.count {
+                    handlers[j](parameter!)
+                }
+                playState.currentEventIndex = max(eventIndex - 1, 0)
             }
         }
     }
@@ -807,10 +930,28 @@ class Animator: Component {
         }
     }
 
+    private func _checkAutoPlay() {
+        let layers = _animatorController.layers
+        for i in 0..<layers.count {
+            let stateMachine = layers[i].stateMachine
+            if (stateMachine?.defaultState != nil) {
+                play(stateMachine!.defaultState!.name, i)
+            }
+        }
+    }
+
     private func _clearPlayData() {
         _animatorLayersData = [:]
-        _crossCurveDataCollection = []
-        _animationCurveOwners = [:]
-        _controllerUpdateFlag.flag = false
+        _crossOwnerCollection = []
+        _animationCurveOwners = []
+
+        if _controllerUpdateFlag != nil {
+            _controllerUpdateFlag!.flag = false
+        }
     }
+}
+
+struct AnimatorStateInfo {
+    var layerIndex: Int = -1
+    var state: AnimatorState?
 }

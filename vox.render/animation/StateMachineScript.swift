@@ -8,10 +8,10 @@ import Foundation
 
 /// StateMachineScript is a component that can be added to a animator state.
 /// It's the base class every script on a state derives from.
-class StateMachineScript {
+public class StateMachineScript {
     var _state: AnimatorState!
 
-    required init() {
+    public required init() {
     }
 
     deinit {
@@ -23,7 +23,7 @@ class StateMachineScript {
     ///   - animator: The animator
     ///   - animatorState: The state be evaluated
     ///   - layerIndex: The index of the layer where the state is located
-    func onStateEnter(_ animator: Animator, _ animatorState: AnimatorState, _ layerIndex: Int) {
+    public func onStateEnter(_ animator: Animator, _ animatorState: AnimatorState, _ layerIndex: Int) {
     }
 
     /// onStateUpdate is called on each Update frame between onStateEnter and onStateExit callbacks.
@@ -31,7 +31,7 @@ class StateMachineScript {
     ///   - animator: The animator
     ///   - animatorState: The state be evaluated
     ///   - layerIndex: The index of the layer where the state is located
-    func onStateUpdate(_ animator: Animator, _ animatorState: AnimatorState, _ layerIndex: Int) {
+    public func onStateUpdate(_ animator: Animator, _ animatorState: AnimatorState, _ layerIndex: Int) {
     }
 
     /// onStateExit is called when a transition ends and the state machine finishes evaluating this state.
@@ -39,6 +39,6 @@ class StateMachineScript {
     ///   - animator: The animator
     ///   - animatorState: The state be evaluated
     ///   - layerIndex: The index of the layer where the state is located
-    func onStateExit(_ animator: Animator, _ animatorState: AnimatorState, _ layerIndex: Int) {
+    public func onStateExit(_ animator: Animator, _ animatorState: AnimatorState, _ layerIndex: Int) {
     }
 }

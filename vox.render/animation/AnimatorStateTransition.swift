@@ -8,13 +8,13 @@ import Foundation
 
 /// Transitions define when and how the state machine switch from on state to another.
 // AnimatorTransition always originate from a StateMachine or a StateMachine entry.
-class AnimatorStateTransition {
+public class AnimatorStateTransition {
     /// The duration of the transition. This is represented in normalized time.
-    var duration: Float = 0
+    public var duration: Float = 0
     /// The time at which the destination state will start. This is represented in normalized time.
-    var offset: Float = 0
+    public var offset: Float = 0
     /// ExitTime represents the exact time at which the transition can take effect. This is represented in normalized time.
-    var exitTime: Float = 1
+    public var exitTime: Float = 1
     /// The destination state of the transition.
-    var destinationState: AnimatorState!
+    public var destinationState: AnimatorState!
 }

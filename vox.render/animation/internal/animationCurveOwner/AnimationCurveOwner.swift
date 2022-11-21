@@ -6,9 +6,8 @@
 
 import vox_math
 
-class AnimationCurveOwner<V: KeyframeValueType, Calculator: IAnimationCurveCalculator> where Calculator.V == V {
+public class AnimationCurveOwner<V: KeyframeValueType, Calculator: IAnimationCurveCalculator>: PropertyBase where Calculator.V == V {
     var target: Entity
-    var property: AnimationProperty
 
     var crossCurveMark: Int = 0
     var crossCurveDataIndex: Int = 0
@@ -24,18 +23,20 @@ class AnimationCurveOwner<V: KeyframeValueType, Calculator: IAnimationCurveCalcu
     var referenceTargetValue: V?
     private var _assembler: IAnimationCurveOwnerAssembler<V, Calculator>
 
-    init(_ target: Entity, _ property: AnimationProperty,
+    init(_ target: Entity, _ property: String,
          _ assembler: IAnimationCurveOwnerAssembler<V, Calculator>) {
         self.target = target
-        self.property = property
         _assembler = assembler
 
         if (Calculator._isReferenceType) {
             referenceTargetValue = _assembler.getTargetValue()!
         }
+        super.init()
+        self.property = property
     }
 
-    func evaluateAndApplyValue(curve: AnimationCurve<V, Calculator>, time: Float, layerWeight: Float, additive: Bool) {
+    public func evaluateAndApplyValue(_ curve: AnimationCurve<V, Calculator>, _ time: Float,
+                                      _ layerWeight: Float, _ additive: Bool) {
         if (curve.keys.count != 0) {
             if (additive) {
                 let value = curve._evaluateAdditive(time, &baseEvaluateData)
@@ -55,15 +56,13 @@ class AnimationCurveOwner<V: KeyframeValueType, Calculator: IAnimationCurveCalcu
         }
     }
 
-    func crossFadeAndApplyValue(
-            srcCurve: AnimationCurve<V, Calculator>?,
-            destCurve: AnimationCurve<V, Calculator>?,
-            srcTime: Float,
-            destTime: Float,
-            crossWeight: Float,
-            layerWeight: Float,
-            additive: Bool
-    ) {
+    public func crossFadeAndApplyValue(_ srcCurve: AnimationCurve<V, Calculator>?,
+                                       _ destCurve: AnimationCurve<V, Calculator>?,
+                                       _ srcTime: Float,
+                                       _ destTime: Float,
+                                       _ crossWeight: Float,
+                                       _ layerWeight: Float,
+                                       _ additive: Bool) {
         let srcValue =
                 srcCurve != nil && srcCurve!.keys.count != 0
                         ? additive
@@ -85,11 +84,31 @@ class AnimationCurveOwner<V: KeyframeValueType, Calculator: IAnimationCurveCalcu
         _applyCrossValue(srcValue!, destValue!, crossWeight, layerWeight, additive)
     }
 
-    func revertDefaultValue() {
+    public func crossFadeFromPoseAndApplyValue(_ destCurve: AnimationCurve<V, Calculator>?,
+                                               _ destTime: Float,
+                                               _ crossWeight: Float,
+                                               _ layerWeight: Float,
+                                               _ additive: Bool) {
+        let srcValue = additive
+                ? Calculator._subtractValue(fixedPoseValue, defaultValue, baseEvaluateData.value)
+                : fixedPoseValue;
+        let destValue =
+                destCurve != nil && destCurve!.keys.count != 0
+                        ? additive
+                        ? destCurve!._evaluateAdditive(destTime, &crossEvaluateData)
+                        : destCurve!._evaluate(destTime, &crossEvaluateData)
+                        : additive
+                        ? Calculator._getZeroValue(crossEvaluateData.value)
+                        : defaultValue;
+
+        _applyCrossValue(srcValue!, destValue!, crossWeight, layerWeight, additive);
+    }
+
+    public func revertDefaultValue() {
         _assembler.setTargetValue(defaultValue)
     }
 
-    func saveDefaultValue() {
+    public func saveDefaultValue() {
         if (Calculator._isReferenceType) {
             _ = Calculator._copyValue(referenceTargetValue!, defaultValue)
         } else {
@@ -98,7 +117,7 @@ class AnimationCurveOwner<V: KeyframeValueType, Calculator: IAnimationCurveCalcu
         hasSavedDefaultValue = true
     }
 
-    func saveFixedPoseValue() {
+    public func saveFixedPoseValue() {
         if (Calculator._isReferenceType) {
             _ = Calculator._copyValue(referenceTargetValue!, fixedPoseValue)
         } else {

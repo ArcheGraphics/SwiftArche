@@ -6,45 +6,45 @@
 
 import vox_math
 
-protocol KeyframeValueType {
+public protocol KeyframeValueType {
     associatedtype TangentType
 
     init()
 }
 
 extension Bool: KeyframeValueType {
-    typealias TangentType = Bool
+    public typealias TangentType = Bool
 }
 
 extension Float: KeyframeValueType {
-    typealias TangentType = Float
+    public typealias TangentType = Float
 }
 
 extension Vector2: KeyframeValueType {
-    typealias TangentType = Vector2
+    public typealias TangentType = Vector2
 }
 
 extension Vector3: KeyframeValueType {
-    typealias TangentType = Vector3
+    public typealias TangentType = Vector3
 }
 
 extension Vector4: KeyframeValueType {
-    typealias TangentType = Vector4
+    public typealias TangentType = Vector4
 }
 
 extension Color: KeyframeValueType {
-    typealias TangentType = Vector4
+    public typealias TangentType = Vector4
 }
 
 extension Quaternion: KeyframeValueType {
-    typealias TangentType = Vector4
+    public typealias TangentType = Vector4
 }
 
 extension Array<Float>: KeyframeValueType {
-    typealias TangentType = Array<Float>
+    public typealias TangentType = Array<Float>
 }
 
-class Keyframe<V: KeyframeValueType> {
+public class Keyframe<V: KeyframeValueType> {
     /// The time of the Keyframe.
     var time: Float = 0.0
     /// The value of the Keyframe.

@@ -7,11 +7,15 @@
 import Foundation
 
 /// A graph controlling the interaction of states. Each state references a motion.
-class AnimatorStateMachine {
+public class AnimatorStateMachine {
     /// The list of states.
-    var states: [AnimatorState] = []
+    public var states: [AnimatorState] = []
 
-    internal var _statesMap: [String: AnimatorState] = [:]
+    /// The state will be played automatically.
+    /// @remarks When the Animator's AnimatorController changed or the Animator's onEnable be triggered.
+    public var defaultState: AnimatorState!
+
+    var _statesMap: [String: AnimatorState] = [:]
 
     /// Add a state to the state machine.
     /// - Parameter name: The name of the new state
