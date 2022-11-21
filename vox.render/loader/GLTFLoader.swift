@@ -7,63 +7,44 @@
 import vox_math
 
 public class GLTFLoader {
-    private let _engine: Engine
-    public var asset: GLTFAsset?
+    static let defaultPipeline = GLTFLoader([
+        Validator(),
+        TextureParser(),
+        MaterialParser(),
+        MeshParser(),
+        EntityParser(),
+        SkinParser(),
+        AnimationParser(),
+        SceneParser()
+    ]);
 
-    public init(_ engine: Engine, with assetUrl: URL) {
-        _engine = engine
-        GLTFAsset.load(with: assetUrl, options: [:]) { (progress, status, maybeAsset, maybeError, _) in
+    static let texturePipeline = GLTFLoader([TextureParser()]);
+    static let materialPipeline = GLTFLoader([TextureParser(), MaterialParser()]);
+    static let animationPipeline = GLTFLoader([EntityParser(), AnimationParser()]);
+    static let meshPipeline = GLTFLoader([MeshParser()]);
+
+    private var _pipes: [Parser] = [];
+
+    private init(_ pipes: [Parser]) {
+        _pipes = pipes
+    }
+
+    func parse(_ resource: GLTFResource, keepMeshData: Bool) {
+        GLTFAsset.load(with: resource.url, options: [:]) { (progress, status, maybeAsset, maybeError, _) in
             DispatchQueue.main.async { [self] in
                 if status == .complete {
-                    asset = maybeAsset!
-                    _parseAsset()
+                    resource.gltf = maybeAsset!
+                    var context = ParserContext()
+                    context.glTFResource = resource
+                    context.keepMeshData = keepMeshData
+                    for pipe in _pipes {
+                        pipe.parse(&context)
+                    }
+
                 } else if let error = maybeError {
                     print("Failed to load glTF asset: \(error)")
                 }
             }
-        }
-    }
-
-    private func _parseAsset() {
-        guard let asset = asset else {
-            return
-        }
-        let rootEntity = Entity(_engine)
-        for node in asset.nodes {
-            _parseNode(node, rootEntity)
-        }
-
-        for material in asset.materials {
-            _parseMaterial(material)
-        }
-    }
-
-    private func _parseMaterial(_ material: GLTFMaterial) {
-
-    }
-
-    private func _parseNode(_ node: GLTFNode, _ root: Entity) {
-        for node in node.childNodes {
-            let child = root.createChild()
-            child.transform.localMatrix = Matrix(node.matrix)
-            if let gltfCamera = node.camera {
-                _parseCamera(gltfCamera, child)
-            }
-            _parseNode(node, child)
-        }
-    }
-
-    private func _parseCamera(_ gltfCamera: GLTFCamera, _ entity: Entity) {
-        let camera: Camera = entity.addComponent()
-        camera.nearClipPlane = gltfCamera.zNear
-        camera.farClipPlane = gltfCamera.zFar
-        if let gltfPerspectiveCamera = gltfCamera.perspective {
-            camera.aspectRatio = gltfPerspectiveCamera.aspectRatio
-            camera.fieldOfView = gltfPerspectiveCamera.yFOV
-        }
-        if let gltfOrthographicCamera = gltfCamera.orthographic {
-            camera.orthographicSize = max(gltfOrthographicCamera.xMag, gltfOrthographicCamera.yMag)
-            camera.isOrthographic = true
         }
     }
 }

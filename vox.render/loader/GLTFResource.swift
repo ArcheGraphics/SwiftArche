@@ -7,9 +7,9 @@
 import Metal
 
 /// Product after GLTF parser, usually, `defaultSceneRoot` is only needed to use.
-public struct GLTFResource {
+public class GLTFResource {
     /** GLTF file url. */
-    var url: String!
+    var url: URL!
     /** GLTF file content. */
     var gltf: GLTFAsset!
     /** Oasis Texture2D after TextureParser. */
