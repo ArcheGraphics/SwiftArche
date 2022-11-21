@@ -8,10 +8,10 @@ import Metal
 import vox_math
 
 public class MeshRenderer: Renderer {
-    private var _mesh: Mesh?
+    var _mesh: Mesh?
 
     /// Mesh assigned to the renderer.
-    var mesh: Mesh? {
+    public var mesh: Mesh? {
         get {
             _mesh
         }

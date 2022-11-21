@@ -8,8 +8,9 @@ import Metal
 import vox_math
 
 class ModelMesh: Mesh {
-    private var _device: MTLDevice
+    var _blendShapeManager: BlendShapeManager!
 
+    private var _device: MTLDevice
     private var _elementCount: Int = 0
     private var _vertexCount: Int = 0
     private var _accessible: Bool = true
@@ -52,6 +53,23 @@ class ModelMesh: Mesh {
         }
     }
 
+    /// BlendShapes of this ModelMesh.
+    var blendShapes: [BlendShape] {
+        get {
+            if (!_accessible) {
+                fatalError("Not allowed to access data while accessible is false.")
+            }
+            return _blendShapeManager._blendShapes
+        }
+    }
+
+    /// BlendShape count of this ModelMesh.
+    var blendShapeCount: Int {
+        get {
+            _blendShapeManager._blendShapeCount
+        }
+    }
+
     /// Create a model mesh.
     /// - Parameters:
     ///   - engine: Engine
@@ -60,6 +78,7 @@ class ModelMesh: Mesh {
         _device = engine.device
         super.init()
         self.name = name
+        _blendShapeManager = BlendShapeManager(engine, self)
     }
 }
 
@@ -324,6 +343,52 @@ extension ModelMesh {
         _indicesChangeFlag = true
     }
 
+    /// Get indices for the mesh.
+    func getIndices() -> [UInt16]? {
+        if (!_accessible) {
+            fatalError("Not allowed to access data while accessible is false.")
+        }
+        return _indices16
+    }
+
+    /// Get indices for the mesh.
+    func getIndices() -> [UInt32]? {
+        if (!_accessible) {
+            fatalError("Not allowed to access data while accessible is false.")
+        }
+        return _indices32
+    }
+
+    /// Add a BlendShape for this ModelMesh.
+    /// - Parameter blendShape: The BlendShape
+    func addBlendShape(_ blendShape: BlendShape) {
+        if (!_accessible) {
+            fatalError("Not allowed to access data while accessible is false.")
+        }
+
+        _blendShapeManager._addBlendShape(blendShape)
+    }
+
+    /// Clear all BlendShapes.
+    func clearBlendShapes() {
+        if (!_accessible) {
+            fatalError("Not allowed to access data while accessible is false.")
+        }
+        _blendShapeManager._clearBlendShapes()
+    }
+
+    /// Get name of BlendShape by given index.
+    /// - Parameter index: The index of BlendShape
+    /// - Returns: The name of BlendShape
+    func getBlendShapeName(at index: Int) -> String {
+        if (_accessible) {
+            let blendShapes = _blendShapeManager._blendShapes
+            return blendShapes[index].name
+        } else {
+            return _blendShapeManager._blendShapeNames[index]
+        }
+    }
+
     /// Upload Mesh Data to the graphics API.
     /// - Parameter noLongerAccessible: Whether to access data later. If true, you'll never access data anymore (free memory cache)
     func uploadData(_ noLongerAccessible: Bool) {
@@ -351,6 +416,10 @@ extension ModelMesh {
             _setIndexBufferBinding(IndexBufferBinding(BufferView(device: _device, array: _indices16!), .uint16))
         } else {
             _setIndexBufferBinding(IndexBufferBinding(BufferView(device: _device, array: _indices32!), .uint32))
+        }
+
+        if _blendShapeManager._blendShapeCount > 0 {
+            _blendShapeManager._update(true, noLongerAccessible)
         }
 
         if (noLongerAccessible) {
@@ -659,6 +728,7 @@ extension ModelMesh {
         _uv5 = nil
         _uv6 = nil
         _uv7 = nil
+        _blendShapeManager._releaseMemoryCache()
     }
 }
 
