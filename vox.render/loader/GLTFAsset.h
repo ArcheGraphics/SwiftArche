@@ -507,6 +507,7 @@ GLTFKIT2_EXPORT
 @interface GLTFTextureParams : NSObject
 
 @property(nonatomic, strong) GLTFTexture *texture;
+@property(nonatomic, assign) NSInteger index;
 @property(nonatomic, assign) NSInteger texCoord;
 @property(nonatomic, assign) float scale; // occlusion map strength or normal map scale
 @property(nonatomic, nullable, strong) GLTFTextureTransform *transform;

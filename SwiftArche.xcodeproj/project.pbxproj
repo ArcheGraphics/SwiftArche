@@ -208,6 +208,7 @@
 		43D8C8B17C3DBE869B5D3F58 /* AnimationParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8C92161B93C8F090717EC /* AnimationParser.swift */; };
 		43D8C8CE36C33163DDB2FBD7 /* ResourceCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8CD34E1337864CB67AF7E /* ResourceCache.swift */; };
 		43D8C8DA95DABECFDE06AC41 /* JointLimits.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8CB23455968ACCFC0E47E /* JointLimits.swift */; };
+		43D8C8F45D89C48EDD8DA56E /* KHR_materials_clearcoat.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8C5E86C5D16F7B10135E0 /* KHR_materials_clearcoat.swift */; };
 		43D8C90AE24197CDB540FB64 /* BlendShapeFrame.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8C9942022F6DC1C633DC6 /* BlendShapeFrame.swift */; };
 		43D8C90C0E2864B1E8311355 /* EngineSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8CD1CF732CB93CE0380DE /* EngineSettings.swift */; };
 		43D8C91C88772F8F3AB795F2 /* RenderFace.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8C6552637EBD197C3A253 /* RenderFace.swift */; };
@@ -257,6 +258,7 @@
 		43D8CF878A456E1E04E23EAA /* MaterialParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8C71A4D9C772A8096DC81 /* MaterialParser.swift */; };
 		43D8CF98C05E60C0A40F11E4 /* StencilState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8C55ADD0B573F9BE441A2 /* StencilState.swift */; };
 		43D8CF9A819FABF732156575 /* ComputePipelineState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8C5458496A0164715E24D /* ComputePipelineState.swift */; };
+		43D8CFB968614C57EB9D4BE2 /* ExtensionParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8CA52D42DCC6A0AA501DC /* ExtensionParser.swift */; };
 		43D8CFDE172582A4463B835E /* PrimitiveMesh.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8C0E825225EDCF4195D57 /* PrimitiveMesh.swift */; };
 		E63B10A5AD9B371E044CF012 /* AnimatorStatePlayState.swift in Sources */ = {isa = PBXBuildFile; fileRef = E63B1F7F363BDA85D54F674E /* AnimatorStatePlayState.swift */; };
 		E63B113C5609C5F386EDF786 /* WrapMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = E63B1D15496DFF9775F04BA0 /* WrapMode.swift */; };
@@ -666,6 +668,7 @@
 		43D8C54936F3EFC16FD740F6 /* SpringJoint.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SpringJoint.swift; sourceTree = "<group>"; };
 		43D8C55ADD0B573F9BE441A2 /* StencilState.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StencilState.swift; sourceTree = "<group>"; };
 		43D8C5BA82AE969237F234DC /* Subpass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Subpass.swift; sourceTree = "<group>"; };
+		43D8C5E86C5D16F7B10135E0 /* KHR_materials_clearcoat.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KHR_materials_clearcoat.swift; sourceTree = "<group>"; };
 		43D8C5FB606CD86F901949A4 /* AnimationCurve.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AnimationCurve.swift; sourceTree = "<group>"; };
 		43D8C604A7750ECC5ACB625F /* SubMesh.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SubMesh.swift; sourceTree = "<group>"; };
 		43D8C607434E7C4086A0C91A /* JointMotor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JointMotor.swift; sourceTree = "<group>"; };
@@ -701,6 +704,7 @@
 		43D8C994E210CFEEA2560E05 /* BoundingSphere.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BoundingSphere.swift; sourceTree = "<group>"; };
 		43D8C99F4B73069C1988F340 /* BufferView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BufferView.swift; sourceTree = "<group>"; };
 		43D8CA31635DEBED25A020C1 /* BlendMode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BlendMode.swift; sourceTree = "<group>"; };
+		43D8CA52D42DCC6A0AA501DC /* ExtensionParser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExtensionParser.swift; sourceTree = "<group>"; };
 		43D8CAB2F8824F2A898EC7C1 /* TextureParser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TextureParser.swift; sourceTree = "<group>"; };
 		43D8CAD23565A918160AFC1F /* PBRBaseMaterial.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PBRBaseMaterial.swift; sourceTree = "<group>"; };
 		43D8CAED3B1AFD13451D2107 /* BoolUpdateFlag.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BoolUpdateFlag.swift; sourceTree = "<group>"; };
@@ -1244,6 +1248,7 @@
 		3E5D868F292BAC3500759BA9 /* parser */ = {
 			isa = PBXGroup;
 			children = (
+				3E5D8690292BCC0F00759BA9 /* extensions */,
 				43D8C873360B8542018B057B /* ParserContext.swift */,
 				43D8C00EC2BD19AC5A0A909D /* Parser.swift */,
 				43D8CAB2F8824F2A898EC7C1 /* TextureParser.swift */,
@@ -1256,6 +1261,15 @@
 				43D8C780AC903E909A8E80C3 /* Validator.swift */,
 			);
 			path = parser;
+			sourceTree = "<group>";
+		};
+		3E5D8690292BCC0F00759BA9 /* extensions */ = {
+			isa = PBXGroup;
+			children = (
+				43D8CA52D42DCC6A0AA501DC /* ExtensionParser.swift */,
+				43D8C5E86C5D16F7B10135E0 /* KHR_materials_clearcoat.swift */,
+			);
+			path = extensions;
 			sourceTree = "<group>";
 		};
 		3E67EDBC291B2F7600ED60C8 = {
@@ -2185,6 +2199,8 @@
 				43D8CA9A8B2CBAE3DC0B177D /* EntityParser.swift in Sources */,
 				43D8C8B17C3DBE869B5D3F58 /* AnimationParser.swift in Sources */,
 				43D8C413D10E9C714A6486BB /* Validator.swift in Sources */,
+				43D8CFB968614C57EB9D4BE2 /* ExtensionParser.swift in Sources */,
+				43D8C8F45D89C48EDD8DA56E /* KHR_materials_clearcoat.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
