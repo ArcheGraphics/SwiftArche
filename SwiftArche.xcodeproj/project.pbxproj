@@ -21,6 +21,22 @@
 		04462EEF292A149300F95387 /* GLTFAssetReader.m in Sources */ = {isa = PBXBuildFile; fileRef = 04462EE7292A149200F95387 /* GLTFAssetReader.m */; };
 		04462EF1292A149300F95387 /* GLTFAsset.m in Sources */ = {isa = PBXBuildFile; fileRef = 04462EEC292A149300F95387 /* GLTFAsset.m */; };
 		04462EF3292A1C6D00F95387 /* GLTFLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04462EF2292A1C6D00F95387 /* GLTFLoader.swift */; };
+		04462F03292AEF3400F95387 /* CrossCurveData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04462EFC292AEF3400F95387 /* CrossCurveData.swift */; };
+		04462F04292AEF3400F95387 /* AnimationCurveOwner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04462EFD292AEF3400F95387 /* AnimationCurveOwner.swift */; };
+		04462F05292AEF3400F95387 /* AnimationEventHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04462EFE292AEF3400F95387 /* AnimationEventHandler.swift */; };
+		04462F06292AEF3400F95387 /* AnimatorStateData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04462EFF292AEF3400F95387 /* AnimatorStateData.swift */; };
+		04462F07292AEF3400F95387 /* AnimatorStatePlayData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04462F00292AEF3400F95387 /* AnimatorStatePlayData.swift */; };
+		04462F08292AEF3400F95387 /* AnimatorLayerData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04462F01292AEF3400F95387 /* AnimatorLayerData.swift */; };
+		04462F09292AEF3400F95387 /* AnimatorStateInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04462F02292AEF3400F95387 /* AnimatorStateInfo.swift */; };
+		04462F14292AEF4100F95387 /* AnimatorControllerLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04462F0A292AEF4000F95387 /* AnimatorControllerLayer.swift */; };
+		04462F15292AEF4100F95387 /* AnimatorState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04462F0B292AEF4000F95387 /* AnimatorState.swift */; };
+		04462F16292AEF4100F95387 /* AnimatorController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04462F0C292AEF4100F95387 /* AnimatorController.swift */; };
+		04462F18292AEF4100F95387 /* AnimatorStateTransition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04462F0E292AEF4100F95387 /* AnimatorStateTransition.swift */; };
+		04462F19292AEF4100F95387 /* StateMachineScript.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04462F0F292AEF4100F95387 /* StateMachineScript.swift */; };
+		04462F1A292AEF4100F95387 /* Animator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04462F10292AEF4100F95387 /* Animator.swift */; };
+		04462F1B292AEF4100F95387 /* AnimatorUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04462F11292AEF4100F95387 /* AnimatorUtils.swift */; };
+		04462F1C292AEF4100F95387 /* AnimatorStateMachine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04462F12292AEF4100F95387 /* AnimatorStateMachine.swift */; };
+		04462F1D292AEF4100F95387 /* AnimationEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04462F13292AEF4100F95387 /* AnimationEvent.swift */; };
 		04ED07DA29226E9C00DD55AB /* normal_shading.metal in Sources */ = {isa = PBXBuildFile; fileRef = 04ED07D929226E9C00DD55AB /* normal_shading.metal */; };
 		04ED07DE292284FD00DD55AB /* shadow_shading.metal in Sources */ = {isa = PBXBuildFile; fileRef = 04ED07DD292284FD00DD55AB /* shadow_shading.metal */; };
 		3E0F7B0C2921F63B00C4A843 /* skybox_shading.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3E0F7B0B2921F63B00C4A843 /* skybox_shading.metal */; };
@@ -236,7 +252,6 @@
 		E63B1816639E944D107AF911 /* InterpolationType.swift in Sources */ = {isa = PBXBuildFile; fileRef = E63B18457D7F26DED974F8AF /* InterpolationType.swift */; };
 		E63B1828A10683FFA47122A8 /* CascadedShadowSubpass.swift in Sources */ = {isa = PBXBuildFile; fileRef = E63B10D0E5E63C6772E58E3E /* CascadedShadowSubpass.swift */; };
 		E63B18AFE41CF0C5049F0A3A /* Keyframe.swift in Sources */ = {isa = PBXBuildFile; fileRef = E63B152B56D2F2BE0AE76CA0 /* Keyframe.swift */; };
-		E63B190B7C1A30F434FDC746 /* AnimationCurveOwner.swift in Sources */ = {isa = PBXBuildFile; fileRef = E63B103A1B4241E5480DAC73 /* AnimationCurveOwner.swift */; };
 		E63B1992B1C2F658B6C75B36 /* GeometrySubpass.swift in Sources */ = {isa = PBXBuildFile; fileRef = E63B18EF061EC5A645E66939 /* GeometrySubpass.swift */; };
 		E63B1AA40375BFAABC560F95 /* GLTFResource.swift in Sources */ = {isa = PBXBuildFile; fileRef = E63B1CDA75FD90993E02BD74 /* GLTFResource.swift */; };
 		E63B1AF5F5856D17AF1FCB2D /* Skin.swift in Sources */ = {isa = PBXBuildFile; fileRef = E63B11EDE4BA4562BDFFF83D /* Skin.swift */; };
@@ -371,6 +386,22 @@
 		04462EED292A149300F95387 /* GLTFTypes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GLTFTypes.h; sourceTree = "<group>"; };
 		04462EEE292A149300F95387 /* GLTFAsset.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GLTFAsset.h; sourceTree = "<group>"; };
 		04462EF2292A1C6D00F95387 /* GLTFLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GLTFLoader.swift; sourceTree = "<group>"; };
+		04462EFC292AEF3400F95387 /* CrossCurveData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CrossCurveData.swift; sourceTree = "<group>"; };
+		04462EFD292AEF3400F95387 /* AnimationCurveOwner.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AnimationCurveOwner.swift; sourceTree = "<group>"; };
+		04462EFE292AEF3400F95387 /* AnimationEventHandler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AnimationEventHandler.swift; sourceTree = "<group>"; };
+		04462EFF292AEF3400F95387 /* AnimatorStateData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AnimatorStateData.swift; sourceTree = "<group>"; };
+		04462F00292AEF3400F95387 /* AnimatorStatePlayData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AnimatorStatePlayData.swift; sourceTree = "<group>"; };
+		04462F01292AEF3400F95387 /* AnimatorLayerData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AnimatorLayerData.swift; sourceTree = "<group>"; };
+		04462F02292AEF3400F95387 /* AnimatorStateInfo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AnimatorStateInfo.swift; sourceTree = "<group>"; };
+		04462F0A292AEF4000F95387 /* AnimatorControllerLayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AnimatorControllerLayer.swift; sourceTree = "<group>"; };
+		04462F0B292AEF4000F95387 /* AnimatorState.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AnimatorState.swift; sourceTree = "<group>"; };
+		04462F0C292AEF4100F95387 /* AnimatorController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AnimatorController.swift; sourceTree = "<group>"; };
+		04462F0E292AEF4100F95387 /* AnimatorStateTransition.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AnimatorStateTransition.swift; sourceTree = "<group>"; };
+		04462F0F292AEF4100F95387 /* StateMachineScript.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StateMachineScript.swift; sourceTree = "<group>"; };
+		04462F10292AEF4100F95387 /* Animator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Animator.swift; sourceTree = "<group>"; };
+		04462F11292AEF4100F95387 /* AnimatorUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AnimatorUtils.swift; sourceTree = "<group>"; };
+		04462F12292AEF4100F95387 /* AnimatorStateMachine.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AnimatorStateMachine.swift; sourceTree = "<group>"; };
+		04462F13292AEF4100F95387 /* AnimationEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AnimationEvent.swift; sourceTree = "<group>"; };
 		04ED07D929226E9C00DD55AB /* normal_shading.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = normal_shading.metal; sourceTree = "<group>"; };
 		04ED07DB29226EA800DD55AB /* normal_shading.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = normal_shading.h; sourceTree = "<group>"; };
 		04ED07DC292284A100DD55AB /* shadow_shading.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = shadow_shading.h; sourceTree = "<group>"; };
@@ -655,7 +686,6 @@
 		43D8CF92C29A209C3AB9C9C6 /* Mesh.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Mesh.swift; sourceTree = "<group>"; };
 		43D8CFA6FC902338A11A5E3A /* Component.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Component.swift; sourceTree = "<group>"; };
 		43D8CFC9BFA4F9B8CFA83B17 /* Joint.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Joint.swift; sourceTree = "<group>"; };
-		E63B103A1B4241E5480DAC73 /* AnimationCurveOwner.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AnimationCurveOwner.swift; sourceTree = "<group>"; };
 		E63B106A9787C662E67CC2F3 /* AnimationClip.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AnimationClip.swift; sourceTree = "<group>"; };
 		E63B106FED41DA853C5CF292 /* LightManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LightManager.swift; sourceTree = "<group>"; };
 		E63B10D0E5E63C6772E58E3E /* CascadedShadowSubpass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CascadedShadowSubpass.swift; sourceTree = "<group>"; };
@@ -839,22 +869,23 @@
 		04462EF4292A4DF400F95387 /* animation */ = {
 			isa = PBXGroup;
 			children = (
+				04462F13292AEF4100F95387 /* AnimationEvent.swift */,
+				04462F10292AEF4100F95387 /* Animator.swift */,
+				04462F0C292AEF4100F95387 /* AnimatorController.swift */,
+				04462F0A292AEF4000F95387 /* AnimatorControllerLayer.swift */,
+				04462F0B292AEF4000F95387 /* AnimatorState.swift */,
+				04462F12292AEF4100F95387 /* AnimatorStateMachine.swift */,
+				04462F0E292AEF4100F95387 /* AnimatorStateTransition.swift */,
+				04462F11292AEF4100F95387 /* AnimatorUtils.swift */,
+				04462F0F292AEF4100F95387 /* StateMachineScript.swift */,
+				04462EFB292AEEEE00F95387 /* internal */,
 				04462EFA292A555D00F95387 /* enums */,
-				04462EF5292A518700F95387 /* internal */,
 				E63B106A9787C662E67CC2F3 /* AnimationClip.swift */,
 				E63B152B56D2F2BE0AE76CA0 /* Keyframe.swift */,
 				E63B1A4BF0BC68838A754C44 /* AnimationClipCurveBinding.swift */,
 				E63B1D7B84C48FBA5DECFE14 /* AnimationCurve.swift */,
 			);
 			path = animation;
-			sourceTree = "<group>";
-		};
-		04462EF5292A518700F95387 /* internal */ = {
-			isa = PBXGroup;
-			children = (
-				E63B103A1B4241E5480DAC73 /* AnimationCurveOwner.swift */,
-			);
-			path = internal;
 			sourceTree = "<group>";
 		};
 		04462EFA292A555D00F95387 /* enums */ = {
@@ -872,6 +903,20 @@
 				E63B139B272B062D72C9C9EC /* InterpolableValueType.swift */,
 			);
 			path = enums;
+			sourceTree = "<group>";
+		};
+		04462EFB292AEEEE00F95387 /* internal */ = {
+			isa = PBXGroup;
+			children = (
+				04462EFD292AEF3400F95387 /* AnimationCurveOwner.swift */,
+				04462EFE292AEF3400F95387 /* AnimationEventHandler.swift */,
+				04462F01292AEF3400F95387 /* AnimatorLayerData.swift */,
+				04462EFF292AEF3400F95387 /* AnimatorStateData.swift */,
+				04462F02292AEF3400F95387 /* AnimatorStateInfo.swift */,
+				04462F00292AEF3400F95387 /* AnimatorStatePlayData.swift */,
+				04462EFC292AEF3400F95387 /* CrossCurveData.swift */,
+			);
+			path = internal;
 			sourceTree = "<group>";
 		};
 		3E0F7B1229220F5D00C4A843 /* shadow */ = {
@@ -1877,6 +1922,7 @@
 				43D8C9496D9307A6BC9571A3 /* Script.swift in Sources */,
 				43D8CA603615F2BA10B8A283 /* Transform.swift in Sources */,
 				43D8C56AFF29A4383C0F6DFF /* Scene.swift in Sources */,
+				04462F18292AEF4100F95387 /* AnimatorStateTransition.swift in Sources */,
 				43D8C9C577229A021BDFB510 /* SceneManager.swift in Sources */,
 				43D8C519A137AB2E23BBC897 /* CameraClearFlags.swift in Sources */,
 				43D8CEF8E23C12D9326BDA90 /* ColorSpace.swift in Sources */,
@@ -1886,6 +1932,7 @@
 				3E0F7B1F292331B000C4A843 /* ReflectionUniform.swift in Sources */,
 				3E0F7C602926038E00C4A843 /* PhysXSphereColliderShape.swift in Sources */,
 				43D8C51244720F80CFE1E7FB /* ShadowType.swift in Sources */,
+				04462F08292AEF3400F95387 /* AnimatorLayerData.swift in Sources */,
 				3E0F7C562926036F00C4A843 /* PhysXStaticCollider.swift in Sources */,
 				43D8CF98C05E60C0A40F11E4 /* StencilState.swift in Sources */,
 				43D8C28F840B36CAA2638716 /* RasterState.swift in Sources */,
@@ -1895,6 +1942,8 @@
 				3E0F7C8C2926642E00C4A843 /* BoxColliderShape.swift in Sources */,
 				43D8CBD7534ED79625118AE2 /* ShaderMacroCollection.swift in Sources */,
 				43D8C7FE394C931314DCAAF2 /* ShaderData.swift in Sources */,
+				04462F07292AEF3400F95387 /* AnimatorStatePlayData.swift in Sources */,
+				04462F19292AEF4100F95387 /* StateMachineScript.swift in Sources */,
 				3E0F7C5D2926038E00C4A843 /* PhysXBoxColliderShape.swift in Sources */,
 				43D8C2536A00B262EB4FDFFA /* ShaderPass.swift in Sources */,
 				3E0F7C7E2926039D00C4A843 /* PhysXCharacterController.swift in Sources */,
@@ -1907,6 +1956,7 @@
 				43D8C1B2AED98876E2A587FC /* BaseMaterial.swift in Sources */,
 				43D8CE61BE3200DB2073AC80 /* BlendMode.swift in Sources */,
 				43D8C91C88772F8F3AB795F2 /* RenderFace.swift in Sources */,
+				04462F03292AEF3400F95387 /* CrossCurveData.swift in Sources */,
 				43D8CDB093F067C1F7E65758 /* UnlitMaterial.swift in Sources */,
 				3E0F7C5E2926038E00C4A843 /* PhysXPlaneColliderShape.swift in Sources */,
 				43D8CAC028040C7520C6C8FA /* PBRBaseMaterial.swift in Sources */,
@@ -1920,23 +1970,28 @@
 				43D8C24FBA43B612E59B13DE /* SubMesh.swift in Sources */,
 				3E0F7C522926036F00C4A843 /* PhysXDynamicCollider.swift in Sources */,
 				43D8C77DD4198A013659D501 /* Mesh.swift in Sources */,
+				04462F1A292AEF4100F95387 /* Animator.swift in Sources */,
 				3E0F7C552926036F00C4A843 /* PhysXPhysicsManager.swift in Sources */,
 				43D8CE559C09812B32CB1E26 /* ModelMesh.swift in Sources */,
 				43D8CFDE172582A4463B835E /* PrimitiveMesh.swift in Sources */,
 				E63B15AE550BABADB0BEFA9E /* Renderer.swift in Sources */,
 				E63B1F9026B97044A0275D9D /* CameraInfo.swift in Sources */,
+				04462F06292AEF3400F95387 /* AnimatorStateData.swift in Sources */,
 				E63B1E93014B86D51FF16C4F /* DevicePipeline.swift in Sources */,
+				04462F15292AEF4100F95387 /* AnimatorState.swift in Sources */,
 				E63B12FD0D692DA50726EADC /* Camera.swift in Sources */,
 				E63B1816046796FD0B7C58DD /* Canvas.swift in Sources */,
 				E63B16D49F72F7475B37721F /* RenderElement.swift in Sources */,
 				3E0F7C6B2926039500C4A843 /* PhysXSpringJoint.swift in Sources */,
 				E63B1E40E988F3A3BE5E6518 /* MeshRenderer.swift in Sources */,
+				04462F16292AEF4100F95387 /* AnimatorController.swift in Sources */,
 				E63B137938CDF22136EACAB5 /* ShadowSliceData.swift in Sources */,
 				E63B1F3B6D23E8286F457252 /* DiffuseMode.swift in Sources */,
 				E63B1562D7DA439F207F8DB1 /* PointLight.swift in Sources */,
 				E63B15C7EE0AD10494231AFF /* SpotLight.swift in Sources */,
 				3E0F7C8E2926642E00C4A843 /* SphereColliderShape.swift in Sources */,
 				E63B1DF5B6407214A4BB1D46 /* DirectLight.swift in Sources */,
+				04462F04292AEF3400F95387 /* AnimationCurveOwner.swift in Sources */,
 				3E0F7C6E2926039500C4A843 /* PhysXSphericalJoint.swift in Sources */,
 				E63B1C21D23A62BB4C35D54C /* LightManager.swift in Sources */,
 				43D8CC46810990E2EF50CBB6 /* AmbientLight.swift in Sources */,
@@ -1963,11 +2018,14 @@
 				43D8C3BA1BA3519EE26FB708 /* SkySubpass.swift in Sources */,
 				04462EF1292A149300F95387 /* GLTFAsset.m in Sources */,
 				43D8C2D06DBDF6CCA1ECC6B3 /* BackgroundSubpass.swift in Sources */,
+				04462F05292AEF3400F95387 /* AnimationEventHandler.swift in Sources */,
 				43D8C21945D6381CFDBAF783 /* PointerManager.swift in Sources */,
 				43D8CE172B64A49B08156328 /* InputManager.swift in Sources */,
 				43D8CB093928BE8DF054C48C /* HitResult.swift in Sources */,
+				04462F14292AEF4100F95387 /* AnimatorControllerLayer.swift in Sources */,
 				43D8C4BD1B1EAB571FCB7040 /* ColliderShape.swift in Sources */,
 				04176A7B292717D900B1775A /* Time.swift in Sources */,
+				04462F1B292AEF4100F95387 /* AnimatorUtils.swift in Sources */,
 				43D8CDF1E139BB27FB465815 /* PhysicsMaterial.swift in Sources */,
 				43D8CB6C869DD874CFBF194E /* CharacterController.swift in Sources */,
 				43D8CD3C7521C26895BB6BA7 /* ControllerNonWalkableMode.swift in Sources */,
@@ -1986,6 +2044,7 @@
 				E63B1D742AB1372E53F63989 /* Background.swift in Sources */,
 				E63B1F8DA7DEA3BF63D648CF /* ARManager.swift in Sources */,
 				E63B1828A10683FFA47122A8 /* CascadedShadowSubpass.swift in Sources */,
+				04462F1C292AEF4100F95387 /* AnimatorStateMachine.swift in Sources */,
 				E63B14041298E8A7482B9FAC /* ShadowManager.swift in Sources */,
 				E63B117E5A0F83C02B55118B /* BufferPool.swift in Sources */,
 				E63B1AA40375BFAABC560F95 /* GLTFResource.swift in Sources */,
@@ -1995,15 +2054,16 @@
 				E63B13BE4B83237308EB5629 /* AnimationClipCurveBinding.swift in Sources */,
 				E63B1F02A2574DBBAE579AB5 /* AnimatorConditionMode.swift in Sources */,
 				E63B155F6165E95781BFCB26 /* AnimatorLayerBlendingMode.swift in Sources */,
+				04462F1D292AEF4100F95387 /* AnimationEvent.swift in Sources */,
 				E63B10A5AD9B371E044CF012 /* AnimatorStatePlayState.swift in Sources */,
 				E63B1816639E944D107AF911 /* InterpolationType.swift in Sources */,
 				E63B16863F22CC3922BF0245 /* LayerState.swift in Sources */,
 				E63B1E3AC9B48994F2110C57 /* PlayState.swift in Sources */,
 				E63B113C5609C5F386EDF786 /* WrapMode.swift in Sources */,
+				04462F09292AEF3400F95387 /* AnimatorStateInfo.swift in Sources */,
 				E63B1EF9F08CF8129C5E2F87 /* AnimationEventType.swift in Sources */,
 				E63B14DB89853F17DDD64E54 /* AnimationProperty.swift in Sources */,
 				E63B150489779CD4C5DE3EFA /* InterpolableValueType.swift in Sources */,
-				E63B190B7C1A30F434FDC746 /* AnimationCurveOwner.swift in Sources */,
 				E63B152D07E7F85A82101002 /* AnimationCurve.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

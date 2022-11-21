@@ -7,7 +7,7 @@
 import Foundation
 
 /// Animation event type.
-public enum AnimationEventType : Int {
+public enum AnimationEventType: Int {
     /// Triggered when the animation over if the wrapMode === WrapMode.ONCE
     case Finished = 0
     /// Triggered when the animation over if the wrapMode === WrapMode.LOOP

@@ -14,6 +14,9 @@ class ComponentsManager {
     private var _disableScripts: [Script] = []
     private var _destroyScripts: [Script] = []
 
+    // Animation
+    private var _onUpdateAnimations: DisorderedArray<Animator> = DisorderedArray()
+
     // Render
     var _renderers: DisorderedArray<Renderer> = DisorderedArray()
 
@@ -69,7 +72,27 @@ extension ComponentsManager {
         _destroyScripts.append(component)
     }
 
+    func addOnUpdateAnimations(_ animation: Animator) {
+        animation._onUpdateIndex = _onUpdateAnimations.length
+        _onUpdateAnimations.add(animation)
+    }
+
+    func removeOnUpdateAnimations(_ animation: Animator) {
+        let replaced = _onUpdateAnimations.deleteByIndex(animation._onUpdateIndex)
+        if replaced != nil {
+            replaced!._onUpdateIndex = animation._onUpdateIndex
+        }
+        animation._onUpdateIndex = -1
+    }
+
     //MARK: - Execute Components
+
+    func callAnimationUpdate(_ deltaTime: Float) {
+        let elements = _onUpdateAnimations._elements
+        for i in 0..<_onUpdateAnimations.length {
+            elements[i]!.update(deltaTime)
+        }
+    }
 
     func callRendererOnUpdate(_ deltaTime: Float) {
         let elements = _renderers._elements
