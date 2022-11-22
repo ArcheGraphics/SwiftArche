@@ -16,10 +16,10 @@ class MaterialParser: Parser {
             let gltfMaterial = context.glTFResource.gltf.materials[i]
 
             let material: Material
-            if gltfMaterial.extensions["KHR_materials_unlit"] != nil {
-                material = PBRMaterial(context.engine);
-            } else if gltfMaterial.extensions["KHR_materials_pbrSpecularGlossiness"] != nil {
-                material = PBRMaterial(context.engine);
+            if gltfMaterial.isUnlit {
+                material = UnlitMaterial(context.engine, gltfMaterial.name ?? "");
+            } else if gltfMaterial.specularGlossiness != nil {
+                material = KHR_materials_pbrSpecularGlossiness.createEngineResource(schema: gltfMaterial.specularGlossiness!, context: context)
             } else {
                 material = PBRMaterial(context.engine);
             }

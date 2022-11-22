@@ -6,8 +6,8 @@
 
 import Foundation
 
-class KHR_materials_clearcoat: ExtensionParser {
-    func parseEngineResource(schema: GLTFClearcoatParams, material: PBRMaterial, context: GLTFResource) {
+class KHR_materials_clearcoat {
+    static func parseEngineResource(schema: GLTFClearcoatParams, material: PBRMaterial, context: GLTFResource) {
         material.clearCoat = schema.clearcoatFactor
         material.clearCoatRoughness = schema.clearcoatRoughnessFactor
 

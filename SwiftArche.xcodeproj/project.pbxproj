@@ -203,6 +203,7 @@
 		43D8C7759AA52F6E7219BD79 /* AnimationVector4Curve.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8CF570103572D7FD65533 /* AnimationVector4Curve.swift */; };
 		43D8C77DD4198A013659D501 /* Mesh.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8CF92C29A209C3AB9C9C6 /* Mesh.swift */; };
 		43D8C7FE394C931314DCAAF2 /* ShaderData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8C2CB55289ACA088A32A4 /* ShaderData.swift */; };
+		43D8C80AD1162E9048D5D0D0 /* KHR_materials_pbrSpecularGlossiness.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8C8B676244466A3CE0A0E /* KHR_materials_pbrSpecularGlossiness.swift */; };
 		43D8C88A3903131798FB09AA /* AnimationQuaternionCurve.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8CCF0CCCEBC531A44ED23 /* AnimationQuaternionCurve.swift */; };
 		43D8C88ACAE60431C443C85C /* ComputePass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8C15F86CB93FDBB5AB528 /* ComputePass.swift */; };
 		43D8C8B17C3DBE869B5D3F58 /* AnimationParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8C92161B93C8F090717EC /* AnimationParser.swift */; };
@@ -258,7 +259,6 @@
 		43D8CF878A456E1E04E23EAA /* MaterialParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8C71A4D9C772A8096DC81 /* MaterialParser.swift */; };
 		43D8CF98C05E60C0A40F11E4 /* StencilState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8C55ADD0B573F9BE441A2 /* StencilState.swift */; };
 		43D8CF9A819FABF732156575 /* ComputePipelineState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8C5458496A0164715E24D /* ComputePipelineState.swift */; };
-		43D8CFB968614C57EB9D4BE2 /* ExtensionParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8CA52D42DCC6A0AA501DC /* ExtensionParser.swift */; };
 		43D8CFDE172582A4463B835E /* PrimitiveMesh.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8C0E825225EDCF4195D57 /* PrimitiveMesh.swift */; };
 		E63B10A5AD9B371E044CF012 /* AnimatorStatePlayState.swift in Sources */ = {isa = PBXBuildFile; fileRef = E63B1F7F363BDA85D54F674E /* AnimatorStatePlayState.swift */; };
 		E63B113C5609C5F386EDF786 /* WrapMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = E63B1D15496DFF9775F04BA0 /* WrapMode.swift */; };
@@ -695,6 +695,7 @@
 		43D8C880374559AC1B0915D3 /* Transform.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Transform.swift; sourceTree = "<group>"; };
 		43D8C883E143471B246003FB /* PhysicsMaterial.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhysicsMaterial.swift; sourceTree = "<group>"; };
 		43D8C890FF41EDC96C909FC5 /* ControllerNonWalkableMode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ControllerNonWalkableMode.swift; sourceTree = "<group>"; };
+		43D8C8B676244466A3CE0A0E /* KHR_materials_pbrSpecularGlossiness.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KHR_materials_pbrSpecularGlossiness.swift; sourceTree = "<group>"; };
 		43D8C8DEB27F4A68CF043663 /* Entity.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Entity.swift; sourceTree = "<group>"; };
 		43D8C90EA461838DF774912B /* Material.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Material.swift; sourceTree = "<group>"; };
 		43D8C9178F2C745B6BF56BDF /* SkinParser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SkinParser.swift; sourceTree = "<group>"; };
@@ -704,7 +705,6 @@
 		43D8C994E210CFEEA2560E05 /* BoundingSphere.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BoundingSphere.swift; sourceTree = "<group>"; };
 		43D8C99F4B73069C1988F340 /* BufferView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BufferView.swift; sourceTree = "<group>"; };
 		43D8CA31635DEBED25A020C1 /* BlendMode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BlendMode.swift; sourceTree = "<group>"; };
-		43D8CA52D42DCC6A0AA501DC /* ExtensionParser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExtensionParser.swift; sourceTree = "<group>"; };
 		43D8CAB2F8824F2A898EC7C1 /* TextureParser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TextureParser.swift; sourceTree = "<group>"; };
 		43D8CAD23565A918160AFC1F /* PBRBaseMaterial.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PBRBaseMaterial.swift; sourceTree = "<group>"; };
 		43D8CAED3B1AFD13451D2107 /* BoolUpdateFlag.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BoolUpdateFlag.swift; sourceTree = "<group>"; };
@@ -1266,8 +1266,8 @@
 		3E5D8690292BCC0F00759BA9 /* extensions */ = {
 			isa = PBXGroup;
 			children = (
-				43D8CA52D42DCC6A0AA501DC /* ExtensionParser.swift */,
 				43D8C5E86C5D16F7B10135E0 /* KHR_materials_clearcoat.swift */,
+				43D8C8B676244466A3CE0A0E /* KHR_materials_pbrSpecularGlossiness.swift */,
 			);
 			path = extensions;
 			sourceTree = "<group>";
@@ -2199,8 +2199,8 @@
 				43D8CA9A8B2CBAE3DC0B177D /* EntityParser.swift in Sources */,
 				43D8C8B17C3DBE869B5D3F58 /* AnimationParser.swift in Sources */,
 				43D8C413D10E9C714A6486BB /* Validator.swift in Sources */,
-				43D8CFB968614C57EB9D4BE2 /* ExtensionParser.swift in Sources */,
 				43D8C8F45D89C48EDD8DA56E /* KHR_materials_clearcoat.swift in Sources */,
+				43D8C80AD1162E9048D5D0D0 /* KHR_materials_pbrSpecularGlossiness.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
