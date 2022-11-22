@@ -276,6 +276,7 @@
 		E63B17993C8FDA068381D526 /* BackgroundTextureFillMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = E63B19D8E23F234811FC6599 /* BackgroundTextureFillMode.swift */; };
 		E63B1816046796FD0B7C58DD /* Canvas.swift in Sources */ = {isa = PBXBuildFile; fileRef = E63B1CB34D0218B55ACB3457 /* Canvas.swift */; };
 		E63B1816639E944D107AF911 /* InterpolationType.swift in Sources */ = {isa = PBXBuildFile; fileRef = E63B18457D7F26DED974F8AF /* InterpolationType.swift */; };
+		E63B1819402D6701F7631A3E /* KHR_lights_punctual.swift in Sources */ = {isa = PBXBuildFile; fileRef = E63B19D114C37BA81BAFF2C4 /* KHR_lights_punctual.swift */; };
 		E63B1828A10683FFA47122A8 /* CascadedShadowSubpass.swift in Sources */ = {isa = PBXBuildFile; fileRef = E63B10D0E5E63C6772E58E3E /* CascadedShadowSubpass.swift */; };
 		E63B1992B1C2F658B6C75B36 /* GeometrySubpass.swift in Sources */ = {isa = PBXBuildFile; fileRef = E63B18EF061EC5A645E66939 /* GeometrySubpass.swift */; };
 		E63B1AA40375BFAABC560F95 /* GLTFResource.swift in Sources */ = {isa = PBXBuildFile; fileRef = E63B1CDA75FD90993E02BD74 /* GLTFResource.swift */; };
@@ -287,6 +288,7 @@
 		E63B1DF5B6407214A4BB1D46 /* DirectLight.swift in Sources */ = {isa = PBXBuildFile; fileRef = E63B180F182B0FABE01911CA /* DirectLight.swift */; };
 		E63B1E3AC9B48994F2110C57 /* PlayState.swift in Sources */ = {isa = PBXBuildFile; fileRef = E63B1CF7054BD8930E22492F /* PlayState.swift */; };
 		E63B1E40E988F3A3BE5E6518 /* MeshRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = E63B1F6CBBF500DC5175715F /* MeshRenderer.swift */; };
+		E63B1E75C2810722D3625667 /* KHR_texture_transform.swift in Sources */ = {isa = PBXBuildFile; fileRef = E63B1F0A2DC737ABC2517624 /* KHR_texture_transform.swift */; };
 		E63B1E93014B86D51FF16C4F /* DevicePipeline.swift in Sources */ = {isa = PBXBuildFile; fileRef = E63B14B2CEF6930B88416E69 /* DevicePipeline.swift */; };
 		E63B1F02A2574DBBAE579AB5 /* AnimatorConditionMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = E63B15B97CDF2B01A3FC62F6 /* AnimatorConditionMode.swift */; };
 		E63B1F3B6D23E8286F457252 /* DiffuseMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = E63B126D86D1150480AF5E59 /* DiffuseMode.swift */; };
@@ -763,6 +765,7 @@
 		E63B180F182B0FABE01911CA /* DirectLight.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DirectLight.swift; sourceTree = "<group>"; };
 		E63B18457D7F26DED974F8AF /* InterpolationType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InterpolationType.swift; sourceTree = "<group>"; };
 		E63B18EF061EC5A645E66939 /* GeometrySubpass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GeometrySubpass.swift; sourceTree = "<group>"; };
+		E63B19D114C37BA81BAFF2C4 /* KHR_lights_punctual.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KHR_lights_punctual.swift; sourceTree = "<group>"; };
 		E63B19D8E23F234811FC6599 /* BackgroundTextureFillMode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BackgroundTextureFillMode.swift; sourceTree = "<group>"; };
 		E63B1A4BF0BC68838A754C44 /* AnimationClipCurveBinding.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AnimationClipCurveBinding.swift; sourceTree = "<group>"; };
 		E63B1AAE575CDDFFC0A8CD28 /* Camera.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Camera.swift; sourceTree = "<group>"; };
@@ -775,6 +778,7 @@
 		E63B1D15496DFF9775F04BA0 /* WrapMode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WrapMode.swift; sourceTree = "<group>"; };
 		E63B1E675A77F63B0AF79089 /* ShadowUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ShadowUtils.swift; sourceTree = "<group>"; };
 		E63B1EC7C4950E84EA889876 /* ARManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ARManager.swift; sourceTree = "<group>"; };
+		E63B1F0A2DC737ABC2517624 /* KHR_texture_transform.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KHR_texture_transform.swift; sourceTree = "<group>"; };
 		E63B1F6CBBF500DC5175715F /* MeshRenderer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MeshRenderer.swift; sourceTree = "<group>"; };
 		E63B1F7F363BDA85D54F674E /* AnimatorStatePlayState.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AnimatorStatePlayState.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -1268,6 +1272,8 @@
 			children = (
 				43D8C5E86C5D16F7B10135E0 /* KHR_materials_clearcoat.swift */,
 				43D8C8B676244466A3CE0A0E /* KHR_materials_pbrSpecularGlossiness.swift */,
+				E63B19D114C37BA81BAFF2C4 /* KHR_lights_punctual.swift */,
+				E63B1F0A2DC737ABC2517624 /* KHR_texture_transform.swift */,
 			);
 			path = extensions;
 			sourceTree = "<group>";
@@ -2201,6 +2207,8 @@
 				43D8C413D10E9C714A6486BB /* Validator.swift in Sources */,
 				43D8C8F45D89C48EDD8DA56E /* KHR_materials_clearcoat.swift in Sources */,
 				43D8C80AD1162E9048D5D0D0 /* KHR_materials_pbrSpecularGlossiness.swift in Sources */,
+				E63B1819402D6701F7631A3E /* KHR_lights_punctual.swift in Sources */,
+				E63B1E75C2810722D3625667 /* KHR_texture_transform.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -19,7 +19,7 @@ class MaterialParser: Parser {
             if gltfMaterial.isUnlit {
                 material = UnlitMaterial(context.engine, gltfMaterial.name ?? "");
             } else if gltfMaterial.specularGlossiness != nil {
-                material = KHR_materials_pbrSpecularGlossiness.createEngineResource(schema: gltfMaterial.specularGlossiness!, context: context)
+                material = KHR_materials_pbrSpecularGlossiness.createEngineResource(gltfMaterial.specularGlossiness!, context)
             } else {
                 material = PBRMaterial(context.engine);
             }
