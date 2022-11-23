@@ -8,19 +8,23 @@ import Foundation
 
 class KHR_materials_clearcoat {
     static func parseEngineResource(_ schema: GLTFClearcoatParams, _ material: PBRBaseMaterial, _ context: ParserContext) {
+        let glTFResource = context.glTFResource!
         material.clearCoat = schema.clearcoatFactor
         material.clearCoatRoughness = schema.clearcoatRoughnessFactor
 
         if schema.clearcoatTexture != nil {
-            material.clearCoatTexture = context.glTFResource.textures![schema.clearcoatTexture!.index]
+            material.clearCoatTexture = glTFResource.textures![schema.clearcoatTexture!.index]
+            material.setClearCoatSampler(value: glTFResource.samplers![schema.clearcoatTexture!.index])
             KHR_texture_transform.parseEngineResource(schema.clearcoatTexture!.transform, material, context)
         }
         if schema.clearcoatRoughnessTexture != nil {
-            material.clearCoatRoughnessTexture = context.glTFResource.textures![schema.clearcoatRoughnessTexture!.index]
+            material.clearCoatRoughnessTexture = glTFResource.textures![schema.clearcoatRoughnessTexture!.index]
+            material.setClearCoatRoughnessSampler(value: glTFResource.samplers![schema.clearcoatRoughnessTexture!.index])
             KHR_texture_transform.parseEngineResource(schema.clearcoatRoughnessTexture!.transform, material, context)
         }
         if schema.clearcoatNormalTexture != nil {
-            material.clearCoatNormalTexture = context.glTFResource.textures![schema.clearcoatNormalTexture!.index]
+            material.clearCoatNormalTexture = glTFResource.textures![schema.clearcoatNormalTexture!.index]
+            material.setClearCoatNormalSampler(value: glTFResource.samplers![schema.clearcoatNormalTexture!.index])
             KHR_texture_transform.parseEngineResource(schema.clearcoatNormalTexture!.transform, material, context)
         }
     }

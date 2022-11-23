@@ -130,7 +130,7 @@ public class PBRBaseMaterial: BaseMaterial {
         }
     }
 
-    public func setEmissiveTexture(value: MTLSamplerDescriptor) {
+    public func setEmissiveSampler(value: MTLSamplerDescriptor) {
         shaderData.setSampler(PBRBaseMaterial._emissiveSamplerProp, value)
     }
 

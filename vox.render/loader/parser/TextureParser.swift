@@ -12,6 +12,7 @@ class TextureParser: Parser {
     override func parse(_ context: ParserContext) {
         let gltf = context.glTFResource.gltf!
         var textures: [MTLTexture] = []
+        var samplers: [MTLSamplerDescriptor] = []
         for index in 0..<gltf.textures.count {
             if context.textureIndex != nil && context.textureIndex! != index {
                 return
@@ -100,8 +101,10 @@ class TextureParser: Parser {
                 default:
                     break
                 }
+                samplers.append(descriptor)
             }
         }
+        context.glTFResource.samplers = samplers
         context.glTFResource.textures = textures
     }
 

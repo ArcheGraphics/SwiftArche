@@ -8,7 +8,8 @@ import vox_math
 
 class KHR_materials_pbrSpecularGlossiness {
     static func createEngineResource(_ schema: GLTFPBRSpecularGlossinessParams, _ context: ParserContext) -> PBRSpecularMaterial {
-        let material = PBRSpecularMaterial(context.glTFResource.engine)
+        let glTFResource = context.glTFResource!
+        let material = PBRSpecularMaterial(glTFResource.engine)
 
         material.baseColor = Color(
                 Color.linearToGammaSpace(value: schema.diffuseFactor.x),
@@ -18,7 +19,8 @@ class KHR_materials_pbrSpecularGlossiness {
         )
 
         if (schema.diffuseTexture != nil) {
-            material.baseTexture = context.glTFResource.textures![schema.diffuseTexture!.index]
+            material.baseTexture = glTFResource.textures![schema.diffuseTexture!.index]
+            material.setBaseSampler(value: glTFResource.samplers![schema.diffuseTexture!.index])
             KHR_texture_transform.parseEngineResource(schema.diffuseTexture!.transform, material, context)
         }
 
@@ -30,7 +32,8 @@ class KHR_materials_pbrSpecularGlossiness {
         material.glossiness = schema.glossinessFactor
 
         if (schema.specularGlossinessTexture != nil) {
-            material.specularGlossinessTexture = context.glTFResource.textures![schema.specularGlossinessTexture!.index]
+            material.specularGlossinessTexture = glTFResource.textures![schema.specularGlossinessTexture!.index]
+            material.setSpecularGlossinessSampler(value: glTFResource.samplers![schema.specularGlossinessTexture!.index])
             KHR_texture_transform.parseEngineResource(schema.specularGlossinessTexture!.transform, material, context)
         }
 

@@ -45,6 +45,7 @@ class MaterialParser: Parser {
                     )
                     if let baseColorTexture = pbrMetallicRoughness.baseColorTexture {
                         pbrMtl.baseTexture = glTFResource.textures![baseColorTexture.index]
+                        pbrMtl.setBaseSampler(value: glTFResource.samplers![baseColorTexture.index])
                         KHR_texture_transform.parseEngineResource(baseColorTexture.transform, pbrMtl, context)
                     }
                     if let pbrMtl = pbrMtl as? PBRMaterial {
@@ -52,6 +53,7 @@ class MaterialParser: Parser {
                         pbrMtl.metallic = pbrMetallicRoughness.metallicFactor
                         if let metallicRoughnessTexture = pbrMetallicRoughness.metallicRoughnessTexture {
                             pbrMtl.roughnessMetallicTexture = glTFResource.textures![metallicRoughnessTexture.index]
+                            pbrMtl.setRoughnessMetallicSampler(value: glTFResource.samplers![metallicRoughnessTexture.index])
                             KHR_texture_transform.parseEngineResource(metallicRoughnessTexture.transform, pbrMtl, context)
                         }
                     }
@@ -59,6 +61,7 @@ class MaterialParser: Parser {
 
                 if let emissiveTexture = gltfMaterial.emissiveTexture {
                     pbrMtl.emissiveTexture = glTFResource.textures![emissiveTexture.index]
+                    pbrMtl.setEmissiveSampler(value: glTFResource.samplers![emissiveTexture.index])
                     KHR_texture_transform.parseEngineResource(emissiveTexture.transform, pbrMtl, context)
                 }
                 pbrMtl.emissiveColor = Vector3(
@@ -70,6 +73,7 @@ class MaterialParser: Parser {
                 if let normalTexture = gltfMaterial.normalTexture {
                     pbrMtl.normalTextureIntensity = normalTexture.scale
                     pbrMtl.normalTexture = glTFResource.textures![normalTexture.index]
+                    pbrMtl.setNormalSampler(value: glTFResource.samplers![normalTexture.index])
                     KHR_texture_transform.parseEngineResource(normalTexture.transform, pbrMtl, context)
                 }
 
@@ -82,6 +86,7 @@ class MaterialParser: Parser {
 
                     pbrMtl.occlusionTextureIntensity = occlusionTexture.scale
                     pbrMtl.occlusionTexture = glTFResource.textures![occlusionTexture.index]
+                    pbrMtl.setOcclusionSampler(value: glTFResource.samplers![occlusionTexture.index])
                     KHR_texture_transform.parseEngineResource(occlusionTexture.transform, pbrMtl, context)
                 }
             }

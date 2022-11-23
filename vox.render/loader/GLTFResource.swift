@@ -15,6 +15,8 @@ public class GLTFResource {
     var gltf: GLTFAsset!
     /** Oasis Texture2D after TextureParser. */
     var textures: [MTLTexture]?
+    /** Oasis Sampler after TextureParser. */
+    var samplers: [MTLSamplerDescriptor]?
     /** Oasis Material after MaterialParser. */
     var materials: [Material]?
     /** Oasis ModelMesh after MeshParser. */
