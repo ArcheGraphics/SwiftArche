@@ -7,15 +7,19 @@
 import vox_math
 
 class KHR_texture_transform {
-    static func parseEngineResource(_ schema: GLTFTextureTransform,
+    static func parseEngineResource(_ schema: GLTFTextureTransform?,
                                     _ material: UnlitMaterial,
                                     _ context: ParserContext) {
-        material.tilingOffset = Vector4(schema.scale.x, schema.scale.y, schema.offset.x, schema.offset.y)
+        if let schema = schema {
+            material.tilingOffset = Vector4(schema.scale.x, schema.scale.y, schema.offset.x, schema.offset.y)
+        }
     }
 
-    static func parseEngineResource(_ schema: GLTFTextureTransform,
+    static func parseEngineResource(_ schema: GLTFTextureTransform?,
                                     _ material: PBRBaseMaterial,
                                     _ context: ParserContext) {
-        material.tilingOffset = Vector4(schema.scale.x, schema.scale.y, schema.offset.x, schema.offset.y)
+        if let schema = schema {
+            material.tilingOffset = Vector4(schema.scale.x, schema.scale.y, schema.offset.x, schema.offset.y)
+        }
     }
 }

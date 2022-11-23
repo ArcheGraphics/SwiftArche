@@ -19,9 +19,7 @@ class KHR_materials_pbrSpecularGlossiness {
 
         if (schema.diffuseTexture != nil) {
             material.baseTexture = context.glTFResource.textures![schema.diffuseTexture!.index]
-            if schema.diffuseTexture!.transform != nil {
-                KHR_texture_transform.parseEngineResource(schema.diffuseTexture!.transform!, material, context)
-            }
+            KHR_texture_transform.parseEngineResource(schema.diffuseTexture!.transform, material, context)
         }
 
         material.specularColor = Vector3(
@@ -33,9 +31,7 @@ class KHR_materials_pbrSpecularGlossiness {
 
         if (schema.specularGlossinessTexture != nil) {
             material.specularGlossinessTexture = context.glTFResource.textures![schema.specularGlossinessTexture!.index]
-            if schema.specularGlossinessTexture!.transform != nil {
-                KHR_texture_transform.parseEngineResource(schema.specularGlossinessTexture!.transform!, material, context)
-            }
+            KHR_texture_transform.parseEngineResource(schema.specularGlossinessTexture!.transform, material, context)
         }
 
         return material
