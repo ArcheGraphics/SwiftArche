@@ -8,6 +8,7 @@ import Metal
 
 /// Product after GLTF parser, usually, `defaultSceneRoot` is only needed to use.
 public class GLTFResource {
+    var engine: Engine!
     /** GLTF file url. */
     var url: URL!
     /** GLTF file content. */

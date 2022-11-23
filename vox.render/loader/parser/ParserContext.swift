@@ -7,7 +7,6 @@
 import Foundation
 
 class ParserContext {
-    var engine: Engine!
     var glTFResource: GLTFResource!
     var keepMeshData: Bool = false
     var hasSkinned: Bool = false

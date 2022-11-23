@@ -275,7 +275,7 @@ GLTFKIT2_EXPORT
 //MARK: - GLTFCamera
 GLTFKIT2_EXPORT
 @interface GLTFCamera : GLTFObject
-
+@property(nonatomic, assign) NSInteger index;
 @property(nonatomic, nullable, strong) GLTFOrthographicProjectionParams *orthographic;
 @property(nonatomic, nullable, strong) GLTFPerspectiveProjectionParams *perspective;
 @property(nonatomic, assign) float zNear;
@@ -364,7 +364,7 @@ GLTFKIT2_EXPORT
 //MARK: - GLTFMaterial
 GLTFKIT2_EXPORT
 @interface GLTFMaterial : GLTFObject
-
+@property(nonatomic, assign) NSInteger index;
 @property(nonatomic, nullable) GLTFPBRMetallicRoughnessParams *metallicRoughness;
 @property(nonatomic, nullable) GLTFPBRSpecularGlossinessParams *specularGlossiness;
 @property(nonatomic, nullable) GLTFClearcoatParams *clearcoat;
@@ -384,7 +384,7 @@ GLTFKIT2_EXPORT
 //MARK: - GLTFMesh
 GLTFKIT2_EXPORT
 @interface GLTFMesh : GLTFObject
-
+@property(nonatomic, assign) NSInteger index;
 @property(nonatomic, copy) NSArray<GLTFPrimitive *> *primitives;
 @property(nonatomic, nullable, copy) NSArray<NSNumber *> *weights;
 @property(nonatomic, nullable, copy) NSArray<NSString *> *targetNames;
@@ -448,7 +448,7 @@ GLTFKIT2_EXPORT
 //MARK: - GLTFScene
 GLTFKIT2_EXPORT
 @interface GLTFScene : GLTFObject
-
+@property(nonatomic, assign) NSInteger index;
 @property(nonatomic, copy) NSArray<GLTFNode *> *nodes;
 
 @end
@@ -456,7 +456,7 @@ GLTFKIT2_EXPORT
 //MARK: - GLTFSkin
 GLTFKIT2_EXPORT
 @interface GLTFSkin : GLTFObject
-
+@property(nonatomic, assign) NSInteger index;
 @property(nonatomic, nullable, strong) GLTFAccessor *inverseBindMatrices;
 @property(nonatomic, nullable, strong) GLTFNode *skeleton;
 @property(nonatomic, copy) NSArray<GLTFNode *> *joints;

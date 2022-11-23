@@ -30,7 +30,8 @@ public class GLTFLoader {
 
     static func parse(_ engine: Engine, _ url: URL, _ callback: @escaping (GLTFResource) -> Void, _ keepMeshData: Bool = false) {
         let context = ParserContext()
-        context.engine = engine
+        context.glTFResource = GLTFResource()
+        context.glTFResource.engine = engine
         context.keepMeshData = keepMeshData
         GLTFLoader.defaultPipeline._parse(url, context, callback)
     }
@@ -38,7 +39,8 @@ public class GLTFLoader {
     static func parseTexture(_ engine: Engine, _ url: URL, _ callback: @escaping (GLTFResource) -> Void,
                              _ keepMeshData: Bool = false, _ textureIndex: Int? = nil) {
         let context = ParserContext()
-        context.engine = engine
+        context.glTFResource = GLTFResource()
+        context.glTFResource.engine = engine
         context.keepMeshData = keepMeshData
         context.textureIndex = textureIndex
         GLTFLoader.texturePipeline._parse(url, context, callback)
@@ -47,7 +49,8 @@ public class GLTFLoader {
     static func parseMaterial(_ engine: Engine, _ url: URL, _ callback: @escaping (GLTFResource) -> Void,
                               _ keepMeshData: Bool = false, _ materialIndex: Int? = nil) {
         let context = ParserContext()
-        context.engine = engine
+        context.glTFResource = GLTFResource()
+        context.glTFResource.engine = engine
         context.keepMeshData = keepMeshData
         context.materialIndex = materialIndex
         GLTFLoader.materialPipeline._parse(url, context, callback)
@@ -56,7 +59,8 @@ public class GLTFLoader {
     static func parseAnimation(_ engine: Engine, _ url: URL, _ callback: @escaping (GLTFResource) -> Void,
                                _ keepMeshData: Bool = false, _ animationIndex: Int? = nil) {
         let context = ParserContext()
-        context.engine = engine
+        context.glTFResource = GLTFResource()
+        context.glTFResource.engine = engine
         context.keepMeshData = keepMeshData
         context.animationIndex = animationIndex
         GLTFLoader.animationPipeline._parse(url, context, callback)
@@ -65,7 +69,8 @@ public class GLTFLoader {
     static func parseMesh(_ engine: Engine, _ url: URL, _ callback: @escaping (GLTFResource) -> Void,
                           _ keepMeshData: Bool = false, _ meshIndex: Int? = nil, _ subMeshIndex:Int? = nil) {
         let context = ParserContext()
-        context.engine = engine
+        context.glTFResource = GLTFResource()
+        context.glTFResource.engine = engine
         context.keepMeshData = keepMeshData
         context.meshIndex = meshIndex
         context.subMeshIndex = subMeshIndex
@@ -76,7 +81,6 @@ public class GLTFLoader {
         GLTFAsset.load(with: url, options: [:]) { (progress, status, maybeAsset, maybeError, _) in
             DispatchQueue.main.async { [self] in
                 if status == .complete {
-                    context.glTFResource = GLTFResource()
                     context.glTFResource.url = url
                     context.glTFResource.gltf = maybeAsset!
                     for pipe in _pipes {

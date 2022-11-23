@@ -485,6 +485,7 @@ static dispatch_queue_t _loaderQueue;
     for (int i = 0; i < gltf->materials_count; ++i) {
         cgltf_material *m = gltf->materials + i;
         GLTFMaterial *material = [GLTFMaterial new];
+        material.index = i;
         if (m->normal_texture.texture) {
             material.normalTexture = [self textureParamsFromTextureView:&m->normal_texture];
         }
@@ -560,6 +561,7 @@ static dispatch_queue_t _loaderQueue;
     for (int i = 0; i < gltf->meshes_count; ++i) {
         cgltf_mesh *m = gltf->meshes + i;
         GLTFMesh *mesh = [GLTFMesh new];
+        mesh.index = i;
         NSMutableArray *primitives = [NSMutableArray array];
         for (int j = 0; j < m->primitives_count; ++j) {
             cgltf_primitive *p = m->primitives + j;
@@ -664,6 +666,7 @@ static dispatch_queue_t _loaderQueue;
         } else {
             camera = [GLTFCamera new]; // Got an invalid camera, so just make a dummy to occupy the slot
         }
+        camera.index = i;
         camera.name = c->name ? [NSString stringWithUTF8String:c->name]
                 : [self.nameGenerator nextUniqueNameWithPrefix:@"Camera"];
         camera.extensions = GLTFConvertExtensions(c->extensions, c->extensions_count, nil);
@@ -768,6 +771,7 @@ static dispatch_queue_t _loaderQueue;
             [joints addObject:joint];
         }
         GLTFSkin *skin = [[GLTFSkin alloc] initWithJoints:joints];
+        skin.index = i;
         if (s->inverse_bind_matrices) {
             size_t ibmIndex = s->inverse_bind_matrices - gltf->accessors;
             GLTFAccessor *ibms = self.asset.accessors[ibmIndex];
@@ -843,6 +847,7 @@ static dispatch_queue_t _loaderQueue;
     for (int i = 0; i < gltf->scenes_count; ++i) {
         cgltf_scene *s = gltf->scenes + i;
         GLTFScene *scene = [GLTFScene new];
+        scene.index = i;
         NSMutableArray *rootNodes = [NSMutableArray arrayWithCapacity:s->nodes_count];
         for (int j = 0; j < s->nodes_count; ++j) {
             size_t nodeIndex = s->nodes[j] - gltf->nodes;

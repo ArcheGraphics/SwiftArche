@@ -8,9 +8,12 @@ import Foundation
 
 /// Stores keyframe based animations.
 public class AnimationClip {
-    internal var _curveBindings: [AnimationClipCurveBindingBase] = []
+    var _curveBindings: [AnimationClipCurveBindingBase] = []
     private var _length: Float = 0
     private var _events: [AnimationEvent] = []
+
+    /// The AnimationClip's name
+    public let name: String
 
     /// Animation events for this animation clip.
     public var events: [AnimationEvent] {
@@ -31,6 +34,10 @@ public class AnimationClip {
         get {
             _length
         }
+    }
+
+    init(_ name: String) {
+        self.name = name
     }
 
     /// Adds an animation event to the clip.

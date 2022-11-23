@@ -18,7 +18,7 @@ class MaterialParser: Parser {
             let mtl: BaseMaterial
 
             if gltfMaterial.isUnlit {
-                let material = UnlitMaterial(context.engine, gltfMaterial.name ?? "")
+                let material = UnlitMaterial(glTFResource.engine, gltfMaterial.name ?? "")
                 mtl = material
             } else {
                 let pbrMtl: PBRBaseMaterial
@@ -27,7 +27,7 @@ class MaterialParser: Parser {
                     mtl = material
                     pbrMtl = material
                 } else {
-                    let material = PBRMaterial(context.engine)
+                    let material = PBRMaterial(glTFResource.engine)
                     mtl = material
                     pbrMtl = material
                 }
