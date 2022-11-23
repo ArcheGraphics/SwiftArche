@@ -419,7 +419,7 @@ GLTFKIT2_EXPORT
 //MARK: - GLTFNode
 GLTFKIT2_EXPORT
 @interface GLTFNode : GLTFObject
-
+@property(nonatomic, assign) NSInteger index;
 @property(nonatomic, nullable, strong) GLTFCamera *camera;
 @property(nonatomic, nullable, strong) GLTFLight *light;
 @property(nonatomic, copy) NSArray<GLTFNode *> *childNodes;

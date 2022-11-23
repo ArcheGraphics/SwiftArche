@@ -695,6 +695,7 @@ static dispatch_queue_t _loaderQueue;
     for (int i = 0; i < gltf->nodes_count; ++i) {
         cgltf_node *n = gltf->nodes + i;
         GLTFNode *node = [GLTFNode new];
+        node.index = i;
         if (n->camera) {
             size_t cameraIndex = n->camera - gltf->cameras;
             node.camera = self.asset.cameras[cameraIndex];
