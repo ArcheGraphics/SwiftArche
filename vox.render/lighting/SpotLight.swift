@@ -25,7 +25,7 @@ public class SpotLight: Light {
     /// Get light direction.
     public var direction: Vector3 {
         get {
-            entity.transform.getWorldForward()
+            entity.transform.worldForward
         }
     }
 

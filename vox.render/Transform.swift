@@ -29,9 +29,36 @@ public class Transform: Component {
 //MARK:- Get/Set Property
 
 extension Transform {
+    /// Get the forward direction in world space.
+    public var worldForward: Vector3 {
+        get {
+            let e = worldMatrix.elements
+            var forward = Vector3(-e.columns.2[0], -e.columns.2[1], -e.columns.2[2])
+            return forward.normalize()
+        }
+    }
+
+    /// Get the right direction in world space.
+    public var worldRight: Vector3 {
+        get {
+            let e = worldMatrix.elements
+            var right = Vector3(e.columns.0[0], e.columns.0[1], e.columns.0[2])
+            return right.normalize()
+        }
+    }
+
+    /// Get the up direction in world space.
+    public var worldUp: Vector3 {
+        get {
+            let e = worldMatrix.elements
+            var up = Vector3(e.columns.1[0], e.columns.1[1], e.columns.1[2])
+            return up.normalize()
+        }
+    }
+
     /// Local position.
     /// - Remark: Need to re-assign after modification to ensure that the modification takes effect.
-    var position: Vector3 {
+    public var position: Vector3 {
         get {
             _position
         }
@@ -44,7 +71,7 @@ extension Transform {
 
     /// World position.
     /// - Remark:  Need to re-assign after modification to ensure that the modification takes effect.
-    var worldPosition: Vector3 {
+    public var worldPosition: Vector3 {
         get {
             if (_isContainDirtyFlag(TransformModifyFlags.WorldPosition.rawValue)) {
                 if (_getParentTransform() != nil) {
@@ -74,7 +101,7 @@ extension Transform {
     /// Local rotation, defining the rotation value in degrees.
     /// Rotations are performed around the Y axis, the X axis, and the Z axis, in that order.
     /// - Remark: Need to re-assign after modification to ensure that the modification takes effect
-    var rotation: Vector3 {
+    public var rotation: Vector3 {
         get {
             if (_isContainDirtyFlag(TransformModifyFlags.LocalEuler.rawValue)) {
                 _rotation = _rotationQuaternion.toEuler()
@@ -94,7 +121,7 @@ extension Transform {
     /// World rotation, defining the rotation value in degrees.
     /// Rotations are performed around the Y axis, the X axis, and the Z axis, in that order.
     /// - Remark: Need to re-assign after modification to ensure that the modification takes effect.
-    var worldRotation: Vector3 {
+    public var worldRotation: Vector3 {
         get {
             if (_isContainDirtyFlag(TransformModifyFlags.WorldEuler.rawValue)) {
                 _worldRotation = worldRotationQuaternion.toEuler()
@@ -117,7 +144,7 @@ extension Transform {
 
     /// Local rotation, defining the rotation by using a unit quaternion.
     /// - Remark: Need to re-assign after modification to ensure that the modification takes effect.
-    var rotationQuaternion: Quaternion {
+    public var rotationQuaternion: Quaternion {
         get {
             if (_isContainDirtyFlag(TransformModifyFlags.LocalQuat.rawValue)) {
                 _rotationQuaternion = Quaternion.rotationEuler(
@@ -139,7 +166,7 @@ extension Transform {
 
     /// World rotation, defining the rotation by using a unit quaternion.
     /// - Remark: Need to re-assign after modification to ensure that the modification takes effect.
-    var worldRotationQuaternion: Quaternion {
+    public var worldRotationQuaternion: Quaternion {
         get {
             if (_isContainDirtyFlag(TransformModifyFlags.WorldQuat.rawValue)) {
                 let parent = _getParentTransform()
@@ -169,7 +196,7 @@ extension Transform {
 
     /// Local scaling.
     /// - Remark: Need to re-assign after modification to ensure that the modification takes effect.
-    var scale: Vector3 {
+    public var scale: Vector3 {
         get {
             _scale
         }
@@ -183,7 +210,7 @@ extension Transform {
     /// Local lossy scaling.
     /// - Remark: The value obtained may not be correct under certain conditions(for example, the parent node has scaling,
     /// and the child node has a rotation), the scaling will be tilted. Vector3 cannot be used to correctly represent the scaling. Must use Matrix3x3.
-    var lossyWorldScale: Vector3 {
+    public var lossyWorldScale: Vector3 {
         get {
             if (_isContainDirtyFlag(TransformModifyFlags.WorldScale.rawValue)) {
                 if (_getParentTransform() != nil) {
@@ -201,7 +228,7 @@ extension Transform {
 
     /// Local matrix.
     /// - Remark: Need to re-assign after modification to ensure that the modification takes effect.
-    var localMatrix: Matrix {
+    public var localMatrix: Matrix {
         get {
             if (_isContainDirtyFlag(TransformModifyFlags.LocalMatrix.rawValue)) {
                 _localMatrix = Matrix.affineTransformation(scale: _scale, rotation: rotationQuaternion, translation: _position)
@@ -223,7 +250,7 @@ extension Transform {
 
     /// World matrix.
     /// - Remark: Need to re-assign after modification to ensure that the modification takes effect.
-    var worldMatrix: Matrix {
+    public var worldMatrix: Matrix {
         get {
             if (_isContainDirtyFlag(TransformModifyFlags.WorldMatrix.rawValue)) {
                 let parent = _getParentTransform()
@@ -258,7 +285,7 @@ extension Transform {
     ///   - x: X coordinate
     ///   - y: Y coordinate
     ///   - z: Z coordinate
-    func setPosition(x: Float, y: Float, z: Float) {
+    public func setPosition(x: Float, y: Float, z: Float) {
         _ = _position.set(x: x, y: y, z: z)
         position = _position
     }
@@ -269,7 +296,7 @@ extension Transform {
     ///   - x: The angle of rotation around the X axis
     ///   - y: The angle of rotation around the Y axis
     ///   - z: The angle of rotation around the Z axis
-    func setRotation(x: Float, y: Float, z: Float) {
+    public func setRotation(x: Float, y: Float, z: Float) {
         _ = _rotation.set(x: x, y: y, z: z)
         rotation = _rotation
     }
@@ -280,7 +307,7 @@ extension Transform {
     ///   - y: Y component of quaternion
     ///   - z: Z component of quaternion
     ///   - w: W component of quaternion
-    func setRotationQuaternion(x: Float, y: Float, z: Float, w: Float) {
+    public func setRotationQuaternion(x: Float, y: Float, z: Float, w: Float) {
         _ = _rotationQuaternion.set(x: x, y: y, z: z, w: w)
         rotationQuaternion = _rotationQuaternion
     }
@@ -290,7 +317,7 @@ extension Transform {
     ///   - x: Scaling along X axis
     ///   - y:  Scaling along Y axis
     ///   - z: Scaling along Z axis
-    func setScale(x: Float, y: Float, z: Float) {
+    public func setScale(x: Float, y: Float, z: Float) {
         _ = _scale.set(x: x, y: y, z: z)
         scale = _scale
     }
@@ -300,7 +327,7 @@ extension Transform {
     ///   - x: X coordinate
     ///   - y: Y coordinate
     ///   - z: Z coordinate
-    func setWorldPosition(x: Float, y: Float, z: Float) {
+    public func setWorldPosition(x: Float, y: Float, z: Float) {
         _ = _worldPosition.set(x: x, y: y, z: z)
         worldPosition = _worldPosition
     }
@@ -310,7 +337,7 @@ extension Transform {
     ///   - x: The angle of rotation around the X axis
     ///   - y: The angle of rotation around the Y axis
     ///   - z: The angle of rotation around the Z axis
-    func setWorldRotation(x: Float, y: Float, z: Float) {
+    public func setWorldRotation(x: Float, y: Float, z: Float) {
         _ = _worldRotation.set(x: x, y: y, z: z)
         worldRotation = _worldRotation
     }
@@ -321,43 +348,16 @@ extension Transform {
     ///   - y: Y component of quaternion
     ///   - z: Z component of quaternion
     ///   - w: W component of quaternion
-    func setWorldRotationQuaternion(x: Float, y: Float, z: Float, w: Float) {
+    public func setWorldRotationQuaternion(x: Float, y: Float, z: Float, w: Float) {
         _ = _worldRotationQuaternion.set(x: x, y: y, z: z, w: w)
         worldRotationQuaternion = _worldRotationQuaternion
-    }
-
-    /// Get the forward direction in world space.
-    /// - Parameter forward: Forward vector
-    /// - Returns: Forward vector
-    func getWorldForward() -> Vector3 {
-        let e = worldMatrix.elements
-        var forward = Vector3(-e.columns.2[0], -e.columns.2[1], -e.columns.2[2])
-        return forward.normalize()
-    }
-
-    /// Get the right direction in world space.
-    /// - Parameter right: Right vector
-    /// - Returns: Right vector
-    func getWorldRight() -> Vector3 {
-        let e = worldMatrix.elements
-        var right = Vector3(e.columns.0[0], e.columns.0[1], e.columns.0[2])
-        return right.normalize()
-    }
-
-    /// Get the up direction in world space.
-    /// - Parameter up: Up vector
-    /// - Returns: Up vector
-    func getWorldUp() -> Vector3 {
-        let e = worldMatrix.elements
-        var up = Vector3(e.columns.1[0], e.columns.1[1], e.columns.1[2])
-        return up.normalize()
     }
 
     /// Translate along the passed Vector3.
     /// - Parameters:
     ///   - translation: Direction and distance of translation
     ///   - relativeToLocal: Relative to local space
-    func translate(_ translation: Vector3, _ relativeToLocal: Bool = true) {
+    public func translate(_ translation: Vector3, _ relativeToLocal: Bool = true) {
         _translate(translation, relativeToLocal)
     }
 
@@ -367,7 +367,7 @@ extension Transform {
     ///   - y: Translate direction and distance along y axis
     ///   - z: Translate direction and distance along z axis
     ///   - relativeToLocal: Relative to local space
-    func translate(_ x: Float, _ y: Float, _ z: Float, _ relativeToLocal: Bool = true) {
+    public func translate(_ x: Float, _ y: Float, _ z: Float, _ relativeToLocal: Bool = true) {
         _translate(Vector3(x, y, z), relativeToLocal)
     }
 
@@ -375,7 +375,7 @@ extension Transform {
     /// - Parameters:
     ///   - rotation: Euler angle in degrees
     ///   - relativeToLocal: Relative to local space
-    func rotate(_ rotation: Vector3, _ relativeToLocal: Bool = true) {
+    public func rotate(_ rotation: Vector3, _ relativeToLocal: Bool = true) {
         _rotateXYZ(rotation.x, rotation.y, rotation.z, relativeToLocal)
     }
 
@@ -385,7 +385,7 @@ extension Transform {
     ///   - y: Rotation along y axis, in degrees
     ///   - z: Rotation along z axis, in degrees
     ///   - relativeToLocal: Relative to local space
-    func rotate(_ x: Float, _ y: Float, _ z: Float, _ relativeToLocal: Bool = true) {
+    public func rotate(_ x: Float, _ y: Float, _ z: Float, _ relativeToLocal: Bool = true) {
         _rotateXYZ(x, y, z, relativeToLocal)
     }
 
@@ -394,7 +394,7 @@ extension Transform {
     ///   - axis: Rotate axis
     ///   - angle: Rotate angle in degrees
     ///   - relativeToLocal: Relative to local space
-    func rotateByAxis(axis: Vector3, angle: Float, relativeToLocal: Bool = true) {
+    public func rotateByAxis(axis: Vector3, angle: Float, relativeToLocal: Bool = true) {
         let _tempQuat0 = Quaternion.rotationAxisAngle(axis: axis, rad: angle * MathUtil.degreeToRadFactor)
         _rotateByQuat(_tempQuat0, relativeToLocal)
     }
@@ -403,7 +403,7 @@ extension Transform {
     /// - Parameters:
     ///   - targetPosition: Target world position
     ///   - worldUp: Up direction in world space, default is Vector3(0, 1, 0)
-    func lookAt(targetPosition: Vector3, worldUp: Vector3?) {
+    public func lookAt(targetPosition: Vector3, worldUp: Vector3? = nil) {
         var zAxis = worldPosition - targetPosition
         var axisLen = zAxis.length()
         if (axisLen <= MathUtil.zeroTolerance) {
@@ -444,7 +444,7 @@ extension Transform {
 
     /// Register world transform change flag.
     /// - Returns: Change flag
-    func registerWorldChangeFlag() -> BoolUpdateFlag {
+    public func registerWorldChangeFlag() -> BoolUpdateFlag {
         let flag = BoolUpdateFlag()
         _updateFlagManager.addFlag(flag: flag)
         return flag

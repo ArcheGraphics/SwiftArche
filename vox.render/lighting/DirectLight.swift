@@ -18,7 +18,7 @@ public class DirectLight: Light {
     /// Get direction.
     public var direction: Vector3 {
         get {
-            entity.transform.getWorldForward()
+            entity.transform.worldForward
         }
     }
 

@@ -7,6 +7,7 @@
 import UIKit
 import ARKit
 import vox_render
+import vox_math
 
 class PrimitiveApp: UIViewController {
     var canvas: Canvas!
@@ -21,7 +22,12 @@ class PrimitiveApp: UIViewController {
         engine.initArSession()
 
         let scene = engine.sceneManager.activeScene!
-        let root = scene.createRootEntity()
+        let rootEntity = scene.createRootEntity()
+
+        let cameraEntity = rootEntity.createChild()
+        cameraEntity.transform.setPosition(x: 10, y: 10, z: 10)
+        cameraEntity.transform.lookAt(targetPosition: Vector3(0, 0, 0))
+        let camera: Camera = cameraEntity.addComponent()
     }
 }
 

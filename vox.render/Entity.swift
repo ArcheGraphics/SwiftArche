@@ -32,7 +32,7 @@ public final class Entity: EngineObject {
     /// - Parameters:
     ///   - engine: The engine the entity belongs to.
     ///   - name: The name
-    init(_ engine: Engine, _ name: String = "") {
+    public init(_ engine: Engine, _ name: String = "") {
         self.name = name
         super.init(engine)
 
@@ -56,7 +56,7 @@ public final class Entity: EngineObject {
     private var _inverseWorldMatFlag: BoolUpdateFlag!
 
     /// Whether to activate locally.
-    var isActive: Bool {
+    public var isActive: Bool {
         get {
             _isActive
         }
@@ -78,14 +78,14 @@ public final class Entity: EngineObject {
     }
 
     /// Whether it is active in the hierarchy.
-    var isActiveInHierarchy: Bool {
+    public var isActiveInHierarchy: Bool {
         get {
             _isActiveInHierarchy
         }
     }
 
     /// The parent entity.
-    var parent: Entity? {
+    public var parent: Entity? {
         get {
             _parent
         }
@@ -95,27 +95,27 @@ public final class Entity: EngineObject {
     }
 
     /// The children entities
-    var children: [Entity] {
+    public var children: [Entity] {
         get {
             _children
         }
     }
 
     /// Number of the children entities
-    var childCount: Int {
+    public var childCount: Int {
         get {
             _children.count
         }
     }
 
     /// The scene the entity belongs to.
-    var scene: Scene {
+    public var scene: Scene {
         get {
             _scene
         }
     }
 
-    var siblingIndex: Int {
+    public var siblingIndex: Int {
         get {
             _siblingIndex
         }
@@ -134,7 +134,7 @@ public final class Entity: EngineObject {
 
     /// Add component based on the component type.
     /// - Returns: The component which has been added.
-    func addComponent<T: Component>() -> T {
+    public func addComponent<T: Component>() -> T {
         //todo ComponentsDependencies._addCheck(this, type)
         let component = T(self)
         _components.append(component)
@@ -146,7 +146,7 @@ public final class Entity: EngineObject {
 
     /// Get component which match the type.
     /// - Returns: The first component which match type.
-    func getComponent<T: Component>() -> T {
+    public func getComponent<T: Component>() -> T {
         for i in 0..<_components.count {
             let component = _components[i]
             if (component is T) {
@@ -159,7 +159,7 @@ public final class Entity: EngineObject {
     /// Get components which match the type.
     /// - Parameter results: The components which match type.
     /// - Returns: The components which match type.
-    func getComponents<T: Component>(_ results: inout [T]) -> [T] {
+    public func getComponents<T: Component>(_ results: inout [T]) -> [T] {
         results = []
         for i in 0..<_components.count {
             let component = _components[i]
@@ -173,7 +173,7 @@ public final class Entity: EngineObject {
     /// Get the components which match the type of the entity and it's children.
     /// - Parameter results: The components collection.
     /// - Returns:  The components collection which match the type.
-    func getComponentsIncludeChildren<T: Component>(_ results: inout [T]) -> [T] {
+    public func getComponentsIncludeChildren<T: Component>(_ results: inout [T]) -> [T] {
         results = []
         _getComponentsInChildren(&results)
         return results
@@ -181,7 +181,7 @@ public final class Entity: EngineObject {
 
     /// Add child entity.
     /// - Parameter child: The child entity which want to be added.
-    func addChild(_ child: Entity) {
+    public func addChild(_ child: Entity) {
         if (child._isRoot) {
             child._scene._removeFromEntityList(child)
             child._isRoot = false
@@ -210,7 +210,7 @@ public final class Entity: EngineObject {
         }
     }
 
-    func addChild(_ index: Int, _ child: Entity) {
+    public func addChild(_ index: Int, _ child: Entity) {
         if (child._isRoot) {
             child._scene._removeFromEntityList(child)
             child._isRoot = false
@@ -240,21 +240,21 @@ public final class Entity: EngineObject {
 
     /// Remove child entity.
     /// - Parameter child: The child entity which want to be removed.
-    func removeChild(_ child: Entity) {
+    public func removeChild(_ child: Entity) {
         child._setParent(nil)
     }
 
     /// Find child entity by index.
     /// - Parameter index: The index of the child entity.
     /// - Returns: The component which be found.
-    func getChild(_ index: Int) -> Entity {
+    public func getChild(_ index: Int) -> Entity {
         _children[index]
     }
 
     /// Find child entity by name.
     /// - Parameter name: The name of the entity which want to be found.
     /// - Returns: The component which be found.
-    func findByName(_ name: String) -> Entity? {
+    public func findByName(_ name: String) -> Entity? {
         let children = _children
         let child = Entity._findChildByName(self, name)
         if (child != nil) {
@@ -273,7 +273,7 @@ public final class Entity: EngineObject {
     /// Find the entity by path.
     /// - Parameter path: The path fo the entity eg: /entity.
     /// - Returns: The component which be found.
-    func findByPath(_ path: String) -> Entity? {
+    public func findByPath(_ path: String) -> Entity? {
         let splits = path.split(separator: "/")
         var entity: Entity? = self
         for i in 0..<splits.count {
@@ -289,7 +289,7 @@ public final class Entity: EngineObject {
     /// Create child entity.
     /// - Parameter name: The child entity's name.
     /// - Returns: The child entity.
-    func createChild(_ name: String = "") -> Entity {
+    public func createChild(_ name: String = "") -> Entity {
         let child = Entity(engine, name)
         child.layer = layer
         child.parent = self
@@ -297,7 +297,7 @@ public final class Entity: EngineObject {
     }
 
     /// Clear children entities.
-    func clearChildren() {
+    public func clearChildren() {
         for child in _children {
             child._parent = nil
             if child._isActiveInHierarchy {
@@ -310,7 +310,7 @@ public final class Entity: EngineObject {
 
     /// Clone
     /// - Returns: Cloned entity.
-    func clone() -> Entity {
+    public func clone() -> Entity {
         let cloneEntity = Entity(_engine, name)
 
         cloneEntity._isActive = _isActive

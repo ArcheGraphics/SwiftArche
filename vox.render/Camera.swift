@@ -363,7 +363,7 @@ extension Camera {
         _cameraInfo.viewProjectionMatrix = projectionMatrix * viewMatrix
         _cameraInfo.position = _transform.worldPosition
         if (_cameraInfo.isOrthographic) {
-            _cameraInfo.forward = _transform.getWorldForward()
+            _cameraInfo.forward = _transform.worldForward
         }
 
         // compute cull frustum.
