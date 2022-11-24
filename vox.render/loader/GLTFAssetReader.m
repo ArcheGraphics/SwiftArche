@@ -813,6 +813,7 @@ static dispatch_queue_t _loaderQueue;
             size_t outputIndex = s->output - gltf->accessors;
             GLTFAccessor *output = self.asset.accessors[outputIndex];
             GLTFAnimationSampler *sampler = [[GLTFAnimationSampler alloc] initWithInput:input output:output];
+            sampler.index = j;
             sampler.interpolationMode = GLTFInterpolationModeForType(s->interpolation);
             [samplers addObject:sampler];
         }

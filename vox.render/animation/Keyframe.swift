@@ -37,7 +37,7 @@ extension Color: KeyframeValueType {
 }
 
 extension Quaternion: KeyframeValueType {
-    public typealias TangentType = Vector4
+    public typealias TangentType = Quaternion
 }
 
 extension Array<Float>: KeyframeValueType {

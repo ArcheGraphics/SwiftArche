@@ -208,7 +208,7 @@ GLTFKIT2_EXPORT
 //MARK: - GLTFAnimationSampler
 GLTFKIT2_EXPORT
 @interface GLTFAnimationSampler : GLTFObject
-
+@property(nonatomic, assign) NSInteger index;
 @property(nonatomic, strong) GLTFAccessor *input;
 @property(nonatomic, strong) GLTFAccessor *output;
 @property(nonatomic, assign) GLTFInterpolationMode interpolationMode;
