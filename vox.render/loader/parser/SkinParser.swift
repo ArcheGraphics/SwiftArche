@@ -22,17 +22,8 @@ class SkinParser: Parser {
             let skin = Skin("SKIN_\(i)")
 
             if let inverseBindMatrices = gltfSkin.inverseBindMatrices {
-                if let bufferView = inverseBindMatrices.bufferView {
-                    if let data = bufferView.buffer.data {
-                        let offset = inverseBindMatrices.offset + bufferView.offset
-                        skin.inverseBindMatrices = [Matrix](repeating: Matrix(), count: jointCount)
-                        for j in 0..<jointCount {
-                            (data as NSData).getBytes(&skin.inverseBindMatrices[j],
-                                    range: NSRange(location: offset + (bufferView.stride != 0 ? bufferView.stride : MemoryLayout<Matrix>.stride) * j,
-                                            length: MemoryLayout<Matrix>.stride))
-                        }
-                    }
-                }
+                skin.inverseBindMatrices = [Matrix](repeating: Matrix(), count: jointCount)
+                GLTFUtil.convert(inverseBindMatrices, out: &skin.inverseBindMatrices)
             }
 
             for j in 0..<jointCount {
