@@ -7,7 +7,7 @@
 import Metal
 import vox_math
 
-class ModelMesh: Mesh {
+public class ModelMesh: Mesh {
     var _blendShapeManager: BlendShapeManager!
 
     private var _device: MTLDevice
@@ -40,21 +40,21 @@ class ModelMesh: Mesh {
     private var _boneIndices: [Vector4]? = nil
 
     /// Whether to access data of the mesh.
-    var accessible: Bool {
+    public var accessible: Bool {
         get {
             _accessible
         }
     }
 
     /// Vertex count of current mesh.
-    var vertexCount: Int {
+    public var vertexCount: Int {
         get {
             _vertexCount
         }
     }
 
     /// BlendShapes of this ModelMesh.
-    var blendShapes: [BlendShape] {
+    public var blendShapes: [BlendShape] {
         get {
             if (!_accessible) {
                 fatalError("Not allowed to access data while accessible is false.")
@@ -64,7 +64,7 @@ class ModelMesh: Mesh {
     }
 
     /// BlendShape count of this ModelMesh.
-    var blendShapeCount: Int {
+    public var blendShapeCount: Int {
         get {
             _blendShapeManager._blendShapeCount
         }
@@ -85,7 +85,7 @@ class ModelMesh: Mesh {
 extension ModelMesh {
     /// Set positions for the mesh.
     /// - Parameter positions: The positions for the mesh.
-    func setPositions(positions: [Vector3]) {
+    public func setPositions(positions: [Vector3]) {
         if (!_accessible) {
             fatalError("Not allowed to access data while accessible is false.")
         }
@@ -98,7 +98,7 @@ extension ModelMesh {
 
     /// Get positions for the mesh.
     /// - Remark: Please call the setPositions() method after modification to ensure that the modification takes effect.
-    func getPositions() -> [Vector3]? {
+    public func getPositions() -> [Vector3]? {
         if (!_accessible) {
             fatalError("Not allowed to access data while accessible is false.")
         }
@@ -108,7 +108,7 @@ extension ModelMesh {
 
     /// Set per-vertex normals for the mesh.
     /// - Parameter normals: The normals for the mesh.
-    func setNormals(normals: [Vector3]?) {
+    public func setNormals(normals: [Vector3]?) {
         if (!_accessible) {
             fatalError("Not allowed to access data while accessible is false.")
         }
@@ -124,7 +124,7 @@ extension ModelMesh {
 
     /// Get normals for the mesh.
     /// - Remark: Please call the setNormals() method after modification to ensure that the modification takes effect.
-    func getNormals() -> [Vector3]? {
+    public func getNormals() -> [Vector3]? {
         if (!_accessible) {
             fatalError("Not allowed to access data while accessible is false.")
         }
@@ -133,7 +133,7 @@ extension ModelMesh {
 
     /// Set per-vertex colors for the mesh.
     /// - Parameter colors: The colors for the mesh.
-    func setColors(colors: [Color]?) {
+    public func setColors(colors: [Color]?) {
         if (!_accessible) {
             fatalError("Not allowed to access data while accessible is false.")
         }
@@ -149,7 +149,7 @@ extension ModelMesh {
 
     /// Get colors for the mesh.
     /// - Remark: Please call the setColors() method after modification to ensure that the modification takes effect.
-    func getColors() -> [Color]? {
+    public func getColors() -> [Color]? {
         if (!_accessible) {
             fatalError("Not allowed to access data while accessible is false.")
         }
@@ -158,7 +158,7 @@ extension ModelMesh {
 
     /// Set per-vertex weights for the mesh.
     /// - Parameter boneWeights: The weights for the mesh.
-    func setBoneWeights(boneWeights: [Vector4]?) {
+    public func setBoneWeights(boneWeights: [Vector4]?) {
         if (!_accessible) {
             fatalError("Not allowed to access data while accessible is false.")
         }
@@ -174,7 +174,7 @@ extension ModelMesh {
 
     /// Get weights for the mesh.
     /// - Remark: Please call the setBoneWeights() method after modification to ensure that the modification takes effect.
-    func getBoneWeights() -> [Vector4]? {
+    public func getBoneWeights() -> [Vector4]? {
         if (!_accessible) {
             fatalError("Not allowed to access data while accessible is false.")
         }
@@ -183,7 +183,7 @@ extension ModelMesh {
 
     /// Set per-vertex joints for the mesh.
     /// - Parameter boneIndices: The joints for the mesh.
-    func setBoneIndices(_ boneIndices: [Vector4]?) {
+    public func setBoneIndices(_ boneIndices: [Vector4]?) {
         if (!_accessible) {
             fatalError("Not allowed to access data while accessible is false.")
         }
@@ -199,7 +199,7 @@ extension ModelMesh {
 
     /// Get joints for the mesh.
     /// - Remark: Please call the setBoneIndices() method after modification to ensure that the modification takes effect.
-    func getBoneIndices() -> [Vector4]? {
+    public func getBoneIndices() -> [Vector4]? {
         if (!_accessible) {
             fatalError("Not allowed to access data while accessible is false.")
         }
@@ -208,7 +208,7 @@ extension ModelMesh {
 
     /// Set per-vertex tangents for the mesh.
     /// - Parameter tangents: The tangents for the mesh.
-    func setTangents(tangents: [Vector4]?) {
+    public func setTangents(tangents: [Vector4]?) {
         if (!_accessible) {
             fatalError("Not allowed to access data while accessible is false.")
         }
@@ -224,7 +224,7 @@ extension ModelMesh {
 
     /// Get tangents for the mesh.
     /// - Remark: Please call the setTangents() method after modification to ensure that the modification takes effect.
-    func getTangents() -> [Vector4]? {
+    public func getTangents() -> [Vector4]? {
         if (!_accessible) {
             fatalError("Not allowed to access data while accessible is false.")
         }
@@ -235,7 +235,7 @@ extension ModelMesh {
     /// - Parameters:
     ///   - uv: The uv for the mesh.
     ///   - channelIndex: The index of uv channels, in [0 ~ 7] range.
-    func setUVs(uv: [Vector2]?, channelIndex: Int? = nil) {
+    public func setUVs(uv: [Vector2]?, channelIndex: Int? = nil) {
         if (!_accessible) {
             fatalError("Not allowed to access data while accessible is false.")
         }
@@ -294,7 +294,7 @@ extension ModelMesh {
     /// Get uv for the mesh by channelIndex.
     /// - Parameter channelIndex: The index of uv channels, in [0 ~ 7] range.
     /// - Remark: Please call the setUV() method after modification to ensure that the modification takes effect.
-    func getUVs(channelIndex: Int? = nil) -> [Vector2]? {
+    public func getUVs(channelIndex: Int? = nil) -> [Vector2]? {
         if (!_accessible) {
             fatalError("Not allowed to access data while accessible is false.")
         }
@@ -323,7 +323,7 @@ extension ModelMesh {
 
     /// Set indices for the mesh.
     /// - Parameter indices: The indices for the mesh.
-    func setIndices(indices: [UInt16]?) {
+    public func setIndices(indices: [UInt16]?) {
         if (!_accessible) {
             fatalError("Not allowed to access data while accessible is false.")
         }
@@ -334,7 +334,7 @@ extension ModelMesh {
 
     /// Set indices for the mesh.
     /// - Parameter indices: The indices for the mesh.
-    func setIndices(indices: [UInt32]?) {
+    public func setIndices(indices: [UInt32]?) {
         if (!_accessible) {
             fatalError("Not allowed to access data while accessible is false.")
         }
@@ -344,7 +344,7 @@ extension ModelMesh {
     }
 
     /// Get indices for the mesh.
-    func getIndices() -> [UInt16]? {
+    public func getIndices() -> [UInt16]? {
         if (!_accessible) {
             fatalError("Not allowed to access data while accessible is false.")
         }
@@ -352,7 +352,7 @@ extension ModelMesh {
     }
 
     /// Get indices for the mesh.
-    func getIndices() -> [UInt32]? {
+    public func getIndices() -> [UInt32]? {
         if (!_accessible) {
             fatalError("Not allowed to access data while accessible is false.")
         }
@@ -361,7 +361,7 @@ extension ModelMesh {
 
     /// Add a BlendShape for this ModelMesh.
     /// - Parameter blendShape: The BlendShape
-    func addBlendShape(_ blendShape: BlendShape) {
+    public func addBlendShape(_ blendShape: BlendShape) {
         if (!_accessible) {
             fatalError("Not allowed to access data while accessible is false.")
         }
@@ -370,7 +370,7 @@ extension ModelMesh {
     }
 
     /// Clear all BlendShapes.
-    func clearBlendShapes() {
+    public func clearBlendShapes() {
         if (!_accessible) {
             fatalError("Not allowed to access data while accessible is false.")
         }
@@ -380,7 +380,7 @@ extension ModelMesh {
     /// Get name of BlendShape by given index.
     /// - Parameter index: The index of BlendShape
     /// - Returns: The name of BlendShape
-    func getBlendShapeName(at index: Int) -> String {
+    public func getBlendShapeName(at index: Int) -> String {
         if (_accessible) {
             let blendShapes = _blendShapeManager._blendShapes
             return blendShapes[index].name
@@ -391,7 +391,7 @@ extension ModelMesh {
 
     /// Upload Mesh Data to the graphics API.
     /// - Parameter noLongerAccessible: Whether to access data later. If true, you'll never access data anymore (free memory cache)
-    func uploadData(_ noLongerAccessible: Bool) {
+    public func uploadData(_ noLongerAccessible: Bool) {
         if (!_accessible) {
             fatalError("Not allowed to access data while accessible is false.")
         }

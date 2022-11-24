@@ -7,14 +7,14 @@
 import Foundation
 
 /// The base class of the components.
-public class Component: EngineObject {
+open class Component: EngineObject {
     var _entity: Entity
     var _awoken: Bool = false
 
     private var _phasedActive: Bool = false
     private var _enabled: Bool = true
 
-    required init(_ entity: Entity) {
+    public required init(_ entity: Entity) {
         _entity = entity
         super.init(entity.engine)
     }

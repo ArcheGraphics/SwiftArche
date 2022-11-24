@@ -6,7 +6,7 @@
 
 import Foundation
 
-public class EngineObject {
+open class EngineObject {
     private static var _instanceIdCounter: Int = 0
     /// Engine to which the object belongs.
     internal var _engine: Engine

@@ -7,7 +7,7 @@
 import ARKit
 
 /// Script class, used for logic writing.
-public class Script: Component {
+open class Script: Component {
     var _started: Bool = false
     var _onStartIndex: Int = -1
     var _onUpdateIndex: Int = -1
@@ -18,116 +18,116 @@ public class Script: Component {
     var _waitHandlingInValid: Bool = false
 
     /// Called when be enabled first time, only once.
-    public func onAwake() {
+    open func onAwake() {
     }
 
     /// Called when be enabled.
-    public func onEnable() {
+    open func onEnable() {
     }
 
     /// Called before the frame-level loop start for the first time, only once.
-    public func onStart() {
+    open func onStart() {
     }
 
     /// The main loop, called frame by frame.
     /// - Parameter deltaTime: The deltaTime when the script update.
-    public func onUpdate(_ deltaTime: Float) {
+    open func onUpdate(_ deltaTime: Float) {
     }
 
     /// Called after the onUpdate finished, called frame by frame.
     /// - Parameter deltaTime: The deltaTime when the script update.
-    public func onLateUpdate(_ deltaTime: Float) {
+    open func onLateUpdate(_ deltaTime: Float) {
     }
 
     /// Called after the onLateUpdate finished, called frame by frame.
     /// - Parameter deltaTime: The deltaTime when the script update.
     /// - Parameter frame: The ARFrame when the script update.
-    public func onARUpdate(_ deltaTime: Float, _ frame: ARFrame) {
+    open func onARUpdate(_ deltaTime: Float, _ frame: ARFrame) {
     }
 
     /// Called before camera rendering, called per camera.
     /// - Parameter camera: Current camera.
-    func onBeginRender(_ camera: Camera) {
+    open func onBeginRender(_ camera: Camera) {
     }
 
     /// Called after camera rendering, called per camera.
     /// - Parameter camera: Current camera.
-    func onEndRender(_ camera: Camera) {
+    open func onEndRender(_ camera: Camera) {
     }
 
     /// Called before physics calculations, the number of times is related to the physical update frequency.
-    func onPhysicsUpdate() {
+    open func onPhysicsUpdate() {
     }
 
     /// Called when the collision enter.
     /// - Parameter other: ColliderShape
-    func onTriggerEnter(_ other: ColliderShape) {
+    open func onTriggerEnter(_ other: ColliderShape) {
     }
 
     /// Called when the collision stay.
     /// - Remark: onTriggerStay is called every frame while the collision stay.
     /// - Parameter other:ColliderShape
-    func onTriggerExit(_ other: ColliderShape) {
+    open func onTriggerExit(_ other: ColliderShape) {
     }
 
     /// Called when the collision exit.
     /// - Parameter other: ColliderShape
-    func onTriggerStay(_ other: ColliderShape) {
+    open func onTriggerStay(_ other: ColliderShape) {
     }
 
     /// Called when the collision enter.
     /// - Parameter other: ColliderShape
-    func onCollisionEnter(_ other: ColliderShape) {
+    open func onCollisionEnter(_ other: ColliderShape) {
     }
 
     /// Called when the collision stay.
     /// - Remark: onTriggerStay is called every frame while the collision stay.
     /// - Parameter other: ColliderShape
-    func onCollisionExit(_ other: ColliderShape) {
+    open func onCollisionExit(_ other: ColliderShape) {
     }
 
     /// Called when the collision exit.
     /// - Parameter other: ColliderShape
-    func onCollisionStay(_ other: ColliderShape) {
+    open func onCollisionStay(_ other: ColliderShape) {
     }
 
     /// Called when the pointer is down while over the ColliderShape.
     /// - Parameter pointer: The pointer that triggered
-    func onPointerDown(_ pointer: Pointer) {
+    open func onPointerDown(_ pointer: Pointer) {
     }
 
     /// Called when the pointer is up while over the ColliderShape.
     /// - Parameter pointer: The pointer that triggered
-    func onPointerUp(_ pointer: Pointer) {
+    open func onPointerUp(_ pointer: Pointer) {
     }
 
     /// Called when the pointer is down and up with the same collider.
     /// - Parameter pointer: The pointer that triggered
-    func onPointerClick(_ pointer: Pointer) {
+    open func onPointerClick(_ pointer: Pointer) {
     }
 
     /// Called when the pointer is enters the ColliderShape.
     /// - Parameter pointer: The pointer that triggered
-    func onPointerEnter(_ pointer: Pointer) {
+    open func onPointerEnter(_ pointer: Pointer) {
     }
 
     /// Called when the pointer is no longer over the ColliderShape.
     /// - Parameter pointer: The pointer that triggered
-    func onPointerExit(_ pointer: Pointer) {
+    open func onPointerExit(_ pointer: Pointer) {
     }
 
     /// - Remark: onPointerDrag is called every frame while the pointer is down.
     /// Called when the pointer is down while over the ColliderShape and is still holding down.
     /// - Parameter pointer: The pointer that triggered
-    func onPointerDrag(_ pointer: Pointer) {
+    open func onPointerDrag(_ pointer: Pointer) {
     }
 
     /// Called when be disabled.
-    public func onDisable() {
+    open func onDisable() {
     }
 
     /// Called at the end of the destroyed frame.
-    public func onDestroy() {
+    open func onDestroy() {
     }
 
     override func _onAwake() {
