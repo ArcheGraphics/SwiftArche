@@ -30,6 +30,17 @@ public class ARManager: NSObject {
         capturedImageTextureCache = textureCache
         _session.delegate = self
     }
+    
+    public func run() {
+        // Create a session configuration
+        let configuration = ARWorldTrackingConfiguration()
+        // Run the view's session
+        session.run(configuration)
+    }
+    
+    public func pause() {
+        session.pause()
+    }
 
     func addOnUpdateScript(_ script: Script) {
         script._onUpdateIndex = _onUpdateScripts.length

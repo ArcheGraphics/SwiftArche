@@ -26,7 +26,7 @@ vertex ImageColorInOut capturedImageVertexTransform(ImageVertex in [[stage_in]])
     ImageColorInOut out;
     
     // Pass through the image vertex's position
-    out.position = float4(in.position, 0.0, 1.0);
+    out.position = float4(in.position, 1.0, 1.0);
     
     // Pass through the texture coordinate
     out.texCoord = in.texCoord;

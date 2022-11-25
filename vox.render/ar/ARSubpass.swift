@@ -67,7 +67,7 @@ public class ARSubpass: Subpass {
         }
 
         let capturedImageDepthStateDescriptor = MTLDepthStencilDescriptor()
-        capturedImageDepthStateDescriptor.depthCompareFunction = .always
+        capturedImageDepthStateDescriptor.depthCompareFunction = .lessEqual
         capturedImageDepthStateDescriptor.isDepthWriteEnabled = false
         capturedImageDepthState = engine.device.makeDepthStencilState(descriptor: capturedImageDepthStateDescriptor)
 
@@ -103,8 +103,8 @@ public class ARSubpass: Subpass {
         encoder.setVertexBuffer(imagePlaneVertexBuffer, offset: 0, index: 0)
 
         // Set any textures read/sampled from our render pipeline
-        encoder.setFragmentTexture(CVMetalTextureGetTexture(textureY), index: 1)
-        encoder.setFragmentTexture(CVMetalTextureGetTexture(textureCbCr), index: 2)
+        encoder.setFragmentTexture(CVMetalTextureGetTexture(textureY), index: 0)
+        encoder.setFragmentTexture(CVMetalTextureGetTexture(textureCbCr), index: 1)
 
         // Draw each submesh of our mesh
         encoder.drawPrimitives(type: .triangleStrip, vertexStart: 0, vertexCount: 4)
