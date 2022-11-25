@@ -1840,7 +1840,6 @@
 /* Begin PBXShellScriptBuildPhase section */
 		3E67EE1A291B339200ED60C8 /* Copy Metal Libraries */ = {
 			isa = PBXShellScriptBuildPhase;
-			alwaysOutOfDate = 1;
 			buildActionMask = 2147483647;
 			files = (
 			);

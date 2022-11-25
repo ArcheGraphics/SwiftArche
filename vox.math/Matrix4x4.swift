@@ -331,12 +331,12 @@ extension Matrix {
 
                 m31: 0,
                 m32: 0,
-                m33: (far + near) * nf,
+                m33: far * nf,
                 m34: -1,
 
                 m41: 0,
                 m42: 0,
-                m43: 2 * far * near * nf,
+                m43: far * near * nf,
                 m44: 0)
     }
 

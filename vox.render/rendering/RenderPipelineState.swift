@@ -41,18 +41,17 @@ class RenderPipelineState {
             return
         }
 
+        // isUsed have bug when no-debug
         var count = _reflection.vertexBindings.count
         if count != 0 {
             for i in 0..<count {
                 let aug = _reflection.vertexBindings[i]
-                if aug.isUsed {
-                    var shaderUniform = ReflectionUniform()
-                    shaderUniform.name = aug.name
-                    shaderUniform.location = aug.index
-                    shaderUniform.functionType = .vertex
-                    shaderUniform.bindingType = aug.type
-                    uniformBlock.append(shaderUniform)
-                }
+                var shaderUniform = ReflectionUniform()
+                shaderUniform.name = aug.name
+                shaderUniform.location = aug.index
+                shaderUniform.functionType = .vertex
+                shaderUniform.bindingType = aug.type
+                uniformBlock.append(shaderUniform)
             }
         }
 
@@ -60,14 +59,12 @@ class RenderPipelineState {
         if count != 0 {
             for i in 0..<count {
                 let aug = _reflection.fragmentBindings[i]
-                if aug.isUsed {
-                    var shaderUniform = ReflectionUniform()
-                    shaderUniform.name = aug.name
-                    shaderUniform.location = aug.index
-                    shaderUniform.functionType = .fragment
-                    shaderUniform.bindingType = aug.type
-                    uniformBlock.append(shaderUniform)
-                }
+                var shaderUniform = ReflectionUniform()
+                shaderUniform.name = aug.name
+                shaderUniform.location = aug.index
+                shaderUniform.functionType = .fragment
+                shaderUniform.bindingType = aug.type
+                uniformBlock.append(shaderUniform)
             }
         }
     }
