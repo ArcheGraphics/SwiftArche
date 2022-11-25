@@ -121,6 +121,7 @@
     } else {
         assert(false);
     }
+    return 0;
 }
 
 - (bool)removeObstacle:(uint32_t)handle {
@@ -135,6 +136,7 @@
     } else {
         assert(false);
     }
+    return false;
 }
 
 - (uint32_t)getNbObstacles {
@@ -154,6 +156,7 @@
     } else {
         assert(false);
     }
+    return nullptr;
 }
 
 - (CPxObstacle *)getObstacleByHandle:(uint32_t)handle {
@@ -169,6 +172,7 @@
     } else {
         assert(false);
     }
+    return nullptr;
 }
 
 @end

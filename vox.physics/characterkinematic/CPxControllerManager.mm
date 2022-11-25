@@ -43,6 +43,7 @@ using namespace physx;
     } else {
         assert(false);
     }
+    return nullptr;
 }
 
 - (void)purgeControllers {

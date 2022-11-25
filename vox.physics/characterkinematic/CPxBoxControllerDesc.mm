@@ -190,6 +190,7 @@
             } else {
                 assert(false);
             }
+            return PxControllerBehaviorFlags(0);
         }
     };
 
