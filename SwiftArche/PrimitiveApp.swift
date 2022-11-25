@@ -36,7 +36,7 @@ class PrimitiveApp: UIViewController {
         let cameraEntity = rootEntity.createChild()
         cameraEntity.transform.setPosition(x: 10, y: 10, z: 10)
         cameraEntity.transform.lookAt(targetPosition: Vector3(0, 0, 0))
-        let camera: Camera = cameraEntity.addComponent()
+        let _: Camera = cameraEntity.addComponent()
 
         let light = rootEntity.createChild("light")
         light.transform.setPosition(x: 0, y: 3, z: 0)
@@ -47,9 +47,11 @@ class PrimitiveApp: UIViewController {
         let _: MoveScript = cubeEntity.addComponent()
         let renderer: MeshRenderer = cubeEntity.addComponent()
         renderer.mesh = PrimitiveMesh.createCuboid(engine, 1)
-        let material = PBRMaterial(engine)
+        let material = UnlitMaterial(engine)
         material.baseColor = Color(0.4, 0.6, 0.6)
         renderer.setMaterial(material)
+
+        engine.run()
     }
 }
 

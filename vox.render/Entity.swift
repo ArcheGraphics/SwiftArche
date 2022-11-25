@@ -371,7 +371,7 @@ extension Entity {
     }
 
     internal func _processActive() {
-        if (_activeChangedComponents.isEmpty) {
+        if (!_activeChangedComponents.isEmpty) {
             fatalError("Note: can't set the 'main inActive entity' active in hierarchy, if the operation is in main inActive entity or it's children script's onDisable Event.")
         }
         _activeChangedComponents = _engine._componentsManager.getActiveChangedTempList()
@@ -380,7 +380,7 @@ extension Entity {
     }
 
     internal func _processInActive() {
-        if (_activeChangedComponents.isEmpty) {
+        if (!_activeChangedComponents.isEmpty) {
             fatalError("Note: can't set the 'main active entity' inActive in hierarchy, if the operation is in main active entity or it's children script's onEnable Event.")
         }
         _activeChangedComponents = _engine._componentsManager.getActiveChangedTempList()

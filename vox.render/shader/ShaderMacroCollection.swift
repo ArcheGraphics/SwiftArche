@@ -32,6 +32,7 @@ internal class ShaderMacroCollection {
 
         // Blend Shape
         HAS_BLENDSHAPE: (0, .bool),
+        BLENDSHAPE_COUNT: (0, .int),
         HAS_BLENDSHAPE_NORMAL: (0, .bool),
         HAS_BLENDSHAPE_TANGENT: (0, .bool),
 
@@ -67,9 +68,13 @@ internal class ShaderMacroCollection {
         // Environment
         HAS_SH: (0, .bool),
         HAS_SPECULAR_ENV: (0, .bool),
+        DECODE_ENV_RGBM: (0, .bool),
 
         // Shadow
         NEED_RECEIVE_SHADOWS: (0, .bool),
+        CASCADED_COUNT: (0, .int),
+        CASCADED_SHADOW_MAP: (0, .bool),
+        SHADOW_MODE: (0, .int)
     ]
 
     static var defaultFunctionConstant = ShaderMacroCollection.createDefaultFunction()

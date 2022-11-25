@@ -112,6 +112,7 @@ public class Engine: NSObject {
 
         super.init()
         canvas.delegate = self
+        canvas.device = device
         _physicsManager = PhysicsManager(engine: self)
         _inputManager = InputManager(engine: self)
         _sceneManager = SceneManager(engine: self)

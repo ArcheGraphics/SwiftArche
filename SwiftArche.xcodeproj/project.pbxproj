@@ -115,7 +115,6 @@
 		3E67EDC9291B2F7600ED60C8 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E67EDC8291B2F7600ED60C8 /* AppDelegate.swift */; };
 		3E67EDD3291B2F7600ED60C8 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3E67EDD1291B2F7600ED60C8 /* Main.storyboard */; };
 		3E67EDD5291B2F7800ED60C8 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3E67EDD4291B2F7800ED60C8 /* Assets.xcassets */; };
-		3E67EDD8291B2F7800ED60C8 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3E67EDD6291B2F7800ED60C8 /* LaunchScreen.storyboard */; };
 		3E67EDE3291B2F7800ED60C8 /* SwiftArcheTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E67EDE2291B2F7800ED60C8 /* SwiftArcheTests.swift */; };
 		3E67EDED291B2F7800ED60C8 /* SwiftArcheUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E67EDEC291B2F7800ED60C8 /* SwiftArcheUITests.swift */; };
 		3E67EDEF291B2F7800ED60C8 /* SwiftArcheUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E67EDEE291B2F7800ED60C8 /* SwiftArcheUITestsLaunchTests.swift */; };
@@ -565,7 +564,6 @@
 		3E67EDCA291B2F7600ED60C8 /* ar_shading.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = ar_shading.metal; sourceTree = "<group>"; };
 		3E67EDD2291B2F7600ED60C8 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		3E67EDD4291B2F7800ED60C8 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		3E67EDD7291B2F7800ED60C8 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		3E67EDD9291B2F7800ED60C8 /* bridging.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = bridging.h; sourceTree = "<group>"; };
 		3E67EDDE291B2F7800ED60C8 /* SwiftArcheTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SwiftArcheTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		3E67EDE2291B2F7800ED60C8 /* SwiftArcheTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftArcheTests.swift; sourceTree = "<group>"; };
@@ -1294,7 +1292,6 @@
 			isa = PBXGroup;
 			children = (
 				3E67EDD1291B2F7600ED60C8 /* Main.storyboard */,
-				3E67EDD6291B2F7800ED60C8 /* LaunchScreen.storyboard */,
 				3E67EDD4291B2F7800ED60C8 /* Assets.xcassets */,
 				3E67EE55291B3D8600ED60C8 /* SwiftArche.entitlements */,
 				3E67EDC8291B2F7600ED60C8 /* AppDelegate.swift */,
@@ -1812,7 +1809,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				3E67EDD8291B2F7800ED60C8 /* LaunchScreen.storyboard in Resources */,
 				3E67EDD5291B2F7800ED60C8 /* Assets.xcassets in Resources */,
 				3E67EDD3291B2F7600ED60C8 /* Main.storyboard in Resources */,
 			);
@@ -2252,14 +2248,6 @@
 				3E67EDD2291B2F7600ED60C8 /* Base */,
 			);
 			name = Main.storyboard;
-			sourceTree = "<group>";
-		};
-		3E67EDD6291B2F7800ED60C8 /* LaunchScreen.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				3E67EDD7291B2F7800ED60C8 /* Base */,
-			);
-			name = LaunchScreen.storyboard;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */

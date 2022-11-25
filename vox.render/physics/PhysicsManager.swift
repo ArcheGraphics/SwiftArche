@@ -34,6 +34,7 @@ public class PhysicsManager {
 
     init(engine: Engine) {
         _engine = engine
+        PhysXPhysics.initialization()
         _nativePhysicsManager = PhysXPhysics.createPhysicsManager(
                 { (obj1: Int, obj2: Int) in },
                 { (obj1: Int, obj2: Int) in },

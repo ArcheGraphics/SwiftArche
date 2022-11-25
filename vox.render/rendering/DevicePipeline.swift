@@ -38,7 +38,7 @@ public class DevicePipeline {
 
         let canvas = camera.engine.canvas
         if let renderPassDescriptor = canvas.currentRenderPassDescriptor {
-            shadowManager.draw(commandBuffer)
+            // shadowManager.draw(commandBuffer)
 
             if background.mode == BackgroundMode.SolidColor {
                 renderPassDescriptor.colorAttachments[0].clearColor = MTLClearColor(

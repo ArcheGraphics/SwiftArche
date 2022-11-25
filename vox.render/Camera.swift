@@ -140,7 +140,8 @@ public class Camera: Component {
         get {
             if (_isViewMatrixDirty.flag) {
                 _isViewMatrixDirty.flag = false
-                _cameraInfo.viewMatrix = Matrix.rotationTranslation(quaternion: _transform.worldRotationQuaternion, translation: _transform.worldPosition)
+                _cameraInfo.viewMatrix = Matrix.rotationTranslation(quaternion: _transform.worldRotationQuaternion,
+                                                                    translation: _transform.worldPosition)
                 _ = _cameraInfo.viewMatrix.invert()
             }
             return _cameraInfo.viewMatrix

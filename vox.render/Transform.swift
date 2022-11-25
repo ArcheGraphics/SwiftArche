@@ -439,7 +439,7 @@ extension Transform {
         rotMat.elements.columns.2[0] = zAxis.x
         rotMat.elements.columns.2[1] = zAxis.y
         rotMat.elements.columns.2[2] = zAxis.z
-        _worldRotationQuaternion = rotMat.getRotation()
+        worldRotationQuaternion = rotMat.getRotation()
     }
 
     /// Register world transform change flag.

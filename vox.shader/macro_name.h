@@ -64,5 +64,5 @@ typedef enum {
     CASCADED_SHADOW_MAP = 35,
     SHADOW_MODE = 36,
 
-    TOTAL_COUNT = 41,
+    TOTAL_COUNT = 37,
 } MacroName;

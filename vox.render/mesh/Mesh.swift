@@ -69,7 +69,7 @@ public class Mesh {
     }
 
     func _setVertexBufferBinding(_ index: Int, _ binding: BufferView) {
-        _vertexBufferBindings[index] = binding
+        _vertexBufferBindings.insert(binding, at: index)
     }
 
     func _setIndexBufferBinding(_ binding: IndexBufferBinding?) {
