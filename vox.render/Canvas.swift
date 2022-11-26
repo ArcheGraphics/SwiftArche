@@ -10,20 +10,13 @@ public class Canvas: MTKView {
     var inputManager: InputManager?
     public var updateFlagManager = UpdateFlagManager()
 
-    public var isMultipleTouchEnabled:Bool {
+#if os(macOS)
+    public var isMultipleTouchEnabled : Bool {
         get {
-#if os(iOS)
-            super.isMultipleTouchEnabled
-#else
             false
-#endif
-        }
-        set {
-#if os(iOS)
-            super.isMultipleTouchEnabled = newValue            
-#endif
         }
     }
+#endif
     
     required init(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")

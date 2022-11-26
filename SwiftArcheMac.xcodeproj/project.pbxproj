@@ -416,6 +416,7 @@
 		3EB32B8E2932391E0019A4F3 /* Pointer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Pointer.swift; sourceTree = "<group>"; };
 		3EB32B8F2932391F0019A4F3 /* PointerManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PointerManager.swift; sourceTree = "<group>"; };
 		3EB32B92293239250019A4F3 /* PointerButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PointerButton.swift; sourceTree = "<group>"; };
+		3EB32B9429323D9B0019A4F3 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		3EC0370129321131002187DC /* SwiftArcheMac.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SwiftArcheMac.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		3EC0370429321131002187DC /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		3EC0370D29321132002187DC /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -848,6 +849,7 @@
 		3EC036F829321131002187DC = {
 			isa = PBXGroup;
 			children = (
+				3EB32B9429323D9B0019A4F3 /* README.md */,
 				3EC037392932125F002187DC /* vox.math */,
 				3EC0376B293213A0002187DC /* vox.physics */,
 				3EC0383329321473002187DC /* vox.shader */,
@@ -2376,6 +2378,7 @@
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = 4SL5L673UU;
 				ENABLE_HARDENED_RUNTIME = YES;
+				EXCLUDED_ARCHS = arm64;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				INFOPLIST_KEY_NSMainStoryboardFile = Main;
@@ -2416,6 +2419,7 @@
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = 4SL5L673UU;
 				ENABLE_HARDENED_RUNTIME = YES;
+				EXCLUDED_ARCHS = arm64;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				INFOPLIST_KEY_NSMainStoryboardFile = Main;

@@ -99,7 +99,7 @@ public class TextureLoader {
                 commandEncoder.setBytes(&roughness, length: MemoryLayout<Float>.stride, index: 0)
 
                 let size = Int(Float(cube.width) / pow(2.0, Float(lod)))
-                commandEncoder.dispatchThreads(MTLSizeMake(cube.width / 16, cube.height / 16, 6),
+                commandEncoder.dispatchThreads(MTLSizeMake(size / 16, size / 16, 6),
                         threadsPerThreadgroup: MTLSizeMake(16, 16, 1))
             }
         }

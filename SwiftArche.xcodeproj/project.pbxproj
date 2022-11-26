@@ -607,6 +607,7 @@
 		3E67EED02921D9C800ED60C8 /* unlit_shading.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = unlit_shading.metal; sourceTree = "<group>"; };
 		3E67EED22921DB3F00ED60C8 /* function_common.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = function_common.h; sourceTree = "<group>"; };
 		3E67EED32921DB4A00ED60C8 /* function_common.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = function_common.metal; sourceTree = "<group>"; };
+		3EB32B9529323DA30019A4F3 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		3EC036EE2931B746002187DC /* specular_map.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = specular_map.metal; sourceTree = "<group>"; };
 		3EC036F32931B801002187DC /* texture_packer.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; path = texture_packer.metal; sourceTree = "<group>"; };
 		3EC036F62931FF95002187DC /* DecodeMode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DecodeMode.swift; sourceTree = "<group>"; };
@@ -1223,6 +1224,7 @@
 		3E67EDBC291B2F7600ED60C8 = {
 			isa = PBXGroup;
 			children = (
+				3EB32B9529323DA30019A4F3 /* README.md */,
 				3E67EE5F291B799900ED60C8 /* vox.math */,
 				3E67EE82291BDE7700ED60C8 /* test.math */,
 				3E0F7BBA2925FBBF00C4A843 /* vox.physics */,
