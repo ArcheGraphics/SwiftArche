@@ -1,0 +1,596 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 56;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		3EC0370529321131002187DC /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EC0370429321131002187DC /* AppDelegate.swift */; };
+		3EC0370729321131002187DC /* GameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EC0370629321131002187DC /* GameViewController.swift */; };
+		3EC0370929321131002187DC /* Renderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EC0370829321131002187DC /* Renderer.swift */; };
+		3EC0370B29321131002187DC /* Shaders.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3EC0370A29321131002187DC /* Shaders.metal */; };
+		3EC0370E29321132002187DC /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3EC0370D29321132002187DC /* Assets.xcassets */; };
+		3EC0371129321132002187DC /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3EC0370F29321132002187DC /* Main.storyboard */; };
+		3EC0371C29321133002187DC /* SwiftArcheMacTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EC0371B29321133002187DC /* SwiftArcheMacTests.swift */; };
+		3EC0372629321133002187DC /* SwiftArcheMacUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EC0372529321133002187DC /* SwiftArcheMacUITests.swift */; };
+		3EC0372829321133002187DC /* SwiftArcheMacUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EC0372729321133002187DC /* SwiftArcheMacUITestsLaunchTests.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		3EC0371829321133002187DC /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 3EC036F929321131002187DC /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 3EC0370029321131002187DC;
+			remoteInfo = SwiftArcheMac;
+		};
+		3EC0372229321133002187DC /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 3EC036F929321131002187DC /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 3EC0370029321131002187DC;
+			remoteInfo = SwiftArcheMac;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		3EC0370129321131002187DC /* SwiftArcheMac.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SwiftArcheMac.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		3EC0370429321131002187DC /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		3EC0370629321131002187DC /* GameViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameViewController.swift; sourceTree = "<group>"; };
+		3EC0370829321131002187DC /* Renderer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Renderer.swift; sourceTree = "<group>"; };
+		3EC0370A29321131002187DC /* Shaders.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = Shaders.metal; sourceTree = "<group>"; };
+		3EC0370C29321131002187DC /* ShaderTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ShaderTypes.h; sourceTree = "<group>"; };
+		3EC0370D29321132002187DC /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		3EC0371029321132002187DC /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		3EC0371229321132002187DC /* SwiftArcheMac.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = SwiftArcheMac.entitlements; sourceTree = "<group>"; };
+		3EC0371729321133002187DC /* SwiftArcheMacTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SwiftArcheMacTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		3EC0371B29321133002187DC /* SwiftArcheMacTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftArcheMacTests.swift; sourceTree = "<group>"; };
+		3EC0372129321133002187DC /* SwiftArcheMacUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SwiftArcheMacUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		3EC0372529321133002187DC /* SwiftArcheMacUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftArcheMacUITests.swift; sourceTree = "<group>"; };
+		3EC0372729321133002187DC /* SwiftArcheMacUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftArcheMacUITestsLaunchTests.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		3EC036FE29321131002187DC /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		3EC0371429321133002187DC /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		3EC0371E29321133002187DC /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		3EC036F829321131002187DC = {
+			isa = PBXGroup;
+			children = (
+				3EC0370329321131002187DC /* SwiftArcheMac */,
+				3EC0371A29321133002187DC /* SwiftArcheMacTests */,
+				3EC0372429321133002187DC /* SwiftArcheMacUITests */,
+				3EC0370229321131002187DC /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		3EC0370229321131002187DC /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				3EC0370129321131002187DC /* SwiftArcheMac.app */,
+				3EC0371729321133002187DC /* SwiftArcheMacTests.xctest */,
+				3EC0372129321133002187DC /* SwiftArcheMacUITests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		3EC0370329321131002187DC /* SwiftArcheMac */ = {
+			isa = PBXGroup;
+			children = (
+				3EC0370429321131002187DC /* AppDelegate.swift */,
+				3EC0370629321131002187DC /* GameViewController.swift */,
+				3EC0370829321131002187DC /* Renderer.swift */,
+				3EC0370A29321131002187DC /* Shaders.metal */,
+				3EC0370C29321131002187DC /* ShaderTypes.h */,
+				3EC0370D29321132002187DC /* Assets.xcassets */,
+				3EC0370F29321132002187DC /* Main.storyboard */,
+				3EC0371229321132002187DC /* SwiftArcheMac.entitlements */,
+			);
+			path = SwiftArcheMac;
+			sourceTree = "<group>";
+		};
+		3EC0371A29321133002187DC /* SwiftArcheMacTests */ = {
+			isa = PBXGroup;
+			children = (
+				3EC0371B29321133002187DC /* SwiftArcheMacTests.swift */,
+			);
+			path = SwiftArcheMacTests;
+			sourceTree = "<group>";
+		};
+		3EC0372429321133002187DC /* SwiftArcheMacUITests */ = {
+			isa = PBXGroup;
+			children = (
+				3EC0372529321133002187DC /* SwiftArcheMacUITests.swift */,
+				3EC0372729321133002187DC /* SwiftArcheMacUITestsLaunchTests.swift */,
+			);
+			path = SwiftArcheMacUITests;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		3EC0370029321131002187DC /* SwiftArcheMac */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 3EC0372B29321133002187DC /* Build configuration list for PBXNativeTarget "SwiftArcheMac" */;
+			buildPhases = (
+				3EC036FD29321131002187DC /* Sources */,
+				3EC036FE29321131002187DC /* Frameworks */,
+				3EC036FF29321131002187DC /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = SwiftArcheMac;
+			productName = SwiftArcheMac;
+			productReference = 3EC0370129321131002187DC /* SwiftArcheMac.app */;
+			productType = "com.apple.product-type.application";
+		};
+		3EC0371629321133002187DC /* SwiftArcheMacTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 3EC0372E29321133002187DC /* Build configuration list for PBXNativeTarget "SwiftArcheMacTests" */;
+			buildPhases = (
+				3EC0371329321133002187DC /* Sources */,
+				3EC0371429321133002187DC /* Frameworks */,
+				3EC0371529321133002187DC /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				3EC0371929321133002187DC /* PBXTargetDependency */,
+			);
+			name = SwiftArcheMacTests;
+			productName = SwiftArcheMacTests;
+			productReference = 3EC0371729321133002187DC /* SwiftArcheMacTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		3EC0372029321133002187DC /* SwiftArcheMacUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 3EC0373129321133002187DC /* Build configuration list for PBXNativeTarget "SwiftArcheMacUITests" */;
+			buildPhases = (
+				3EC0371D29321133002187DC /* Sources */,
+				3EC0371E29321133002187DC /* Frameworks */,
+				3EC0371F29321133002187DC /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				3EC0372329321133002187DC /* PBXTargetDependency */,
+			);
+			name = SwiftArcheMacUITests;
+			productName = SwiftArcheMacUITests;
+			productReference = 3EC0372129321133002187DC /* SwiftArcheMacUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		3EC036F929321131002187DC /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1410;
+				LastUpgradeCheck = 1410;
+				TargetAttributes = {
+					3EC0370029321131002187DC = {
+						CreatedOnToolsVersion = 14.1;
+					};
+					3EC0371629321133002187DC = {
+						CreatedOnToolsVersion = 14.1;
+						TestTargetID = 3EC0370029321131002187DC;
+					};
+					3EC0372029321133002187DC = {
+						CreatedOnToolsVersion = 14.1;
+						TestTargetID = 3EC0370029321131002187DC;
+					};
+				};
+			};
+			buildConfigurationList = 3EC036FC29321131002187DC /* Build configuration list for PBXProject "SwiftArcheMac" */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 3EC036F829321131002187DC;
+			productRefGroup = 3EC0370229321131002187DC /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				3EC0370029321131002187DC /* SwiftArcheMac */,
+				3EC0371629321133002187DC /* SwiftArcheMacTests */,
+				3EC0372029321133002187DC /* SwiftArcheMacUITests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		3EC036FF29321131002187DC /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				3EC0370E29321132002187DC /* Assets.xcassets in Resources */,
+				3EC0371129321132002187DC /* Main.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		3EC0371529321133002187DC /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		3EC0371F29321133002187DC /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		3EC036FD29321131002187DC /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				3EC0370B29321131002187DC /* Shaders.metal in Sources */,
+				3EC0370729321131002187DC /* GameViewController.swift in Sources */,
+				3EC0370929321131002187DC /* Renderer.swift in Sources */,
+				3EC0370529321131002187DC /* AppDelegate.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		3EC0371329321133002187DC /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				3EC0371C29321133002187DC /* SwiftArcheMacTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		3EC0371D29321133002187DC /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				3EC0372829321133002187DC /* SwiftArcheMacUITestsLaunchTests.swift in Sources */,
+				3EC0372629321133002187DC /* SwiftArcheMacUITests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		3EC0371929321133002187DC /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 3EC0370029321131002187DC /* SwiftArcheMac */;
+			targetProxy = 3EC0371829321133002187DC /* PBXContainerItemProxy */;
+		};
+		3EC0372329321133002187DC /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 3EC0370029321131002187DC /* SwiftArcheMac */;
+			targetProxy = 3EC0372229321133002187DC /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		3EC0370F29321132002187DC /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				3EC0371029321132002187DC /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		3EC0372929321133002187DC /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 13.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		3EC0372A29321133002187DC /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 13.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = macosx;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+			};
+			name = Release;
+		};
+		3EC0372C29321133002187DC /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = SwiftArcheMac/SwiftArcheMac.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 4SL5L673UU;
+				ENABLE_HARDENED_RUNTIME = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				INFOPLIST_KEY_NSMainStoryboardFile = Main;
+				INFOPLIST_KEY_NSPrincipalClass = NSApplication;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = archegraphics.SwiftArcheMac;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_OBJC_BRIDGING_HEADER = "$(TARGET_NAME)/ShaderTypes.h";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		3EC0372D29321133002187DC /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = SwiftArcheMac/SwiftArcheMac.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 4SL5L673UU;
+				ENABLE_HARDENED_RUNTIME = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				INFOPLIST_KEY_NSMainStoryboardFile = Main;
+				INFOPLIST_KEY_NSPrincipalClass = NSApplication;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = archegraphics.SwiftArcheMac;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_OBJC_BRIDGING_HEADER = "$(TARGET_NAME)/ShaderTypes.h";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+		3EC0372F29321133002187DC /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 4SL5L673UU;
+				GENERATE_INFOPLIST_FILE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 13.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = archegraphics.SwiftArcheMacTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/SwiftArcheMac.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/SwiftArcheMac";
+			};
+			name = Debug;
+		};
+		3EC0373029321133002187DC /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 4SL5L673UU;
+				GENERATE_INFOPLIST_FILE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 13.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = archegraphics.SwiftArcheMacTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/SwiftArcheMac.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/SwiftArcheMac";
+			};
+			name = Release;
+		};
+		3EC0373229321133002187DC /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 4SL5L673UU;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = archegraphics.SwiftArcheMacUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TEST_TARGET_NAME = SwiftArcheMac;
+			};
+			name = Debug;
+		};
+		3EC0373329321133002187DC /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 4SL5L673UU;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = archegraphics.SwiftArcheMacUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TEST_TARGET_NAME = SwiftArcheMac;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		3EC036FC29321131002187DC /* Build configuration list for PBXProject "SwiftArcheMac" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				3EC0372929321133002187DC /* Debug */,
+				3EC0372A29321133002187DC /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		3EC0372B29321133002187DC /* Build configuration list for PBXNativeTarget "SwiftArcheMac" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				3EC0372C29321133002187DC /* Debug */,
+				3EC0372D29321133002187DC /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		3EC0372E29321133002187DC /* Build configuration list for PBXNativeTarget "SwiftArcheMacTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				3EC0372F29321133002187DC /* Debug */,
+				3EC0373029321133002187DC /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		3EC0373129321133002187DC /* Build configuration list for PBXNativeTarget "SwiftArcheMacUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				3EC0373229321133002187DC /* Debug */,
+				3EC0373329321133002187DC /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 3EC036F929321131002187DC /* Project object */;
+}
