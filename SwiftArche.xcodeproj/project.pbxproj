@@ -193,6 +193,7 @@
 		43D8C52A399C01C7FA561389 /* ForwardSubpass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8C0EA6C54B16C4DBBDB8C /* ForwardSubpass.swift */; };
 		43D8C56AFF29A4383C0F6DFF /* Scene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8C4A35ABF161ABDDD3AF5 /* Scene.swift */; };
 		43D8C5AEEFF81FC6E3DC7A45 /* AnimationVector3Curve.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8CE4CF1AA17B0AA60E2A4 /* AnimationVector3Curve.swift */; };
+		43D8C61C4DE66A30C9DF1C1E /* TextureLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8CDE8A76E9B891985FFA5 /* TextureLoader.swift */; };
 		43D8C632EC69D73870ADE9D6 /* AnimationVector2Curve.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8CD76A9A600671D3BF2E0 /* AnimationVector2Curve.swift */; };
 		43D8C64F87A019BFA0DE1CC0 /* BoolUpdateFlag.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8CAED3B1AFD13451D2107 /* BoolUpdateFlag.swift */; };
 		43D8C6D77BE611782B2EC4EC /* Entity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8C8DEB27F4A68CF043663 /* Entity.swift */; };
@@ -703,6 +704,7 @@
 		43D8CD34E1337864CB67AF7E /* ResourceCache.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ResourceCache.swift; sourceTree = "<group>"; };
 		43D8CD76A9A600671D3BF2E0 /* AnimationVector2Curve.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AnimationVector2Curve.swift; sourceTree = "<group>"; };
 		43D8CD8FF3430733254A4886 /* InputManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InputManager.swift; sourceTree = "<group>"; };
+		43D8CDE8A76E9B891985FFA5 /* TextureLoader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TextureLoader.swift; sourceTree = "<group>"; };
 		43D8CE02846F5ED4A032F5CB /* SceneParser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SceneParser.swift; sourceTree = "<group>"; };
 		43D8CE4CF1AA17B0AA60E2A4 /* AnimationVector3Curve.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AnimationVector3Curve.swift; sourceTree = "<group>"; };
 		43D8CE5D7B75CB684EC5EC1B /* ShadowType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ShadowType.swift; sourceTree = "<group>"; };
@@ -894,6 +896,7 @@
 				04462EF2292A1C6D00F95387 /* GLTFLoader.swift */,
 				E63B1CDA75FD90993E02BD74 /* GLTFResource.swift */,
 				43D8C9573F788972BC660FB1 /* GLTFUtil.swift */,
+				43D8CDE8A76E9B891985FFA5 /* TextureLoader.swift */,
 			);
 			path = loader;
 			sourceTree = "<group>";
@@ -2141,6 +2144,7 @@
 				E63B1819402D6701F7631A3E /* KHR_lights_punctual.swift in Sources */,
 				E63B1E75C2810722D3625667 /* KHR_texture_transform.swift in Sources */,
 				43D8C20421F8D44B9B60AD7C /* GLTFUtil.swift in Sources */,
+				43D8C61C4DE66A30C9DF1C1E /* TextureLoader.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -25,6 +25,7 @@ public class Engine: NSObject {
     private var _physicsManager: PhysicsManager!
     private var _inputManager: InputManager!
     private var _arManager: ARManager?
+    private var _textureLoader: TextureLoader!
 
     private var _isPaused: Bool = true;
 
@@ -39,6 +40,13 @@ public class Engine: NSObject {
     public var device: MTLDevice {
         get {
             _device
+        }
+    }
+
+    /// Get the texture loader.
+    public var textureLoader: TextureLoader {
+        get {
+            _textureLoader
         }
     }
 
@@ -117,6 +125,8 @@ public class Engine: NSObject {
         _inputManager = InputManager(engine: self)
         _sceneManager = SceneManager(engine: self)
         _sceneManager.activeScene = Scene(self, "DefaultScene")
+
+        _textureLoader = TextureLoader(self)
     }
 
     public func initArSession() {
