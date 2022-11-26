@@ -74,7 +74,9 @@ internal class ShaderMacroCollection {
         NEED_RECEIVE_SHADOWS: (0, .bool),
         CASCADED_COUNT: (0, .int),
         CASCADED_SHADOW_MAP: (0, .bool),
-        SHADOW_MODE: (0, .int)
+        SHADOW_MODE: (0, .int),
+        
+        DECODE_MODE: (0, .int)
     ]
 
     static var defaultFunctionConstant = ShaderMacroCollection.createDefaultFunction()

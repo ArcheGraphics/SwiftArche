@@ -72,7 +72,7 @@ public class TextureLoader {
         return sh
     }
 
-    public func createSpecularTexture(with cube: MTLTexture) -> MTLTexture? {
+    public func createSpecularTexture(with cube: MTLTexture, _ decodeMode: DecodeMode = .Linear) -> MTLTexture? {
         let descriptor = MTLTextureDescriptor()
         descriptor.textureType = .typeCube
         descriptor.pixelFormat = cube.pixelFormat
@@ -82,22 +82,25 @@ public class TextureLoader {
         descriptor.usage = MTLTextureUsage(rawValue: MTLTextureUsage.shaderRead.rawValue | MTLTextureUsage.pixelFormatView.rawValue)
         let specularTexture = makeTexture(descriptor)
 
-        let function = _engine.library.makeFunction(name: "build_specular")
-        let pipelineState = try! _engine.device.makeComputePipelineState(function: function!)
+        let functionConstants = MTLFunctionConstantValues()
+        var decodeModeValue = decodeMode.rawValue
+        functionConstants.setConstantValue(&decodeModeValue, type: .int, index: 0)
+        let function = try! _engine.library.makeFunction(name: "build_specular", constantValues: functionConstants)
+        let pipelineState = try! _engine.device.makeComputePipelineState(function: function)
         if let commandBuffer = _engine.commandQueue.makeCommandBuffer(),
            let commandEncoder = commandBuffer.makeComputeCommandEncoder() {
             commandEncoder.setComputePipelineState(pipelineState)
             commandEncoder.setTexture(cube, index: 0)
             for lod in 0..<cube.mipmapLevelCount {
                 let textureView = specularTexture.makeTextureView(pixelFormat: cube.pixelFormat, textureType: .typeCube,
-                        levels: lod..<lod + 1, slices: lod * 6..<6 * lod + 6)
+                        levels: lod..<lod + 1, slices: lod * 6..<lod * 6 + 6)
                 commandEncoder.setTexture(textureView, index: 1)
                 var roughness: Float = Float(lod) / Float(cube.mipmapLevelCount - 1)  // linear
                 commandEncoder.setBytes(&roughness, length: MemoryLayout<Float>.stride, index: 0)
 
                 let size = Int(Float(cube.width) / pow(2.0, Float(lod)))
-                commandEncoder.dispatchThreads(MTLSizeMake(min(size, 16), min(size, 16), 1),
-                        threadsPerThreadgroup: MTLSizeMake(cube.width / min(size, 16), cube.height / min(size, 16), 6))
+                commandEncoder.dispatchThreads(MTLSizeMake(cube.width / 16, cube.height / 16, 6),
+                        threadsPerThreadgroup: MTLSizeMake(16, 16, 1))
             }
         }
         return specularTexture
@@ -122,8 +125,8 @@ public class TextureLoader {
             commandEncoder.setTexture(mergedTexture, index: 2)
 
             let size = metallic.width
-            commandEncoder.dispatchThreads(MTLSizeMake(min(size, 16), min(size, 16), 1),
-                    threadsPerThreadgroup: MTLSizeMake(size / min(size, 16), size / min(size, 16), 1))
+            commandEncoder.dispatchThreads(MTLSizeMake(size / min(size, 16), size / min(size, 16), 1),
+                    threadsPerThreadgroup: MTLSizeMake(min(size, 16), min(size, 16), 1))
             commandEncoder.endEncoding()
 
             commandBuffer.commit()

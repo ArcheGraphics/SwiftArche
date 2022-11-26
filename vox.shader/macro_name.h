@@ -63,6 +63,9 @@ typedef enum {
     CASCADED_COUNT = 34,
     CASCADED_SHADOW_MAP = 35,
     SHADOW_MODE = 36,
+    
+    // Offline
+    DECODE_MODE = 37,
 
-    TOTAL_COUNT = 37,
+    TOTAL_COUNT = 38,
 } MacroName;
