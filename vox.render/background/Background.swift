@@ -27,7 +27,9 @@ public class Background {
     /// - Remark: When `mode` is `BackgroundMode.Texture`, the property will take effects.
     public var texture: BackgroundSubpass?
 
+#if os(iOS)
     /// Background ar.
     /// - Remark: When `mode` is `BackgroundMode.AR`, the property will take effects.
     public var ar: ARSubpass?
+#endif
 }

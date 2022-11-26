@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3EB32B032932299A0019A4F3 /* Logging in Frameworks */ = {isa = PBXBuildFile; productRef = 3EB32B022932299A0019A4F3 /* Logging */; };
 		3EC0370529321131002187DC /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EC0370429321131002187DC /* AppDelegate.swift */; };
 		3EC0370729321131002187DC /* GameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EC0370629321131002187DC /* GameViewController.swift */; };
 		3EC0370E29321132002187DC /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3EC0370D29321132002187DC /* Assets.xcassets */; };
@@ -735,6 +736,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3EB32B032932299A0019A4F3 /* Logging in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1007,33 +1009,33 @@
 			isa = PBXGroup;
 			children = (
 				3EC0388E29321826002187DC /* bridging.h */,
-				3EC0388829321825002187DC /* Camera.swift */,
-				3EC0388C29321826002187DC /* CameraInfo.swift */,
-				3EC0388629321825002187DC /* Canvas.swift */,
-				3EC0388F29321826002187DC /* Component.swift */,
-				3EC0388A29321825002187DC /* ComponentsManager.swift */,
-				3EC0388429321825002187DC /* Engine.swift */,
-				3EC0388529321825002187DC /* EngineSettings.swift */,
-				3EC0388D29321826002187DC /* Entity.swift */,
-				3EC0389029321826002187DC /* Layer.swift */,
-				3EC0389129321826002187DC /* Renderer.swift */,
-				3EC0388929321825002187DC /* Scene.swift */,
-				3EC0388729321825002187DC /* SceneManager.swift */,
-				3EC0389229321826002187DC /* Script.swift */,
-				3EC0388B29321826002187DC /* Transform.swift */,
-				3EC0387129321740002187DC /* physics */,
-				3EC0387029321739002187DC /* loader */,
-				3EC0386F29321726002187DC /* sky */,
-				3EC0386E2932171F002187DC /* shadow */,
-				3EC0386D29321718002187DC /* shader */,
-				3EC0386C29321710002187DC /* rendering */,
-				3EC0386B29321707002187DC /* mesh */,
-				3EC0386A29321700002187DC /* material */,
-				3EC03869293216F9002187DC /* lighting */,
 				3EC03868293216F1002187DC /* enums */,
 				3EC0386729321551002187DC /* base */,
-				3EC038662932154A002187DC /* animation */,
+				3EC0386D29321718002187DC /* shader */,
+				3EC0386A29321700002187DC /* material */,
+				3EC0386B29321707002187DC /* mesh */,
+				3EC0386C29321710002187DC /* rendering */,
+				3EC03869293216F9002187DC /* lighting */,
+				3EC0386E2932171F002187DC /* shadow */,
+				3EC0386F29321726002187DC /* sky */,
 				3EC0386529321542002187DC /* background */,
+				3EC0387129321740002187DC /* physics */,
+				3EC038662932154A002187DC /* animation */,
+				3EC0387029321739002187DC /* loader */,
+				3EC0389029321826002187DC /* Layer.swift */,
+				3EC0388629321825002187DC /* Canvas.swift */,
+				3EC0388429321825002187DC /* Engine.swift */,
+				3EC0388929321825002187DC /* Scene.swift */,
+				3EC0388729321825002187DC /* SceneManager.swift */,
+				3EC0388F29321826002187DC /* Component.swift */,
+				3EC0388A29321825002187DC /* ComponentsManager.swift */,
+				3EC0388D29321826002187DC /* Entity.swift */,
+				3EC0389229321826002187DC /* Script.swift */,
+				3EC0388B29321826002187DC /* Transform.swift */,
+				3EC0389129321826002187DC /* Renderer.swift */,
+				3EC0388829321825002187DC /* Camera.swift */,
+				3EC0388C29321826002187DC /* CameraInfo.swift */,
+				3EC0388529321825002187DC /* EngineSettings.swift */,
 			);
 			path = vox.render;
 			sourceTree = "<group>";
@@ -1041,8 +1043,8 @@
 		3EC0386529321542002187DC /* background */ = {
 			isa = PBXGroup;
 			children = (
-				3EC039FE2932192D002187DC /* Background.swift */,
 				3EC039FF2932192D002187DC /* BackgroundMode.swift */,
+				3EC039FE2932192D002187DC /* Background.swift */,
 				3EC03A002932192D002187DC /* BackgroundSubpass.swift */,
 				3EC03A012932192D002187DC /* BackgroundTextureFillMode.swift */,
 			);
@@ -1052,6 +1054,9 @@
 		3EC038662932154A002187DC /* animation */ = {
 			isa = PBXGroup;
 			children = (
+				3EC0387329321754002187DC /* enums */,
+				3EC038742932175C002187DC /* internal */,
+				3EC038722932174B002187DC /* animationCurve */,
 				3EC039B6293218FA002187DC /* AnimationClip.swift */,
 				3EC039B8293218FA002187DC /* AnimationClipCurveBinding.swift */,
 				3EC039B7293218FA002187DC /* AnimationEvent.swift */,
@@ -1063,9 +1068,6 @@
 				3EC039B3293218FA002187DC /* AnimatorStateTransition.swift */,
 				3EC039BC293218FB002187DC /* Keyframe.swift */,
 				3EC039B2293218FA002187DC /* StateMachineScript.swift */,
-				3EC038742932175C002187DC /* internal */,
-				3EC0387329321754002187DC /* enums */,
-				3EC038722932174B002187DC /* animationCurve */,
 			);
 			path = animation;
 			sourceTree = "<group>";
@@ -1074,12 +1076,12 @@
 			isa = PBXGroup;
 			children = (
 				3EC039A2293218F0002187DC /* BoolUpdateFlag.swift */,
-				3EC039A4293218F0002187DC /* DisorderedArray.swift */,
-				3EC039A6293218F0002187DC /* EngineObject.swift */,
 				3EC039A3293218F0002187DC /* ListenerUpdateFlag .swift */,
-				3EC039A5293218F0002187DC /* Time.swift */,
 				3EC039A7293218F0002187DC /* UpdateFlag.swift */,
 				3EC039A8293218F0002187DC /* UpdateFlagManager.swift */,
+				3EC039A4293218F0002187DC /* DisorderedArray.swift */,
+				3EC039A6293218F0002187DC /* EngineObject.swift */,
+				3EC039A5293218F0002187DC /* Time.swift */,
 				3EC039A9293218F0002187DC /* Util.swift */,
 			);
 			path = base;
@@ -1098,12 +1100,12 @@
 			isa = PBXGroup;
 			children = (
 				3EC0387729321783002187DC /* enums */,
-				3EC03992293218DA002187DC /* AmbientLight.swift */,
-				3EC03990293218DA002187DC /* DirectLight.swift */,
 				3EC03995293218DA002187DC /* Light.swift */,
+				3EC03990293218DA002187DC /* DirectLight.swift */,
 				3EC03993293218DA002187DC /* LightManager.swift */,
 				3EC03991293218DA002187DC /* PointLight.swift */,
 				3EC03994293218DA002187DC /* SpotLight.swift */,
+				3EC03992293218DA002187DC /* AmbientLight.swift */,
 			);
 			path = lighting;
 			sourceTree = "<group>";
@@ -1111,13 +1113,13 @@
 		3EC0386A29321700002187DC /* material */ = {
 			isa = PBXGroup;
 			children = (
-				3EC03986293218CB002187DC /* BaseMaterial.swift */,
+				3EC038782932178D002187DC /* enums */,
 				3EC03987293218CB002187DC /* Material.swift */,
+				3EC03986293218CB002187DC /* BaseMaterial.swift */,
+				3EC03985293218CB002187DC /* UnlitMaterial.swift */,
 				3EC03983293218CB002187DC /* PBRBaseMaterial.swift */,
 				3EC03982293218CB002187DC /* PBRMaterial.swift */,
 				3EC03984293218CB002187DC /* PBRSpecularMaterial.swift */,
-				3EC03985293218CB002187DC /* UnlitMaterial.swift */,
-				3EC038782932178D002187DC /* enums */,
 			);
 			path = material;
 			sourceTree = "<group>";
@@ -1125,19 +1127,19 @@
 		3EC0386B29321707002187DC /* mesh */ = {
 			isa = PBXGroup;
 			children = (
-				3EC03969293218C2002187DC /* BlendShape.swift */,
-				3EC03971293218C3002187DC /* BlendShapeFrame.swift */,
-				3EC03968293218C2002187DC /* BlendShapeManager.swift */,
 				3EC0396F293218C3002187DC /* BufferPool.swift */,
 				3EC03973293218C3002187DC /* BufferView.swift */,
 				3EC0396C293218C3002187DC /* IndexBufferBinding.swift */,
+				3EC0396E293218C3002187DC /* SubMesh.swift */,
 				3EC0396D293218C3002187DC /* Mesh.swift */,
-				3EC0396A293218C2002187DC /* MeshRenderer.swift */,
 				3EC03970293218C3002187DC /* ModelMesh.swift */,
 				3EC03974293218C3002187DC /* PrimitiveMesh.swift */,
+				3EC03969293218C2002187DC /* BlendShape.swift */,
+				3EC03971293218C3002187DC /* BlendShapeFrame.swift */,
+				3EC03968293218C2002187DC /* BlendShapeManager.swift */,
+				3EC0396A293218C2002187DC /* MeshRenderer.swift */,
 				3EC0396B293218C2002187DC /* Skin.swift */,
 				3EC03972293218C3002187DC /* SkinnedMeshRenderer.swift */,
-				3EC0396E293218C3002187DC /* SubMesh.swift */,
 			);
 			path = mesh;
 			sourceTree = "<group>";
@@ -1145,16 +1147,16 @@
 		3EC0386C29321710002187DC /* rendering */ = {
 			isa = PBXGroup;
 			children = (
-				3EC0395E293218BA002187DC /* ComputePass.swift */,
-				3EC03959293218BA002187DC /* ComputePipelineState.swift */,
-				3EC03957293218BA002187DC /* DevicePipeline.swift */,
-				3EC03958293218BA002187DC /* ReflectionUniform.swift */,
 				3EC0395C293218BA002187DC /* RenderElement.swift */,
+				3EC03957293218BA002187DC /* DevicePipeline.swift */,
+				3EC0395E293218BA002187DC /* ComputePass.swift */,
 				3EC03956293218BA002187DC /* RenderPass.swift */,
-				3EC0395A293218BA002187DC /* RenderPipelineState.swift */,
-				3EC0395B293218BA002187DC /* ResourceCache.swift */,
 				3EC0395D293218BA002187DC /* Subpass.swift */,
 				3EC0387929321799002187DC /* subpasses */,
+				3EC03959293218BA002187DC /* ComputePipelineState.swift */,
+				3EC0395A293218BA002187DC /* RenderPipelineState.swift */,
+				3EC03958293218BA002187DC /* ReflectionUniform.swift */,
+				3EC0395B293218BA002187DC /* ResourceCache.swift */,
 			);
 			path = rendering;
 			sourceTree = "<group>";
@@ -1162,11 +1164,11 @@
 		3EC0386D29321718002187DC /* shader */ = {
 			isa = PBXGroup;
 			children = (
+				3EC0387A293217A6002187DC /* enums */,
+				3EC0387B293217AE002187DC /* state */,
 				3EC0393B2932189C002187DC /* ShaderData.swift */,
 				3EC0393C2932189D002187DC /* ShaderMacroCollection.swift */,
 				3EC0393A2932189C002187DC /* ShaderPass.swift */,
-				3EC0387B293217AE002187DC /* state */,
-				3EC0387A293217A6002187DC /* enums */,
 			);
 			path = shader;
 			sourceTree = "<group>";
@@ -1174,11 +1176,11 @@
 		3EC0386E2932171F002187DC /* shadow */ = {
 			isa = PBXGroup;
 			children = (
+				3EC0387C293217BB002187DC /* enums */,
 				3EC0392F2932188D002187DC /* CascadedShadowSubpass.swift */,
 				3EC0392E2932188D002187DC /* ShadowManager.swift */,
 				3EC0392D2932188D002187DC /* ShadowSliceData.swift */,
 				3EC0392C2932188C002187DC /* ShadowUtils.swift */,
-				3EC0387C293217BB002187DC /* enums */,
 			);
 			path = shadow;
 			sourceTree = "<group>";
@@ -1195,6 +1197,8 @@
 		3EC0387029321739002187DC /* loader */ = {
 			isa = PBXGroup;
 			children = (
+				3EC0387D293217C7002187DC /* enums */,
+				3EC0387E293217CF002187DC /* parser */,
 				3EC038FF29321862002187DC /* GLTFAsset.h */,
 				3EC038FD29321862002187DC /* GLTFAsset.m */,
 				3EC038F829321862002187DC /* GLTFAssetReader.h */,
@@ -1204,8 +1208,6 @@
 				3EC038F929321862002187DC /* GLTFTypes.h */,
 				3EC038FC29321862002187DC /* GLTFUtil.swift */,
 				3EC038FA29321862002187DC /* TextureLoader.swift */,
-				3EC0387E293217CF002187DC /* parser */,
-				3EC0387D293217C7002187DC /* enums */,
 			);
 			path = loader;
 			sourceTree = "<group>";
@@ -1213,22 +1215,22 @@
 		3EC0387129321740002187DC /* physics */ = {
 			isa = PBXGroup;
 			children = (
-				3EC038A729321835002187DC /* Collider.swift */,
-				3EC038A829321835002187DC /* DynamicCollider.swift */,
-				3EC038A629321835002187DC /* HitResult.swift */,
-				3EC038A229321834002187DC /* PhysicsManager.swift */,
-				3EC038AD29321835002187DC /* PhysicsMaterial.swift */,
-				3EC038A329321835002187DC /* PhysXCollider.swift */,
-				3EC038A929321835002187DC /* PhysXDynamicCollider.swift */,
-				3EC038AA29321835002187DC /* PhysXPhysics.swift */,
-				3EC038AC29321835002187DC /* PhysXPhysicsManager.swift */,
-				3EC038A529321835002187DC /* PhysXPhysicsMaterial.swift */,
-				3EC038A429321835002187DC /* PhysXStaticCollider.swift */,
-				3EC038AB29321835002187DC /* StaticCollider.swift */,
+				3EC03880293217E2002187DC /* enums */,
 				3EC03882293217F2002187DC /* shapes */,
 				3EC03881293217EB002187DC /* joints */,
-				3EC03880293217E2002187DC /* enums */,
 				3EC0387F293217DC002187DC /* controller */,
+				3EC038AA29321835002187DC /* PhysXPhysics.swift */,
+				3EC038A729321835002187DC /* Collider.swift */,
+				3EC038A329321835002187DC /* PhysXCollider.swift */,
+				3EC038AB29321835002187DC /* StaticCollider.swift */,
+				3EC038A429321835002187DC /* PhysXStaticCollider.swift */,
+				3EC038A829321835002187DC /* DynamicCollider.swift */,
+				3EC038A929321835002187DC /* PhysXDynamicCollider.swift */,
+				3EC038A629321835002187DC /* HitResult.swift */,
+				3EC038A229321834002187DC /* PhysicsManager.swift */,
+				3EC038AC29321835002187DC /* PhysXPhysicsManager.swift */,
+				3EC038AD29321835002187DC /* PhysicsMaterial.swift */,
+				3EC038A529321835002187DC /* PhysXPhysicsMaterial.swift */,
 			);
 			path = physics;
 			sourceTree = "<group>";
@@ -1405,20 +1407,20 @@
 		3EC03881293217EB002187DC /* joints */ = {
 			isa = PBXGroup;
 			children = (
-				3EC038DA29321845002187DC /* FixedJoint.swift */,
-				3EC038D729321844002187DC /* HingeJoint.swift */,
 				3EC038D029321844002187DC /* Joint.swift */,
+				3EC038D829321845002187DC /* PhysXJoint.swift */,
+				3EC038DA29321845002187DC /* FixedJoint.swift */,
+				3EC038D329321844002187DC /* PhysXFixedJoint.swift */,
+				3EC038D929321845002187DC /* SpringJoint.swift */,
+				3EC038D529321844002187DC /* PhysXSpringJoint.swift */,
+				3EC038D729321844002187DC /* HingeJoint.swift */,
+				3EC038CE29321844002187DC /* PhysXHingeJoint.swift */,
 				3EC038D129321844002187DC /* JointLimits.swift */,
 				3EC038DB29321845002187DC /* JointMotor.swift */,
 				3EC038D629321844002187DC /* PhysXConfigurableJoint.swift */,
-				3EC038D329321844002187DC /* PhysXFixedJoint.swift */,
-				3EC038CE29321844002187DC /* PhysXHingeJoint.swift */,
-				3EC038D829321845002187DC /* PhysXJoint.swift */,
 				3EC038CF29321844002187DC /* PhysXSphericalJoint.swift */,
-				3EC038D529321844002187DC /* PhysXSpringJoint.swift */,
 				3EC038D429321844002187DC /* PhysXTolerancesScale.swift */,
 				3EC038D229321844002187DC /* PhysXTranslationalJoint.swift */,
-				3EC038D929321845002187DC /* SpringJoint.swift */,
 			);
 			path = joints;
 			sourceTree = "<group>";
@@ -1426,16 +1428,16 @@
 		3EC03882293217F2002187DC /* shapes */ = {
 			isa = PBXGroup;
 			children = (
-				3EC038C22932183D002187DC /* BoxColliderShape.swift */,
-				3EC038C02932183C002187DC /* CapsuleColliderShape.swift */,
 				3EC038BB2932183C002187DC /* ColliderShape.swift */,
-				3EC038BA2932183C002187DC /* PhysXBoxColliderShape.swift */,
-				3EC038BD2932183C002187DC /* PhysXCapsuleColliderShape.swift */,
 				3EC038BF2932183C002187DC /* PhysXColliderShape.swift */,
-				3EC038BC2932183C002187DC /* PhysXPlaneColliderShape.swift */,
-				3EC038C12932183D002187DC /* PhysXSphereColliderShape.swift */,
+				3EC038C22932183D002187DC /* BoxColliderShape.swift */,
+				3EC038BA2932183C002187DC /* PhysXBoxColliderShape.swift */,
+				3EC038C02932183C002187DC /* CapsuleColliderShape.swift */,
+				3EC038BD2932183C002187DC /* PhysXCapsuleColliderShape.swift */,
 				3EC038C32932183D002187DC /* PlaneColliderShape.swift */,
+				3EC038BC2932183C002187DC /* PhysXPlaneColliderShape.swift */,
 				3EC038BE2932183C002187DC /* SphereColliderShape.swift */,
+				3EC038C12932183D002187DC /* PhysXSphereColliderShape.swift */,
 			);
 			path = shapes;
 			sourceTree = "<group>";
@@ -1606,6 +1608,9 @@
 			dependencies = (
 			);
 			name = vox.math;
+			packageProductDependencies = (
+				3EB32B022932299A0019A4F3 /* Logging */,
+			);
 			productName = vox.math;
 			productReference = 3EC037382932125F002187DC /* libvox.math.a */;
 			productType = "com.apple.product-type.library.static";
@@ -1708,6 +1713,9 @@
 				Base,
 			);
 			mainGroup = 3EC036F829321131002187DC;
+			packageReferences = (
+				3EB32B012932299A0019A4F3 /* XCRemoteSwiftPackageReference "swift-log" */,
+			);
 			productRefGroup = 3EC0370229321131002187DC /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -2506,6 +2514,7 @@
 				SWIFT_OBJC_BRIDGING_HEADER = vox.render/bridging.h;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
+				SYSTEM_HEADER_SEARCH_PATHS = ./third_party/cgltf;
 			};
 			name = Debug;
 		};
@@ -2525,6 +2534,7 @@
 				SKIP_INSTALL = YES;
 				SWIFT_OBJC_BRIDGING_HEADER = vox.render/bridging.h;
 				SWIFT_VERSION = 5.0;
+				SYSTEM_HEADER_SEARCH_PATHS = ./third_party/cgltf;
 			};
 			name = Release;
 		};
@@ -2604,6 +2614,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		3EB32B012932299A0019A4F3 /* XCRemoteSwiftPackageReference "swift-log" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/apple/swift-log.git";
+			requirement = {
+				kind = exactVersion;
+				version = 1.4.4;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		3EB32B022932299A0019A4F3 /* Logging */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 3EB32B012932299A0019A4F3 /* XCRemoteSwiftPackageReference "swift-log" */;
+			productName = Logging;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 3EC036F929321131002187DC /* Project object */;
 }

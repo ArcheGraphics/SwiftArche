@@ -23,8 +23,10 @@ public class Engine: NSObject {
     private var _device: MTLDevice
     private var _sceneManager: SceneManager!
     private var _physicsManager: PhysicsManager!
-    private var _inputManager: InputManager!
+//    private var _inputManager: InputManager!
+#if os(iOS)
     private var _arManager: ARManager?
+#endif
     private var _textureLoader: TextureLoader!
 
     private var _isPaused: Bool = true;
@@ -57,26 +59,28 @@ public class Engine: NSObject {
         }
     }
 
-    /// Get the input manager.
+    /// Get the physics manager.
     public var physicsManager: PhysicsManager {
         get {
             _physicsManager
         }
     }
 
-    /// Get the input manager.
-    public var inputManager: InputManager {
-        get {
-            _inputManager
-        }
-    }
+//    /// Get the input manager.
+//    public var inputManager: InputManager {
+//        get {
+//            _inputManager
+//        }
+//    }
 
+#if os(iOS)
     /// Get the ar manager.
     public var arManager: ARManager? {
         get {
             _arManager
         }
     }
+#endif
 
     /// Get the timer.
     public var time: Time {
@@ -122,19 +126,21 @@ public class Engine: NSObject {
         canvas.delegate = self
         canvas.device = device
         _physicsManager = PhysicsManager(engine: self)
-        _inputManager = InputManager(engine: self)
+//        _inputManager = InputManager(engine: self)
         _sceneManager = SceneManager(engine: self)
         _sceneManager.activeScene = Scene(self, "DefaultScene")
 
         _textureLoader = TextureLoader(self)
     }
 
+#if os(iOS)
     public func initArSession() {
         _arManager = ARManager(device)
         let scene = _sceneManager.activeScene!
         scene.background.mode = .AR
         scene.background.ar = ARSubpass(self)
     }
+#endif
 
     /// Execution engine loop.
     public func run() {
@@ -156,7 +162,7 @@ public class Engine: NSObject {
 
                 componentsManager.callScriptOnStart()
                 _physicsManager._update(deltaTime)
-                _inputManager._update()
+//                _inputManager._update()
                 componentsManager.callScriptOnUpdate(deltaTime)
                 componentsManager.callAnimationUpdate(deltaTime)
                 componentsManager.callScriptOnLateUpdate(deltaTime)
@@ -167,7 +173,9 @@ public class Engine: NSObject {
     }
 
     func _render(_ scene: Scene) {
+#if os(iOS)
         arManager?.update(_time.deltaTime)
+#endif
         _componentsManager.callRendererOnUpdate(_time.deltaTime)
 
         scene._updateShaderData()

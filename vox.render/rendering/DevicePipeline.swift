@@ -62,7 +62,9 @@ public class DevicePipeline {
             backgroundSubpass = background.texture
             break
         case .AR:
+#if os(iOS)
             backgroundSubpass = background.ar
+#endif
             break
         case .SolidColor:
             backgroundSubpass = nil

@@ -4,7 +4,9 @@
 //  personal capacity and am not conveying any rights to any intellectual
 //  property of any third parties.
 
+#if os(iOS)
 import ARKit
+#endif
 
 /// Script class, used for logic writing.
 open class Script: Component {
@@ -39,11 +41,13 @@ open class Script: Component {
     open func onLateUpdate(_ deltaTime: Float) {
     }
 
+#if os(iOS)
     /// Called after the onLateUpdate finished, called frame by frame.
     /// - Parameter deltaTime: The deltaTime when the script update.
     /// - Parameter frame: The ARFrame when the script update.
     open func onARUpdate(_ deltaTime: Float, _ frame: ARFrame) {
     }
+#endif
 
     /// Called before camera rendering, called per camera.
     /// - Parameter camera: Current camera.
@@ -91,36 +95,36 @@ open class Script: Component {
     open func onCollisionStay(_ other: ColliderShape) {
     }
 
-    /// Called when the pointer is down while over the ColliderShape.
-    /// - Parameter pointer: The pointer that triggered
-    open func onPointerDown(_ pointer: Pointer) {
-    }
-
-    /// Called when the pointer is up while over the ColliderShape.
-    /// - Parameter pointer: The pointer that triggered
-    open func onPointerUp(_ pointer: Pointer) {
-    }
-
-    /// Called when the pointer is down and up with the same collider.
-    /// - Parameter pointer: The pointer that triggered
-    open func onPointerClick(_ pointer: Pointer) {
-    }
-
-    /// Called when the pointer is enters the ColliderShape.
-    /// - Parameter pointer: The pointer that triggered
-    open func onPointerEnter(_ pointer: Pointer) {
-    }
-
-    /// Called when the pointer is no longer over the ColliderShape.
-    /// - Parameter pointer: The pointer that triggered
-    open func onPointerExit(_ pointer: Pointer) {
-    }
-
-    /// - Remark: onPointerDrag is called every frame while the pointer is down.
-    /// Called when the pointer is down while over the ColliderShape and is still holding down.
-    /// - Parameter pointer: The pointer that triggered
-    open func onPointerDrag(_ pointer: Pointer) {
-    }
+//    /// Called when the pointer is down while over the ColliderShape.
+//    /// - Parameter pointer: The pointer that triggered
+//    open func onPointerDown(_ pointer: Pointer) {
+//    }
+//
+//    /// Called when the pointer is up while over the ColliderShape.
+//    /// - Parameter pointer: The pointer that triggered
+//    open func onPointerUp(_ pointer: Pointer) {
+//    }
+//
+//    /// Called when the pointer is down and up with the same collider.
+//    /// - Parameter pointer: The pointer that triggered
+//    open func onPointerClick(_ pointer: Pointer) {
+//    }
+//
+//    /// Called when the pointer is enters the ColliderShape.
+//    /// - Parameter pointer: The pointer that triggered
+//    open func onPointerEnter(_ pointer: Pointer) {
+//    }
+//
+//    /// Called when the pointer is no longer over the ColliderShape.
+//    /// - Parameter pointer: The pointer that triggered
+//    open func onPointerExit(_ pointer: Pointer) {
+//    }
+//
+//    /// - Remark: onPointerDrag is called every frame while the pointer is down.
+//    /// Called when the pointer is down while over the ColliderShape and is still holding down.
+//    /// - Parameter pointer: The pointer that triggered
+//    open func onPointerDrag(_ pointer: Pointer) {
+//    }
 
     /// Called when be disabled.
     open func onDisable() {
@@ -143,7 +147,9 @@ open class Script: Component {
                 componentsManager.addOnStartScript(self)
             }
             componentsManager.addOnUpdateScript(self)
+#if os(iOS)
             engine.arManager?.addOnUpdateScript(self)
+#endif
             _entity._addScript(self)
         }
         onEnable()
@@ -161,8 +167,9 @@ open class Script: Component {
 
     func _handlingInValid() {
         engine._componentsManager.removeOnUpdateScript(self)
+#if os(iOS)
         engine.arManager?.removeOnUpdateScript(self)
-
+#endif
         _entity._removeScript(self)
         _waitHandlingInValid = false
     }

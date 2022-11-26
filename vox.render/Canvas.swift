@@ -7,7 +7,7 @@
 import MetalKit
 
 public class Canvas: MTKView {
-    var inputManager: InputManager?
+//    var inputManager: InputManager?
     public var updateFlagManager = UpdateFlagManager()
 
     required init(coder: NSCoder) {
@@ -21,6 +21,7 @@ public class Canvas: MTKView {
         colorPixelFormat = MTLPixelFormat.bgra8Unorm
     }
 
+#if os(iOS)
     public func setParentView(_ view: UIView) {
         view.addSubview(self)
         NSLayoutConstraint.activate([
@@ -30,13 +31,14 @@ public class Canvas: MTKView {
             bottomAnchor.constraint(equalTo: view.bottomAnchor)
         ])
     }
+#endif
 
     public func dispatchResize() {
         updateFlagManager.dispatch(type: nil, param: self)
     }
 
     // MARK: - RawEvent
-
+#if os(iOS)
     public override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
     }
 
@@ -60,4 +62,5 @@ public class Canvas: MTKView {
 
     public override func pressesCancelled(_ presses: Set<UIPress>, with event: UIPressesEvent?) {
     }
+#endif
 }
