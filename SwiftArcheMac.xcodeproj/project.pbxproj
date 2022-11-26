@@ -8,8 +8,14 @@
 
 /* Begin PBXBuildFile section */
 		3EB32B032932299A0019A4F3 /* Logging in Frameworks */ = {isa = PBXBuildFile; productRef = 3EB32B022932299A0019A4F3 /* Logging */; };
+		3EB32B7529322DB30019A4F3 /* PrimitiveApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EB32B7429322DB30019A4F3 /* PrimitiveApp.swift */; };
+		3EB32B7F29322E850019A4F3 /* libvox.math.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3EC037382932125F002187DC /* libvox.math.a */; };
+		3EB32B8029322E850019A4F3 /* libvox.physics.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3EC0376A293213A0002187DC /* libvox.physics.a */; };
+		3EB32B8129322E850019A4F3 /* libvox.render.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3EC0385C2932152C002187DC /* libvox.render.a */; };
+		3EB32B862932303A0019A4F3 /* libc++abi.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 3EB32B832932303A0019A4F3 /* libc++abi.tbd */; };
+		3EB32B872932303A0019A4F3 /* libc++.1.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 3EB32B842932303A0019A4F3 /* libc++.1.tbd */; };
+		3EB32B882932303A0019A4F3 /* libc++.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 3EB32B852932303A0019A4F3 /* libc++.tbd */; };
 		3EC0370529321131002187DC /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EC0370429321131002187DC /* AppDelegate.swift */; };
-		3EC0370729321131002187DC /* GameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EC0370629321131002187DC /* GameViewController.swift */; };
 		3EC0370E29321132002187DC /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3EC0370D29321132002187DC /* Assets.xcassets */; };
 		3EC0371129321132002187DC /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3EC0370F29321132002187DC /* Main.storyboard */; };
 		3EC0371C29321133002187DC /* SwiftArcheMacTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EC0371B29321133002187DC /* SwiftArcheMacTests.swift */; };
@@ -332,6 +338,34 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		3EB32B7629322E7E0019A4F3 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 3EC036F929321131002187DC /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 3EC037372932125F002187DC;
+			remoteInfo = vox.math;
+		};
+		3EB32B7829322E7E0019A4F3 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 3EC036F929321131002187DC /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 3EC03769293213A0002187DC;
+			remoteInfo = vox.physics;
+		};
+		3EB32B7A29322E7E0019A4F3 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 3EC036F929321131002187DC /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 3EC0385B2932152C002187DC;
+			remoteInfo = vox.render;
+		};
+		3EB32B7C29322E7E0019A4F3 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 3EC036F929321131002187DC /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 3EC0383129321473002187DC;
+			remoteInfo = vox.shader;
+		};
 		3EC0371829321133002187DC /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 3EC036F929321131002187DC /* Project object */;
@@ -370,9 +404,12 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		3EB32B7429322DB30019A4F3 /* PrimitiveApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrimitiveApp.swift; sourceTree = "<group>"; };
+		3EB32B832932303A0019A4F3 /* libc++abi.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libc++abi.tbd"; path = "usr/lib/libc++abi.tbd"; sourceTree = SDKROOT; };
+		3EB32B842932303A0019A4F3 /* libc++.1.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libc++.1.tbd"; path = "usr/lib/libc++.1.tbd"; sourceTree = SDKROOT; };
+		3EB32B852932303A0019A4F3 /* libc++.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libc++.tbd"; path = "usr/lib/libc++.tbd"; sourceTree = SDKROOT; };
 		3EC0370129321131002187DC /* SwiftArcheMac.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SwiftArcheMac.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		3EC0370429321131002187DC /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		3EC0370629321131002187DC /* GameViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameViewController.swift; sourceTree = "<group>"; };
 		3EC0370D29321132002187DC /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		3EC0371029321132002187DC /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		3EC0371229321132002187DC /* SwiftArcheMac.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = SwiftArcheMac.entitlements; sourceTree = "<group>"; };
@@ -715,6 +752,12 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3EB32B862932303A0019A4F3 /* libc++abi.tbd in Frameworks */,
+				3EB32B872932303A0019A4F3 /* libc++.1.tbd in Frameworks */,
+				3EB32B882932303A0019A4F3 /* libc++.tbd in Frameworks */,
+				3EB32B7F29322E850019A4F3 /* libvox.math.a in Frameworks */,
+				3EB32B8029322E850019A4F3 /* libvox.physics.a in Frameworks */,
+				3EB32B8129322E850019A4F3 /* libvox.render.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -757,6 +800,16 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		3EB32B7E29322E850019A4F3 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				3EB32B842932303A0019A4F3 /* libc++.1.tbd */,
+				3EB32B852932303A0019A4F3 /* libc++.tbd */,
+				3EB32B832932303A0019A4F3 /* libc++abi.tbd */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		3EC036F829321131002187DC = {
 			isa = PBXGroup;
 			children = (
@@ -768,6 +821,7 @@
 				3EC0371A29321133002187DC /* SwiftArcheMacTests */,
 				3EC0372429321133002187DC /* SwiftArcheMacUITests */,
 				3EC0370229321131002187DC /* Products */,
+				3EB32B7E29322E850019A4F3 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -792,7 +846,7 @@
 				3EC0370D29321132002187DC /* Assets.xcassets */,
 				3EC0371229321132002187DC /* SwiftArcheMac.entitlements */,
 				3EC0370429321131002187DC /* AppDelegate.swift */,
-				3EC0370629321131002187DC /* GameViewController.swift */,
+				3EB32B7429322DB30019A4F3 /* PrimitiveApp.swift */,
 			);
 			path = SwiftArcheMac;
 			sourceTree = "<group>";
@@ -1549,10 +1603,15 @@
 				3EC036FD29321131002187DC /* Sources */,
 				3EC036FE29321131002187DC /* Frameworks */,
 				3EC036FF29321131002187DC /* Resources */,
+				3EB32B8229322E9D0019A4F3 /* Copy Metal Libraries */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				3EB32B7729322E7E0019A4F3 /* PBXTargetDependency */,
+				3EB32B7929322E7E0019A4F3 /* PBXTargetDependency */,
+				3EB32B7B29322E7E0019A4F3 /* PBXTargetDependency */,
+				3EB32B7D29322E7E0019A4F3 /* PBXTargetDependency */,
 			);
 			name = SwiftArcheMac;
 			productName = SwiftArcheMac;
@@ -1757,12 +1816,34 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		3EB32B8229322E9D0019A4F3 /* Copy Metal Libraries */ = {
+			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "Copy Metal Libraries";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "cp \"$TARGET_BUILD_DIR/vox.shader.metallib\" \"$TARGET_BUILD_DIR/$UNLOCALIZED_RESOURCES_FOLDER_PATH/.\"\n";
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		3EC036FD29321131002187DC /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				3EC0370729321131002187DC /* GameViewController.swift in Sources */,
+				3EB32B7529322DB30019A4F3 /* PrimitiveApp.swift in Sources */,
 				3EC0370529321131002187DC /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -2067,6 +2148,26 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		3EB32B7729322E7E0019A4F3 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 3EC037372932125F002187DC /* vox.math */;
+			targetProxy = 3EB32B7629322E7E0019A4F3 /* PBXContainerItemProxy */;
+		};
+		3EB32B7929322E7E0019A4F3 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 3EC03769293213A0002187DC /* vox.physics */;
+			targetProxy = 3EB32B7829322E7E0019A4F3 /* PBXContainerItemProxy */;
+		};
+		3EB32B7B29322E7E0019A4F3 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 3EC0385B2932152C002187DC /* vox.render */;
+			targetProxy = 3EB32B7A29322E7E0019A4F3 /* PBXContainerItemProxy */;
+		};
+		3EB32B7D29322E7E0019A4F3 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 3EC0383129321473002187DC /* vox.shader */;
+			targetProxy = 3EB32B7C29322E7E0019A4F3 /* PBXContainerItemProxy */;
+		};
 		3EC0371929321133002187DC /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 3EC0370029321131002187DC /* SwiftArcheMac */;
@@ -2226,6 +2327,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CODE_SIGN_ENTITLEMENTS = SwiftArcheMac/SwiftArcheMac.entitlements;
 				CODE_SIGN_IDENTITY = "-";
 				CODE_SIGN_STYLE = Automatic;
@@ -2242,7 +2344,16 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
+				LIBRARY_SEARCH_PATHS = ./third_party/physx/physx/bin/mac.x86_64/debug;
 				MARKETING_VERSION = 1.0;
+				OTHER_LDFLAGS = (
+					"-lPhysX_static_64",
+					"-lPhysXCommon_static_64",
+					"-lPhysXFoundation_static_64",
+					"-lPhysXPvdSDK_static_64",
+					"-lPhysXExtensions_static_64",
+					"-lPhysXCharacterKinematic_static_64",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = archegraphics.SwiftArcheMac;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -2256,6 +2367,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CODE_SIGN_ENTITLEMENTS = SwiftArcheMac/SwiftArcheMac.entitlements;
 				CODE_SIGN_IDENTITY = "-";
 				CODE_SIGN_STYLE = Automatic;
@@ -2272,7 +2384,16 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
+				LIBRARY_SEARCH_PATHS = ./third_party/physx/physx/bin/mac.x86_64/release;
 				MARKETING_VERSION = 1.0;
+				OTHER_LDFLAGS = (
+					"-lPhysX_static_64",
+					"-lPhysXCommon_static_64",
+					"-lPhysXFoundation_static_64",
+					"-lPhysXPvdSDK_static_64",
+					"-lPhysXExtensions_static_64",
+					"-lPhysXCharacterKinematic_static_64",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = archegraphics.SwiftArcheMac;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
