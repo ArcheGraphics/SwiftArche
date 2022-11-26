@@ -5,14 +5,22 @@
 //  property of any third parties.
 
 import vox_math
+#if os(iOS)
 import UIKit
+#else
+import Cocoa
+#endif
 
 /// Pointer.
 public class Pointer {
     /// Unique id.
     public var id: Int
     /// The phase of pointer.
+#if os(iOS)
     public var phase: UITouch.Phase = .cancelled
+#else
+    public var phase: NSEvent.Phase = .cancelled
+#endif
     /// The button that triggers the pointer event.
     public var button: PointerButton = .None
     /// The currently pressed buttons for this pointer.
@@ -21,7 +29,11 @@ public class Pointer {
     public var position: Vector2 = Vector2()
     /// The change of the pointer.
     public var deltaPosition: Vector2 = Vector2()
+#if os(iOS)
     var _events: [UITouch] = []
+#else
+    var _events: [NSEvent] = []
+#endif
     var _uniqueID: Int = 0
     var _upList: [PointerButton] = []
     var _downList: [PointerButton] = []

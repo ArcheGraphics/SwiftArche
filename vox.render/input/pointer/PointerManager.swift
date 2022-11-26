@@ -5,7 +5,11 @@
 //  property of any third parties.
 
 import vox_math
+#if os(iOS)
 import UIKit
+#else
+import Cocoa
+#endif
 
 class PointerManager {
     private static var _tempRay: Ray = Ray()
@@ -18,7 +22,11 @@ class PointerManager {
 
     private var _engine: Engine
     private var _canvas: Canvas
+#if os(iOS)
     private var _nativeEvents: [UITouch] = []
+#else
+    private var _nativeEvents: [NSEvent] = []
+#endif
     private var _pointerPool: [Pointer?] = [Pointer?](repeating: nil, count: 11)
     private var _hadListener: Bool = false
 
@@ -113,41 +121,41 @@ class PointerManager {
         let position = pointer.position
         let length = events.count
         if (length > 0) {
-            let latestEvent = events[length - 1]
-            let location = latestEvent.location(in: _canvas)
-            let previousLocation = latestEvent.previousLocation(in: _canvas)
-            pointer.phase = latestEvent.phase
-            _ = pointer.deltaPosition.set(x: Float(location.x - previousLocation.x), y: Float(location.y - previousLocation.y))
-            _ = pointer.position.set(x: Float(location.x), y: Float(location.y))
-
-            pointer._firePointerDrag()
-            let rayCastEntity = _pointerRayCast(Float(location.x) / canvasW, Float(location.y) / canvasH)
-            pointer._firePointerExitAndEnter(rayCastEntity)
-            for i in 0..<length {
-                let event = events[i]
-                pointer.button = .Primary
-                pointer.pressedButtons = .Primary
-                switch (event.phase) {
-                case .began:
-                    _downList.append(.Primary)
-                    pointer._downList.append(.Primary)
-                    pointer.phase = .began
-                    pointer._firePointerDown(rayCastEntity)
-                    break
-                case .ended:
-                    _upList.append(.Primary)
-                    pointer._upList.append(.Primary)
-                    pointer.phase = .ended
-                    pointer._firePointerUpAndClick(rayCastEntity)
-                    break
-                case .cancelled:
-                    pointer.phase = .cancelled
-                    pointer._firePointerExitAndEnter(nil)
-                default:
-                    break
-                }
-            }
-            pointer._events = []
+//            let latestEvent = events[length - 1]
+//            let location = latestEvent.location(in: _canvas)
+//            let previousLocation = latestEvent.previousLocation(in: _canvas)
+//            pointer.phase = latestEvent.phase
+//            _ = pointer.deltaPosition.set(x: Float(location.x - previousLocation.x), y: Float(location.y - previousLocation.y))
+//            _ = pointer.position.set(x: Float(location.x), y: Float(location.y))
+//
+//            pointer._firePointerDrag()
+//            let rayCastEntity = _pointerRayCast(Float(location.x) / canvasW, Float(location.y) / canvasH)
+//            pointer._firePointerExitAndEnter(rayCastEntity)
+//            for i in 0..<length {
+//                let event = events[i]
+//                pointer.button = .Primary
+//                pointer.pressedButtons = .Primary
+//                switch (event.phase) {
+//                case .began:
+//                    _downList.append(.Primary)
+//                    pointer._downList.append(.Primary)
+//                    pointer.phase = .began
+//                    pointer._firePointerDown(rayCastEntity)
+//                    break
+//                case .ended:
+//                    _upList.append(.Primary)
+//                    pointer._upList.append(.Primary)
+//                    pointer.phase = .ended
+//                    pointer._firePointerUpAndClick(rayCastEntity)
+//                    break
+//                case .cancelled:
+//                    pointer.phase = .cancelled
+//                    pointer._firePointerExitAndEnter(nil)
+//                default:
+//                    break
+//                }
+//            }
+//            pointer._events = []
         } else {
             _ = pointer.deltaPosition.set(x: 0, y: 0)
             pointer.phase = .stationary

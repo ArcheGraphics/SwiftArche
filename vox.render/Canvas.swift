@@ -7,9 +7,24 @@
 import MetalKit
 
 public class Canvas: MTKView {
-//    var inputManager: InputManager?
+    var inputManager: InputManager?
     public var updateFlagManager = UpdateFlagManager()
 
+    public var isMultipleTouchEnabled:Bool {
+        get {
+#if os(iOS)
+            super.isMultipleTouchEnabled
+#else
+            false
+#endif
+        }
+        set {
+#if os(iOS)
+            super.isMultipleTouchEnabled = newValue            
+#endif
+        }
+    }
+    
     required init(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -72,5 +87,45 @@ public class Canvas: MTKView {
 
     public override func pressesCancelled(_ presses: Set<UIPress>, with event: UIPressesEvent?) {
     }
+#else
+    public override func keyDown(with event: NSEvent) {
+    }
+
+    public override func keyUp(with event: NSEvent) {
+    }
+    
+    public override func mouseDown(with event: NSEvent) {
+    }
+
+    public override func mouseUp(with event: NSEvent) {
+    }
+
+    public override func mouseDragged(with event: NSEvent) {
+    }
+
+    public override func mouseMoved(with event: NSEvent) {
+    }
+
+    public override func rightMouseDown(with event: NSEvent) {
+    }
+
+    public override func rightMouseUp(with event: NSEvent) {
+    }
+
+    public override func rightMouseDragged(with event: NSEvent) {
+    }
+
+    public override func otherMouseDown(with event: NSEvent) {
+    }
+
+    public override func otherMouseUp(with event: NSEvent) {
+    }
+
+    public override func otherMouseDragged(with event: NSEvent) {
+    }
+
+    public override func scrollWheel(with event: NSEvent) {
+    }
+    
 #endif
 }

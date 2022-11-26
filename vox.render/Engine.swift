@@ -23,7 +23,7 @@ public class Engine: NSObject {
     private var _device: MTLDevice
     private var _sceneManager: SceneManager!
     private var _physicsManager: PhysicsManager!
-//    private var _inputManager: InputManager!
+    private var _inputManager: InputManager!
 #if os(iOS)
     private var _arManager: ARManager?
 #endif
@@ -66,12 +66,12 @@ public class Engine: NSObject {
         }
     }
 
-//    /// Get the input manager.
-//    public var inputManager: InputManager {
-//        get {
-//            _inputManager
-//        }
-//    }
+    /// Get the input manager.
+    public var inputManager: InputManager {
+        get {
+            _inputManager
+        }
+    }
 
 #if os(iOS)
     /// Get the ar manager.
@@ -126,7 +126,7 @@ public class Engine: NSObject {
         canvas.delegate = self
         canvas.device = device
         _physicsManager = PhysicsManager(engine: self)
-//        _inputManager = InputManager(engine: self)
+        _inputManager = InputManager(engine: self)
         _sceneManager = SceneManager(engine: self)
         _sceneManager.activeScene = Scene(self, "DefaultScene")
 
@@ -162,7 +162,7 @@ public class Engine: NSObject {
 
                 componentsManager.callScriptOnStart()
                 _physicsManager._update(deltaTime)
-//                _inputManager._update()
+                _inputManager._update()
                 componentsManager.callScriptOnUpdate(deltaTime)
                 componentsManager.callAnimationUpdate(deltaTime)
                 componentsManager.callScriptOnLateUpdate(deltaTime)
