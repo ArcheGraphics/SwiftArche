@@ -15,6 +15,11 @@
 		040F1DC0293392FA008BDC8D /* WheelManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 040F1DBF293392FA008BDC8D /* WheelManager.swift */; };
 		040F1DC2293393E2008BDC8D /* KeyboardManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 040F1DC1293393E2008BDC8D /* KeyboardManager.swift */; };
 		040F1DC4293397B3008BDC8D /* Keys.swift in Sources */ = {isa = PBXBuildFile; fileRef = 040F1DC3293397B3008BDC8D /* Keys.swift */; };
+		040F1DC82933A172008BDC8D /* ControlKeyboard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 040F1DC72933A172008BDC8D /* ControlKeyboard.swift */; };
+		040F1DCA2933A3BE008BDC8D /* ControlWheel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 040F1DC92933A3BE008BDC8D /* ControlWheel.swift */; };
+		040F1DCC2933AAF0008BDC8D /* ControlFreePointer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 040F1DCB2933AAF0008BDC8D /* ControlFreePointer.swift */; };
+		040F1DCE2933AB71008BDC8D /* FreeControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 040F1DCD2933AB71008BDC8D /* FreeControl.swift */; };
+		040F1DD02933AC19008BDC8D /* ControlFreeKeyboard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 040F1DCF2933AC19008BDC8D /* ControlFreeKeyboard.swift */; };
 		04462F21293324A300F95387 /* Textures.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 04462F20293324A200F95387 /* Textures.xcassets */; };
 		3EB32B032932299A0019A4F3 /* Logging in Frameworks */ = {isa = PBXBuildFile; productRef = 3EB32B022932299A0019A4F3 /* Logging */; };
 		3EB32B7529322DB30019A4F3 /* PrimitiveApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EB32B7429322DB30019A4F3 /* PrimitiveApp.swift */; };
@@ -433,6 +438,11 @@
 		040F1DBF293392FA008BDC8D /* WheelManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WheelManager.swift; sourceTree = "<group>"; };
 		040F1DC1293393E2008BDC8D /* KeyboardManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardManager.swift; sourceTree = "<group>"; };
 		040F1DC3293397B3008BDC8D /* Keys.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Keys.swift; sourceTree = "<group>"; };
+		040F1DC72933A172008BDC8D /* ControlKeyboard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ControlKeyboard.swift; sourceTree = "<group>"; };
+		040F1DC92933A3BE008BDC8D /* ControlWheel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ControlWheel.swift; sourceTree = "<group>"; };
+		040F1DCB2933AAF0008BDC8D /* ControlFreePointer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ControlFreePointer.swift; sourceTree = "<group>"; };
+		040F1DCD2933AB71008BDC8D /* FreeControl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FreeControl.swift; sourceTree = "<group>"; };
+		040F1DCF2933AC19008BDC8D /* ControlFreeKeyboard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ControlFreeKeyboard.swift; sourceTree = "<group>"; };
 		04462F20293324A200F95387 /* Textures.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Textures.xcassets; sourceTree = SOURCE_ROOT; };
 		3EB32B7429322DB30019A4F3 /* PrimitiveApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrimitiveApp.swift; sourceTree = "<group>"; };
 		3EB32B832932303A0019A4F3 /* libc++abi.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libc++abi.tbd"; path = "usr/lib/libc++abi.tbd"; sourceTree = SDKROOT; };
@@ -857,6 +867,7 @@
 				040F1DB629336F73008BDC8D /* inputDevice */,
 				040F1DAF29336AAE008BDC8D /* Spherical.swift */,
 				040F1DBA29336FBF008BDC8D /* OrbitControl.swift */,
+				040F1DCD2933AB71008BDC8D /* FreeControl.swift */,
 			);
 			path = controls;
 			sourceTree = "<group>";
@@ -874,6 +885,10 @@
 			children = (
 				040F1DB729336F86008BDC8D /* IControlInput.swift */,
 				040F1DBD2933705D008BDC8D /* ControlPointer.swift */,
+				040F1DC72933A172008BDC8D /* ControlKeyboard.swift */,
+				040F1DC92933A3BE008BDC8D /* ControlWheel.swift */,
+				040F1DCB2933AAF0008BDC8D /* ControlFreePointer.swift */,
+				040F1DCF2933AC19008BDC8D /* ControlFreeKeyboard.swift */,
 			);
 			path = inputDevice;
 			sourceTree = "<group>";
@@ -1995,11 +2010,16 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				040F1DC82933A172008BDC8D /* ControlKeyboard.swift in Sources */,
+				040F1DCA2933A3BE008BDC8D /* ControlWheel.swift in Sources */,
 				040F1DBE2933705D008BDC8D /* ControlPointer.swift in Sources */,
+				040F1DCE2933AB71008BDC8D /* FreeControl.swift in Sources */,
+				040F1DD02933AC19008BDC8D /* ControlFreeKeyboard.swift in Sources */,
 				040F1DB529336F48008BDC8D /* ControlHandlerType.swift in Sources */,
 				040F1DB029336AAE008BDC8D /* Spherical.swift in Sources */,
 				040F1DBB29336FBF008BDC8D /* OrbitControl.swift in Sources */,
 				040F1DB829336F86008BDC8D /* IControlInput.swift in Sources */,
+				040F1DCC2933AAF0008BDC8D /* ControlFreePointer.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

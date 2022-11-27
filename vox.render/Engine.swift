@@ -11,7 +11,7 @@ import Logging
 let logger = Logger(label: "com.arche.main")
 
 public class Engine: NSObject {
-    let canvas: Canvas
+    public let canvas: Canvas
     let library: MTLLibrary!
     let commandQueue: MTLCommandQueue
     let _macroCollection: ShaderMacroCollection = ShaderMacroCollection()

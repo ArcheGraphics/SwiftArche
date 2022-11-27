@@ -104,7 +104,7 @@ public class InputManager {
     }
     
     /// Get the change of the scroll wheel on the x-axis.
-    var wheelDelta:Vector3 {
+    public var wheelDelta:Vector3 {
         get {
             _wheelManager._delta
         }
@@ -113,7 +113,7 @@ public class InputManager {
     /// Whether the key is being held down, if there is no parameter, return whether any key is being held down.
     /// - Parameter key: The keys of the keyboard
     /// - Returns: Whether the key is being held down
-    public func isKeyHeldDown(key: Keys? = nil)->Bool {
+    public func isKeyHeldDown(_ key: Keys? = nil)->Bool {
         if (_initialized) {
             if (key == nil) {
                 return _keyboardManager._curFrameHeldDownList.count > 0
@@ -128,7 +128,7 @@ public class InputManager {
     /// Whether the key starts to be pressed down during the current frame, if there is no parameter, return whether any key starts to be pressed down during the current frame.
     /// - Parameter key: The keys of the keyboard
     /// - Returns: Whether the key starts to be pressed down during the current frame
-    public func isKeyDown(key: Keys? = nil)->Bool {
+    public func isKeyDown(_ key: Keys? = nil)->Bool {
         if (_initialized) {
             if (key == nil) {
                 return _keyboardManager._curFrameDownList.count > 0
@@ -143,7 +143,7 @@ public class InputManager {
     /// Whether the key is released during the current frame, if there is no parameter, return whether any key released during the current frame.
     /// - Parameter key: The keys of the keyboard
     /// - Returns: Whether the key is released during the current frame
-    public func isKeyUp(key: Keys? = nil)->Bool {
+    public func isKeyUp(_ key: Keys? = nil)->Bool {
         if (_initialized) {
             if (key == nil) {
                 return _keyboardManager._curFrameUpList.count > 0

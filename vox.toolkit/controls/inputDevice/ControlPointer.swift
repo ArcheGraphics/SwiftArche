@@ -63,7 +63,7 @@ class ControlPointer : IControlInput {
         return ControlPointer._handlerType
     }
     
-    static func onUpdateDelta(_ control: OrbitControl, outDelta: inout Vector3) {
+    static func onUpdateDelta(_ control: OrbitControl, _ outDelta: inout Vector3) {
         var outDeltaVec = SIMD3<Float>(repeating: 0.0)
         switch (ControlPointer._deltaType) {
         case DeltaType.Moving:
