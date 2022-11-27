@@ -14,7 +14,7 @@ import Cocoa
 class PointerManager {
     private static var _tempRay: Ray = Ray()
     private static var _tempHitResult: HitResult = HitResult()
-
+    
     var _pointers: [Pointer] = []
     var _buttons: UInt = 0
 #if os(iOS)
@@ -28,7 +28,7 @@ class PointerManager {
     var _upList: [NSEvent.EventType] = []
     var _downList: [NSEvent.EventType] = []
 #endif
-
+    
     private var _engine: Engine
     private var _canvas: Canvas
 #if os(iOS)
@@ -38,12 +38,12 @@ class PointerManager {
 #endif
     private var _pointerPool: [Pointer?] = [Pointer?](repeating: nil, count: 11)
     private var _hadListener: Bool = false
-
+    
     init(_ engine: Engine) {
         _engine = engine
         _canvas = engine.canvas
     }
-
+    
     func _update(_ frameCount: UInt64) {
         /** Clean up the pointer released in the previous frame. */
         var lastIndex = _pointers.count - 1
@@ -60,7 +60,7 @@ class PointerManager {
             }
             _pointers = _pointers.dropLast(_pointers.count - lastIndex - 1)
         }
-
+        
         /** Generate the pointer received for this frame. */
         lastIndex = _nativeEvents.count - 1
         if (lastIndex >= 0) {
@@ -70,7 +70,7 @@ class PointerManager {
             }
             _nativeEvents = []
         }
-
+        
         /** Pointer handles its own events. */
         _upList = []
         _downList = []
@@ -86,7 +86,7 @@ class PointerManager {
             }
         }
     }
-
+    
     private func _getIndexByPointerID(_ pointerId: Int) -> Int {
         for i in 0..<_pointers.count {
             if (_pointers[i]._uniqueID == pointerId) {
@@ -95,7 +95,7 @@ class PointerManager {
         }
         return -1
     }
-
+    
     private func _getPointer(_ pointerId: Int) -> Pointer? {
         let index = _getIndexByPointerID(pointerId)
         if (index >= 0) {
@@ -124,7 +124,7 @@ class PointerManager {
             }
         }
     }
-
+    
     private func _updatePointer(_ frameCount: UInt64, _ pointer: Pointer, _ canvasW: Float, _ canvasH: Float) {
         let events = pointer._events
         let position = pointer.position
@@ -142,7 +142,7 @@ class PointerManager {
             _ = pointer.deltaPosition.set(x: Float(latestEvent.deltaX), y: Float(latestEvent.deltaY))
             _ = pointer.position.set(x: Float(location.x), y: Float(location.y))
 #endif
-
+            
             pointer._firePointerDrag()
             let rayCastEntity = _pointerRayCast(Float(location.x) / canvasW, Float(location.y) / canvasH)
             pointer._firePointerExitAndEnter(rayCastEntity)
@@ -183,7 +183,7 @@ class PointerManager {
             pointer._firePointerExitAndEnter(_pointerRayCast(position.x / canvasW, position.y / canvasH))
         }
     }
-
+    
     private func _pointerRayCast(_ normalizedX: Float, _ normalizedY: Float) -> Entity? {
         let cameras = _engine.sceneManager.activeScene!._activeCameras
         for i in 0..<cameras.count {
@@ -198,9 +198,9 @@ class PointerManager {
             if (normalizedX >= vpX && normalizedY >= vpY && normalizedX - vpX <= vpW && normalizedY - vpY <= vpH) {
                 let point = Vector2((normalizedX - vpX) / vpW, (normalizedY - vpY) / vpH)
                 if (_engine.physicsManager.raycast(
-                        camera.viewportPointToRay(point, PointerManager._tempRay),
-                        Float.greatestFiniteMagnitude,
-                        camera.cullingMask, PointerManager._tempHitResult)) {
+                    camera.viewportPointToRay(point, PointerManager._tempRay),
+                    Float.greatestFiniteMagnitude,
+                    camera.cullingMask, PointerManager._tempHitResult)) {
                     return PointerManager._tempHitResult.entity
                 } else if ((camera.clearFlags.rawValue & CameraClearFlags.Color.rawValue) != 0) {
                     return nil
@@ -209,4 +209,14 @@ class PointerManager {
         }
         return nil
     }
+    
+#if os(iOS)
+    func _onPointerEvent(_ evt: UITouch) {
+        _nativeEvents.append(evt)
+    }
+#else
+    func _onPointerEvent(_ evt: NSEvent) {
+        _nativeEvents.append(evt)
+    }
+#endif
 }

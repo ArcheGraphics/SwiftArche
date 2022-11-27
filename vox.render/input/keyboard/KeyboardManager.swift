@@ -51,4 +51,8 @@ class KeyboardManager {
             _nativeEvents = []
         }
     }
+    
+    func _onKeyEvent(_ evt: NSEvent) {
+        _nativeEvents.append(evt)
+    }
 }

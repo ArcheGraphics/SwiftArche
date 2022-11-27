@@ -878,6 +878,23 @@
 			path = inputDevice;
 			sourceTree = "<group>";
 		};
+		040F1DC529339E93008BDC8D /* keyboard */ = {
+			isa = PBXGroup;
+			children = (
+				040F1DC3293397B3008BDC8D /* Keys.swift */,
+				040F1DC1293393E2008BDC8D /* KeyboardManager.swift */,
+			);
+			path = keyboard;
+			sourceTree = "<group>";
+		};
+		040F1DC629339EA9008BDC8D /* wheel */ = {
+			isa = PBXGroup;
+			children = (
+				040F1DBF293392FA008BDC8D /* WheelManager.swift */,
+			);
+			path = wheel;
+			sourceTree = "<group>";
+		};
 		3EB32B7E29322E850019A4F3 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -891,10 +908,9 @@
 		3EB32B89293238F00019A4F3 /* input */ = {
 			isa = PBXGroup;
 			children = (
+				040F1DC629339EA9008BDC8D /* wheel */,
+				040F1DC529339E93008BDC8D /* keyboard */,
 				3EB32B8B293238FF0019A4F3 /* pointer */,
-				040F1DC3293397B3008BDC8D /* Keys.swift */,
-				040F1DC1293393E2008BDC8D /* KeyboardManager.swift */,
-				040F1DBF293392FA008BDC8D /* WheelManager.swift */,
 				3EB32B8C293239170019A4F3 /* InputManager.swift */,
 			);
 			path = input;

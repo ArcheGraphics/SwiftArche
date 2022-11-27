@@ -23,4 +23,8 @@ class WheelManager {
         }
         _delta = Vector3(delta)
     }
+    
+    func _onWheelEvent(_ evt: NSEvent) {
+      _nativeEvents.append(evt)
+    }
 }

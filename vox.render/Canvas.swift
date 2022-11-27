@@ -53,15 +53,27 @@ public class Canvas: MTKView {
     // MARK: - RawEvent
 #if os(iOS)
     public override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        for touch in touches {
+            inputManager?._pointerManager._onPointerEvent(touch)
+        }
     }
 
     public override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
+        for touch in touches {
+            inputManager?._pointerManager._onPointerEvent(touch)
+        }
     }
 
     public override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
+        for touch in touches {
+            inputManager?._pointerManager._onPointerEvent(touch)
+        }
     }
 
     public override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
+        for touch in touches {
+            inputManager?._pointerManager._onPointerEvent(touch)
+        }
     }
 
     public override func pressesBegan(_ presses: Set<UIPress>, with event: UIPressesEvent?) {
@@ -77,42 +89,55 @@ public class Canvas: MTKView {
     }
 #else
     public override func keyDown(with event: NSEvent) {
+        inputManager?._keyboardManager._onKeyEvent(event)
     }
 
     public override func keyUp(with event: NSEvent) {
+        inputManager?._keyboardManager._onKeyEvent(event)
     }
     
     public override func mouseDown(with event: NSEvent) {
+        inputManager?._pointerManager._onPointerEvent(event)
     }
 
     public override func mouseUp(with event: NSEvent) {
+        inputManager?._pointerManager._onPointerEvent(event)
     }
 
     public override func mouseDragged(with event: NSEvent) {
+        inputManager?._pointerManager._onPointerEvent(event)
     }
 
     public override func mouseMoved(with event: NSEvent) {
+        inputManager?._pointerManager._onPointerEvent(event)
     }
 
     public override func rightMouseDown(with event: NSEvent) {
+        inputManager?._pointerManager._onPointerEvent(event)
     }
 
     public override func rightMouseUp(with event: NSEvent) {
+        inputManager?._pointerManager._onPointerEvent(event)
     }
 
     public override func rightMouseDragged(with event: NSEvent) {
+        inputManager?._pointerManager._onPointerEvent(event)
     }
 
     public override func otherMouseDown(with event: NSEvent) {
+        inputManager?._pointerManager._onPointerEvent(event)
     }
 
     public override func otherMouseUp(with event: NSEvent) {
+        inputManager?._pointerManager._onPointerEvent(event)
     }
 
     public override func otherMouseDragged(with event: NSEvent) {
+        inputManager?._pointerManager._onPointerEvent(event)
     }
 
     public override func scrollWheel(with event: NSEvent) {
+        inputManager?._wheelManager._onWheelEvent(event)
     }
     
 #endif

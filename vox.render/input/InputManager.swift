@@ -16,10 +16,10 @@ public class InputManager {
     /// Sometimes the input module will not be initialized, such as off-screen rendering.
     private var _initialized: Bool = false
     private var _curFrameCount: UInt64 = 0
-    private var _pointerManager: PointerManager
+    var _pointerManager: PointerManager
 #if os(macOS)
-    private var _wheelManager: WheelManager
-    private var _keyboardManager: KeyboardManager
+    var _wheelManager: WheelManager
+    var _keyboardManager: KeyboardManager
 #endif
     
     /// Pointer list.
@@ -31,9 +31,10 @@ public class InputManager {
     
     init(engine: Engine) {
         _pointerManager = PointerManager(engine)
+#if os(macOS)
         _wheelManager = WheelManager()
         _keyboardManager = KeyboardManager()
-        
+#endif
         _initialized = true
     }
     
@@ -159,8 +160,10 @@ public class InputManager {
         if (_initialized) {
             _curFrameCount += 1
             _pointerManager._update(_curFrameCount)
+#if os(macOS)
             _keyboardManager._update(_curFrameCount)
             _wheelManager._update()
+#endif
         }
     }
 }
