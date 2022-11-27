@@ -13,8 +13,7 @@ public class PBRBaseMaterial: BaseMaterial {
             normalTextureIntensity: 1,
             occlusionTextureIntensity: 1,
             occlusionTextureCoord: TextureCoordinate.UV0.rawValue,
-            clearCoat: 0, clearCoatRoughness: 0,
-            tilingOffset: vector_float4(1, 1, 0, 0))
+            clearCoat: 0, clearCoatRoughness: 0)
     private static let _pbrBaseProp = "u_pbrBase"
 
     private var _baseTexture: MTLTexture?
@@ -181,12 +180,11 @@ public class PBRBaseMaterial: BaseMaterial {
     /// Tiling and offset of main textures.
     public var tilingOffset: Vector4 {
         get {
-            Vector4(_pbrBaseData.tilingOffset)
+            _tilingOffset
         }
-
         set {
-            _pbrBaseData.tilingOffset = newValue.internalValue
-            shaderData.setData(PBRBaseMaterial._pbrBaseProp, _pbrBaseData)
+            _tilingOffset = newValue
+            shaderData.setData(UnlitMaterial._tilingOffsetProp, newValue)
         }
     }
 
@@ -286,5 +284,6 @@ public class PBRBaseMaterial: BaseMaterial {
         shaderData.enableMacro(NEED_WORLDPOS)
         shaderData.enableMacro(NEED_TILINGOFFSET)
         shaderData.setData(PBRBaseMaterial._pbrBaseProp, _pbrBaseData)
+        shaderData.setData(UnlitMaterial._tilingOffsetProp, _tilingOffset)
     }
 }

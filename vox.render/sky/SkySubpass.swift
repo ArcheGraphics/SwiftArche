@@ -20,6 +20,10 @@ public class SkySubpass: Subpass {
     private let _pipelineDescriptor = MTLRenderPipelineDescriptor()
     private var _pso: RenderPipelineState!
     private var _depthStencilState: MTLDepthStencilState!
+    
+    public override init() {
+        super.init()
+    }
 
     func prepare(_ encoder: MTLRenderCommandEncoder) {
         let pipeline = _renderPass.pipeline!

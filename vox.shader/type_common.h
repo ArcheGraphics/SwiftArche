@@ -80,8 +80,6 @@ struct PBRBaseData {
     int occlusionTextureCoord;
     float clearCoat;
     float clearCoatRoughness;
-
-    vector_float4 tilingOffset;
 };
 
 struct PBRData {

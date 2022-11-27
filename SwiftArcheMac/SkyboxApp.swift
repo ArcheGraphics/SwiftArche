@@ -7,17 +7,9 @@
 import Cocoa
 import vox_render
 import vox_math
+import ModelIO
 
-class MoveScript: Script {
-    private var _rTri: Float = 0
-
-    override func onUpdate(_ deltaTime: Float) {
-        _rTri += 90 * deltaTime
-        entity.transform.setRotation(x: 0, y: _rTri, z: 0)
-    }
-}
-
-class PrimitiveApp: NSViewController {
+class SkyboxApp: NSViewController {
     var canvas: Canvas!
     var engine: Engine!
 
@@ -31,6 +23,20 @@ class PrimitiveApp: NSViewController {
         let scene = engine.sceneManager.activeScene!
         let rootEntity = scene.createRootEntity()
 
+        let skyboxMDL = MDLSkyCubeTexture(name: "country", channelEncoding: .uInt8,
+                                          textureDimensions: [256, 256], turbidity: 0.28, sunElevation: 0.6,
+                                          upperAtmosphereScattering: 0.1, groundAlbedo: 4)
+        let skyBox = try! engine.textureLoader.loadTexture(with: skyboxMDL)!
+        let skyMaterial = SkyBoxMaterial(engine)
+        skyMaterial.textureCubeMap = skyBox
+        
+        let skySubpass = SkySubpass()
+        skySubpass.material = skyMaterial
+        skySubpass.mesh = PrimitiveMesh.createCuboid(engine)
+        
+        scene.background.mode = .Sky
+        scene.background.sky = skySubpass
+
         let cameraEntity = rootEntity.createChild()
         cameraEntity.transform.setPosition(x: 1, y: 1, z: 1)
         cameraEntity.transform.lookAt(targetPosition: Vector3())
@@ -42,10 +48,9 @@ class PrimitiveApp: NSViewController {
         pointLight.intensity = 0.3
 
         let cubeEntity = rootEntity.createChild()
-        let _: MoveScript = cubeEntity.addComponent()
         let renderer: MeshRenderer = cubeEntity.addComponent()
         renderer.mesh = PrimitiveMesh.createCuboid(engine, 0.1, 0.1, 0.1)
-        let material = PBRMaterial(engine)
+        let material = UnlitMaterial(engine)
         material.baseColor = Color(0.4, 0.0, 0.0)
         renderer.setMaterial(material)
 

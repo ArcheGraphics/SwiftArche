@@ -41,7 +41,7 @@ public class SkyBoxMaterial: Material {
         }
         set {
             _textureCubeMap = newValue
-            shaderData.setImageView("u_cube", "u_cubeSampler", _textureCubeMap)
+            shaderData.setImageView("u_cubeTexture", "u_cubeSampler", _textureCubeMap)
         }
     }
 
