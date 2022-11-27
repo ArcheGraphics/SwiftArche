@@ -6,6 +6,12 @@
 
 import MetalKit
 
+#if os(iOS)
+public typealias View = UIView
+#else
+public typealias View = NSView
+#endif
+
 public class Canvas: MTKView {
     var inputManager: InputManager?
     public var updateFlagManager = UpdateFlagManager()
@@ -22,15 +28,15 @@ public class Canvas: MTKView {
         fatalError("init(coder:) has not been implemented")
     }
 
-    public init(frame frameRect: CGRect) {
-        super.init(frame: frameRect, device: nil)
+    public init(with view: View) {
+        super.init(frame: view.frame, device: nil)
+        _setParentView(view)
         translatesAutoresizingMaskIntoConstraints = false
         depthStencilPixelFormat = MTLPixelFormat.depth32Float_stencil8
         colorPixelFormat = MTLPixelFormat.bgra8Unorm
     }
-
-#if os(iOS)
-    public func setParentView(_ view: UIView) {
+    
+    private func _setParentView(_ view: View) {
         view.addSubview(self)
         NSLayoutConstraint.activate([
             topAnchor.constraint(equalTo: view.topAnchor),
@@ -39,17 +45,6 @@ public class Canvas: MTKView {
             bottomAnchor.constraint(equalTo: view.bottomAnchor)
         ])
     }
-#else
-    public func setParentView(_ view: NSView) {
-        view.addSubview(self)
-        NSLayoutConstraint.activate([
-            topAnchor.constraint(equalTo: view.topAnchor),
-            leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            bottomAnchor.constraint(equalTo: view.bottomAnchor)
-        ])
-    }
-#endif
 
     public func dispatchResize() {
         updateFlagManager.dispatch(type: nil, param: self)

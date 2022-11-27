@@ -41,8 +41,7 @@ class PrimitiveApp: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        canvas = Canvas(frame: view.frame)
-        canvas.setParentView(view)
+        canvas = Canvas(with: view)
 
         engine = Engine(canvas: canvas)
         engine.initArSession()

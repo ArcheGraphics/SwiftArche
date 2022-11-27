@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		040F1D9D293369DC008BDC8D /* Textures.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 040F1D9C293369DC008BDC8D /* Textures.xcassets */; };
 		04176A792925295B00B1775A /* PointerButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = E63B1323D02AE5FF4E20C301 /* PointerButton.swift */; };
 		04176A7A2925295B00B1775A /* Pointer.swift in Sources */ = {isa = PBXBuildFile; fileRef = E63B111B2848B79F0F440F00 /* Pointer.swift */; };
 		04176A7B292717D900B1775A /* Time.swift in Sources */ = {isa = PBXBuildFile; fileRef = E63B17B65377F894AAEF5610 /* Time.swift */; };
@@ -154,7 +155,6 @@
 		3E67EEC6291DF54F00ED60C8 /* DepthState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8C518C7B03C3787F9676C /* DepthState.swift */; };
 		3E67EED12921D9C800ED60C8 /* unlit_shading.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3E67EED02921D9C800ED60C8 /* unlit_shading.metal */; };
 		3E67EED42921DB4A00ED60C8 /* function_common.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3E67EED32921DB4A00ED60C8 /* function_common.metal */; };
-		3EC036EF2931B746002187DC /* specular_map.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3EC036EE2931B746002187DC /* specular_map.metal */; };
 		3EC036F42931B801002187DC /* texture_packer.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3EC036F32931B801002187DC /* texture_packer.metal */; };
 		3EC036F72931FF95002187DC /* DecodeMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EC036F62931FF95002187DC /* DecodeMode.swift */; };
 		43D8C013A31176A5BCE169AC /* KHR_materials_pbrSpecularGlossiness.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8CC391B749FD47D8987F9 /* KHR_materials_pbrSpecularGlossiness.swift */; };
@@ -397,6 +397,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		040F1D9C293369DC008BDC8D /* Textures.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Textures.xcassets; sourceTree = SOURCE_ROOT; };
 		04176ABF29275CD300B1775A /* libPhysXExtensions_static_64.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libPhysXExtensions_static_64.a; path = third_party/physx/physx/bin/ios.arm_64/debug/libPhysXExtensions_static_64.a; sourceTree = "<group>"; };
 		04176AC029275CD400B1775A /* libPhysX_static_64.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libPhysX_static_64.a; path = third_party/physx/physx/bin/ios.arm_64/debug/libPhysX_static_64.a; sourceTree = "<group>"; };
 		04176AC129275CD400B1775A /* libPhysXFoundation_static_64.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libPhysXFoundation_static_64.a; path = third_party/physx/physx/bin/ios.arm_64/debug/libPhysXFoundation_static_64.a; sourceTree = "<group>"; };
@@ -1257,6 +1258,7 @@
 			isa = PBXGroup;
 			children = (
 				3E67EDD1291B2F7600ED60C8 /* Main.storyboard */,
+				040F1D9C293369DC008BDC8D /* Textures.xcassets */,
 				3E67EDD4291B2F7800ED60C8 /* Assets.xcassets */,
 				3E67EE55291B3D8600ED60C8 /* SwiftArche.entitlements */,
 				3E67EDC8291B2F7600ED60C8 /* AppDelegate.swift */,
@@ -1831,6 +1833,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				040F1D9D293369DC008BDC8D /* Textures.xcassets in Resources */,
 				3E67EDD5291B2F7800ED60C8 /* Assets.xcassets in Resources */,
 				3E67EDD3291B2F7600ED60C8 /* Main.storyboard in Resources */,
 			);
@@ -1958,7 +1961,6 @@
 				04176A7D2927343900B1775A /* ar_shading.metal in Sources */,
 				3E0F7B242924834B00C4A843 /* background_shading.metal in Sources */,
 				3EC036F42931B801002187DC /* texture_packer.metal in Sources */,
-				3EC036EF2931B746002187DC /* specular_map.metal in Sources */,
 				3E0F7B1429220F8C00C4A843 /* shadowmap.metal in Sources */,
 				04ED07DA29226E9C00DD55AB /* normal_shading.metal in Sources */,
 				04ED07DE292284FD00DD55AB /* shadow_shading.metal in Sources */,
