@@ -12,6 +12,9 @@
 		040F1DB829336F86008BDC8D /* IControlInput.swift in Sources */ = {isa = PBXBuildFile; fileRef = 040F1DB729336F86008BDC8D /* IControlInput.swift */; };
 		040F1DBB29336FBF008BDC8D /* OrbitControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 040F1DBA29336FBF008BDC8D /* OrbitControl.swift */; };
 		040F1DBE2933705D008BDC8D /* ControlPointer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 040F1DBD2933705D008BDC8D /* ControlPointer.swift */; };
+		040F1DC0293392FA008BDC8D /* WheelManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 040F1DBF293392FA008BDC8D /* WheelManager.swift */; };
+		040F1DC2293393E2008BDC8D /* KeyboardManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 040F1DC1293393E2008BDC8D /* KeyboardManager.swift */; };
+		040F1DC4293397B3008BDC8D /* Keys.swift in Sources */ = {isa = PBXBuildFile; fileRef = 040F1DC3293397B3008BDC8D /* Keys.swift */; };
 		04462F21293324A300F95387 /* Textures.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 04462F20293324A200F95387 /* Textures.xcassets */; };
 		3EB32B032932299A0019A4F3 /* Logging in Frameworks */ = {isa = PBXBuildFile; productRef = 3EB32B022932299A0019A4F3 /* Logging */; };
 		3EB32B7529322DB30019A4F3 /* PrimitiveApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EB32B7429322DB30019A4F3 /* PrimitiveApp.swift */; };
@@ -427,6 +430,9 @@
 		040F1DB729336F86008BDC8D /* IControlInput.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IControlInput.swift; sourceTree = "<group>"; };
 		040F1DBA29336FBF008BDC8D /* OrbitControl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrbitControl.swift; sourceTree = "<group>"; };
 		040F1DBD2933705D008BDC8D /* ControlPointer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ControlPointer.swift; sourceTree = "<group>"; };
+		040F1DBF293392FA008BDC8D /* WheelManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WheelManager.swift; sourceTree = "<group>"; };
+		040F1DC1293393E2008BDC8D /* KeyboardManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardManager.swift; sourceTree = "<group>"; };
+		040F1DC3293397B3008BDC8D /* Keys.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Keys.swift; sourceTree = "<group>"; };
 		04462F20293324A200F95387 /* Textures.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Textures.xcassets; sourceTree = SOURCE_ROOT; };
 		3EB32B7429322DB30019A4F3 /* PrimitiveApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrimitiveApp.swift; sourceTree = "<group>"; };
 		3EB32B832932303A0019A4F3 /* libc++abi.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libc++abi.tbd"; path = "usr/lib/libc++abi.tbd"; sourceTree = SDKROOT; };
@@ -886,6 +892,9 @@
 			isa = PBXGroup;
 			children = (
 				3EB32B8B293238FF0019A4F3 /* pointer */,
+				040F1DC3293397B3008BDC8D /* Keys.swift */,
+				040F1DC1293393E2008BDC8D /* KeyboardManager.swift */,
+				040F1DBF293392FA008BDC8D /* WheelManager.swift */,
 				3EB32B8C293239170019A4F3 /* InputManager.swift */,
 			);
 			path = input;
@@ -2097,6 +2106,7 @@
 				3EC03954293218B3002187DC /* ForwardSubpass.swift in Sources */,
 				3EC0397A293218C3002187DC /* Mesh.swift in Sources */,
 				3EC0391C2932186B002187DC /* ParserContext.swift in Sources */,
+				040F1DC4293397B3008BDC8D /* Keys.swift in Sources */,
 				3EC039CE29321903002187DC /* AnimationEventHandler.swift in Sources */,
 				3EC0393829321893002187DC /* ShadowResolution.swift in Sources */,
 				3EC0389429321826002187DC /* EngineSettings.swift in Sources */,
@@ -2125,6 +2135,7 @@
 				3EC039D729321910002187DC /* IAnimationCurveOwnerAssembler.swift in Sources */,
 				3EC03A022932192D002187DC /* Background.swift in Sources */,
 				3EB32B8D293239170019A4F3 /* InputManager.swift in Sources */,
+				040F1DC2293393E2008BDC8D /* KeyboardManager.swift in Sources */,
 				3EC0389929321826002187DC /* ComponentsManager.swift in Sources */,
 				3EC038E129321845002187DC /* PhysXFixedJoint.swift in Sources */,
 				3EC038B829321835002187DC /* PhysXPhysicsManager.swift in Sources */,
@@ -2176,6 +2187,7 @@
 				3EC039172932186A002187DC /* TextureParser.swift in Sources */,
 				3EC039C1293218FB002187DC /* AnimationClip.swift in Sources */,
 				3EC03997293218DA002187DC /* PointLight.swift in Sources */,
+				040F1DC0293392FA008BDC8D /* WheelManager.swift in Sources */,
 				3EC038F12932184C002187DC /* ControllerNonWalkableMode.swift in Sources */,
 				3EC0389829321826002187DC /* Scene.swift in Sources */,
 				3EC038E929321845002187DC /* JointMotor.swift in Sources */,

@@ -9,6 +9,7 @@ import UIKit
 #else
 import Cocoa
 #endif
+import vox_math
 
 /// InputManager manages device input such as mouse, touch, keyboard, etc.
 public class InputManager {
@@ -16,19 +17,26 @@ public class InputManager {
     private var _initialized: Bool = false
     private var _curFrameCount: UInt64 = 0
     private var _pointerManager: PointerManager
-
+#if os(macOS)
+    private var _wheelManager: WheelManager
+    private var _keyboardManager: KeyboardManager
+#endif
+    
     /// Pointer list.
     public var pointers: [Pointer] {
         get {
             _initialized ? _pointerManager._pointers : []
         }
     }
-
+    
     init(engine: Engine) {
         _pointerManager = PointerManager(engine)
+        _wheelManager = WheelManager()
+        _keyboardManager = KeyboardManager()
+        
         _initialized = true
     }
-
+    
 #if os(iOS)
     /// Whether the pointer is being held down, if there is no parameter, return whether any pointer is being held down.
     /// - Returns: Whether the pointer is being held down
@@ -39,7 +47,7 @@ public class InputManager {
             return false
         }
     }
-
+    
     /// Whether the pointer starts to be pressed down during the current frame, if there is no parameter,
     /// return whether any pointer starts to be pressed down during the current frame.
     /// - Returns: Whether the pointer starts to be pressed down during the current frame
@@ -50,7 +58,7 @@ public class InputManager {
             return false
         }
     }
-
+    
     /// Whether the pointer is released during the current frame, if there is no parameter,
     /// return whether any pointer released during the current frame.
     /// - Returns: Whether the pointer is released during the current frame
@@ -71,7 +79,7 @@ public class InputManager {
             return false
         }
     }
-
+    
     /// Whether the pointer starts to be pressed down during the current frame, if there is no parameter,
     /// return whether any pointer starts to be pressed down during the current frame.
     /// - Returns: Whether the pointer starts to be pressed down during the current frame
@@ -82,7 +90,7 @@ public class InputManager {
             return false
         }
     }
-
+    
     /// Whether the pointer is released during the current frame, if there is no parameter,
     /// return whether any pointer released during the current frame.
     /// - Returns: Whether the pointer is released during the current frame
@@ -93,12 +101,66 @@ public class InputManager {
             return false
         }
     }
+    
+    /// Get the change of the scroll wheel on the x-axis.
+    var wheelDelta:Vector3 {
+        get {
+            _wheelManager._delta
+        }
+    }
+    
+    /// Whether the key is being held down, if there is no parameter, return whether any key is being held down.
+    /// - Parameter key: The keys of the keyboard
+    /// - Returns: Whether the key is being held down
+    public func isKeyHeldDown(key: Keys? = nil)->Bool {
+        if (_initialized) {
+            if (key == nil) {
+                return _keyboardManager._curFrameHeldDownList.count > 0
+            } else {
+                return _keyboardManager._curHeldDownKeyToIndexMap[key!] != nil
+            }
+        } else {
+            return false
+        }
+    }
+    
+    /// Whether the key starts to be pressed down during the current frame, if there is no parameter, return whether any key starts to be pressed down during the current frame.
+    /// - Parameter key: The keys of the keyboard
+    /// - Returns: Whether the key starts to be pressed down during the current frame
+    public func isKeyDown(key: Keys? = nil)->Bool {
+        if (_initialized) {
+            if (key == nil) {
+                return _keyboardManager._curFrameDownList.count > 0
+            } else {
+                return _keyboardManager._downKeyToFrameCountMap[key!] == _curFrameCount
+            }
+        } else {
+            return false
+        }
+    }
+    
+    /// Whether the key is released during the current frame, if there is no parameter, return whether any key released during the current frame.
+    /// - Parameter key: The keys of the keyboard
+    /// - Returns: Whether the key is released during the current frame
+    public func isKeyUp(key: Keys? = nil)->Bool {
+        if (_initialized) {
+            if (key == nil) {
+                return _keyboardManager._curFrameUpList.count > 0
+            } else {
+                return _keyboardManager._upKeyToFrameCountMap[key!] == _curFrameCount
+            }
+        } else {
+            return false
+        }
+    }
 #endif
-
+    
     func _update() {
         if (_initialized) {
             _curFrameCount += 1
             _pointerManager._update(_curFrameCount)
+            _keyboardManager._update(_curFrameCount)
+            _wheelManager._update()
         }
     }
 }
