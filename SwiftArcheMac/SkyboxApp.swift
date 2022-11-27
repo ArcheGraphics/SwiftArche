@@ -22,13 +22,9 @@ class SkyboxApp: NSViewController {
 
         let scene = engine.sceneManager.activeScene!
         let rootEntity = scene.createRootEntity()
-
-        let skyboxMDL = MDLSkyCubeTexture(name: "country", channelEncoding: .uInt8,
-                                          textureDimensions: [256, 256], turbidity: 0.28, sunElevation: 0.6,
-                                          upperAtmosphereScattering: 0.1, groundAlbedo: 4)
-        let skyBox = try! engine.textureLoader.loadTexture(with: skyboxMDL)!
+        
         let skyMaterial = SkyBoxMaterial(engine)
-        skyMaterial.textureCubeMap = skyBox
+        skyMaterial.textureCubeMap = try! engine.textureLoader.loadTexture(with: "country")!
         
         let skySubpass = SkySubpass()
         skySubpass.material = skyMaterial

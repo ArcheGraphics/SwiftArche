@@ -26,6 +26,19 @@ public class TextureLoader {
         }
         return texture
     }
+    
+    public func loadTexture(with name: String, scaleFactor: CGFloat = 1.0, bundle: Bundle? = nil,
+                            textureLoaderOptions: [MTKTextureLoader.Option : Any] = [:]) throws -> MTLTexture? {
+        var textureLoaderOptions = textureLoaderOptions
+        if textureLoaderOptions.isEmpty {
+            textureLoaderOptions = [.origin: MTKTextureLoader.Origin.topLeft,
+                                    .SRGB: false,
+                                    .generateMipmaps: NSNumber(booleanLiteral: true)]
+        }
+        let texture = try textureLoader.newTexture(name: name, scaleFactor: scaleFactor,
+                                                   bundle: bundle, options: textureLoaderOptions)
+        return texture
+    }
 
     /// load texture from url of image.
     /// - Parameters:
