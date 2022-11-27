@@ -20,6 +20,7 @@
 		040F1DCC2933AAF0008BDC8D /* ControlFreePointer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 040F1DCB2933AAF0008BDC8D /* ControlFreePointer.swift */; };
 		040F1DCE2933AB71008BDC8D /* FreeControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 040F1DCD2933AB71008BDC8D /* FreeControl.swift */; };
 		040F1DD02933AC19008BDC8D /* ControlFreeKeyboard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 040F1DCF2933AC19008BDC8D /* ControlFreeKeyboard.swift */; };
+		040F1DD32933AF83008BDC8D /* libvox.toolkit.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 040F1DA329336A56008BDC8D /* libvox.toolkit.a */; };
 		04462F21293324A300F95387 /* Textures.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 04462F20293324A200F95387 /* Textures.xcassets */; };
 		3EB32B032932299A0019A4F3 /* Logging in Frameworks */ = {isa = PBXBuildFile; productRef = 3EB32B022932299A0019A4F3 /* Logging */; };
 		3EB32B7529322DB30019A4F3 /* PrimitiveApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EB32B7429322DB30019A4F3 /* PrimitiveApp.swift */; };
@@ -362,6 +363,13 @@
 			proxyType = 1;
 			remoteGlobalIDString = 3EC0385B2932152C002187DC;
 			remoteInfo = vox.render;
+		};
+		040F1DD12933AF7D008BDC8D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 3EC036F929321131002187DC /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 040F1DA229336A56008BDC8D;
+			remoteInfo = vox.toolkit;
 		};
 		3EB32B7629322E7E0019A4F3 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -804,6 +812,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				040F1DD32933AF83008BDC8D /* libvox.toolkit.a in Frameworks */,
 				3EB32B862932303A0019A4F3 /* libc++abi.tbd in Frameworks */,
 				3EB32B872932303A0019A4F3 /* libc++.1.tbd in Frameworks */,
 				3EB32B882932303A0019A4F3 /* libc++.tbd in Frameworks */,
@@ -1769,6 +1778,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				040F1DD22933AF7D008BDC8D /* PBXTargetDependency */,
 				3EB32B7729322E7E0019A4F3 /* PBXTargetDependency */,
 				3EB32B7929322E7E0019A4F3 /* PBXTargetDependency */,
 				3EB32B7B29322E7E0019A4F3 /* PBXTargetDependency */,
@@ -2343,6 +2353,11 @@
 			isa = PBXTargetDependency;
 			target = 3EC0385B2932152C002187DC /* vox.render */;
 			targetProxy = 040F1DB129336C1D008BDC8D /* PBXContainerItemProxy */;
+		};
+		040F1DD22933AF7D008BDC8D /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 040F1DA229336A56008BDC8D /* vox.toolkit */;
+			targetProxy = 040F1DD12933AF7D008BDC8D /* PBXContainerItemProxy */;
 		};
 		3EB32B7729322E7E0019A4F3 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;

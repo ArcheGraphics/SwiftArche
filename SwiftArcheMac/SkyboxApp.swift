@@ -7,7 +7,7 @@
 import Cocoa
 import vox_render
 import vox_math
-import ModelIO
+import vox_toolkit
 
 class SkyboxApp: NSViewController {
     var canvas: Canvas!
@@ -36,6 +36,7 @@ class SkyboxApp: NSViewController {
         cameraEntity.transform.setPosition(x: 1, y: 1, z: 1)
         cameraEntity.transform.lookAt(targetPosition: Vector3())
         let _: Camera = cameraEntity.addComponent()
+        let _: OrbitControl = cameraEntity.addComponent()
 
         let light = rootEntity.createChild("light")
         light.transform.setPosition(x: 0, y: 3, z: 0)

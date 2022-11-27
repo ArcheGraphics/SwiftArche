@@ -164,7 +164,7 @@ public class OrbitControl : Script {
         /** Update _sphericalDelta, _scale and _panOffset. */
         _updateInputDelta(deltaTime)
         /** Update camera's transform. */
-        //        _updateTransform()
+        _updateTransform()
     }
     
     private func _updateInputDelta(_ deltaTime: Float) {
