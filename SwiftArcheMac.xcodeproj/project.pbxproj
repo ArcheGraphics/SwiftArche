@@ -7,6 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		040F1DB029336AAE008BDC8D /* Spherical.swift in Sources */ = {isa = PBXBuildFile; fileRef = 040F1DAF29336AAE008BDC8D /* Spherical.swift */; };
+		040F1DB529336F48008BDC8D /* ControlHandlerType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 040F1DB429336F48008BDC8D /* ControlHandlerType.swift */; };
+		040F1DB829336F86008BDC8D /* IControlInput.swift in Sources */ = {isa = PBXBuildFile; fileRef = 040F1DB729336F86008BDC8D /* IControlInput.swift */; };
+		040F1DBB29336FBF008BDC8D /* OrbitControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 040F1DBA29336FBF008BDC8D /* OrbitControl.swift */; };
+		040F1DBE2933705D008BDC8D /* ControlPointer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 040F1DBD2933705D008BDC8D /* ControlPointer.swift */; };
 		04462F21293324A300F95387 /* Textures.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 04462F20293324A200F95387 /* Textures.xcassets */; };
 		3EB32B032932299A0019A4F3 /* Logging in Frameworks */ = {isa = PBXBuildFile; productRef = 3EB32B022932299A0019A4F3 /* Logging */; };
 		3EB32B7529322DB30019A4F3 /* PrimitiveApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EB32B7429322DB30019A4F3 /* PrimitiveApp.swift */; };
@@ -19,7 +24,6 @@
 		3EB32B8D293239170019A4F3 /* InputManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EB32B8C293239170019A4F3 /* InputManager.swift */; };
 		3EB32B902932391F0019A4F3 /* Pointer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EB32B8E2932391E0019A4F3 /* Pointer.swift */; };
 		3EB32B912932391F0019A4F3 /* PointerManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EB32B8F2932391F0019A4F3 /* PointerManager.swift */; };
-		3EB32B93293239250019A4F3 /* PointerButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EB32B92293239250019A4F3 /* PointerButton.swift */; };
 		3EC0370529321131002187DC /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EC0370429321131002187DC /* AppDelegate.swift */; };
 		3EC0370E29321132002187DC /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3EC0370D29321132002187DC /* Assets.xcassets */; };
 		3EC0371129321132002187DC /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3EC0370F29321132002187DC /* Main.storyboard */; };
@@ -344,6 +348,13 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		040F1DB129336C1D008BDC8D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 3EC036F929321131002187DC /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 3EC0385B2932152C002187DC;
+			remoteInfo = vox.render;
+		};
 		3EB32B7629322E7E0019A4F3 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 3EC036F929321131002187DC /* Project object */;
@@ -410,6 +421,12 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		040F1DA329336A56008BDC8D /* libvox.toolkit.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libvox.toolkit.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		040F1DAF29336AAE008BDC8D /* Spherical.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Spherical.swift; sourceTree = "<group>"; };
+		040F1DB429336F48008BDC8D /* ControlHandlerType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ControlHandlerType.swift; sourceTree = "<group>"; };
+		040F1DB729336F86008BDC8D /* IControlInput.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IControlInput.swift; sourceTree = "<group>"; };
+		040F1DBA29336FBF008BDC8D /* OrbitControl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrbitControl.swift; sourceTree = "<group>"; };
+		040F1DBD2933705D008BDC8D /* ControlPointer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ControlPointer.swift; sourceTree = "<group>"; };
 		04462F20293324A200F95387 /* Textures.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Textures.xcassets; sourceTree = SOURCE_ROOT; };
 		3EB32B7429322DB30019A4F3 /* PrimitiveApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrimitiveApp.swift; sourceTree = "<group>"; };
 		3EB32B832932303A0019A4F3 /* libc++abi.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libc++abi.tbd"; path = "usr/lib/libc++abi.tbd"; sourceTree = SDKROOT; };
@@ -418,7 +435,6 @@
 		3EB32B8C293239170019A4F3 /* InputManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InputManager.swift; sourceTree = "<group>"; };
 		3EB32B8E2932391E0019A4F3 /* Pointer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Pointer.swift; sourceTree = "<group>"; };
 		3EB32B8F2932391F0019A4F3 /* PointerManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PointerManager.swift; sourceTree = "<group>"; };
-		3EB32B92293239250019A4F3 /* PointerButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PointerButton.swift; sourceTree = "<group>"; };
 		3EB32B9429323D9B0019A4F3 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		3EC0370129321131002187DC /* SwiftArcheMac.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SwiftArcheMac.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		3EC0370429321131002187DC /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -761,6 +777,13 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		040F1DA129336A56008BDC8D /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		3EC036FE29321131002187DC /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -813,6 +836,42 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		040F1DA429336A56008BDC8D /* vox.toolkit */ = {
+			isa = PBXGroup;
+			children = (
+				040F1DAE29336A67008BDC8D /* controls */,
+			);
+			path = vox.toolkit;
+			sourceTree = "<group>";
+		};
+		040F1DAE29336A67008BDC8D /* controls */ = {
+			isa = PBXGroup;
+			children = (
+				040F1DB329336F3E008BDC8D /* enums */,
+				040F1DB629336F73008BDC8D /* inputDevice */,
+				040F1DAF29336AAE008BDC8D /* Spherical.swift */,
+				040F1DBA29336FBF008BDC8D /* OrbitControl.swift */,
+			);
+			path = controls;
+			sourceTree = "<group>";
+		};
+		040F1DB329336F3E008BDC8D /* enums */ = {
+			isa = PBXGroup;
+			children = (
+				040F1DB429336F48008BDC8D /* ControlHandlerType.swift */,
+			);
+			path = enums;
+			sourceTree = "<group>";
+		};
+		040F1DB629336F73008BDC8D /* inputDevice */ = {
+			isa = PBXGroup;
+			children = (
+				040F1DB729336F86008BDC8D /* IControlInput.swift */,
+				040F1DBD2933705D008BDC8D /* ControlPointer.swift */,
+			);
+			path = inputDevice;
+			sourceTree = "<group>";
+		};
 		3EB32B7E29322E850019A4F3 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -826,19 +885,10 @@
 		3EB32B89293238F00019A4F3 /* input */ = {
 			isa = PBXGroup;
 			children = (
-				3EB32B8A293238F80019A4F3 /* enums */,
 				3EB32B8B293238FF0019A4F3 /* pointer */,
 				3EB32B8C293239170019A4F3 /* InputManager.swift */,
 			);
 			path = input;
-			sourceTree = "<group>";
-		};
-		3EB32B8A293238F80019A4F3 /* enums */ = {
-			isa = PBXGroup;
-			children = (
-				3EB32B92293239250019A4F3 /* PointerButton.swift */,
-			);
-			path = enums;
 			sourceTree = "<group>";
 		};
 		3EB32B8B293238FF0019A4F3 /* pointer */ = {
@@ -858,6 +908,7 @@
 				3EC0376B293213A0002187DC /* vox.physics */,
 				3EC0383329321473002187DC /* vox.shader */,
 				3EC0385D2932152D002187DC /* vox.render */,
+				040F1DA429336A56008BDC8D /* vox.toolkit */,
 				3EC0370329321131002187DC /* SwiftArcheMac */,
 				3EC0371A29321133002187DC /* SwiftArcheMacTests */,
 				3EC0372429321133002187DC /* SwiftArcheMacUITests */,
@@ -876,6 +927,7 @@
 				3EC0376A293213A0002187DC /* libvox.physics.a */,
 				3EC0383229321473002187DC /* vox.shader.metallib */,
 				3EC0385C2932152C002187DC /* libvox.render.a */,
+				040F1DA329336A56008BDC8D /* libvox.toolkit.a */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -1554,6 +1606,13 @@
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
+		040F1D9F29336A56008BDC8D /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		3EC037342932125F002187DC /* Headers */ = {
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
@@ -1640,6 +1699,24 @@
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
+		040F1DA229336A56008BDC8D /* vox.toolkit */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 040F1DAB29336A56008BDC8D /* Build configuration list for PBXNativeTarget "vox.toolkit" */;
+			buildPhases = (
+				040F1D9F29336A56008BDC8D /* Headers */,
+				040F1DA029336A56008BDC8D /* Sources */,
+				040F1DA129336A56008BDC8D /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				040F1DB229336C1D008BDC8D /* PBXTargetDependency */,
+			);
+			name = vox.toolkit;
+			productName = vox.toolkit;
+			productReference = 040F1DA329336A56008BDC8D /* libvox.toolkit.a */;
+			productType = "com.apple.product-type.library.static";
+		};
 		3EC0370029321131002187DC /* SwiftArcheMac */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 3EC0372B29321133002187DC /* Build configuration list for PBXNativeTarget "SwiftArcheMac" */;
@@ -1780,6 +1857,10 @@
 				LastSwiftUpdateCheck = 1410;
 				LastUpgradeCheck = 1410;
 				TargetAttributes = {
+					040F1DA229336A56008BDC8D = {
+						CreatedOnToolsVersion = 14.1;
+						LastSwiftMigration = 1410;
+					};
 					3EC0370029321131002187DC = {
 						CreatedOnToolsVersion = 14.1;
 					};
@@ -1827,6 +1908,7 @@
 				3EC03769293213A0002187DC /* vox.physics */,
 				3EC0383129321473002187DC /* vox.shader */,
 				3EC0385B2932152C002187DC /* vox.render */,
+				040F1DA229336A56008BDC8D /* vox.toolkit */,
 				3EC0370029321131002187DC /* SwiftArcheMac */,
 				3EC0371629321133002187DC /* SwiftArcheMacTests */,
 				3EC0372029321133002187DC /* SwiftArcheMacUITests */,
@@ -1884,6 +1966,18 @@
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		040F1DA029336A56008BDC8D /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				040F1DBE2933705D008BDC8D /* ControlPointer.swift in Sources */,
+				040F1DB529336F48008BDC8D /* ControlHandlerType.swift in Sources */,
+				040F1DB029336AAE008BDC8D /* Spherical.swift in Sources */,
+				040F1DBB29336FBF008BDC8D /* OrbitControl.swift in Sources */,
+				040F1DB829336F86008BDC8D /* IControlInput.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		3EC036FD29321131002187DC /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -2000,7 +2094,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				3EC0394B293218A3002187DC /* StencilState.swift in Sources */,
-				3EB32B93293239250019A4F3 /* PointerButton.swift in Sources */,
 				3EC03954293218B3002187DC /* ForwardSubpass.swift in Sources */,
 				3EC0397A293218C3002187DC /* Mesh.swift in Sources */,
 				3EC0391C2932186B002187DC /* ParserContext.swift in Sources */,
@@ -2198,6 +2291,11 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		040F1DB229336C1D008BDC8D /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 3EC0385B2932152C002187DC /* vox.render */;
+			targetProxy = 040F1DB129336C1D008BDC8D /* PBXContainerItemProxy */;
+		};
 		3EB32B7729322E7E0019A4F3 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 3EC037372932125F002187DC /* vox.math */;
@@ -2257,6 +2355,47 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
+		040F1DAC29336A56008BDC8D /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 4SL5L673UU;
+				EXECUTABLE_PREFIX = lib;
+				GCC_ENABLE_CPP_EXCEPTIONS = YES;
+				GCC_ENABLE_CPP_RTTI = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@loader_path/../Frameworks",
+				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		040F1DAD29336A56008BDC8D /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 4SL5L673UU;
+				EXECUTABLE_PREFIX = lib;
+				GCC_ENABLE_CPP_EXCEPTIONS = YES;
+				GCC_ENABLE_CPP_RTTI = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@loader_path/../Frameworks",
+				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
 		3EC0372929321133002187DC /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -2716,6 +2855,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		040F1DAB29336A56008BDC8D /* Build configuration list for PBXNativeTarget "vox.toolkit" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				040F1DAC29336A56008BDC8D /* Debug */,
+				040F1DAD29336A56008BDC8D /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		3EC036FC29321131002187DC /* Build configuration list for PBXProject "SwiftArcheMac" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (

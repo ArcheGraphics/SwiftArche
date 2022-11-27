@@ -15,28 +15,38 @@ import Cocoa
 public class Pointer {
     /// Unique id.
     public var id: Int
-    /// The phase of pointer.
-#if os(iOS)
-    public var phase: UITouch.Phase = .cancelled
-#else
-    public var phase: NSEvent.Phase = .cancelled
-#endif
-    /// The button that triggers the pointer event.
-    public var button: PointerButton = .None
-    /// The currently pressed buttons for this pointer.
-    public var pressedButtons: PointerButton = .None
     /// The position of the pointer in screen space pixel coordinates.
     public var position: Vector2 = Vector2()
     /// The change of the pointer.
     public var deltaPosition: Vector2 = Vector2()
+
 #if os(iOS)
+    /// The phase of pointer.
+    public var phase: UITouch.Phase = .cancelled
+    /// The button that triggers the pointer event.
+    public var button: UITouch.TouchType?
+    /// The currently pressed buttons for this pointer.
+    public var pressedButtons: UITouch.TouchType?
     var _events: [UITouch] = []
+    var _upMap: [UITouch.TouchType: UInt64] = [:];
+    var _downMap: [UITouch.TouchType: UInt64] = [:];
+    var _upList: [UITouch.TouchType] = []
+    var _downList: [UITouch.TouchType] = []
 #else
+    /// The phase of pointer.
+    public var phase: NSEvent.Phase = .cancelled
+    /// The button that triggers the pointer event.
+    public var button: NSEvent.EventType?
+    /// The currently pressed buttons for this pointer.
+    public var pressedButtons: NSEvent.EventType?
     var _events: [NSEvent] = []
+    var _upMap: [NSEvent.EventType: UInt64] = [:];
+    var _downMap: [NSEvent.EventType: UInt64] = [:];
+    var _upList: [NSEvent.EventType] = []
+    var _downList: [NSEvent.EventType] = []
 #endif
+
     var _uniqueID: Int = 0
-    var _upList: [PointerButton] = []
-    var _downList: [PointerButton] = []
     private var _currentPressedEntity: Entity?
     private var _currentEnteredEntity: Entity?
 

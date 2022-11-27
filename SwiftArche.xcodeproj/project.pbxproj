@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		040F1D9D293369DC008BDC8D /* Textures.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 040F1D9C293369DC008BDC8D /* Textures.xcassets */; };
-		04176A792925295B00B1775A /* PointerButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = E63B1323D02AE5FF4E20C301 /* PointerButton.swift */; };
 		04176A7A2925295B00B1775A /* Pointer.swift in Sources */ = {isa = PBXBuildFile; fileRef = E63B111B2848B79F0F440F00 /* Pointer.swift */; };
 		04176A7B292717D900B1775A /* Time.swift in Sources */ = {isa = PBXBuildFile; fileRef = E63B17B65377F894AAEF5610 /* Time.swift */; };
 		04176A7D2927343900B1775A /* ar_shading.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3E67EDCA291B2F7600ED60C8 /* ar_shading.metal */; };
@@ -738,7 +737,6 @@
 		E63B111B2848B79F0F440F00 /* Pointer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Pointer.swift; sourceTree = "<group>"; };
 		E63B11EDE4BA4562BDFFF83D /* Skin.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Skin.swift; sourceTree = "<group>"; };
 		E63B126D86D1150480AF5E59 /* DiffuseMode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DiffuseMode.swift; sourceTree = "<group>"; };
-		E63B1323D02AE5FF4E20C301 /* PointerButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PointerButton.swift; sourceTree = "<group>"; };
 		E63B133737E2EA928107632F /* ShadowSliceData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ShadowSliceData.swift; sourceTree = "<group>"; };
 		E63B13A68F9CBED679A302E7 /* LayerState.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LayerState.swift; sourceTree = "<group>"; };
 		E63B1432B9937ED43CD1DC28 /* Background.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Background.swift; sourceTree = "<group>"; };
@@ -838,18 +836,9 @@
 			isa = PBXGroup;
 			children = (
 				04176A782925276300B1775A /* pointer */,
-				04176A772925275C00B1775A /* enums */,
 				43D8CD8FF3430733254A4886 /* InputManager.swift */,
 			);
 			path = input;
-			sourceTree = "<group>";
-		};
-		04176A772925275C00B1775A /* enums */ = {
-			isa = PBXGroup;
-			children = (
-				E63B1323D02AE5FF4E20C301 /* PointerButton.swift */,
-			);
-			path = enums;
 			sourceTree = "<group>";
 		};
 		04176A782925276300B1775A /* pointer */ = {
@@ -2083,7 +2072,6 @@
 				43D8C52A399C01C7FA561389 /* ForwardSubpass.swift in Sources */,
 				E63B1992B1C2F658B6C75B36 /* GeometrySubpass.swift in Sources */,
 				E63B1FBDADAAF1E683C7D956 /* ShadowUtils.swift in Sources */,
-				04176A792925295B00B1775A /* PointerButton.swift in Sources */,
 				3E0F7C6F2926039500C4A843 /* PhysXConfigurableJoint.swift in Sources */,
 				3EC036F72931FF95002187DC /* DecodeMode.swift in Sources */,
 				43D8C4BD6BB477FAF132C5DE /* SkyBoxMaterial.swift in Sources */,
