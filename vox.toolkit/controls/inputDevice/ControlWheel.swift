@@ -8,11 +8,11 @@ import vox_math
 import vox_render
 
 class ControlWheel : IControlInput {
-    static func onUpdateHandler(_ input: InputManager)-> ControlHandlerType {
+    static func onUpdateHandler(_ input: InputManager, callback: (ControlHandlerType)->Void) {
         if (input.wheelDelta.x == 0 && input.wheelDelta.y == 0 && input.wheelDelta.z == 0) {
-            return ControlHandlerType.None
+            callback(ControlHandlerType.None)
         } else {
-            return ControlHandlerType.ZOOM
+            callback(ControlHandlerType.ZOOM)
         }
     }
     

@@ -20,47 +20,33 @@ class ControlPointer : IControlInput {
     private static var _lastUsefulFrameIndex: Int = -1
     private static var _distanceOfPointers: Float = 0
     
-    static func onUpdateHandler(_ input: InputManager) -> ControlHandlerType {
+    static func onUpdateHandler(_ input: InputManager, callback: (ControlHandlerType)->Void) {
         _frameIndex += 1
         let pointers = input.pointers
-        switch (pointers.count) {
-        case 1:
-            if (input.isPointerHeldDown(.rightMouseDown)) {
+        for pointer in pointers {
+            if pointer.type == .rightMouseDown {
                 ControlPointer._updateType(ControlHandlerType.PAN, DeltaType.Moving)
-            } else if (input.isPointerHeldDown(.otherMouseDown)) {
+                callback(ControlPointer._handlerType)
+            } else if pointer.type == .otherMouseDown {
                 ControlPointer._updateType(ControlHandlerType.ZOOM, DeltaType.Moving)
-            } else if (input.isPointerHeldDown(.leftMouseDown)) {
+                callback(ControlPointer._handlerType)
+            } else if pointer.type == .leftMouseDown {
                 ControlPointer._updateType(ControlHandlerType.ROTATE, DeltaType.Moving)
+                callback(ControlPointer._handlerType)
+            } else if pointer.type == .rightMouseDragged {
+                ControlPointer._updateType(ControlHandlerType.PAN, DeltaType.Moving)
+                callback(ControlPointer._handlerType)
+            } else if pointer.type == .otherMouseDragged {
+                ControlPointer._updateType(ControlHandlerType.ZOOM, DeltaType.Moving)
+                callback(ControlPointer._handlerType)
+            } else if pointer.type == .leftMouseDragged {
+                ControlPointer._updateType(ControlHandlerType.ROTATE, DeltaType.Moving)
+                callback(ControlPointer._handlerType)
             } else {
-                // When `onPointerMove` happens on the same frame as `onPointerUp`
-                // Need to record the movement of this frame
-                let deltaPosition = input.pointers[0].deltaPosition
-                if (deltaPosition.x != 0 && deltaPosition.y != 0) {
-                    if (input.isPointerUp(.rightMouseUp)) {
-                        ControlPointer._updateType(ControlHandlerType.PAN, DeltaType.Moving)
-                    } else if (input.isPointerUp(.otherMouseUp)) {
-                        ControlPointer._updateType(ControlHandlerType.ZOOM, DeltaType.Moving)
-                    } else if (input.isPointerUp(.leftMouseUp)) {
-                        ControlPointer._updateType(ControlHandlerType.ROTATE, DeltaType.Moving)
-                    } else {
-                        ControlPointer._updateType(ControlHandlerType.None, DeltaType.None)
-                    }
-                } else {
-                    ControlPointer._updateType(ControlHandlerType.None, DeltaType.None)
-                }
+                ControlPointer._updateType(ControlHandlerType.None, DeltaType.None)
+                callback(ControlPointer._handlerType)
             }
-            break
-        case 2:
-            ControlPointer._updateType(ControlHandlerType.ZOOM, DeltaType.Distance)
-            break
-        case 3:
-            ControlPointer._updateType(ControlHandlerType.PAN, DeltaType.Moving)
-            break
-        default:
-            ControlPointer._updateType(ControlHandlerType.None, DeltaType.None)
-            break
         }
-        return ControlPointer._handlerType
     }
     
     static func onUpdateDelta(_ control: OrbitControl, _ outDelta: inout Vector3) {
@@ -73,9 +59,9 @@ class ControlPointer : IControlInput {
                 let pointers = control.input.pointers
                 let length = pointers.count
                 for i in 0..<length {
-                    let deltaPosition = pointers[i].deltaPosition
-                    outDeltaVec.x += deltaPosition.x
-                    outDeltaVec.y += deltaPosition.y
+                    let pointer = pointers[i]
+                    outDeltaVec.x += Float(pointer.deltaX)
+                    outDeltaVec.y += Float(pointer.deltaY)
                 }
                 outDeltaVec.x /= Float(length)
                 outDeltaVec.y /= Float(length)
@@ -83,9 +69,10 @@ class ControlPointer : IControlInput {
             break
         case DeltaType.Distance:
             let pointers = control.input.pointers
-            let pointer1 = pointers[0]
-            let pointer2 = pointers[1]
-            let curDistance = Vector2.distance(left: pointer1.position, right: pointer2.position)
+            let pointer1 = pointers[0].locationInWindow
+            let pointer2 = pointers[1].locationInWindow
+            let curDistance = Vector2.distance(left: Vector2(Float(pointer1.x), Float(pointer1.y)),
+                                               right: Vector2(Float(pointer2.x), Float(pointer2.y)))
             if (ControlPointer._lastUsefulFrameIndex == _frameIndex - 1) {
                 outDeltaVec = SIMD3<Float>(0, ControlPointer._distanceOfPointers - curDistance, 0)
             }

@@ -170,22 +170,23 @@ public class OrbitControl : Script {
         var delta = Vector3()
         var curHandlerType:Int = ControlHandlerType.None.rawValue
         for handler in inputDevices {
-            let handlerType = handler.onUpdateHandler(input)
-            if ((handlerType.rawValue & _enableHandler) != 0) {
-                curHandlerType |= handlerType.rawValue
-                handler.onUpdateDelta(self, &delta)
-                switch (handlerType) {
-                case ControlHandlerType.ROTATE:
-                    _rotate(delta)
-                    break
-                case ControlHandlerType.ZOOM:
-                    _zoom(delta)
-                    break
-                case ControlHandlerType.PAN:
-                    _pan(delta)
-                    break
-                default:
-                    break
+            handler.onUpdateHandler(input) { handlerType in
+                if ((handlerType.rawValue & _enableHandler) != 0) {
+                    curHandlerType |= handlerType.rawValue
+                    handler.onUpdateDelta(self, &delta)
+                    switch (handlerType) {
+                    case ControlHandlerType.ROTATE:
+                        _rotate(delta)
+                        break
+                    case ControlHandlerType.ZOOM:
+                        _zoom(delta)
+                        break
+                    case ControlHandlerType.PAN:
+                        _pan(delta)
+                        break
+                    default:
+                        break
+                    }
                 }
             }
         }

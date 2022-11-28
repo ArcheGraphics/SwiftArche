@@ -8,7 +8,7 @@ import vox_math
 import vox_render
 
 class ControlFreeKeyboard : IControlInput {
-    static func onUpdateHandler(_ input: InputManager)->ControlHandlerType {
+    static func onUpdateHandler(_ input: InputManager, callback: (ControlHandlerType)->Void) {
         if (input.isKeyHeldDown(.VKEY_LEFT) ||
             input.isKeyHeldDown(.VKEY_A) ||
             input.isKeyHeldDown(.VKEY_UP) ||
@@ -17,9 +17,9 @@ class ControlFreeKeyboard : IControlInput {
             input.isKeyHeldDown(.VKEY_S) ||
             input.isKeyHeldDown(.VKEY_RIGHT) ||
             input.isKeyHeldDown(.VKEY_D)) {
-            return ControlHandlerType.PAN
+            callback(ControlHandlerType.PAN)
         } else {
-            return ControlHandlerType.None
+            callback(ControlHandlerType.None)
         }
     }
     

@@ -37,20 +37,21 @@ public class FreeControl : Script {
         if (enabled == false) {return}
         var curHandlerType:Int = ControlHandlerType.None.rawValue
         for handler in inputDevices{
-            let handlerType = handler.onUpdateHandler(input)
-            if (handlerType != .None) {
-                curHandlerType |= handlerType.rawValue
-                var delta = Vector3()
-                handler.onUpdateDelta(self, &delta)
-                switch (handlerType) {
-                case ControlHandlerType.ROTATE:
-                    _rotate(delta)
-                    break
-                case ControlHandlerType.PAN:
-                    _pan(delta, deltaTime)
-                    break
-                default:
-                    break
+            handler.onUpdateHandler(input) { handlerType in
+                if (handlerType != .None) {
+                    curHandlerType |= handlerType.rawValue
+                    var delta = Vector3()
+                    handler.onUpdateDelta(self, &delta)
+                    switch (handlerType) {
+                    case ControlHandlerType.ROTATE:
+                        _rotate(delta)
+                        break
+                    case ControlHandlerType.PAN:
+                        _pan(delta, deltaTime)
+                        break
+                    default:
+                        break
+                    }
                 }
             }
         }
