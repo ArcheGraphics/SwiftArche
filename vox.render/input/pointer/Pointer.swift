@@ -58,7 +58,7 @@ public class Pointer {
         if (_currentEnteredEntity !== rayCastEntity) {
             if (_currentEnteredEntity != nil) {
                 let scripts = _currentEnteredEntity!._scripts
-                for i in 0..<scripts.length {
+                for i in 0..<scripts.count {
                     let script = scripts.get(i)!
                     if !script._waitHandlingInValid {
                         script.onPointerExit(self)
@@ -67,7 +67,7 @@ public class Pointer {
             }
             if (rayCastEntity != nil) {
                 let scripts = rayCastEntity!._scripts
-                for i in 0..<scripts.length {
+                for i in 0..<scripts.count {
                     let script = scripts.get(i)!
                     if !script._waitHandlingInValid {
                         script.onPointerEnter(self)
@@ -81,7 +81,7 @@ public class Pointer {
     func _firePointerDown(_ rayCastEntity: Entity?) {
         if (rayCastEntity != nil) {
             let scripts = rayCastEntity!._scripts
-            for i in 0..<scripts.length {
+            for i in 0..<scripts.count {
                 let script = scripts.get(i)!
                 if !script._waitHandlingInValid {
                     script.onPointerDown(self)
@@ -94,7 +94,7 @@ public class Pointer {
     func _firePointerDrag() {
         if (_currentPressedEntity != nil) {
             let scripts = _currentPressedEntity!._scripts
-            for i in 0..<scripts.length {
+            for i in 0..<scripts.count {
                 let script = scripts.get(i)!
                 if !script._waitHandlingInValid {
                     script.onPointerDrag(self)
@@ -107,7 +107,7 @@ public class Pointer {
         if (_currentPressedEntity != nil) {
             let sameTarget = _currentPressedEntity === rayCastEntity
             let scripts = _currentPressedEntity!._scripts
-            for i in 0..<scripts.length {
+            for i in 0..<scripts.count {
                 let script = scripts.get(i)!
                 if !script._waitHandlingInValid {
                     if sameTarget {

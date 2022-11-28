@@ -58,7 +58,7 @@ class PhysXColliderShape {
         _contactOffset = offset
         _pxShape.setContactOffset(offset)
 
-        for i in 0..<_controllers.length {
+        for i in 0..<_controllers.count {
             _controllers.get(i)!._pxController.setContactOffset(offset)
         }
     }

@@ -88,6 +88,10 @@ public class Canvas: MTKView {
     public override func pressesCancelled(_ presses: Set<UIPress>, with event: UIPressesEvent?) {
     }
 #else
+    public override var acceptsFirstResponder: Bool {
+        true
+    }
+    
     public override func keyDown(with event: NSEvent) {
         inputManager?._keyboardManager._onKeyEvent(event)
     }

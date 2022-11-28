@@ -46,7 +46,7 @@ class PhysXCapsuleColliderShape: PhysXColliderShape {
         }
         _pxShape.setGeometry(_pxGeometry)
 
-        for i in 0..<_controllers.length {
+        for i in 0..<_controllers.count {
             (_controllers.get(i)!._pxController as! CPxCapsuleController).setRadius(value)
         }
     }
@@ -66,7 +66,7 @@ class PhysXCapsuleColliderShape: PhysXColliderShape {
         }
         _pxShape.setGeometry(_pxGeometry)
 
-        for i in 0..<_controllers.length {
+        for i in 0..<_controllers.count {
             (_controllers.get(i)!._pxController as! CPxCapsuleController).setHeight(value)
         }
     }

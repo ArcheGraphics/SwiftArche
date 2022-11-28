@@ -26,7 +26,7 @@ class ComponentsManager {
 
 extension ComponentsManager {
     func addRenderer(_ renderer: Renderer) {
-        renderer._rendererIndex = _renderers.length
+        renderer._rendererIndex = _renderers.count
         _renderers.add(renderer)
     }
 
@@ -39,7 +39,7 @@ extension ComponentsManager {
     }
 
     func addOnStartScript(_ script: Script) {
-        script._onStartIndex = _onStartScripts.length
+        script._onStartIndex = _onStartScripts.count
         _onStartScripts.add(script)
     }
 
@@ -52,7 +52,7 @@ extension ComponentsManager {
     }
 
     func addOnUpdateScript(_ script: Script) {
-        script._onUpdateIndex = _onUpdateScripts.length
+        script._onUpdateIndex = _onUpdateScripts.count
         _onUpdateScripts.add(script)
     }
 
@@ -73,7 +73,7 @@ extension ComponentsManager {
     }
 
     func addOnUpdateAnimations(_ animation: Animator) {
-        animation._onUpdateIndex = _onUpdateAnimations.length
+        animation._onUpdateIndex = _onUpdateAnimations.count
         _onUpdateAnimations.add(animation)
     }
 
@@ -89,24 +89,24 @@ extension ComponentsManager {
 
     func callAnimationUpdate(_ deltaTime: Float) {
         let elements = _onUpdateAnimations._elements
-        for i in 0..<_onUpdateAnimations.length {
+        for i in 0..<_onUpdateAnimations.count {
             elements[i]!.update(deltaTime)
         }
     }
 
     func callRendererOnUpdate(_ deltaTime: Float) {
         let elements = _renderers._elements
-        for i in 0..<_renderers.length {
+        for i in 0..<_renderers.count {
             elements[i]!.update(deltaTime)
         }
     }
 
     func callScriptOnStart() {
         let onStartScripts = _onStartScripts
-        if (onStartScripts.length > 0) {
+        if (onStartScripts.count > 0) {
             let elements = onStartScripts._elements
             // The 'onStartScripts.length' maybe add if you add some Script with addComponent() in some Script's onStart()
-            for i in 0..<onStartScripts.length {
+            for i in 0..<onStartScripts.count {
                 let script = elements[i]!
                 if (!script._waitHandlingInValid) {
                     script._started = true
@@ -114,13 +114,13 @@ extension ComponentsManager {
                     script.onStart()
                 }
             }
-            onStartScripts.length = 0
+            onStartScripts.count = 0
         }
     }
 
     func callScriptOnUpdate(_ deltaTime: Float) {
         let elements = _onUpdateScripts._elements
-        for i in 0..<_onUpdateScripts.length {
+        for i in 0..<_onUpdateScripts.count {
             let element = elements[i]!
             if (element._started) {
                 element.onUpdate(deltaTime)
@@ -130,7 +130,7 @@ extension ComponentsManager {
 
     func callScriptOnLateUpdate(_ deltaTime: Float) {
         let elements = _onUpdateScripts._elements
-        for i in 0..<_onUpdateScripts.length {
+        for i in 0..<_onUpdateScripts.count {
             let element = elements[i]!
             if (element._started) {
                 element.onLateUpdate(deltaTime)
@@ -140,7 +140,7 @@ extension ComponentsManager {
 
     func callScriptOnPhysicsUpdate() {
         let elements = _onUpdateScripts._elements
-        for i in 0..<_onUpdateScripts.length {
+        for i in 0..<_onUpdateScripts.count {
             let element = elements[i]!
             if (!element._waitHandlingInValid && element._started) {
                 element.onPhysicsUpdate()
@@ -150,14 +150,14 @@ extension ComponentsManager {
 
     func callCameraOnBeginRender(_ camera: Camera) {
         let camComps = camera.entity._scripts
-        for i in 0..<camComps.length {
+        for i in 0..<camComps.count {
             camComps.get(i)?.onBeginRender(camera)
         }
     }
 
     func callCameraOnEndRender(_ camera: Camera) {
         let camComps = camera.entity._scripts
-        for i in 0..<camComps.length {
+        for i in 0..<camComps.count {
             camComps.get(i)?.onEndRender(camera)
         }
     }

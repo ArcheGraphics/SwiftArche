@@ -44,12 +44,12 @@ public class PhysicsManager {
                     let shape2 = self._physicalObjectsMap[obj2]
 
                     var scripts = shape1!.collider!.entity._scripts
-                    for i in 0..<scripts.length {
+                    for i in 0..<scripts.count {
                         scripts.get(i)!.onTriggerEnter(shape2!)
                     }
 
                     scripts = shape2!.collider!.entity._scripts
-                    for i in 0..<scripts.length {
+                    for i in 0..<scripts.count {
                         scripts.get(i)!.onTriggerEnter(shape1!)
                     }
                 },
@@ -58,12 +58,12 @@ public class PhysicsManager {
                     let shape2 = self._physicalObjectsMap[obj2]
 
                     var scripts = shape1!.collider!.entity._scripts
-                    for i in 0..<scripts.length {
+                    for i in 0..<scripts.count {
                         scripts.get(i)!.onTriggerExit(shape2!)
                     }
 
                     scripts = shape2!.collider!.entity._scripts
-                    for i in 0..<scripts.length {
+                    for i in 0..<scripts.count {
                         scripts.get(i)!.onTriggerExit(shape1!)
                     }
                 },
@@ -72,12 +72,12 @@ public class PhysicsManager {
                     let shape2 = self._physicalObjectsMap[obj2]
 
                     var scripts = shape1!.collider!.entity._scripts
-                    for i in 0..<scripts.length {
+                    for i in 0..<scripts.count {
                         scripts.get(i)!.onTriggerStay(shape2!)
                     }
 
                     scripts = shape2!.collider!.entity._scripts
-                    for i in 0..<scripts.length {
+                    for i in 0..<scripts.count {
                         scripts.get(i)!.onTriggerStay(shape1!)
                     }
                 }
@@ -117,7 +117,7 @@ public class PhysicsManager {
     /// - Parameter collider: StaticCollider or DynamicCollider.
     func _addCollider(_  collider: Collider) {
         if (collider._index == -1) {
-            collider._index = _colliders.length
+            collider._index = _colliders.count
             _colliders.add(collider)
         }
         _nativePhysicsManager.addCollider(collider._nativeCollider)
@@ -138,7 +138,7 @@ public class PhysicsManager {
     /// - Parameter controller: The Character Controller.
     func _addCharacterController(_  controller: CharacterController) {
         if (controller._index == -1) {
-            controller._index = _colliders.length
+            controller._index = _colliders.count
             _colliders.add(controller)
         }
         _nativePhysicsManager.addCharacterController(controller._nativeCollider as! PhysXCharacterController)
@@ -157,14 +157,14 @@ public class PhysicsManager {
 
     func _callColliderOnUpdate() {
         let elements = _colliders._elements
-        for i in 0..<_colliders.length {
+        for i in 0..<_colliders.count {
             elements[i]!._onUpdate()
         }
     }
 
     func _callColliderOnLateUpdate() {
         let elements = _colliders._elements
-        for i in 0..<_colliders.length {
+        for i in 0..<_colliders.count {
             elements[i]!._onLateUpdate()
         }
     }

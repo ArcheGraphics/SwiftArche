@@ -33,7 +33,7 @@ class PhysXBoxColliderShape: PhysXColliderShape {
         (_pxGeometry as! CPxBoxGeometry).halfExtents = (_halfSize * _scale).internalValue
         _pxShape.setGeometry(_pxGeometry)
 
-        for i in 0..<_controllers.length {
+        for i in 0..<_controllers.count {
             let pxController = _controllers.get(i)!._pxController as! CPxBoxController
             pxController.setHalfHeight(_halfSize.x)
             pxController.setHalfSideExtent(_halfSize.y)

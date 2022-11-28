@@ -346,7 +346,7 @@ extension Entity {
     }
 
     internal func _addScript(_ script: Script) {
-        script._entityScriptsIndex = _scripts.length
+        script._entityScriptsIndex = _scripts.count
         _scripts.add(script)
     }
 

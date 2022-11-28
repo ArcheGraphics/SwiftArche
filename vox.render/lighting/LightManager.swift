@@ -13,7 +13,7 @@ class LightManager {
     var _directLights: DisorderedArray<DirectLight> = DisorderedArray()
 
     func _attachSpotLight(_ light: SpotLight) {
-        light._lightIndex = _spotLights.length
+        light._lightIndex = _spotLights.count
         _spotLights.add(light)
     }
 
@@ -27,7 +27,7 @@ class LightManager {
 
 
     func _attachPointLight(_ light: PointLight) {
-        light._lightIndex = _pointLights.length
+        light._lightIndex = _pointLights.count
         _pointLights.add(light)
     }
 
@@ -42,7 +42,7 @@ class LightManager {
 
 
     func _attachDirectLight(_ light: DirectLight) {
-        light._lightIndex = _directLights.length
+        light._lightIndex = _directLights.count
         _directLights.add(light)
     }
 
@@ -59,7 +59,7 @@ class LightManager {
         var sunLightIndex = -1
         var maxIntensity = -Float.greatestFiniteMagnitude
         var hasShadowLight = false
-        for i in 0..<_directLights.length {
+        for i in 0..<_directLights.count {
             let directLight = _directLights.get(i)!
             if (directLight.shadowType != ShadowType.None && !hasShadowLight) {
                 maxIntensity = -Float.greatestFiniteMagnitude
@@ -82,9 +82,9 @@ class LightManager {
     }
 
     func _updateShaderData(_ shaderData: ShaderData) {
-        let spotLightCount = _spotLights.length
-        let pointLightCount = _pointLights.length
-        let directLightCount = _directLights.length
+        let spotLightCount = _spotLights.count
+        let pointLightCount = _pointLights.count
+        let directLightCount = _directLights.count
 
         for i in 0..<spotLightCount {
             _spotLights.get(i)!._appendData(i)

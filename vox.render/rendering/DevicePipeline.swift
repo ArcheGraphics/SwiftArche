@@ -83,7 +83,7 @@ public class DevicePipeline {
 
     func callRender(_ cameraInfo: CameraInfo) {
         let renderers = camera.engine._componentsManager._renderers
-        for i in 0..<renderers.length {
+        for i in 0..<renderers.count {
             let renderer = renderers.get(i)!
 
             // filter by camera culling mask.

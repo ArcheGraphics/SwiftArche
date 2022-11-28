@@ -177,7 +177,7 @@ class CascadedShadowSubpass: GeometrySubpass {
                 pipeline._transparentQueue.removeAll()
                 let renderers = _camera.engine._componentsManager._renderers
                 let elements = renderers._elements
-                for k in 0..<renderers.length {
+                for k in 0..<renderers.count {
                     ShadowUtils.shadowCullFrustum(_shadowSliceData.virtualCamera, pipeline, elements[k]!, _shadowSliceData)
                 }
                 pipeline._opaqueQueue.sort(by: DevicePipeline._compareFromNearToFar)

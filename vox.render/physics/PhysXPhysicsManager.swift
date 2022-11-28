@@ -96,7 +96,7 @@ class PhysXPhysicsManager {
     }
 
     func removeColliderShape(_ colliderShape: PhysXColliderShape) {
-        for i in 0..<_currentEvents.length {
+        for i in 0..<_currentEvents.count {
             let event = _currentEvents.get(i)!
             if (event.index1 == colliderShape._id || event.index2 == colliderShape._id) {
                 _ = _currentEvents.deleteByIndex(i)
@@ -195,7 +195,7 @@ class PhysXPhysicsManager {
     }
 
     private func _fireEvent() {
-        for i in 0..<_currentEvents.length {
+        for i in 0..<_currentEvents.count {
             let event = _currentEvents.get(i)!
             if (event.state == TriggerEventState.Enter) {
                 _onTriggerEnter(event.index1, event.index2)
