@@ -31,9 +31,7 @@
 		3EB32B872932303A0019A4F3 /* libc++.1.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 3EB32B842932303A0019A4F3 /* libc++.1.tbd */; };
 		3EB32B882932303A0019A4F3 /* libc++.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 3EB32B852932303A0019A4F3 /* libc++.tbd */; };
 		3EB32B8D293239170019A4F3 /* InputManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EB32B8C293239170019A4F3 /* InputManager.swift */; };
-		3EB32B902932391F0019A4F3 /* Pointer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EB32B8E2932391E0019A4F3 /* Pointer.swift */; };
 		3EB32B912932391F0019A4F3 /* PointerManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EB32B8F2932391F0019A4F3 /* PointerManager.swift */; };
-		3EB32B9D29344E240019A4F3 /* PointerPhase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EB32B9C29344E240019A4F3 /* PointerPhase.swift */; };
 		3EC0370529321131002187DC /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EC0370429321131002187DC /* AppDelegate.swift */; };
 		3EC0370E29321132002187DC /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3EC0370D29321132002187DC /* Assets.xcassets */; };
 		3EC0371129321132002187DC /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3EC0370F29321132002187DC /* Main.storyboard */; };
@@ -458,10 +456,8 @@
 		3EB32B842932303A0019A4F3 /* libc++.1.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libc++.1.tbd"; path = "usr/lib/libc++.1.tbd"; sourceTree = SDKROOT; };
 		3EB32B852932303A0019A4F3 /* libc++.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libc++.tbd"; path = "usr/lib/libc++.tbd"; sourceTree = SDKROOT; };
 		3EB32B8C293239170019A4F3 /* InputManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InputManager.swift; sourceTree = "<group>"; };
-		3EB32B8E2932391E0019A4F3 /* Pointer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Pointer.swift; sourceTree = "<group>"; };
 		3EB32B8F2932391F0019A4F3 /* PointerManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PointerManager.swift; sourceTree = "<group>"; };
 		3EB32B9429323D9B0019A4F3 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
-		3EB32B9C29344E240019A4F3 /* PointerPhase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PointerPhase.swift; sourceTree = "<group>"; };
 		3EC0370129321131002187DC /* SwiftArcheMac.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SwiftArcheMac.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		3EC0370429321131002187DC /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		3EC0370D29321132002187DC /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -945,8 +941,6 @@
 		3EB32B8B293238FF0019A4F3 /* pointer */ = {
 			isa = PBXGroup;
 			children = (
-				3EB32B9C29344E240019A4F3 /* PointerPhase.swift */,
-				3EB32B8E2932391E0019A4F3 /* Pointer.swift */,
 				3EB32B8F2932391F0019A4F3 /* PointerManager.swift */,
 			);
 			path = pointer;
@@ -2290,7 +2284,6 @@
 				3EC038AE29321835002187DC /* PhysicsManager.swift in Sources */,
 				3EC0392429321872002187DC /* KHR_texture_transform.swift in Sources */,
 				3EC039E829321918002187DC /* AnimationProperty.swift in Sources */,
-				3EB32B9D29344E240019A4F3 /* PointerPhase.swift in Sources */,
 				3EC039E529321918002187DC /* InterpolationType.swift in Sources */,
 				3EC0389629321826002187DC /* SceneManager.swift in Sources */,
 				3EC038C42932183D002187DC /* PhysXBoxColliderShape.swift in Sources */,
@@ -2300,7 +2293,6 @@
 				3EC039C7293218FB002187DC /* Keyframe.swift in Sources */,
 				3EC039302932188D002187DC /* ShadowUtils.swift in Sources */,
 				3EC038E329321845002187DC /* PhysXSpringJoint.swift in Sources */,
-				3EB32B902932391F0019A4F3 /* Pointer.swift in Sources */,
 				3EC038F22932184C002187DC /* HingeJointFlag.swift in Sources */,
 				3EC039C2293218FB002187DC /* AnimationEvent.swift in Sources */,
 				3EC03998293218DA002187DC /* AmbientLight.swift in Sources */,

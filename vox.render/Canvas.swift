@@ -15,14 +15,6 @@ public typealias View = NSView
 public class Canvas: MTKView {
     var inputManager: InputManager?
     public var updateFlagManager = UpdateFlagManager()
-
-#if os(macOS)
-    public var isMultipleTouchEnabled : Bool {
-        get {
-            false
-        }
-    }
-#endif
     
     required init(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")

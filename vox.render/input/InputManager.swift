@@ -22,15 +22,24 @@ public class InputManager {
     var _keyboardManager: KeyboardManager
 #endif
     
+#if os(iOS)
     /// Pointer list.
-    public var pointers: [Pointer] {
+    public var pointers: [UITouch] {
         get {
             _initialized ? _pointerManager._pointers : []
         }
     }
+#else
+    /// Pointer list.
+    public var pointers: [NSEvent] {
+        get {
+            _initialized ? _pointerManager._pointers : []
+        }
+    }
+#endif
     
     init(engine: Engine) {
-        _pointerManager = PointerManager(engine)
+        _pointerManager = PointerManager()
 #if os(macOS)
         _wheelManager = WheelManager()
         _keyboardManager = KeyboardManager()
@@ -73,31 +82,9 @@ public class InputManager {
 #else
     /// Whether the pointer is being held down, if there is no parameter, return whether any pointer is being held down.
     /// - Returns: Whether the pointer is being held down
-    public func isPointerHeldDown(_ pointerButton: NSEvent.EventType) -> Bool {
+    public func isPointerTrigger(_ pointerButton: NSEvent.EventType) -> Bool {
         if (_initialized) {
-            return (_pointerManager._buttons & pointerButton.rawValue) != 0
-        } else {
-            return false
-        }
-    }
-    
-    /// Whether the pointer starts to be pressed down during the current frame, if there is no parameter,
-    /// return whether any pointer starts to be pressed down during the current frame.
-    /// - Returns: Whether the pointer starts to be pressed down during the current frame
-    public func isPointerDown(_ pointerButton: NSEvent.EventType) -> Bool {
-        if (_initialized) {
-            return _pointerManager._downMap[pointerButton] == _curFrameCount
-        } else {
-            return false
-        }
-    }
-    
-    /// Whether the pointer is released during the current frame, if there is no parameter,
-    /// return whether any pointer released during the current frame.
-    /// - Returns: Whether the pointer is released during the current frame
-    public func isPointerUp(_ pointerButton: NSEvent.EventType) -> Bool {
-        if (_initialized) {
-            return _pointerManager._upMap[pointerButton] == _curFrameCount
+            return _pointerManager.isPointerTrigger(pointerButton)
         } else {
             return false
         }
@@ -158,9 +145,9 @@ public class InputManager {
     
     func _update() {
         if (_initialized) {
-            _curFrameCount += 1
-            _pointerManager._update(_curFrameCount)
+            _pointerManager._update()
 #if os(macOS)
+            _curFrameCount += 1
             _keyboardManager._update(_curFrameCount)
             _wheelManager._update()
 #endif

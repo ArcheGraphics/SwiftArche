@@ -6,7 +6,6 @@
 
 import Cocoa
 import vox_math
-import Carbon
 
 class KeyboardManager {
     var _curHeldDownKeyToIndexMap: [Keys: Int] = [:]

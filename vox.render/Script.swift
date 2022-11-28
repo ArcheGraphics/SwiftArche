@@ -95,37 +95,6 @@ open class Script: Component {
     open func onCollisionStay(_ other: ColliderShape) {
     }
 
-    /// Called when the pointer is down while over the ColliderShape.
-    /// - Parameter pointer: The pointer that triggered
-    open func onPointerDown(_ pointer: Pointer) {
-    }
-
-    /// Called when the pointer is up while over the ColliderShape.
-    /// - Parameter pointer: The pointer that triggered
-    open func onPointerUp(_ pointer: Pointer) {
-    }
-
-    /// Called when the pointer is down and up with the same collider.
-    /// - Parameter pointer: The pointer that triggered
-    open func onPointerClick(_ pointer: Pointer) {
-    }
-
-    /// Called when the pointer is enters the ColliderShape.
-    /// - Parameter pointer: The pointer that triggered
-    open func onPointerEnter(_ pointer: Pointer) {
-    }
-
-    /// Called when the pointer is no longer over the ColliderShape.
-    /// - Parameter pointer: The pointer that triggered
-    open func onPointerExit(_ pointer: Pointer) {
-    }
-
-    /// - Remark: onPointerDrag is called every frame while the pointer is down.
-    /// Called when the pointer is down while over the ColliderShape and is still holding down.
-    /// - Parameter pointer: The pointer that triggered
-    open func onPointerDrag(_ pointer: Pointer) {
-    }
-
     /// Called when be disabled.
     open func onDisable() {
     }
