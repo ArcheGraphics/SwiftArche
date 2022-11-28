@@ -43,7 +43,7 @@ public class ARManager: NSObject {
     }
 
     func addOnUpdateScript(_ script: Script) {
-        script._onUpdateIndex = _onUpdateScripts.length
+        script._onUpdateIndex = _onUpdateScripts.count
         _onUpdateScripts.add(script)
     }
 
@@ -68,7 +68,7 @@ public class ARManager: NSObject {
                     zNear: CGFloat(camera!.nearClipPlane), zFar: CGFloat(camera!.farClipPlane)))
 
             let elements = _onUpdateScripts._elements
-            for i in 0..<_onUpdateScripts.length {
+            for i in 0..<_onUpdateScripts.count {
                 let element = elements[i]!
                 if (element._started) {
                     element.onARUpdate(deltaTime, currentFrame)

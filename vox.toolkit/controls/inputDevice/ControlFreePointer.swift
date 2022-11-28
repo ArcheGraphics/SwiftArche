@@ -14,21 +14,20 @@ class ControlFreePointer : IControlInput {
     private static var _lastUsefulFrameIndex: Int = -1
     static func onUpdateHandler(_ input: InputManager, callback: (ControlHandlerType)->Void) {
         _frameIndex += 1
-        if (input.pointers.count == 1) {
-            if (input.isPointerTrigger(.leftMouseDown)) {
-                _updateType(ControlHandlerType.ROTATE, DeltaType.Moving)
+        
+        let pointers = input.pointers
+        for pointer in pointers {
+            if pointer.type == .leftMouseDown {
+                ControlFreePointer._updateType(ControlHandlerType.ROTATE, DeltaType.Moving)
+                callback(ControlFreePointer._handlerType)
+            } else if pointer.type == .leftMouseDragged {
+                ControlFreePointer._updateType(ControlHandlerType.ROTATE, DeltaType.Moving)
+                callback(ControlFreePointer._handlerType)
             } else {
-                let pointer = input.pointers[0]
-                if ((pointer.deltaX != 0 || pointer.deltaY != 0) && input.isPointerTrigger(.leftMouseUp)) {
-                    _updateType(ControlHandlerType.ROTATE, DeltaType.Moving)
-                } else {
-                    _updateType(ControlHandlerType.None, DeltaType.None)
-                }
+                ControlFreePointer._updateType(ControlHandlerType.None, DeltaType.None)
+                callback(ControlFreePointer._handlerType)
             }
-        } else {
-            _updateType(ControlHandlerType.None, DeltaType.None)
         }
-        callback(_handlerType)
     }
     
     static func onUpdateDelta(_ control: FreeControl, _ outDelta: inout Vector3) {

@@ -50,31 +50,9 @@ public class InputManager {
 #if os(iOS)
     /// Whether the pointer is being held down, if there is no parameter, return whether any pointer is being held down.
     /// - Returns: Whether the pointer is being held down
-    public func isPointerHeldDown() -> Bool {
+    public func isPointerTrigger(_ phase: UITouch.Phase) -> Bool {
         if (_initialized) {
-            return _pointerManager._buttons != 0
-        } else {
-            return false
-        }
-    }
-    
-    /// Whether the pointer starts to be pressed down during the current frame, if there is no parameter,
-    /// return whether any pointer starts to be pressed down during the current frame.
-    /// - Returns: Whether the pointer starts to be pressed down during the current frame
-    public func isPointerDown() -> Bool {
-        if (_initialized) {
-            return _pointerManager._downList.count > 0
-        } else {
-            return false
-        }
-    }
-    
-    /// Whether the pointer is released during the current frame, if there is no parameter,
-    /// return whether any pointer released during the current frame.
-    /// - Returns: Whether the pointer is released during the current frame
-    public func isPointerUp() -> Bool {
-        if (_initialized) {
-            return _pointerManager._upList.count > 0
+            return _pointerManager.isPointerTrigger(phase)
         } else {
             return false
         }

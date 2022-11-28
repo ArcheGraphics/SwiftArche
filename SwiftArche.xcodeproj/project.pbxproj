@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		040F1D9D293369DC008BDC8D /* Textures.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 040F1D9C293369DC008BDC8D /* Textures.xcassets */; };
-		04176A7A2925295B00B1775A /* Pointer.swift in Sources */ = {isa = PBXBuildFile; fileRef = E63B111B2848B79F0F440F00 /* Pointer.swift */; };
 		04176A7B292717D900B1775A /* Time.swift in Sources */ = {isa = PBXBuildFile; fileRef = E63B17B65377F894AAEF5610 /* Time.swift */; };
 		04176A7D2927343900B1775A /* ar_shading.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3E67EDCA291B2F7600ED60C8 /* ar_shading.metal */; };
 		04176ACE29275DBD00B1775A /* libvox.math.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E67EE5E291B799900ED60C8 /* libvox.math.a */; };
@@ -734,7 +733,6 @@
 		E63B106FED41DA853C5CF292 /* LightManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LightManager.swift; sourceTree = "<group>"; };
 		E63B10D0E5E63C6772E58E3E /* CascadedShadowSubpass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CascadedShadowSubpass.swift; sourceTree = "<group>"; };
 		E63B110EAC5C5290512927D7 /* ShadowManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ShadowManager.swift; sourceTree = "<group>"; };
-		E63B111B2848B79F0F440F00 /* Pointer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Pointer.swift; sourceTree = "<group>"; };
 		E63B11EDE4BA4562BDFFF83D /* Skin.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Skin.swift; sourceTree = "<group>"; };
 		E63B126D86D1150480AF5E59 /* DiffuseMode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DiffuseMode.swift; sourceTree = "<group>"; };
 		E63B133737E2EA928107632F /* ShadowSliceData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ShadowSliceData.swift; sourceTree = "<group>"; };
@@ -844,7 +842,6 @@
 		04176A782925276300B1775A /* pointer */ = {
 			isa = PBXGroup;
 			children = (
-				E63B111B2848B79F0F440F00 /* Pointer.swift */,
 				43D8C4B08C621CA82C7DB591 /* PointerManager.swift */,
 			);
 			path = pointer;
@@ -2026,7 +2023,6 @@
 				43D8CAC028040C7520C6C8FA /* PBRBaseMaterial.swift in Sources */,
 				43D8C92AEBFA1FB64A9B4AA9 /* TextureCoordinate.swift in Sources */,
 				43D8CCC670BB10844D82AFF0 /* PBRMaterial.swift in Sources */,
-				04176A7A2925295B00B1775A /* Pointer.swift in Sources */,
 				3E0F7C952926644F00C4A843 /* StaticCollider.swift in Sources */,
 				3E5D8680292B248500759BA9 /* AnimationClip.swift in Sources */,
 				3E0F7C6C2926039500C4A843 /* PhysXTolerancesScale.swift in Sources */,

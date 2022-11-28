@@ -64,7 +64,7 @@ public class FreeControl : Script {
     }
     
     private func _pan(_ moveDelta: Vector3, _ delta: Float) {
-        let actualMoveSpeed = (delta / 1000) * movementSpeed
+        let actualMoveSpeed = delta * movementSpeed
         var moveDelta = moveDelta
         _ = moveDelta.normalize()
         _ = moveDelta.scale(s: actualMoveSpeed)

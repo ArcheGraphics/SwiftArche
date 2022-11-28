@@ -20,18 +20,21 @@ class PointerManager {
     func _onPointerEvent(_ evt: UITouch) {
         _nativeEvents.append(evt)
     }
+    
+    func isPointerTrigger(_ pointerButton: UITouch.Phase) -> Bool {
+        for evt in _pointers {
+            if evt.phase == pointerButton {
+                return true
+            }
+        }
+        return false
+    }
 #else
     var _pointers: [NSEvent] = []
     private var _nativeEvents: [NSEvent] = []
 
     func _onPointerEvent(_ evt: NSEvent) {
         _nativeEvents.append(evt)
-    }
-#endif
-    
-    func _update() {
-        _pointers = _nativeEvents
-        _nativeEvents = []
     }
     
     func isPointerTrigger(_ pointerButton: NSEvent.EventType) -> Bool {
@@ -42,4 +45,11 @@ class PointerManager {
         }
         return false
     }
+#endif
+    
+    func _update() {
+        _pointers = _nativeEvents
+        _nativeEvents = []
+    }
+
 }
