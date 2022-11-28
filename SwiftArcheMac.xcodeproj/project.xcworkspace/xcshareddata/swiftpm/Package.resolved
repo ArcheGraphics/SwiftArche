@@ -8,6 +8,15 @@
         "revision" : "6fe203dc33195667ce1759bf0182975e4653ba1c",
         "version" : "1.4.4"
       }
+    },
+    {
+      "identity" : "swiftimgui",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/ctreffs/SwiftImGui.git",
+      "state" : {
+        "revision" : "9a521cba8523fe4c2db4775e6d3fd2aff6cb9849",
+        "version" : "1.86.0"
+      }
     }
   ],
   "version" : 2

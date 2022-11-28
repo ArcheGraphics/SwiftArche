@@ -10,11 +10,17 @@ import MetalKit
 public typealias View = UIView
 #else
 public typealias View = NSView
+import ImGui
+import AppKit
 #endif
 
 public class Canvas: MTKView {
     var inputManager: InputManager?
     public var updateFlagManager = UpdateFlagManager()
+#if os(macOS)
+    // for mouse movement
+    var trackingArea: NSTrackingArea?
+#endif
     
     required init(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
@@ -79,7 +85,34 @@ public class Canvas: MTKView {
 
     public override func pressesCancelled(_ presses: Set<UIPress>, with event: UIPressesEvent?) {
     }
-#else
+#else    
+    public override func updateTrackingAreas() {
+        guard let window = NSApplication.shared.mainWindow else {
+            return
+        }
+        window.acceptsMouseMovedEvents = true
+
+        if let trackingArea = trackingArea {
+            removeTrackingArea(trackingArea)
+        }
+
+        let options: NSTrackingArea.Options = [.activeAlways, .inVisibleRect, .mouseMoved]
+        trackingArea = NSTrackingArea(rect: self.bounds, options: options,
+                owner: self, userInfo: nil)
+        addTrackingArea(trackingArea!)
+        
+        // If we want to receive key events, we either need to be in the responder chain of the key view,
+        // or else we can install a local monitor. The consequence of this heavy-handed approach is that
+        // we receive events for all controls, not just Dear ImGui widgets. If we had native controls in our
+        // window, we'd want to be much more careful than just ingesting the complete event stream, though we
+        // do make an effort to be good citizens by passing along events when Dear ImGui doesn't want to capture.
+        let eventMask: NSEvent.EventTypeMask = [.keyDown, .keyUp, .flagsChanged]
+        NSEvent.addLocalMonitorForEvents(matching: eventMask) { [unowned self](event) -> NSEvent? in
+            ImGui_ImplOSX_HandleEvent(event, self)
+            return event
+        }        
+    }
+    
     public override var acceptsFirstResponder: Bool {
         true
     }
@@ -93,18 +126,22 @@ public class Canvas: MTKView {
     }
     
     public override func mouseDown(with event: NSEvent) {
+        ImGui_ImplOSX_HandleEvent(event, self)
         inputManager?._pointerManager._onPointerEvent(event)
     }
 
     public override func mouseUp(with event: NSEvent) {
+        ImGui_ImplOSX_HandleEvent(event, self)
         inputManager?._pointerManager._onPointerEvent(event)
     }
 
     public override func mouseDragged(with event: NSEvent) {
+        ImGui_ImplOSX_HandleEvent(event, self)
         inputManager?._pointerManager._onPointerEvent(event)
     }
 
     public override func mouseMoved(with event: NSEvent) {
+        ImGui_ImplOSX_HandleEvent(event, self)
         inputManager?._pointerManager._onPointerEvent(event)
     }
 
@@ -133,6 +170,7 @@ public class Canvas: MTKView {
     }
 
     public override func scrollWheel(with event: NSEvent) {
+        ImGui_ImplOSX_HandleEvent(event, self)
         inputManager?._wheelManager._onWheelEvent(event)
     }
     

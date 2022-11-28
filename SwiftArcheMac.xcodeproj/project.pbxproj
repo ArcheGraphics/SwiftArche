@@ -21,6 +21,13 @@
 		040F1DCE2933AB71008BDC8D /* FreeControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 040F1DCD2933AB71008BDC8D /* FreeControl.swift */; };
 		040F1DD02933AC19008BDC8D /* ControlFreeKeyboard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 040F1DCF2933AC19008BDC8D /* ControlFreeKeyboard.swift */; };
 		040F1DD32933AF83008BDC8D /* libvox.toolkit.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 040F1DA329336A56008BDC8D /* libvox.toolkit.a */; };
+		040F1DD62934E6B9008BDC8D /* ImGui in Frameworks */ = {isa = PBXBuildFile; productRef = 040F1DD52934E6B9008BDC8D /* ImGui */; };
+		040F1DD92934E6F6008BDC8D /* imgui_impl_osx.swift in Sources */ = {isa = PBXBuildFile; fileRef = 040F1DD82934E6F6008BDC8D /* imgui_impl_osx.swift */; };
+		040F1DDB2934E772008BDC8D /* imgui_impl_metal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 040F1DDA2934E772008BDC8D /* imgui_impl_metal.swift */; };
+		040F1DDD2934E89F008BDC8D /* GUIShader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 040F1DDC2934E89F008BDC8D /* GUIShader.swift */; };
+		040F1DDF2934EAB8008BDC8D /* ImGui in Frameworks */ = {isa = PBXBuildFile; productRef = 040F1DDE2934EAB8008BDC8D /* ImGui */; };
+		040F1DE12934EB16008BDC8D /* ImGui in Frameworks */ = {isa = PBXBuildFile; productRef = 040F1DE02934EB16008BDC8D /* ImGui */; };
+		040F1DE32934ED68008BDC8D /* GUIManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 040F1DE22934ED68008BDC8D /* GUIManager.swift */; };
 		04462F21293324A300F95387 /* Textures.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 04462F20293324A200F95387 /* Textures.xcassets */; };
 		3EB32B032932299A0019A4F3 /* Logging in Frameworks */ = {isa = PBXBuildFile; productRef = 3EB32B022932299A0019A4F3 /* Logging */; };
 		3EB32B7529322DB30019A4F3 /* PrimitiveApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EB32B7429322DB30019A4F3 /* PrimitiveApp.swift */; };
@@ -450,6 +457,10 @@
 		040F1DCB2933AAF0008BDC8D /* ControlFreePointer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ControlFreePointer.swift; sourceTree = "<group>"; };
 		040F1DCD2933AB71008BDC8D /* FreeControl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FreeControl.swift; sourceTree = "<group>"; };
 		040F1DCF2933AC19008BDC8D /* ControlFreeKeyboard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ControlFreeKeyboard.swift; sourceTree = "<group>"; };
+		040F1DD82934E6F6008BDC8D /* imgui_impl_osx.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = imgui_impl_osx.swift; sourceTree = "<group>"; };
+		040F1DDA2934E772008BDC8D /* imgui_impl_metal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = imgui_impl_metal.swift; sourceTree = "<group>"; };
+		040F1DDC2934E89F008BDC8D /* GUIShader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GUIShader.swift; sourceTree = "<group>"; };
+		040F1DE22934ED68008BDC8D /* GUIManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GUIManager.swift; sourceTree = "<group>"; };
 		04462F20293324A200F95387 /* Textures.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Textures.xcassets; sourceTree = SOURCE_ROOT; };
 		3EB32B7429322DB30019A4F3 /* PrimitiveApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrimitiveApp.swift; sourceTree = "<group>"; };
 		3EB32B832932303A0019A4F3 /* libc++abi.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libc++abi.tbd"; path = "usr/lib/libc++abi.tbd"; sourceTree = SDKROOT; };
@@ -803,6 +814,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				040F1DE12934EB16008BDC8D /* ImGui in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -810,6 +822,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				040F1DDF2934EAB8008BDC8D /* ImGui in Frameworks */,
 				040F1DD32933AF83008BDC8D /* libvox.toolkit.a in Frameworks */,
 				3EB32B862932303A0019A4F3 /* libc++abi.tbd in Frameworks */,
 				3EB32B872932303A0019A4F3 /* libc++.1.tbd in Frameworks */,
@@ -853,6 +866,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				040F1DD62934E6B9008BDC8D /* ImGui in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -915,6 +929,17 @@
 				040F1DBF293392FA008BDC8D /* WheelManager.swift */,
 			);
 			path = wheel;
+			sourceTree = "<group>";
+		};
+		040F1DD72934E6CF008BDC8D /* gui */ = {
+			isa = PBXGroup;
+			children = (
+				040F1DD82934E6F6008BDC8D /* imgui_impl_osx.swift */,
+				040F1DDA2934E772008BDC8D /* imgui_impl_metal.swift */,
+				040F1DDC2934E89F008BDC8D /* GUIShader.swift */,
+				040F1DE22934ED68008BDC8D /* GUIManager.swift */,
+			);
+			path = gui;
 			sourceTree = "<group>";
 		};
 		3EB32B7E29322E850019A4F3 /* Frameworks */ = {
@@ -1218,6 +1243,7 @@
 				3EB32B89293238F00019A4F3 /* input */,
 				3EC038662932154A002187DC /* animation */,
 				3EC0387029321739002187DC /* loader */,
+				040F1DD72934E6CF008BDC8D /* gui */,
 				3EC0389029321826002187DC /* Layer.swift */,
 				3EC0388629321825002187DC /* Canvas.swift */,
 				3EC0388429321825002187DC /* Engine.swift */,
@@ -1759,6 +1785,9 @@
 				040F1DB229336C1D008BDC8D /* PBXTargetDependency */,
 			);
 			name = vox.toolkit;
+			packageProductDependencies = (
+				040F1DE02934EB16008BDC8D /* ImGui */,
+			);
 			productName = vox.toolkit;
 			productReference = 040F1DA329336A56008BDC8D /* libvox.toolkit.a */;
 			productType = "com.apple.product-type.library.static";
@@ -1782,6 +1811,9 @@
 				3EB32B7D29322E7E0019A4F3 /* PBXTargetDependency */,
 			);
 			name = SwiftArcheMac;
+			packageProductDependencies = (
+				040F1DDE2934EAB8008BDC8D /* ImGui */,
+			);
 			productName = SwiftArcheMac;
 			productReference = 3EC0370129321131002187DC /* SwiftArcheMac.app */;
 			productType = "com.apple.product-type.application";
@@ -1890,6 +1922,9 @@
 				3EC03A0729321963002187DC /* PBXTargetDependency */,
 			);
 			name = vox.render;
+			packageProductDependencies = (
+				040F1DD52934E6B9008BDC8D /* ImGui */,
+			);
 			productName = vox.render;
 			productReference = 3EC0385C2932152C002187DC /* libvox.render.a */;
 			productType = "com.apple.product-type.library.static";
@@ -1946,6 +1981,7 @@
 			mainGroup = 3EC036F829321131002187DC;
 			packageReferences = (
 				3EB32B012932299A0019A4F3 /* XCRemoteSwiftPackageReference "swift-log" */,
+				040F1DD42934E6B9008BDC8D /* XCRemoteSwiftPackageReference "SwiftImGui" */,
 			);
 			productRefGroup = 3EC0370229321131002187DC /* Products */;
 			projectDirPath = "";
@@ -2172,6 +2208,7 @@
 				3EC038E629321845002187DC /* PhysXJoint.swift in Sources */,
 				3EC039D829321910002187DC /* PositionAnimationCurveOwnerAssembler.swift in Sources */,
 				3EC03949293218A3002187DC /* BlendState.swift in Sources */,
+				040F1DE32934ED68008BDC8D /* GUIManager.swift in Sources */,
 				3EC0399D293218DF002187DC /* DiffuseMode.swift in Sources */,
 				3EC03967293218BA002187DC /* ComputePass.swift in Sources */,
 				3EC039AA293218F0002187DC /* BoolUpdateFlag.swift in Sources */,
@@ -2206,6 +2243,7 @@
 				3EC038F02932184C002187DC /* ColliderShapeUpAxis.swift in Sources */,
 				3EC0390629321862002187DC /* GLTFAsset.m in Sources */,
 				3EC0394A293218A3002187DC /* RenderState.swift in Sources */,
+				040F1DD92934E6F6008BDC8D /* imgui_impl_osx.swift in Sources */,
 				3EC038CA2932183D002187DC /* CapsuleColliderShape.swift in Sources */,
 				3EC039F529321920002187DC /* IAnimationCurveCalculator.swift in Sources */,
 				3EC0393D2932189D002187DC /* ShaderPass.swift in Sources */,
@@ -2247,6 +2285,7 @@
 				3EC0389E29321826002187DC /* Component.swift in Sources */,
 				3EC03966293218BA002187DC /* Subpass.swift in Sources */,
 				3EC0389329321826002187DC /* Engine.swift in Sources */,
+				040F1DDD2934E89F008BDC8D /* GUIShader.swift in Sources */,
 				3EC039AF293218F0002187DC /* UpdateFlag.swift in Sources */,
 				3EC038E829321845002187DC /* FixedJoint.swift in Sources */,
 				3EC0399B293218DA002187DC /* Light.swift in Sources */,
@@ -2263,6 +2302,7 @@
 				3EC0393E2932189D002187DC /* ShaderData.swift in Sources */,
 				3EC03976293218C3002187DC /* BlendShape.swift in Sources */,
 				3EC039E729321918002187DC /* AnimatorStatePlayState.swift in Sources */,
+				040F1DDB2934E772008BDC8D /* imgui_impl_metal.swift in Sources */,
 				3EC0393F2932189D002187DC /* ShaderMacroCollection.swift in Sources */,
 				3EC0397B293218C3002187DC /* SubMesh.swift in Sources */,
 				3EC038CB2932183D002187DC /* PhysXSphereColliderShape.swift in Sources */,
@@ -2998,6 +3038,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		040F1DD42934E6B9008BDC8D /* XCRemoteSwiftPackageReference "SwiftImGui" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/ctreffs/SwiftImGui.git";
+			requirement = {
+				kind = exactVersion;
+				version = 1.86.0;
+			};
+		};
 		3EB32B012932299A0019A4F3 /* XCRemoteSwiftPackageReference "swift-log" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/apple/swift-log.git";
@@ -3009,6 +3057,21 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		040F1DD52934E6B9008BDC8D /* ImGui */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 040F1DD42934E6B9008BDC8D /* XCRemoteSwiftPackageReference "SwiftImGui" */;
+			productName = ImGui;
+		};
+		040F1DDE2934EAB8008BDC8D /* ImGui */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 040F1DD42934E6B9008BDC8D /* XCRemoteSwiftPackageReference "SwiftImGui" */;
+			productName = ImGui;
+		};
+		040F1DE02934EB16008BDC8D /* ImGui */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 040F1DD42934E6B9008BDC8D /* XCRemoteSwiftPackageReference "SwiftImGui" */;
+			productName = ImGui;
+		};
 		3EB32B022932299A0019A4F3 /* Logging */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 3EB32B012932299A0019A4F3 /* XCRemoteSwiftPackageReference "swift-log" */;

@@ -17,7 +17,7 @@ public class Engine: NSObject {
     let _macroCollection: ShaderMacroCollection = ShaderMacroCollection()
     let _componentsManager: ComponentsManager = ComponentsManager()
     let _lightManager = LightManager()
-
+    
     private var _time: Time = Time();
     private var _settings: EngineSettings? = nil
     private var _device: MTLDevice
@@ -26,53 +26,56 @@ public class Engine: NSObject {
     private var _inputManager: InputManager!
 #if os(iOS)
     private var _arManager: ARManager?
+#else
+    private var _guiManager: GUIManager!
 #endif
+    
     private var _textureLoader: TextureLoader!
-
+    
     private var _isPaused: Bool = true;
-
+    
     /// Settings of Engine.
     public var settings: EngineSettings? {
         get {
             _settings
         }
     }
-
+    
     /// Get the Metal device.
     public var device: MTLDevice {
         get {
             _device
         }
     }
-
+    
     /// Get the texture loader.
     public var textureLoader: TextureLoader {
         get {
             _textureLoader
         }
     }
-
+    
     /// Get the scene manager.
     public var sceneManager: SceneManager {
         get {
             _sceneManager
         }
     }
-
+    
     /// Get the physics manager.
     public var physicsManager: PhysicsManager {
         get {
             _physicsManager
         }
     }
-
+    
     /// Get the input manager.
     public var inputManager: InputManager {
         get {
             _inputManager
         }
     }
-
+    
 #if os(iOS)
     /// Get the ar manager.
     public var arManager: ARManager? {
@@ -81,14 +84,14 @@ public class Engine: NSObject {
         }
     }
 #endif
-
+    
     /// Get the timer.
     public var time: Time {
         get {
             _time
         }
     }
-
+    
     /// Whether the engine is paused.
     public var isPaused: Bool {
         get {
@@ -101,14 +104,14 @@ public class Engine: NSObject {
             }
         }
     }
-
+    
     public init(canvas: Canvas) {
         self.canvas = canvas
         guard let device = MTLCreateSystemDefaultDevice() else {
             fatalError("Unable to create default Metal Device")
         }
         _device = device
-
+        
         // Load all the shader files with a metal file extension in the project
         let libraryURL = Bundle.main.url(forResource: "vox.shader", withExtension: "metallib")!
         do {
@@ -116,12 +119,12 @@ public class Engine: NSObject {
         } catch let error {
             fatalError("Error creating MetalKit mesh, error \(error)")
         }
-
+        
         guard let commandQueue = device.makeCommandQueue() else {
             fatalError("Unable to create default Metal Device")
         }
         self.commandQueue = commandQueue
-
+        
         super.init()
         _physicsManager = PhysicsManager(engine: self)
         _inputManager = InputManager(engine: self)
@@ -130,10 +133,13 @@ public class Engine: NSObject {
         canvas.delegate = self
         canvas.device = device
         canvas.inputManager = _inputManager
-        
         _textureLoader = TextureLoader(self)
+        
+#if os(macOS)
+        _guiManager = GUIManager(self)
+#endif
     }
-
+    
 #if os(iOS)
     public func initArSession() {
         _arManager = ARManager(device)
@@ -142,12 +148,12 @@ public class Engine: NSObject {
         scene.background.ar = ARSubpass(self)
     }
 #endif
-
+    
     /// Execution engine loop.
     public func run() {
         isPaused = false
     }
-
+    
     /// Update the engine loop manually. If you call engine.run(), you generally don't need to call this function.
     func update() {
         let deltaTime = time.deltaTime;
@@ -160,7 +166,7 @@ public class Engine: NSObject {
                 scene!._activeCameras.sort { camera1, camera2 in
                     camera1.priority > camera2.priority
                 }
-
+                
                 componentsManager.callScriptOnStart()
                 _physicsManager._update(deltaTime)
                 _inputManager._update()
@@ -172,15 +178,15 @@ public class Engine: NSObject {
             componentsManager.handlingInvalidScripts()
         }
     }
-
+    
     func _render(_ scene: Scene) {
 #if os(iOS)
         arManager?.update(_time.deltaTime)
 #endif
         _componentsManager.callRendererOnUpdate(_time.deltaTime)
-
+        
         scene._updateShaderData()
-
+        
         let cameras = scene._activeCameras
         if (cameras.count > 0) {
             if let commandBuffer = commandQueue.makeCommandBuffer(),
@@ -190,6 +196,9 @@ public class Engine: NSObject {
                     camera.render(commandBuffer)
                     _componentsManager.callCameraOnEndRender(camera)
                 }
+#if os(macOS)
+                _guiManager.draw(commandBuffer)
+#endif
                 commandBuffer.present(currentDrawable)
                 commandBuffer.commit()
             }
@@ -209,7 +218,7 @@ extension Engine: MTKViewDelegate {
     public func mtkView(_ view: MTKView, drawableSizeWillChange size: CGSize) {
         canvas.dispatchResize()
     }
-
+    
     /// Called on the delegate when it is asked to render into the view
     /// - Remark: Called on the delegate when it is asked to render into the view
     /// - Parameter view:  MTKView which called this method
