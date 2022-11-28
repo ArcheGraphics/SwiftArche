@@ -50,7 +50,7 @@ class PointerManager {
         if (lastIndex >= 0) {
             var i = lastIndex
             while i >= 0 {
-                if (_pointers[i].phase == .cancelled) {
+                if (_pointers[i].phase == .Leave) {
                     if (i != lastIndex) {
                         _pointers[i] = _pointers[lastIndex]
                     }
@@ -77,7 +77,7 @@ class PointerManager {
         _buttons = 0
         lastIndex = _pointers.count - 1
         if (lastIndex >= 0) {
-            for i in 0..<lastIndex {
+            for i in 0...lastIndex {
                 let pointer = _pointers[i]
                 pointer._upList = []
                 pointer._downList = []
@@ -117,7 +117,7 @@ class PointerManager {
                     _pointerPool[i] = pointer
                 }
                 pointer!._uniqueID = pointerId
-                _pointers[i] = pointer!
+                _pointers.insert(pointer!, at: i)
                 return pointer
             } else {
                 return nil
@@ -131,7 +131,6 @@ class PointerManager {
         let length = events.count
         if (length > 0) {
             let latestEvent = events[length - 1]
-            pointer.phase = latestEvent.phase
 #if os(iOS)
             let location = latestEvent.location(in: _canvas)
             let previousLocation = latestEvent.previousLocation(in: _canvas)
@@ -141,6 +140,10 @@ class PointerManager {
             let location = latestEvent.locationInWindow
             _ = pointer.deltaPosition.set(x: Float(latestEvent.deltaX), y: Float(latestEvent.deltaY))
             _ = pointer.position.set(x: Float(location.x), y: Float(location.y))
+            pointer.phase = .Move
+            if latestEvent.deltaX == 0 && latestEvent.deltaY == 0 {
+                pointer.phase = .Stationary
+            }
 #endif
             
             pointer._firePointerDrag()
@@ -151,25 +154,25 @@ class PointerManager {
                 let button = event.type
                 pointer.button = button
                 pointer.pressedButtons = button
-                switch (event.phase) {
-                case .began:
+                switch (event.type) {
+                case .leftMouseDown, .rightMouseDown, .otherMouseDown:
                     _downList.append(button)
                     _downMap[button] = frameCount
                     pointer._downList.append(button)
                     pointer._downMap[button] = frameCount
-                    pointer.phase = .began
+                    pointer.phase = .Down
                     pointer._firePointerDown(rayCastEntity)
                     break
-                case .ended:
+                case .leftMouseUp, .rightMouseUp, .otherMouseUp:
                     _upList.append(button)
                     _upMap[button] = frameCount
                     pointer._upList.append(button)
                     pointer._upMap[button] = frameCount;
-                    pointer.phase = .ended
+                    pointer.phase = .Up
                     pointer._firePointerUpAndClick(rayCastEntity)
                     break
-                case .cancelled:
-                    pointer.phase = .cancelled
+                case .mouseExited:
+                    pointer.phase = .Leave
                     pointer._firePointerExitAndEnter(nil)
                 default:
                     break
@@ -178,7 +181,7 @@ class PointerManager {
             pointer._events = []
         } else {
             _ = pointer.deltaPosition.set(x: 0, y: 0)
-            pointer.phase = .stationary
+            pointer.phase = .Stationary
             pointer._firePointerDrag()
             pointer._firePointerExitAndEnter(_pointerRayCast(position.x / canvasW, position.y / canvasH))
         }

@@ -34,9 +34,9 @@ class Spherical {
     }
     
     func setYAxis(_ up: Vector3) {
-        var xAxis = Vector3()
+        var xAxis = Vector3(1, 0, 0)
         var yAxis = up
-        if (Vector3.equals(left: Vector3(1, 0, 0), right: yAxis.normalize())) {
+        if (Vector3.equals(left: xAxis, right: yAxis.normalize())) {
             _ = xAxis.set(x: 0, y: 1, z: 0)
         }
         var zAxis = Vector3.cross(left: xAxis, right: yAxis)
@@ -46,7 +46,10 @@ class Spherical {
                          m21: yAxis.x, m22: yAxis.y, m23: yAxis.z, m24: 0,
                          m31: zAxis.x, m32: zAxis.y, m33: zAxis.z, m34: 0,
                          m41: 0, m42: 0, m43: 0, m44: 1)
-        _matrixInv = _matrix.transpose()
+        _matrixInv = Matrix(m11: xAxis.x, m12: yAxis.x, m13: zAxis.x, m14: 0,
+                            m21: xAxis.y, m22: yAxis.y, m23: zAxis.y, m24: 0,
+                            m31: xAxis.z, m32: yAxis.z, m33: zAxis.z, m34: 0,
+                            m41: 0, m42: 0, m43: 0, m44: 1)
     }
     
     func setFromVec3(_ value: Vector3, atTheBack: Bool = false)-> Spherical {

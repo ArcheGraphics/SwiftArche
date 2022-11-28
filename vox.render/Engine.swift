@@ -123,13 +123,14 @@ public class Engine: NSObject {
         self.commandQueue = commandQueue
 
         super.init()
-        canvas.delegate = self
-        canvas.device = device
         _physicsManager = PhysicsManager(engine: self)
         _inputManager = InputManager(engine: self)
         _sceneManager = SceneManager(engine: self)
         _sceneManager.activeScene = Scene(self, "DefaultScene")
-
+        canvas.delegate = self
+        canvas.device = device
+        canvas.inputManager = _inputManager
+        
         _textureLoader = TextureLoader(self)
     }
 

@@ -34,7 +34,7 @@ public class Pointer {
     var _downList: [UITouch.TouchType] = []
 #else
     /// The phase of pointer.
-    public var phase: NSEvent.Phase = .cancelled
+    public var phase: PointerPhase = .Leave
     /// The button that triggers the pointer event.
     public var button: NSEvent.EventType?
     /// The currently pressed buttons for this pointer.

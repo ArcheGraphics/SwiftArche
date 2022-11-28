@@ -57,7 +57,6 @@ public class OrbitControl : Script {
     private var _zoomFrag: Float = 0
     private var _scale: Float = 1
     private var _panOffset: Vector3 = Vector3()
-    private var _tempVec3: Vector3 = Vector3()
     private var _enableHandler: Int = ControlHandlerType.All.rawValue
     
     /// Return whether to enable keyboard.
@@ -235,9 +234,9 @@ public class OrbitControl : Script {
         let distanceUp = 2 * delta.y * (targetDistance / height)
         let worldMatrix = cameraTransform.worldMatrix
         var panOffset = _panOffset.internalValue
-        panOffset.x += worldMatrix.elements.columns.0[0] * distanceLeft + worldMatrix.elements.columns.0[4] * distanceUp
-        panOffset.y += worldMatrix.elements.columns.0[1] * distanceLeft + worldMatrix.elements.columns.0[5] * distanceUp
-        panOffset.z += worldMatrix.elements.columns.0[2] * distanceLeft + worldMatrix.elements.columns.0[6] * distanceUp
+        panOffset.x += worldMatrix.elements.columns.0[0] * distanceLeft + worldMatrix.elements.columns.1[0] * distanceUp
+        panOffset.y += worldMatrix.elements.columns.0[1] * distanceLeft + worldMatrix.elements.columns.1[1] * distanceUp
+        panOffset.z += worldMatrix.elements.columns.0[2] * distanceLeft + worldMatrix.elements.columns.1[2] * distanceUp
         _panOffset = Vector3(panOffset)
     }
     
