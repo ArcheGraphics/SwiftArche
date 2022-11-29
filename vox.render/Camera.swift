@@ -28,9 +28,10 @@ public class Camera: Component {
     /// - Remark Support bit manipulation, corresponding to Entity's layer.
     public var cullingMask: Layer = Layer.Everything
 
+    public var devicePipeline: DevicePipeline!
+
     var _globalShaderMacro: ShaderMacroCollection = ShaderMacroCollection()
     var _frustum: BoundingFrustum = BoundingFrustum()
-    var _devicePipeline: DevicePipeline!
     var _cameraInfo = CameraInfo()
 
     private var _isProjMatSetting = false
@@ -214,7 +215,7 @@ public class Camera: Component {
         shaderData = ShaderData(entity.engine.device)
 
         super.init(entity)
-        _devicePipeline = DevicePipeline(self)
+        devicePipeline = DevicePipeline(self)
     }
 
     override func _onEnable() {
@@ -383,7 +384,7 @@ extension Camera {
                 _globalShaderMacro
         )
 
-        _devicePipeline.commit(commandBuffer)
+        devicePipeline.commit(commandBuffer)
     }
 }
 

@@ -15,6 +15,9 @@ public struct SphericalHarmonics3 {
     /// The coefficients of SphericalHarmonics3.
     public var coefficients: [Float] = [Float](repeating: 0, count: 27)
 
+    public init() {
+    }
+
     /// Scale the coefficients.
     /// - Parameters:
     ///   - sh: The sh

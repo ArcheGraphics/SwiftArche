@@ -192,9 +192,9 @@ public class Engine: NSObject {
             if let commandBuffer = commandQueue.makeCommandBuffer(),
                let currentDrawable = canvas.currentDrawable {
                 for camera in cameras {
-                    _componentsManager.callCameraOnBeginRender(camera)
+                    _componentsManager.callCameraOnBeginRender(camera, commandBuffer)
                     camera.render(commandBuffer)
-                    _componentsManager.callCameraOnEndRender(camera)
+                    _componentsManager.callCameraOnEndRender(camera, commandBuffer)
                 }
 #if os(macOS)
                 _guiManager.draw(commandBuffer)

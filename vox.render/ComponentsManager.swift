@@ -4,7 +4,7 @@
 //  personal capacity and am not conveying any rights to any intellectual
 //  property of any third parties.
 
-import Foundation
+import Metal
 
 /// The manager of the components.
 class ComponentsManager {
@@ -148,17 +148,17 @@ extension ComponentsManager {
         }
     }
 
-    func callCameraOnBeginRender(_ camera: Camera) {
+    func callCameraOnBeginRender(_ camera: Camera,  _ commandBuffer: MTLCommandBuffer) {
         let camComps = camera.entity._scripts
         for i in 0..<camComps.count {
-            camComps.get(i)?.onBeginRender(camera)
+            camComps.get(i)?.onBeginRender(camera, commandBuffer)
         }
     }
 
-    func callCameraOnEndRender(_ camera: Camera) {
+    func callCameraOnEndRender(_ camera: Camera,  _ commandBuffer: MTLCommandBuffer) {
         let camComps = camera.entity._scripts
         for i in 0..<camComps.count {
-            camComps.get(i)?.onEndRender(camera)
+            camComps.get(i)?.onEndRender(camera, commandBuffer)
         }
     }
 

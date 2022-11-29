@@ -6,6 +6,7 @@
 
 import Metal
 import MetalKit
+import vox_math
 
 public class TextureLoader {
     private var _engine: Engine
@@ -74,13 +75,13 @@ public class TextureLoader {
         return texture
     }
 
-    public func createSphericalHarmonicsCoefficients(with texture: MDLTexture) -> [Float] {
+    public func createSphericalHarmonicsCoefficients(with texture: MDLTexture) -> SphericalHarmonics3 {
         let irradianceTexture = MDLTexture.irradianceTextureCube(with: texture, name: nil, dimensions: simd_make_int2(64, 64), roughness: 0)
         let lightProbe = MDLLightProbe(reflectiveTexture: texture, irradianceTexture: irradianceTexture)
         lightProbe.generateSphericalHarmonics(fromIrradiance: 2)
-        var sh = [Float](repeating: 0, count: 27)
+        var sh = SphericalHarmonics3()
         if let coefficients = lightProbe.sphericalHarmonicsCoefficients {
-            (coefficients as NSData).getBytes(&sh, length: 27 * MemoryLayout<Float>.stride)
+            (coefficients as NSData).getBytes(&sh.coefficients, length: 27 * MemoryLayout<Float>.stride)
         }
         return sh
     }

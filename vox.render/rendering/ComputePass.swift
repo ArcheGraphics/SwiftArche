@@ -6,9 +6,10 @@
 
 import Metal
 
-public class ComputePass {
-    private var _devicePipeline: DevicePipeline
+open class ComputePass {
     private var _pipelineDescriptor = MTLComputePipelineDescriptor()
+
+    public weak var devicePipeline: DevicePipeline?
 
     public var threadsPerGridX = 1
     public var threadsPerGridY = 1
@@ -17,30 +18,31 @@ public class ComputePass {
     public var shader: [ShaderPass] = []
     public var data: [ShaderData] = []
 
-    public init(_ devicePipeline: DevicePipeline) {
-        _devicePipeline = devicePipeline
+    public init() {
     }
 
     /// Compute function
     /// - Parameter commandEncoder: CommandEncoder to use to record compute commands
-    func compute(commandEncoder: MTLComputeCommandEncoder) {
-        let compileMacros = ShaderMacroCollection()
-        for shaderData in data {
-            ShaderMacroCollection.unionCollection(compileMacros, shaderData._macroCollection, compileMacros)
-        }
-
-        for shaderPass in shader {
-            _pipelineDescriptor.computeFunction = _devicePipeline._resourceCache.requestShaderModule(shaderPass, compileMacros)[0]
-            let pipelineState = _devicePipeline._resourceCache.requestComputePipeline(_pipelineDescriptor)
+    public func compute(commandEncoder: MTLComputeCommandEncoder) {
+        if let devicePipeline = devicePipeline {
+            let compileMacros = ShaderMacroCollection()
             for shaderData in data {
-                shaderData.bindData(commandEncoder, pipelineState.uniformBlock, _devicePipeline._resourceCache)
+                ShaderMacroCollection.unionCollection(compileMacros, shaderData._macroCollection, compileMacros)
             }
-            commandEncoder.setComputePipelineState(pipelineState.handle)
 
-            let nWidth = min(threadsPerGridX, pipelineState.handle.threadExecutionWidth)
-            let nHeight = min(threadsPerGridY, pipelineState.handle.maxTotalThreadsPerThreadgroup / nWidth)
-            commandEncoder.dispatchThreads(MTLSize(width: threadsPerGridX, height: threadsPerGridY, depth: threadsPerGridZ),
-                    threadsPerThreadgroup: MTLSize(width: nWidth, height: nHeight, depth: 1))
+            for shaderPass in shader {
+                _pipelineDescriptor.computeFunction = devicePipeline._resourceCache.requestShaderModule(shaderPass, compileMacros)[0]
+                let pipelineState = devicePipeline._resourceCache.requestComputePipeline(_pipelineDescriptor)
+                for shaderData in data {
+                    shaderData.bindData(commandEncoder, pipelineState.uniformBlock, devicePipeline._resourceCache)
+                }
+                commandEncoder.setComputePipelineState(pipelineState.handle)
+
+                let nWidth = min(threadsPerGridX, pipelineState.handle.threadExecutionWidth)
+                let nHeight = min(threadsPerGridY, pipelineState.handle.maxTotalThreadsPerThreadgroup / nWidth)
+                commandEncoder.dispatchThreads(MTLSize(width: threadsPerGridX, height: threadsPerGridY, depth: threadsPerGridZ),
+                        threadsPerThreadgroup: MTLSize(width: nWidth, height: nHeight, depth: 1))
+            }
         }
     }
 }

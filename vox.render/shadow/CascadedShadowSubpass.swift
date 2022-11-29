@@ -171,7 +171,7 @@ class CascadedShadowSubpass: GeometrySubpass {
                 _splitBoundSpheres[offset + 2] = center.z
                 _splitBoundSpheres[offset + 3] = radius * radius
 
-                let pipeline = _camera._devicePipeline!
+                let pipeline = _camera.devicePipeline!
                 pipeline._opaqueQueue.removeAll()
                 pipeline._alphaTestQueue.removeAll()
                 pipeline._transparentQueue.removeAll()

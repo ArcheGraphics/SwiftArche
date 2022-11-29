@@ -7,6 +7,7 @@
 #if os(iOS)
 import ARKit
 #endif
+import Metal
 
 /// Script class, used for logic writing.
 open class Script: Component {
@@ -51,12 +52,14 @@ open class Script: Component {
 
     /// Called before camera rendering, called per camera.
     /// - Parameter camera: Current camera.
-    open func onBeginRender(_ camera: Camera) {
+    /// - Parameter commandBuffer: Current commandBuffer.
+    open func onBeginRender(_ camera: Camera, _ commandBuffer: MTLCommandBuffer) {
     }
 
     /// Called after camera rendering, called per camera.
     /// - Parameter camera: Current camera.
-    open func onEndRender(_ camera: Camera) {
+    /// - Parameter commandBuffer: Current commandBuffer.
+    open func onEndRender(_ camera: Camera, _ commandBuffer: MTLCommandBuffer) {
     }
 
     /// Called before physics calculations, the number of times is related to the physical update frequency.
