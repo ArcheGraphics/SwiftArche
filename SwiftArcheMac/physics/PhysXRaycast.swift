@@ -9,16 +9,26 @@ import vox_render
 import vox_math
 import vox_toolkit
 
-fileprivate class MoveScript: Script {
-    private var _rTri: Float = 0
+fileprivate class GeometryGenerator: Script {
+    var quat: Quaternion = Quaternion(0, 0, 0.3, 0.7)
+
+    override func onAwake() {
+        _ = quat.normalize()
+    }
 
     override func onUpdate(_ deltaTime: Float) {
-        _rTri += 90 * deltaTime
-        entity.transform.setRotation(x: 0, y: _rTri, z: 0)
+        let inputManager = engine.inputManager
+        if (inputManager.isPointerTrigger(.leftMouseDown)) {
+            if (Float.random(in: 0...1) > 0.5) {
+                _ = addSphere(entity, 0.5, Vector3(floor(Float.random(in: 0...6)) - 2.5, 5, floor(Float.random(in: 0...6)) - 2.5), quat)
+            } else {
+                _ = addCapsule(entity, 0.5, 2.0, Vector3(floor(Float.random(in: 0...6)) - 2.5, 5, floor(Float.random(in: 0...6)) - 2.5), quat)
+            }
+        }
     }
 }
 
-class PrimitiveApp: NSViewController {
+class PhysXRaycastApp: NSViewController {
     var canvas: Canvas!
     var engine: Engine!
 
@@ -42,7 +52,6 @@ class PrimitiveApp: NSViewController {
         pointLight.intensity = 0.3
 
         let cubeEntity = rootEntity.createChild()
-        let _: MoveScript = cubeEntity.addComponent()
         let renderer: MeshRenderer = cubeEntity.addComponent()
         renderer.mesh = PrimitiveMesh.createCuboid(engine, 0.1, 0.1, 0.1)
         let material = PBRMaterial(engine)
