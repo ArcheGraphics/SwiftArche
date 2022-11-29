@@ -10,7 +10,7 @@ import vox_math
 import vox_toolkit
 import ImGui
 
-class GUI: Script {
+fileprivate class GUI: Script {
     var show_demo_window: Bool = true
     var show_another_window: Bool = false
     var clear_color: SIMD3<Float> = .init(x: 0.28, y: 0.36, z: 0.5)
@@ -98,7 +98,7 @@ class SkyboxApp: NSViewController {
         cameraEntity.transform.setPosition(x: 1, y: 1, z: 1)
         cameraEntity.transform.lookAt(targetPosition: Vector3())
         let _: Camera = cameraEntity.addComponent()
-        let _: FreeControl = cameraEntity.addComponent()
+        let _: OrbitControl = cameraEntity.addComponent()
         
         let light = rootEntity.createChild("light")
         light.transform.setPosition(x: 0, y: 3, z: 0)

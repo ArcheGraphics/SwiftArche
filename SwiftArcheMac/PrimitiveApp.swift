@@ -9,7 +9,7 @@ import vox_render
 import vox_math
 import vox_toolkit
 
-class MoveScript: Script {
+fileprivate class MoveScript: Script {
     private var _rTri: Float = 0
 
     override func onUpdate(_ deltaTime: Float) {
