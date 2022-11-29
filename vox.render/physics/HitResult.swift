@@ -9,11 +9,11 @@ import vox_math
 /// Structure used to get information back from a raycast or a sweep.
 public class HitResult {
     /// The entity that was hit.
-    var entity: Entity? = nil
+    public var entity: Entity? = nil
     /// The distance from the ray's origin to the impact point.
-    var distance: Float = 0
+    public var distance: Float = 0
     /// The impact point in world space where the ray hit the collider.
-    var point: Vector3 = Vector3()
+    public var point: Vector3 = Vector3()
     /// The normal of the surface the ray hit.
-    var normal: Vector3 = Vector3()
+    public var normal: Vector3 = Vector3()
 }

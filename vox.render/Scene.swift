@@ -34,7 +34,7 @@ public class Scene: EngineObject {
     var _sunLight: Light?
 
     private var _shadowCascades: ShadowCascadesMode = ShadowCascadesMode.NoCascades
-    private var _ambientLight: AmbientLight?
+    private var _ambientLight: AmbientLight!
 
     /// Number of cascades to use for directional light shadows.
     public var shadowCascades: ShadowCascadesMode {
@@ -50,20 +50,15 @@ public class Scene: EngineObject {
     }
 
     /// Ambient light.
-    public var ambientLight: AmbientLight? {
+    public var ambientLight: AmbientLight {
         get {
             _ambientLight
         }
         set {
-            if (newValue == nil) {
-                logger.warning("The scene must have one ambient light")
-                return
-            }
-
             let lastAmbientLight = _ambientLight
             if (lastAmbientLight !== newValue) {
                 lastAmbientLight?._removeFromScene(self)
-                newValue!._addToScene(self)
+                newValue._addToScene(self)
                 _ambientLight = newValue
             }
         }
@@ -91,6 +86,10 @@ public class Scene: EngineObject {
         self.name = name
         shaderData = ShaderData(engine.device)
         super.init(engine)
+
+        ambientLight = AmbientLight();
+        engine.sceneManager._allScenes.append(self)
+        shaderData.enableMacro(CASCADED_COUNT, (shadowCascades.rawValue, .int));
     }
 
     deinit {

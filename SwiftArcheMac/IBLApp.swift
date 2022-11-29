@@ -69,8 +69,8 @@ class IBLApp: NSViewController {
         let mat = _materials[materialIndex]
         let cubeMDL = MDLTexture(named: "country")!
         let cubeMap = try! engine.textureLoader.loadTexture(with: "country")!
-        scene.ambientLight?.specularTexture = engine.textureLoader.createSpecularTexture(with: cubeMap)
-        scene.ambientLight?.diffuseSphericalHarmonics = engine.textureLoader.createSphericalHarmonicsCoefficients(with: cubeMDL)
+        scene.ambientLight.specularTexture = engine.textureLoader.createSpecularTexture(with: cubeMap)
+        scene.ambientLight.diffuseSphericalHarmonics = engine.textureLoader.createSphericalHarmonicsCoefficients(with: cubeMDL)
 
         let sphere = PrimitiveMesh.createSphere(engine, 0.5, 64)
         for i in 0..<7 {

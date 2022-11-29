@@ -7,7 +7,7 @@
 import vox_math
 
 /// The collision detection mode constants used for PhysXDynamicCollider.collisionDetectionMode.
-enum CollisionDetectionMode: Int {
+public enum CollisionDetectionMode: Int {
     /// Continuous collision detection is off for this dynamic collider.
     case Discrete
     /// Continuous collision detection is on for colliding with static mesh geometry.
@@ -19,7 +19,7 @@ enum CollisionDetectionMode: Int {
 }
 
 /// Use these flags to constrain motion of dynamic collider.
-enum DynamicColliderConstraints {
+public enum DynamicColliderConstraints {
     /// Freeze motion along the X-axis.
     case FreezePositionX
     /// Freeze motion along the Y-axis.

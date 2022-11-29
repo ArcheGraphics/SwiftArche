@@ -23,7 +23,7 @@ public class DynamicCollider: Collider {
     private var _collisionDetectionMode: CollisionDetectionMode = .Discrete
 
     /// The linear damping of the dynamic collider.
-    var linearDamping: Float {
+    public var linearDamping: Float {
         get {
             _linearDamping
         }
@@ -34,7 +34,7 @@ public class DynamicCollider: Collider {
     }
 
     /// The angular damping of the dynamic collider.
-    var angularDamping: Float {
+    public var angularDamping: Float {
         get {
             _angularDamping
         }
@@ -45,7 +45,7 @@ public class DynamicCollider: Collider {
     }
 
     /// The linear velocity vector of the dynamic collider measured in world unit per second.
-    var linearVelocity: Vector3 {
+    public var linearVelocity: Vector3 {
         get {
             _linearVelocity
         }
@@ -56,7 +56,7 @@ public class DynamicCollider: Collider {
     }
 
     /// The angular velocity vector of the dynamic collider measured in radians per second.
-    var angularVelocity: Vector3 {
+    public var angularVelocity: Vector3 {
         get {
             _angularVelocity
         }
@@ -67,7 +67,7 @@ public class DynamicCollider: Collider {
     }
 
     /// The mass of the dynamic collider.
-    var mass: Float {
+    public var mass: Float {
         get {
             _mass
         }
@@ -78,7 +78,7 @@ public class DynamicCollider: Collider {
     }
 
     /// The center of mass relative to the transform's origin.
-    var centerOfMass: Vector3 {
+    public var centerOfMass: Vector3 {
         get {
             _centerOfMass
         }
@@ -89,7 +89,7 @@ public class DynamicCollider: Collider {
     }
 
     /// The diagonal inertia tensor of mass relative to the center of mass.
-    var inertiaTensor: Vector3 {
+    public var inertiaTensor: Vector3 {
         get {
             _inertiaTensor
         }
@@ -100,7 +100,7 @@ public class DynamicCollider: Collider {
     }
 
     /// The maximum angular velocity of the collider measured in radians per second. (Default 7) range { 0, infinity }.
-    var maxAngularVelocity: Float {
+    public var maxAngularVelocity: Float {
         get {
             _maxAngularVelocity
         }
@@ -111,7 +111,7 @@ public class DynamicCollider: Collider {
     }
 
     /// Maximum velocity of a collider when moving out of penetrating state.
-    var maxDepenetrationVelocity: Float {
+    public var maxDepenetrationVelocity: Float {
         get {
             _maxDepenetrationVelocity
         }
@@ -122,7 +122,7 @@ public class DynamicCollider: Collider {
     }
 
     /// The mass-normalized energy threshold, below which objects start going to sleep.
-    var sleepThreshold: Float {
+    public var sleepThreshold: Float {
         get {
             _sleepThreshold
         }
@@ -133,7 +133,7 @@ public class DynamicCollider: Collider {
     }
 
     /// The solverIterations determines how accurately collider joints and collision contacts are resolved.
-    var solverIterations: Int {
+    public var solverIterations: Int {
         get {
             _solverIterations
         }
@@ -144,7 +144,7 @@ public class DynamicCollider: Collider {
     }
 
     /// Controls whether physics affects the dynamic collider.
-    var isKinematic: Bool {
+    public var isKinematic: Bool {
         get {
             _isKinematic
         }
@@ -155,7 +155,7 @@ public class DynamicCollider: Collider {
     }
 
     /// The colliders' collision detection mode.
-    var collisionDetectionMode: CollisionDetectionMode {
+    public var collisionDetectionMode: CollisionDetectionMode {
         get {
             _collisionDetectionMode
         }
@@ -165,7 +165,7 @@ public class DynamicCollider: Collider {
         }
     }
 
-    required init(_ entity: Entity) {
+    public required init(_ entity: Entity) {
         super.init(entity)
         let transform = entity.transform!
         _nativeCollider = PhysXPhysics.createDynamicCollider(
@@ -176,38 +176,38 @@ public class DynamicCollider: Collider {
 
     /// Apply a force to the DynamicCollider.
     /// - Parameter force: The force make the collider move
-    func applyForce(_ force: Vector3) {
+    public func applyForce(_ force: Vector3) {
         (_nativeCollider as! PhysXDynamicCollider).addForce(force)
     }
 
     /// Apply a torque to the DynamicCollider.
     /// - Parameter torque: The force make the collider rotate
-    func applyTorque(_ torque: Vector3) {
+    public func applyTorque(_ torque: Vector3) {
         (_nativeCollider as! PhysXDynamicCollider).addTorque(torque)
     }
 
     /// Applies force at position. As a result this will apply a torque and force on the object.
-    func applyForceAtPosition(_ force: Vector3, _ pos: Vector3) {
+    public func applyForceAtPosition(_ force: Vector3, _ pos: Vector3) {
         (_nativeCollider as! PhysXDynamicCollider).addForceAtPosition(force, pos)
     }
 
     /// Moves the kinematic collider towards position.
-    func movePosition(_ value: Vector3) {
+    public func movePosition(_ value: Vector3) {
         (_nativeCollider as! PhysXDynamicCollider).movePosition(value)
     }
 
     /// Rotates the collider to rotation.
-    func moveRotation(_ value: Quaternion) {
+    public func moveRotation(_ value: Quaternion) {
         (_nativeCollider as! PhysXDynamicCollider).moveRotation(value)
     }
 
     /// Forces a collider to sleep at least one frame.
-    func sleep() {
+    public func sleep() {
         (_nativeCollider as! PhysXDynamicCollider).sleep()
     }
 
     /// Forces a collider to wake up.
-    func wakeUp() {
+    public func wakeUp() {
         (_nativeCollider as! PhysXDynamicCollider).wakeUp()
     }
 

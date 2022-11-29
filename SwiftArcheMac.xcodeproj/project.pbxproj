@@ -363,7 +363,9 @@
 		43D8C033021F4B86E95953E6 /* IBLApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8CFAFE0E0B5772488FA13 /* IBLApp.swift */; };
 		43D8C40438F0527739C7D662 /* AtomicComputeApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8C888ABFCE2075E7AA5BE /* AtomicComputeApp.swift */; };
 		43D8C62B488D6837DDD5BBA8 /* SkyboxApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8C50348EB9AC72BD7BF83 /* SkyboxApp.swift */; };
+		43D8C808C0FA018090454567 /* PhysXAttractorApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8C5E1D5FA1D3B1F819147 /* PhysXAttractorApp.swift */; };
 		43D8CC2C3372F5E3258A852D /* IrradianceApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8C159E7E7844EB632C57F /* IrradianceApp.swift */; };
+		43D8CF515E4D90196E7E806B /* PhysXCollisionDetectionApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8C0A4A7B56D737C3F4FE2 /* PhysXCollisionDetectionApp.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -811,8 +813,10 @@
 		3EC03A002932192D002187DC /* BackgroundSubpass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BackgroundSubpass.swift; sourceTree = "<group>"; };
 		3EC03A012932192D002187DC /* BackgroundTextureFillMode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BackgroundTextureFillMode.swift; sourceTree = "<group>"; };
 		3EC92A3D29358C9600423396 /* PBRApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PBRApp.swift; sourceTree = "<group>"; };
+		43D8C0A4A7B56D737C3F4FE2 /* PhysXCollisionDetectionApp.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhysXCollisionDetectionApp.swift; sourceTree = "<group>"; };
 		43D8C159E7E7844EB632C57F /* IrradianceApp.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IrradianceApp.swift; sourceTree = "<group>"; };
 		43D8C50348EB9AC72BD7BF83 /* SkyboxApp.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SkyboxApp.swift; sourceTree = "<group>"; };
+		43D8C5E1D5FA1D3B1F819147 /* PhysXAttractorApp.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhysXAttractorApp.swift; sourceTree = "<group>"; };
 		43D8C888ABFCE2075E7AA5BE /* AtomicComputeApp.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AtomicComputeApp.swift; sourceTree = "<group>"; };
 		43D8CFAFE0E0B5772488FA13 /* IBLApp.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IBLApp.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -1025,6 +1029,8 @@
 				43D8C159E7E7844EB632C57F /* IrradianceApp.swift */,
 				43D8CFAFE0E0B5772488FA13 /* IBLApp.swift */,
 				43D8C888ABFCE2075E7AA5BE /* AtomicComputeApp.swift */,
+				43D8C0A4A7B56D737C3F4FE2 /* PhysXCollisionDetectionApp.swift */,
+				43D8C5E1D5FA1D3B1F819147 /* PhysXAttractorApp.swift */,
 			);
 			path = SwiftArcheMac;
 			sourceTree = "<group>";
@@ -2089,6 +2095,8 @@
 				43D8CC2C3372F5E3258A852D /* IrradianceApp.swift in Sources */,
 				43D8C033021F4B86E95953E6 /* IBLApp.swift in Sources */,
 				43D8C40438F0527739C7D662 /* AtomicComputeApp.swift in Sources */,
+				43D8CF515E4D90196E7E806B /* PhysXCollisionDetectionApp.swift in Sources */,
+				43D8C808C0FA018090454567 /* PhysXAttractorApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
