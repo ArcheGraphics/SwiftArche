@@ -7,7 +7,7 @@
 import Metal
 
 /// Material.
-public class Material {
+open class Material {
     /// Name.
     public var name: String = ""
     /// Shader data.

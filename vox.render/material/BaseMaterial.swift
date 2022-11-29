@@ -6,7 +6,7 @@
 
 import Foundation
 
-public class BaseMaterial: Material {
+open class BaseMaterial: Material {
     static let _tilingOffsetProp = "u_tilingOffset"
 
     static let _baseColorProp = "u_baseColor"

@@ -361,6 +361,7 @@
 		3EC03A052932192D002187DC /* BackgroundTextureFillMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EC03A012932192D002187DC /* BackgroundTextureFillMode.swift */; };
 		3EC92A3E29358C9600423396 /* PBRApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EC92A3D29358C9600423396 /* PBRApp.swift */; };
 		43D8C62B488D6837DDD5BBA8 /* SkyboxApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8C50348EB9AC72BD7BF83 /* SkyboxApp.swift */; };
+		43D8CC2C3372F5E3258A852D /* IrradianceApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8C159E7E7844EB632C57F /* IrradianceApp.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -808,6 +809,7 @@
 		3EC03A002932192D002187DC /* BackgroundSubpass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BackgroundSubpass.swift; sourceTree = "<group>"; };
 		3EC03A012932192D002187DC /* BackgroundTextureFillMode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BackgroundTextureFillMode.swift; sourceTree = "<group>"; };
 		3EC92A3D29358C9600423396 /* PBRApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PBRApp.swift; sourceTree = "<group>"; };
+		43D8C159E7E7844EB632C57F /* IrradianceApp.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IrradianceApp.swift; sourceTree = "<group>"; };
 		43D8C50348EB9AC72BD7BF83 /* SkyboxApp.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SkyboxApp.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -1016,6 +1018,7 @@
 				3EB32B7429322DB30019A4F3 /* PrimitiveApp.swift */,
 				43D8C50348EB9AC72BD7BF83 /* SkyboxApp.swift */,
 				3EC92A3D29358C9600423396 /* PBRApp.swift */,
+				43D8C159E7E7844EB632C57F /* IrradianceApp.swift */,
 			);
 			path = SwiftArcheMac;
 			sourceTree = "<group>";
@@ -2077,6 +2080,7 @@
 				3EB32B7529322DB30019A4F3 /* PrimitiveApp.swift in Sources */,
 				3EC0370529321131002187DC /* AppDelegate.swift in Sources */,
 				43D8C62B488D6837DDD5BBA8 /* SkyboxApp.swift in Sources */,
+				43D8CC2C3372F5E3258A852D /* IrradianceApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

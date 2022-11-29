@@ -9,15 +9,16 @@ import vox_render
 import vox_math
 import vox_toolkit
 
-struct Material {
-    var name:String = ""
-    var baseColor:Color = Color()
-    var roughness:Float = 0
-    var metallic:Float = 0
-    
-    init() {}
-    
-    init(_ n:String, _ c:Color, _ r:Float, _ m:Float) {
+fileprivate struct Material {
+    var name: String = ""
+    var baseColor: Color = Color()
+    var roughness: Float = 0
+    var metallic: Float = 0
+
+    init() {
+    }
+
+    init(_ n: String, _ c: Color, _ r: Float, _ m: Float) {
         name = n
         roughness = r
         metallic = m
@@ -28,7 +29,7 @@ struct Material {
 class PBRApp: NSViewController {
     var canvas: Canvas!
     var engine: Engine!
-    private var _materials:[Material] = [
+    private var _materials: [Material] = [
         Material("Gold", Color(1.0, 0.765557, 0.336057, 1.0), 0.1, 1.0),
         Material("Copper", Color(0.955008, 0.637427, 0.538163, 1.0), 0.1, 1.0),
         Material("Chromium", Color(0.549585, 0.556114, 0.554256, 1.0), 0.1, 1.0),
@@ -42,33 +43,33 @@ class PBRApp: NSViewController {
         Material("Blue", Color(0.0, 0.0, 1.0, 1.0), 0.1, 1.0),
         Material("Black", Color(0.0, 1.0, 1.0, 1.0), 0.1, 1.0)
     ]
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
         canvas = Canvas(with: view)
-        
+
         engine = Engine(canvas: canvas)
-        
+
         let scene = engine.sceneManager.activeScene!
         let rootEntity = scene.createRootEntity()
-        
+
         let cameraEntity = rootEntity.createChild()
         cameraEntity.transform.setPosition(x: 1, y: 1, z: 1)
         cameraEntity.transform.lookAt(targetPosition: Vector3())
         let _: Camera = cameraEntity.addComponent()
         let _: OrbitControl = cameraEntity.addComponent()
-        
-        
+
+
         let materialIndex = 0
         let mat = _materials[materialIndex]
-        
+
         // init point light
         let light = rootEntity.createChild("light")
         light.transform.setPosition(x: 3, y: 3, z: 3)
         light.transform.lookAt(targetPosition: Vector3(0, 0, 0))
-        let directionLight:DirectLight = light.addComponent()
+        let directionLight: DirectLight = light.addComponent()
         directionLight.intensity = 0.3
-        
+
         let sphere = PrimitiveMesh.createSphere(engine, 0.5, 30)
         for i in 0..<7 {
             for j in 0..<7 {
@@ -78,13 +79,13 @@ class PBRApp: NSViewController {
                 sphereMtl.baseColor = mat.baseColor
                 sphereMtl.metallic = simd_clamp(Float(i) / Float(7 - 1), 0.1, 1.0)
                 sphereMtl.roughness = simd_clamp(Float(j) / Float(7 - 1), 0.05, 1.0)
-                
-                let sphereRenderer:MeshRenderer = sphereEntity.addComponent()
+
+                let sphereRenderer: MeshRenderer = sphereEntity.addComponent()
                 sphereRenderer.mesh = sphere
                 sphereRenderer.setMaterial(sphereMtl)
             }
         }
-        
+
         engine.run()
     }
 }
