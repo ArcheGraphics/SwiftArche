@@ -12,7 +12,7 @@ let logger = Logger(label: "com.arche.main")
 
 public class Engine: NSObject {
     public let canvas: Canvas
-    let commandQueue: MTLCommandQueue
+    let _commandQueue: MTLCommandQueue
     let _macroCollection: ShaderMacroCollection = ShaderMacroCollection()
     let _componentsManager: ComponentsManager = ComponentsManager()
     let _lightManager = LightManager()
@@ -45,6 +45,12 @@ public class Engine: NSObject {
     public var device: MTLDevice {
         get {
             _device
+        }
+    }
+    
+    public var commandQueue: MTLCommandQueue {
+        get {
+            _commandQueue
         }
     }
 
@@ -115,7 +121,7 @@ public class Engine: NSObject {
         guard let commandQueue = device.makeCommandQueue() else {
             fatalError("Unable to create default Metal Device")
         }
-        self.commandQueue = commandQueue
+        self._commandQueue = commandQueue
 
         super.init()
         createShaderLibrary("vox.shader")

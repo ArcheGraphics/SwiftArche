@@ -91,7 +91,7 @@ class IrradianceApp: NSViewController {
         planes[5].transform.setPosition(x: 3, y: 0, z: 0) // NZ
 
         let cubeMap = try! engine.textureLoader.loadTexture(with: "country")!
-        scene.ambientLight.specularTexture = engine.textureLoader.createSpecularTexture(with: cubeMap)
+        scene.ambientLight.specularTexture = createSpecularTexture(engine, with: cubeMap)
         let changeMip: (Int) -> Void = {
             (mipLevel: Int) -> Void in
             for i in 0..<6 {

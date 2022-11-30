@@ -4,11 +4,9 @@
 //  personal capacity and am not conveying any rights to any intellectual
 //  property of any third parties.
 
-import Foundation
+#pragma once
 
-public enum DecodeMode : Int {
-    case Linear = 0
-    case Gamma = 1
-    case RGBE = 2
-    case RGBM = 3
-}
+#include "../vox.shader/function_constant.h"
+#include "macro_name.h"
+
+DeclIntMacro(decodeMode, DECODE_MODE)

@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		040F1D9D293369DC008BDC8D /* Textures.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 040F1D9C293369DC008BDC8D /* Textures.xcassets */; };
+		040F1E07293785EE008BDC8D /* texture_packer.metal in Sources */ = {isa = PBXBuildFile; fileRef = 040F1E02293785ED008BDC8D /* texture_packer.metal */; };
+		040F1E08293785EE008BDC8D /* specular_map.metal in Sources */ = {isa = PBXBuildFile; fileRef = 040F1E04293785ED008BDC8D /* specular_map.metal */; };
 		04176A7B292717D900B1775A /* Time.swift in Sources */ = {isa = PBXBuildFile; fileRef = E63B17B65377F894AAEF5610 /* Time.swift */; };
 		04176A7D2927343900B1775A /* ar_shading.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3E67EDCA291B2F7600ED60C8 /* ar_shading.metal */; };
 		04176ACE29275DBD00B1775A /* libvox.math.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E67EE5E291B799900ED60C8 /* libvox.math.a */; };
@@ -153,8 +155,6 @@
 		3E67EEC6291DF54F00ED60C8 /* DepthState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8C518C7B03C3787F9676C /* DepthState.swift */; };
 		3E67EED12921D9C800ED60C8 /* unlit_shading.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3E67EED02921D9C800ED60C8 /* unlit_shading.metal */; };
 		3E67EED42921DB4A00ED60C8 /* function_common.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3E67EED32921DB4A00ED60C8 /* function_common.metal */; };
-		3EC036F42931B801002187DC /* texture_packer.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3EC036F32931B801002187DC /* texture_packer.metal */; };
-		3EC036F72931FF95002187DC /* DecodeMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EC036F62931FF95002187DC /* DecodeMode.swift */; };
 		3EC92A9E2937427200423396 /* grid_shading.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3EC92A9C2937427100423396 /* grid_shading.metal */; };
 		3EC92AA5293742D400423396 /* WireframePrimitive.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EC92AA3293742D300423396 /* WireframePrimitive.swift */; };
 		3EC92AA6293742D400423396 /* WireframeManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EC92AA4293742D400423396 /* WireframeManager.swift */; };
@@ -445,6 +445,13 @@
 
 /* Begin PBXFileReference section */
 		040F1D9C293369DC008BDC8D /* Textures.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Textures.xcassets; sourceTree = SOURCE_ROOT; };
+		040F1DFB293785BC008BDC8D /* app.shader.metallib */ = {isa = PBXFileReference; explicitFileType = "archive.metal-library"; includeInIndex = 0; path = app.shader.metallib; sourceTree = BUILT_PRODUCTS_DIR; };
+		040F1E02293785ED008BDC8D /* texture_packer.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; path = texture_packer.metal; sourceTree = "<group>"; };
+		040F1E03293785ED008BDC8D /* type_common.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = type_common.h; sourceTree = "<group>"; };
+		040F1E04293785ED008BDC8D /* specular_map.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; path = specular_map.metal; sourceTree = "<group>"; };
+		040F1E05293785EE008BDC8D /* macro_name.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = macro_name.h; sourceTree = "<group>"; };
+		040F1E06293785EE008BDC8D /* function_constant.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = function_constant.h; sourceTree = "<group>"; };
+		040F1E0929378616008BDC8D /* bridging.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = bridging.h; sourceTree = "<group>"; };
 		04176ABF29275CD300B1775A /* libPhysXExtensions_static_64.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libPhysXExtensions_static_64.a; path = third_party/physx/physx/bin/ios.arm_64/debug/libPhysXExtensions_static_64.a; sourceTree = "<group>"; };
 		04176AC029275CD400B1775A /* libPhysX_static_64.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libPhysX_static_64.a; path = third_party/physx/physx/bin/ios.arm_64/debug/libPhysX_static_64.a; sourceTree = "<group>"; };
 		04176AC129275CD400B1775A /* libPhysXFoundation_static_64.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libPhysXFoundation_static_64.a; path = third_party/physx/physx/bin/ios.arm_64/debug/libPhysXFoundation_static_64.a; sourceTree = "<group>"; };
@@ -656,9 +663,6 @@
 		3E67EED22921DB3F00ED60C8 /* function_common.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = function_common.h; sourceTree = "<group>"; };
 		3E67EED32921DB4A00ED60C8 /* function_common.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = function_common.metal; sourceTree = "<group>"; };
 		3EB32B9529323DA30019A4F3 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
-		3EC036EE2931B746002187DC /* specular_map.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = specular_map.metal; sourceTree = "<group>"; };
-		3EC036F32931B801002187DC /* texture_packer.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; path = texture_packer.metal; sourceTree = "<group>"; };
-		3EC036F62931FF95002187DC /* DecodeMode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DecodeMode.swift; sourceTree = "<group>"; };
 		3EC92A892937422700423396 /* toolkit.shader.metallib */ = {isa = PBXFileReference; explicitFileType = "archive.metal-library"; includeInIndex = 0; path = toolkit.shader.metallib; sourceTree = BUILT_PRODUCTS_DIR; };
 		3EC92A942937424400423396 /* libvox.toolkit.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libvox.toolkit.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		3EC92A9C2937427100423396 /* grid_shading.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; path = grid_shading.metal; sourceTree = "<group>"; };
@@ -895,6 +899,18 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		040F1DFC293785BD008BDC8D /* app.shader */ = {
+			isa = PBXGroup;
+			children = (
+				040F1E03293785ED008BDC8D /* type_common.h */,
+				040F1E05293785EE008BDC8D /* macro_name.h */,
+				040F1E06293785EE008BDC8D /* function_constant.h */,
+				040F1E04293785ED008BDC8D /* specular_map.metal */,
+				040F1E02293785ED008BDC8D /* texture_packer.metal */,
+			);
+			path = app.shader;
+			sourceTree = "<group>";
+		};
 		04176A762925274800B1775A /* input */ = {
 			isa = PBXGroup;
 			children = (
@@ -1284,6 +1300,7 @@
 				3E67EE0A291B304700ED60C8 /* vox.render */,
 				3EC92A8A2937422700423396 /* toolkit.shader */,
 				3EC92A952937424400423396 /* vox.toolkit */,
+				040F1DFC293785BD008BDC8D /* app.shader */,
 				3E67EDC7291B2F7600ED60C8 /* SwiftArche */,
 				3E67EDE1291B2F7800ED60C8 /* SwiftArcheTests */,
 				3E67EDEB291B2F7800ED60C8 /* SwiftArcheUITests */,
@@ -1305,6 +1322,7 @@
 				3E0F7BB92925FBBF00C4A843 /* libvox.physics.a */,
 				3EC92A892937422700423396 /* toolkit.shader.metallib */,
 				3EC92A942937424400423396 /* libvox.toolkit.a */,
+				040F1DFB293785BC008BDC8D /* app.shader.metallib */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -1316,6 +1334,7 @@
 				040F1D9C293369DC008BDC8D /* Textures.xcassets */,
 				3E67EDD4291B2F7800ED60C8 /* Assets.xcassets */,
 				3E67EE55291B3D8600ED60C8 /* SwiftArche.entitlements */,
+				040F1E0929378616008BDC8D /* bridging.h */,
 				3E67EDC8291B2F7600ED60C8 /* AppDelegate.swift */,
 				E63B17AB94CBF9AAB3956248 /* PrimitiveApp.swift */,
 			);
@@ -1357,8 +1376,6 @@
 				3E0F7B232924834B00C4A843 /* background_shading.metal */,
 				3E0F7B1D2922375800C4A843 /* pbr_shading.h */,
 				3E0F7B1B2922374400C4A843 /* pbr_shading.metal */,
-				3EC036EE2931B746002187DC /* specular_map.metal */,
-				3EC036F32931B801002187DC /* texture_packer.metal */,
 			);
 			path = vox.shader;
 			sourceTree = "<group>";
@@ -1612,14 +1629,6 @@
 			path = mesh;
 			sourceTree = "<group>";
 		};
-		3EC036F52931FF88002187DC /* enums */ = {
-			isa = PBXGroup;
-			children = (
-				3EC036F62931FF95002187DC /* DecodeMode.swift */,
-			);
-			path = enums;
-			sourceTree = "<group>";
-		};
 		3EC92A8A2937422700423396 /* toolkit.shader */ = {
 			isa = PBXGroup;
 			children = (
@@ -1668,7 +1677,6 @@
 		43D8C02BDC6A48446340709A /* loader */ = {
 			isa = PBXGroup;
 			children = (
-				3EC036F52931FF88002187DC /* enums */,
 				43D8CBD40892C24240A7E0CA /* parser */,
 				43D8CA1FF735DD8E8442F760 /* GLTFTypes.h */,
 				43D8C2119C0047BE5F2644EF /* GLTFAsset.h */,
@@ -1715,6 +1723,21 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		040F1DFA293785BC008BDC8D /* app.shader */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 040F1E01293785BD008BDC8D /* Build configuration list for PBXNativeTarget "app.shader" */;
+			buildPhases = (
+				040F1DF9293785BC008BDC8D /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = app.shader;
+			productName = app.shader;
+			productReference = 040F1DFB293785BC008BDC8D /* app.shader.metallib */;
+			productType = "com.apple.product-type.metal-library";
+		};
 		3E0F7BB82925FBBF00C4A843 /* vox.physics */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 3E0F7BC12925FBBF00C4A843 /* Build configuration list for PBXNativeTarget "vox.physics" */;
@@ -1909,6 +1932,9 @@
 				LastSwiftUpdateCheck = 1410;
 				LastUpgradeCheck = 1410;
 				TargetAttributes = {
+					040F1DFA293785BC008BDC8D = {
+						CreatedOnToolsVersion = 14.1;
+					};
 					3E0F7BB82925FBBF00C4A843 = {
 						CreatedOnToolsVersion = 14.1;
 					};
@@ -1967,6 +1993,7 @@
 				3E67EE08291B304700ED60C8 /* vox.render */,
 				3EC92A882937422700423396 /* toolkit.shader */,
 				3EC92A932937424300423396 /* vox.toolkit */,
+				040F1DFA293785BC008BDC8D /* app.shader */,
 				3E67EDC4291B2F7600ED60C8 /* SwiftArche */,
 				3E67EDDD291B2F7800ED60C8 /* SwiftArcheTests */,
 				3E67EDE7291B2F7800ED60C8 /* SwiftArcheUITests */,
@@ -2031,6 +2058,15 @@
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		040F1DF9293785BC008BDC8D /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				040F1E07293785EE008BDC8D /* texture_packer.metal in Sources */,
+				040F1E08293785EE008BDC8D /* specular_map.metal in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		3E0F7BB52925FBBF00C4A843 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -2106,7 +2142,6 @@
 				3E67EED42921DB4A00ED60C8 /* function_common.metal in Sources */,
 				04176A7D2927343900B1775A /* ar_shading.metal in Sources */,
 				3E0F7B242924834B00C4A843 /* background_shading.metal in Sources */,
-				3EC036F42931B801002187DC /* texture_packer.metal in Sources */,
 				3E0F7B1429220F8C00C4A843 /* shadowmap.metal in Sources */,
 				04ED07DA29226E9C00DD55AB /* normal_shading.metal in Sources */,
 				04ED07DE292284FD00DD55AB /* shadow_shading.metal in Sources */,
@@ -2229,7 +2264,6 @@
 				E63B1992B1C2F658B6C75B36 /* GeometrySubpass.swift in Sources */,
 				E63B1FBDADAAF1E683C7D956 /* ShadowUtils.swift in Sources */,
 				3E0F7C6F2926039500C4A843 /* PhysXConfigurableJoint.swift in Sources */,
-				3EC036F72931FF95002187DC /* DecodeMode.swift in Sources */,
 				43D8C4BD6BB477FAF132C5DE /* SkyBoxMaterial.swift in Sources */,
 				3E0F7C8F2926642E00C4A843 /* PlaneColliderShape.swift in Sources */,
 				3E0F7C942926644F00C4A843 /* DynamicCollider.swift in Sources */,
@@ -2469,6 +2503,24 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
+		040F1DFF293785BD008BDC8D /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 4SL5L673UU;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		040F1E00293785BD008BDC8D /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 4SL5L673UU;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
 		3E0F7BBF2925FBBF00C4A843 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -2728,7 +2780,7 @@
 				SUPPORTS_MACCATALYST = YES;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
-				SWIFT_OBJC_BRIDGING_HEADER = vox.render/bridging.h;
+				SWIFT_OBJC_BRIDGING_HEADER = SwiftArche/bridging.h;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -2775,7 +2827,7 @@
 				SUPPORTS_MACCATALYST = YES;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
-				SWIFT_OBJC_BRIDGING_HEADER = vox.render/bridging.h;
+				SWIFT_OBJC_BRIDGING_HEADER = SwiftArche/bridging.h;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -2795,6 +2847,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = archegraphics.SwiftArcheTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_OBJC_BRIDGING_HEADER = SwiftArche/bridging.h;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/SwiftArche.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/SwiftArche";
@@ -2815,6 +2868,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = archegraphics.SwiftArcheTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_OBJC_BRIDGING_HEADER = SwiftArche/bridging.h;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/SwiftArche.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/SwiftArche";
@@ -2833,6 +2887,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = archegraphics.SwiftArcheUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_OBJC_BRIDGING_HEADER = SwiftArche/bridging.h;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_TARGET_NAME = SwiftArche;
@@ -2851,6 +2906,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = archegraphics.SwiftArcheUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_OBJC_BRIDGING_HEADER = SwiftArche/bridging.h;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_TARGET_NAME = SwiftArche;
@@ -3025,6 +3081,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		040F1E01293785BD008BDC8D /* Build configuration list for PBXNativeTarget "app.shader" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				040F1DFF293785BD008BDC8D /* Debug */,
+				040F1E00293785BD008BDC8D /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		3E0F7BC12925FBBF00C4A843 /* Build configuration list for PBXNativeTarget "vox.physics" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (

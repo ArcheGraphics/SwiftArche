@@ -28,6 +28,9 @@
 		040F1DDF2934EAB8008BDC8D /* ImGui in Frameworks */ = {isa = PBXBuildFile; productRef = 040F1DDE2934EAB8008BDC8D /* ImGui */; };
 		040F1DE12934EB16008BDC8D /* ImGui in Frameworks */ = {isa = PBXBuildFile; productRef = 040F1DE02934EB16008BDC8D /* ImGui */; };
 		040F1DE32934ED68008BDC8D /* GUIManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 040F1DE22934ED68008BDC8D /* GUIManager.swift */; };
+		040F1DEE293780D5008BDC8D /* specular_map.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3EC0383F29321495002187DC /* specular_map.metal */; };
+		040F1DEF293780D5008BDC8D /* texture_packer.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3EC0384329321495002187DC /* texture_packer.metal */; };
+		040F1DF3293781B0008BDC8D /* RenderingUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 040F1DF2293781B0008BDC8D /* RenderingUtils.swift */; };
 		04462F21293324A300F95387 /* Textures.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 04462F20293324A200F95387 /* Textures.xcassets */; };
 		3EB32B032932299A0019A4F3 /* Logging in Frameworks */ = {isa = PBXBuildFile; productRef = 3EB32B022932299A0019A4F3 /* Logging */; };
 		3EB32B7529322DB30019A4F3 /* PrimitiveApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EB32B7429322DB30019A4F3 /* PrimitiveApp.swift */; };
@@ -161,7 +164,6 @@
 		3EC0384D29321496002187DC /* pbr_shading.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3EC0384029321495002187DC /* pbr_shading.metal */; };
 		3EC0384E29321496002187DC /* ar_shading.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3EC0384129321495002187DC /* ar_shading.metal */; };
 		3EC0384F29321496002187DC /* function_common.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3EC0384229321495002187DC /* function_common.metal */; };
-		3EC0385029321496002187DC /* texture_packer.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3EC0384329321495002187DC /* texture_packer.metal */; };
 		3EC0385129321496002187DC /* skybox_shading.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3EC0384629321496002187DC /* skybox_shading.metal */; };
 		3EC0385229321496002187DC /* unlit_shading.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3EC0384729321496002187DC /* unlit_shading.metal */; };
 		3EC03856293214A2002187DC /* shadowmap.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3EC03853293214A2002187DC /* shadowmap.metal */; };
@@ -247,7 +249,6 @@
 		3EC0392329321872002187DC /* KHR_materials_pbrSpecularGlossiness.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EC0391F29321872002187DC /* KHR_materials_pbrSpecularGlossiness.swift */; };
 		3EC0392429321872002187DC /* KHR_texture_transform.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EC0392029321872002187DC /* KHR_texture_transform.swift */; };
 		3EC0392529321872002187DC /* KHR_lights_punctual.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EC0392129321872002187DC /* KHR_lights_punctual.swift */; };
-		3EC039272932187C002187DC /* DecodeMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EC039262932187C002187DC /* DecodeMode.swift */; };
 		3EC0392A29321885002187DC /* SkySubpass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EC0392829321885002187DC /* SkySubpass.swift */; };
 		3EC0392B29321885002187DC /* SkyBoxMaterial.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EC0392929321885002187DC /* SkyBoxMaterial.swift */; };
 		3EC039302932188D002187DC /* ShadowUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EC0392C2932188C002187DC /* ShadowUtils.swift */; };
@@ -393,6 +394,13 @@
 			remoteGlobalIDString = 040F1DA229336A56008BDC8D;
 			remoteInfo = vox.toolkit;
 		};
+		040F1DF729378520008BDC8D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 3EC036F929321131002187DC /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 040F1DE5293780B3008BDC8D;
+			remoteInfo = app.shader;
+		};
 		3EB32B7629322E7E0019A4F3 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 3EC036F929321131002187DC /* Project object */;
@@ -484,6 +492,12 @@
 		040F1DDA2934E772008BDC8D /* imgui_impl_metal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = imgui_impl_metal.swift; sourceTree = "<group>"; };
 		040F1DDC2934E89F008BDC8D /* GUIShader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GUIShader.swift; sourceTree = "<group>"; };
 		040F1DE22934ED68008BDC8D /* GUIManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GUIManager.swift; sourceTree = "<group>"; };
+		040F1DE6293780B3008BDC8D /* app.shader.metallib */ = {isa = PBXFileReference; explicitFileType = "archive.metal-library"; includeInIndex = 0; path = app.shader.metallib; sourceTree = BUILT_PRODUCTS_DIR; };
+		040F1DF0293780F4008BDC8D /* type_common.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = type_common.h; sourceTree = "<group>"; };
+		040F1DF2293781B0008BDC8D /* RenderingUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RenderingUtils.swift; sourceTree = "<group>"; };
+		040F1DF4293783AD008BDC8D /* macro_name.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = macro_name.h; sourceTree = "<group>"; };
+		040F1DF5293783EA008BDC8D /* function_constant.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = function_constant.h; sourceTree = "<group>"; };
+		040F1DF6293784C3008BDC8D /* bridging.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = bridging.h; sourceTree = "<group>"; };
 		04462F20293324A200F95387 /* Textures.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Textures.xcassets; sourceTree = SOURCE_ROOT; };
 		3EB32B7429322DB30019A4F3 /* PrimitiveApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrimitiveApp.swift; sourceTree = "<group>"; };
 		3EB32B832932303A0019A4F3 /* libc++abi.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libc++abi.tbd"; path = "usr/lib/libc++abi.tbd"; sourceTree = SDKROOT; };
@@ -717,7 +731,6 @@
 		3EC0391F29321872002187DC /* KHR_materials_pbrSpecularGlossiness.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KHR_materials_pbrSpecularGlossiness.swift; sourceTree = "<group>"; };
 		3EC0392029321872002187DC /* KHR_texture_transform.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KHR_texture_transform.swift; sourceTree = "<group>"; };
 		3EC0392129321872002187DC /* KHR_lights_punctual.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KHR_lights_punctual.swift; sourceTree = "<group>"; };
-		3EC039262932187C002187DC /* DecodeMode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DecodeMode.swift; sourceTree = "<group>"; };
 		3EC0392829321885002187DC /* SkySubpass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SkySubpass.swift; sourceTree = "<group>"; };
 		3EC0392929321885002187DC /* SkyBoxMaterial.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SkyBoxMaterial.swift; sourceTree = "<group>"; };
 		3EC0392C2932188C002187DC /* ShadowUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ShadowUtils.swift; sourceTree = "<group>"; };
@@ -987,6 +1000,29 @@
 			path = gui;
 			sourceTree = "<group>";
 		};
+		040F1DE7293780B3008BDC8D /* app.shader */ = {
+			isa = PBXGroup;
+			children = (
+				040F1DF0293780F4008BDC8D /* type_common.h */,
+				040F1DF4293783AD008BDC8D /* macro_name.h */,
+				040F1DF5293783EA008BDC8D /* function_constant.h */,
+				3EC0383F29321495002187DC /* specular_map.metal */,
+				3EC0384329321495002187DC /* texture_packer.metal */,
+			);
+			path = app.shader;
+			sourceTree = "<group>";
+		};
+		040F1DF129378195008BDC8D /* rendering */ = {
+			isa = PBXGroup;
+			children = (
+				3EC92A3D29358C9600423396 /* PBRApp.swift */,
+				43D8C159E7E7844EB632C57F /* IrradianceApp.swift */,
+				43D8CFAFE0E0B5772488FA13 /* IBLApp.swift */,
+				040F1DF2293781B0008BDC8D /* RenderingUtils.swift */,
+			);
+			path = rendering;
+			sourceTree = "<group>";
+		};
 		3EB32B7E29322E850019A4F3 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -1026,6 +1062,7 @@
 				3EC0385D2932152D002187DC /* vox.render */,
 				3EC92A452936F44600423396 /* toolkit.shader */,
 				040F1DA429336A56008BDC8D /* vox.toolkit */,
+				040F1DE7293780B3008BDC8D /* app.shader */,
 				3EC0370329321131002187DC /* SwiftArcheMac */,
 				3EC0371A29321133002187DC /* SwiftArcheMacTests */,
 				3EC0372429321133002187DC /* SwiftArcheMacUITests */,
@@ -1046,6 +1083,7 @@
 				3EC0385C2932152C002187DC /* libvox.render.a */,
 				040F1DA329336A56008BDC8D /* libvox.toolkit.a */,
 				3EC92A442936F44500423396 /* toolkit.shader.metallib */,
+				040F1DE6293780B3008BDC8D /* app.shader.metallib */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -1057,13 +1095,12 @@
 				04462F20293324A200F95387 /* Textures.xcassets */,
 				3EC0370D29321132002187DC /* Assets.xcassets */,
 				3EC0371229321132002187DC /* SwiftArcheMac.entitlements */,
+				040F1DF6293784C3008BDC8D /* bridging.h */,
 				3EC0370429321131002187DC /* AppDelegate.swift */,
 				3EB32B7429322DB30019A4F3 /* PrimitiveApp.swift */,
 				43D8C50348EB9AC72BD7BF83 /* SkyboxApp.swift */,
 				3EC92A3F29360C6800423396 /* physics */,
-				3EC92A3D29358C9600423396 /* PBRApp.swift */,
-				43D8C159E7E7844EB632C57F /* IrradianceApp.swift */,
-				43D8CFAFE0E0B5772488FA13 /* IBLApp.swift */,
+				040F1DF129378195008BDC8D /* rendering */,
 				43D8C888ABFCE2075E7AA5BE /* AtomicComputeApp.swift */,
 			);
 			path = SwiftArcheMac;
@@ -1261,8 +1298,6 @@
 				3EC0383D29321495002187DC /* background_shading.metal */,
 				3EC0383C29321495002187DC /* pbr_shading.h */,
 				3EC0384029321495002187DC /* pbr_shading.metal */,
-				3EC0383F29321495002187DC /* specular_map.metal */,
-				3EC0384329321495002187DC /* texture_packer.metal */,
 			);
 			path = vox.shader;
 			sourceTree = "<group>";
@@ -1471,7 +1506,6 @@
 		3EC0387029321739002187DC /* loader */ = {
 			isa = PBXGroup;
 			children = (
-				3EC0387D293217C7002187DC /* enums */,
 				3EC0387E293217CF002187DC /* parser */,
 				3EC038FF29321862002187DC /* GLTFAsset.h */,
 				3EC038FD29321862002187DC /* GLTFAsset.m */,
@@ -1627,14 +1661,6 @@
 				3EC0393429321893002187DC /* ShadowCascadesMode.swift */,
 				3EC0393529321893002187DC /* ShadowResolution.swift */,
 				3EC0393629321893002187DC /* ShadowType.swift */,
-			);
-			path = enums;
-			sourceTree = "<group>";
-		};
-		3EC0387D293217C7002187DC /* enums */ = {
-			isa = PBXGroup;
-			children = (
-				3EC039262932187C002187DC /* DecodeMode.swift */,
 			);
 			path = enums;
 			sourceTree = "<group>";
@@ -1893,6 +1919,21 @@
 			productReference = 040F1DA329336A56008BDC8D /* libvox.toolkit.a */;
 			productType = "com.apple.product-type.library.static";
 		};
+		040F1DE5293780B3008BDC8D /* app.shader */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 040F1DEC293780B3008BDC8D /* Build configuration list for PBXNativeTarget "app.shader" */;
+			buildPhases = (
+				040F1DE4293780B3008BDC8D /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = app.shader;
+			productName = app.shader;
+			productReference = 040F1DE6293780B3008BDC8D /* app.shader.metallib */;
+			productType = "com.apple.product-type.metal-library";
+		};
 		3EC0370029321131002187DC /* SwiftArcheMac */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 3EC0372B29321133002187DC /* Build configuration list for PBXNativeTarget "SwiftArcheMac" */;
@@ -1905,6 +1946,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				040F1DF829378520008BDC8D /* PBXTargetDependency */,
 				3EC92A4C2936F46B00423396 /* PBXTargetDependency */,
 				040F1DD22933AF7D008BDC8D /* PBXTargetDependency */,
 				3EB32B7729322E7E0019A4F3 /* PBXTargetDependency */,
@@ -2060,6 +2102,9 @@
 						CreatedOnToolsVersion = 14.1;
 						LastSwiftMigration = 1410;
 					};
+					040F1DE5293780B3008BDC8D = {
+						CreatedOnToolsVersion = 14.1;
+					};
 					3EC0370029321131002187DC = {
 						CreatedOnToolsVersion = 14.1;
 					};
@@ -2113,6 +2158,7 @@
 				3EC0385B2932152C002187DC /* vox.render */,
 				3EC92A432936F44500423396 /* toolkit.shader */,
 				040F1DA229336A56008BDC8D /* vox.toolkit */,
+				040F1DE5293780B3008BDC8D /* app.shader */,
 				3EC0370029321131002187DC /* SwiftArcheMac */,
 				3EC0371629321133002187DC /* SwiftArcheMacTests */,
 				3EC0372029321133002187DC /* SwiftArcheMacUITests */,
@@ -2165,7 +2211,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "cp \"$TARGET_BUILD_DIR/vox.shader.metallib\" \"$TARGET_BUILD_DIR/$UNLOCALIZED_RESOURCES_FOLDER_PATH/.\"\ncp \"$TARGET_BUILD_DIR/toolkit.shader.metallib\" \"$TARGET_BUILD_DIR/$UNLOCALIZED_RESOURCES_FOLDER_PATH/.\"\n";
+			shellScript = "cp \"$TARGET_BUILD_DIR/vox.shader.metallib\" \"$TARGET_BUILD_DIR/$UNLOCALIZED_RESOURCES_FOLDER_PATH/.\"\ncp \"$TARGET_BUILD_DIR/toolkit.shader.metallib\" \"$TARGET_BUILD_DIR/$UNLOCALIZED_RESOURCES_FOLDER_PATH/.\"\ncp \"$TARGET_BUILD_DIR/app.shader.metallib\" \"$TARGET_BUILD_DIR/$UNLOCALIZED_RESOURCES_FOLDER_PATH/.\"\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -2191,6 +2237,15 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		040F1DE4293780B3008BDC8D /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				040F1DEE293780D5008BDC8D /* specular_map.metal in Sources */,
+				040F1DEF293780D5008BDC8D /* texture_packer.metal in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		3EC036FD29321131002187DC /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -2202,6 +2257,7 @@
 				43D8CC2C3372F5E3258A852D /* IrradianceApp.swift in Sources */,
 				43D8C033021F4B86E95953E6 /* IBLApp.swift in Sources */,
 				43D8C40438F0527739C7D662 /* AtomicComputeApp.swift in Sources */,
+				040F1DF3293781B0008BDC8D /* RenderingUtils.swift in Sources */,
 				43D8CF515E4D90196E7E806B /* PhysXCollisionDetectionApp.swift in Sources */,
 				43D8C808C0FA018090454567 /* PhysXAttractorApp.swift in Sources */,
 				43D8CC13B0B39DD99DEE0DC4 /* PhysXCompoundApp.swift in Sources */,
@@ -2303,7 +2359,6 @@
 				3EC0384F29321496002187DC /* function_common.metal in Sources */,
 				3EC0385229321496002187DC /* unlit_shading.metal in Sources */,
 				3EC0385129321496002187DC /* skybox_shading.metal in Sources */,
-				3EC0385029321496002187DC /* texture_packer.metal in Sources */,
 				3EC0384E29321496002187DC /* ar_shading.metal in Sources */,
 				3EC03856293214A2002187DC /* shadowmap.metal in Sources */,
 				3EC0384B29321496002187DC /* background_shading.metal in Sources */,
@@ -2504,7 +2559,6 @@
 				3EC0391D2932186B002187DC /* AnimationParser.swift in Sources */,
 				3EC0389A29321826002187DC /* Transform.swift in Sources */,
 				3EC038CC2932183D002187DC /* BoxColliderShape.swift in Sources */,
-				3EC039272932187C002187DC /* DecodeMode.swift in Sources */,
 				3EC038B529321835002187DC /* PhysXDynamicCollider.swift in Sources */,
 				3EC039152932186A002187DC /* SkinParser.swift in Sources */,
 				3EC03955293218B3002187DC /* GeometrySubpass.swift in Sources */,
@@ -2538,6 +2592,11 @@
 			isa = PBXTargetDependency;
 			target = 040F1DA229336A56008BDC8D /* vox.toolkit */;
 			targetProxy = 040F1DD12933AF7D008BDC8D /* PBXContainerItemProxy */;
+		};
+		040F1DF829378520008BDC8D /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 040F1DE5293780B3008BDC8D /* app.shader */;
+			targetProxy = 040F1DF729378520008BDC8D /* PBXContainerItemProxy */;
 		};
 		3EB32B7729322E7E0019A4F3 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -2643,6 +2702,24 @@
 				SKIP_INSTALL = YES;
 				SWIFT_OBJC_BRIDGING_HEADER = vox.toolkit/bridging.h;
 				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+		040F1DEA293780B3008BDC8D /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 4SL5L673UU;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		040F1DEB293780B3008BDC8D /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 4SL5L673UU;
+				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;
 		};
@@ -2798,7 +2875,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = archegraphics.SwiftArcheMac;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
-				SWIFT_OBJC_BRIDGING_HEADER = vox.render/bridging.h;
+				SWIFT_OBJC_BRIDGING_HEADER = SwiftArcheMac/bridging.h;
 				SWIFT_VERSION = 5.0;
 			};
 			name = Debug;
@@ -2840,7 +2917,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = archegraphics.SwiftArcheMac;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
-				SWIFT_OBJC_BRIDGING_HEADER = vox.render/bridging.h;
+				SWIFT_OBJC_BRIDGING_HEADER = SwiftArcheMac/bridging.h;
 				SWIFT_VERSION = 5.0;
 			};
 			name = Release;
@@ -2860,6 +2937,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = archegraphics.SwiftArcheMacTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_OBJC_BRIDGING_HEADER = SwiftArcheMac/bridging.h;
 				SWIFT_VERSION = 5.0;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/SwiftArcheMac.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/SwiftArcheMac";
 			};
@@ -2880,6 +2958,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = archegraphics.SwiftArcheMacTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_OBJC_BRIDGING_HEADER = SwiftArcheMac/bridging.h;
 				SWIFT_VERSION = 5.0;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/SwiftArcheMac.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/SwiftArcheMac";
 			};
@@ -2898,6 +2977,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = archegraphics.SwiftArcheMacUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_OBJC_BRIDGING_HEADER = SwiftArcheMac/bridging.h;
 				SWIFT_VERSION = 5.0;
 				TEST_TARGET_NAME = SwiftArcheMac;
 			};
@@ -2916,6 +2996,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = archegraphics.SwiftArcheMacUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_OBJC_BRIDGING_HEADER = SwiftArcheMac/bridging.h;
 				SWIFT_VERSION = 5.0;
 				TEST_TARGET_NAME = SwiftArcheMac;
 			};
@@ -3128,6 +3209,15 @@
 			buildConfigurations = (
 				040F1DAC29336A56008BDC8D /* Debug */,
 				040F1DAD29336A56008BDC8D /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		040F1DEC293780B3008BDC8D /* Build configuration list for PBXNativeTarget "app.shader" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				040F1DEA293780B3008BDC8D /* Debug */,
+				040F1DEB293780B3008BDC8D /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

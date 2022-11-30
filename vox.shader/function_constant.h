@@ -78,5 +78,3 @@ DeclIntMacro(cascadeCount, CASCADED_COUNT)
 DeclBoolMacro(hasCascadeShadowMap, CASCADED_SHADOW_MAP)
 DeclIntMacro(shadowMode, SHADOW_MODE)
 constant bool needCalculateShadow = hasCascadeShadowMap && needReceiveShadow;
-
-DeclIntMacro(decodeMode, DECODE_MODE)

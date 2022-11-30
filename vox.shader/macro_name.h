@@ -62,8 +62,5 @@ typedef enum {
     NEED_RECEIVE_SHADOWS =               65502,
     CASCADED_COUNT =                     65501,
     CASCADED_SHADOW_MAP =                65500,
-    SHADOW_MODE =                        65499,
-    
-    // Offline
-    DECODE_MODE =                        65498
+    SHADOW_MODE =                        65499
 } MacroName;
