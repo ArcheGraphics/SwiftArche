@@ -48,9 +48,9 @@ public class PBRSpecularMaterial: PBRBaseMaterial {
             _specularGlossinessTexture = newValue
             shaderData.setImageView(PBRSpecularMaterial._specularGlossinessTextureProp, PBRSpecularMaterial._specularGlossinessSamplerProp, newValue)
             if newValue != nil {
-                shaderData.enableMacro(HAS_ROUGHNESS_METALLIC_TEXTURE)
+                shaderData.enableMacro(HAS_ROUGHNESS_METALLIC_TEXTURE.rawValue)
             } else {
-                shaderData.disableMacro(HAS_ROUGHNESS_METALLIC_TEXTURE)
+                shaderData.disableMacro(HAS_ROUGHNESS_METALLIC_TEXTURE.rawValue)
             }
         }
     }

@@ -43,7 +43,7 @@ public class Scene: EngineObject {
         }
         set {
             if _shadowCascades != newValue {
-                shaderData.enableMacro(CASCADED_COUNT, (newValue.rawValue, .int))
+                shaderData.enableMacro(CASCADED_COUNT.rawValue, (newValue.rawValue, .int))
                 _shadowCascades = newValue
             }
         }
@@ -89,7 +89,7 @@ public class Scene: EngineObject {
 
         ambientLight = AmbientLight();
         engine.sceneManager._allScenes.append(self)
-        shaderData.enableMacro(CASCADED_COUNT, (shadowCascades.rawValue, .int));
+        shaderData.enableMacro(CASCADED_COUNT.rawValue, (shadowCascades.rawValue, .int));
     }
 
     deinit {
@@ -288,10 +288,10 @@ extension Scene {
         }
 
         if (castShadows && _sunLight != nil && _sunLight!.shadowType != ShadowType.None) {
-            shaderData.enableMacro(CASCADED_SHADOW_MAP)
-            shaderData.enableMacro(SHADOW_MODE, (_sunLight!.shadowType.rawValue, .int))
+            shaderData.enableMacro(CASCADED_SHADOW_MAP.rawValue)
+            shaderData.enableMacro(SHADOW_MODE.rawValue, (_sunLight!.shadowType.rawValue, .int))
         } else {
-            shaderData.disableMacro(CASCADED_SHADOW_MAP)
+            shaderData.disableMacro(CASCADED_SHADOW_MAP.rawValue)
         }
 
         // union scene and camera macro.

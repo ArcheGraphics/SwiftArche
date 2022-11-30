@@ -116,7 +116,7 @@ public class SkinnedMeshRenderer: MeshRenderer {
             descriptor.pixelFormat = .rgba32Float
             descriptor.mipmapLevelCount = 1
             _jointTexture = engine.device.makeTexture(descriptor: descriptor)
-            shaderData.enableMacro(HAS_JOINT_TEXTURE)
+            shaderData.enableMacro(HAS_JOINT_TEXTURE.rawValue)
             shaderData.setImageView(SkinnedMeshRenderer._jointSamplerProperty, "", _jointTexture)
         }
 
@@ -132,7 +132,7 @@ public class SkinnedMeshRenderer: MeshRenderer {
 
     private func _initJoints() {
         if (skin == nil) {
-            shaderData.disableMacro(HAS_SKIN)
+            shaderData.disableMacro(HAS_SKIN.rawValue)
             return
         }
 
@@ -173,18 +173,18 @@ public class SkinnedMeshRenderer: MeshRenderer {
         let maxJoints = Int(floor(Float(_maxVertexUniformVectors - 30) / 4.0))
 
         if (jointCount != 0) {
-            shaderData.enableMacro(HAS_SKIN)
+            shaderData.enableMacro(HAS_SKIN.rawValue)
             shaderData.setData(SkinnedMeshRenderer._jointCountProperty, jointCount)
             if (jointCount > maxJoints) {
                 _useJointTexture = true
             } else {
                 let maxJoints = max(SkinnedMeshRenderer._maxJoints, jointCount)
                 SkinnedMeshRenderer._maxJoints = maxJoints
-                shaderData.disableMacro(HAS_JOINT_TEXTURE)
-                shaderData.enableMacro(JOINTS_COUNT, (maxJoints, .int))
+                shaderData.disableMacro(HAS_JOINT_TEXTURE.rawValue)
+                shaderData.enableMacro(JOINTS_COUNT.rawValue, (maxJoints, .int))
             }
         } else {
-            shaderData.disableMacro(HAS_SKIN)
+            shaderData.disableMacro(HAS_SKIN.rawValue)
         }
     }
 

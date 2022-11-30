@@ -13,59 +13,57 @@
 // IS_ : Shader control flow
 // _COUNT: type int constant
 typedef enum {
-    HAS_UV = 0,
-    HAS_NORMAL = 1,
-    HAS_TANGENT = 2,
-    HAS_VERTEXCOLOR = 3,
+    HAS_UV =                             65535,
+    HAS_NORMAL =                         65534,
+    HAS_TANGENT =                        65533,
+    HAS_VERTEXCOLOR =                    65532,
 
     // Blend Shape
-    HAS_BLENDSHAPE = 4,
-    BLENDSHAPE_COUNT = 5,
-    HAS_BLENDSHAPE_NORMAL = 6,
-    HAS_BLENDSHAPE_TANGENT = 7,
-    
+    HAS_BLENDSHAPE =                     65531,
+    BLENDSHAPE_COUNT =                   65530,
+    HAS_BLENDSHAPE_NORMAL =              65529,
+    HAS_BLENDSHAPE_TANGENT =             65528,
+     
     // Skin
-    HAS_SKIN = 8,
-    HAS_JOINT_TEXTURE = 9,
-    JOINTS_COUNT = 10,
+    HAS_SKIN =                           65527,
+    HAS_JOINT_TEXTURE =                  65526,
+    JOINTS_COUNT =                       65525,
 
     // Material
-    NEED_ALPHA_CUTOFF = 11,
-    NEED_WORLDPOS = 12,
-    NEED_TILINGOFFSET = 13,
+    NEED_ALPHA_CUTOFF =                  65524,
+    NEED_WORLDPOS =                      65523,
+    NEED_TILINGOFFSET =                  65522,
 
-    OMIT_NORMAL = 14,
-    HAS_NORMAL_TEXTURE = 15,
-    HAS_BASE_TEXTURE = 16,
-    HAS_EMISSIVE_TEXTURE = 17,
-    HAS_OCCLUSION_TEXTURE = 18,
-    HAS_CLEARCOAT_TEXTURE = 19,
-    HAS_CLEARCOAT_ROUGHNESS_TEXTURE = 20,
-    HAS_CLEARCOAT_NORMAL_TEXTURE = 21,
-    HAS_SPECULAR_GLOSSINESS_TEXTURE = 22,
-    HAS_ROUGHNESS_METALLIC_TEXTURE = 23,
-    IS_METALLIC_WORKFLOW = 24,
-    IS_CLEARCOAT = 25,
-    HAS_SPECULAR_TEXTURE = 26,
+    OMIT_NORMAL =                        65521,
+    HAS_NORMAL_TEXTURE =                 65520,
+    HAS_BASE_TEXTURE =                   65519,
+    HAS_EMISSIVE_TEXTURE =               65518,
+    HAS_OCCLUSION_TEXTURE =              65517,
+    HAS_CLEARCOAT_TEXTURE =              65516,
+    HAS_CLEARCOAT_ROUGHNESS_TEXTURE =    65515,
+    HAS_CLEARCOAT_NORMAL_TEXTURE =       65514,
+    HAS_SPECULAR_GLOSSINESS_TEXTURE =    65513,
+    HAS_ROUGHNESS_METALLIC_TEXTURE =     65512,
+    IS_METALLIC_WORKFLOW =               65511,
+    IS_CLEARCOAT =                       65510,
+    HAS_SPECULAR_TEXTURE =               65509,
 
     // Light
-    DIRECT_LIGHT_COUNT = 27,
-    POINT_LIGHT_COUNT = 28,
-    SPOT_LIGHT_COUNT = 29,
+    DIRECT_LIGHT_COUNT =                 65508,
+    POINT_LIGHT_COUNT =                  65507,
+    SPOT_LIGHT_COUNT =                   65506,
 
     // Enviroment
-    HAS_SH = 30,
-    HAS_SPECULAR_ENV = 31,
-    DECODE_ENV_RGBM = 32,
+    HAS_SH =                             65505,
+    HAS_SPECULAR_ENV =                   65504,
+    DECODE_ENV_RGBM =                    65503,
 
     // Shadow
-    NEED_RECEIVE_SHADOWS = 33,
-    CASCADED_COUNT = 34,
-    CASCADED_SHADOW_MAP = 35,
-    SHADOW_MODE = 36,
+    NEED_RECEIVE_SHADOWS =               65502,
+    CASCADED_COUNT =                     65501,
+    CASCADED_SHADOW_MAP =                65500,
+    SHADOW_MODE =                        65499,
     
     // Offline
-    DECODE_MODE = 37,
-
-    TOTAL_COUNT = 38,
+    DECODE_MODE =                        65498
 } MacroName;

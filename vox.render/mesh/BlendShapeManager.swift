@@ -62,25 +62,25 @@ public class BlendShapeManager {
 
     func _updateShaderData(_ shaderData: ShaderData, _ skinnedMeshRenderer: SkinnedMeshRenderer) {
         if (_blendShapeCount > 0) {
-            shaderData.enableMacro(HAS_BLENDSHAPE)
+            shaderData.enableMacro(HAS_BLENDSHAPE.rawValue)
             shaderData.setImageView(BlendShapeManager._blendShapeTextureProperty, "", _vertexTexture)
             shaderData.setData(BlendShapeManager._blendShapeTextureInfoProperty, _dataTextureInfo)
             shaderData.setData(BlendShapeManager._blendShapeWeightsProperty, skinnedMeshRenderer.blendShapeWeights)
-            shaderData.enableMacro(BLENDSHAPE_COUNT, (_blendShapeCount, .int))
+            shaderData.enableMacro(BLENDSHAPE_COUNT.rawValue, (_blendShapeCount, .int))
 
             if (_useBlendNormal) {
-                shaderData.enableMacro(HAS_BLENDSHAPE_NORMAL)
+                shaderData.enableMacro(HAS_BLENDSHAPE_NORMAL.rawValue)
             } else {
-                shaderData.disableMacro(HAS_BLENDSHAPE_NORMAL)
+                shaderData.disableMacro(HAS_BLENDSHAPE_NORMAL.rawValue)
             }
             if (_useBlendTangent) {
-                shaderData.enableMacro(HAS_BLENDSHAPE_TANGENT)
+                shaderData.enableMacro(HAS_BLENDSHAPE_TANGENT.rawValue)
             } else {
-                shaderData.disableMacro(HAS_BLENDSHAPE_TANGENT)
+                shaderData.disableMacro(HAS_BLENDSHAPE_TANGENT.rawValue)
             }
         } else {
-            shaderData.disableMacro(HAS_BLENDSHAPE)
-            shaderData.disableMacro(BLENDSHAPE_COUNT)
+            shaderData.disableMacro(HAS_BLENDSHAPE.rawValue)
+            shaderData.disableMacro(BLENDSHAPE_COUNT.rawValue)
         }
     }
 

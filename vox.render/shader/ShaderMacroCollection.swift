@@ -11,7 +11,7 @@ extension MacroName: Hashable {
 
 /// Shader macro collection.
 internal class ShaderMacroCollection {
-    internal var _value: [MacroName: (Int, MTLDataType)] = [:]
+    internal var _value: [UInt16: (Int, MTLDataType)] = [:]
 
     /// Union of two macro collection.
     /// - Parameters:
@@ -38,9 +38,9 @@ extension ShaderMacroCollection: Hashable {
 
     func hash(into hasher: inout Hasher) {
         _value.sorted { l, r in
-                    l.key.rawValue < r.key.rawValue
+                    l.key < r.key
                 }
-                .forEach { (key: MacroName, value: (Int, MTLDataType)) in
+                .forEach { (key: UInt16, value: (Int, MTLDataType)) in
                     hasher.combine(key)
                     hasher.combine(value.0)
                 }

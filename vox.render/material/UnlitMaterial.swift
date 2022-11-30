@@ -33,9 +33,9 @@ public class UnlitMaterial: BaseMaterial {
             _baseTexture = newValue
             shaderData.setImageView(UnlitMaterial._baseTextureProp, UnlitMaterial._baseSamplerProp, newValue)
             if newValue != nil {
-                shaderData.enableMacro(HAS_BASE_TEXTURE)
+                shaderData.enableMacro(HAS_BASE_TEXTURE.rawValue)
             } else {
-                shaderData.disableMacro(HAS_BASE_TEXTURE)
+                shaderData.disableMacro(HAS_BASE_TEXTURE.rawValue)
             }
         }
     }
@@ -55,8 +55,8 @@ public class UnlitMaterial: BaseMaterial {
         super.init(engine.device, name)
         shader.append(ShaderPass(engine.library, "vertex_unlit", "fragment_unlit"))
 
-        shaderData.enableMacro(OMIT_NORMAL)
-        shaderData.enableMacro(NEED_TILINGOFFSET)
+        shaderData.enableMacro(OMIT_NORMAL.rawValue)
+        shaderData.enableMacro(NEED_TILINGOFFSET.rawValue)
 
         shaderData.setData(UnlitMaterial._baseColorProp, _baseColor)
         shaderData.setData(UnlitMaterial._tilingOffsetProp, _tilingOffset)

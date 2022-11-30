@@ -114,10 +114,10 @@ public class ShaderPass {
                 } else {
                     property = false
                 }
-                functionConstants.setConstantValue(&property, type: .bool, index: Int(info.key.rawValue))
+                functionConstants.setConstantValue(&property, type: .bool, index: Int(info.key))
             } else {
                 var property = info.value.0
-                functionConstants.setConstantValue(&property, type: info.value.1, index: Int(info.key.rawValue))
+                functionConstants.setConstantValue(&property, type: info.value.1, index: Int(info.key))
             }
         }
         return functionConstants

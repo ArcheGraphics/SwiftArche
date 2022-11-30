@@ -100,23 +100,23 @@ class LightManager {
 
         if (directLightCount != 0) {
             DirectLight._updateShaderData(shaderData)
-            shaderData.enableMacro(DIRECT_LIGHT_COUNT, (directLightCount, .int))
+            shaderData.enableMacro(DIRECT_LIGHT_COUNT.rawValue, (directLightCount, .int))
         } else {
-            shaderData.disableMacro(DIRECT_LIGHT_COUNT)
+            shaderData.disableMacro(DIRECT_LIGHT_COUNT.rawValue)
         }
 
         if (pointLightCount != 0) {
             PointLight._updateShaderData(shaderData)
-            shaderData.enableMacro(POINT_LIGHT_COUNT, (pointLightCount, .int))
+            shaderData.enableMacro(POINT_LIGHT_COUNT.rawValue, (pointLightCount, .int))
         } else {
-            shaderData.disableMacro(POINT_LIGHT_COUNT)
+            shaderData.disableMacro(POINT_LIGHT_COUNT.rawValue)
         }
 
         if (spotLightCount != 0) {
             SpotLight._updateShaderData(shaderData)
-            shaderData.enableMacro(SPOT_LIGHT_COUNT, (spotLightCount, .int))
+            shaderData.enableMacro(SPOT_LIGHT_COUNT.rawValue, (spotLightCount, .int))
         } else {
-            shaderData.disableMacro(SPOT_LIGHT_COUNT)
+            shaderData.disableMacro(SPOT_LIGHT_COUNT.rawValue)
         }
     }
 }

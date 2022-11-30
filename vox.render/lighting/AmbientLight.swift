@@ -140,9 +140,9 @@ public class AmbientLight {
 
     private func _setDiffuseMode(_ sceneShaderData: ShaderData) {
         if (_diffuseMode == DiffuseMode.SphericalHarmonics) {
-            sceneShaderData.enableMacro(HAS_SH)
+            sceneShaderData.enableMacro(HAS_SH.rawValue)
         } else {
-            sceneShaderData.disableMacro(HAS_SH)
+            sceneShaderData.disableMacro(HAS_SH.rawValue)
         }
     }
 
@@ -151,17 +151,17 @@ public class AmbientLight {
             sceneShaderData.setImageView(AmbientLight._specularTextureProperty, AmbientLight._specularSamplerProperty, _specularTexture)
             _envMapLight.mipMapLevel = Int32(_specularTexture!.mipmapLevelCount)
             sceneShaderData.setData(AmbientLight._envMapProperty, _envMapLight)
-            sceneShaderData.enableMacro(HAS_SPECULAR_ENV)
+            sceneShaderData.enableMacro(HAS_SPECULAR_ENV.rawValue)
         } else {
-            sceneShaderData.disableMacro(HAS_SPECULAR_ENV)
+            sceneShaderData.disableMacro(HAS_SPECULAR_ENV.rawValue)
         }
     }
 
     private func _setSpecularTextureDecodeRGBM(_ sceneShaderData: ShaderData) {
         if (_specularTextureDecodeRGBM) {
-            sceneShaderData.enableMacro(DECODE_ENV_RGBM)
+            sceneShaderData.enableMacro(DECODE_ENV_RGBM.rawValue)
         } else {
-            sceneShaderData.disableMacro(DECODE_ENV_RGBM)
+            sceneShaderData.disableMacro(DECODE_ENV_RGBM.rawValue)
         }
     }
 

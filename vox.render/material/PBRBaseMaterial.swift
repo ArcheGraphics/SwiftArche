@@ -58,9 +58,9 @@ public class PBRBaseMaterial: BaseMaterial {
             _baseTexture = newValue
             shaderData.setImageView(PBRBaseMaterial._baseTextureProp, PBRBaseMaterial._baseSamplerProp, newValue)
             if newValue != nil {
-                shaderData.enableMacro(HAS_BASE_TEXTURE)
+                shaderData.enableMacro(HAS_BASE_TEXTURE.rawValue)
             } else {
-                shaderData.disableMacro(HAS_BASE_TEXTURE)
+                shaderData.disableMacro(HAS_BASE_TEXTURE.rawValue)
             }
         }
     }
@@ -78,9 +78,9 @@ public class PBRBaseMaterial: BaseMaterial {
             _normalTexture = newValue
             shaderData.setImageView(PBRBaseMaterial._normalTextureProp, PBRBaseMaterial._normalTextureProp, newValue)
             if newValue != nil {
-                shaderData.enableMacro(HAS_NORMAL_TEXTURE)
+                shaderData.enableMacro(HAS_NORMAL_TEXTURE.rawValue)
             } else {
-                shaderData.disableMacro(HAS_NORMAL_TEXTURE)
+                shaderData.disableMacro(HAS_NORMAL_TEXTURE.rawValue)
             }
         }
     }
@@ -122,9 +122,9 @@ public class PBRBaseMaterial: BaseMaterial {
             _emissiveTexture = newValue
             shaderData.setImageView(PBRBaseMaterial._emissiveTextureProp, PBRBaseMaterial._emissiveSamplerProp, newValue)
             if newValue != nil {
-                shaderData.enableMacro(HAS_EMISSIVE_TEXTURE)
+                shaderData.enableMacro(HAS_EMISSIVE_TEXTURE.rawValue)
             } else {
-                shaderData.disableMacro(HAS_EMISSIVE_TEXTURE)
+                shaderData.disableMacro(HAS_EMISSIVE_TEXTURE.rawValue)
             }
         }
     }
@@ -142,9 +142,9 @@ public class PBRBaseMaterial: BaseMaterial {
             _occlusionTexture = newValue
             shaderData.setImageView(PBRBaseMaterial._occlusionTextureProp, PBRBaseMaterial._occlusionSamplerProp, newValue)
             if newValue != nil {
-                shaderData.enableMacro(HAS_OCCLUSION_TEXTURE)
+                shaderData.enableMacro(HAS_OCCLUSION_TEXTURE.rawValue)
             } else {
-                shaderData.disableMacro(HAS_OCCLUSION_TEXTURE)
+                shaderData.disableMacro(HAS_OCCLUSION_TEXTURE.rawValue)
             }
         }
     }
@@ -198,9 +198,9 @@ public class PBRBaseMaterial: BaseMaterial {
             _pbrBaseData.clearCoat = newValue
             shaderData.setData(PBRBaseMaterial._pbrBaseProp, _pbrBaseData)
             if newValue == 0 {
-                shaderData.disableMacro(IS_CLEARCOAT)
+                shaderData.disableMacro(IS_CLEARCOAT.rawValue)
             } else {
-                shaderData.enableMacro(IS_CLEARCOAT)
+                shaderData.enableMacro(IS_CLEARCOAT.rawValue)
             }
         }
     }
@@ -214,9 +214,9 @@ public class PBRBaseMaterial: BaseMaterial {
             _clearCoatTexture = newValue
             shaderData.setImageView(PBRBaseMaterial._clearCoatTextureProp, PBRBaseMaterial._clearCoatSamplerProp, newValue)
             if newValue != nil {
-                shaderData.enableMacro(HAS_CLEARCOAT_TEXTURE)
+                shaderData.enableMacro(HAS_CLEARCOAT_TEXTURE.rawValue)
             } else {
-                shaderData.disableMacro(HAS_CLEARCOAT_TEXTURE)
+                shaderData.disableMacro(HAS_CLEARCOAT_TEXTURE.rawValue)
             }
         }
     }
@@ -246,9 +246,9 @@ public class PBRBaseMaterial: BaseMaterial {
             _clearCoatRoughnessTexture = newValue
             shaderData.setImageView(PBRBaseMaterial._clearCoatRoughnessTextureProp, PBRBaseMaterial._clearCoatRoughnessSamplerProp, newValue)
             if newValue != nil {
-                shaderData.enableMacro(HAS_CLEARCOAT_ROUGHNESS_TEXTURE)
+                shaderData.enableMacro(HAS_CLEARCOAT_ROUGHNESS_TEXTURE.rawValue)
             } else {
-                shaderData.disableMacro(HAS_CLEARCOAT_ROUGHNESS_TEXTURE)
+                shaderData.disableMacro(HAS_CLEARCOAT_ROUGHNESS_TEXTURE.rawValue)
             }
         }
     }
@@ -266,9 +266,9 @@ public class PBRBaseMaterial: BaseMaterial {
             _clearCoatNormalTexture = newValue
             shaderData.setImageView(PBRBaseMaterial._clearCoatNormalTextureProp, PBRBaseMaterial._clearCoatNormalSamplerProp, newValue)
             if newValue != nil {
-                shaderData.enableMacro(HAS_CLEARCOAT_NORMAL_TEXTURE)
+                shaderData.enableMacro(HAS_CLEARCOAT_NORMAL_TEXTURE.rawValue)
             } else {
-                shaderData.disableMacro(HAS_CLEARCOAT_NORMAL_TEXTURE)
+                shaderData.disableMacro(HAS_CLEARCOAT_NORMAL_TEXTURE.rawValue)
             }
         }
     }
@@ -281,8 +281,8 @@ public class PBRBaseMaterial: BaseMaterial {
         super.init(engine.device, name)
         shader.append(ShaderPass(engine.library, "vertex_pbr", "fragment_pbr"))
 
-        shaderData.enableMacro(NEED_WORLDPOS)
-        shaderData.enableMacro(NEED_TILINGOFFSET)
+        shaderData.enableMacro(NEED_WORLDPOS.rawValue)
+        shaderData.enableMacro(NEED_TILINGOFFSET.rawValue)
         shaderData.setData(PBRBaseMaterial._pbrBaseProp, _pbrBaseData)
         shaderData.setData(UnlitMaterial._tilingOffsetProp, _tilingOffset)
     }

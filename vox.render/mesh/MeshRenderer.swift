@@ -47,22 +47,22 @@ public class MeshRenderer: Renderer {
         if (_mesh != nil) {
             if (_dirtyUpdateFlag & MeshRendererUpdateFlags.VertexElementMacro.rawValue != 0) {
                 let vertexDescriptor = mesh!._vertexDescriptor
-                shaderData.disableMacro(HAS_UV)
-                shaderData.disableMacro(HAS_NORMAL)
-                shaderData.disableMacro(HAS_TANGENT)
-                shaderData.disableMacro(HAS_VERTEXCOLOR)
+                shaderData.disableMacro(HAS_UV.rawValue)
+                shaderData.disableMacro(HAS_NORMAL.rawValue)
+                shaderData.disableMacro(HAS_TANGENT.rawValue)
+                shaderData.disableMacro(HAS_VERTEXCOLOR.rawValue)
 
                 if vertexDescriptor.attributes[Int(Position.rawValue)].format != .invalid {
-                    shaderData.enableMacro(HAS_UV)
+                    shaderData.enableMacro(HAS_UV.rawValue)
                 }
                 if vertexDescriptor.attributes[Int(Normal.rawValue)].format != .invalid {
-                    shaderData.enableMacro(HAS_NORMAL)
+                    shaderData.enableMacro(HAS_NORMAL.rawValue)
                 }
                 if vertexDescriptor.attributes[Int(Tangent.rawValue)].format != .invalid {
-                    shaderData.enableMacro(HAS_TANGENT)
+                    shaderData.enableMacro(HAS_TANGENT.rawValue)
                 }
                 if vertexDescriptor.attributes[Int(Color_0.rawValue)].format != .invalid {
-                    shaderData.enableMacro(HAS_VERTEXCOLOR)
+                    shaderData.enableMacro(HAS_VERTEXCOLOR.rawValue)
                 }
                 _dirtyUpdateFlag &= ~MeshRendererUpdateFlags.VertexElementMacro.rawValue
             }

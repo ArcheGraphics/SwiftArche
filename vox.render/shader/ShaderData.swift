@@ -96,22 +96,22 @@ public class ShaderData {
 extension ShaderData {
     /// Enable macro.
     /// - Parameter name: Macro name
-    public func enableMacro(_ name: MacroName) {
-        _macroCollection._value[name] = (1, .bool)
+    public func enableMacro(_ name: UInt32) {
+        _macroCollection._value[UInt16(name)] = (1, .bool)
     }
 
     /// Enable macro.
     /// - Parameters:
     ///   - name: Macro name
     ///   - value: Macro value
-    public func enableMacro(_ name: MacroName, _ value: (Int, MTLDataType)) {
-        _macroCollection._value[name] = value
+    public func enableMacro(_ name: UInt32, _ value: (Int, MTLDataType)) {
+        _macroCollection._value[UInt16(name)] = value
     }
 
     /// Disable macro
-    /// - Parameter name: Macro name
-    public func disableMacro(_ name: MacroName) {
-        _macroCollection._value.removeValue(forKey: name)
+    /// - Parameter name: Macro name    
+    public func disableMacro(_ name: UInt32) {
+        _macroCollection._value.removeValue(forKey: UInt16(name))
     }
 }
 

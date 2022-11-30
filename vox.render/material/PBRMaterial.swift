@@ -48,9 +48,9 @@ public class PBRMaterial: PBRBaseMaterial {
             _metallicRoughnessTexture = newValue
             shaderData.setImageView(PBRMaterial._roughnessMetallicTextureProp, PBRMaterial._roughnessMetallicSamplerProp, newValue)
             if newValue != nil {
-                shaderData.enableMacro(HAS_ROUGHNESS_METALLIC_TEXTURE)
+                shaderData.enableMacro(HAS_ROUGHNESS_METALLIC_TEXTURE.rawValue)
             } else {
-                shaderData.disableMacro(HAS_ROUGHNESS_METALLIC_TEXTURE)
+                shaderData.disableMacro(HAS_ROUGHNESS_METALLIC_TEXTURE.rawValue)
             }
         }
     }
@@ -61,7 +61,7 @@ public class PBRMaterial: PBRBaseMaterial {
 
     public override init(_ engine: Engine, _ name: String = "") {
         super.init(engine, name)
-        shaderData.enableMacro(IS_METALLIC_WORKFLOW)
+        shaderData.enableMacro(IS_METALLIC_WORKFLOW.rawValue)
         shaderData.setData(PBRMaterial._pbrProp, _pbrData)
     }
 }

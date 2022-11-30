@@ -39,9 +39,9 @@ public class Renderer: Component {
         set {
             if (_receiveShadows != newValue) {
                 if (newValue) {
-                    shaderData.enableMacro(NEED_RECEIVE_SHADOWS)
+                    shaderData.enableMacro(NEED_RECEIVE_SHADOWS.rawValue)
                 } else {
-                    shaderData.disableMacro(NEED_RECEIVE_SHADOWS)
+                    shaderData.disableMacro(NEED_RECEIVE_SHADOWS.rawValue)
                 }
                 _receiveShadows = newValue
             }
@@ -70,7 +70,7 @@ public class Renderer: Component {
         shaderData = ShaderData(entity.engine.device)
         super.init(entity)
         _registerEntityTransformListener()
-        shaderData.enableMacro(NEED_RECEIVE_SHADOWS)
+        shaderData.enableMacro(NEED_RECEIVE_SHADOWS.rawValue)
     }
 
     deinit {
