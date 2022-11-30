@@ -379,7 +379,7 @@ extension Camera {
 
         // union scene and camera macro.
         ShaderMacroCollection.unionCollection(
-                scene.shaderData._macroCollection,
+                scene._globalShaderMacro,
                 shaderData._macroCollection,
                 _globalShaderMacro
         )

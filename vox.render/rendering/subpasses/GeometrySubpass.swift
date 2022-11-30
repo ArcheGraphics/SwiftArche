@@ -34,7 +34,7 @@ public class GeometrySubpass: Subpass {
         prepare(pipelineDescriptor, depthStencilDescriptor)
 
         ShaderMacroCollection.unionCollection(element.material.shaderData._macroCollection,
-                element.renderer.shaderData._macroCollection, shaderMacro)
+                element.renderer._globalShaderMacro, shaderMacro)
 
         let functions = pipeline._resourceCache.requestShaderModule(element.shaderPass, shaderMacro)
         pipelineDescriptor.vertexFunction = functions[0]

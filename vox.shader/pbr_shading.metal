@@ -188,9 +188,9 @@ void PBRShading::addTotalDirectRadiance() {
                 if (i == sunIndex) {
                     directionalLight.color *= shadowAttenuation;
                 }
-                directionalLight.direction = directLight[i].direction;
-                addDirectionalDirectLightRadiance( directionalLight);
             }
+            directionalLight.direction = directLight[i].direction;
+            addDirectionalDirectLightRadiance( directionalLight);
         }
     }
     

@@ -26,7 +26,7 @@ fileprivate struct Material {
     }
 }
 
-class PBRApp: NSViewController {
+class PbrApp: NSViewController {
     var canvas: Canvas!
     var engine: Engine!
     private var _materials: [Material] = [

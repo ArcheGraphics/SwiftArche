@@ -27,7 +27,7 @@ fileprivate struct Material {
     }
 }
 
-class IBLApp: NSViewController {
+class IblApp: NSViewController {
     var canvas: Canvas!
     var engine: Engine!
     private var _materials: [Material] = [
