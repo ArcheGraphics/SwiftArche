@@ -49,8 +49,8 @@ public class ARSubpass: Subpass {
         imagePlaneVertexBuffer = engine.device.makeBuffer(bytes: kImagePlaneVertexData, length: imagePlaneVertexDataCount, options: [])
         imagePlaneVertexBuffer.label = "ImagePlaneVertexBuffer"
 
-        let capturedImageVertexFunction = engine.library.makeFunction(name: "capturedImageVertexTransform")!
-        let capturedImageFragmentFunction = engine.library.makeFunction(name: "capturedImageFragmentShader")!
+        let capturedImageVertexFunction = engine.library()!.makeFunction(name: "capturedImageVertexTransform")!
+        let capturedImageFragmentFunction = engine.library()!.makeFunction(name: "capturedImageFragmentShader")!
         let capturedImagePipelineStateDescriptor = MTLRenderPipelineDescriptor()
         capturedImagePipelineStateDescriptor.label = "CapturedImagePipeline"
         capturedImagePipelineStateDescriptor.rasterSampleCount = Int(engine.canvas.sampleCount)

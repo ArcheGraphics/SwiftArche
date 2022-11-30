@@ -155,6 +155,11 @@
 		3E67EED42921DB4A00ED60C8 /* function_common.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3E67EED32921DB4A00ED60C8 /* function_common.metal */; };
 		3EC036F42931B801002187DC /* texture_packer.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3EC036F32931B801002187DC /* texture_packer.metal */; };
 		3EC036F72931FF95002187DC /* DecodeMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EC036F62931FF95002187DC /* DecodeMode.swift */; };
+		3EC92A9E2937427200423396 /* grid_shading.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3EC92A9C2937427100423396 /* grid_shading.metal */; };
+		3EC92AA5293742D400423396 /* WireframePrimitive.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EC92AA3293742D300423396 /* WireframePrimitive.swift */; };
+		3EC92AA6293742D400423396 /* WireframeManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EC92AA4293742D400423396 /* WireframeManager.swift */; };
+		3EC92AA9293742DF00423396 /* GridControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EC92AA7293742DF00423396 /* GridControl.swift */; };
+		3EC92AAA293742DF00423396 /* GridMaterial.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EC92AA8293742DF00423396 /* GridMaterial.swift */; };
 		43D8C013A31176A5BCE169AC /* KHR_materials_pbrSpecularGlossiness.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8CC391B749FD47D8987F9 /* KHR_materials_pbrSpecularGlossiness.swift */; };
 		43D8C028EAA2732208634F87 /* EngineObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8C860A954154FCBE6973D /* EngineObject.swift */; };
 		43D8C058C79C4CF107774FD3 /* FixedJoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8C6EC5B8AD9E887A884AA /* FixedJoint.swift */; };
@@ -362,6 +367,41 @@
 			remoteGlobalIDString = 3E67EE5D291B799900ED60C8;
 			remoteInfo = vox.math;
 		};
+		3EC92AAB2937433E00423396 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 3E67EDBD291B2F7600ED60C8 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 3EC92A882937422700423396;
+			remoteInfo = toolkit.shader;
+		};
+		3EC92AAD2937433E00423396 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 3E67EDBD291B2F7600ED60C8 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 3E67EE5D291B799900ED60C8;
+			remoteInfo = vox.math;
+		};
+		3EC92AAF2937433E00423396 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 3E67EDBD291B2F7600ED60C8 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 3E0F7BB82925FBBF00C4A843;
+			remoteInfo = vox.physics;
+		};
+		3EC92AB12937433E00423396 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 3E67EDBD291B2F7600ED60C8 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 3E67EE08291B304700ED60C8;
+			remoteInfo = vox.render;
+		};
+		3EC92AB32937433E00423396 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 3E67EDBD291B2F7600ED60C8 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 3E67EDFC291B301700ED60C8;
+			remoteInfo = vox.shader;
+		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -384,6 +424,15 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		3E67EE5C291B799900ED60C8 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "include/$(PRODUCT_NAME)";
+			dstSubfolderSpec = 16;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		3EC92A922937424300423396 /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
 			dstPath = "include/$(PRODUCT_NAME)";
@@ -610,6 +659,15 @@
 		3EC036EE2931B746002187DC /* specular_map.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = specular_map.metal; sourceTree = "<group>"; };
 		3EC036F32931B801002187DC /* texture_packer.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; path = texture_packer.metal; sourceTree = "<group>"; };
 		3EC036F62931FF95002187DC /* DecodeMode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DecodeMode.swift; sourceTree = "<group>"; };
+		3EC92A892937422700423396 /* toolkit.shader.metallib */ = {isa = PBXFileReference; explicitFileType = "archive.metal-library"; includeInIndex = 0; path = toolkit.shader.metallib; sourceTree = BUILT_PRODUCTS_DIR; };
+		3EC92A942937424400423396 /* libvox.toolkit.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libvox.toolkit.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		3EC92A9C2937427100423396 /* grid_shading.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; path = grid_shading.metal; sourceTree = "<group>"; };
+		3EC92A9D2937427100423396 /* type_common.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = type_common.h; sourceTree = "<group>"; };
+		3EC92A9F2937427800423396 /* bridging.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = bridging.h; sourceTree = "<group>"; };
+		3EC92AA3293742D300423396 /* WireframePrimitive.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WireframePrimitive.swift; sourceTree = "<group>"; };
+		3EC92AA4293742D400423396 /* WireframeManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WireframeManager.swift; sourceTree = "<group>"; };
+		3EC92AA7293742DF00423396 /* GridControl.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GridControl.swift; sourceTree = "<group>"; };
+		3EC92AA8293742DF00423396 /* GridMaterial.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GridMaterial.swift; sourceTree = "<group>"; };
 		43D8C0115848492526783538 /* HingeJointFlag.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HingeJointFlag.swift; sourceTree = "<group>"; };
 		43D8C050955DD1855EEBFE8E /* BlendState.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BlendState.swift; sourceTree = "<group>"; };
 		43D8C058DA27D2BC1365273F /* SceneParser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SceneParser.swift; sourceTree = "<group>"; };
@@ -824,6 +882,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				3E67EE85291BDE7700ED60C8 /* libvox.math.a in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		3EC92A912937424300423396 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1215,8 +1280,10 @@
 				3E67EE5F291B799900ED60C8 /* vox.math */,
 				3E67EE82291BDE7700ED60C8 /* test.math */,
 				3E0F7BBA2925FBBF00C4A843 /* vox.physics */,
-				3E67EE0A291B304700ED60C8 /* vox.render */,
 				3E67EDFE291B301700ED60C8 /* vox.shader */,
+				3E67EE0A291B304700ED60C8 /* vox.render */,
+				3EC92A8A2937422700423396 /* toolkit.shader */,
+				3EC92A952937424400423396 /* vox.toolkit */,
 				3E67EDC7291B2F7600ED60C8 /* SwiftArche */,
 				3E67EDE1291B2F7800ED60C8 /* SwiftArcheTests */,
 				3E67EDEB291B2F7800ED60C8 /* SwiftArcheUITests */,
@@ -1236,6 +1303,8 @@
 				3E67EE5E291B799900ED60C8 /* libvox.math.a */,
 				3E67EE81291BDE7700ED60C8 /* test.math.xctest */,
 				3E0F7BB92925FBBF00C4A843 /* libvox.physics.a */,
+				3EC92A892937422700423396 /* toolkit.shader.metallib */,
+				3EC92A942937424400423396 /* libvox.toolkit.a */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -1551,6 +1620,51 @@
 			path = enums;
 			sourceTree = "<group>";
 		};
+		3EC92A8A2937422700423396 /* toolkit.shader */ = {
+			isa = PBXGroup;
+			children = (
+				3EC92A9D2937427100423396 /* type_common.h */,
+				3EC92A9C2937427100423396 /* grid_shading.metal */,
+			);
+			path = toolkit.shader;
+			sourceTree = "<group>";
+		};
+		3EC92A952937424400423396 /* vox.toolkit */ = {
+			isa = PBXGroup;
+			children = (
+				3EC92A9F2937427800423396 /* bridging.h */,
+				3EC92AA0293742A300423396 /* auxiliary-lines */,
+				3EC92AA1293742AB00423396 /* custom-material */,
+			);
+			path = vox.toolkit;
+			sourceTree = "<group>";
+		};
+		3EC92AA0293742A300423396 /* auxiliary-lines */ = {
+			isa = PBXGroup;
+			children = (
+				3EC92AA4293742D400423396 /* WireframeManager.swift */,
+				3EC92AA3293742D300423396 /* WireframePrimitive.swift */,
+			);
+			path = "auxiliary-lines";
+			sourceTree = "<group>";
+		};
+		3EC92AA1293742AB00423396 /* custom-material */ = {
+			isa = PBXGroup;
+			children = (
+				3EC92AA2293742C500423396 /* grid */,
+			);
+			path = "custom-material";
+			sourceTree = "<group>";
+		};
+		3EC92AA2293742C500423396 /* grid */ = {
+			isa = PBXGroup;
+			children = (
+				3EC92AA7293742DF00423396 /* GridControl.swift */,
+				3EC92AA8293742DF00423396 /* GridMaterial.swift */,
+			);
+			path = grid;
+			sourceTree = "<group>";
+		};
 		43D8C02BDC6A48446340709A /* loader */ = {
 			isa = PBXGroup;
 			children = (
@@ -1748,6 +1862,43 @@
 			productReference = 3E67EE81291BDE7700ED60C8 /* test.math.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
+		3EC92A882937422700423396 /* toolkit.shader */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 3EC92A8F2937422700423396 /* Build configuration list for PBXNativeTarget "toolkit.shader" */;
+			buildPhases = (
+				3EC92A872937422700423396 /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = toolkit.shader;
+			productName = toolkit.shader;
+			productReference = 3EC92A892937422700423396 /* toolkit.shader.metallib */;
+			productType = "com.apple.product-type.metal-library";
+		};
+		3EC92A932937424300423396 /* vox.toolkit */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 3EC92A982937424400423396 /* Build configuration list for PBXNativeTarget "vox.toolkit" */;
+			buildPhases = (
+				3EC92A902937424300423396 /* Sources */,
+				3EC92A912937424300423396 /* Frameworks */,
+				3EC92A922937424300423396 /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				3EC92AAC2937433E00423396 /* PBXTargetDependency */,
+				3EC92AAE2937433E00423396 /* PBXTargetDependency */,
+				3EC92AB02937433E00423396 /* PBXTargetDependency */,
+				3EC92AB22937433E00423396 /* PBXTargetDependency */,
+				3EC92AB42937433E00423396 /* PBXTargetDependency */,
+			);
+			name = vox.toolkit;
+			productName = vox.toolkit;
+			productReference = 3EC92A942937424400423396 /* libvox.toolkit.a */;
+			productType = "com.apple.product-type.library.static";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -1784,6 +1935,13 @@
 					3E67EE80291BDE7700ED60C8 = {
 						CreatedOnToolsVersion = 14.1;
 					};
+					3EC92A882937422700423396 = {
+						CreatedOnToolsVersion = 14.1;
+					};
+					3EC92A932937424300423396 = {
+						CreatedOnToolsVersion = 14.1;
+						LastSwiftMigration = 1410;
+					};
 				};
 			};
 			buildConfigurationList = 3E67EDC0291B2F7600ED60C8 /* Build configuration list for PBXProject "SwiftArche" */;
@@ -1805,8 +1963,10 @@
 				3E67EE5D291B799900ED60C8 /* vox.math */,
 				3E67EE80291BDE7700ED60C8 /* test.math */,
 				3E0F7BB82925FBBF00C4A843 /* vox.physics */,
-				3E67EE08291B304700ED60C8 /* vox.render */,
 				3E67EDFC291B301700ED60C8 /* vox.shader */,
+				3E67EE08291B304700ED60C8 /* vox.render */,
+				3EC92A882937422700423396 /* toolkit.shader */,
+				3EC92A932937424300423396 /* vox.toolkit */,
 				3E67EDC4291B2F7600ED60C8 /* SwiftArche */,
 				3E67EDDD291B2F7800ED60C8 /* SwiftArcheTests */,
 				3E67EDE7291B2F7800ED60C8 /* SwiftArcheUITests */,
@@ -2203,6 +2363,25 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		3EC92A872937422700423396 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				3EC92A9E2937427200423396 /* grid_shading.metal in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		3EC92A902937424300423396 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				3EC92AA9293742DF00423396 /* GridControl.swift in Sources */,
+				3EC92AA6293742D400423396 /* WireframeManager.swift in Sources */,
+				3EC92AAA293742DF00423396 /* GridMaterial.swift in Sources */,
+				3EC92AA5293742D400423396 /* WireframePrimitive.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -2250,6 +2429,31 @@
 			isa = PBXTargetDependency;
 			target = 3E67EE5D291B799900ED60C8 /* vox.math */;
 			targetProxy = 3E67EEBF291DD37400ED60C8 /* PBXContainerItemProxy */;
+		};
+		3EC92AAC2937433E00423396 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 3EC92A882937422700423396 /* toolkit.shader */;
+			targetProxy = 3EC92AAB2937433E00423396 /* PBXContainerItemProxy */;
+		};
+		3EC92AAE2937433E00423396 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 3E67EE5D291B799900ED60C8 /* vox.math */;
+			targetProxy = 3EC92AAD2937433E00423396 /* PBXContainerItemProxy */;
+		};
+		3EC92AB02937433E00423396 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 3E0F7BB82925FBBF00C4A843 /* vox.physics */;
+			targetProxy = 3EC92AAF2937433E00423396 /* PBXContainerItemProxy */;
+		};
+		3EC92AB22937433E00423396 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 3E67EE08291B304700ED60C8 /* vox.render */;
+			targetProxy = 3EC92AB12937433E00423396 /* PBXContainerItemProxy */;
+		};
+		3EC92AB42937433E00423396 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 3E67EDFC291B301700ED60C8 /* vox.shader */;
+			targetProxy = 3EC92AB32937433E00423396 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -2759,6 +2963,65 @@
 			};
 			name = Release;
 		};
+		3EC92A8D2937422700423396 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 4SL5L673UU;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		3EC92A8E2937422700423396 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 4SL5L673UU;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+		3EC92A992937424400423396 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 4SL5L673UU;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				OTHER_LDFLAGS = "-ObjC";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_OBJC_BRIDGING_HEADER = vox.toolkit/bridging.h;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		3EC92A9A2937424400423396 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 4SL5L673UU;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				OTHER_LDFLAGS = "-ObjC";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_OBJC_BRIDGING_HEADER = vox.toolkit/bridging.h;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -2839,6 +3102,24 @@
 			buildConfigurations = (
 				3E67EE88291BDE7700ED60C8 /* Debug */,
 				3E67EE89291BDE7700ED60C8 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		3EC92A8F2937422700423396 /* Build configuration list for PBXNativeTarget "toolkit.shader" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				3EC92A8D2937422700423396 /* Debug */,
+				3EC92A8E2937422700423396 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		3EC92A982937424400423396 /* Build configuration list for PBXNativeTarget "vox.toolkit" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				3EC92A992937424400423396 /* Debug */,
+				3EC92A9A2937424400423396 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
