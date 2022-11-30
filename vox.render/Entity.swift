@@ -146,14 +146,14 @@ public final class Entity: EngineObject {
 
     /// Get component which match the type.
     /// - Returns: The first component which match type.
-    public func getComponent<T: Component>() -> T {
+    public func getComponent<T: Component>() -> T? {
         for i in 0..<_components.count {
             let component = _components[i]
             if (component is T) {
-                return component as! T
+                return (component as! T)
             }
         }
-        fatalError()
+        return nil
     }
 
     /// Get components which match the type.
@@ -173,8 +173,8 @@ public final class Entity: EngineObject {
     /// Get the components which match the type of the entity and it's children.
     /// - Parameter results: The components collection.
     /// - Returns:  The components collection which match the type.
-    public func getComponentsIncludeChildren<T: Component>(_ results: inout [T]) -> [T] {
-        results = []
+    public func getComponentsIncludeChildren<T: Component>() -> [T] {
+        var results: [T] = []
         _getComponentsInChildren(&results)
         return results
     }

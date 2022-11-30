@@ -35,13 +35,15 @@ fileprivate class ComputeScript: Script {
     private let _computePass = ComputePass()
 
     override func onAwake() {
-        let renderer: MeshRenderer = entity.getComponent()
-        let shaderData = renderer.getMaterial()!.shaderData
-        _computePass.data.append(shaderData)
-        _computePass.shader.append(ShaderPass(engine.library, "atomicCounter"))
-        _computePass.threadsPerGridX = 2
-        _computePass.threadsPerGridY = 2
-        _computePass.threadsPerGridZ = 2
+        let renderer: MeshRenderer? = entity.getComponent()
+        if let renderer = renderer {
+            let shaderData = renderer.getMaterial()!.shaderData
+            _computePass.data.append(shaderData)
+            _computePass.shader.append(ShaderPass(engine.library, "atomicCounter"))
+            _computePass.threadsPerGridX = 2
+            _computePass.threadsPerGridY = 2
+            _computePass.threadsPerGridZ = 2
+        }
     }
 
     override func onBeginRender(_ camera: Camera, _ commandBuffer: MTLCommandBuffer) {

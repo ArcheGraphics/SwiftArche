@@ -16,4 +16,7 @@ public class HitResult {
     public var point: Vector3 = Vector3()
     /// The normal of the surface the ray hit.
     public var normal: Vector3 = Vector3()
+
+    public init() {
+    }
 }

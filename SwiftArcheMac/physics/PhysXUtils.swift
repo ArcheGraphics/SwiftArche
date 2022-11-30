@@ -78,3 +78,36 @@ func addBox(_ rootEntity: Entity, _ size: Vector3,
 
     return boxEntity
 }
+
+func addPlane(_ rootEntity: Entity, _ size: Vector3,
+              _ position: Vector3, _ rotation: Quaternion) -> Entity {
+    let mtl = PBRMaterial(rootEntity.engine)
+    mtl.baseColor = Color(
+            0.2179807202597362,
+            0.2939682161541871,
+            0.31177952549087604,
+            1
+    )
+    mtl.roughness = 0.0
+    mtl.metallic = 0.0
+    let planeEntity = rootEntity.createChild()
+    planeEntity.layer = Layer.Layer1
+
+    let renderer: MeshRenderer = planeEntity.addComponent()
+    renderer.mesh = PrimitiveMesh.createCuboid(
+            rootEntity.engine,
+            size.x,
+            size.y,
+            size.z
+    )
+    renderer.setMaterial(mtl)
+    planeEntity.transform.position = position
+    planeEntity.transform.rotationQuaternion = rotation
+
+    let physicsPlane = PlaneColliderShape()
+    physicsPlane.position = Vector3(0, size.y, 0)
+    let planeCollider: StaticCollider = planeEntity.addComponent()
+    planeCollider.addShape(physicsPlane)
+
+    return planeEntity
+}

@@ -28,9 +28,65 @@ fileprivate class GeometryGenerator: Script {
     }
 }
 
+fileprivate class Raycast: Script {
+    var camera: Camera!
+    var ray = Ray()
+    var hit = HitResult()
+
+    override func onAwake() {
+        camera = entity.getComponent()
+    }
+
+    override func onUpdate(_ deltaTime: Float) {
+        let inputManager = engine.inputManager
+        let pointers = inputManager.pointers
+        if (!pointers.isEmpty && inputManager.isPointerTrigger(.leftMouseDown)) {
+            let pointerPosition = pointers[0].locationInWindow
+            _ = camera.screenPointToRay(Vector2(Float(pointerPosition.x), Float(pointerPosition.y)), ray)
+
+            let result = engine.physicsManager.raycast(ray, Float.greatestFiniteMagnitude, Layer.Layer0, hit)
+            if (result) {
+                let mtl = PBRMaterial(engine)
+                mtl.baseColor = Color(Float.random(in: 0...1), Float.random(in: 0...1), Float.random(in: 0...1), 1.0)
+                mtl.metallic = 0.0
+                mtl.roughness = 0.5
+
+                let meshes: [MeshRenderer] = hit.entity!.getComponentsIncludeChildren()
+                for mesh in meshes {
+                    mesh.setMaterial(mtl)
+                }
+            }
+        }
+    }
+}
+
 class PhysXRaycastApp: NSViewController {
     var canvas: Canvas!
     var engine: Engine!
+
+    func initialize(_ rootEntity: Entity) {
+        var quat = Quaternion(0, 0, 0.3, 0.7)
+        _ = quat.normalize()
+        _ = addPlane(rootEntity, Vector3(30, 0.0, 30), Vector3(), Quaternion())
+        for i in 0..<8 {
+            for j in 0..<8 {
+                let random = Int(floor(Float.random(in: 0...3))) % 3
+                switch (random) {
+                case 0:
+                    _ = addBox(rootEntity, Vector3(1, 1, 1), Vector3(Float(-4 + i), floor(Float.random(in: 0...6)) + 1, Float(-4 + j)), quat)
+                    break
+                case 1:
+                    _ = addSphere(rootEntity, 0.5, Vector3(floor(Float.random(in: 0...16)) - 4, 5, floor(Float.random(in: 0...16)) - 4), quat)
+                    break
+                case 2:
+                    _ = addCapsule(rootEntity, 0.5, 2.0, Vector3(floor(Float.random(in: 0...16)) - 4, 5, floor(Float.random(in: 0...16)) - 4), quat)
+                    break
+                default:
+                    break
+                }
+            }
+        }
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -39,6 +95,7 @@ class PhysXRaycastApp: NSViewController {
 
         let scene = engine.sceneManager.activeScene!
         let rootEntity = scene.createRootEntity()
+        let _: GeometryGenerator = rootEntity.addComponent()
 
         let cameraEntity = rootEntity.createChild()
         cameraEntity.transform.setPosition(x: 1, y: 1, z: 1)
@@ -51,12 +108,7 @@ class PhysXRaycastApp: NSViewController {
         let pointLight: PointLight = light.addComponent()
         pointLight.intensity = 0.3
 
-        let cubeEntity = rootEntity.createChild()
-        let renderer: MeshRenderer = cubeEntity.addComponent()
-        renderer.mesh = PrimitiveMesh.createCuboid(engine, 0.1, 0.1, 0.1)
-        let material = PBRMaterial(engine)
-        material.baseColor = Color(0.4, 0.0, 0.0)
-        renderer.setMaterial(material)
+        initialize(rootEntity)
 
         engine.run()
     }

@@ -74,7 +74,7 @@ public class ModelMesh: Mesh {
     /// - Parameters:
     ///   - engine: Engine
     ///   - name: Mesh name
-    init(_ engine: Engine, _ name: String = "") {
+    public init(_ engine: Engine, _ name: String = "") {
         _device = engine.device
         super.init()
         self.name = name

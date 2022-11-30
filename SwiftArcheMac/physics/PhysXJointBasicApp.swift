@@ -70,7 +70,7 @@ class PhysXJointBasicApp: NSViewController {
             transform(position, rotation, &localPosition, &localQuaternion)
             let currentEntity = addBox(rootEntity, Vector3(2.0, 2.0, 0.5), localPosition, localQuaternion)
 
-            let currentCollider: DynamicCollider = currentEntity.getComponent()
+            let currentCollider: DynamicCollider? = currentEntity.getComponent()
             let fixedJoint: FixedJoint = currentEntity.addComponent()
             if (prevCollider != nil) {
                 fixedJoint.connectedAnchor = currentEntity.transform.worldPosition - prevCollider!.entity.transform.worldPosition

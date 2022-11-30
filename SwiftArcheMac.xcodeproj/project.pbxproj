@@ -366,8 +366,11 @@
 		43D8C62B488D6837DDD5BBA8 /* SkyboxApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8C50348EB9AC72BD7BF83 /* SkyboxApp.swift */; };
 		43D8C645AB2BDFD62E330B9C /* PhysXRaycast.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8C645B5CB351C0BFE24C7 /* PhysXRaycast.swift */; };
 		43D8C808C0FA018090454567 /* PhysXAttractorApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8C5E1D5FA1D3B1F819147 /* PhysXAttractorApp.swift */; };
+		43D8C8847DCDFE5DABA15585 /* WireframePrimitive.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8CB37C6DA6DAEFDC5A2A4 /* WireframePrimitive.swift */; };
+		43D8CB27974E2712F873405E /* WireframeManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8C0CC365128B7B18E4074 /* WireframeManager.swift */; };
 		43D8CC13B0B39DD99DEE0DC4 /* PhysXCompoundApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8CFE45C9E5B56F6B8A397 /* PhysXCompoundApp.swift */; };
 		43D8CC2C3372F5E3258A852D /* IrradianceApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8C159E7E7844EB632C57F /* IrradianceApp.swift */; };
+		43D8CC8E6EC814867725CBD1 /* PhysXDebug.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8CCD2428D0365772246E7 /* PhysXDebug.swift */; };
 		43D8CE4CE0A0E392D06A3B25 /* PhysXUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8CF2C4FC2C2529FFE5E7F /* PhysXUtils.swift */; };
 		43D8CF515E4D90196E7E806B /* PhysXCollisionDetectionApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8C0A4A7B56D737C3F4FE2 /* PhysXCollisionDetectionApp.swift */; };
 /* End PBXBuildFile section */
@@ -818,12 +821,15 @@
 		3EC03A012932192D002187DC /* BackgroundTextureFillMode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BackgroundTextureFillMode.swift; sourceTree = "<group>"; };
 		3EC92A3D29358C9600423396 /* PBRApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PBRApp.swift; sourceTree = "<group>"; };
 		43D8C0A4A7B56D737C3F4FE2 /* PhysXCollisionDetectionApp.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhysXCollisionDetectionApp.swift; sourceTree = "<group>"; };
+		43D8C0CC365128B7B18E4074 /* WireframeManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WireframeManager.swift; sourceTree = "<group>"; };
 		43D8C12DBC7510CB05B703F8 /* PhysXJointBasicApp.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhysXJointBasicApp.swift; sourceTree = "<group>"; };
 		43D8C159E7E7844EB632C57F /* IrradianceApp.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IrradianceApp.swift; sourceTree = "<group>"; };
 		43D8C50348EB9AC72BD7BF83 /* SkyboxApp.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SkyboxApp.swift; sourceTree = "<group>"; };
 		43D8C5E1D5FA1D3B1F819147 /* PhysXAttractorApp.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhysXAttractorApp.swift; sourceTree = "<group>"; };
 		43D8C645B5CB351C0BFE24C7 /* PhysXRaycast.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhysXRaycast.swift; sourceTree = "<group>"; };
 		43D8C888ABFCE2075E7AA5BE /* AtomicComputeApp.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AtomicComputeApp.swift; sourceTree = "<group>"; };
+		43D8CB37C6DA6DAEFDC5A2A4 /* WireframePrimitive.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WireframePrimitive.swift; sourceTree = "<group>"; };
+		43D8CCD2428D0365772246E7 /* PhysXDebug.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhysXDebug.swift; sourceTree = "<group>"; };
 		43D8CF2C4FC2C2529FFE5E7F /* PhysXUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhysXUtils.swift; sourceTree = "<group>"; };
 		43D8CFAFE0E0B5772488FA13 /* IBLApp.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IBLApp.swift; sourceTree = "<group>"; };
 		43D8CFE45C9E5B56F6B8A397 /* PhysXCompoundApp.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhysXCompoundApp.swift; sourceTree = "<group>"; };
@@ -896,6 +902,8 @@
 		040F1DA429336A56008BDC8D /* vox.toolkit */ = {
 			isa = PBXGroup;
 			children = (
+				3EC92A412936334600423396 /* custom-material */,
+				3EC92A402936333A00423396 /* auxiliary-lines */,
 				040F1DAE29336A67008BDC8D /* controls */,
 			);
 			path = vox.toolkit;
@@ -1709,8 +1717,25 @@
 				43D8C12DBC7510CB05B703F8 /* PhysXJointBasicApp.swift */,
 				43D8C645B5CB351C0BFE24C7 /* PhysXRaycast.swift */,
 				43D8CF2C4FC2C2529FFE5E7F /* PhysXUtils.swift */,
+				43D8CCD2428D0365772246E7 /* PhysXDebug.swift */,
 			);
 			path = physics;
+			sourceTree = "<group>";
+		};
+		3EC92A402936333A00423396 /* auxiliary-lines */ = {
+			isa = PBXGroup;
+			children = (
+				43D8CB37C6DA6DAEFDC5A2A4 /* WireframePrimitive.swift */,
+				43D8C0CC365128B7B18E4074 /* WireframeManager.swift */,
+			);
+			path = "auxiliary-lines";
+			sourceTree = "<group>";
+		};
+		3EC92A412936334600423396 /* custom-material */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = "custom-material";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -2101,6 +2126,8 @@
 				040F1DBB29336FBF008BDC8D /* OrbitControl.swift in Sources */,
 				040F1DB829336F86008BDC8D /* IControlInput.swift in Sources */,
 				040F1DCC2933AAF0008BDC8D /* ControlFreePointer.swift in Sources */,
+				43D8C8847DCDFE5DABA15585 /* WireframePrimitive.swift in Sources */,
+				43D8CB27974E2712F873405E /* WireframeManager.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2121,6 +2148,7 @@
 				43D8C1413D08147985256B8A /* PhysXJointBasicApp.swift in Sources */,
 				43D8C645AB2BDFD62E330B9C /* PhysXRaycast.swift in Sources */,
 				43D8CE4CE0A0E392D06A3B25 /* PhysXUtils.swift in Sources */,
+				43D8CC8E6EC814867725CBD1 /* PhysXDebug.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
