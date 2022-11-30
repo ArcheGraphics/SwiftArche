@@ -5,6 +5,7 @@
 //  property of any third parties.
 
 import vox_render
+import Metal
 
 public class GridMaterial: BaseMaterial {
     private static let _gridProperty = "u_grid"
@@ -88,8 +89,8 @@ public class GridMaterial: BaseMaterial {
         }
     }
 
-    public init(_ engine: Engine, _ name: String = "") {
-        super.init(engine.device, name)
-        shader.append(ShaderPass(engine.library, "vertex_grid", "fragment_grid"))
+    public init(_ device: MTLDevice, _ library: MTLLibrary, _ name: String = "") {
+        super.init(device, name)
+        shader.append(ShaderPass(library, "vertex_grid", "fragment_grid"))
     }
 }

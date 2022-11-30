@@ -105,7 +105,7 @@ public class ShaderPass {
     }
 
     private func makeFunctionConstants(_ macroInfo: ShaderMacroCollection) -> MTLFunctionConstantValues {
-        let functionConstants = ShaderMacroCollection.defaultFunctionConstant
+        let functionConstants = MTLFunctionConstantValues()
         macroInfo._value.forEach { info in
             if info.value.1 == .bool {
                 var property: Bool
