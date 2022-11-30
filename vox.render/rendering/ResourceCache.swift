@@ -78,7 +78,9 @@ class ResourceCache {
             var hasher = Hasher()
             shader.hash(into: &hasher)
             macroInfo.hash(into: &hasher)
-            hasher.combine(shaderPass._library.hash)
+            if let library = shaderPass.library {
+                hasher.combine(library.hash)
+            }
             let hash = hasher.finalize()
             let cacheFunction = shader_modules[hash]
             if cacheFunction == nil {

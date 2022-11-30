@@ -99,7 +99,7 @@ public class TextureLoader {
         let functionConstants = MTLFunctionConstantValues()
         var decodeModeValue = decodeMode.rawValue
         functionConstants.setConstantValue(&decodeModeValue, type: .int, index: 0)
-        let function = try! _engine.library.makeFunction(name: "build_specular", constantValues: functionConstants)
+        let function = try! _engine.library()!.makeFunction(name: "build_specular", constantValues: functionConstants)
         let pipelineState = try! _engine.device.makeComputePipelineState(function: function)
         if let commandBuffer = _engine.commandQueue.makeCommandBuffer(),
            let commandEncoder = commandBuffer.makeComputeCommandEncoder() {
@@ -129,7 +129,7 @@ public class TextureLoader {
         descriptor.usage = MTLTextureUsage(rawValue: metallic.usage.rawValue | MTLTextureUsage.shaderWrite.rawValue)
         let mergedTexture = makeTexture(descriptor)
 
-        let function = _engine.library.makeFunction(name: "build_metallicRoughness")
+        let function = _engine.library()!.makeFunction(name: "build_metallicRoughness")
         let pipelineState = try! _engine.device.makeComputePipelineState(function: function!)
         if let commandBuffer = _engine.commandQueue.makeCommandBuffer(),
            let commandEncoder = commandBuffer.makeComputeCommandEncoder() {

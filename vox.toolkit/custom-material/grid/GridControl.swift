@@ -65,7 +65,7 @@ public class GridControl: Script {
     public override func onAwake() {
         let gridRenderer: MeshRenderer! = entity.addComponent()
         gridRenderer.mesh = GridControl.createGridPlane(engine)
-//        _material = GridMaterial(engine.device)
+        _material = GridMaterial(engine)
         gridRenderer.setMaterial(_material)
     }
 

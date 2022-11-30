@@ -16,7 +16,7 @@ fileprivate class AtomicMaterial: BaseMaterial {
         _atomicBuffer = BufferView(device: engine.device, count: 1, stride: MemoryLayout<UInt32>.stride)
         super.init(engine.device)
         atomicBuffer = _atomicBuffer
-        shader.append(ShaderPass(engine.library, "vertex_unlit", "fragment_atomic"))
+        shader.append(ShaderPass(engine.library()!, "vertex_unlit", "fragment_atomic"))
     }
 
     var atomicBuffer: BufferView {
@@ -39,7 +39,7 @@ fileprivate class ComputeScript: Script {
         if let renderer = renderer {
             let shaderData = renderer.getMaterial()!.shaderData
             _computePass.data.append(shaderData)
-            _computePass.shader.append(ShaderPass(engine.library, "atomicCounter"))
+            _computePass.shader.append(ShaderPass(engine.library()!, "atomicCounter"))
             _computePass.threadsPerGridX = 2
             _computePass.threadsPerGridY = 2
             _computePass.threadsPerGridZ = 2

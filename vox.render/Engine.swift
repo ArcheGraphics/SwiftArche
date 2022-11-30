@@ -12,12 +12,12 @@ let logger = Logger(label: "com.arche.main")
 
 public class Engine: NSObject {
     public let canvas: Canvas
-    public let library: MTLLibrary!
     let commandQueue: MTLCommandQueue
     let _macroCollection: ShaderMacroCollection = ShaderMacroCollection()
     let _componentsManager: ComponentsManager = ComponentsManager()
     let _lightManager = LightManager()
 
+    private var _library: [String: MTLLibrary] = [:]
     private var _time: Time = Time();
     private var _settings: EngineSettings? = nil
     private var _device: MTLDevice
@@ -112,20 +112,13 @@ public class Engine: NSObject {
         }
         _device = device
 
-        // Load all the shader files with a metal file extension in the project
-        let libraryURL = Bundle.main.url(forResource: "vox.shader", withExtension: "metallib")!
-        do {
-            library = try device.makeLibrary(URL: libraryURL)
-        } catch let error {
-            fatalError("Error creating MetalKit mesh, error \(error)")
-        }
-
         guard let commandQueue = device.makeCommandQueue() else {
             fatalError("Unable to create default Metal Device")
         }
         self.commandQueue = commandQueue
 
         super.init()
+        createShaderLibrary("vox.shader")
         _physicsManager = PhysicsManager(engine: self)
         _inputManager = InputManager(engine: self)
         _sceneManager = SceneManager(engine: self)
@@ -148,6 +141,20 @@ public class Engine: NSObject {
         scene.background.ar = ARSubpass(self)
     }
 #endif
+    
+    public func createShaderLibrary(_ name: String) {
+        // Load all the shader files with a metal file extension in the project
+        let libraryURL = Bundle.main.url(forResource: name, withExtension: "metallib")!
+        do {
+            _library[name] = try device.makeLibrary(URL: libraryURL)
+        } catch let error {
+            fatalError("Error creating MetalKit mesh, error \(error)")
+        }
+    }
+    
+    public func library(_ name: String = "vox.shader") -> MTLLibrary? {
+        _library[name]
+    }
 
     /// Execution engine loop.
     public func run() {

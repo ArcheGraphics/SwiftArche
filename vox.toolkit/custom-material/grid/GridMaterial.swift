@@ -89,8 +89,8 @@ public class GridMaterial: BaseMaterial {
         }
     }
 
-    public init(_ device: MTLDevice, _ library: MTLLibrary, _ name: String = "") {
-        super.init(device, name)
-        shader.append(ShaderPass(library, "vertex_grid", "fragment_grid"))
+    public init(_ engine: Engine, _ name: String = "") {
+        super.init(engine.device, name)
+        shader.append(ShaderPass(engine, "toolkit.shader", "vertex_grid", "fragment_grid"))
     }
 }

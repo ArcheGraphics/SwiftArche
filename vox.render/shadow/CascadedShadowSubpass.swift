@@ -40,7 +40,7 @@ class CascadedShadowSubpass: GeometrySubpass {
 
     init(_ camera: Camera) {
         _camera = camera
-        _shaderPass = ShaderPass(camera.engine.library, "vertex_shadowmap", nil)
+        _shaderPass = ShaderPass(camera.engine.library()!, "vertex_shadowmap", nil)
         _bufferPool = BufferPool(camera.engine.device, MemoryLayout<Matrix>.size * 4)
         super.init()
     }

@@ -279,7 +279,7 @@ public class PBRBaseMaterial: BaseMaterial {
 
     public init(_ engine: Engine, _ name: String = "") {
         super.init(engine.device, name)
-        shader.append(ShaderPass(engine.library, "vertex_pbr", "fragment_pbr"))
+        shader.append(ShaderPass(engine.library()!, "vertex_pbr", "fragment_pbr"))
 
         shaderData.enableMacro(NEED_WORLDPOS.rawValue)
         shaderData.enableMacro(NEED_TILINGOFFSET.rawValue)
