@@ -4,6 +4,8 @@
 //  personal capacity and am not conveying any rights to any intellectual
 //  property of any third parties.
 
+#pragma once
+
 #include "../vox.shader/macro_name.h"
 #include "../vox.shader/type_common.h"
 

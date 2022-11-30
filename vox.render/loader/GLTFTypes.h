@@ -4,6 +4,8 @@
 //  personal capacity and am not conveying any rights to any intellectual
 //  property of any third parties.
 
+#pragma once
+
 #import <Foundation/Foundation.h>
 
 #define GLTFKIT2_EXPORT __attribute__((visibility("default"))) FOUNDATION_EXTERN
