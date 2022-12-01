@@ -105,13 +105,10 @@ class PhysXJointBasicApp: NSViewController {
         canvas = Canvas(with: view)
         engine = Engine(canvas: canvas)
         engine.createShaderLibrary("app.shader")
-        
+
         let scene = engine.sceneManager.activeScene!
+        scene.ambientLight = loadAmbientLight(engine, with: "countryIBL")
         let rootEntity = scene.createRootEntity()
-        
-        let cubeMap = try! engine.textureLoader.loadTexture(with: "countryIBL")!
-        scene.ambientLight.specularTexture = createSpecularTexture(engine, with: cubeMap)
-        scene.ambientLight.diffuseSphericalHarmonics = createSphericalHarmonicsCoefficients(engine, with: cubeMap)
 
         let cameraEntity = rootEntity.createChild()
         cameraEntity.transform.setPosition(x: 3, y: 1, z: 22)
@@ -120,9 +117,9 @@ class PhysXJointBasicApp: NSViewController {
         let _: ShootScript = cameraEntity.addComponent();
 
         let light = rootEntity.createChild("light")
-        light.transform.setPosition(x: 0, y: 3, z: 0)
-        let pointLight: PointLight = light.addComponent()
-        pointLight.intensity = 0.3
+        light.transform.setPosition(x: 1, y: 3, z: 0)
+        light.transform.lookAt(targetPosition: Vector3())
+        let _: DirectLight = light.addComponent()
 
         createChain(rootEntity, Vector3(8.0, 10.0, 0.0), Quaternion(), 10, 2.0)
         createSpring(rootEntity, Vector3(-4.0, 4.0, 1.0), Quaternion())

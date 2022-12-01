@@ -109,3 +109,12 @@ func createMetallicRoughnessTexture(_ engine: Engine, with metallic: MTLTexture,
     }
     return mergedTexture
 }
+
+func loadAmbientLight(_ engine: Engine, with name: String, _ decodeMode: DecodeMode = .Gamma) -> AmbientLight {
+    let cubeMap = try! engine.textureLoader.loadTexture(with: name)!
+    let ambientLight = AmbientLight();
+    ambientLight.specularTexture = createSpecularTexture(engine, with: cubeMap, decodeMode)
+    ambientLight.diffuseSphericalHarmonics = createSphericalHarmonicsCoefficients(engine, with: cubeMap)
+    ambientLight.diffuseMode = DiffuseMode.SphericalHarmonics
+    return ambientLight
+}

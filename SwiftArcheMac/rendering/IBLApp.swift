@@ -52,6 +52,7 @@ class IblApp: NSViewController {
         engine.createShaderLibrary("app.shader")
 
         let scene = engine.sceneManager.activeScene!
+        scene.ambientLight = loadAmbientLight(engine, with: "countryIBL")
         let rootEntity = scene.createRootEntity()
 
         let cameraEntity = rootEntity.createChild()
@@ -61,17 +62,13 @@ class IblApp: NSViewController {
         let _: OrbitControl = cameraEntity.addComponent()
 
         let light = rootEntity.createChild("light")
-        light.transform.setPosition(x: 0, y: 3, z: 0)
-        let pointLight: PointLight = light.addComponent()
-        pointLight.intensity = 0.3
+        light.transform.setPosition(x: 1, y: 3, z: 0)
+        light.transform.lookAt(targetPosition: Vector3())
+        let _: DirectLight = light.addComponent()
 
         let materialIndex = 4
         let mat = _materials[materialIndex]
-        let cubeMap = try! engine.textureLoader.loadTexture(with: "countryIBL")!
-        scene.ambientLight.specularTexture = createSpecularTexture(engine, with: cubeMap)
-        scene.ambientLight.diffuseSphericalHarmonics = createSphericalHarmonicsCoefficients(engine, with: cubeMap)
-        scene.ambientLight.diffuseMode = .SphericalHarmonics
-        
+
         let sphere = PrimitiveMesh.createSphere(engine, 0.5, 64)
         for i in 0..<7 {
             for j in 0..<7 {

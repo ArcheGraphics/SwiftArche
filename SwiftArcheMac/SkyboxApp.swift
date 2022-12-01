@@ -101,9 +101,9 @@ class SkyboxApp: NSViewController {
         let _: OrbitControl = cameraEntity.addComponent()
 
         let light = rootEntity.createChild("light")
-        light.transform.setPosition(x: 0, y: 3, z: 0)
-        let pointLight: PointLight = light.addComponent()
-        pointLight.intensity = 0.3
+        light.transform.setPosition(x: 1, y: 3, z: 0)
+        light.transform.lookAt(targetPosition: Vector3())
+        let _: DirectLight = light.addComponent()
 
         let cubeEntity = rootEntity.createChild()
         let renderer: MeshRenderer = cubeEntity.addComponent()

@@ -54,13 +54,10 @@ class PhysXDebugApp: NSViewController {
         engine = Engine(canvas: canvas)
         engine.createShaderLibrary("app.shader")
         engine.createShaderLibrary("toolkit.shader")
-        
-        let scene = engine.sceneManager.activeScene!
-        let rootEntity = scene.createRootEntity()
 
-        let cubeMap = try! engine.textureLoader.loadTexture(with: "countryIBL")!
-        scene.ambientLight.specularTexture = createSpecularTexture(engine, with: cubeMap)
-        scene.ambientLight.diffuseSphericalHarmonics = createSphericalHarmonicsCoefficients(engine, with: cubeMap)
+        let scene = engine.sceneManager.activeScene!
+        scene.ambientLight = loadAmbientLight(engine, with: "countryIBL")
+        let rootEntity = scene.createRootEntity()
 
         let cameraEntity = rootEntity.createChild()
         cameraEntity.transform.setPosition(x: 10, y: 10, z: 10)
@@ -69,9 +66,9 @@ class PhysXDebugApp: NSViewController {
         let _: OrbitControl = cameraEntity.addComponent()
 
         let light = rootEntity.createChild("light")
-        light.transform.setPosition(x: 0, y: 3, z: 0)
-        let pointLight: PointLight = light.addComponent()
-        pointLight.intensity = 0.3
+        light.transform.setPosition(x: 1, y: 3, z: 0)
+        light.transform.lookAt(targetPosition: Vector3())
+        let _: DirectLight = light.addComponent()
 
         // create box test entity
         let cubeSize: Float = 2.0

@@ -137,11 +137,8 @@ class PhysXAttractorApp: NSViewController {
         engine.createShaderLibrary("app.shader")
         
         let scene = engine.sceneManager.activeScene!
+        scene.ambientLight = loadAmbientLight(engine, with: "countryIBL")
         let rootEntity = scene.createRootEntity()
-        
-        let cubeMap = try! engine.textureLoader.loadTexture(with: "countryIBL")!
-        scene.ambientLight.specularTexture = createSpecularTexture(engine, with: cubeMap)
-        scene.ambientLight.diffuseSphericalHarmonics = createSphericalHarmonicsCoefficients(engine, with: cubeMap)
 
         // init camera
         let cameraEntity = rootEntity.createChild("camera")
@@ -152,7 +149,8 @@ class PhysXAttractorApp: NSViewController {
         let light = rootEntity.createChild("light")
         light.transform.setPosition(x: 5, y: 0, z: -10)
         light.transform.lookAt(targetPosition: Vector3(0, 0, 0))
-        let p: DirectLight = light.addComponent()
+        light.transform.lookAt(targetPosition: Vector3())
+        let _: DirectLight = light.addComponent()
 //        p.shadowType = ShadowType.SoftLow
 
         let attractorEntity = rootEntity.createChild()

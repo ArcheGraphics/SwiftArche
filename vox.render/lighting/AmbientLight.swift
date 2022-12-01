@@ -25,6 +25,8 @@ public class AmbientLight {
     private var _scenes: [Scene] = []
     private var _diffuseMode: DiffuseMode = .SolidColor
 
+    public init() {}
+
     /// Whether to decode from specularTexture with RGBM format.
     public var specularTextureDecodeRGBM: Bool {
         get {

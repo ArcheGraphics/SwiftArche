@@ -75,11 +75,6 @@ class AtomicComputeApp: NSViewController {
         let _: OrbitControl = cameraEntity.addComponent()
         let counter: ComputeScript = cameraEntity.addComponent()
 
-        let light = rootEntity.createChild("light")
-        light.transform.setPosition(x: 0, y: 3, z: 0)
-        let pointLight: PointLight = light.addComponent()
-        pointLight.intensity = 0.3
-
         let cubeEntity = rootEntity.createChild()
         let renderer: MeshRenderer = cubeEntity.addComponent()
         renderer.mesh = PrimitiveMesh.createCuboid(engine, 0.1, 0.1, 0.1)
