@@ -41,7 +41,7 @@ func createSphericalHarmonicsCoefficients(_ engine: Engine, with cube: MTLTextur
     return bufferView
 }
 
-func createSpecularTexture(_ engine: Engine, with cube: MTLTexture, _ decodeMode: DecodeMode = .Linear) -> MTLTexture? {
+func createSpecularTexture(_ engine: Engine, with cube: MTLTexture, _ decodeMode: DecodeMode = .Gamma) -> MTLTexture? {
     let descriptor = MTLTextureDescriptor()
     descriptor.textureType = .typeCube
     descriptor.pixelFormat = cube.pixelFormat

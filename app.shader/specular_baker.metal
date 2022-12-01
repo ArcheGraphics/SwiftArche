@@ -63,13 +63,13 @@ float4 gammaToLinear(float4 srgbIn){
 
 float4 toLinear(float4 color){
     float4 linear = float4(0.0);
-    if (DECODE_MODE == 0)
+    if (decodeMode == 0)
         linear = color;
-    else if (DECODE_MODE == 1)
+    else if (decodeMode == 1)
         linear = gammaToLinear(color);
-    else if (DECODE_MODE == 2)
+    else if (decodeMode == 2)
         linear = RGBEToLinear(color);
-    else if (DECODE_MODE == 3)
+    else if (decodeMode == 3)
         linear = RGBMToLinear(color, 5.0);
 
     return linear;
@@ -146,39 +146,40 @@ kernel void build_specular(texturecube<float, access::sample> input [[ texture(0
     uint face = tpig.z;
     float2 inputuv = float2(tpig.xy) / inputWidth;
 
-    float cx = inputuv.x * 2. - 1.;
-    float cy = inputuv.y * 2. - 1.;
+    float u = 2.0 * inputuv.x - 1.0;
+    float v = -2.0 * inputuv.y + 1.0;
 
-    float3 dir = float3(0.);
-    if (face == 0.) { // PX
-        dir = float3( 1.,  cy, -cx);
+    float3 direction;
+    switch(face) {
+        case 0:
+            direction = float3(1.0, -v, -u);
+            break;
+        case 1:
+            direction = float3(-1.0, -v, u);
+            break;
+        case 2:
+            direction = float3(u, -1.0, -v);
+            break;
+        case 3:
+            direction = float3(u, 1.0, v);
+            break;
+        case 4:
+            direction = float3(u, -v, 1.0);
+            break;
+        case 5:
+            direction = float3(-u, -v, -1.0);
+            break;
     }
-    else if (face == 1.) { // NX
-        dir = float3(-1.,  cy,  cx);
-    }
-    else if (face == 2.) { // PY
-        dir = float3( cx,  1., -cy);
-    }
-    else if (face == 3.) { // NY
-        dir = float3( cx, -1.,  cy);
-    }
-    else if (face == 4.) { // PZ
-        dir = float3( cx,  cy,  1.);
-    }
-    else if (face == 5.) { // NZ
-        dir = float3(-cx,  cy, -1.);
-    }
-    dir = normalize(dir);
+    direction = normalize(direction);
     
     float4 color;
     if (lod_roughness == 0.) {
         constexpr sampler s(filter::linear);
-        color = toLinear(input.sample(s, dir));
+        color = toLinear(input.sample(s, direction));
     } else {
-        float3 integratedBRDF = specular(dir, lod_roughness, inputWidth, input);
+        float3 integratedBRDF = specular(direction, lod_roughness, inputWidth, input);
         color = float4(integratedBRDF, 1.);
     }
-    color = LinearToRGBM(color, 5.0);
 
     uint2 outputuv = uint2(tpig.x/scale, tpig.y/scale);
     output.write(color, outputuv, face);
