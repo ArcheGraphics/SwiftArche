@@ -70,7 +70,8 @@ class IblApp: NSViewController {
         let cubeMap = try! engine.textureLoader.loadTexture(with: "countryIBL")!
         scene.ambientLight.specularTexture = createSpecularTexture(engine, with: cubeMap)
         scene.ambientLight.diffuseSphericalHarmonics = createSphericalHarmonicsCoefficients(engine, with: cubeMap)
-
+        scene.ambientLight.diffuseMode = .SphericalHarmonics
+        
         let sphere = PrimitiveMesh.createSphere(engine, 0.5, 64)
         for i in 0..<7 {
             for j in 0..<7 {

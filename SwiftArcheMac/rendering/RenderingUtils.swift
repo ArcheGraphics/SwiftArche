@@ -67,7 +67,7 @@ func createSpecularTexture(_ engine: Engine, with cube: MTLTexture, _ decodeMode
             var roughness: Float = Float(lod) / Float(cube.mipmapLevelCount - 1)  // linear
             commandEncoder.setBytes(&roughness, length: MemoryLayout<Float>.stride, index: 0)
 
-            let size = Int(Float(cube.width) / pow(2.0, Float(lod)))
+            let size = Int(Float(cube.width))
             let w = pipelineState.threadExecutionWidth
             let h = pipelineState.maxTotalThreadsPerThreadgroup / w
             commandEncoder.dispatchThreads(MTLSizeMake(size, size, 6),
