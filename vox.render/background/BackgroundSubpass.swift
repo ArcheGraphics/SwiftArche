@@ -39,7 +39,7 @@ public class BackgroundSubpass: Subpass {
     /// - Parameter engine:  Engine Which the background belongs to.
     public init(_ engine: Engine) {
         _canvas = engine.canvas
-        _shader = ShaderPass(engine.library()!, "vertex_background", "fragment_background")
+        _shader = ShaderPass(engine.library(), "vertex_background", "fragment_background")
         _shader.renderState!.depthState.compareFunction = MTLCompareFunction.lessEqual
         super.init()
         _mesh = _createPlane(engine)

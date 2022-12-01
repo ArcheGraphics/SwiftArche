@@ -91,6 +91,6 @@ public class GridMaterial: BaseMaterial {
 
     public init(_ engine: Engine, _ name: String = "") {
         super.init(engine.device, name)
-        shader.append(ShaderPass(engine, "toolkit.shader", "vertex_grid", "fragment_grid"))
+        shader.append(ShaderPass(engine.library("toolkit.shader"), "vertex_grid", "fragment_grid"))
     }
 }

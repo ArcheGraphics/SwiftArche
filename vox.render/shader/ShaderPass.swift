@@ -8,7 +8,7 @@ import Metal
 
 /// Shader pass
 public class ShaderPass {
-    internal var _library: MTLLibrary?
+    internal var _library: MTLLibrary!
     internal var _shaders: [String]
     internal var _renderState: RenderState? = nil
 
@@ -18,20 +18,9 @@ public class ShaderPass {
         }
     }
     
-    var library: MTLLibrary? {
-        get {
-            _library
-        }
-    }
-    
     public init(_ library: MTLLibrary, _ computeShader: String) {
         _shaders = [computeShader]
         _library = library
-    }
-
-    public init(_ engine: Engine, _ libName: String, _ computeShader: String) {
-        _shaders = [computeShader]
-        _library = engine.library(libName)
     }
     
     public init(_ library: MTLLibrary, _ vertexSource: String, _ fragmentSource: String?) {
@@ -41,17 +30,6 @@ public class ShaderPass {
             _shaders = [vertexSource, fragmentSource!]
         }
         _library = library
-        _renderState = RenderState()
-        setBlendMode(.Normal)
-    }
-
-    public init(_ engine: Engine, _ libName: String, _ vertexSource: String, _ fragmentSource: String?) {
-        if fragmentSource == nil {
-            _shaders = [vertexSource]
-        } else {
-            _shaders = [vertexSource, fragmentSource!]
-        }
-        _library = engine.library(libName)
         _renderState = RenderState()
         setBlendMode(.Normal)
     }
@@ -120,11 +98,7 @@ public class ShaderPass {
         let functionConstants = makeFunctionConstants(macroInfo)
 
         do {
-            if let library = _library {
-                return try library.makeFunction(name: source, constantValues: functionConstants)
-            } else {
-                fatalError("No shader library")
-            }
+            return try _library.makeFunction(name: source, constantValues: functionConstants)
         } catch {
             return nil
         }

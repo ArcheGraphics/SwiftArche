@@ -40,7 +40,7 @@ func createSpecularTexture(_ engine: Engine, with cube: MTLTexture, _ decodeMode
     let functionConstants = MTLFunctionConstantValues()
     var decodeModeValue = decodeMode.rawValue
     functionConstants.setConstantValue(&decodeModeValue, type: .int, index: 0)
-    let function = try! engine.library()!.makeFunction(name: "build_specular", constantValues: functionConstants)
+    let function = try! engine.library().makeFunction(name: "build_specular", constantValues: functionConstants)
     let pipelineState = try! engine.device.makeComputePipelineState(function: function)
     if let commandBuffer = engine.commandQueue.makeCommandBuffer(),
        let commandEncoder = commandBuffer.makeComputeCommandEncoder() {
@@ -70,7 +70,7 @@ func createMetallicRoughnessTexture(_ engine: Engine, with metallic: MTLTexture,
     descriptor.usage = MTLTextureUsage(rawValue: metallic.usage.rawValue | MTLTextureUsage.shaderWrite.rawValue)
     let mergedTexture = engine.textureLoader.makeTexture(descriptor)
 
-    let function = engine.library()!.makeFunction(name: "build_metallicRoughness")
+    let function = engine.library().makeFunction(name: "build_metallicRoughness")
     let pipelineState = try! engine.device.makeComputePipelineState(function: function!)
     if let commandBuffer = engine.commandQueue.makeCommandBuffer(),
        let commandEncoder = commandBuffer.makeComputeCommandEncoder() {

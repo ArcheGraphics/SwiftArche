@@ -158,8 +158,12 @@ public class Engine: NSObject {
         }
     }
     
-    public func library(_ name: String = "vox.shader") -> MTLLibrary? {
-        _library[name]
+    public func library(_ name: String = "vox.shader") -> MTLLibrary {
+        if let library = _library[name] {
+            return library
+        } else {
+            fatalError("can't find library \(name)")
+        }
     }
 
     /// Execution engine loop.
