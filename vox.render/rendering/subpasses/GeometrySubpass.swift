@@ -54,10 +54,11 @@ public class GeometrySubpass: Subpass {
         encoder.setRenderPipelineState(pso.handle)
 
         encoder.setDepthStencilState(pipeline._resourceCache.requestDepthStencilState(depthStencilDescriptor))
-        var index = 0
-        for buffer in mesh._vertexBufferBindings {
-            encoder.setVertexBuffer(buffer?.buffer, offset: 0, index: index)
-            index += 1
+        
+        for index in 0..<31 {
+            if let bufferView = mesh._vertexBufferBindings[index] {
+                encoder.setVertexBuffer(bufferView.buffer, offset: 0, index: index)
+            }
         }
 
         let indexBufferBinding = mesh._indexBufferBinding

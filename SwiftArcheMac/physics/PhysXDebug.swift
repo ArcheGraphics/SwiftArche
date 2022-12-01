@@ -12,18 +12,18 @@ import vox_toolkit
 fileprivate class CollisionScript: Script {
     private var sphereRenderer: MeshRenderer!
 
+    override func onAwake() {
+        sphereRenderer = entity.getComponent()
+    }
+
     override func onTriggerEnter(_ other: ColliderShape) {
         _ = (sphereRenderer.getMaterial() as! PBRMaterial).baseColor.set(r: Float.random(in: 0..<1),
                 g: Float.random(in: 0..<1), b: Float.random(in: 0..<1), a: 1.0)
     }
 
-    override func onTriggerStay(_ other: ColliderShape) {
+    override func onTriggerExit(_ other: ColliderShape) {
         _ = (sphereRenderer.getMaterial() as! PBRMaterial).baseColor.set(r: Float.random(in: 0..<1),
                 g: Float.random(in: 0..<1), b: Float.random(in: 0..<1), a: 1.0)
-    }
-
-    override func onTriggerExit(_ other: ColliderShape) {
-
     }
 }
 
@@ -51,17 +51,19 @@ class PhysXDebugApp: NSViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         canvas = Canvas(with: view)
-
         engine = Engine(canvas: canvas)
-
+        engine.createShaderLibrary("app.shader")
+        engine.createShaderLibrary("toolkit.shader")
+        
         let scene = engine.sceneManager.activeScene!
         let rootEntity = scene.createRootEntity()
 
-        _ = scene.ambientLight.diffuseSolidColor.set(x: 1, y: 1, z: 1)
-        scene.ambientLight.diffuseIntensity = 1.2
+        let cubeMap = try! engine.textureLoader.loadTexture(with: "countryIBL")!
+        scene.ambientLight.specularTexture = createSpecularTexture(engine, with: cubeMap)
+        scene.ambientLight.diffuseSphericalHarmonics = createSphericalHarmonicsCoefficients(engine, with: cubeMap)
 
         let cameraEntity = rootEntity.createChild()
-        cameraEntity.transform.setPosition(x: 1, y: 1, z: 1)
+        cameraEntity.transform.setPosition(x: 10, y: 10, z: 10)
         cameraEntity.transform.lookAt(targetPosition: Vector3())
         let _: Camera = cameraEntity.addComponent()
         let _: OrbitControl = cameraEntity.addComponent()

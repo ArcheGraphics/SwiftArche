@@ -92,13 +92,18 @@ class PhysXRaycastApp: NSViewController {
         super.viewDidLoad()
         canvas = Canvas(with: view)
         engine = Engine(canvas: canvas)
-
+        engine.createShaderLibrary("app.shader")
+        
         let scene = engine.sceneManager.activeScene!
         let rootEntity = scene.createRootEntity()
         let _: GeometryGenerator = rootEntity.addComponent()
+        
+        let cubeMap = try! engine.textureLoader.loadTexture(with: "countryIBL")!
+        scene.ambientLight.specularTexture = createSpecularTexture(engine, with: cubeMap)
+        scene.ambientLight.diffuseSphericalHarmonics = createSphericalHarmonicsCoefficients(engine, with: cubeMap)
 
         let cameraEntity = rootEntity.createChild()
-        cameraEntity.transform.setPosition(x: 1, y: 1, z: 1)
+        cameraEntity.transform.setPosition(x: 10, y: 10, z: 10)
         cameraEntity.transform.lookAt(targetPosition: Vector3())
         let _: Camera = cameraEntity.addComponent()
         let _: OrbitControl = cameraEntity.addComponent()

@@ -14,7 +14,7 @@ fileprivate class TableGenerator: Script {
 
     override func onUpdate(_ deltaTime: Float) {
         _totalTime += deltaTime
-        if (_totalTime > 300) {
+        if (_totalTime > 0.3) {
             _addTable()
             _totalTime = 0
         }
@@ -130,12 +130,17 @@ class PhysXCompoundApp: NSViewController {
         super.viewDidLoad()
         canvas = Canvas(with: view)
         engine = Engine(canvas: canvas)
-
+        engine.createShaderLibrary("app.shader")
+        
         let scene = engine.sceneManager.activeScene!
         let rootEntity = scene.createRootEntity()
+        
+        let cubeMap = try! engine.textureLoader.loadTexture(with: "countryIBL")!
+        scene.ambientLight.specularTexture = createSpecularTexture(engine, with: cubeMap)
+        scene.ambientLight.diffuseSphericalHarmonics = createSphericalHarmonicsCoefficients(engine, with: cubeMap)
 
         let cameraEntity = rootEntity.createChild()
-        cameraEntity.transform.setPosition(x: 1, y: 1, z: 1)
+        cameraEntity.transform.setPosition(x: 15, y: 15, z: 15)
         cameraEntity.transform.lookAt(targetPosition: Vector3())
         let _: Camera = cameraEntity.addComponent()
         let _: OrbitControl = cameraEntity.addComponent()

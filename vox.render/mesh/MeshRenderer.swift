@@ -52,7 +52,7 @@ public class MeshRenderer: Renderer {
                 shaderData.disableMacro(HAS_TANGENT.rawValue)
                 shaderData.disableMacro(HAS_VERTEXCOLOR.rawValue)
 
-                if vertexDescriptor.attributes[Int(Position.rawValue)].format != .invalid {
+                if vertexDescriptor.attributes[Int(UV_0.rawValue)].format != .invalid {
                     shaderData.enableMacro(HAS_UV.rawValue)
                 }
                 if vertexDescriptor.attributes[Int(Normal.rawValue)].format != .invalid {

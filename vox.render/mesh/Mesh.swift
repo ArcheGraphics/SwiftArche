@@ -14,7 +14,7 @@ public class Mesh {
     public var bounds: BoundingBox = BoundingBox()
 
     var _instanceCount: Int = 1
-    var _vertexBufferBindings: [BufferView?] = []
+    var _vertexBufferBindings =  [BufferView?](Array(repeating: nil, count: 31))
     var _indexBufferBinding: IndexBufferBinding?
     var _vertexDescriptor = MTLVertexDescriptor()
     var _subMeshes: [SubMesh] = []
@@ -68,8 +68,8 @@ public class Mesh {
         _subMeshes = []
     }
 
-    func _setVertexBufferBinding(_ index: Int, _ binding: BufferView) {
-        _vertexBufferBindings.insert(binding, at: index)
+    func _setVertexBufferBinding(_ index: Int, _ binding: BufferView?) {
+        _vertexBufferBindings[index] = binding
     }
 
     func _setIndexBufferBinding(_ binding: IndexBufferBinding?) {

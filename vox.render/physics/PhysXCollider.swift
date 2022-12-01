@@ -25,7 +25,7 @@ class PhysXCollider {
 
     func getWorldTransform(_ outPosition: inout Vector3, _ outRotation: inout Quaternion) {
         var position = SIMD3<Float>()
-        var rotation = simd_quatf()
+        var rotation = simd_quatf(ix: 0, iy: 0, iz: 0, r: 1)
         _pxActor.getGlobalPose(&position, rotation: &rotation)
         outPosition = Vector3(position)
         outRotation = Quaternion(rotation)

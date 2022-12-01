@@ -54,7 +54,7 @@ final class AnimationQuaternionCurve: IAnimationCurveCalculator {
         let c = t3 - t2
         let d = -2.0 * t3 + 3.0 * t2
 
-        var outValue = simd_quatf()
+        var outValue = simd_quatf(ix: 0, iy: 0, iz: 0, r: 1)
         var t0 = tan0.x
         var t1 = tan1.x
         if (t0.isFinite && t1.isFinite) {

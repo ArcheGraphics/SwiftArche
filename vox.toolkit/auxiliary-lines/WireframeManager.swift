@@ -358,18 +358,16 @@ public class WireframeManager: Script {
     public override func onAwake() {
         let mesh = ModelMesh(engine)
         let material = UnlitMaterial(engine)
-        let renderer: MeshRenderer? = entity.getComponent()
+        let renderer: MeshRenderer = entity.addComponent()
 
-        if let renderer = renderer {
-            _ = mesh.addSubMesh(0, _indicesCount, MTLPrimitiveType.line)
-            renderer.mesh = mesh
-            renderer.setMaterial(material)
+        _ = mesh.addSubMesh(0, _indicesCount, MTLPrimitiveType.line)
+        renderer.mesh = mesh
+        renderer.setMaterial(material)
 
-            _mesh = mesh
-            _material = material
-            _renderer = renderer
-            _indices = [UInt32](repeating: 0, count: 128)
-        }
+        _mesh = mesh
+        _material = material
+        _renderer = renderer
+        _indices = [UInt32](repeating: 0, count: 128)
     }
 
     public override func onEnable() {

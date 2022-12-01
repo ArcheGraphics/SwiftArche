@@ -104,9 +104,14 @@ class PhysXJointBasicApp: NSViewController {
         super.viewDidLoad()
         canvas = Canvas(with: view)
         engine = Engine(canvas: canvas)
-
+        engine.createShaderLibrary("app.shader")
+        
         let scene = engine.sceneManager.activeScene!
         let rootEntity = scene.createRootEntity()
+        
+        let cubeMap = try! engine.textureLoader.loadTexture(with: "countryIBL")!
+        scene.ambientLight.specularTexture = createSpecularTexture(engine, with: cubeMap)
+        scene.ambientLight.diffuseSphericalHarmonics = createSphericalHarmonicsCoefficients(engine, with: cubeMap)
 
         let cameraEntity = rootEntity.createChild()
         cameraEntity.transform.setPosition(x: 3, y: 1, z: 22)

@@ -12,8 +12,8 @@ class PhysXSpringJoint: PhysXJoint {
     init(_ collider: PhysXCollider?) {
         super.init()
         _pxJoint = PhysXPhysics._pxPhysics.createDistanceJoint(
-                nil ?? nil, SIMD3<Float>(), simd_quatf(),
-                collider?._pxActor ?? nil, SIMD3<Float>(), simd_quatf()
+                nil ?? nil, SIMD3<Float>(), simd_quatf(ix: 0, iy: 0, iz: 0, r: 1),
+                collider?._pxActor ?? nil, SIMD3<Float>(), simd_quatf(ix: 0, iy: 0, iz: 0, r: 1)
         )
         (_pxJoint as! CPxDistanceJoint).setDistanceJointFlag(CPxDistanceJointFlag(1), true) // enable max distance
         (_pxJoint as! CPxDistanceJoint).setDistanceJointFlag(CPxDistanceJointFlag(2), true) // enable min distance

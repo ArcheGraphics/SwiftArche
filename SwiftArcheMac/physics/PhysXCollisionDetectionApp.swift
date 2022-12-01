@@ -21,9 +21,6 @@ fileprivate class CollisionScript: Script {
                 g: Float.random(in: 0..<1), b: Float.random(in: 0..<1), a: 1.0)
     }
 
-    override func onTriggerStay(_ other: ColliderShape) {
-    }
-
     override func onTriggerExit(_ other: ColliderShape) {
         _ = (sphereRenderer.getMaterial() as! PBRMaterial).baseColor.set(r: Float.random(in: 0..<1),
                 g: Float.random(in: 0..<1), b: Float.random(in: 0..<1), a: 1.0)
