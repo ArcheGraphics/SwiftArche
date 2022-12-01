@@ -12,6 +12,10 @@ import vox_toolkit
 fileprivate class CollisionScript: Script {
     private var sphereRenderer: MeshRenderer!
 
+    override func onAwake() {
+        sphereRenderer = entity.getComponent()
+    }
+
     override func onTriggerEnter(_ other: ColliderShape) {
         _ = (sphereRenderer.getMaterial() as! PBRMaterial).baseColor.set(r: Float.random(in: 0..<1),
                 g: Float.random(in: 0..<1), b: Float.random(in: 0..<1), a: 1.0)
@@ -61,7 +65,7 @@ class PhysXCollisionDetectionApp: NSViewController {
         scene.ambientLight.diffuseIntensity = 1.2
 
         let cameraEntity = rootEntity.createChild()
-        cameraEntity.transform.setPosition(x: 1, y: 1, z: 1)
+        cameraEntity.transform.setPosition(x: 10, y: 10, z: 10)
         cameraEntity.transform.lookAt(targetPosition: Vector3())
         let _: Camera = cameraEntity.addComponent()
         let _: OrbitControl = cameraEntity.addComponent()

@@ -29,7 +29,7 @@
               outPosition:(simd_float3 *)outPosition
                 outNormal:(simd_float3 *)outNormal
               outDistance:(float *)outDistance
-                 outIndex:(int *)outIndex;
+                 outIndex:(uint32_t *)outIndex;
 
 - (CPxControllerManager *)createControllerManager;
 

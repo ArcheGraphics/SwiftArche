@@ -16,12 +16,12 @@ class PhysXPhysics {
         _pxPhysics.initExtensions()
     }
 
-    static func createPhysicsManager(_ onContactEnter: ((Int, Int) -> Void)?,
-                                     _ onContactExit: ((Int, Int) -> Void)?,
-                                     _ onContactStay: ((Int, Int) -> Void)?,
-                                     _ onTriggerEnter: ((Int, Int) -> Void)?,
-                                     _ onTriggerExit: ((Int, Int) -> Void)?,
-                                     _ onTriggerStay: ((Int, Int) -> Void)?) -> PhysXPhysicsManager {
+    static func createPhysicsManager(_ onContactEnter: ((UInt32, UInt32) -> Void)?,
+                                     _ onContactExit: ((UInt32, UInt32) -> Void)?,
+                                     _ onContactStay: ((UInt32, UInt32) -> Void)?,
+                                     _ onTriggerEnter: ((UInt32, UInt32) -> Void)?,
+                                     _ onTriggerExit: ((UInt32, UInt32) -> Void)?,
+                                     _ onTriggerStay: ((UInt32, UInt32) -> Void)?) -> PhysXPhysicsManager {
         PhysXPhysicsManager(onContactEnter, onContactExit, onContactStay,
                 onTriggerEnter, onTriggerExit, onTriggerStay)
     }

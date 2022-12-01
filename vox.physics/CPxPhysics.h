@@ -38,12 +38,12 @@
 
 - (CPxRigidDynamic *_Nonnull)createRigidDynamicWithPosition:(simd_float3)position rotation:(simd_quatf)rotation;
 
-- (CPxScene *_Nonnull)createSceneWith:(void (^ _Nullable)(CPxShape *_Nonnull obj1, CPxShape *_Nonnull obj2))onContactEnter
-                        onContactExit:(void (^ _Nullable)(CPxShape *_Nonnull obj1, CPxShape *_Nonnull obj2))onContactExit
-                        onContactStay:(void (^ _Nullable)(CPxShape *_Nonnull obj1, CPxShape *_Nonnull obj2))onContactStay
-                       onTriggerEnter:(void (^ _Nullable)(CPxShape *_Nonnull obj1, CPxShape *_Nonnull obj2))onTriggerEnter
-                        onTriggerExit:(void (^ _Nullable)(CPxShape *_Nonnull obj1, CPxShape *_Nonnull obj2))onTriggerExit
-                        onTriggerStay:(void (^ _Nullable)(CPxShape *_Nonnull obj1, CPxShape *_Nonnull obj2))onTriggerStay;
+- (CPxScene *_Nonnull)createSceneWith:(void (^ _Nullable)(uint32_t obj1, uint32_t obj2))onContactEnter
+                        onContactExit:(void (^ _Nullable)(uint32_t obj1, uint32_t obj2))onContactExit
+                        onContactStay:(void (^ _Nullable)(uint32_t obj1, uint32_t obj2))onContactStay
+                       onTriggerEnter:(void (^ _Nullable)(uint32_t obj1, uint32_t obj2))onTriggerEnter
+                        onTriggerExit:(void (^ _Nullable)(uint32_t obj1, uint32_t obj2))onTriggerExit
+                        onTriggerStay:(void (^ _Nullable)(uint32_t obj1, uint32_t obj2))onTriggerStay;
 
 //MARK: - Joint
 - (CPxFixedJoint *_Nonnull)createFixedJoint:(CPxRigidActor *_Nullable)actor0 :(simd_float3)position0 :(simd_quatf)rotation0

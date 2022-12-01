@@ -19,23 +19,23 @@ class PhysXPhysicsManager {
     var _pxControllerManager: CPxControllerManager?
     private var _pxScene: CPxScene!
 
-    private var _onContactEnter: ((Int, Int) -> Void)!
-    private var _onContactExit: ((Int, Int) -> Void)!
-    private var _onContactStay: ((Int, Int) -> Void)!
-    private var _onTriggerEnter: ((Int, Int) -> Void)!
-    private var _onTriggerExit: ((Int, Int) -> Void)!
-    private var _onTriggerStay: ((Int, Int) -> Void)!
+    private var _onContactEnter: ((UInt32, UInt32) -> Void)!
+    private var _onContactExit: ((UInt32, UInt32) -> Void)!
+    private var _onContactStay: ((UInt32, UInt32) -> Void)!
+    private var _onTriggerEnter: ((UInt32, UInt32) -> Void)!
+    private var _onTriggerExit: ((UInt32, UInt32) -> Void)!
+    private var _onTriggerStay: ((UInt32, UInt32) -> Void)!
 
     private var _currentEvents: DisorderedArray<TriggerEvent> = DisorderedArray()
-    private var _eventMap: [Int: [Int: TriggerEvent]] = [:]
+    private var _eventMap: [UInt32: [UInt32: TriggerEvent]] = [:]
     private var _eventPool: [TriggerEvent] = []
 
-    init(_ onContactEnter: ((Int, Int) -> Void)?,
-         _ onContactExit: ((Int, Int) -> Void)?,
-         _ onContactStay: ((Int, Int) -> Void)?,
-         _ onTriggerEnter: ((Int, Int) -> Void)?,
-         _ onTriggerExit: ((Int, Int) -> Void)?,
-         _ onTriggerStay: ((Int, Int) -> Void)?) {
+    init(_ onContactEnter: ((UInt32, UInt32) -> Void)?,
+         _ onContactExit: ((UInt32, UInt32) -> Void)?,
+         _ onContactStay: ((UInt32, UInt32) -> Void)?,
+         _ onTriggerEnter: ((UInt32, UInt32) -> Void)?,
+         _ onTriggerExit: ((UInt32, UInt32) -> Void)?,
+         _ onTriggerStay: ((UInt32, UInt32) -> Void)?) {
         _onContactEnter = onContactEnter
         _onContactExit = onContactExit
         _onContactStay = onContactStay
@@ -45,33 +45,25 @@ class PhysXPhysicsManager {
 
         _pxScene = PhysXPhysics._pxPhysics.createScene(
                 {
-                    [self] (obj1: CPxShape?, obj2: CPxShape?) in
-                    let index1 = Int(obj1!.getQueryFilterData(0))
-                    let index2 = Int(obj2!.getQueryFilterData(0))
+                    [self] (index1: UInt32, index2: UInt32) in
                     _onContactEnter(index1, index2)
                 },
                 onContactExit: {
-                    [self] (obj1: CPxShape?, obj2: CPxShape?) in
-                    let index1 = Int(obj1!.getQueryFilterData(0))
-                    let index2 = Int(obj2!.getQueryFilterData(0))
+                    [self] (index1: UInt32, index2: UInt32) in
                     _onContactExit(index1, index2)
                 },
-                onContactStay: { [self]
-                (obj1: CPxShape?, obj2: CPxShape?) in
-                    let index1 = Int(obj1!.getQueryFilterData(0))
-                    let index2 = Int(obj2!.getQueryFilterData(0))
+                onContactStay: {
+                    [self] (index1: UInt32, index2: UInt32) in
                     _onContactStay(index1, index2)
                 },
-                onTriggerEnter: { [self] (obj1: CPxShape?, obj2: CPxShape?) in
-                    let index1 = Int(obj1!.getQueryFilterData(0))
-                    let index2 = Int(obj2!.getQueryFilterData(0))
+                onTriggerEnter: {
+                    [self] (index1: UInt32, index2: UInt32) in
                     let event = index1 < index2 ? _getTrigger(index1, index2) : _getTrigger(index2, index1)
                     event.state = TriggerEventState.Enter
                     _currentEvents.add(event)
                 },
-                onTriggerExit: { [self] (obj1: CPxShape?, obj2: CPxShape?) in
-                    let index1 = Int(obj1!.getQueryFilterData(0))
-                    let index2 = Int(obj2!.getQueryFilterData(0))
+                onTriggerExit: {
+                    [self] (index1: UInt32, index2: UInt32) in
                     let event: TriggerEvent
                     if (index1 < index2) {
                         let subMap = _eventMap[index1]
@@ -92,7 +84,7 @@ class PhysXPhysicsManager {
     }
 
     func addColliderShape(_ colliderShape: PhysXColliderShape) {
-        _eventMap[Int(colliderShape._id!)] = [:]
+        _eventMap[colliderShape._id!] = [:]
     }
 
     func removeColliderShape(_ colliderShape: PhysXColliderShape) {
@@ -103,7 +95,7 @@ class PhysXPhysicsManager {
                 _eventPool.append(event)
             }
         }
-        _eventMap.removeValue(forKey: Int(colliderShape._id!))
+        _eventMap.removeValue(forKey: colliderShape._id!)
     }
 
     func addCollider(_ collider: PhysXCollider) {
@@ -143,8 +135,8 @@ class PhysXPhysicsManager {
     }
 
     func raycast(_ ray: Ray, _ distance: Float,
-                 _ outHitResult: ((Int, Float, Vector3, Vector3) -> Void)?) -> Bool {
-        var outIndex: Int32 = 0
+                 _ outHitResult: ((UInt32, Float, Vector3, Vector3) -> Void)?) -> Bool {
+        var outIndex: UInt32 = 0
         var outDistance: Float = 0
 
         var outPosition = SIMD3<Float>()
@@ -160,7 +152,7 @@ class PhysXPhysicsManager {
         )
 
         if (result && outHitResult != nil) {
-            outHitResult!(Int(outIndex), outDistance, Vector3(outPosition), Vector3(outNormal))
+            outHitResult!(outIndex, outDistance, Vector3(outPosition), Vector3(outNormal))
         }
 
         return result
@@ -181,7 +173,7 @@ class PhysXPhysicsManager {
         _pxScene.fetchResults(block)
     }
 
-    private func _getTrigger(_ index1: Int, _ index2: Int) -> TriggerEvent {
+    private func _getTrigger(_ index1: UInt32, _ index2: UInt32) -> TriggerEvent {
         var event: TriggerEvent
         if _eventPool.count != 0 {
             event = _eventPool.popLast()!
@@ -221,8 +213,8 @@ enum TriggerEventState {
 /// Trigger event to store interactive object ids and state.
 class TriggerEvent {
     var state: TriggerEventState
-    var index1: Int
-    var index2: Int
+    var index1: UInt32
+    var index2: UInt32
 
     required init() {
         index1 = 0
@@ -230,7 +222,7 @@ class TriggerEvent {
         state = .Exit
     }
 
-    init(_ index1: Int, _ index2: Int) {
+    init(_ index1: UInt32, _ index2: UInt32) {
         self.index1 = index1
         self.index2 = index2
         state = .Exit

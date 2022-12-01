@@ -13,7 +13,7 @@ public class PhysicsManager {
     private var _colliders: DisorderedArray<Collider> = DisorderedArray()
     private var _gravity: Vector3 = Vector3(0, -9.81, 0)
     private var _nativePhysicsManager: PhysXPhysicsManager!
-    private var _physicalObjectsMap: [Int: ColliderShape] = [:]
+    private var _physicalObjectsMap: [UInt32: ColliderShape] = [:]
 
     /// The fixed time step in seconds at which physics are performed.
     public var fixedTimeStep: Float = 1 / 60
@@ -36,10 +36,10 @@ public class PhysicsManager {
         _engine = engine
         PhysXPhysics.initialization()
         _nativePhysicsManager = PhysXPhysics.createPhysicsManager(
-                { (obj1: Int, obj2: Int) in },
-                { (obj1: Int, obj2: Int) in },
-                { (obj1: Int, obj2: Int) in },
-                { (obj1: Int, obj2: Int) in
+                { (obj1: UInt32, obj2: UInt32) in },
+                { (obj1: UInt32, obj2: UInt32) in },
+                { (obj1: UInt32, obj2: UInt32) in },
+                { (obj1: UInt32, obj2: UInt32) in
                     let shape1 = self._physicalObjectsMap[obj1]
                     let shape2 = self._physicalObjectsMap[obj2]
 
@@ -53,7 +53,7 @@ public class PhysicsManager {
                         scripts.get(i)!.onTriggerEnter(shape1!)
                     }
                 },
-                { (obj1: Int, obj2: Int) in
+                { (obj1: UInt32, obj2: UInt32) in
                     let shape1 = self._physicalObjectsMap[obj1]
                     let shape2 = self._physicalObjectsMap[obj2]
 
@@ -67,7 +67,7 @@ public class PhysicsManager {
                         scripts.get(i)!.onTriggerExit(shape1!)
                     }
                 },
-                { (obj1: Int, obj2: Int) in
+                { (obj1: UInt32, obj2: UInt32) in
                     let shape1 = self._physicalObjectsMap[obj1]
                     let shape2 = self._physicalObjectsMap[obj2]
 
@@ -102,14 +102,14 @@ public class PhysicsManager {
     /// Add ColliderShape into the manager.
     /// - Parameter colliderShape: The Collider Shape.
     func _addColliderShape(_  colliderShape: ColliderShape) {
-        _physicalObjectsMap[Int(colliderShape.id)] = colliderShape
+        _physicalObjectsMap[colliderShape.id] = colliderShape
         _nativePhysicsManager.addColliderShape(colliderShape._nativeShape)
     }
 
     /// Remove ColliderShape.
     /// - Parameter colliderShape: The Collider Shape.
     func _removeColliderShape(_ colliderShape: ColliderShape) {
-        _physicalObjectsMap.removeValue(forKey: Int(colliderShape.id))
+        _physicalObjectsMap.removeValue(forKey: colliderShape.id)
         _nativePhysicsManager.removeColliderShape(colliderShape._nativeShape)
     }
 

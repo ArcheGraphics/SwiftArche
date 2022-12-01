@@ -75,28 +75,28 @@ using namespace physx;
                             rotation.vector.z, rotation.vector.w)))];
 }
 
-- (CPxScene *)createSceneWith:(void (^ _Nullable)(CPxShape *_Nonnull obj1, CPxShape *_Nonnull obj2))onContactEnter
-                onContactExit:(void (^ _Nullable)(CPxShape *_Nonnull obj1, CPxShape *_Nonnull obj2))onContactExit
-                onContactStay:(void (^ _Nullable)(CPxShape *_Nonnull obj1, CPxShape *_Nonnull obj2))onContactStay
-               onTriggerEnter:(void (^ _Nullable)(CPxShape *_Nonnull obj1, CPxShape *_Nonnull obj2))onTriggerEnter
-                onTriggerExit:(void (^ _Nullable)(CPxShape *_Nonnull obj1, CPxShape *_Nonnull obj2))onTriggerExit
-                onTriggerStay:(void (^ _Nullable)(CPxShape *_Nonnull obj1, CPxShape *_Nonnull obj2))onTriggerStay {
+- (CPxScene *)createSceneWith:(void (^ _Nullable)(uint32_t obj1, uint32_t obj2))onContactEnter
+                onContactExit:(void (^ _Nullable)(uint32_t obj1, uint32_t obj2))onContactExit
+                onContactStay:(void (^ _Nullable)(uint32_t obj1, uint32_t obj2))onContactStay
+               onTriggerEnter:(void (^ _Nullable)(uint32_t obj1, uint32_t obj2))onTriggerEnter
+                onTriggerExit:(void (^ _Nullable)(uint32_t obj1, uint32_t obj2))onTriggerExit
+                onTriggerStay:(void (^ _Nullable)(uint32_t obj1, uint32_t obj2))onTriggerStay {
     class PxSimulationEventCallbackWrapper : public PxSimulationEventCallback {
     public:
-        std::function<void(CPxShape *obj1, CPxShape *obj2)> onContactEnter;
-        std::function<void(CPxShape *obj1, CPxShape *obj2)> onContactExit;
-        std::function<void(CPxShape *obj1, CPxShape *obj2)> onContactStay;
+        std::function<void(uint32_t obj1, uint32_t obj2)> onContactEnter;
+        std::function<void(uint32_t obj1, uint32_t obj2)> onContactExit;
+        std::function<void(uint32_t obj1, uint32_t obj2)> onContactStay;
 
-        std::function<void(CPxShape *obj1, CPxShape *obj2)> onTriggerEnter;
-        std::function<void(CPxShape *obj1, CPxShape *obj2)> onTriggerExit;
-        std::function<void(CPxShape *obj1, CPxShape *obj2)> onTriggerStay;
+        std::function<void(uint32_t obj1, uint32_t obj2)> onTriggerEnter;
+        std::function<void(uint32_t obj1, uint32_t obj2)> onTriggerExit;
+        std::function<void(uint32_t obj1, uint32_t obj2)> onTriggerStay;
 
-        PxSimulationEventCallbackWrapper(std::function<void(CPxShape *obj1, CPxShape *obj2)> onContactEnter,
-                std::function<void(CPxShape *obj1, CPxShape *obj2)> onContactExit,
-                std::function<void(CPxShape *obj1, CPxShape *obj2)> onContactStay,
-                std::function<void(CPxShape *obj1, CPxShape *obj2)> onTriggerEnter,
-                std::function<void(CPxShape *obj1, CPxShape *obj2)> onTriggerExit,
-                std::function<void(CPxShape *obj1, CPxShape *obj2)> onTriggerStay) :
+        PxSimulationEventCallbackWrapper(std::function<void(uint32_t obj1, uint32_t obj2)> onContactEnter,
+                std::function<void(uint32_t obj1, uint32_t obj2)> onContactExit,
+                std::function<void(uint32_t obj1, uint32_t obj2)> onContactStay,
+                std::function<void(uint32_t obj1, uint32_t obj2)> onTriggerEnter,
+                std::function<void(uint32_t obj1, uint32_t obj2)> onTriggerExit,
+                std::function<void(uint32_t obj1, uint32_t obj2)> onTriggerStay) :
                 onContactEnter(onContactEnter), onContactExit(onContactExit), onContactStay(onContactStay),
                 onTriggerEnter(onTriggerEnter), onTriggerExit(onTriggerExit), onTriggerStay(onTriggerStay) {
         }
@@ -115,11 +115,14 @@ using namespace physx;
                 const PxContactPair &cp = pairs[i];
 
                 if (cp.events & (PxPairFlag::eNOTIFY_TOUCH_FOUND | PxPairFlag::eNOTIFY_TOUCH_CCD)) {
-                    onContactEnter([[CPxShape alloc] initWithShape:cp.shapes[0]], [[CPxShape alloc] initWithShape:cp.shapes[1]]);
+                    onContactEnter(cp.shapes[0]->getQueryFilterData().word0, cp.shapes[1]->getQueryFilterData().word0);
                 } else if (cp.events & PxPairFlag::eNOTIFY_TOUCH_LOST) {
-                    onContactExit([[CPxShape alloc] initWithShape:cp.shapes[0]], [[CPxShape alloc] initWithShape:cp.shapes[1]]);
+                    if (!cp.flags.isSet(PxContactPairFlag::Enum::eREMOVED_SHAPE_0) &&
+                            !cp.flags.isSet(PxContactPairFlag::Enum::eREMOVED_SHAPE_1)) {
+                        onContactExit(cp.shapes[0]->getQueryFilterData().word0, cp.shapes[1]->getQueryFilterData().word0);
+                    }
                 } else if (cp.events & PxPairFlag::eNOTIFY_TOUCH_PERSISTS) {
-                    onContactStay([[CPxShape alloc] initWithShape:cp.shapes[0]], [[CPxShape alloc] initWithShape:cp.shapes[1]]);
+                    onContactStay(cp.shapes[0]->getQueryFilterData().word0, cp.shapes[1]->getQueryFilterData().word0);
                 }
             }
         }
@@ -129,9 +132,12 @@ using namespace physx;
                 const PxTriggerPair &tp = pairs[i];
 
                 if (tp.status & PxPairFlag::eNOTIFY_TOUCH_FOUND) {
-                    onTriggerEnter([[CPxShape alloc] initWithShape:tp.triggerShape], [[CPxShape alloc] initWithShape:tp.otherShape]);
+                    onTriggerEnter(tp.triggerShape->getQueryFilterData().word0, tp.otherShape->getQueryFilterData().word0);
                 } else if (tp.status & PxPairFlag::eNOTIFY_TOUCH_LOST) {
-                    onTriggerExit([[CPxShape alloc] initWithShape:tp.triggerShape], [[CPxShape alloc] initWithShape:tp.otherShape]);
+                    if (!tp.flags.isSet(PxTriggerPairFlag::Enum::eREMOVED_SHAPE_OTHER) &&
+                            !tp.flags.isSet(PxTriggerPairFlag::Enum::eREMOVED_SHAPE_TRIGGER)) {
+                        onTriggerExit(tp.triggerShape->getQueryFilterData().word0, tp.otherShape->getQueryFilterData().word0);
+                    }
                 }
             }
         }

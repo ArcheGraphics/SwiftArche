@@ -49,7 +49,7 @@ using namespace physx;
               outPosition:(simd_float3 *)outPosition
                 outNormal:(simd_float3 *)outNormal
               outDistance:(float *)outDistance
-                 outIndex:(int *)outIndex {
+                 outIndex:(uint32_t *)outIndex {
     PxRaycastHit hit = PxRaycastHit();
     PxSceneQueryFilterData filterData = PxSceneQueryFilterData();
     filterData.flags = PxQueryFlags(PxQueryFlag::eSTATIC | PxQueryFlag::eDYNAMIC);
