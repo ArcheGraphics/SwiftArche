@@ -16,7 +16,7 @@ fileprivate class AtomicMaterial: BaseMaterial {
         _atomicBuffer = BufferView(device: engine.device, count: 1, stride: MemoryLayout<UInt32>.stride)
         super.init(engine.device)
         atomicBuffer = _atomicBuffer
-        shader.append(ShaderPass(engine.library(), "vertex_unlit", "fragment_atomic"))
+        shader.append(ShaderPass(engine.library("app.shader"), "vertex_atomic", "fragment_atomic"))
     }
 
     var atomicBuffer: BufferView {
@@ -33,20 +33,19 @@ fileprivate class AtomicMaterial: BaseMaterial {
 
 fileprivate class ComputeScript: Script {
     private let _computePass = ComputePass()
-
+    var renderer: MeshRenderer!
+    
     override func onAwake() {
-        let renderer: MeshRenderer? = entity.getComponent()
-        if let renderer = renderer {
-            let shaderData = renderer.getMaterial()!.shaderData
-            _computePass.data.append(shaderData)
-            _computePass.shader.append(ShaderPass(engine.library(), "atomicCounter"))
-            _computePass.threadsPerGridX = 2
-            _computePass.threadsPerGridY = 2
-            _computePass.threadsPerGridZ = 2
-        }
+        _computePass.shader.append(ShaderPass(engine.library("app.shader"), "compute_atomic"))
+        _computePass.threadsPerGridX = 2
+        _computePass.threadsPerGridY = 2
+        _computePass.threadsPerGridZ = 2
     }
 
     override func onBeginRender(_ camera: Camera, _ commandBuffer: MTLCommandBuffer) {
+        if _computePass.data.isEmpty {
+            _computePass.data.append(renderer.getMaterial()!.shaderData)
+        }
         if let computeCommandEncoder = commandBuffer.makeComputeCommandEncoder() {
             _computePass.devicePipeline = camera.devicePipeline
             _computePass.compute(commandEncoder: computeCommandEncoder)
@@ -64,7 +63,8 @@ class AtomicComputeApp: NSViewController {
         canvas = Canvas(with: view)
 
         engine = Engine(canvas: canvas)
-
+        engine.createShaderLibrary("app.shader")
+        
         let scene = engine.sceneManager.activeScene!
         let rootEntity = scene.createRootEntity()
 
@@ -73,6 +73,7 @@ class AtomicComputeApp: NSViewController {
         cameraEntity.transform.lookAt(targetPosition: Vector3())
         let _: Camera = cameraEntity.addComponent()
         let _: OrbitControl = cameraEntity.addComponent()
+        let counter: ComputeScript = cameraEntity.addComponent()
 
         let light = rootEntity.createChild("light")
         light.transform.setPosition(x: 0, y: 3, z: 0)
@@ -84,7 +85,7 @@ class AtomicComputeApp: NSViewController {
         renderer.mesh = PrimitiveMesh.createCuboid(engine, 0.1, 0.1, 0.1)
         let material = AtomicMaterial(engine)
         renderer.setMaterial(material)
-        let _: ComputeScript = cubeEntity.addComponent()
+        counter.renderer = renderer
 
         engine.run()
     }

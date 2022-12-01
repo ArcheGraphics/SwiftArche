@@ -168,6 +168,24 @@ extension ShaderData {
                         commandEncoder.setFragmentBuffer(buffer!.buffer, offset: 0, index: uniform.location)
                     }
                 }
+                let bufferPool = _shaderBufferPools[uniform.name]
+                if bufferPool != nil {
+                    if uniform.functionType == .vertex {
+                        commandEncoder.setVertexBuffer(bufferPool!.buffer, offset: bufferPool!.offset, index: uniform.location)
+                    }
+                    if uniform.functionType == .fragment {
+                        commandEncoder.setFragmentBuffer(bufferPool!.buffer, offset: bufferPool!.offset, index: uniform.location)
+                    }
+                }
+                let bufferFunctor = _shaderBufferFunctors[uniform.name]
+                if bufferFunctor != nil {
+                    if uniform.functionType == .vertex {
+                        commandEncoder.setVertexBuffer(bufferFunctor!().buffer, offset: 0, index: uniform.location)
+                    }
+                    if uniform.functionType == .fragment {
+                        commandEncoder.setFragmentBuffer(bufferFunctor!().buffer, offset: 0, index: uniform.location)
+                    }
+                }
                 break
             case .texture:
                 let image = _imageViews[uniform.name]
