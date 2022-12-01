@@ -28,6 +28,10 @@ public class ShaderData {
         _shaderBufferPools[property] = value
     }
 
+    public func setData(_ property: String, _ value: BufferView) {
+        _shaderBuffers[property] = value
+    }
+
     public func setData<T>(_ property: String, _ data: T) {
         let value = _shaderBuffers.first { (key: String, value: BufferView) in
             key == property

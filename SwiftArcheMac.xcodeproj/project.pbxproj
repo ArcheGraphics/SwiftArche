@@ -63,7 +63,6 @@
 		3EC03760293212BC002187DC /* Vector2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EC03751293212BC002187DC /* Vector2.swift */; };
 		3EC03761293212BC002187DC /* Matrix4x4.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EC03752293212BC002187DC /* Matrix4x4.swift */; };
 		3EC03762293212BC002187DC /* Color.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EC03753293212BC002187DC /* Color.swift */; };
-		3EC03763293212BC002187DC /* SphericalHarmonics3.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EC03754293212BC002187DC /* SphericalHarmonics3.swift */; };
 		3EC03764293212BC002187DC /* CollisionUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EC03755293212BC002187DC /* CollisionUtil.swift */; };
 		3EC03765293212BC002187DC /* Vector3.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EC03756293212BC002187DC /* Vector3.swift */; };
 		3EC0378D293213D6002187DC /* CPxRigidActor+Internal.h in Headers */ = {isa = PBXBuildFile; fileRef = 3EC03776293213D4002187DC /* CPxRigidActor+Internal.h */; };
@@ -535,7 +534,6 @@
 		3EC03751293212BC002187DC /* Vector2.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Vector2.swift; sourceTree = "<group>"; };
 		3EC03752293212BC002187DC /* Matrix4x4.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Matrix4x4.swift; sourceTree = "<group>"; };
 		3EC03753293212BC002187DC /* Color.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Color.swift; sourceTree = "<group>"; };
-		3EC03754293212BC002187DC /* SphericalHarmonics3.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SphericalHarmonics3.swift; sourceTree = "<group>"; };
 		3EC03755293212BC002187DC /* CollisionUtil.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CollisionUtil.swift; sourceTree = "<group>"; };
 		3EC03756293212BC002187DC /* Vector3.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Vector3.swift; sourceTree = "<group>"; };
 		3EC0376A293213A0002187DC /* libvox.physics.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libvox.physics.a; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -1150,7 +1148,6 @@
 				3EC03750293212BC002187DC /* BoundingFrustum.swift */,
 				3EC03755293212BC002187DC /* CollisionUtil.swift */,
 				3EC03749293212BB002187DC /* Ray.swift */,
-				3EC03754293212BC002187DC /* SphericalHarmonics3.swift */,
 			);
 			path = vox.math;
 			sourceTree = "<group>";
@@ -2307,7 +2304,6 @@
 				3EC03746293212B3002187DC /* ContainmentType.swift in Sources */,
 				3EC03760293212BC002187DC /* Vector2.swift in Sources */,
 				3EC03745293212B3002187DC /* PlaneIntersectionType.swift in Sources */,
-				3EC03763293212BC002187DC /* SphericalHarmonics3.swift in Sources */,
 				3EC03759293212BC002187DC /* BoundingBox.swift in Sources */,
 				3EC03761293212BC002187DC /* Matrix4x4.swift in Sources */,
 				3EC03764293212BC002187DC /* CollisionUtil.swift in Sources */,

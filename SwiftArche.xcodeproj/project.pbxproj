@@ -142,7 +142,6 @@
 		3E67EEA2291C988F00ED60C8 /* BoundingFrustum.test.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E67EEA1291C988F00ED60C8 /* BoundingFrustum.test.swift */; };
 		3E67EEA4291C993600ED60C8 /* CollisionUtil.test.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E67EEA3291C993600ED60C8 /* CollisionUtil.test.swift */; };
 		3E67EEA6291C996600ED60C8 /* Ray.test.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E67EEA5291C996600ED60C8 /* Ray.test.swift */; };
-		3E67EEA8291C9F2D00ED60C8 /* SphericalHarmonics3.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E67EEA7291C9F2D00ED60C8 /* SphericalHarmonics3.swift */; };
 		3E67EEAA291CEBDF00ED60C8 /* Layer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E67EEA9291CEBDF00ED60C8 /* Layer.swift */; };
 		3E67EEAC291CEC2200ED60C8 /* DisorderedArray.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E67EEAB291CEC2200ED60C8 /* DisorderedArray.swift */; };
 		3E67EEAE291CEC9D00ED60C8 /* UpdateFlagManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E67EEAD291CEC9D00ED60C8 /* UpdateFlagManager.swift */; };
@@ -268,7 +267,6 @@
 		43D8CED97850C34465F3AE4A /* TextureLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8C20CB57C5A32D0E5CCD0 /* TextureLoader.swift */; };
 		43D8CEE05C4F1021A3652A8D /* MaterialParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8C5A3314DCAAF4732626D /* MaterialParser.swift */; };
 		43D8CEF8E23C12D9326BDA90 /* ColorSpace.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8CF595B22621DDE5D976D /* ColorSpace.swift */; };
-		43D8CF51D259BF8108280B41 /* SphericalHarmonics3.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8CAF5E3A5BD4BF225335E /* SphericalHarmonics3.swift */; };
 		43D8CF98C05E60C0A40F11E4 /* StencilState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8C55ADD0B573F9BE441A2 /* StencilState.swift */; };
 		43D8CF9A819FABF732156575 /* ComputePipelineState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8C5458496A0164715E24D /* ComputePipelineState.swift */; };
 		43D8CFDE172582A4463B835E /* PrimitiveMesh.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8C0E825225EDCF4195D57 /* PrimitiveMesh.swift */; };
@@ -655,7 +653,6 @@
 		3E67EEA1291C988F00ED60C8 /* BoundingFrustum.test.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BoundingFrustum.test.swift; sourceTree = "<group>"; };
 		3E67EEA3291C993600ED60C8 /* CollisionUtil.test.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollisionUtil.test.swift; sourceTree = "<group>"; };
 		3E67EEA5291C996600ED60C8 /* Ray.test.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Ray.test.swift; sourceTree = "<group>"; };
-		3E67EEA7291C9F2D00ED60C8 /* SphericalHarmonics3.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SphericalHarmonics3.swift; sourceTree = "<group>"; };
 		3E67EEA9291CEBDF00ED60C8 /* Layer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Layer.swift; sourceTree = "<group>"; };
 		3E67EEAB291CEC2200ED60C8 /* DisorderedArray.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DisorderedArray.swift; sourceTree = "<group>"; };
 		3E67EEAD291CEC9D00ED60C8 /* UpdateFlagManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateFlagManager.swift; sourceTree = "<group>"; };
@@ -764,7 +761,6 @@
 		43D8CA31635DEBED25A020C1 /* BlendMode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BlendMode.swift; sourceTree = "<group>"; };
 		43D8CAD23565A918160AFC1F /* PBRBaseMaterial.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PBRBaseMaterial.swift; sourceTree = "<group>"; };
 		43D8CAED3B1AFD13451D2107 /* BoolUpdateFlag.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BoolUpdateFlag.swift; sourceTree = "<group>"; };
-		43D8CAF5E3A5BD4BF225335E /* SphericalHarmonics3.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SphericalHarmonics3.swift; sourceTree = "<group>"; };
 		43D8CB181B53EB800A1DE650 /* BaseMaterial.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BaseMaterial.swift; sourceTree = "<group>"; };
 		43D8CB23455968ACCFC0E47E /* JointLimits.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JointLimits.swift; sourceTree = "<group>"; };
 		43D8CB4D62123269161B355A /* Util.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Util.swift; sourceTree = "<group>"; };
@@ -1461,7 +1457,6 @@
 				43D8C6D2A37C7B97B84BA40F /* BoundingFrustum.swift */,
 				43D8CD246102C5B06736E329 /* CollisionUtil.swift */,
 				43D8C1F25D3E4025BA6C8E2F /* Ray.swift */,
-				43D8CAF5E3A5BD4BF225335E /* SphericalHarmonics3.swift */,
 			);
 			path = vox.math;
 			sourceTree = "<group>";
@@ -1493,7 +1488,6 @@
 				3E67EEA1291C988F00ED60C8 /* BoundingFrustum.test.swift */,
 				3E67EEA3291C993600ED60C8 /* CollisionUtil.test.swift */,
 				3E67EEA5291C996600ED60C8 /* Ray.test.swift */,
-				3E67EEA7291C9F2D00ED60C8 /* SphericalHarmonics3.swift */,
 			);
 			path = test.math;
 			sourceTree = "<group>";
@@ -2383,7 +2377,6 @@
 				43D8CEC103063AE1BE61B2A8 /* BoundingFrustum.swift in Sources */,
 				43D8C2105702030D5652A7A0 /* CollisionUtil.swift in Sources */,
 				43D8C95F71DA2BB448D9A8E3 /* Ray.swift in Sources */,
-				43D8CF51D259BF8108280B41 /* SphericalHarmonics3.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2398,7 +2391,6 @@
 				3E67EEA2291C988F00ED60C8 /* BoundingFrustum.test.swift in Sources */,
 				3E67EE84291BDE7700ED60C8 /* Vector2.test.swift in Sources */,
 				3E67EE8C291BDF7600ED60C8 /* Vector3.test.swift in Sources */,
-				3E67EEA8291C9F2D00ED60C8 /* SphericalHarmonics3.swift in Sources */,
 				3E67EEA6291C996600ED60C8 /* Ray.test.swift in Sources */,
 				3E67EE9C291C976A00ED60C8 /* BoundingSphere.test.swift in Sources */,
 				3E67EE90291BE30800ED60C8 /* Matrix4x4.test.swift in Sources */,

@@ -16,15 +16,29 @@ enum DecodeMode: Int {
     case RGBM = 3
 }
 
-func createSphericalHarmonicsCoefficients(with texture: MDLTexture) -> SphericalHarmonics3 {
-    let irradianceTexture = MDLTexture.irradianceTextureCube(with: texture, name: nil, dimensions: simd_make_int2(64, 64), roughness: 0)
-    let lightProbe = MDLLightProbe(reflectiveTexture: texture, irradianceTexture: irradianceTexture)
-    lightProbe.generateSphericalHarmonics(fromIrradiance: 2)
-    var sh = SphericalHarmonics3()
-    if let coefficients = lightProbe.sphericalHarmonicsCoefficients {
-        (coefficients as NSData).getBytes(&sh.coefficients, length: 27 * MemoryLayout<Float>.stride)
+func createSphericalHarmonicsCoefficients(_ engine: Engine, with cube: MTLTexture) -> BufferView {
+    // first 27 is parameter, the last is scale
+    let bufferView = BufferView(device: engine.device, count: 28, stride: MemoryLayout<Float>.stride)
+
+    let function = engine.library("app.shader").makeFunction(name: "compute_sh")
+    let pipelineState = try! engine.device.makeComputePipelineState(function: function!)
+    if let commandBuffer = engine.commandQueue.makeCommandBuffer(),
+       let commandEncoder = commandBuffer.makeComputeCommandEncoder() {
+        commandEncoder.setComputePipelineState(pipelineState)
+        commandEncoder.setBuffer(bufferView.buffer, offset: 0, index: 0)
+        commandEncoder.setTexture(cube, index: 0)
+
+        let size = Int(Float(cube.width))
+        let w = pipelineState.threadExecutionWidth
+        let h = pipelineState.maxTotalThreadsPerThreadgroup / w
+        commandEncoder.dispatchThreads(MTLSizeMake(size, size, 6),
+                threadsPerThreadgroup: MTLSizeMake(w, h, 1))
+        commandEncoder.endEncoding()
+
+        commandBuffer.commit()
+        commandBuffer.waitUntilCompleted()
     }
-    return sh
+    return bufferView
 }
 
 func createSpecularTexture(_ engine: Engine, with cube: MTLTexture, _ decodeMode: DecodeMode = .Linear) -> MTLTexture? {
@@ -54,8 +68,10 @@ func createSpecularTexture(_ engine: Engine, with cube: MTLTexture, _ decodeMode
             commandEncoder.setBytes(&roughness, length: MemoryLayout<Float>.stride, index: 0)
 
             let size = Int(Float(cube.width) / pow(2.0, Float(lod)))
-            commandEncoder.dispatchThreads(MTLSizeMake(size / 16, size / 16, 6),
-                    threadsPerThreadgroup: MTLSizeMake(16, 16, 1))
+            let w = pipelineState.threadExecutionWidth
+            let h = pipelineState.maxTotalThreadsPerThreadgroup / w
+            commandEncoder.dispatchThreads(MTLSizeMake(size, size, 6),
+                    threadsPerThreadgroup: MTLSizeMake(w, h, 1))
         }
     }
     return specularTexture
@@ -79,9 +95,10 @@ func createMetallicRoughnessTexture(_ engine: Engine, with metallic: MTLTexture,
         commandEncoder.setTexture(roughness, index: 1)
         commandEncoder.setTexture(mergedTexture, index: 2)
 
-        let size = metallic.width
-        commandEncoder.dispatchThreads(MTLSizeMake(size / min(size, 16), size / min(size, 16), 1),
-                threadsPerThreadgroup: MTLSizeMake(min(size, 16), min(size, 16), 1))
+        let w = pipelineState.threadExecutionWidth
+        let h = pipelineState.maxTotalThreadsPerThreadgroup / w
+        commandEncoder.dispatchThreads(MTLSizeMake(metallic.width, metallic.height, 1),
+                threadsPerThreadgroup: MTLSizeMake(w, h, 1))
         commandEncoder.endEncoding()
 
         commandBuffer.commit()

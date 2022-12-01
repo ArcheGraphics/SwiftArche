@@ -16,17 +16,17 @@ public:
          * Implements `EvalSHBasis` from [Projection from Cube maps] in http://www.ppsloan.org/publications/StupidSH36.pdf.
          *
          * Basis constants
-         * 0: Math.sqrt(1/(4 * Math.PI))
+         * 0: std::sqrt(1/(4 * M_PI_F))
          *
-         * 1: -Math.sqrt(3 / (4 * Math.PI))
-         * 2: Math.sqrt(3 / (4 * Math.PI))
-         * 3: -Math.sqrt(3 / (4 * Math.PI))
+         * 1: -std::sqrt(3 / (4 * M_PI_F))
+         * 2: std::sqrt(3 / (4 * M_PI_F))
+         * 3: -std::sqrt(3 / (4 * M_PI_F))
          *
-         * 4: Math.sqrt(15 / (4 * Math.PI))
-         * 5: -Math.sqrt(15 / (4 * Math.PI))
-         * 6: Math.sqrt(5 / (16 * Math.PI))
-         * 7: -Math.sqrt(15 / (4 * Math.PI)）
-         * 8: Math.sqrt(15 / (16 * Math.PI))
+         * 4: std::sqrt(15 / (4 * M_PI_F))
+         * 5: -std::sqrt(15 / (4 * M_PI_F))
+         * 6: std::sqrt(5 / (16 * M_PI_F))
+         * 7: -std::sqrt(15 / (4 * M_PI_F)）
+         * 8: std::sqrt(15 / (16 * M_PI_F))
          */
         
         auto color = c * delta_solid_angle;

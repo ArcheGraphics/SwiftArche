@@ -107,7 +107,7 @@ public:
     constant SpotLightData* spotLight;
     
     EnvMapLight u_envMapLight;
-    constant float3* u_env_sh;
+    constant float* u_env_sh;
     texturecube<float> u_env_specularTexture;
     sampler u_env_specularSampler;
     
