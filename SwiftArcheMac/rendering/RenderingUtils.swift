@@ -48,7 +48,7 @@ func createSpecularTexture(_ engine: Engine, with cube: MTLTexture, _ decodeMode
     descriptor.width = cube.width
     descriptor.height = cube.height
     descriptor.mipmapLevelCount = cube.mipmapLevelCount
-    descriptor.usage = MTLTextureUsage(rawValue: MTLTextureUsage.shaderRead.rawValue | MTLTextureUsage.pixelFormatView.rawValue)
+    descriptor.usage = MTLTextureUsage(rawValue: MTLTextureUsage.shaderRead.rawValue | MTLTextureUsage.shaderWrite.rawValue)
     let specularTexture = engine.textureLoader.makeTexture(descriptor)
 
     let functionConstants = MTLFunctionConstantValues()
@@ -62,7 +62,7 @@ func createSpecularTexture(_ engine: Engine, with cube: MTLTexture, _ decodeMode
         commandEncoder.setTexture(cube, index: 0)
         for lod in 0..<cube.mipmapLevelCount {
             let textureView = specularTexture.makeTextureView(pixelFormat: cube.pixelFormat, textureType: .typeCube,
-                    levels: lod..<lod + 1, slices: lod * 6..<lod * 6 + 6)
+                    levels: lod..<lod + 1, slices: 0..<6)
             commandEncoder.setTexture(textureView, index: 1)
             var roughness: Float = Float(lod) / Float(cube.mipmapLevelCount - 1)  // linear
             commandEncoder.setBytes(&roughness, length: MemoryLayout<Float>.stride, index: 0)
@@ -73,6 +73,9 @@ func createSpecularTexture(_ engine: Engine, with cube: MTLTexture, _ decodeMode
             commandEncoder.dispatchThreads(MTLSizeMake(size, size, 6),
                     threadsPerThreadgroup: MTLSizeMake(w, h, 1))
         }
+        commandEncoder.endEncoding()
+        commandBuffer.commit()
+        commandBuffer.waitUntilCompleted()
     }
     return specularTexture
 }

@@ -8,11 +8,7 @@
 using namespace metal;
 #include "type_common.h"
 #include "function_constant.h"
-
-typedef struct {
-    float3 position [[attribute(Position)]];
-    float2 TEXCOORD_0 [[attribute(UV_0)]];
-} VertexIn;
+#include "../vox.shader/shader_common.h"
 
 typedef struct {
     float4 position [[position]];
@@ -20,12 +16,13 @@ typedef struct {
 } VertexOut;
 
 vertex VertexOut vertex_cubemap(const VertexIn in [[stage_in]],
-                                constant matrix_float4x4 &u_MVPMat [[buffer(7)]]) {
+                                constant CameraData &u_camera [[buffer(2)]],
+                                constant RendererData &u_renderer [[buffer(3)]]) {
     VertexOut out;
     
     // begin position
-    float4 position = float4( in.position, 1.0);
-    out.position = u_MVPMat * position;
+    float4 position = float4( in.POSITION, 1.0);
+    out.position = u_camera.u_VPMat * u_renderer.u_modelMat * position;
     out.v_uv = in.TEXCOORD_0;
     return out;
 }

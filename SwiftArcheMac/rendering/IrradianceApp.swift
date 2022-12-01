@@ -14,7 +14,9 @@ fileprivate class BakerMaterial: BaseMaterial {
 
     init(_ engine: Engine) {
         super.init(engine.device)
-        shader.append(ShaderPass(engine.library("app.shader"), "vertex_cubemap", "fragment_cubemap"))
+        let shaderPass = ShaderPass(engine.library("app.shader"), "vertex_cubemap", "fragment_cubemap")
+        shaderPass.setRenderFace(.Double)
+        shader.append(shaderPass)
     }
 
     /// Base texture.
@@ -48,12 +50,13 @@ class IrradianceApp: NSViewController {
         super.viewDidLoad()
         canvas = Canvas(with: view)
         engine = Engine(canvas: canvas)
+        engine.createShaderLibrary("app.shader")
 
         let scene = engine.sceneManager.activeScene!
         let rootEntity = scene.createRootEntity()
 
         let cameraEntity = rootEntity.createChild()
-        cameraEntity.transform.setPosition(x: 1, y: 1, z: 1)
+        cameraEntity.transform.setPosition(x: 0, y: 0, z: -10)
         cameraEntity.transform.lookAt(targetPosition: Vector3())
         let _: Camera = cameraEntity.addComponent()
         let _: OrbitControl = cameraEntity.addComponent()
@@ -96,8 +99,8 @@ class IrradianceApp: NSViewController {
             (mipLevel: Int) -> Void in
             for i in 0..<6 {
                 let material = planeMaterials[i]
-                material.baseTexture = cubeMap.makeTextureView(pixelFormat: cubeMap.pixelFormat, textureType: cubeMap.textureType,
-                        levels: mipLevel..<mipLevel + 1, slices: mipLevel * 6 + i..<mipLevel * 6 + i + 1)
+                material.baseTexture = cubeMap.makeTextureView(pixelFormat: cubeMap.pixelFormat, textureType: .type2D,
+                        levels: mipLevel..<mipLevel + 1, slices: i..<i + 1)
                 material.faceIndex = i
             }
         }
