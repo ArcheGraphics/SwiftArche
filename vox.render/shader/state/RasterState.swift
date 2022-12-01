@@ -20,9 +20,9 @@ public class RasterState {
         renderEncoder.setCullMode(cullMode)
 
         if frontFaceInvert {
-            renderEncoder.setFrontFacing(.clockwise)
-        } else {
             renderEncoder.setFrontFacing(.counterClockwise)
+        } else {
+            renderEncoder.setFrontFacing(.clockwise)
         }
 
         // apply polygonOffset.

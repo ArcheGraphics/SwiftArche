@@ -152,22 +152,22 @@ kernel void build_specular(texturecube<float, access::sample> input [[ texture(0
     float3 direction;
     switch(face) {
         case 0:
-            direction = float3(1.0, -v, -u);
+            direction = float3(1.0, v, -u);
             break;
         case 1:
-            direction = float3(-1.0, -v, u);
+            direction = float3(-1.0, v, u);
             break;
         case 2:
-            direction = float3(u, -1.0, -v);
+            direction = float3(u, 1.0, -v);
             break;
         case 3:
-            direction = float3(u, 1.0, v);
+            direction = float3(u, -1.0, v);
             break;
         case 4:
-            direction = float3(u, -v, 1.0);
+            direction = float3(u, v, 1.0);
             break;
         case 5:
-            direction = float3(-u, -v, -1.0);
+            direction = float3(-u, v, -1.0);
             break;
     }
     direction = normalize(direction);

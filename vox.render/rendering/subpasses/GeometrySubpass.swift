@@ -43,7 +43,8 @@ public class GeometrySubpass: Subpass {
         }
 
         pipelineDescriptor.vertexDescriptor = mesh._vertexDescriptor
-        element.shaderPass.renderState!._apply(pipelineDescriptor, depthStencilDescriptor, encoder, false)
+        element.shaderPass.renderState!._apply(pipelineDescriptor, depthStencilDescriptor, encoder,
+                                               element.renderer.entity.transform._isFrontFaceInvert())
 
         let pso = pipeline._resourceCache.requestGraphicsPipeline(pipelineDescriptor)
         element.renderer.shaderData.bindData(encoder, pso.uniformBlock, pipeline._resourceCache)
