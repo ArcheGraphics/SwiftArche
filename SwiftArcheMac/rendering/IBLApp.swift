@@ -48,14 +48,14 @@ class IblApp: NSViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         canvas = Canvas(with: view)
-
         engine = Engine(canvas: canvas)
+        engine.createShaderLibrary("app.shader")
 
         let scene = engine.sceneManager.activeScene!
         let rootEntity = scene.createRootEntity()
 
         let cameraEntity = rootEntity.createChild()
-        cameraEntity.transform.setPosition(x: 1, y: 1, z: 1)
+        cameraEntity.transform.setPosition(x: 0, y: 0, z: -10)
         cameraEntity.transform.lookAt(targetPosition: Vector3())
         let _: Camera = cameraEntity.addComponent()
         let _: OrbitControl = cameraEntity.addComponent()
@@ -65,7 +65,7 @@ class IblApp: NSViewController {
         let pointLight: PointLight = light.addComponent()
         pointLight.intensity = 0.3
 
-        let materialIndex = 0
+        let materialIndex = 4
         let mat = _materials[materialIndex]
         let cubeMap = try! engine.textureLoader.loadTexture(with: "country")!
         scene.ambientLight.specularTexture = createSpecularTexture(engine, with: cubeMap)
