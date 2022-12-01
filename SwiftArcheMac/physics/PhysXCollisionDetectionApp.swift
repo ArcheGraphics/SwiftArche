@@ -52,7 +52,6 @@ class PhysXCollisionDetectionApp: NSViewController {
         super.viewDidLoad()
         canvas = Canvas(with: view)
         engine = Engine(canvas: canvas)
-        engine.createShaderLibrary("app.shader")
 
         let scene = engine.sceneManager.activeScene!
         scene.ambientLight = loadAmbientLight(engine, with: "countryIBL")

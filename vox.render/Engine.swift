@@ -124,7 +124,7 @@ public class Engine: NSObject {
         self._commandQueue = commandQueue
 
         super.init()
-        createShaderLibrary("vox.shader")
+        _ = createShaderLibrary("vox.shader")
         _physicsManager = PhysicsManager(engine: self)
         _inputManager = InputManager(engine: self)
         _sceneManager = SceneManager(engine: self)
@@ -148,13 +148,15 @@ public class Engine: NSObject {
     }
 #endif
     
-    public func createShaderLibrary(_ name: String) {
+    public func createShaderLibrary(_ name: String) -> MTLLibrary {
         // Load all the shader files with a metal file extension in the project
         let libraryURL = Bundle.main.url(forResource: name, withExtension: "metallib")!
         do {
-            _library[name] = try device.makeLibrary(URL: libraryURL)
+            let library = try device.makeLibrary(URL: libraryURL)
+            _library[name] = library
+            return library
         } catch let error {
-            fatalError("Error creating MetalKit mesh, error \(error)")
+            fatalError("Error creating metal library \(name), error \(error)")
         }
     }
     
@@ -162,7 +164,7 @@ public class Engine: NSObject {
         if let library = _library[name] {
             return library
         } else {
-            fatalError("can't find library \(name)")
+            return createShaderLibrary(name)
         }
     }
 

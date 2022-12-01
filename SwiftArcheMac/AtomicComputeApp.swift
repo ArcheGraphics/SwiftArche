@@ -61,9 +61,7 @@ class AtomicComputeApp: NSViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         canvas = Canvas(with: view)
-
         engine = Engine(canvas: canvas)
-        engine.createShaderLibrary("app.shader")
         
         let scene = engine.sceneManager.activeScene!
         let rootEntity = scene.createRootEntity()
