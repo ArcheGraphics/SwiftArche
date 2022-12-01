@@ -67,7 +67,7 @@ class IblApp: NSViewController {
 
         let materialIndex = 4
         let mat = _materials[materialIndex]
-        let cubeMap = try! engine.textureLoader.loadTexture(with: "country")!
+        let cubeMap = try! engine.textureLoader.loadTexture(with: "countryIBL")!
         scene.ambientLight.specularTexture = createSpecularTexture(engine, with: cubeMap)
         scene.ambientLight.diffuseSphericalHarmonics = createSphericalHarmonicsCoefficients(engine, with: cubeMap)
 
