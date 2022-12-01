@@ -14,7 +14,7 @@ fileprivate class BakerMaterial: BaseMaterial {
 
     init(_ engine: Engine) {
         super.init(engine.device)
-        shader.append(ShaderPass(engine.library(), "vertex_cubemap", "fragment_cubemap"))
+        shader.append(ShaderPass(engine.library("app.shader"), "vertex_cubemap", "fragment_cubemap"))
     }
 
     /// Base texture.
