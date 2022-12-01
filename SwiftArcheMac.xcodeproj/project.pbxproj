@@ -28,7 +28,7 @@
 		040F1DDF2934EAB8008BDC8D /* ImGui in Frameworks */ = {isa = PBXBuildFile; productRef = 040F1DDE2934EAB8008BDC8D /* ImGui */; };
 		040F1DE12934EB16008BDC8D /* ImGui in Frameworks */ = {isa = PBXBuildFile; productRef = 040F1DE02934EB16008BDC8D /* ImGui */; };
 		040F1DE32934ED68008BDC8D /* GUIManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 040F1DE22934ED68008BDC8D /* GUIManager.swift */; };
-		040F1DEE293780D5008BDC8D /* specular_map.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3EC0383F29321495002187DC /* specular_map.metal */; };
+		040F1DEE293780D5008BDC8D /* specular_baker.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3EC0383F29321495002187DC /* specular_baker.metal */; };
 		040F1DEF293780D5008BDC8D /* texture_packer.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3EC0384329321495002187DC /* texture_packer.metal */; };
 		040F1DF3293781B0008BDC8D /* RenderingUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 040F1DF2293781B0008BDC8D /* RenderingUtils.swift */; };
 		04462F21293324A300F95387 /* Textures.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 04462F20293324A200F95387 /* Textures.xcassets */; };
@@ -364,6 +364,7 @@
 		3EC92A472936F44600423396 /* grid_shading.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3EC92A462936F44600423396 /* grid_shading.metal */; };
 		3EC92AB62938633E00423396 /* cubemap_shading.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3EC92AB52938633E00423396 /* cubemap_shading.metal */; };
 		3EC92ABC2938834900423396 /* atomic_counter.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3EC92ABB2938834900423396 /* atomic_counter.metal */; };
+		3EC92ABE29388A9C00423396 /* sh_baker.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3EC92ABD29388A9C00423396 /* sh_baker.metal */; };
 		43D8C033021F4B86E95953E6 /* IBLApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8CFAFE0E0B5772488FA13 /* IBLApp.swift */; };
 		43D8C1413D08147985256B8A /* PhysXJointBasicApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8C12DBC7510CB05B703F8 /* PhysXJointBasicApp.swift */; };
 		43D8C40438F0527739C7D662 /* AtomicComputeApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8C888ABFCE2075E7AA5BE /* AtomicComputeApp.swift */; };
@@ -637,7 +638,7 @@
 		3EC0383C29321495002187DC /* pbr_shading.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = pbr_shading.h; sourceTree = "<group>"; };
 		3EC0383D29321495002187DC /* background_shading.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; path = background_shading.metal; sourceTree = "<group>"; };
 		3EC0383E29321495002187DC /* function_common.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = function_common.h; sourceTree = "<group>"; };
-		3EC0383F29321495002187DC /* specular_map.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; path = specular_map.metal; sourceTree = "<group>"; };
+		3EC0383F29321495002187DC /* specular_baker.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; path = specular_baker.metal; sourceTree = "<group>"; };
 		3EC0384029321495002187DC /* pbr_shading.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; path = pbr_shading.metal; sourceTree = "<group>"; };
 		3EC0384129321495002187DC /* ar_shading.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; path = ar_shading.metal; sourceTree = "<group>"; };
 		3EC0384229321495002187DC /* function_common.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; path = function_common.metal; sourceTree = "<group>"; };
@@ -851,6 +852,7 @@
 		3EC92A4F2936F74100423396 /* type_common.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = type_common.h; sourceTree = "<group>"; };
 		3EC92AB52938633E00423396 /* cubemap_shading.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = cubemap_shading.metal; sourceTree = "<group>"; };
 		3EC92ABB2938834900423396 /* atomic_counter.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = atomic_counter.metal; sourceTree = "<group>"; };
+		3EC92ABD29388A9C00423396 /* sh_baker.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = sh_baker.metal; sourceTree = "<group>"; };
 		43D8C090F42BE8E48D6FC4E1 /* GridMaterial.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GridMaterial.swift; sourceTree = "<group>"; };
 		43D8C0A4A7B56D737C3F4FE2 /* PhysXCollisionDetectionApp.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhysXCollisionDetectionApp.swift; sourceTree = "<group>"; };
 		43D8C0CC365128B7B18E4074 /* WireframeManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WireframeManager.swift; sourceTree = "<group>"; };
@@ -1010,7 +1012,8 @@
 				040F1DF0293780F4008BDC8D /* type_common.h */,
 				040F1DF4293783AD008BDC8D /* macro_name.h */,
 				040F1DF5293783EA008BDC8D /* function_constant.h */,
-				3EC0383F29321495002187DC /* specular_map.metal */,
+				3EC92ABD29388A9C00423396 /* sh_baker.metal */,
+				3EC0383F29321495002187DC /* specular_baker.metal */,
 				3EC0384329321495002187DC /* texture_packer.metal */,
 				3EC92AB52938633E00423396 /* cubemap_shading.metal */,
 				3EC92ABB2938834900423396 /* atomic_counter.metal */,
@@ -2247,7 +2250,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				040F1DEE293780D5008BDC8D /* specular_map.metal in Sources */,
+				040F1DEE293780D5008BDC8D /* specular_baker.metal in Sources */,
+				3EC92ABE29388A9C00423396 /* sh_baker.metal in Sources */,
 				040F1DEF293780D5008BDC8D /* texture_packer.metal in Sources */,
 				3EC92ABC2938834900423396 /* atomic_counter.metal in Sources */,
 				3EC92AB62938633E00423396 /* cubemap_shading.metal in Sources */,
