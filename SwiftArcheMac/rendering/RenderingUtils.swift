@@ -41,8 +41,8 @@ func createSphericalHarmonicsCoefficients(_ engine: Engine, with cube: MTLTextur
     return bufferView
 }
 
-func createSpecularTexture(_ engine: Engine, with cube: MTLTexture, _ decodeMode: DecodeMode = .Linear) -> MTLTexture? {
-    let format = MTLPixelFormat(rawValue: cube.pixelFormat.rawValue - 1)!
+func createSpecularTexture(_ engine: Engine, with cube: MTLTexture,
+                           format: MTLPixelFormat, _ decodeMode: DecodeMode = .Linear) -> MTLTexture? {
     let descriptor = MTLTextureDescriptor()
     descriptor.textureType = .typeCube
     descriptor.pixelFormat = format
@@ -111,10 +111,47 @@ func createMetallicRoughnessTexture(_ engine: Engine, with metallic: MTLTexture,
     return mergedTexture
 }
 
-func loadAmbientLight(_ engine: Engine, with name: String, _ decodeMode: DecodeMode = .Gamma) -> AmbientLight {
+func createCubemap(_ engine: Engine, with hdr: MTLTexture, size: Int, level: Int) -> MTLTexture {
+    let descriptor = MTLTextureDescriptor()
+    descriptor.textureType = .typeCube
+    descriptor.pixelFormat = .rgba16Float
+    descriptor.width = size
+    descriptor.height = size
+    descriptor.mipmapLevelCount = level;
+    descriptor.usage = MTLTextureUsage(rawValue: MTLTextureUsage.shaderRead.rawValue | MTLTextureUsage.shaderWrite.rawValue)
+    let cubeMap = engine.textureLoader.makeTexture(descriptor)
+
+    let function = engine.library("app.shader").makeFunction(name: "cubemap_generator")
+    let pipelineState = try! engine.device.makeComputePipelineState(function: function!)
+    if let commandBuffer = engine.commandQueue.makeCommandBuffer() {
+        if let commandEncoder = commandBuffer.makeComputeCommandEncoder() {
+            commandEncoder.setComputePipelineState(pipelineState)
+            commandEncoder.setTexture(hdr, index: 0)
+            commandEncoder.setTexture(cubeMap, index: 1)
+
+            let w = pipelineState.threadExecutionWidth
+            let h = pipelineState.maxTotalThreadsPerThreadgroup / w
+            commandEncoder.dispatchThreads(MTLSizeMake(size, size, 1),
+                    threadsPerThreadgroup: MTLSizeMake(w, h, 1))
+            commandEncoder.endEncoding()
+        }
+
+        if level > 1, let commandEncoder = commandBuffer.makeBlitCommandEncoder() {
+            commandEncoder.generateMipmaps(for: cubeMap)
+            commandEncoder.endEncoding()
+        }
+
+        commandBuffer.commit()
+        commandBuffer.waitUntilCompleted()
+    }
+    return cubeMap
+}
+
+func loadAmbientLight(_ engine: Engine, with name: String,
+                      format: MTLPixelFormat = .rgba8Unorm, _ decodeMode: DecodeMode = .Gamma) -> AmbientLight {
     let cubeMap = try! engine.textureLoader.loadTexture(with: name)!
     let ambientLight = AmbientLight();
-    ambientLight.specularTexture = createSpecularTexture(engine, with: cubeMap, decodeMode)
+    ambientLight.specularTexture = createSpecularTexture(engine, with: cubeMap, format: format, decodeMode)
     ambientLight.diffuseSphericalHarmonics = createSphericalHarmonicsCoefficients(engine, with: cubeMap)
     ambientLight.diffuseMode = DiffuseMode.SphericalHarmonics
     return ambientLight

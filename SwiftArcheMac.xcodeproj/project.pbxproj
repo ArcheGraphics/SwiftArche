@@ -31,6 +31,9 @@
 		040F1DEE293780D5008BDC8D /* specular_baker.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3EC0383F29321495002187DC /* specular_baker.metal */; };
 		040F1DEF293780D5008BDC8D /* texture_packer.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3EC0384329321495002187DC /* texture_packer.metal */; };
 		040F1DF3293781B0008BDC8D /* RenderingUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 040F1DF2293781B0008BDC8D /* RenderingUtils.swift */; };
+		040F1E0B293AAFB1008BDC8D /* HDRLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 040F1E0A293AAFB1008BDC8D /* HDRLoader.m */; };
+		040F1E0E293AB2F2008BDC8D /* assets in Resources */ = {isa = PBXBuildFile; fileRef = 040F1E0D293AB2F2008BDC8D /* assets */; };
+		040F1E10293AB3B6008BDC8D /* cubemap_generator.metal in Sources */ = {isa = PBXBuildFile; fileRef = 040F1E0F293AB3B6008BDC8D /* cubemap_generator.metal */; };
 		04462F21293324A300F95387 /* Textures.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 04462F20293324A200F95387 /* Textures.xcassets */; };
 		3EB32B032932299A0019A4F3 /* Logging in Frameworks */ = {isa = PBXBuildFile; productRef = 3EB32B022932299A0019A4F3 /* Logging */; };
 		3EB32B7529322DB30019A4F3 /* PrimitiveApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EB32B7429322DB30019A4F3 /* PrimitiveApp.swift */; };
@@ -503,6 +506,10 @@
 		040F1DF4293783AD008BDC8D /* macro_name.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = macro_name.h; sourceTree = "<group>"; };
 		040F1DF5293783EA008BDC8D /* function_constant.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = function_constant.h; sourceTree = "<group>"; };
 		040F1DF6293784C3008BDC8D /* bridging.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = bridging.h; sourceTree = "<group>"; };
+		040F1E0A293AAFB1008BDC8D /* HDRLoader.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HDRLoader.m; sourceTree = "<group>"; };
+		040F1E0C293AAFC7008BDC8D /* HDRLoader.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HDRLoader.h; sourceTree = "<group>"; };
+		040F1E0D293AB2F2008BDC8D /* assets */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = assets; sourceTree = SOURCE_ROOT; };
+		040F1E0F293AB3B6008BDC8D /* cubemap_generator.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = cubemap_generator.metal; sourceTree = "<group>"; };
 		04462F20293324A200F95387 /* Textures.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Textures.xcassets; sourceTree = SOURCE_ROOT; };
 		3EB32B7429322DB30019A4F3 /* PrimitiveApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrimitiveApp.swift; sourceTree = "<group>"; };
 		3EB32B832932303A0019A4F3 /* libc++abi.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libc++abi.tbd"; path = "usr/lib/libc++abi.tbd"; sourceTree = SDKROOT; };
@@ -1020,6 +1027,7 @@
 				3EC0383F29321495002187DC /* specular_baker.metal */,
 				3EC0384329321495002187DC /* texture_packer.metal */,
 				3EC92AB52938633E00423396 /* cubemap_shading.metal */,
+				040F1E0F293AB3B6008BDC8D /* cubemap_generator.metal */,
 				3EC92ABB2938834900423396 /* atomic_counter.metal */,
 			);
 			path = app.shader;
@@ -1105,6 +1113,7 @@
 		3EC0370329321131002187DC /* SwiftArcheMac */ = {
 			isa = PBXGroup;
 			children = (
+				040F1E0D293AB2F2008BDC8D /* assets */,
 				3EC0370F29321132002187DC /* Main.storyboard */,
 				04462F20293324A200F95387 /* Textures.xcassets */,
 				3EC0370D29321132002187DC /* Assets.xcassets */,
@@ -1531,6 +1540,8 @@
 				3EC038F929321862002187DC /* GLTFTypes.h */,
 				3EC038FC29321862002187DC /* GLTFUtil.swift */,
 				3EC038FA29321862002187DC /* TextureLoader.swift */,
+				040F1E0C293AAFC7008BDC8D /* HDRLoader.h */,
+				040F1E0A293AAFB1008BDC8D /* HDRLoader.m */,
 			);
 			path = loader;
 			sourceTree = "<group>";
@@ -2187,6 +2198,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				04462F21293324A300F95387 /* Textures.xcassets in Resources */,
+				040F1E0E293AB2F2008BDC8D /* assets in Resources */,
 				3EC0370E29321132002187DC /* Assets.xcassets in Resources */,
 				3EC0371129321132002187DC /* Main.storyboard in Resources */,
 			);
@@ -2261,6 +2273,7 @@
 				040F1DEF293780D5008BDC8D /* texture_packer.metal in Sources */,
 				3EC92ABC2938834900423396 /* atomic_counter.metal in Sources */,
 				3EC92AB62938633E00423396 /* cubemap_shading.metal in Sources */,
+				040F1E10293AB3B6008BDC8D /* cubemap_generator.metal in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2409,6 +2422,7 @@
 				3EC039F729321920002187DC /* AnimationVector3Curve.swift in Sources */,
 				3EC038DF29321845002187DC /* JointLimits.swift in Sources */,
 				3EC038E729321845002187DC /* SpringJoint.swift in Sources */,
+				040F1E0B293AAFB1008BDC8D /* HDRLoader.m in Sources */,
 				3EC038B929321835002187DC /* PhysicsMaterial.swift in Sources */,
 				3EC039D629321910002187DC /* ScaleAnimationCurveOwnerAssembler.swift in Sources */,
 				3EC038B429321835002187DC /* DynamicCollider.swift in Sources */,

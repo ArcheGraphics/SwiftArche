@@ -27,16 +27,16 @@ public class TextureLoader {
         }
         return texture
     }
-    
+
     public func loadTexture(with name: String, scaleFactor: CGFloat = 1.0, bundle: Bundle? = nil,
-                            textureLoaderOptions: [MTKTextureLoader.Option : Any] = [:]) throws -> MTLTexture? {
+                            textureLoaderOptions: [MTKTextureLoader.Option: Any] = [:]) throws -> MTLTexture? {
         var textureLoaderOptions = textureLoaderOptions
         if textureLoaderOptions.isEmpty {
             textureLoaderOptions = [.origin: MTKTextureLoader.Origin.topLeft,
                                     .generateMipmaps: NSNumber(booleanLiteral: true)]
         }
         let texture = try textureLoader.newTexture(name: name, scaleFactor: scaleFactor,
-                                                   bundle: bundle, options: textureLoaderOptions)
+                bundle: bundle, options: textureLoaderOptions)
         return texture
     }
 
@@ -70,5 +70,10 @@ public class TextureLoader {
         }
         let texture = try? textureLoader.newTexture(texture: texture, options: textureLoaderOptions)
         return texture
+    }
+
+    public func loadHDR(with name: String) -> MTLTexture? {
+        var error: NSError?
+        return texture_from_radiance_file(name, _engine.device, &error)
     }
 }

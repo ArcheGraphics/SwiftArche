@@ -23,3 +23,4 @@
 #include "../vox.physics/characterkinematic/CCharacterBridge.h"
 
 #include "loader/GLTFAsset.h"
+#include "loader/HDRLoader.h"
