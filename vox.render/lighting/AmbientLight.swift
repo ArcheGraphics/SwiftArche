@@ -13,7 +13,6 @@ public class AmbientLight {
             diffuseIntensity: 1.0, specularIntensity: 1.0)
     private static let _envMapProperty = "u_envMapLight"
 
-    private static var zeroSH = [Float](repeating: 0, count: 28)
     private var _diffuseSphericalHarmonics: BufferView?
     private static let _diffuseSHProperty = "u_env_sh"
 
@@ -125,8 +124,9 @@ public class AmbientLight {
 
         let shaderData = scene.shaderData
         shaderData.setData(AmbientLight._envMapProperty, _envMapLight)
-        AmbientLight.zeroSH[27] = 1.0;
-        shaderData.setData(AmbientLight._diffuseSHProperty, AmbientLight.zeroSH)
+        if let _diffuseSphericalHarmonics = _diffuseSphericalHarmonics {
+            shaderData.setData(AmbientLight._diffuseSHProperty, _diffuseSphericalHarmonics)
+        }
 
         _setDiffuseMode(shaderData)
         _setSpecularTextureDecodeRGBM(shaderData)

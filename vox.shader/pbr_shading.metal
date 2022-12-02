@@ -383,13 +383,13 @@ float4 PBRShading::execute() {
     // IBL diffuse
     float3 irradiance = float3(0.0);
     if (hasSH) {
-        float3 irradiance = getLightProbeIrradiance(geometry.normal);
+        irradiance = getLightProbeIrradiance(geometry.normal);
 #ifdef OASIS_COLORSPACE_GAMMA
         irradiance = linearToGamma(vec4(irradiance, 1.0)).rgb;
 #endif
         irradiance *= u_envMapLight.diffuseIntensity;
     } else {
-        float3 irradiance = u_envMapLight.diffuse * u_envMapLight.diffuseIntensity;
+        irradiance = u_envMapLight.diffuse * u_envMapLight.diffuseIntensity;
         irradiance *= M_PI_F;
     }
     
