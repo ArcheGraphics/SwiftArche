@@ -91,8 +91,8 @@ class SkyboxApp: NSViewController {
         
         // method2: load hdr
         let hdr = engine.textureLoader.loadHDR(with: "assets/kloppenheim_06_4k.hdr")!
-        let cubeMap = createCubemap(engine, with: hdr, size: 256, level: 3)
-        skyMaterial.textureCubeMap = cubeMap
+        skyMaterial.textureCubeMap = hdr
+        skyMaterial.equirectangular = true
         
         // method3: generate skymap
         // let skyTexture = MDLSkyCubeTexture(name: "natrual", channelEncoding: .float16,

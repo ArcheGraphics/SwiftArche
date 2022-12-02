@@ -28,8 +28,21 @@ vertex VertexOut vertex_skybox(const VertexIn in [[stage_in]],
     return out;
 }
 
+float4 equirectangularSample(float3 direction, sampler s, texture2d<float> image) {
+    float3 d = normalize(direction);
+    float2 t = float2((atan2(d.z, d.x) + M_PI_F) / (2.f * M_PI_F), acos(d.y) / M_PI_F);
+    return image.sample(s, t);
+}
+
 fragment float4 fragment_skybox(VertexOut in [[stage_in]],
                                 sampler u_cubeSampler [[sampler(0)]],
                                 texturecube<float> u_cubeTexture [[texture(0)]]) {
-    return u_cubeTexture.sample(u_cubeSampler, in.v_cubeUV);    
+    return u_cubeTexture.sample(u_cubeSampler, in.v_cubeUV);
+}
+
+fragment float4 fragment_skyboxHDR(VertexOut in [[stage_in]],
+                                   sampler u_cubeSampler [[sampler(0)]],
+                                   texture2d<float> u_cubeTexture [[texture(0)]]) {
+    float3 c = equirectangularSample(in.v_cubeUV, u_cubeSampler, u_cubeTexture).rgb;
+    return float4(clamp(c, 0.f, 500.0), 1.f);
 }
