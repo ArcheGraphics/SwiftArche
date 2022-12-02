@@ -32,10 +32,11 @@ fileprivate class AtomicMaterial: BaseMaterial {
 }
 
 fileprivate class ComputeScript: Script {
-    private let _computePass = ComputePass()
+    private var _computePass: ComputePass!
     var renderer: MeshRenderer!
     
     override func onAwake() {
+        _computePass = ComputePass(engine.device)
         _computePass.shader.append(ShaderPass(engine.library("app.shader"), "compute_atomic"))
         _computePass.threadsPerGridX = 2
         _computePass.threadsPerGridY = 2

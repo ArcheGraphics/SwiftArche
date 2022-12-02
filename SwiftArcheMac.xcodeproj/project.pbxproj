@@ -364,6 +364,7 @@
 		3EC92AB62938633E00423396 /* cubemap_shading.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3EC92AB52938633E00423396 /* cubemap_shading.metal */; };
 		3EC92ABC2938834900423396 /* atomic_counter.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3EC92ABB2938834900423396 /* atomic_counter.metal */; };
 		3EC92ABE29388A9C00423396 /* sh_baker.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3EC92ABD29388A9C00423396 /* sh_baker.metal */; };
+		3EC92AC82939A1ED00423396 /* gamma_correction.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3EC92AC72939A1ED00423396 /* gamma_correction.metal */; };
 		43D8C033021F4B86E95953E6 /* IBLApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8CFAFE0E0B5772488FA13 /* IBLApp.swift */; };
 		43D8C1413D08147985256B8A /* PhysXJointBasicApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8C12DBC7510CB05B703F8 /* PhysXJointBasicApp.swift */; };
 		43D8C40438F0527739C7D662 /* AtomicComputeApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8C888ABFCE2075E7AA5BE /* AtomicComputeApp.swift */; };
@@ -851,6 +852,7 @@
 		3EC92AB52938633E00423396 /* cubemap_shading.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = cubemap_shading.metal; sourceTree = "<group>"; };
 		3EC92ABB2938834900423396 /* atomic_counter.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = atomic_counter.metal; sourceTree = "<group>"; };
 		3EC92ABD29388A9C00423396 /* sh_baker.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = sh_baker.metal; sourceTree = "<group>"; };
+		3EC92AC72939A1ED00423396 /* gamma_correction.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = gamma_correction.metal; sourceTree = "<group>"; };
 		43D8C090F42BE8E48D6FC4E1 /* GridMaterial.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GridMaterial.swift; sourceTree = "<group>"; };
 		43D8C0A4A7B56D737C3F4FE2 /* PhysXCollisionDetectionApp.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhysXCollisionDetectionApp.swift; sourceTree = "<group>"; };
 		43D8C0CC365128B7B18E4074 /* WireframeManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WireframeManager.swift; sourceTree = "<group>"; };
@@ -1304,6 +1306,7 @@
 				3EC0383D29321495002187DC /* background_shading.metal */,
 				3EC0383C29321495002187DC /* pbr_shading.h */,
 				3EC0384029321495002187DC /* pbr_shading.metal */,
+				3EC92AC72939A1ED00423396 /* gamma_correction.metal */,
 			);
 			path = vox.shader;
 			sourceTree = "<group>";
@@ -2373,6 +2376,7 @@
 				3EC0384A29321496002187DC /* normal_shading.metal in Sources */,
 				3EC03857293214A2002187DC /* shadow_shading.metal in Sources */,
 				3EC0384D29321496002187DC /* pbr_shading.metal in Sources */,
+				3EC92AC82939A1ED00423396 /* gamma_correction.metal in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

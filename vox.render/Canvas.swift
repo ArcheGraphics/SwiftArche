@@ -32,6 +32,7 @@ public class Canvas: MTKView {
         translatesAutoresizingMaskIntoConstraints = false
         depthStencilPixelFormat = MTLPixelFormat.depth32Float_stencil8
         colorPixelFormat = MTLPixelFormat.bgra8Unorm
+        framebufferOnly = false
     }
     
     private func _setParentView(_ view: View) {

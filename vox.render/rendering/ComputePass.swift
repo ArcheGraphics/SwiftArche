@@ -17,8 +17,15 @@ open class ComputePass {
 
     public var shader: [ShaderPass] = []
     public var data: [ShaderData] = []
+    
+    var defaultShaderData: ShaderData {
+        get {
+            data[0]
+        }
+    }
 
-    public init() {
+    public init(_ device: MTLDevice) {
+        data.append(ShaderData(device))
     }
 
     /// Compute function

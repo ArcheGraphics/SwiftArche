@@ -11,32 +11,38 @@
     {
       "cube-face" : "x-",
       "filename" : "Universal -X.mipmapset",
-      "idiom" : "universal"
+      "idiom" : "universal",
+      "pixel-format" : "rgba-8-unorm-sRGB"
     },
     {
       "cube-face" : "y-",
       "filename" : "Universal -Y.mipmapset",
-      "idiom" : "universal"
+      "idiom" : "universal",
+      "pixel-format" : "rgba-8-unorm-sRGB"
     },
     {
       "cube-face" : "z-",
       "filename" : "Universal -Z.mipmapset",
-      "idiom" : "universal"
+      "idiom" : "universal",
+      "pixel-format" : "rgba-8-unorm-sRGB"
     },
     {
       "cube-face" : "x+",
       "filename" : "Universal +X.mipmapset",
-      "idiom" : "universal"
+      "idiom" : "universal",
+      "pixel-format" : "rgba-8-unorm-sRGB"
     },
     {
       "cube-face" : "y+",
       "filename" : "Universal +Y.mipmapset",
-      "idiom" : "universal"
+      "idiom" : "universal",
+      "pixel-format" : "rgba-8-unorm-sRGB"
     },
     {
       "cube-face" : "z+",
       "filename" : "Universal +Z.mipmapset",
-      "idiom" : "universal"
+      "idiom" : "universal",
+      "pixel-format" : "rgba-8-unorm-sRGB"
     }
   ]
 }

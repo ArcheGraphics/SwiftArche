@@ -33,7 +33,6 @@ public class TextureLoader {
         var textureLoaderOptions = textureLoaderOptions
         if textureLoaderOptions.isEmpty {
             textureLoaderOptions = [.origin: MTKTextureLoader.Origin.topLeft,
-                                    .SRGB: false,
                                     .generateMipmaps: NSNumber(booleanLiteral: true)]
         }
         let texture = try textureLoader.newTexture(name: name, scaleFactor: scaleFactor,
@@ -51,7 +50,6 @@ public class TextureLoader {
         var textureLoaderOptions = textureLoaderOptions
         if textureLoaderOptions.isEmpty {
             textureLoaderOptions = [.origin: MTKTextureLoader.Origin.topLeft,
-                                    .SRGB: false,
                                     .generateMipmaps: NSNumber(booleanLiteral: true)]
         }
         let texture = try textureLoader.newTexture(URL: url, options: textureLoaderOptions)
@@ -68,7 +66,6 @@ public class TextureLoader {
         var textureLoaderOptions = textureLoaderOptions
         if textureLoaderOptions.isEmpty {
             textureLoaderOptions = [.origin: MTKTextureLoader.Origin.topLeft,
-                                    .SRGB: false,
                                     .generateMipmaps: NSNumber(booleanLiteral: true)]
         }
         let texture = try? textureLoader.newTexture(texture: texture, options: textureLoaderOptions)

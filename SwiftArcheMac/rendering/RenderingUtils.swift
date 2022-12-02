@@ -41,10 +41,11 @@ func createSphericalHarmonicsCoefficients(_ engine: Engine, with cube: MTLTextur
     return bufferView
 }
 
-func createSpecularTexture(_ engine: Engine, with cube: MTLTexture, _ decodeMode: DecodeMode = .Gamma) -> MTLTexture? {
+func createSpecularTexture(_ engine: Engine, with cube: MTLTexture, _ decodeMode: DecodeMode = .Linear) -> MTLTexture? {
+    let format = MTLPixelFormat(rawValue: cube.pixelFormat.rawValue - 1)!
     let descriptor = MTLTextureDescriptor()
     descriptor.textureType = .typeCube
-    descriptor.pixelFormat = cube.pixelFormat
+    descriptor.pixelFormat = format
     descriptor.width = cube.width
     descriptor.height = cube.height
     descriptor.mipmapLevelCount = cube.mipmapLevelCount
@@ -61,7 +62,7 @@ func createSpecularTexture(_ engine: Engine, with cube: MTLTexture, _ decodeMode
         commandEncoder.setComputePipelineState(pipelineState)
         commandEncoder.setTexture(cube, index: 0)
         for lod in 0..<cube.mipmapLevelCount {
-            let textureView = specularTexture.makeTextureView(pixelFormat: cube.pixelFormat, textureType: .typeCube,
+            let textureView = specularTexture.makeTextureView(pixelFormat: format, textureType: .typeCube,
                     levels: lod..<lod + 1, slices: 0..<6)
             commandEncoder.setTexture(textureView, index: 1)
             var roughness: Float = Float(lod) / Float(cube.mipmapLevelCount - 1)  // linear

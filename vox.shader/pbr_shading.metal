@@ -312,11 +312,7 @@ void PBRShading::initMaterial(){
     float alphaCutoff = u_alphaCutoff;
     
     if (hasBaseTexture) {
-        float4 baseTextureColor = u_baseTexture.sample(u_baseSampler, v_uv);
-#ifndef OASIS_COLORSPACE_GAMMA
-        baseTextureColor = gammaToLinear(baseTextureColor);
-#endif
-        baseColor *= baseTextureColor;
+        baseColor *= u_baseTexture.sample(u_baseSampler, v_uv);
     }
     
     if (hasVertexColor) {
@@ -337,9 +333,6 @@ void PBRShading::initMaterial(){
     
     if (hasSpecularGlossinessTexture) {
         float4 specularGlossinessColor = u_specularGlossinessTexture.sample(u_specularGlossinessSampler, v_uv );
-#ifndef OASIS_COLORSPACE_GAMMA
-        specularGlossinessColor = gammaToLinear(specularGlossinessColor);
-#endif
         specularColor *= specularGlossinessColor.rgb;
         glossiness *= specularGlossinessColor.a;
     }
@@ -384,9 +377,6 @@ float4 PBRShading::execute() {
     float3 irradiance = float3(0.0);
     if (hasSH) {
         irradiance = getLightProbeIrradiance(geometry.normal);
-#ifdef OASIS_COLORSPACE_GAMMA
-        irradiance = linearToGamma(vec4(irradiance, 1.0)).rgb;
-#endif
         irradiance *= u_envMapLight.diffuseIntensity;
     } else {
         irradiance = u_envMapLight.diffuse * u_envMapLight.diffuseIntensity;
@@ -422,11 +412,7 @@ float4 PBRShading::execute() {
     // Emissive
     float3 emissiveRadiance = u_emissiveColor;
     if (hasEmissiveTexture) {
-        float4 emissiveColor = u_emissiveTexture.sample(u_emissiveSampler, v_uv);
-#ifndef OASIS_COLORSPACE_GAMMA
-        emissiveColor = gammaToLinear(emissiveColor);
-#endif
-        emissiveRadiance *= emissiveColor.rgb;
+        emissiveRadiance *= u_emissiveTexture.sample(u_emissiveSampler, v_uv).rgb;
     }
     
     float3 totalRadiance = reflectedLight.directDiffuse +
@@ -435,11 +421,7 @@ float4 PBRShading::execute() {
     reflectedLight.indirectSpecular +
     emissiveRadiance;
     
-    float4 targetColor = float4(totalRadiance, material.opacity);
-#ifndef OASIS_COLORSPACE_GAMMA
-    targetColor = linearToGamma(targetColor);
-#endif
-    return targetColor;
+    return float4(totalRadiance, material.opacity);
 }
 
 // MARK: - Entry

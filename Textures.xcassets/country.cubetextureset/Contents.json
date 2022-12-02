@@ -1,42 +1,48 @@
 {
-  "properties" : {
-    "origin" : "bottom-left",
-    "interpretation" : "data"
-  },
   "info" : {
-    "version" : 1,
-    "author" : "xcode"
+    "author" : "xcode",
+    "version" : 1
+  },
+  "properties" : {
+    "interpretation" : "data",
+    "origin" : "bottom-left"
   },
   "textures" : [
     {
-      "idiom" : "universal",
+      "cube-face" : "x-",
       "filename" : "Universal -X.mipmapset",
-      "cube-face" : "x-"
+      "idiom" : "universal",
+      "pixel-format" : "rgba-8-unorm-sRGB"
     },
     {
-      "idiom" : "universal",
+      "cube-face" : "y-",
       "filename" : "Universal -Y.mipmapset",
-      "cube-face" : "y-"
+      "idiom" : "universal",
+      "pixel-format" : "rgba-8-unorm-sRGB"
     },
     {
-      "idiom" : "universal",
+      "cube-face" : "z-",
       "filename" : "Universal -Z.mipmapset",
-      "cube-face" : "z-"
+      "idiom" : "universal",
+      "pixel-format" : "rgba-8-unorm-sRGB"
     },
     {
-      "idiom" : "universal",
+      "cube-face" : "x+",
       "filename" : "Universal +X.mipmapset",
-      "cube-face" : "x+"
+      "idiom" : "universal",
+      "pixel-format" : "rgba-8-unorm-sRGB"
     },
     {
-      "idiom" : "universal",
+      "cube-face" : "y+",
       "filename" : "Universal +Y.mipmapset",
-      "cube-face" : "y+"
+      "idiom" : "universal",
+      "pixel-format" : "rgba-8-unorm-sRGB"
     },
     {
-      "idiom" : "universal",
+      "cube-face" : "z+",
       "filename" : "Universal +Z.mipmapset",
-      "cube-face" : "z+"
+      "idiom" : "universal",
+      "pixel-format" : "rgba-8-unorm-sRGB"
     }
   ]
 }
