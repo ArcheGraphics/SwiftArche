@@ -51,7 +51,9 @@ class IblApp: NSViewController {
         engine = Engine(canvas: canvas)
 
         let scene = engine.sceneManager.activeScene!
-        scene.ambientLight = loadAmbientLight(engine, with: "countryIBL")
+        let hdr = engine.textureLoader.loadHDR(with: "assets/kloppenheim_06_4k.hdr")!
+        let cubeMap = createCubemap(engine, with: hdr, size: 256, level: 3)
+        scene.ambientLight = loadAmbientLight(engine, with: cubeMap)
         let rootEntity = scene.createRootEntity()
 
         let cameraEntity = rootEntity.createChild()
@@ -59,11 +61,6 @@ class IblApp: NSViewController {
         cameraEntity.transform.lookAt(targetPosition: Vector3())
         let _: Camera = cameraEntity.addComponent()
         let _: OrbitControl = cameraEntity.addComponent()
-
-        let light = rootEntity.createChild("light")
-        light.transform.setPosition(x: 1, y: 3, z: 0)
-        light.transform.lookAt(targetPosition: Vector3())
-        let _: DirectLight = light.addComponent()
 
         let mat = _materials[7]
 

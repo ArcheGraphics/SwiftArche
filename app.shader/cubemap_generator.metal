@@ -16,10 +16,8 @@ float4 equirectangularSample(float3 direction, sampler s, texture2d<float> image
 kernel void cubemap_generator(texture2d<float, access::sample> hdr [[ texture(0) ]],
                               texturecube<float, access::write> output [[ texture(1) ]],
                               uint3 tpig [[ thread_position_in_grid ]]) {
-    float inputWidth = hdr.get_width();
-    float width = output.get_width();
     uint face = tpig.z;
-    float2 inputuv = float2(tpig.xy) / inputWidth;
+    float2 inputuv = float2(tpig.xy) / output.get_width();
 
     float u = 2.0 * inputuv.x - 1.0;
     float v = -2.0 * inputuv.y + 1.0;
@@ -49,7 +47,5 @@ kernel void cubemap_generator(texture2d<float, access::sample> hdr [[ texture(0)
     constexpr sampler linearFilterSampler(coord::normalized, address::clamp_to_edge, filter::linear);
     float4 color = equirectangularSample(direction, linearFilterSampler, hdr);
     
-    float scale = inputWidth / width;
-    uint2 outputuv = uint2(tpig.x/scale, tpig.y/scale);
-    output.write(color, outputuv, face);
+    output.write(float4(clamp(color.rgb, 0.f, 500), 1.f), tpig.xy, face);
 }

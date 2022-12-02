@@ -49,46 +49,6 @@ float pow2(const float x) {
     return x * x;
 }
 
-float4 RGBEToLinear(float4 value) {
-    return float4( value.rgb * exp2( value.a * 255.0 - 128.0 ), 1.0 );
-}
-
-float4 RGBMToLinear(float4 value, float maxRange) {
-    return float4( value.rgb * value.a * maxRange, 1.0 );
-}
-
-float4 gammaToLinear(float4 srgbIn){
-    return float4( pow(srgbIn.rgb, float3(2.2)), srgbIn.a);
-}
-
-float4 toLinear(float4 color){
-    float4 linear = float4(0.0);
-    if (decodeMode == 0)
-        linear = color;
-    else if (decodeMode == 1)
-        linear = gammaToLinear(color);
-    else if (decodeMode == 2)
-        linear = RGBEToLinear(color);
-    else if (decodeMode == 3)
-        linear = RGBMToLinear(color, 5.0);
-
-    return linear;
-}
-
-float4 linearToRGBE(float4 value) {
-    float maxComponent = max( max( value.r, value.g ), value.b );
-    float fExp = clamp( ceil( log2( maxComponent ) ), -128.0, 127.0 );
-    return float4( value.rgb / exp2( fExp ), ( fExp + 128.0 ) / 255.0 );
-}
-
-
-float4 LinearToRGBM(float4 value, float maxRange) {
-    float maxRGB = max( value.r, max( value.g, value.b ) );
-    float M = clamp( maxRGB / maxRange, 0.0, 1.0 );
-    M = ceil( M * 255.0 ) / 255.0;
-    return float4( value.rgb / ( M * maxRange ), M );
-}
-
 // Microfacet Models for Refraction through Rough Surfaces - equation (33)
 // http://graphicrants.blogspot.com/2013/08/specular-brdf-reference.html
 // alpha is "roughness squared" in Disney’s reparameterization
@@ -126,7 +86,7 @@ float3 specular(float3 N, float lodRoughness, float u_textureSize, texturecube<f
             float mipLevel = lodRoughness == 0.0 ? 0.0 : 0.5 * log2(saSample / saTexel);
             
             float4 samplerColor = environmentMap.sample(EnvMapSampler, L, level(mipLevel));
-            float3 linearColor = toLinear(samplerColor).rgb;
+            float3 linearColor = samplerColor.rgb;
 
             prefilteredColor += linearColor * NdotL;
             totalWeight      += NdotL;
@@ -175,7 +135,7 @@ kernel void build_specular(texturecube<float, access::sample> input [[ texture(0
     float4 color;
     if (lod_roughness == 0.) {
         constexpr sampler s(filter::linear);
-        color = toLinear(input.sample(s, direction));
+        color = input.sample(s, direction);
     } else {
         float3 integratedBRDF = specular(direction, lod_roughness, inputWidth, input);
         color = float4(integratedBRDF, 1.);

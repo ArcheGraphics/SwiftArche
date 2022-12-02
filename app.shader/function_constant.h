@@ -8,5 +8,3 @@
 
 #include "../vox.shader/function_constant.h"
 #include "macro_name.h"
-
-DeclIntMacro(decodeMode, DECODE_MODE)

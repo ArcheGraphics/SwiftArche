@@ -13,6 +13,4 @@
 // IS_ : Shader control flow
 // _COUNT: type int constant
 typedef enum {
-    // Offline
-    DECODE_MODE =                        0
 } AppMacro;

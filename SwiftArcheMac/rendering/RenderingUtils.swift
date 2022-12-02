@@ -9,13 +9,6 @@ import vox_render
 import ModelIO
 import Metal
 
-enum DecodeMode: Int {
-    case Linear = 0
-    case Gamma = 1
-    case RGBE = 2
-    case RGBM = 3
-}
-
 func createSphericalHarmonicsCoefficients(_ engine: Engine, with cube: MTLTexture) -> BufferView {
     // first 27 is parameter, the last is scale
     let bufferView = BufferView(device: engine.device, count: 28, stride: MemoryLayout<Float>.stride)
@@ -41,8 +34,7 @@ func createSphericalHarmonicsCoefficients(_ engine: Engine, with cube: MTLTextur
     return bufferView
 }
 
-func createSpecularTexture(_ engine: Engine, with cube: MTLTexture,
-                           format: MTLPixelFormat, _ decodeMode: DecodeMode = .Linear) -> MTLTexture? {
+func createSpecularTexture(_ engine: Engine, with cube: MTLTexture, format: MTLPixelFormat) -> MTLTexture? {
     let descriptor = MTLTextureDescriptor()
     descriptor.textureType = .typeCube
     descriptor.pixelFormat = format
@@ -52,10 +44,7 @@ func createSpecularTexture(_ engine: Engine, with cube: MTLTexture,
     descriptor.usage = MTLTextureUsage(rawValue: MTLTextureUsage.shaderRead.rawValue | MTLTextureUsage.shaderWrite.rawValue)
     let specularTexture = engine.textureLoader.makeTexture(descriptor)
 
-    let functionConstants = MTLFunctionConstantValues()
-    var decodeModeValue = decodeMode.rawValue
-    functionConstants.setConstantValue(&decodeModeValue, type: .int, index: 0)
-    let function = try! engine.library("app.shader").makeFunction(name: "build_specular", constantValues: functionConstants)
+    let function = engine.library("app.shader").makeFunction(name: "build_specular")!
     let pipelineState = try! engine.device.makeComputePipelineState(function: function)
     if let commandBuffer = engine.commandQueue.makeCommandBuffer(),
        let commandEncoder = commandBuffer.makeComputeCommandEncoder() {
@@ -131,7 +120,7 @@ func createCubemap(_ engine: Engine, with hdr: MTLTexture, size: Int, level: Int
 
             let w = pipelineState.threadExecutionWidth
             let h = pipelineState.maxTotalThreadsPerThreadgroup / w
-            commandEncoder.dispatchThreads(MTLSizeMake(size, size, 1),
+            commandEncoder.dispatchThreads(MTLSizeMake(size, size, 6),
                     threadsPerThreadgroup: MTLSizeMake(w, h, 1))
             commandEncoder.endEncoding()
         }
@@ -147,11 +136,18 @@ func createCubemap(_ engine: Engine, with hdr: MTLTexture, size: Int, level: Int
     return cubeMap
 }
 
-func loadAmbientLight(_ engine: Engine, with name: String,
-                      format: MTLPixelFormat = .rgba8Unorm, _ decodeMode: DecodeMode = .Gamma) -> AmbientLight {
+func loadAmbientLight(_ engine: Engine, with name: String, format: MTLPixelFormat = .rgba8Unorm) -> AmbientLight {
     let cubeMap = try! engine.textureLoader.loadTexture(with: name)!
     let ambientLight = AmbientLight();
-    ambientLight.specularTexture = createSpecularTexture(engine, with: cubeMap, format: format, decodeMode)
+    ambientLight.specularTexture = createSpecularTexture(engine, with: cubeMap, format: format)
+    ambientLight.diffuseSphericalHarmonics = createSphericalHarmonicsCoefficients(engine, with: cubeMap)
+    ambientLight.diffuseMode = DiffuseMode.SphericalHarmonics
+    return ambientLight
+}
+
+func loadAmbientLight(_ engine: Engine, with cubeMap: MTLTexture) -> AmbientLight {
+    let ambientLight = AmbientLight();
+    ambientLight.specularTexture = createSpecularTexture(engine, with: cubeMap, format: cubeMap.pixelFormat)
     ambientLight.diffuseSphericalHarmonics = createSphericalHarmonicsCoefficients(engine, with: cubeMap)
     ambientLight.diffuseMode = DiffuseMode.SphericalHarmonics
     return ambientLight
