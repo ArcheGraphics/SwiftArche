@@ -16,6 +16,7 @@ public class Engine: NSObject {
     let _macroCollection: ShaderMacroCollection = ShaderMacroCollection()
     let _componentsManager: ComponentsManager = ComponentsManager()
     let _lightManager = LightManager()
+    var _renderCount: UInt64 = 0;
 
     private var _library: [String: MTLLibrary] = [:]
     private var _time: Time = Time();

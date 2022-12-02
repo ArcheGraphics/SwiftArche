@@ -385,6 +385,7 @@ extension Camera {
         )
 
         devicePipeline.commit(commandBuffer)
+        engine._renderCount += 1
     }
 }
 

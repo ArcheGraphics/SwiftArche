@@ -9,6 +9,13 @@ import Metal
 class RenderPipelineState {
     private var _reflection: MTLRenderPipelineReflection?
     private var _handle: MTLRenderPipelineState?
+    
+    var uploadRenderCount: UInt64 = UInt64.max
+    var uploadScene: Scene?
+    var uploadCamera: Camera?
+    var uploadRenderer: Renderer?
+    var uploadMaterial: Material?
+    var uploadMesh: Mesh?
 
     var uniformBlock: [ReflectionUniform] = []
 

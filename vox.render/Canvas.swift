@@ -33,6 +33,22 @@ public class Canvas: MTKView {
         depthStencilPixelFormat = MTLPixelFormat.depth32Float_stencil8
         colorPixelFormat = MTLPixelFormat.bgra8Unorm
         framebufferOnly = false
+        
+#if os(macOS)
+        if let window = NSApplication.shared.mainWindow {
+            window.acceptsMouseMovedEvents = true
+        }
+        // If we want to receive key events, we either need to be in the responder chain of the key view,
+        // or else we can install a local monitor. The consequence of this heavy-handed approach is that
+        // we receive events for all controls, not just Dear ImGui widgets. If we had native controls in our
+        // window, we'd want to be much more careful than just ingesting the complete event stream, though we
+        // do make an effort to be good citizens by passing along events when Dear ImGui doesn't want to capture.
+        let eventMask: NSEvent.EventTypeMask = [.keyDown, .keyUp, .flagsChanged]
+        NSEvent.addLocalMonitorForEvents(matching: eventMask) { [unowned self](event) -> NSEvent? in
+            ImGui_ImplOSX_HandleEvent(event, self)
+            return event
+        }
+#endif
     }
     
     private func _setParentView(_ view: View) {
@@ -88,11 +104,7 @@ public class Canvas: MTKView {
     }
 #else    
     public override func updateTrackingAreas() {
-        guard let window = NSApplication.shared.mainWindow else {
-            return
-        }
-        window.acceptsMouseMovedEvents = true
-
+        super.updateTrackingAreas()
         if let trackingArea = trackingArea {
             removeTrackingArea(trackingArea)
         }
@@ -101,17 +113,6 @@ public class Canvas: MTKView {
         trackingArea = NSTrackingArea(rect: self.bounds, options: options,
                 owner: self, userInfo: nil)
         addTrackingArea(trackingArea!)
-        
-        // If we want to receive key events, we either need to be in the responder chain of the key view,
-        // or else we can install a local monitor. The consequence of this heavy-handed approach is that
-        // we receive events for all controls, not just Dear ImGui widgets. If we had native controls in our
-        // window, we'd want to be much more careful than just ingesting the complete event stream, though we
-        // do make an effort to be good citizens by passing along events when Dear ImGui doesn't want to capture.
-        let eventMask: NSEvent.EventTypeMask = [.keyDown, .keyUp, .flagsChanged]
-        NSEvent.addLocalMonitorForEvents(matching: eventMask) { [unowned self](event) -> NSEvent? in
-            ImGui_ImplOSX_HandleEvent(event, self)
-            return event
-        }        
     }
     
     public override var acceptsFirstResponder: Bool {
