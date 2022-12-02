@@ -16,7 +16,7 @@ import Metal
 /// the cache on app startup by creating all necessary objects.
 /// The cache holds pointers to objects and has a mapping from such pointers to hashes.
 /// It can only be destroyed in bulk, single elements cannot be removed.
-class ResourceCache {
+public class ResourceCache {
     private var device: MTLDevice
     var shader_modules: [Int: MTLFunction] = [:]
     var graphics_pipelines: [Int: RenderPipelineState] = [:]

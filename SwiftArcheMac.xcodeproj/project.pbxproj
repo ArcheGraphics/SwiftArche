@@ -1477,8 +1477,8 @@
 				3EC0395D293218BA002187DC /* Subpass.swift */,
 				3EC0387929321799002187DC /* subpasses */,
 				3EC92AE02939F97300423396 /* RenderCommandEncoder.swift */,
-				3EC03959293218BA002187DC /* ComputePipelineState.swift */,
 				3EC0395A293218BA002187DC /* RenderPipelineState.swift */,
+				3EC03959293218BA002187DC /* ComputePipelineState.swift */,
 				3EC03958293218BA002187DC /* ReflectionUniform.swift */,
 				3EC0395B293218BA002187DC /* ResourceCache.swift */,
 			);

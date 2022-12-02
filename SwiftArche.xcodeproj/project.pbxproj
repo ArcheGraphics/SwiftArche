@@ -162,6 +162,7 @@
 		3EC92AC42938923B00423396 /* sh_baker.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3EC92AC02938923A00423396 /* sh_baker.metal */; };
 		3EC92AC52938923B00423396 /* specular_baker.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3EC92AC12938923A00423396 /* specular_baker.metal */; };
 		3EC92AC62938923B00423396 /* cubemap_shading.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3EC92AC22938923B00423396 /* cubemap_shading.metal */; };
+		3EC92AE3293A055F00423396 /* RenderCommandEncoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EC92AE2293A055F00423396 /* RenderCommandEncoder.swift */; };
 		43D8C013A31176A5BCE169AC /* KHR_materials_pbrSpecularGlossiness.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8CC391B749FD47D8987F9 /* KHR_materials_pbrSpecularGlossiness.swift */; };
 		43D8C028EAA2732208634F87 /* EngineObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8C860A954154FCBE6973D /* EngineObject.swift */; };
 		43D8C058C79C4CF107774FD3 /* FixedJoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8C6EC5B8AD9E887A884AA /* FixedJoint.swift */; };
@@ -675,6 +676,7 @@
 		3EC92AC02938923A00423396 /* sh_baker.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; path = sh_baker.metal; sourceTree = "<group>"; };
 		3EC92AC12938923A00423396 /* specular_baker.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; path = specular_baker.metal; sourceTree = "<group>"; };
 		3EC92AC22938923B00423396 /* cubemap_shading.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; path = cubemap_shading.metal; sourceTree = "<group>"; };
+		3EC92AE2293A055F00423396 /* RenderCommandEncoder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RenderCommandEncoder.swift; sourceTree = "<group>"; };
 		43D8C0115848492526783538 /* HingeJointFlag.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HingeJointFlag.swift; sourceTree = "<group>"; };
 		43D8C050955DD1855EEBFE8E /* BlendState.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BlendState.swift; sourceTree = "<group>"; };
 		43D8C058DA27D2BC1365273F /* SceneParser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SceneParser.swift; sourceTree = "<group>"; };
@@ -1587,6 +1589,7 @@
 				43D8C5BA82AE969237F234DC /* Subpass.swift */,
 				3E0F7B202923584A00C4A843 /* subpasses */,
 				3E0F7B1E292331B000C4A843 /* ReflectionUniform.swift */,
+				3EC92AE2293A055F00423396 /* RenderCommandEncoder.swift */,
 				43D8C4992F109CE7A2BD9E97 /* RenderPipelineState.swift */,
 				43D8C5458496A0164715E24D /* ComputePipelineState.swift */,
 				43D8CD34E1337864CB67AF7E /* ResourceCache.swift */,
@@ -2227,6 +2230,7 @@
 				3E0F7C952926644F00C4A843 /* StaticCollider.swift in Sources */,
 				3E5D8680292B248500759BA9 /* AnimationClip.swift in Sources */,
 				3E0F7C6C2926039500C4A843 /* PhysXTolerancesScale.swift in Sources */,
+				3EC92AE3293A055F00423396 /* RenderCommandEncoder.swift in Sources */,
 				43D8CCBC80181D80F3E9A7CA /* PBRSpecularMaterial.swift in Sources */,
 				43D8CA3CFB85DE87A2237A01 /* IndexBufferBinding.swift in Sources */,
 				43D8C24FBA43B612E59B13DE /* SubMesh.swift in Sources */,
@@ -2779,11 +2783,11 @@
 					"-lPhysXExtensions_static_64",
 					"-lPhysXCharacterKinematic_static_64",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = archegraphics.Flex;
+				PRODUCT_BUNDLE_IDENTIFIER = archegraphics.SwiftArche;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
-				SUPPORTS_MACCATALYST = YES;
+				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_OBJC_BRIDGING_HEADER = SwiftArche/bridging.h;
@@ -2826,11 +2830,11 @@
 					"-lPhysXExtensions_static_64",
 					"-lPhysXCharacterKinematic_static_64",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = archegraphics.Flex;
+				PRODUCT_BUNDLE_IDENTIFIER = archegraphics.SwiftArche;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
-				SUPPORTS_MACCATALYST = YES;
+				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_OBJC_BRIDGING_HEADER = SwiftArche/bridging.h;

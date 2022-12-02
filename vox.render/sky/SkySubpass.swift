@@ -82,7 +82,6 @@ public class SkySubpass: Subpass {
         encoder.handle.setVertexBytes(&viewProjMatrix, length: MemoryLayout<Matrix>.stride, index: 10)
         encoder.bind(material: material, _pso, pipeline._resourceCache)
         encoder.bind(mesh: mesh)
-        encoder.bind(pso: _pso)
         encoder.handle.setDepthStencilState(_depthStencilState)
         encoder.handle.setFrontFacing(.counterClockwise)
         encoder.draw(subMesh: mesh.subMesh!, with: mesh)

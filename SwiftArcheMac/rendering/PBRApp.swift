@@ -77,8 +77,8 @@ class PbrApp: NSViewController {
                 sphereEntity.transform.position = Vector3(Float(i - 3), Float(j - 3), 0)
                 let sphereMtl = PBRMaterial(engine)
                 sphereMtl.baseColor = mat.baseColor
-                sphereMtl.metallic = simd_clamp(Float(i) / Float(7 - 1), 0.1, 1.0)
-                sphereMtl.roughness = simd_clamp(Float(j) / Float(7 - 1), 0.05, 1.0)
+                sphereMtl.metallic = simd_clamp(Float(i) / Float(7 - 1), 0, 1.0)
+                sphereMtl.roughness = simd_clamp(Float(j) / Float(7 - 1), 0, 1.0)
 
                 let sphereRenderer: MeshRenderer = sphereEntity.addComponent()
                 sphereRenderer.mesh = sphere

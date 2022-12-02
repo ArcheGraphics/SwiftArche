@@ -7,8 +7,8 @@
 import Metal
 
 public struct RenderCommandEncoder {
-    let descriptor: MTLRenderPassDescriptor
-    let handle: MTLRenderCommandEncoder
+    public let descriptor: MTLRenderPassDescriptor
+    public let handle: MTLRenderCommandEncoder
 
     private var _uploadScene: Scene?
     private var _uploadCamera: Camera?
@@ -27,7 +27,7 @@ public struct RenderCommandEncoder {
         handle.label = label
     }
 
-    mutating func bind(depthStencilState: MTLDepthStencilDescriptor, _ cache: ResourceCache) {
+    public mutating func bind(depthStencilState: MTLDepthStencilDescriptor, _ cache: ResourceCache) {
         let state = cache.requestDepthStencilState(depthStencilState)
         if _uploadDepthStencilState !== state {
             handle.setDepthStencilState(state)
@@ -35,42 +35,47 @@ public struct RenderCommandEncoder {
         }
     }
 
-    mutating func bind(pso: RenderPipelineState) {
+    public mutating func bind(camera: Camera, _ pso: RenderPipelineState, _ cache: ResourceCache) {
         if _uploadPSO !== pso {
-            handle.setRenderPipelineState(pso.handle)
-            _uploadPSO = pso
+            _bind(pso: pso)
         }
-    }
-
-    mutating func bind(camera: Camera, _ pso: RenderPipelineState, _ cache: ResourceCache) {
         if _uploadCamera !== camera {
             camera.shaderData.bindData(handle, pso.uniformBlock, cache)
             _uploadCamera = camera
         }
     }
 
-    mutating func bind(material: Material, _ pso: RenderPipelineState, _ cache: ResourceCache) {
+    public mutating func bind(material: Material, _ pso: RenderPipelineState, _ cache: ResourceCache) {
+        if _uploadPSO !== pso {
+            _bind(pso: pso)
+        }
         if _uploadMaterial !== material {
             material.shaderData.bindData(handle, pso.uniformBlock, cache)
             _uploadMaterial = material
         }
     }
 
-    mutating func bind(renderer: Renderer, _ pso: RenderPipelineState, _ cache: ResourceCache) {
+    public mutating func bind(renderer: Renderer, _ pso: RenderPipelineState, _ cache: ResourceCache) {
+        if _uploadPSO !== pso {
+            _bind(pso: pso)
+        }
         if _uploadRenderer !== renderer {
             renderer.shaderData.bindData(handle, pso.uniformBlock, cache)
             _uploadRenderer = renderer
         }
     }
 
-    mutating func bind(scene: Scene, _ pso: RenderPipelineState, _ cache: ResourceCache) {
+    public mutating func bind(scene: Scene, _ pso: RenderPipelineState, _ cache: ResourceCache) {
+        if _uploadPSO !== pso {
+            _bind(pso: pso)
+        }
         if _uploadScene !== scene {
             scene.shaderData.bindData(handle, pso.uniformBlock, cache)
             _uploadScene = scene
         }
     }
 
-    mutating func bind(mesh: Mesh) {
+    public mutating func bind(mesh: Mesh) {
         if _uploadMesh !== mesh {
             for index in 0..<31 {
                 if let bufferView = mesh._vertexBufferBindings[index] {
@@ -81,7 +86,7 @@ public struct RenderCommandEncoder {
         }
     }
 
-    mutating func draw(subMesh: SubMesh, with mesh: Mesh) {
+    public mutating func draw(subMesh: SubMesh, with mesh: Mesh) {
         let indexBufferBinding = mesh._indexBufferBinding
         if indexBufferBinding != nil {
             handle.drawIndexedPrimitives(type: subMesh.topology, indexCount: subMesh.count,
@@ -93,7 +98,18 @@ public struct RenderCommandEncoder {
         }
     }
 
-    func endEncoding() {
+    public func endEncoding() {
         handle.endEncoding()
+    }
+
+    private mutating func _bind(pso: RenderPipelineState) {
+        if _uploadPSO !== pso {
+            handle.setRenderPipelineState(pso.handle)
+            _uploadPSO = pso
+            _uploadCamera = nil
+            _uploadRenderer = nil
+            _uploadScene = nil
+            _uploadMaterial = nil
+        }
     }
 }

@@ -77,7 +77,7 @@ public class ARSubpass: Subpass {
         engine.canvas.updateFlagManager.addFlag(flag: updateFlag)
     }
 
-    override func draw(_ encoder: MTLRenderCommandEncoder) {
+    override func draw(_ encoder: inout RenderCommandEncoder) {
         guard let currentFrame = arManager.session.currentFrame else {
             return
         }
@@ -92,24 +92,24 @@ public class ARSubpass: Subpass {
         }
 
         // Push a debug group allowing us to identify render commands in the GPU Frame Capture tool
-        encoder.pushDebugGroup("DrawCapturedImage")
+        encoder.handle.pushDebugGroup("DrawCapturedImage")
 
         // Set render command encoder state
-        encoder.setCullMode(.none)
-        encoder.setRenderPipelineState(capturedImagePipelineState)
-        encoder.setDepthStencilState(capturedImageDepthState)
+        encoder.handle.setCullMode(.none)
+        encoder.handle.setRenderPipelineState(capturedImagePipelineState)
+        encoder.handle.setDepthStencilState(capturedImageDepthState)
 
         // Set mesh's vertex buffers
-        encoder.setVertexBuffer(imagePlaneVertexBuffer, offset: 0, index: 0)
+        encoder.handle.setVertexBuffer(imagePlaneVertexBuffer, offset: 0, index: 0)
 
         // Set any textures read/sampled from our render pipeline
-        encoder.setFragmentTexture(CVMetalTextureGetTexture(textureY), index: 0)
-        encoder.setFragmentTexture(CVMetalTextureGetTexture(textureCbCr), index: 1)
+        encoder.handle.setFragmentTexture(CVMetalTextureGetTexture(textureY), index: 0)
+        encoder.handle.setFragmentTexture(CVMetalTextureGetTexture(textureCbCr), index: 1)
 
         // Draw each submesh of our mesh
-        encoder.drawPrimitives(type: .triangleStrip, vertexStart: 0, vertexCount: 4)
+        encoder.handle.drawPrimitives(type: .triangleStrip, vertexStart: 0, vertexCount: 4)
 
-        encoder.popDebugGroup()
+        encoder.handle.popDebugGroup()
     }
 
     private func resize(bit: Int?, param: AnyObject?) {

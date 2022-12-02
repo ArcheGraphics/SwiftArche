@@ -6,7 +6,7 @@
 
 import Metal
 
-class RenderPipelineState {
+public class RenderPipelineState {
     private var _reflection: MTLRenderPipelineReflection?
     private var _handle: MTLRenderPipelineState?
     

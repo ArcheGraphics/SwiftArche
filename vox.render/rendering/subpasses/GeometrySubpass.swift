@@ -49,7 +49,6 @@ public class GeometrySubpass: Subpass {
                 renderer.entity.transform._isFrontFaceInvert())
 
         let pso = cache.requestGraphicsPipeline(pipelineDescriptor)
-        encoder.bind(pso: pso)
         encoder.bind(depthStencilState: depthStencilDescriptor, cache)
         encoder.bind(camera: camera, pso, cache)
         encoder.bind(material: material, pso, cache)
