@@ -10,10 +10,6 @@ float pow2(float x) {
     return x * x;
 }
 
-float4 RGBMToLinear(float4 value, float maxRange) {
-    return float4(value.rgb * value.a * maxRange, 1.0);
-}
-
 float4x4 getJointMatrix(texture2d<float> joint_tex,
                         float index, int u_jointCount) {
     float base = index / u_jointCount;

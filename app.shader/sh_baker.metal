@@ -84,27 +84,29 @@ kernel void compute_sh(texturecube<float, access::sample> input [[ texture(0) ]]
     uint face = tpig.z;
     float2 inputuv = float2(tpig.xy) / inputWidth;
 
-    float cx = inputuv.x * 2. - 1.;
-    float cy = inputuv.y * 2. - 1.;
+    float u = 2.0 * inputuv.x - 1.0;
+    float v = -2.0 * inputuv.y + 1.0;
 
-    auto dir = float3(0.);
-    if (face == 0.) { // PX
-        dir = float3( 1.,  cy, -cx);
-    }
-    else if (face == 1.) { // NX
-        dir = float3(-1.,  cy,  cx);
-    }
-    else if (face == 2.) { // PY
-        dir = float3( cx,  1., -cy);
-    }
-    else if (face == 3.) { // NY
-        dir = float3( cx, -1.,  cy);
-    }
-    else if (face == 4.) { // PZ
-        dir = float3( cx,  cy,  1.);
-    }
-    else if (face == 5.) { // NZ
-        dir = float3(-cx,  cy, -1.);
+    float3 dir;
+    switch(face) {
+        case 0:
+            dir = float3(1.0, v, -u);
+            break;
+        case 1:
+            dir = float3(-1.0, v, u);
+            break;
+        case 2:
+            dir = float3(u, 1.0, -v);
+            break;
+        case 3:
+            dir = float3(u, -1.0, v);
+            break;
+        case 4:
+            dir = float3(u, v, 1.0);
+            break;
+        case 5:
+            dir = float3(-u, v, -1.0);
+            break;
     }
     
     constexpr sampler s(filter::linear);

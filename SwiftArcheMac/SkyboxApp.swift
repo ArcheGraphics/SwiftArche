@@ -9,6 +9,7 @@ import vox_render
 import vox_math
 import vox_toolkit
 import ImGui
+import ModelIO
 
 fileprivate class GUI: Script {
     var show_demo_window: Bool = true
@@ -82,10 +83,22 @@ class SkyboxApp: NSViewController {
 
         let scene = engine.sceneManager.activeScene!
         let rootEntity = scene.createRootEntity()
-        let _: GUI = rootEntity.addComponent()
+        // let _: GUI = rootEntity.addComponent()
 
         let skyMaterial = SkyBoxMaterial(engine)
-        skyMaterial.textureCubeMap = try! engine.textureLoader.loadTexture(with: "country")!
+        // method1: load cubemap
+        //skyMaterial.textureCubeMap = try! engine.textureLoader.loadTexture(with: "country")!
+        
+        // method2: load hdr
+        let hdr = engine.textureLoader.loadHDR(with: "assets/kloppenheim_06_4k.hdr")!
+        let cubeMap = createCubemap(engine, with: hdr, size: 256, level: 3)
+        skyMaterial.textureCubeMap = cubeMap
+        
+        // method3: generate skymap
+        // let skyTexture = MDLSkyCubeTexture(name: "natrual", channelEncoding: .float16,
+        //                                    textureDimensions: [512, 512], turbidity: 1.0, sunElevation: 1.0,
+        //                                    sunAzimuth: 1.0, upperAtmosphereScattering: 1.0, groundAlbedo: 1.0)
+        // skyMaterial.textureCubeMap = try! engine.textureLoader.loadTexture(with: skyTexture)!
 
         let skySubpass = SkySubpass()
         skySubpass.material = skyMaterial

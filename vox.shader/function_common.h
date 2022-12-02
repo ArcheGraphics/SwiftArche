@@ -12,8 +12,6 @@ using namespace metal;
 
 float pow2(float x);
 
-float4 RGBMToLinear(float4 value, float maxRange);
-
 float4x4 getJointMatrix(texture2d<float> joint_tex, float index, int u_jointCount);
 
 float3 getBlendShapeVertexElement(int blendShapeIndex, int vertexElementIndex,

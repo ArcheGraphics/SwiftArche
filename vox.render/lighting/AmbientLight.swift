@@ -16,7 +16,6 @@ public class AmbientLight {
     private var _diffuseSphericalHarmonics: BufferView?
     private static let _diffuseSHProperty = "u_env_sh"
 
-    private var _specularTextureDecodeRGBM: Bool = false
     private var _specularTexture: MTLTexture?
     private static var _specularTextureProperty = "u_env_specularTexture"
     private static var _specularSamplerProperty = "u_env_specularSampler"
@@ -25,20 +24,6 @@ public class AmbientLight {
     private var _diffuseMode: DiffuseMode = .SolidColor
 
     public init() {}
-
-    /// Whether to decode from specularTexture with RGBM format.
-    public var specularTextureDecodeRGBM: Bool {
-        get {
-            _specularTextureDecodeRGBM
-        }
-        set {
-            _specularTextureDecodeRGBM = newValue
-            for scene in _scenes {
-                _setSpecularTextureDecodeRGBM(scene.shaderData)
-            }
-        }
-    }
-
 
     /// Diffuse mode of ambient light.
     public var diffuseMode: DiffuseMode {
@@ -129,7 +114,6 @@ public class AmbientLight {
         }
 
         _setDiffuseMode(shaderData)
-        _setSpecularTextureDecodeRGBM(shaderData)
         _setSpecularTexture(shaderData)
     }
 
@@ -156,14 +140,6 @@ public class AmbientLight {
             sceneShaderData.enableMacro(HAS_SPECULAR_ENV.rawValue)
         } else {
             sceneShaderData.disableMacro(HAS_SPECULAR_ENV.rawValue)
-        }
-    }
-
-    private func _setSpecularTextureDecodeRGBM(_ sceneShaderData: ShaderData) {
-        if (_specularTextureDecodeRGBM) {
-            sceneShaderData.enableMacro(DECODE_ENV_RGBM.rawValue)
-        } else {
-            sceneShaderData.disableMacro(DECODE_ENV_RGBM.rawValue)
         }
     }
 }

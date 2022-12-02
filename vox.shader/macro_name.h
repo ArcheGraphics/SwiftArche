@@ -56,11 +56,10 @@ typedef enum {
     // Enviroment
     HAS_SH =                             65505,
     HAS_SPECULAR_ENV =                   65504,
-    DECODE_ENV_RGBM =                    65503,
 
     // Shadow
-    NEED_RECEIVE_SHADOWS =               65502,
-    CASCADED_COUNT =                     65501,
-    CASCADED_SHADOW_MAP =                65500,
-    SHADOW_MODE =                        65499
+    NEED_RECEIVE_SHADOWS =               65503,
+    CASCADED_COUNT =                     65502,
+    CASCADED_SHADOW_MAP =                65501,
+    SHADOW_MODE =                        65500
 } MacroName;

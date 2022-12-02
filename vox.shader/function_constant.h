@@ -71,7 +71,6 @@ constant bool hasSpotLight = spotLightCount > 0;
 
 DeclBoolMacro(hasSH, HAS_SH)
 DeclBoolMacro(hasSpecularEnv, HAS_SPECULAR_ENV)
-DeclBoolMacro(needDecodeEnvRGBM, DECODE_ENV_RGBM)
 
 DeclBoolMacro(needReceiveShadow, NEED_RECEIVE_SHADOWS)
 DeclIntMacro(cascadeCount, CASCADED_COUNT)
