@@ -83,11 +83,12 @@ public class SkySubpass: Subpass {
         material.shaderData.bindData(encoder, _pso.uniformBlock, pipeline._resourceCache)
         encoder.setRenderPipelineState(_pso.handle)
         encoder.setDepthStencilState(_depthStencilState)
+        encoder.setFrontFacing(.counterClockwise)
 
-        var index = 0
-        for buffer in mesh._vertexBufferBindings {
-            encoder.setVertexBuffer(buffer?.buffer, offset: 0, index: index)
-            index += 1
+        for index in 0..<31 {
+            if let bufferView = mesh._vertexBufferBindings[index] {
+                encoder.setVertexBuffer(bufferView.buffer, offset: 0, index: index)
+            }
         }
 
         let subMesh = mesh.subMesh!

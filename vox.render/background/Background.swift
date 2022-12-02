@@ -15,9 +15,9 @@ public class Background {
     public var mode: BackgroundMode = BackgroundMode.SolidColor
 
     /// Background solid color.
-    /// @defaultValue `Color(0.25, 0.25, 0.25, 1.0)`
+    /// @defaultValue `Color(0.8, 0.8, 0.8, 1.0)`
     /// - Remark: When `mode` is `BackgroundMode.SolidColor`, the property will take effects.
-    public var solidColor: Color = Color(0.25, 0.25, 0.25, 1.0)
+    public var solidColor: Color = Color(0.8, 0.8, 0.8, 1.0)
 
     /// Background sky.
     /// - Remark: When `mode` is `BackgroundMode.Sky`, the property will take effects.

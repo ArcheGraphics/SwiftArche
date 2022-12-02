@@ -51,7 +51,6 @@ class IblApp: NSViewController {
         engine = Engine(canvas: canvas)
 
         let scene = engine.sceneManager.activeScene!
-        scene.background.solidColor = Color(0.9, 0.9, 0.9)
         scene.ambientLight = loadAmbientLight(engine, with: "countryIBL")
         let rootEntity = scene.createRootEntity()
 

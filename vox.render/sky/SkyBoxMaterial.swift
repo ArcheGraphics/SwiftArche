@@ -47,11 +47,7 @@ public class SkyBoxMaterial: Material {
 
     public init(_ engine: Engine, _ name: String = "") {
         super.init(engine.device, name)
-
-        let shaderPass = ShaderPass(engine.library(), "vertex_skybox", "fragment_skybox")
-        shaderPass.renderState!.rasterState.cullMode = MTLCullMode.none
-        shaderPass.renderState!.depthState.compareFunction = MTLCompareFunction.lessEqual
-        shader.append(shaderPass)
+        shader.append(ShaderPass(engine.library(), "vertex_skybox", "fragment_skybox"))
 
         shaderData.setData("u_textureDecodeRGBM", _textureDecodeRGBM)
         shaderData.setData("u_RGBMDecodeFactor", _RGBMDecodeFactor)

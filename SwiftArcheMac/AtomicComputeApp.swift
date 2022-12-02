@@ -44,7 +44,7 @@ fileprivate class ComputeScript: Script {
     }
 
     override func onBeginRender(_ camera: Camera, _ commandBuffer: MTLCommandBuffer) {
-        if _computePass.data.isEmpty {
+        if _computePass.data.count == 1  {
             _computePass.data.append(renderer.getMaterial()!.shaderData)
         }
         if let computeCommandEncoder = commandBuffer.makeComputeCommandEncoder() {

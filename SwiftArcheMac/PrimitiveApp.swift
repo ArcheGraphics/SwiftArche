@@ -28,10 +28,11 @@ class PrimitiveApp: NSViewController {
         engine = Engine(canvas: canvas)
 
         let scene = engine.sceneManager.activeScene!
+        scene.ambientLight = loadAmbientLight(engine, with: "countryIBL")
         let rootEntity = scene.createRootEntity()
 
         let cameraEntity = rootEntity.createChild()
-        cameraEntity.transform.setPosition(x: 1, y: 1, z: 1)
+        cameraEntity.transform.setPosition(x: 5, y: 5, z: 5)
         cameraEntity.transform.lookAt(targetPosition: Vector3())
         let _: Camera = cameraEntity.addComponent()
         let _: OrbitControl = cameraEntity.addComponent()
@@ -44,9 +45,9 @@ class PrimitiveApp: NSViewController {
         let cubeEntity = rootEntity.createChild()
         let _: MoveScript = cubeEntity.addComponent()
         let renderer: MeshRenderer = cubeEntity.addComponent()
-        renderer.mesh = PrimitiveMesh.createCuboid(engine, 0.1, 0.1, 0.1)
+        renderer.mesh = PrimitiveMesh.createCuboid(engine)
         let material = PBRMaterial(engine)
-        material.baseColor = Color(0.4, 0.0, 0.0)
+        material.baseColor = Color(0.7, 0.0, 0.0)
         renderer.setMaterial(material)
 
         engine.run()
