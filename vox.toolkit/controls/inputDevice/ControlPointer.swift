@@ -68,11 +68,9 @@ class ControlPointer : IControlInput {
             }
             break
         case DeltaType.Distance:
+            let canvas = control.canvas
             let pointers = control.input.pointers
-            let pointer1 = pointers[0].locationInWindow
-            let pointer2 = pointers[1].locationInWindow
-            let curDistance = Vector2.distance(left: Vector2(Float(pointer1.x), Float(pointer1.y)),
-                                               right: Vector2(Float(pointer2.x), Float(pointer2.y)))
+            let curDistance = Vector2.distance(left: pointers[0].screenPoint(canvas), right: pointers[1].screenPoint(canvas))
             if (ControlPointer._lastUsefulFrameIndex == _frameIndex - 1) {
                 outDeltaVec = SIMD3<Float>(0, ControlPointer._distanceOfPointers - curDistance, 0)
             }

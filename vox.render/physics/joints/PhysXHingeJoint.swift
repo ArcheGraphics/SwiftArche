@@ -13,6 +13,7 @@ class PhysXHingeJoint: PhysXJoint {
 
     init(_ collider: PhysXCollider?) {
         super.init()
+        _collider = collider
         _pxJoint = PhysXPhysics._pxPhysics.createRevoluteJoint(
                 nil ?? nil, SIMD3<Float>(), simd_quatf(ix: 0, iy: 0, iz: 0, r: 1),
                 collider?._pxActor ?? nil, SIMD3<Float>(), simd_quatf(ix: 0, iy: 0, iz: 0, r: 1)

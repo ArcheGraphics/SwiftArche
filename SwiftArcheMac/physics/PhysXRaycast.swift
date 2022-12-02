@@ -18,7 +18,7 @@ fileprivate class GeometryGenerator: Script {
 
     override func onUpdate(_ deltaTime: Float) {
         let inputManager = engine.inputManager
-        if (inputManager.isPointerTrigger(.leftMouseDown)) {
+        if (inputManager.isPointerTrigger(.rightMouseDown)) {
             if (Float.random(in: 0...1) > 0.5) {
                 _ = addSphere(entity, 0.5, Vector3(floor(Float.random(in: 0...6)) - 2.5, 5, floor(Float.random(in: 0...6)) - 2.5), quat)
             } else {
@@ -41,8 +41,7 @@ fileprivate class Raycast: Script {
         let inputManager = engine.inputManager
         let pointers = inputManager.pointers
         if (!pointers.isEmpty && inputManager.isPointerTrigger(.leftMouseDown)) {
-            let pointerPosition = pointers[0].locationInWindow
-            _ = camera.screenPointToRay(Vector2(Float(pointerPosition.x), Float(pointerPosition.y)), ray)
+            _ = camera.screenPointToRay(pointers[0].screenPoint(engine.canvas), ray)
 
             let result = engine.physicsManager.raycast(ray, Float.greatestFiniteMagnitude, Layer.Layer0, hit)
             if (result) {
@@ -99,10 +98,11 @@ class PhysXRaycastApp: NSViewController {
         let _: GeometryGenerator = rootEntity.addComponent()
 
         let cameraEntity = rootEntity.createChild()
-        cameraEntity.transform.setPosition(x: 10, y: 10, z: 10)
+        cameraEntity.transform.setPosition(x: 15, y: 15, z: 15)
         cameraEntity.transform.lookAt(targetPosition: Vector3())
         let _: Camera = cameraEntity.addComponent()
         let _: OrbitControl = cameraEntity.addComponent()
+        let _: Raycast = cameraEntity.addComponent()
 
         let light = rootEntity.createChild("light")
         light.transform.setPosition(x: 1, y: 3, z: 0)

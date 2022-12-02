@@ -37,8 +37,7 @@ fileprivate class Interaction: Script {
     override func onUpdate(_ deltaTime: Float) {
         let pointers = engine.inputManager.pointers
         if (pointers.count > 0) {
-            let pointer = pointers[0].locationInWindow
-            _ = camera.screenPointToRay(Vector2(Float(pointer.x), Float(pointer.y)), ray)
+            _ = camera.screenPointToRay(pointers[0].screenPoint(engine.canvas), ray)
             entity.transform.position = ray.origin + ray.direction * 18
         }
     }

@@ -22,8 +22,7 @@ fileprivate class ShootScript: Script {
     override func onUpdate(_ deltaTime: Float) {
         let inputManager = engine.inputManager
         if (!inputManager.pointers.isEmpty && inputManager.isPointerTrigger(.leftMouseDown)) {
-            let pointerPosition = inputManager.pointers[0].locationInWindow
-            _ = camera.screenPointToRay(Vector2(Float(pointerPosition.x), Float(pointerPosition.y)), ray)
+            _ = camera.screenPointToRay(inputManager.pointers[0].screenPoint(engine.canvas), ray)
             ray.direction *= 50
             _ = addSphere(entity, 0.5, position, rotation, ray.direction)
         }
