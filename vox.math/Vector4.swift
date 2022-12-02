@@ -54,6 +54,10 @@ public struct Vector4 {
         elements = SIMD4<Float>(x, y, z, w)
     }
 
+    public init(_ xyz: Vector3, _ w: Float) {
+        elements = SIMD4<Float>(xyz.x, xyz.y, xyz.z, w)
+    }
+
     /// Constructor of Vector4.
     /// - Parameters:
     ///   - array: The component of the vector

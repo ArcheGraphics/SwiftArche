@@ -48,6 +48,6 @@ public class Light: Component {
 
     func _getLightColor() -> SIMD3<Float> {
         let c = color * intensity
-        return SIMD3<Float>(c.r, c.g, c.b)
+        return c.toLinear().rgb
     }
 }

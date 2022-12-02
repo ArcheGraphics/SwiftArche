@@ -735,15 +735,14 @@ public class PrimitiveMesh {
         let capRectangleCount = radialSegments * radialSegments
 
         let totalVertexCount = torsoVertexCount + 2 * capVertexCount
-        var indices = [UInt32](repeating: 0, count: (torsoRectangleCount + 2 * capRectangleCount) * 6
-        )
+        var indices = [UInt32](repeating: 0, count: (torsoRectangleCount + 2 * capRectangleCount) * 6)
 
         let radialCountReciprocal = 1.0 / Float(radialCount)
         let radialSegmentsReciprocal = 1.0 / Float(radialSegments)
         let heightSegmentsReciprocal = 1.0 / Float(heightSegments)
 
-        let halfPI = Float.pi / 2
-        let doublePI = Float.pi * 2
+        let thetaStart = Float.pi
+        let thetaRange = Float.pi * 2
 
         var positions = [Vector3](repeating: Vector3(), count: totalVertexCount)
         var normals = [Vector3](repeating: Vector3(), count: totalVertexCount)
@@ -757,7 +756,7 @@ public class PrimitiveMesh {
             let y = Int(Float(i) * radialCountReciprocal) | 0
             let u = Float(x) * radialSegmentsReciprocal
             let v = Float(y) * heightSegmentsReciprocal
-            let theta = -halfPI + u * doublePI
+            let theta = thetaStart + u * thetaRange
             let sinTheta = sin(theta)
             let cosTheta = cos(theta)
 
@@ -793,7 +792,7 @@ public class PrimitiveMesh {
                 radius,
                 height,
                 radialSegments,
-                doublePI,
+                thetaRange,
                 torsoVertexCount,
                 1,
                 &positions,
@@ -808,7 +807,7 @@ public class PrimitiveMesh {
                 radius,
                 height,
                 radialSegments,
-                -doublePI,
+                -thetaRange,
                 torsoVertexCount + capVertexCount,
                 -1,
                 &positions,
@@ -836,7 +835,7 @@ public class PrimitiveMesh {
                                           _ indicesOffset: Int) {
         var indicesOffset = indicesOffset
         let radialCount = radialSegments + 1
-        let halfHeight = height * 0.5
+        let halfHeight = height * 0.5 * Float(posIndex)
         let capVertexCount = radialCount * radialCount
         let capRectangleCount = radialSegments * radialSegments
         let radialCountReciprocal = 1.0 / Float(radialCount)
@@ -852,12 +851,12 @@ public class PrimitiveMesh {
             let sinTheta = sin(thetaDelta)
 
             let posX = -radius * cos(alphaDelta) * sinTheta
-            let posY = (radius * cos(thetaDelta) + halfHeight) * Float(posIndex)
+            let posY = radius * cos(thetaDelta) * Float(posIndex) + halfHeight
             let posZ = radius * sin(alphaDelta) * sinTheta
 
             let index = i + offset
             positions[index] = Vector3(posX, posY, posZ)
-            normals[index] = Vector3(posX, posY, posZ)
+            normals[index] = Vector3(posX, posY - halfHeight, posZ)
             uvs[index] = Vector2(u, v)
         }
 

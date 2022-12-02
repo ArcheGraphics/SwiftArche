@@ -428,6 +428,69 @@ extension ModelMesh {
         }
     }
 
+    /// Calculate mesh tangent.
+    /// - Remark: need to set positions(with or not with indices), normals, uv before calculation.
+    /// - Remark: based on http://foundationsofgameenginedev.com/FGED2-sample.pdf
+    func calculateTangents() {
+        if let normals = _normals,
+           let uv = _uv {
+            let triangleCount = _indices32 != nil ? _indices32!.count / 3 : _positions.count / 3
+            var tangents = [Vector4](repeating: Vector4(), count: vertexCount)
+            var biTangents = [Vector3](repeating: Vector3(), count: vertexCount)
+            // Calculate tangent and bi-tangent for each triangle and add to all three vertices.
+            for k in 0..<triangleCount {
+                var i0 = 3 * k
+                var i1 = 3 * k + 1
+                var i2 = 3 * k + 2
+                if (_indices32 != nil) {
+                    i0 = Int(_indices32![i0])
+                    i1 = Int(_indices32![i1])
+                    i2 = Int(_indices32![i2])
+                }
+
+                let p0 = _positions[i0]
+                let p1 = _positions[i1]
+                let p2 = _positions[i2]
+                let w0 = uv[i0]
+                let w1 = uv[i1]
+                let w2 = uv[i2]
+                let e1 = p1 - p0
+                let e2 = p2 - p0
+                let x1 = w1.x - w0.x
+                let x2 = w2.x - w0.x
+                let y1 = w1.y - w0.y
+                let y2 = w2.y - w0.y
+                let r = 1.0 / (x1 * y2 - x2 * y1)
+
+                let t = e1 * y2 * r - e2 * y1 * r
+                let b = e2 * x1 * r - e1 * x2 * r
+
+                tangents[i0] += Vector4(t, 0.0)
+                tangents[i1] += Vector4(t, 0.0)
+                tangents[i2] += Vector4(t, 0.0)
+                biTangents[i0] += b
+                biTangents[i1] += b
+                biTangents[i2] += b
+            }
+
+            // Orthonormalize each tangent and calculate the handedness.
+            for i in 0..<vertexCount {
+                let n = normals[i]
+                let b = biTangents[i]
+                let tangent = tangents[i]
+                var t = Vector3(tangent.x, tangent.y, tangent.z)
+                var temp = Vector3.cross(left: t, right: b)
+                let w: Float = Vector3.dot(left: temp, right: n) > 0.0 ? 1 : -1
+                temp = n * Vector3.dot(left: t, right: n)
+                t -= temp
+                tangents[i] = Vector4(t.normalize(), w)
+            }
+            setTangents(tangents: tangents)
+        } else {
+            fatalError("Set normal and uv before calculation.")
+        }
+    }
+
     private func _updateVertexDescriptor() -> MTLVertexDescriptor {
         let descriptor = MTLVertexDescriptor()
         var desc = MTLVertexAttributeDescriptor()

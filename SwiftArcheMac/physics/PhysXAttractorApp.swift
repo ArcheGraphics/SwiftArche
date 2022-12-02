@@ -77,8 +77,8 @@ class PhysXAttractorApp: NSViewController {
                    _ rotation: Quaternion) -> Entity {
         let mtl = PBRMaterial(rootEntity.engine)
         mtl.baseColor = Color(1.0, 168 / 255, 196 / 255, 1.0)
-        mtl.roughness = 0.8
-        mtl.metallic = 0.4
+        mtl.roughness = 1
+        mtl.metallic = 0
 
         let sphereEntity = rootEntity.createChild()
         let renderer: MeshRenderer = sphereEntity.addComponent()

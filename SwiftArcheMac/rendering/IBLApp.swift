@@ -51,6 +51,7 @@ class IblApp: NSViewController {
         engine = Engine(canvas: canvas)
 
         let scene = engine.sceneManager.activeScene!
+        scene.background.solidColor = Color(0.9, 0.9, 0.9)
         scene.ambientLight = loadAmbientLight(engine, with: "countryIBL")
         let rootEntity = scene.createRootEntity()
 
@@ -65,8 +66,7 @@ class IblApp: NSViewController {
         light.transform.lookAt(targetPosition: Vector3())
         let _: DirectLight = light.addComponent()
 
-        let materialIndex = 4
-        let mat = _materials[materialIndex]
+        let mat = _materials[7]
 
         let sphere = PrimitiveMesh.createSphere(engine, 0.5, 64)
         for i in 0..<7 {

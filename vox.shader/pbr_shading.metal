@@ -107,7 +107,7 @@ float3 PBRShading::getLightProbeIrradiance(float3 normal){
     out[1].z = u_env_sh[5] * -1.023327;
     out[2].x = u_env_sh[6] * 1.023327; // kernel1 * basis2 = 1.023327
     out[2].y = u_env_sh[7] * 1.023327;
-    out[2] = u_env_sh[8] * 1.023327;
+    out[2].z = u_env_sh[8] * 1.023327;
     out[3].x = u_env_sh[9] * -1.023327; // kernel1 * basis3 = -1.023327
     out[3].y = u_env_sh[10] * -1.023327;
     out[3].z = u_env_sh[11] * -1.023327;
