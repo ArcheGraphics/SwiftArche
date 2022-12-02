@@ -24,10 +24,11 @@ class KHR_materials_pbrSpecularGlossiness {
             KHR_texture_transform.parseEngineResource(schema.diffuseTexture!.transform, material, context)
         }
 
-        material.specularColor = Vector3(
+        material.specularColor = Color(
                 Color.linearToGammaSpace(value: schema.specularFactor.x),
                 Color.linearToGammaSpace(value: schema.specularFactor.y),
-                Color.linearToGammaSpace(value: schema.specularFactor.z)
+                Color.linearToGammaSpace(value: schema.specularFactor.z),
+                1.0
         )
         material.glossiness = schema.glossinessFactor
 

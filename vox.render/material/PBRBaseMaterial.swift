@@ -44,7 +44,7 @@ public class PBRBaseMaterial: BaseMaterial {
         }
 
         set {
-            _pbrBaseData.baseColor = newValue.internalValue
+            _pbrBaseData.baseColor = newValue.toLinear().internalValue
             shaderData.setData(PBRBaseMaterial._pbrBaseProp, _pbrBaseData)
         }
     }
@@ -102,13 +102,13 @@ public class PBRBaseMaterial: BaseMaterial {
     }
 
     /// Emissive color.
-    public var emissiveColor: Vector3 {
+    public var emissiveColor: Color {
         get {
-            Vector3(_pbrBaseData.emissiveColor)
+            Color(_pbrBaseData.emissiveColor, 1.0)
         }
 
         set {
-            _pbrBaseData.emissiveColor = newValue.internalValue
+            _pbrBaseData.emissiveColor = newValue.toLinear().rgb
             shaderData.setData(PBRBaseMaterial._pbrBaseProp, _pbrBaseData)
         }
     }

@@ -46,11 +46,9 @@ public class DevicePipeline {
             // shadowManager.draw(commandBuffer)
 
             if background.mode == BackgroundMode.SolidColor {
+                let color = background.solidColor.toLinear()
                 renderPassDescriptor.colorAttachments[0].clearColor = MTLClearColor(
-                        red: Double(background.solidColor.r),
-                        green: Double(background.solidColor.g),
-                        blue: Double(background.solidColor.b),
-                        alpha: Double(background.solidColor.a)
+                        red: Double(color.r), green: Double(color.g), blue: Double(color.b), alpha: Double(color.a)
                 )
             }
             let renderTarget = camera.renderTarget != nil ? camera.renderTarget! : renderPassDescriptor

@@ -16,13 +16,13 @@ public class PBRSpecularMaterial: PBRBaseMaterial {
     private static var _specularGlossinessSamplerProp = "u_specularGlossinessSampler"
 
     /// Specular color.
-    public var specularColor: Vector3 {
+    public var specularColor: Color {
         get {
-            Vector3(_pbrSpecularData.specularColor)
+            Color(_pbrSpecularData.specularColor, 1.0)
         }
 
         set {
-            _pbrSpecularData.specularColor = newValue.internalValue
+            _pbrSpecularData.specularColor = newValue.toLinear().rgb
             shaderData.setData(PBRSpecularMaterial._pbrSpecularProp, _pbrSpecularData)
         }
     }

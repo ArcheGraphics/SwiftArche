@@ -64,10 +64,11 @@ class MaterialParser: Parser {
                     pbrMtl.setEmissiveSampler(value: glTFResource.samplers![emissiveTexture.index])
                     KHR_texture_transform.parseEngineResource(emissiveTexture.transform, pbrMtl, context)
                 }
-                pbrMtl.emissiveColor = Vector3(
+                pbrMtl.emissiveColor = Color(
                         Color.linearToGammaSpace(value: gltfMaterial.emissiveFactor.x),
                         Color.linearToGammaSpace(value: gltfMaterial.emissiveFactor.y),
-                        Color.linearToGammaSpace(value: gltfMaterial.emissiveFactor.z)
+                        Color.linearToGammaSpace(value: gltfMaterial.emissiveFactor.z),
+                        1
                 )
 
                 if let normalTexture = gltfMaterial.normalTexture {

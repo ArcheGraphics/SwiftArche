@@ -35,6 +35,12 @@ public struct Color {
             elements.w
         }
     }
+    
+    public var rgb: SIMD3<Float> {
+        get {
+            SIMD3<Float>(r, g, b)
+        }
+    }
 
     public var internalValue: SIMD4<Float> {
         get {
@@ -61,6 +67,10 @@ public struct Color {
     ///   - array: The component of the vector
     public init(_ array: SIMD4<Float>) {
         elements = array
+    }
+    
+    public init(_ array: SIMD3<Float>, _ alpha: Float = 1) {
+        elements = SIMD4<Float>(array, alpha)
     }
 }
 
@@ -202,7 +212,7 @@ extension Color {
     public func toLinear() -> Color {
         Color(Color.gammaToLinearSpace(value: r),
                 Color.gammaToLinearSpace(value: g),
-                Color.gammaToLinearSpace(value: b))
+                Color.gammaToLinearSpace(value: b), a)
     }
 
     /// Modify components (r, g, b) of this color from linear space to gamma space.
@@ -210,7 +220,7 @@ extension Color {
     public func toGamma() -> Color {
         Color(Color.linearToGammaSpace(value: r),
                 Color.linearToGammaSpace(value: g),
-                Color.linearToGammaSpace(value: b))
+                Color.linearToGammaSpace(value: b), a)
     }
 
     ///

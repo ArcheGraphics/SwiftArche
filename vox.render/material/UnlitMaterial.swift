@@ -20,7 +20,7 @@ public class UnlitMaterial: BaseMaterial {
         }
         set {
             _baseColor = newValue
-            shaderData.setData(UnlitMaterial._baseColorProp, newValue)
+            shaderData.setData(UnlitMaterial._baseColorProp, newValue.toLinear())
         }
     }
 

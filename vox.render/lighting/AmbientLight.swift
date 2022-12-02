@@ -55,12 +55,12 @@ public class AmbientLight {
 
     /// Diffuse reflection solid color.
     /// - Remark: Effective when diffuse reflection mode is `DiffuseMode.SolidColor`.
-    public var diffuseSolidColor: Vector3 {
+    public var diffuseSolidColor: Color {
         get {
-            Vector3(_envMapLight.diffuse)
+            Color(_envMapLight.diffuse, 1.0)
         }
         set {
-            _envMapLight.diffuse = newValue.internalValue
+            _envMapLight.diffuse = newValue.toLinear().rgb
         }
     }
 
