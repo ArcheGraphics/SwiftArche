@@ -9,7 +9,7 @@ import Metal
 public class GeometrySubpass: Subpass {
     var shaderMacro = ShaderMacroCollection()
 
-    func drawElement(_ encoder: MTLRenderCommandEncoder) {
+    func drawElement(_ encoder: inout RenderCommandEncoder) {
         // rewrite by subclass
     }
 
@@ -18,95 +18,44 @@ public class GeometrySubpass: Subpass {
         // rewrite by subclass
     }
 
-    override func draw(_ encoder: MTLRenderCommandEncoder) {
-        encoder.pushDebugGroup("Draw Element")
-        drawElement(encoder)
-        encoder.popDebugGroup()
+    override func draw(_ encoder: inout RenderCommandEncoder) {
+        encoder.handle.pushDebugGroup("Draw Element")
+        drawElement(&encoder)
+        encoder.handle.popDebugGroup()
     }
 
-    func _drawElement(_ encoder: MTLRenderCommandEncoder, _ element: RenderElement) {
+    func _drawElement(_ encoder: inout RenderCommandEncoder, _ element: RenderElement) {
         let pipeline = _renderPass.pipeline!
+        let cache = pipeline._resourceCache
         let mesh = element.mesh
-        let subMesh = element.subMesh
         let renderer = element.renderer
         let material = element.material
         let camera = pipeline.camera
-        let scene = camera.scene
-        let renderCount = renderer.engine._renderCount
 
         let pipelineDescriptor = MTLRenderPipelineDescriptor()
         let depthStencilDescriptor = MTLDepthStencilDescriptor()
         prepare(pipelineDescriptor, depthStencilDescriptor)
 
         ShaderMacroCollection.unionCollection(material.shaderData._macroCollection,
-                element.renderer._globalShaderMacro, shaderMacro)
+                renderer._globalShaderMacro, shaderMacro)
 
-        let functions = pipeline._resourceCache.requestShaderModule(element.shaderPass, shaderMacro)
+        let functions = cache.requestShaderModule(element.shaderPass, shaderMacro)
         pipelineDescriptor.vertexFunction = functions[0]
         if functions.count == 2 {
             pipelineDescriptor.fragmentFunction = functions[1]
         }
-
         pipelineDescriptor.vertexDescriptor = mesh._vertexDescriptor
-        element.shaderPass.renderState!._apply(pipelineDescriptor, depthStencilDescriptor, encoder,
-                                               element.renderer.entity.transform._isFrontFaceInvert())
-        encoder.setDepthStencilState(pipeline._resourceCache.requestDepthStencilState(depthStencilDescriptor))
-        let pso = pipeline._resourceCache.requestGraphicsPipeline(pipelineDescriptor)
-        encoder.setRenderPipelineState(pso.handle)
-        
-        let switchRenderCount = renderCount != pso.uploadRenderCount
-        if switchRenderCount {
-            renderer.shaderData.bindData(encoder, pso.uniformBlock, pipeline._resourceCache)
-            material.shaderData.bindData(encoder, pso.uniformBlock, pipeline._resourceCache)
-            camera.shaderData.bindData(encoder, pso.uniformBlock, pipeline._resourceCache)
-            scene.shaderData.bindData(encoder, pso.uniformBlock, pipeline._resourceCache)
-            for index in 0..<31 {
-                if let bufferView = mesh._vertexBufferBindings[index] {
-                    encoder.setVertexBuffer(bufferView.buffer, offset: 0, index: index)
-                }
-            }
-            
-            pso.uploadRenderer = renderer
-            pso.uploadScene = scene
-            pso.uploadCamera = camera
-            pso.uploadMaterial = material
-            pso.uploadRenderCount = renderCount
-            pso.uploadMesh = mesh
-        } else {
-            if pso.uploadScene !== scene {
-                scene.shaderData.bindData(encoder, pso.uniformBlock, pipeline._resourceCache)
-                pso.uploadScene = scene
-            }
-            if pso.uploadCamera !== camera {
-                camera.shaderData.bindData(encoder, pso.uniformBlock, pipeline._resourceCache)
-                pso.uploadCamera = camera
-            }
-            if pso.uploadRenderer !== renderer {
-                renderer.shaderData.bindData(encoder, pso.uniformBlock, pipeline._resourceCache)
-                pso.uploadRenderer = renderer
-            }
-            if pso.uploadMaterial !== material {
-                material.shaderData.bindData(encoder, pso.uniformBlock, pipeline._resourceCache)
-                pso.uploadMaterial = material
-            }
-            if pso.uploadMesh !== mesh {
-                for index in 0..<31 {
-                    if let bufferView = mesh._vertexBufferBindings[index] {
-                        encoder.setVertexBuffer(bufferView.buffer, offset: 0, index: index)
-                    }
-                }
-                pso.uploadMesh = mesh
-            }
-        }
+        element.shaderPass.renderState!._apply(pipelineDescriptor, depthStencilDescriptor, encoder.handle,
+                renderer.entity.transform._isFrontFaceInvert())
 
-        let indexBufferBinding = mesh._indexBufferBinding
-        if indexBufferBinding != nil {
-            encoder.drawIndexedPrimitives(type: subMesh.topology, indexCount: subMesh.count,
-                    indexType: indexBufferBinding!.format, indexBuffer: indexBufferBinding!.buffer,
-                    indexBufferOffset: 0, instanceCount: mesh._instanceCount)
-        } else {
-            encoder.drawPrimitives(type: subMesh.topology, vertexStart: subMesh.start,
-                    vertexCount: subMesh.count, instanceCount: mesh._instanceCount)
-        }
+        let pso = cache.requestGraphicsPipeline(pipelineDescriptor)
+        encoder.bind(pso: pso)
+        encoder.bind(depthStencilState: depthStencilDescriptor, cache)
+        encoder.bind(camera: camera, pso, cache)
+        encoder.bind(material: material, pso, cache)
+        encoder.bind(renderer: renderer, pso, cache)
+        encoder.bind(scene: camera.scene, pso, cache)
+        encoder.bind(mesh: mesh)
+        encoder.draw(subMesh: element.subMesh, with: mesh)
     }
 }

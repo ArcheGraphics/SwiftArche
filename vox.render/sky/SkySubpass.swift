@@ -43,7 +43,7 @@ public class SkySubpass: Subpass {
         _depthStencilState = pipeline._resourceCache.requestDepthStencilState(_depthStencilDescriptor)
     }
 
-    override func draw(_ encoder: MTLRenderCommandEncoder) {
+    override func draw(_ encoder: inout RenderCommandEncoder) {
         if (material == nil) {
             logger.warning("The material of sky is not defined.")
             return
@@ -53,9 +53,9 @@ public class SkySubpass: Subpass {
             return
         }
 
-        encoder.pushDebugGroup("SkyBox")
+        encoder.handle.pushDebugGroup("SkyBox")
         if (_pso == nil) {
-            prepare(encoder)
+            prepare(encoder.handle)
         }
 
         let pipeline = _renderPass.pipeline!
@@ -79,28 +79,14 @@ public class SkySubpass: Subpass {
         projectionMatrix.elements.columns.1[1] = f
 
         viewProjMatrix = projectionMatrix * viewProjMatrix
-        encoder.setVertexBytes(&viewProjMatrix, length: MemoryLayout<Matrix>.stride, index: 10)
-        material.shaderData.bindData(encoder, _pso.uniformBlock, pipeline._resourceCache)
-        encoder.setRenderPipelineState(_pso.handle)
-        encoder.setDepthStencilState(_depthStencilState)
-        encoder.setFrontFacing(.counterClockwise)
+        encoder.handle.setVertexBytes(&viewProjMatrix, length: MemoryLayout<Matrix>.stride, index: 10)
+        encoder.bind(material: material, _pso, pipeline._resourceCache)
+        encoder.bind(mesh: mesh)
+        encoder.bind(pso: _pso)
+        encoder.handle.setDepthStencilState(_depthStencilState)
+        encoder.handle.setFrontFacing(.counterClockwise)
+        encoder.draw(subMesh: mesh.subMesh!, with: mesh)
 
-        for index in 0..<31 {
-            if let bufferView = mesh._vertexBufferBindings[index] {
-                encoder.setVertexBuffer(bufferView.buffer, offset: 0, index: index)
-            }
-        }
-
-        let subMesh = mesh.subMesh!
-        let indexBufferBinding = mesh._indexBufferBinding
-        if indexBufferBinding != nil {
-            encoder.drawIndexedPrimitives(type: subMesh.topology, indexCount: subMesh.count,
-                    indexType: indexBufferBinding!.format, indexBuffer: indexBufferBinding!.buffer,
-                    indexBufferOffset: 0, instanceCount: mesh._instanceCount)
-        } else {
-            encoder.drawPrimitives(type: subMesh.topology, vertexStart: subMesh.start,
-                    vertexCount: subMesh.count, instanceCount: mesh._instanceCount)
-        }
-        encoder.popDebugGroup()
+        encoder.handle.popDebugGroup()
     }
 }

@@ -15,7 +15,7 @@ public class ForwardSubpass: GeometrySubpass {
         pipelineDescriptor.stencilAttachmentPixelFormat = .depth32Float_stencil8
     }
 
-    override func drawElement(_ encoder: MTLRenderCommandEncoder) {
+    override func drawElement(_ encoder: inout RenderCommandEncoder) {
         let pipeline = _renderPass.pipeline!
         pipeline._opaqueQueue.removeAll()
         pipeline._alphaTestQueue.removeAll()
@@ -26,13 +26,13 @@ public class ForwardSubpass: GeometrySubpass {
         pipeline._transparentQueue.sort(by: DevicePipeline._compareFromFarToNear)
 
         for element in pipeline._opaqueQueue {
-            super._drawElement(encoder, element)
+            super._drawElement(&encoder, element)
         }
         for element in pipeline._alphaTestQueue {
-            super._drawElement(encoder, element)
+            super._drawElement(&encoder, element)
         }
         for element in pipeline._transparentQueue {
-            super._drawElement(encoder, element)
+            super._drawElement(&encoder, element)
         }
     }
 }

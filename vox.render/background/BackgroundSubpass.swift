@@ -63,28 +63,17 @@ public class BackgroundSubpass: Subpass {
         _depthStencilState = pipeline._resourceCache.requestDepthStencilState(_depthStencilDescriptor)
     }
 
-    override func draw(_ encoder: MTLRenderCommandEncoder) {
-        encoder.pushDebugGroup("Background")
+    override func draw(_ encoder: inout RenderCommandEncoder) {
+        encoder.handle.pushDebugGroup("Background")
         if (_pso == nil) {
-            prepare(encoder)
+            prepare(encoder.handle)
         }
 
-        encoder.setRenderPipelineState(_pso.handle)
-        encoder.setDepthStencilState(_depthStencilState)
-
-        var index = 0
-        for buffer in _mesh._vertexBufferBindings {
-            encoder.setVertexBuffer(buffer?.buffer, offset: 0, index: index)
-            index += 1
-        }
-
-        let subMesh = _mesh.subMesh!
-        let indexBufferBinding = _mesh._indexBufferBinding
-        encoder.drawIndexedPrimitives(type: subMesh.topology, indexCount: subMesh.count,
-                indexType: indexBufferBinding!.format, indexBuffer: indexBufferBinding!.buffer,
-                indexBufferOffset: 0, instanceCount: _mesh._instanceCount)
-
-        encoder.popDebugGroup()
+        encoder.handle.setRenderPipelineState(_pso.handle)
+        encoder.handle.setDepthStencilState(_depthStencilState)
+        encoder.bind(mesh: _mesh)
+        encoder.draw(subMesh: _mesh.subMesh!, with: _mesh)
+        encoder.handle.popDebugGroup()
     }
 
     private func _resizeBackgroundTexture() {

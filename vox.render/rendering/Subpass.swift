@@ -13,6 +13,6 @@ public class Subpass {
         _renderPass = renderPass
     }
 
-    func draw(_ encoder: MTLRenderCommandEncoder) {
+    func draw(_ encoder: inout RenderCommandEncoder) {
     }
 }
