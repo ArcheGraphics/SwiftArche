@@ -13,7 +13,7 @@ public class PostprocessManager {
     var _shaderData: ShaderData
     var _postprocessData = PostprocessData(manualExposureValue: 0.5, exposureKey: 1)
     var _autoExposure: Bool = false
-    
+
     // default pass
     public var postProcessPass: ComputePass!
     public var luminancePass: Luminance?
@@ -29,7 +29,7 @@ public class PostprocessManager {
             _shaderData.setData("u_postprocess", _postprocessData)
         }
     }
-    
+
     /// exposure key used in auto mode
     public var exposureKey: Float {
         get {
@@ -40,7 +40,7 @@ public class PostprocessManager {
             _shaderData.setData("u_postprocess", _postprocessData)
         }
     }
-    
+
     // enable auto exposure
     public var autoExposure: Bool {
         get {
@@ -50,6 +50,7 @@ public class PostprocessManager {
             _autoExposure = newValue
             if newValue {
                 luminancePass = Luminance(_scene)
+                luminancePass!.resourceCache = _resourceCache
                 _shaderData.enableMacro(IS_AUTO_EXPOSURE.rawValue)
             } else {
                 luminancePass = nil
@@ -71,12 +72,12 @@ public class PostprocessManager {
         postProcessPass.shader.append(ShaderPass(scene.engine.library(), "postprocess_merge"))
         postProcessPass.data.append(_shaderData)
     }
-    
+
     public func registerComputePass(_ pass: ComputePass) {
         pass.resourceCache = _resourceCache
         computePasses.append(pass)
     }
-    
+
     func render(_ commandBuffer: MTLCommandBuffer) {
         for pass in computePasses {
             if let computeCommandEncoder = commandBuffer.makeComputeCommandEncoder() {
@@ -84,22 +85,25 @@ public class PostprocessManager {
                 computeCommandEncoder.endEncoding()
             }
         }
-        
-        if let renderTarget = _canvas.currentRenderPassDescriptor ,
-           let computeEncoder = commandBuffer.makeComputeCommandEncoder() {
+
+        if let renderTarget = _canvas.currentRenderPassDescriptor {
             let texture = renderTarget.colorAttachments[0].texture!
-            if let luminancePass = luminancePass {
+            if let computeEncoder = commandBuffer.makeComputeCommandEncoder(),
+               let luminancePass = luminancePass {
                 luminancePass.defaultShaderData.setImageView("input", texture)
                 postProcessPass.defaultShaderData.setImageView("logLuminanceIn", luminancePass.logLuminanceTexture)
                 luminancePass.compute(commandEncoder: computeEncoder)
+                computeEncoder.endEncoding()
             }
-            
-            postProcessPass.threadsPerGridX = texture.width
-            postProcessPass.threadsPerGridY = texture.height
-            postProcessPass.defaultShaderData.setImageView("framebufferInput", texture)
-            postProcessPass.defaultShaderData.setImageView("framebufferOutput", texture)
-            postProcessPass.compute(commandEncoder: computeEncoder)
-            computeEncoder.endEncoding()
+
+            if let computeEncoder = commandBuffer.makeComputeCommandEncoder() {
+                postProcessPass.threadsPerGridX = texture.width
+                postProcessPass.threadsPerGridY = texture.height
+                postProcessPass.defaultShaderData.setImageView("framebufferInput", texture)
+                postProcessPass.defaultShaderData.setImageView("framebufferOutput", texture)
+                postProcessPass.compute(commandEncoder: computeEncoder)
+                computeEncoder.endEncoding()
+            }
         }
     }
 }

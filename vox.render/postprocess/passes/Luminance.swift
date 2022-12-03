@@ -11,7 +11,7 @@ public class Luminance: ComputePass {
     private let kLogLuminanceTargetScale: Float = 0.25
     private let device: MTLDevice
     private var _logLuminanceTexture: MTLTexture!
-    
+
     var logLuminanceTexture: MTLTexture {
         get {
             _logLuminanceTexture
@@ -27,17 +27,23 @@ public class Luminance: ComputePass {
         let flag = ListenerUpdateFlag()
         flag.listener = resize
         canvas.updateFlagManager.addFlag(flag: flag)
-        createTexture(canvas.bounds.width, canvas.bounds.height)
+        if let renderTarget = canvas.currentRenderPassDescriptor,
+           let texture = renderTarget.colorAttachments[0].texture {
+            createTexture(texture.width, texture.height)
+        }
 
         shader.append(ShaderPass(engine.library(), "logLuminance"))
     }
 
     func resize(type: Int?, param: AnyObject?) -> Void {
         let canvas = param as! Canvas
-        createTexture(canvas.bounds.width, canvas.bounds.height)
+        if let renderTarget = canvas.currentRenderPassDescriptor,
+           let texture = renderTarget.colorAttachments[0].texture {
+            createTexture(texture.width, texture.height)
+        }
     }
 
-    func createTexture(_ width: CGFloat, _ height: CGFloat) {
+    func createTexture(_ width: Int, _ height: Int) {
         let width = Int(Float(width) * kLogLuminanceTargetScale)
         let height = Int(Float(height) * kLogLuminanceTargetScale)
         let desc = MTLTextureDescriptor.texture2DDescriptor(pixelFormat: .r16Float, width: width, height: height, mipmapped: false)
