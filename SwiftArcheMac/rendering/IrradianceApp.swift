@@ -55,14 +55,14 @@ class IrradianceApp: NSViewController {
         let rootEntity = scene.createRootEntity()
 
         let cameraEntity = rootEntity.createChild()
-        cameraEntity.transform.setPosition(x: 0, y: 0, z: -10)
+        cameraEntity.transform.position = Vector3(0, 0, -10)
         cameraEntity.transform.lookAt(targetPosition: Vector3())
         let _: Camera = cameraEntity.addComponent()
         let _: OrbitControl = cameraEntity.addComponent()
 
         // Create Sphere
         let sphereEntity = rootEntity.createChild("box")
-        sphereEntity.transform.setPosition(x: -1, y: 2, z: 0)
+        sphereEntity.transform.position = Vector3(-1, 2, 0)
         let sphereMaterial = PBRMaterial(engine)
         sphereMaterial.roughness = 0
         sphereMaterial.metallic = 1
@@ -76,7 +76,7 @@ class IrradianceApp: NSViewController {
 
         for _ in 0..<6 {
             let bakerEntity = rootEntity.createChild("IBL Baker Entity")
-            bakerEntity.transform.setRotation(x: 90, y: 0, z: 0)
+            bakerEntity.transform.rotation = Vector3(90, 0, 0)
             let bakerMaterial = BakerMaterial(engine)
             let bakerRenderer: MeshRenderer = bakerEntity.addComponent()
             bakerRenderer.mesh = PrimitiveMesh.createPlane(engine, 2, 2)
@@ -85,12 +85,12 @@ class IrradianceApp: NSViewController {
             planeMaterials.append(bakerMaterial)
         }
 
-        planes[0].transform.setPosition(x: 1, y: 0, z: 0) // PX
-        planes[1].transform.setPosition(x: -3, y: 0, z: 0) // NX
-        planes[2].transform.setPosition(x: 1, y: 2, z: 0) // PY
-        planes[3].transform.setPosition(x: 1, y: -2, z: 0) // NY
-        planes[4].transform.setPosition(x: -1, y: 0, z: 0) // PZ
-        planes[5].transform.setPosition(x: 3, y: 0, z: 0) // NZ
+        planes[0].transform.position = Vector3(1, 0, 0) // PX
+        planes[1].transform.position = Vector3(-3, 0, 0) // NX
+        planes[2].transform.position = Vector3(1, 2, 0) // PY
+        planes[3].transform.position = Vector3(1, -2, 0) // NY
+        planes[4].transform.position = Vector3(-1, 0, 0) // PZ
+        planes[5].transform.position = Vector3(3, 0, 0) // NZ
 
         let hdr = engine.textureLoader.loadHDR(with: "assets/kloppenheim_06_4k.hdr")!
         let cubeMap = createCubemap(engine, with: hdr, size: 512, level: 3)

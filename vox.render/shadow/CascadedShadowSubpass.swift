@@ -75,7 +75,7 @@ class CascadedShadowSubpass: GeometrySubpass {
 
             if (shadowCascades == ShadowCascadesMode.NoCascades) {
                 _shadowTileResolution = shadowResolution
-                _ = _shadowMapSize.set(x: 1 / Float(shadowResolution), y: 1 / Float(shadowResolution), z: Float(shadowResolution), w: Float(shadowResolution))
+                _shadowMapSize = Vector4(1 / Float(shadowResolution), 1 / Float(shadowResolution), Float(shadowResolution), Float(shadowResolution))
             } else {
                 let shadowTileResolution = ShadowUtils.getMaxTileResolutionInAtlas(
                         atlasWidth: shadowResolution,
@@ -85,22 +85,22 @@ class CascadedShadowSubpass: GeometrySubpass {
                 _shadowTileResolution = shadowTileResolution
                 let width = Float(shadowTileResolution * 2)
                 let height = shadowCascades == ShadowCascadesMode.TwoCascades ? Float(shadowTileResolution) : Float(shadowTileResolution * 2)
-                _ = _shadowMapSize.set(x: 1.0 / width, y: 1.0 / height, z: width, w: height)
+                _shadowMapSize = Vector4(1.0 / width, 1.0 / height, width, height)
             }
 
             switch (shadowCascades) {
             case ShadowCascadesMode.NoCascades:
-                _ = _viewportOffsets[0].set(x: 0, y: 0)
+                _viewportOffsets[0] = Vector2()
                 break
             case ShadowCascadesMode.TwoCascades:
-                _ = _viewportOffsets[0].set(x: 0, y: 0)
-                _ = _viewportOffsets[1].set(x: Float(_shadowTileResolution), y: 0)
+                _viewportOffsets[0] = Vector2(0, 0)
+                _viewportOffsets[1] = Vector2(Float(_shadowTileResolution), 0)
                 break
             case ShadowCascadesMode.FourCascades:
-                _ = _viewportOffsets[0].set(x: 0, y: 0)
-                _ = _viewportOffsets[1].set(x: Float(_shadowTileResolution), y: 0)
-                _ = _viewportOffsets[2].set(x: 0, y: Float(_shadowTileResolution))
-                _ = _viewportOffsets[3].set(x: Float(_shadowTileResolution), y: Float(_shadowTileResolution))
+                _viewportOffsets[0] = Vector2(0, 0)
+                _viewportOffsets[1] = Vector2(Float(_shadowTileResolution), 0)
+                _viewportOffsets[2] = Vector2(0, Float(_shadowTileResolution))
+                _viewportOffsets[3] = Vector2(Float(_shadowTileResolution), Float(_shadowTileResolution))
             }
         }
     }

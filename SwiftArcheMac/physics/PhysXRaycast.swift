@@ -99,14 +99,14 @@ class PhysXRaycastApp: NSViewController {
         let _: GeometryGenerator = rootEntity.addComponent()
 
         let cameraEntity = rootEntity.createChild()
-        cameraEntity.transform.setPosition(x: 15, y: 15, z: 15)
+        cameraEntity.transform.position = Vector3(15, 15, 15)
         cameraEntity.transform.lookAt(targetPosition: Vector3())
         let _: Camera = cameraEntity.addComponent()
         let _: OrbitControl = cameraEntity.addComponent()
         let _: Raycast = cameraEntity.addComponent()
 
         let light = rootEntity.createChild("light")
-        light.transform.setPosition(x: 1, y: 3, z: 0)
+        light.transform.position = Vector3(1, 3, 0)
         light.transform.lookAt(targetPosition: Vector3())
         let _: DirectLight = light.addComponent()
 

@@ -75,13 +75,13 @@ class PhysXCapsuleColliderShape: PhysXColliderShape {
         _upAxis = ColliderShapeUpAxis(rawValue: upAxis)!
         switch (_upAxis) {
         case ColliderShapeUpAxis.X:
-            _ = _axis!.set(x: 0, y: 0, z: 0, w: 1)
+            _axis = Quaternion(0, 0, 0, 1)
             break
         case ColliderShapeUpAxis.Y:
-            _ = _axis!.set(x: 0, y: 0, z: PhysXColliderShape.halfSqrt, w: PhysXColliderShape.halfSqrt)
+            _axis = Quaternion(0, 0, PhysXColliderShape.halfSqrt, PhysXColliderShape.halfSqrt)
             break
         case ColliderShapeUpAxis.Z:
-            _ = _axis!.set(x: 0, y: PhysXColliderShape.halfSqrt, z: 0, w: PhysXColliderShape.halfSqrt)
+            _axis = Quaternion(0, PhysXColliderShape.halfSqrt, 0, PhysXColliderShape.halfSqrt)
             break
         }
 

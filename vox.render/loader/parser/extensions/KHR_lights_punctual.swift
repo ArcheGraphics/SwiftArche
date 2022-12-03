@@ -4,7 +4,7 @@
 //  personal capacity and am not conveying any rights to any intellectual
 //  property of any third parties.
 
-import Foundation
+import vox_math
 
 class KHR_lights_punctual {
     static func parseEngineResource(_ schema: GLTFLight, _ entity: Entity, _ context: ParserContext) {
@@ -30,7 +30,7 @@ class KHR_lights_punctual {
             return
         }
 
-        _ = light.color.set(r: schema.color.x, g: schema.color.y, b: schema.color.z, a: 1)
+        light.color = Color(schema.color.x, schema.color.y, schema.color.z, 1)
         light.intensity = schema.intensity
 
         if (context.glTFResource.lights == nil) {

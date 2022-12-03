@@ -22,17 +22,17 @@ fileprivate class TableGenerator: Script {
 
     private func _addTable() {
         let entity = entity.createChild("entity")
-        entity.transform.setPosition(
-                x: Float.random(in: -8..<8),
-                y: 10,
-                z: Float.random(in: -8..<8)
+        entity.transform.position = Vector3(
+                Float.random(in: -8..<8),
+                10,
+                Float.random(in: -8..<8)
         )
-        entity.transform.setRotation(
-                x: Float.random(in: 0..<360),
-                y: Float.random(in: 0..<360),
-                z: Float.random(in: 0..<360)
+        entity.transform.rotation = Vector3(
+                Float.random(in: 0..<360),
+                Float.random(in: 0..<360),
+                Float.random(in: 0..<360)
         )
-        entity.transform.setScale(x: 3, y: 3, z: 3)
+        entity.transform.scale = Vector3(3, 3, 3)
         let boxCollider: DynamicCollider = entity.addComponent()
         boxCollider.mass = 10.0
 
@@ -43,10 +43,10 @@ fileprivate class TableGenerator: Script {
 
         let physicsBox = BoxColliderShape()
         physicsBox.size = Vector3(0.5, 0.4, 0.045)
-        _ = physicsBox.position.set(x: 0, y: 0, z: 0.125)
+        physicsBox.position = Vector3(0, 0, 0.125)
         boxCollider.addShape(physicsBox)
         let child = entity.createChild()
-        child.transform.setPosition(x: 0, y: 0, z: 0.125)
+        child.transform.position = Vector3(0, 0, 0.125)
         let boxRenderer: MeshRenderer = child.addComponent()
         boxRenderer.mesh = PrimitiveMesh.createCuboid(engine, 0.5, 0.4, 0.045)
         boxRenderer.setMaterial(boxMaterial)
@@ -54,10 +54,10 @@ fileprivate class TableGenerator: Script {
 
         let physicsBox1 = BoxColliderShape()
         physicsBox1.size = Vector3(0.1, 0.1, 0.3)
-        _ = physicsBox1.position.set(x: -0.2, y: -0.15, z: -0.045)
+        physicsBox1.position = Vector3(-0.2, -0.15, -0.045)
         boxCollider.addShape(physicsBox1)
         let child1 = entity.createChild()
-        child1.transform.setPosition(x: -0.2, y: -0.15, z: -0.045)
+        child1.transform.position = Vector3(-0.2, -0.15, -0.045)
         let boxRenderer1: MeshRenderer = child1.addComponent()
         boxRenderer1.mesh = PrimitiveMesh.createCuboid(engine, 0.1, 0.1, 0.3)
         boxRenderer1.setMaterial(boxMaterial)
@@ -65,10 +65,10 @@ fileprivate class TableGenerator: Script {
 
         let physicsBox2 = BoxColliderShape()
         physicsBox2.size = Vector3(0.1, 0.1, 0.3)
-        _ = physicsBox2.position.set(x: 0.2, y: -0.15, z: -0.045)
+        physicsBox2.position = Vector3(0.2, -0.15, -0.045)
         boxCollider.addShape(physicsBox2)
         let child2 = entity.createChild()
-        child2.transform.setPosition(x: 0.2, y: -0.15, z: -0.045)
+        child2.transform.position = Vector3(0.2, -0.15, -0.045)
         let boxRenderer2: MeshRenderer = child2.addComponent()
         boxRenderer2.mesh = PrimitiveMesh.createCuboid(engine, 0.1, 0.1, 0.3)
         boxRenderer2.setMaterial(boxMaterial)
@@ -76,10 +76,10 @@ fileprivate class TableGenerator: Script {
 
         let physicsBox3 = BoxColliderShape()
         physicsBox3.size = Vector3(0.1, 0.1, 0.3)
-        _ = physicsBox3.position.set(x: -0.2, y: 0.15, z: -0.045)
+        physicsBox3.position = Vector3(-0.2, 0.15, -0.045)
         boxCollider.addShape(physicsBox3)
         let child3 = entity.createChild()
-        child3.transform.setPosition(x: -0.2, y: 0.15, z: -0.045)
+        child3.transform.position = Vector3(-0.2, 0.15, -0.045)
         let boxRenderer3: MeshRenderer = child3.addComponent()
         boxRenderer3.mesh = PrimitiveMesh.createCuboid(engine, 0.1, 0.1, 0.3)
         boxRenderer3.setMaterial(boxMaterial)
@@ -87,10 +87,10 @@ fileprivate class TableGenerator: Script {
 
         let physicsBox4 = BoxColliderShape()
         physicsBox4.size = Vector3(0.1, 0.1, 0.3)
-        _ = physicsBox4.position.set(x: 0.2, y: 0.15, z: -0.045)
+        physicsBox4.position = Vector3(0.2, 0.15, -0.045)
         boxCollider.addShape(physicsBox4)
         let child4 = entity.createChild()
-        child4.transform.setPosition(x: 0.2, y: 0.15, z: -0.045)
+        child4.transform.position = Vector3(0.2, 0.15, -0.045)
         let boxRenderer4: MeshRenderer = child4.addComponent()
         boxRenderer4.mesh = PrimitiveMesh.createCuboid(engine, 0.1, 0.1, 0.3)
         boxRenderer4.setMaterial(boxMaterial)
@@ -137,13 +137,13 @@ class PhysXCompoundApp: NSViewController {
         let rootEntity = scene.createRootEntity()
 
         let cameraEntity = rootEntity.createChild()
-        cameraEntity.transform.setPosition(x: 15, y: 15, z: 15)
+        cameraEntity.transform.position = Vector3(15, 15, 15)
         cameraEntity.transform.lookAt(targetPosition: Vector3())
         let _: Camera = cameraEntity.addComponent()
         let _: OrbitControl = cameraEntity.addComponent()
 
         let light = rootEntity.createChild("light")
-        light.transform.setPosition(x: 1, y: 3, z: 0)
+        light.transform.position = Vector3(1, 3, 0)
         light.transform.lookAt(targetPosition: Vector3())
         let _: DirectLight = light.addComponent()
 

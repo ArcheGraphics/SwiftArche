@@ -106,7 +106,7 @@ class IblApp: NSViewController {
         let rootEntity = scene.createRootEntity()
         let _: GUI = rootEntity.addComponent()
         let cameraEntity = rootEntity.createChild()
-        cameraEntity.transform.setPosition(x: 0, y: 0, z: -10)
+        cameraEntity.transform.position = Vector3(0, 0, -10)
         cameraEntity.transform.lookAt(targetPosition: Vector3())
         let _: Camera = cameraEntity.addComponent()
         let _: OrbitControl = cameraEntity.addComponent()

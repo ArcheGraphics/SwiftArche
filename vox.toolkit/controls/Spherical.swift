@@ -37,7 +37,7 @@ class Spherical {
         var xAxis = Vector3(1, 0, 0)
         var yAxis = up
         if (Vector3.equals(left: xAxis, right: yAxis.normalize())) {
-            _ = xAxis.set(x: 0, y: 1, z: 0)
+            xAxis = Vector3(0, 1, 0)
         }
         var zAxis = Vector3.cross(left: xAxis, right: yAxis)
         _ = zAxis.normalize()
@@ -74,7 +74,7 @@ class Spherical {
     func setToVec3(_ value: inout Vector3)->Bool {
         let sinPhiRadius = sin(phi) * radius
         phi -= floor(phi / .pi / 2) * .pi * 2
-        _ = value.set(x: sinPhiRadius * sin(theta), y: radius * cos(phi), z: sinPhiRadius * cos(theta))
+        value = Vector3(sinPhiRadius * sin(theta), radius * cos(phi), sinPhiRadius * cos(theta))
         _ = value.transformNormal(m: _matrix)
         return phi > .pi
     }

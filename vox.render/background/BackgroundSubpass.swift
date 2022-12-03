@@ -89,24 +89,24 @@ public class BackgroundSubpass: Subpass {
 
         switch (_textureFillMode) {
         case BackgroundTextureFillMode.Fill:
-            _ = positions[0].set(x: -1, y: -1, z: 1)
-            _ = positions[1].set(x: 1, y: -1, z: 1)
-            _ = positions[2].set(x: -1, y: 1, z: 1)
-            _ = positions[3].set(x: 1, y: 1, z: 1)
+            positions[0] = Vector3(-1, -1, 1)
+            positions[1] = Vector3(1, -1, 1)
+            positions[2] = Vector3(-1, 1, 1)
+            positions[3] = Vector3(1, 1, 1)
             break
         case BackgroundTextureFillMode.AspectFitWidth:
             let fitWidthScale = Float((Double(_texture!.height) * width) / Double(_texture!.width) / height)
-            _ = positions[0].set(x: -1, y: -fitWidthScale, z: 1)
-            _ = positions[1].set(x: 1, y: -fitWidthScale, z: 1)
-            _ = positions[2].set(x: -1, y: fitWidthScale, z: 1)
-            _ = positions[3].set(x: 1, y: fitWidthScale, z: 1)
+            positions[0] = Vector3(-1, -fitWidthScale, 1)
+            positions[1] = Vector3(1, -fitWidthScale, 1)
+            positions[2] = Vector3(-1, fitWidthScale, 1)
+            positions[3] = Vector3(1, fitWidthScale, 1)
             break
         case BackgroundTextureFillMode.AspectFitHeight:
             let fitHeightScale = Float((Double(_texture!.width) * height) / Double(_texture!.height) / width)
-            _ = positions[0].set(x: -fitHeightScale, y: -1, z: 1)
-            _ = positions[1].set(x: fitHeightScale, y: -1, z: 1)
-            _ = positions[2].set(x: -fitHeightScale, y: 1, z: 1)
-            _ = positions[3].set(x: fitHeightScale, y: 1, z: 1)
+            positions[0] = Vector3(-fitHeightScale, -1, 1)
+            positions[1] = Vector3(fitHeightScale, -1, 1)
+            positions[2] = Vector3(-fitHeightScale, 1, 1)
+            positions[3] = Vector3(fitHeightScale, 1, 1)
             break
         }
         _mesh.setPositions(positions: positions)

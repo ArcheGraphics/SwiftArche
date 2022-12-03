@@ -110,13 +110,13 @@ class PhysXJointBasicApp: NSViewController {
         let rootEntity = scene.createRootEntity()
 
         let cameraEntity = rootEntity.createChild()
-        cameraEntity.transform.setPosition(x: 3, y: 1, z: 22)
+        cameraEntity.transform.position = Vector3(3, 1, 22)
         cameraEntity.transform.lookAt(targetPosition: Vector3(3, 1, 0))
         let _: Camera = cameraEntity.addComponent()
         let _: ShootScript = cameraEntity.addComponent();
 
         let light = rootEntity.createChild("light")
-        light.transform.setPosition(x: 1, y: 3, z: 0)
+        light.transform.position = Vector3(1, 3, 0)
         light.transform.lookAt(targetPosition: Vector3())
         let _: DirectLight = light.addComponent()
 

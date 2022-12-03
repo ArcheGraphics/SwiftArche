@@ -54,18 +54,17 @@ class PbrApp: NSViewController {
         let rootEntity = scene.createRootEntity()
 
         let cameraEntity = rootEntity.createChild()
-        cameraEntity.transform.setPosition(x: 0, y: 0, z: 10)
+        cameraEntity.transform.position = Vector3(0, 0, 10)
         cameraEntity.transform.lookAt(targetPosition: Vector3())
         let _: Camera = cameraEntity.addComponent()
         let _: OrbitControl = cameraEntity.addComponent()
-
 
         let materialIndex = 0
         let mat = _materials[materialIndex]
 
         // init point light
         let light = rootEntity.createChild("light")
-        light.transform.setPosition(x: 3, y: 3, z: 3)
+        light.transform.position = Vector3(3, 3, 3)
         light.transform.lookAt(targetPosition: Vector3(0, 0, 0))
         let directionLight: DirectLight = light.addComponent()
         directionLight.intensity = 0.3

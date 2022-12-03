@@ -58,7 +58,7 @@ public class FreeControl : Script {
         if (floorMock) {
             let position = _cameraTransform.position
             if (position.y != floorY) {
-                _cameraTransform.setPosition(x: position.x, y: floorY, z: position.z)
+                _cameraTransform.position = Vector3(position.x, floorY, position.z)
             }
         }
     }

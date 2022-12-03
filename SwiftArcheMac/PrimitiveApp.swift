@@ -14,7 +14,7 @@ fileprivate class MoveScript: Script {
 
     override func onUpdate(_ deltaTime: Float) {
         _rTri += 90 * deltaTime
-        entity.transform.setRotation(x: 0, y: _rTri, z: 0)
+        entity.transform.rotation = Vector3(0, _rTri, 0)
     }
 }
 
@@ -33,13 +33,13 @@ class PrimitiveApp: NSViewController {
         let rootEntity = scene.createRootEntity()
 
         let cameraEntity = rootEntity.createChild()
-        cameraEntity.transform.setPosition(x: 5, y: 5, z: 5)
+        cameraEntity.transform.position = Vector3(5, 5, 5)
         cameraEntity.transform.lookAt(targetPosition: Vector3())
         let _: Camera = cameraEntity.addComponent()
         let _: OrbitControl = cameraEntity.addComponent()
 
         let light = rootEntity.createChild("light")
-        light.transform.setPosition(x: 1, y: 3, z: 0)
+        light.transform.position = Vector3(1, 3, 0)
         light.transform.lookAt(targetPosition: Vector3())
         let _: DirectLight = light.addComponent()
 

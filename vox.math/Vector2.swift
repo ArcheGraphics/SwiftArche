@@ -221,7 +221,7 @@ extension Vector2 {
     ///   - x: The x component of the vector
     ///   - y: The y component of the vector
     /// - Returns: This vector
-    public mutating func set(x: Float, y: Float) -> Vector2 {
+    mutating func set(x: Float, y: Float) -> Vector2 {
         elements = SIMD2<Float>(x, y)
         return self
     }
@@ -231,7 +231,7 @@ extension Vector2 {
     ///   - array: The array
     ///   - offset: The start offset of the array
     /// - Returns: This vector
-    public mutating func set(array: Array<Float>, offset: Int = 0) -> Vector2 {
+    mutating func set(array: Array<Float>, offset: Int = 0) -> Vector2 {
         elements = SIMD2<Float>(array[offset], array[offset + 1])
         return self
     }

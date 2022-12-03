@@ -147,7 +147,7 @@ class PhysXAttractorApp: NSViewController {
         cameraEntity.transform.lookAt(targetPosition: Vector3())
 
         let light = rootEntity.createChild("light")
-        light.transform.setPosition(x: 5, y: 0, z: -10)
+        light.transform.position = Vector3(5, 0, -10)
         light.transform.lookAt(targetPosition: Vector3(0, 0, 0))
         light.transform.lookAt(targetPosition: Vector3())
         let _: DirectLight = light.addComponent()
@@ -157,7 +157,7 @@ class PhysXAttractorApp: NSViewController {
         let interaction: Interaction = attractorEntity.addComponent()
         interaction.camera = camera
         let mtl = PBRMaterial(engine)
-        _ = mtl.baseColor.set(r: 1, g: 1, b: 1, a: 1.0)
+        mtl.baseColor = Color(1, 1, 1, 1.0)
         let renderer: MeshRenderer = attractorEntity.addComponent()
         renderer.mesh = PrimitiveMesh.createSphere(engine, 2)
         // renderer.setMaterial(mtl)

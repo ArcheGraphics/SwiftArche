@@ -202,8 +202,8 @@ extension PhysicsManager {
             } else {
                 outHitResult.entity = nil
                 outHitResult.distance = 0
-                _ = outHitResult.point.set(x: 0, y: 0, z: 0)
-                _ = outHitResult.normal.set(x: 0, y: 0, z: 0)
+                outHitResult.point = Vector3()
+                outHitResult.normal = Vector3()
                 return false
             }
         }
@@ -241,8 +241,8 @@ extension PhysicsManager {
             } else {
                 outHitResult.entity = nil
                 outHitResult.distance = 0
-                _ = outHitResult.point.set(x: 0, y: 0, z: 0)
-                _ = outHitResult.normal.set(x: 0, y: 0, z: 0)
+                outHitResult.point = Vector3()
+                outHitResult.normal = Vector3()
                 return false
             }
         }
@@ -280,8 +280,8 @@ extension PhysicsManager {
             } else {
                 outHitResult.entity = nil
                 outHitResult.distance = 0
-                _ = outHitResult.point.set(x: 0, y: 0, z: 0)
-                _ = outHitResult.normal.set(x: 0, y: 0, z: 0)
+                outHitResult.point = Vector3()
+                outHitResult.normal = Vector3()
                 return false
             }
         }

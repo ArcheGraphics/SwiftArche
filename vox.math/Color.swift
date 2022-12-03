@@ -184,7 +184,7 @@ extension Color {
     ///   - b: The blue component of the color
     ///   - a: The alpha component of the color
     /// - Returns: This color.
-    public mutating func set(r: Float, g: Float, b: Float, a: Float) -> Color {
+    mutating func set(r: Float, g: Float, b: Float, a: Float) -> Color {
         elements = [r, g, b, a]
         return self
     }

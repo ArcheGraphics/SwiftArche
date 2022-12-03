@@ -88,12 +88,12 @@ class SkyboxApp: NSViewController {
         let skyMaterial = SkyBoxMaterial(engine)
         // method1: load cubemap
         //skyMaterial.textureCubeMap = try! engine.textureLoader.loadTexture(with: "country")!
-        
+
         // method2: load hdr
         let hdr = engine.textureLoader.loadHDR(with: "assets/kloppenheim_06_4k.hdr")!
         skyMaterial.textureCubeMap = hdr
         skyMaterial.equirectangular = true
-        
+
         // method3: generate skymap
         // let skyTexture = MDLSkyCubeTexture(name: "natrual", channelEncoding: .float16,
         //                                    textureDimensions: [512, 512], turbidity: 1.0, sunElevation: 1.0,
@@ -108,13 +108,13 @@ class SkyboxApp: NSViewController {
         scene.background.sky = skySubpass
 
         let cameraEntity = rootEntity.createChild()
-        cameraEntity.transform.setPosition(x: 1, y: 1, z: 1)
+        cameraEntity.transform.position = Vector3(1, 1, 1)
         cameraEntity.transform.lookAt(targetPosition: Vector3())
         let _: Camera = cameraEntity.addComponent()
         let _: OrbitControl = cameraEntity.addComponent()
 
         let light = rootEntity.createChild("light")
-        light.transform.setPosition(x: 1, y: 3, z: 0)
+        light.transform.position = Vector3(1, 3, 0)
         light.transform.lookAt(targetPosition: Vector3())
         let _: DirectLight = light.addComponent()
 

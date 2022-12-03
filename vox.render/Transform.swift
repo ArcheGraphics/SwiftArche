@@ -216,7 +216,7 @@ extension Transform {
                 if (_getParentTransform() != nil) {
                     let scaleMat = _getScaleMatrix()
                     let e = scaleMat.elements
-                    _ = _lossyWorldScale.set(x: e.columns.0[0], y: e.columns.1[1], z: e.columns.2[2])
+                    _lossyWorldScale = Vector3(e.columns.0[0], e.columns.1[1], e.columns.2[2])
                 } else {
                     _lossyWorldScale = _scale
                 }
@@ -280,79 +280,6 @@ extension Transform {
 //MARK:- Public Methods
 
 extension Transform {
-    /// Set local position by X, Y, Z value.
-    /// - Parameters:
-    ///   - x: X coordinate
-    ///   - y: Y coordinate
-    ///   - z: Z coordinate
-    public func setPosition(x: Float, y: Float, z: Float) {
-        _ = _position.set(x: x, y: y, z: z)
-        position = _position
-    }
-
-    /// Set local rotation by the X, Y, Z components of the euler angle, unit in degrees.
-    /// Rotations are performed around the Y axis, the X axis, and the Z axis, in that order.
-    /// - Parameters:
-    ///   - x: The angle of rotation around the X axis
-    ///   - y: The angle of rotation around the Y axis
-    ///   - z: The angle of rotation around the Z axis
-    public func setRotation(x: Float, y: Float, z: Float) {
-        _ = _rotation.set(x: x, y: y, z: z)
-        rotation = _rotation
-    }
-
-    /// Set local rotation by the X, Y, Z, and W components of the quaternion.
-    /// - Parameters:
-    ///   - x: X component of quaternion
-    ///   - y: Y component of quaternion
-    ///   - z: Z component of quaternion
-    ///   - w: W component of quaternion
-    public func setRotationQuaternion(x: Float, y: Float, z: Float, w: Float) {
-        _ = _rotationQuaternion.set(x: x, y: y, z: z, w: w)
-        rotationQuaternion = _rotationQuaternion
-    }
-
-    /// Set local scaling by scaling values along X, Y, Z axis.
-    /// - Parameters:
-    ///   - x: Scaling along X axis
-    ///   - y:  Scaling along Y axis
-    ///   - z: Scaling along Z axis
-    public func setScale(x: Float, y: Float, z: Float) {
-        _ = _scale.set(x: x, y: y, z: z)
-        scale = _scale
-    }
-
-    /// Set world position by X, Y, Z value.
-    /// - Parameters:
-    ///   - x: X coordinate
-    ///   - y: Y coordinate
-    ///   - z: Z coordinate
-    public func setWorldPosition(x: Float, y: Float, z: Float) {
-        _ = _worldPosition.set(x: x, y: y, z: z)
-        worldPosition = _worldPosition
-    }
-
-    /// Set world rotation by the X, Y, Z components of the euler angle, unit in degrees, Yaw/Pitch/Roll sequence.
-    /// - Parameters:
-    ///   - x: The angle of rotation around the X axis
-    ///   - y: The angle of rotation around the Y axis
-    ///   - z: The angle of rotation around the Z axis
-    public func setWorldRotation(x: Float, y: Float, z: Float) {
-        _ = _worldRotation.set(x: x, y: y, z: z)
-        worldRotation = _worldRotation
-    }
-
-    /// Set local rotation by the X, Y, Z, and W components of the quaternion.
-    /// - Parameters:
-    ///   - x: X component of quaternion
-    ///   - y: Y component of quaternion
-    ///   - z: Z component of quaternion
-    ///   - w: W component of quaternion
-    public func setWorldRotationQuaternion(x: Float, y: Float, z: Float, w: Float) {
-        _ = _worldRotationQuaternion.set(x: x, y: y, z: z, w: w)
-        worldRotationQuaternion = _worldRotationQuaternion
-    }
-
     /// Translate along the passed Vector3.
     /// - Parameters:
     ///   - translation: Direction and distance of translation
@@ -415,7 +342,7 @@ extension Transform {
         if (worldUp != nil) {
             xAxis = Vector3.cross(left: worldUp!, right: zAxis)
         } else {
-            _ = xAxis.set(x: zAxis.z, y: 0, z: -zAxis.x)
+            xAxis = Vector3(zAxis.z, 0, -zAxis.x)
         }
         axisLen = xAxis.length()
         if (axisLen <= MathUtil.zeroTolerance) {

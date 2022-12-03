@@ -333,7 +333,7 @@ extension Quaternion {
     ///   - z: The z component of the vector
     ///   - w: The w component of the vector
     /// - Returns: This vector
-    public mutating func set(x: Float, y: Float, z: Float, w: Float) -> Quaternion {
+    mutating func set(x: Float, y: Float, z: Float, w: Float) -> Quaternion {
         elements = simd_quatf(ix: x, iy: y, iz: z, r: w)
         return self
     }
@@ -343,7 +343,7 @@ extension Quaternion {
     ///   - array: The array
     ///   - offset: The start offset of the array
     /// - Returns: This vector
-    public mutating func set(array: Array<Float>, offset: Int = 0) -> Quaternion {
+    mutating func set(array: Array<Float>, offset: Int = 0) -> Quaternion {
         elements = simd_quatf(ix: array[offset],
                 iy: array[offset + 1],
                 iz: array[offset + 2],

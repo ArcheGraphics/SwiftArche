@@ -263,6 +263,6 @@ public class OrbitControl : Script {
         _zoomFrag = 0
         _scale = 1
         _ = _sphericalDelta.set(0, 0, 0)
-        _ = _panOffset.set(x: 0, y: 0, z: 0)
+        _panOffset = Vector3(0, 0, 0)
     }
 }

@@ -39,12 +39,12 @@ class AtomicComputeApp: NSViewController {
         super.viewDidLoad()
         canvas = Canvas(with: view)
         engine = Engine(canvas: canvas)
-        
+
         let scene = engine.sceneManager.activeScene!
         let rootEntity = scene.createRootEntity()
 
         let cameraEntity = rootEntity.createChild()
-        cameraEntity.transform.setPosition(x: 1, y: 1, z: 1)
+        cameraEntity.transform.position = Vector3(1, 1, 1)
         cameraEntity.transform.lookAt(targetPosition: Vector3())
         let _: Camera = cameraEntity.addComponent()
         let _: OrbitControl = cameraEntity.addComponent()
@@ -54,7 +54,7 @@ class AtomicComputeApp: NSViewController {
         renderer.mesh = PrimitiveMesh.createCuboid(engine, 0.1, 0.1, 0.1)
         let material = AtomicMaterial(engine)
         renderer.setMaterial(material)
-        
+
         let atomicCounter = ComputePass(engine.device)
         atomicCounter.threadsPerGridX = 2
         atomicCounter.threadsPerGridY = 2

@@ -337,13 +337,13 @@ public class WireframeManager: Script {
         var tempAxis = Quaternion()
         switch (shape.upAxis) {
         case ColliderShapeUpAxis.X:
-            _ = tempAxis.set(x: 0, y: 0, z: WireframeManager._halfSqrt, w: WireframeManager._halfSqrt)
+            tempAxis = Quaternion(0, 0, WireframeManager._halfSqrt, WireframeManager._halfSqrt)
             break
         case ColliderShapeUpAxis.Y:
-            _ = tempAxis.set(x: 0, y: 0, z: 0, w: 1)
+            tempAxis = Quaternion(0, 0, 0, 1)
             break
         case ColliderShapeUpAxis.Z:
-            _ = tempAxis.set(x: WireframeManager._halfSqrt, y: 0, z: 0, w: WireframeManager._halfSqrt)
+            tempAxis = Quaternion(WireframeManager._halfSqrt, 0, 0, WireframeManager._halfSqrt)
         }
         var tempRotation = Quaternion.rotationYawPitchRoll(yaw: shape.rotation.x, pitch: shape.rotation.y, roll: shape.rotation.z)
         tempRotation *= tempAxis

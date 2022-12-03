@@ -103,7 +103,7 @@ public class BlendShapeManager {
         let createHost = _layoutOrCountChange() || vertexCountChange
         if (createHost) {
             _createTextureArray(_modelMesh.vertexCount)
-            _ = _lastCreateHostInfo.set(x: Float(_blendShapeCount), y: _useBlendNormal ? 1.0 : 0.0, z: _useBlendTangent ? 1.0 : 0.0)
+            _lastCreateHostInfo = Vector3(Float(_blendShapeCount), _useBlendNormal ? 1.0 : 0.0, _useBlendTangent ? 1.0 : 0.0)
         }
         if (_needUpdateData()) {
             _updateTextureArray(_modelMesh.vertexCount, createHost)
@@ -141,7 +141,7 @@ public class BlendShapeManager {
 
         _vertexBuffer = _engine.device.makeBuffer(length: blendShapeCount * textureWidth * textureHeight * 4 * MemoryLayout<Float>.stride)
         _vertices = [Float](repeating: 0, count: blendShapeCount * textureWidth * textureHeight * 4)
-        _ = _dataTextureInfo.set(x: Float(_vertexElementCount), y: Float(textureWidth), z: Float(textureHeight))
+        _dataTextureInfo = Vector3(Float(_vertexElementCount), Float(textureWidth), Float(textureHeight))
     }
 
     private func _updateTextureArray(_ vertexCount: Int, _ force: Bool) {

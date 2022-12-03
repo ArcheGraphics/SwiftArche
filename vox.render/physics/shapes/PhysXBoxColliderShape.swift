@@ -16,7 +16,7 @@ class PhysXBoxColliderShape: PhysXColliderShape {
     ///   - size: Size of Shape.
     ///   - material: Material of PhysXCollider.
     init(_ uniqueID: UInt32, _ size: Vector3, _ material: PhysXPhysicsMaterial) {
-        _ = _halfSize.set(x: size.x * 0.5, y: size.y * 0.5, z: size.z * 0.5)
+        _halfSize = Vector3(size.x * 0.5, size.y * 0.5, size.z * 0.5)
         super.init()
 
         _pxGeometry = CPxBoxGeometry(
@@ -29,7 +29,7 @@ class PhysXBoxColliderShape: PhysXColliderShape {
     }
 
     func setSize(_ size: Vector3) {
-        _ = _halfSize.set(x: size.x * 0.5, y: size.y * 0.5, z: size.z * 0.5)
+        _halfSize = Vector3(size.x * 0.5, size.y * 0.5, size.z * 0.5)
         (_pxGeometry as! CPxBoxGeometry).halfExtents = (_halfSize * _scale).internalValue
         _pxShape.setGeometry(_pxGeometry)
 
