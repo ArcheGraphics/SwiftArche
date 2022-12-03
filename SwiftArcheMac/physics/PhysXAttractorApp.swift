@@ -137,7 +137,7 @@ class PhysXAttractorApp: NSViewController {
         let scene = engine.sceneManager.activeScene!
         let hdr = engine.textureLoader.loadHDR(with: "assets/kloppenheim_06_4k.hdr")!
         let cubeMap = createCubemap(engine, with: hdr, size: 256, level: 3)
-        scene.ambientLight = loadAmbientLight(engine, with: cubeMap)
+        scene.ambientLight = loadAmbientLight(engine, withHDR: cubeMap)
         let rootEntity = scene.createRootEntity()
 
         // init camera

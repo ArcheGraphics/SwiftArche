@@ -44,6 +44,37 @@ class IblApp: NSViewController {
         Material("Blue", Color(0.0, 0.0, 1.0, 1.0), 0.1, 1.0),
         Material("Black", Color(0.0, 1.0, 1.0, 1.0), 0.1, 1.0)
     ]
+    
+    func loadHDR(_ scene: Scene) {
+        let hdr = engine.textureLoader.loadHDR(with: "assets/kloppenheim_06_4k.hdr")!
+        let cubeMap = createCubemap(engine, with: hdr, size: 256, level: 3)
+        scene.ambientLight = loadAmbientLight(engine, withHDR: cubeMap)
+        
+        let skyMaterial = SkyBoxMaterial(engine)
+        skyMaterial.textureCubeMap = hdr
+        skyMaterial.equirectangular = true
+        let skySubpass = SkySubpass()
+        skySubpass.material = skyMaterial
+        skySubpass.mesh = PrimitiveMesh.createCuboid(engine)
+        scene.background.mode = .Sky
+        scene.background.sky = skySubpass
+    }
+    
+    func loadPCGSky(_ scene: Scene) {
+         let pcgSky = MDLSkyCubeTexture(name: "natrual", channelEncoding: .float16,
+                                            textureDimensions: [512, 512], turbidity: 1.0, sunElevation: 1.0,
+                                            sunAzimuth: 1.0, upperAtmosphereScattering: 1.0, groundAlbedo: 1.0)
+        let cubeMap = try! engine.textureLoader.loadTexture(with: pcgSky)!
+        scene.ambientLight = loadAmbientLight(engine, withPCG: cubeMap, lodStart: 2, lodEnd: 5)
+        
+        let skyMaterial = SkyBoxMaterial(engine)
+        skyMaterial.textureCubeMap = cubeMap
+        let skySubpass = SkySubpass()
+        skySubpass.material = skyMaterial
+        skySubpass.mesh = PrimitiveMesh.createCuboid(engine)
+        scene.background.mode = .Sky
+        scene.background.sky = skySubpass
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -51,11 +82,10 @@ class IblApp: NSViewController {
         engine = Engine(canvas: canvas)
 
         let scene = engine.sceneManager.activeScene!
-        let hdr = engine.textureLoader.loadHDR(with: "assets/kloppenheim_06_4k.hdr")!
-        let cubeMap = createCubemap(engine, with: hdr, size: 256, level: 3)
-        scene.ambientLight = loadAmbientLight(engine, with: cubeMap)
-        let rootEntity = scene.createRootEntity()
+        loadHDR(scene)
+        // loadPCGSky(scene)
 
+        let rootEntity = scene.createRootEntity()
         let cameraEntity = rootEntity.createChild()
         cameraEntity.transform.setPosition(x: 0, y: 0, z: -10)
         cameraEntity.transform.lookAt(targetPosition: Vector3())

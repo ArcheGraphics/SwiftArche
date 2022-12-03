@@ -34,13 +34,15 @@ func createSphericalHarmonicsCoefficients(_ engine: Engine, with cube: MTLTextur
     return bufferView
 }
 
-func createSpecularTexture(_ engine: Engine, with cube: MTLTexture, format: MTLPixelFormat) -> MTLTexture? {
+func createSpecularTexture(_ engine: Engine, with cube: MTLTexture, format: MTLPixelFormat,
+                           lodStart: Int = 0, lodEnd: Int = -1) -> MTLTexture? {
+    let mipmapEnd = (lodEnd != -1 ? lodEnd : cube.mipmapLevelCount)
     let descriptor = MTLTextureDescriptor()
     descriptor.textureType = .typeCube
     descriptor.pixelFormat = format
-    descriptor.width = cube.width
-    descriptor.height = cube.height
-    descriptor.mipmapLevelCount = cube.mipmapLevelCount
+    descriptor.width = cube.width >> lodStart
+    descriptor.height = cube.height >> lodStart
+    descriptor.mipmapLevelCount = mipmapEnd - lodStart
     descriptor.usage = MTLTextureUsage(rawValue: MTLTextureUsage.shaderRead.rawValue | MTLTextureUsage.shaderWrite.rawValue)
     let specularTexture = engine.textureLoader.makeTexture(descriptor)
 
@@ -50,11 +52,11 @@ func createSpecularTexture(_ engine: Engine, with cube: MTLTexture, format: MTLP
        let commandEncoder = commandBuffer.makeComputeCommandEncoder() {
         commandEncoder.setComputePipelineState(pipelineState)
         commandEncoder.setTexture(cube, index: 0)
-        for lod in 0..<cube.mipmapLevelCount {
+        for lod in 0..<specularTexture.mipmapLevelCount  {
             let textureView = specularTexture.makeTextureView(pixelFormat: format, textureType: .typeCube,
                     levels: lod..<lod + 1, slices: 0..<6)
             commandEncoder.setTexture(textureView, index: 1)
-            var roughness: Float = Float(lod) / Float(cube.mipmapLevelCount - 1)  // linear
+            var roughness: Float = Float(lod) / Float(specularTexture.mipmapLevelCount - 1)  // linear
             commandEncoder.setBytes(&roughness, length: MemoryLayout<Float>.stride, index: 0)
 
             let size = Int(Float(cube.width))
@@ -136,18 +138,30 @@ func createCubemap(_ engine: Engine, with hdr: MTLTexture, size: Int, level: Int
     return cubeMap
 }
 
-func loadAmbientLight(_ engine: Engine, with name: String, format: MTLPixelFormat = .rgba8Unorm) -> AmbientLight {
-    let cubeMap = try! engine.textureLoader.loadTexture(with: name)!
+/// load from xcassets
+func loadAmbientLight(_ engine: Engine, withLDR cubeMap: MTLTexture, format: MTLPixelFormat = .rgba8Unorm,
+                      lodStart: Int = 0, lodEnd: Int = -1) -> AmbientLight {
     let ambientLight = AmbientLight();
-    ambientLight.specularTexture = createSpecularTexture(engine, with: cubeMap, format: format)
+    ambientLight.specularTexture = createSpecularTexture(engine, with: cubeMap, format: format, lodStart: lodStart, lodEnd: lodEnd)
     ambientLight.diffuseSphericalHarmonics = createSphericalHarmonicsCoefficients(engine, with: cubeMap)
     ambientLight.diffuseMode = DiffuseMode.SphericalHarmonics
     return ambientLight
 }
 
-func loadAmbientLight(_ engine: Engine, with cubeMap: MTLTexture) -> AmbientLight {
+/// no need lod because it control by createCubemap, and no need format which is not srgb
+func loadAmbientLight(_ engine: Engine, withHDR cubeMap: MTLTexture) -> AmbientLight {
     let ambientLight = AmbientLight();
     ambientLight.specularTexture = createSpecularTexture(engine, with: cubeMap, format: cubeMap.pixelFormat)
+    ambientLight.diffuseSphericalHarmonics = createSphericalHarmonicsCoefficients(engine, with: cubeMap)
+    ambientLight.diffuseMode = DiffuseMode.SphericalHarmonics
+    return ambientLight
+}
+
+/// no need format which is not srgb
+func loadAmbientLight(_ engine: Engine, withPCG cubeMap: MTLTexture, lodStart: Int = 0, lodEnd: Int = -1) -> AmbientLight {
+    let ambientLight = AmbientLight();
+    ambientLight.specularTexture = createSpecularTexture(engine, with: cubeMap, format: cubeMap.pixelFormat,
+                                                         lodStart: lodStart, lodEnd: lodEnd)
     ambientLight.diffuseSphericalHarmonics = createSphericalHarmonicsCoefficients(engine, with: cubeMap)
     ambientLight.diffuseMode = DiffuseMode.SphericalHarmonics
     return ambientLight

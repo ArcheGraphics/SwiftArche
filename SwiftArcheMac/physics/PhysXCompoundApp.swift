@@ -132,7 +132,8 @@ class PhysXCompoundApp: NSViewController {
         engine = Engine(canvas: canvas)
 
         let scene = engine.sceneManager.activeScene!
-        scene.ambientLight = loadAmbientLight(engine, with: "countryIBL")
+        let cubeMap = try! engine.textureLoader.loadTexture(with: "country")!
+        scene.ambientLight = loadAmbientLight(engine, withLDR: cubeMap, format: .rgba8Unorm, lodStart: 3, lodEnd: 4)
         let rootEntity = scene.createRootEntity()
 
         let cameraEntity = rootEntity.createChild()
