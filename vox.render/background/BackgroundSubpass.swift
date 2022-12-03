@@ -49,9 +49,11 @@ public class BackgroundSubpass: Subpass {
         let pipeline = _renderPass.pipeline!
 
         _pipelineDescriptor.label = "Background Pipeline"
-        _pipelineDescriptor.colorAttachments[0].pixelFormat = .bgra8Unorm
-        _pipelineDescriptor.depthAttachmentPixelFormat = .depth32Float_stencil8
-        _pipelineDescriptor.stencilAttachmentPixelFormat = .depth32Float_stencil8
+        _pipelineDescriptor.colorAttachments[0].pixelFormat = Canvas.colorPixelFormat
+        _pipelineDescriptor.depthAttachmentPixelFormat = Canvas.depthPixelFormat
+        if let format = Canvas.stencilPixelFormat  {
+            _pipelineDescriptor.stencilAttachmentPixelFormat = format
+        }
 
         let functions = pipeline._resourceCache.requestShaderModule(_shader, _shaderMacro)
         _pipelineDescriptor.vertexFunction = functions[0]

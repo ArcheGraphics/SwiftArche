@@ -15,6 +15,14 @@ import AppKit
 #endif
 
 public class Canvas: MTKView {
+#if os(iOS)
+    public static let colorPixelFormat = MTLPixelFormat.bgra8Unorm
+#else
+    public static let colorPixelFormat = MTLPixelFormat.rgba16Float
+#endif
+    public static let depthPixelFormat = MTLPixelFormat.depth32Float
+    public static var stencilPixelFormat: MTLPixelFormat?
+
     var inputManager: InputManager?
     public var updateFlagManager = UpdateFlagManager()
 #if os(macOS)
@@ -30,8 +38,8 @@ public class Canvas: MTKView {
         super.init(frame: view.frame, device: nil)
         _setParentView(view)
         translatesAutoresizingMaskIntoConstraints = false
-        depthStencilPixelFormat = MTLPixelFormat.depth32Float_stencil8
-        colorPixelFormat = MTLPixelFormat.bgra8Unorm
+        depthStencilPixelFormat = Canvas.depthPixelFormat
+        colorPixelFormat = Canvas.colorPixelFormat
         framebufferOnly = false
         
 #if os(macOS)
@@ -102,7 +110,13 @@ public class Canvas: MTKView {
 
     public override func pressesCancelled(_ presses: Set<UIPress>, with event: UIPressesEvent?) {
     }
-#else    
+#else
+    public func enableEDR() {
+        let metalLayer = layer as! CAMetalLayer
+        metalLayer.colorspace = nil
+        metalLayer.wantsExtendedDynamicRangeContent = true
+    }
+    
     public override func updateTrackingAreas() {
         super.updateTrackingAreas()
         if let trackingArea = trackingArea {
