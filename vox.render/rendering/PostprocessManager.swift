@@ -27,14 +27,15 @@ public class PostprocessManager {
         }
     }
 
-    init(_ engine: Engine) {
-        _canvas = engine.canvas
-        _resourceCache = ResourceCache(engine.device)
-        _shaderData = ShaderData(engine.device)
+    init(_ scene: Scene) {
+        _canvas = scene.engine.canvas
+        let device = scene.engine.device
+        _resourceCache = ResourceCache(device)
+        _shaderData = scene.shaderData
         
-        postProcessPass = ComputePass(engine.device)
+        postProcessPass = ComputePass(device)
         postProcessPass.resourceCache = _resourceCache
-        postProcessPass.shader.append(ShaderPass(engine.library(), "postprocess_merge"))
+        postProcessPass.shader.append(ShaderPass(scene.engine.library(), "postprocess_merge"))
         postProcessPass.data.append(_shaderData)
         
         manualExposure = 0.5

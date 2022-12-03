@@ -61,7 +61,7 @@ class AtomicComputeApp: NSViewController {
         atomicCounter.threadsPerGridZ = 2
         atomicCounter.shader.append(ShaderPass(engine.library("app.shader"), "compute_atomic"))
         atomicCounter.data.append(renderer.getMaterial()!.shaderData)
-        engine.postprocessManager.registerComputePass(atomicCounter)
+        scene.postprocessManager.registerComputePass(atomicCounter)
 
         engine.run()
     }

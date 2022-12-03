@@ -28,8 +28,9 @@ class PrimitiveApp: NSViewController {
         engine = Engine(canvas: canvas)
 
         let scene = engine.sceneManager.activeScene!
-        let cubeMap = try! engine.textureLoader.loadTexture(with: "country")!
-        scene.ambientLight = loadAmbientLight(engine, withLDR: cubeMap, format: .rgba8Unorm, lodStart: 3, lodEnd: 4)
+        let hdr = engine.textureLoader.loadHDR(with: "assets/kloppenheim_06_4k.hdr")!
+        let cubeMap = createCubemap(engine, with: hdr, size: 256, level: 3)
+        scene.ambientLight = loadAmbientLight(engine, withHDR: cubeMap)
         let rootEntity = scene.createRootEntity()
 
         let cameraEntity = rootEntity.createChild()

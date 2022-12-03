@@ -4,7 +4,7 @@
 //  personal capacity and am not conveying any rights to any intellectual
 //  property of any third parties.
 
-import Foundation
+import Metal
 import vox_math
 
 public class Scene: EngineObject {
@@ -35,7 +35,15 @@ public class Scene: EngineObject {
 
     private var _shadowCascades: ShadowCascadesMode = ShadowCascadesMode.NoCascades
     private var _ambientLight: AmbientLight!
+    private var _postprocessManager: PostprocessManager!
 
+    /// Get the post-process manager.
+    public var postprocessManager: PostprocessManager {
+        get {
+            _postprocessManager
+        }
+    }
+    
     /// Number of cascades to use for directional light shadows.
     public var shadowCascades: ShadowCascadesMode {
         get {
@@ -88,6 +96,7 @@ public class Scene: EngineObject {
         super.init(engine)
 
         ambientLight = AmbientLight();
+        _postprocessManager = PostprocessManager(self)
         engine.sceneManager._allScenes.append(self)
         shaderData.enableMacro(CASCADED_COUNT.rawValue, (shadowCascades.rawValue, .int));
     }
@@ -276,6 +285,10 @@ extension Scene {
                 active ? entity._processActive() : entity._processInActive()
             }
         }
+    }
+    
+    func postprocess(_ commandBuffer: MTLCommandBuffer) {
+        _postprocessManager.render(commandBuffer)
     }
 
     func _updateShaderData() {

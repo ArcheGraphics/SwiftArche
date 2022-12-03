@@ -1790,8 +1790,8 @@
 				43D8CFE45C9E5B56F6B8A397 /* PhysXCompoundApp.swift */,
 				43D8C12DBC7510CB05B703F8 /* PhysXJointBasicApp.swift */,
 				43D8C645B5CB351C0BFE24C7 /* PhysXRaycast.swift */,
-				43D8CF2C4FC2C2529FFE5E7F /* PhysXUtils.swift */,
 				43D8CCD2428D0365772246E7 /* PhysXDebug.swift */,
+				43D8CF2C4FC2C2529FFE5E7F /* PhysXUtils.swift */,
 			);
 			path = physics;
 			sourceTree = "<group>";
