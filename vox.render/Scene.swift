@@ -16,22 +16,33 @@ public class Scene: EngineObject {
     /// Scene-related shader data.
     public var shaderData: ShaderData
 
-    /** If cast shadows. */
+    /// If cast shadows.
     public var castShadows: Bool = true
-    /** The resolution of the shadow maps. */
+    /// The resolution of the shadow maps.
     public var shadowResolution: ShadowResolution = ShadowResolution.Medium
-    /** The splits of two cascade distribution. */
+    /// The splits of two cascade distribution.
     public var shadowTwoCascadeSplits: Float = 1.0 / 3.0
-    /** The splits of four cascade distribution. */
+    /// The splits of four cascade distribution.
     public var shadowFourCascadeSplits: Vector3 = Vector3(1.0 / 15, 3.0 / 15.0, 7.0 / 15.0)
-    /** Max Shadow distance. */
+    /// Max Shadow distance.
     public var shadowDistance: Float = 50
+    /// Tone Mapping exposure
+    public var toneMappingExposure: Float {
+        get {
+            _toneMappingExposure
+        }
+        set {
+            _toneMappingExposure = newValue
+            shaderData.setData("u_exposure", newValue)
+        }
+    }
 
     var _activeCameras: [Camera] = []
     var _isActiveInEngine: Bool = false
     var _globalShaderMacro: ShaderMacroCollection = ShaderMacroCollection()
     var _rootEntities: [Entity] = []
     var _sunLight: Light?
+    var _toneMappingExposure: Float = 1.0
 
     private var _shadowCascades: ShadowCascadesMode = ShadowCascadesMode.NoCascades
     private var _ambientLight: AmbientLight!
@@ -90,6 +101,7 @@ public class Scene: EngineObject {
         ambientLight = AmbientLight();
         engine.sceneManager._allScenes.append(self)
         shaderData.enableMacro(CASCADED_COUNT.rawValue, (shadowCascades.rawValue, .int));
+        toneMappingExposure = 1.0
     }
 
     deinit {

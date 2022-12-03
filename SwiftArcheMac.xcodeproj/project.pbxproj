@@ -367,7 +367,7 @@
 		3EC92AB62938633E00423396 /* cubemap_shading.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3EC92AB52938633E00423396 /* cubemap_shading.metal */; };
 		3EC92ABC2938834900423396 /* atomic_counter.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3EC92ABB2938834900423396 /* atomic_counter.metal */; };
 		3EC92ABE29388A9C00423396 /* sh_baker.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3EC92ABD29388A9C00423396 /* sh_baker.metal */; };
-		3EC92AC82939A1ED00423396 /* gamma_correction.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3EC92AC72939A1ED00423396 /* gamma_correction.metal */; };
+		3EC92AC82939A1ED00423396 /* postprocess_merge.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3EC92AC72939A1ED00423396 /* postprocess_merge.metal */; };
 		3EC92ADF2939C6A000423396 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EC92ADE2939C6A000423396 /* Extensions.swift */; };
 		3EC92AE12939F97300423396 /* RenderCommandEncoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EC92AE02939F97300423396 /* RenderCommandEncoder.swift */; };
 		43D8C033021F4B86E95953E6 /* IBLApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8CFAFE0E0B5772488FA13 /* IBLApp.swift */; };
@@ -861,7 +861,7 @@
 		3EC92AB52938633E00423396 /* cubemap_shading.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = cubemap_shading.metal; sourceTree = "<group>"; };
 		3EC92ABB2938834900423396 /* atomic_counter.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = atomic_counter.metal; sourceTree = "<group>"; };
 		3EC92ABD29388A9C00423396 /* sh_baker.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = sh_baker.metal; sourceTree = "<group>"; };
-		3EC92AC72939A1ED00423396 /* gamma_correction.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = gamma_correction.metal; sourceTree = "<group>"; };
+		3EC92AC72939A1ED00423396 /* postprocess_merge.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = postprocess_merge.metal; sourceTree = "<group>"; };
 		3EC92ADE2939C6A000423396 /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		3EC92AE02939F97300423396 /* RenderCommandEncoder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RenderCommandEncoder.swift; sourceTree = "<group>"; };
 		43D8C090F42BE8E48D6FC4E1 /* GridMaterial.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GridMaterial.swift; sourceTree = "<group>"; };
@@ -1320,7 +1320,7 @@
 				3EC0383D29321495002187DC /* background_shading.metal */,
 				3EC0383C29321495002187DC /* pbr_shading.h */,
 				3EC0384029321495002187DC /* pbr_shading.metal */,
-				3EC92AC72939A1ED00423396 /* gamma_correction.metal */,
+				3EC92AC72939A1ED00423396 /* postprocess_merge.metal */,
 			);
 			path = vox.shader;
 			sourceTree = "<group>";
@@ -2395,7 +2395,7 @@
 				3EC0384A29321496002187DC /* normal_shading.metal in Sources */,
 				3EC03857293214A2002187DC /* shadow_shading.metal in Sources */,
 				3EC0384D29321496002187DC /* pbr_shading.metal in Sources */,
-				3EC92AC82939A1ED00423396 /* gamma_correction.metal in Sources */,
+				3EC92AC82939A1ED00423396 /* postprocess_merge.metal in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

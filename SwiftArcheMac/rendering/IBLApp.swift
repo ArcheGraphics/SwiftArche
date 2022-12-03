@@ -9,6 +9,24 @@ import vox_render
 import vox_math
 import vox_toolkit
 import ModelIO
+import ImGui
+
+fileprivate class GUI: Script {
+    override func onUpdate(_ deltaTime: Float) {
+        let view = engine.canvas
+        let io = ImGuiGetIO()!
+        io.pointee.DisplaySize.x = Float(view.bounds.size.width)
+        io.pointee.DisplaySize.y = Float(view.bounds.size.height)
+        let frameBufferScale = Float(view.window?.screen?.backingScaleFactor ?? NSScreen.main!.backingScaleFactor)
+        io.pointee.DisplayFramebufferScale = ImVec2(x: frameBufferScale, y: frameBufferScale)
+        io.pointee.DeltaTime = deltaTime
+
+        ImGuiNewFrame()
+        ImGuiSliderFloat("Exposure", &scene.toneMappingExposure, 0.0, 1.0, nil, 1) // Edit 1 float using a slider from 0.0f to 1.0f
+        // Rendering
+        ImGuiRender()
+    }
+}
 
 fileprivate struct Material {
     var name: String = ""
@@ -86,6 +104,7 @@ class IblApp: NSViewController {
         // loadPCGSky(scene)
 
         let rootEntity = scene.createRootEntity()
+        let _: GUI = rootEntity.addComponent()
         let cameraEntity = rootEntity.createChild()
         cameraEntity.transform.setPosition(x: 0, y: 0, z: -10)
         cameraEntity.transform.lookAt(targetPosition: Vector3())

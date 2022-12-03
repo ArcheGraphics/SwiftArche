@@ -24,6 +24,7 @@ vertex VertexOut vertex_skybox(const VertexIn in [[stage_in]],
     VertexOut out;
     
     out.v_cubeUV = in.POSITION.xyz;
+    out.v_cubeUV = float3( -out.v_cubeUV.x, out.v_cubeUV.yz );// TextureCube is left-hand,so x need inverse
     out.position = u_VPMat * float4(in.POSITION, 1.0);
     return out;
 }

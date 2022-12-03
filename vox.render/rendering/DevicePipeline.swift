@@ -34,7 +34,8 @@ public class DevicePipeline {
 
         postProcessPass = ComputePass(camera.engine.device)
         postProcessPass.devicePipeline = self
-        postProcessPass.shader.append(ShaderPass(camera.engine.library(), "gamma_correction"))
+        postProcessPass.shader.append(ShaderPass(camera.engine.library(), "postprocess_merge"))
+        postProcessPass.data.append(camera.scene.shaderData)
     }
 
     public func commit(_ commandBuffer: MTLCommandBuffer) {
