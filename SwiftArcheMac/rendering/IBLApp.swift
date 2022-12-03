@@ -22,7 +22,7 @@ fileprivate class GUI: Script {
         io.pointee.DeltaTime = deltaTime
 
         ImGuiNewFrame()
-        ImGuiSliderFloat("Exposure", &scene.toneMappingExposure, 0.0, 1.0, nil, 1) // Edit 1 float using a slider from 0.0f to 1.0f
+        ImGuiSliderFloat("Exposure", &engine.postprocessManager.manualExposure, 0.0, 1.0, nil, 1)
         // Rendering
         ImGuiRender()
     }

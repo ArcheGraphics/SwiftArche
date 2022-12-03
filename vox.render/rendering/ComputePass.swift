@@ -9,7 +9,7 @@ import Metal
 open class ComputePass {
     private var _pipelineDescriptor = MTLComputePipelineDescriptor()
 
-    public weak var devicePipeline: DevicePipeline?
+    public weak var resourceCache: ResourceCache?
 
     public var threadsPerGridX = 1
     public var threadsPerGridY = 1
@@ -31,17 +31,17 @@ open class ComputePass {
     /// Compute function
     /// - Parameter commandEncoder: CommandEncoder to use to record compute commands
     public func compute(commandEncoder: MTLComputeCommandEncoder) {
-        if let devicePipeline = devicePipeline {
+        if let resourceCache = resourceCache {
             let compileMacros = ShaderMacroCollection()
             for shaderData in data {
                 ShaderMacroCollection.unionCollection(compileMacros, shaderData._macroCollection, compileMacros)
             }
 
             for shaderPass in shader {
-                _pipelineDescriptor.computeFunction = devicePipeline._resourceCache.requestShaderModule(shaderPass, compileMacros)[0]
-                let pipelineState = devicePipeline._resourceCache.requestComputePipeline(_pipelineDescriptor)
+                _pipelineDescriptor.computeFunction = resourceCache.requestShaderModule(shaderPass, compileMacros)[0]
+                let pipelineState = resourceCache.requestComputePipeline(_pipelineDescriptor)
                 for shaderData in data {
-                    shaderData.bindData(commandEncoder, pipelineState.uniformBlock, devicePipeline._resourceCache)
+                    shaderData.bindData(commandEncoder, pipelineState.uniformBlock, resourceCache)
                 }
                 commandEncoder.setComputePipelineState(pipelineState.handle)
 

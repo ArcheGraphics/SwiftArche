@@ -24,6 +24,7 @@ public class Engine: NSObject {
     private var _sceneManager: SceneManager!
     private var _physicsManager: PhysicsManager!
     private var _inputManager: InputManager!
+    private var _postprocessManager: PostprocessManager!
 #if os(iOS)
     private var _arManager: ARManager?
 #else
@@ -58,6 +59,13 @@ public class Engine: NSObject {
     public var textureLoader: TextureLoader {
         get {
             _textureLoader
+        }
+    }
+    
+    /// Get the post-process manager.
+    public var postprocessManager: PostprocessManager {
+        get {
+            _postprocessManager
         }
     }
 
@@ -129,6 +137,7 @@ public class Engine: NSObject {
         _inputManager = InputManager(engine: self)
         _sceneManager = SceneManager(engine: self)
         _sceneManager.activeScene = Scene(self, "DefaultScene")
+        _postprocessManager = PostprocessManager(self)
         canvas.delegate = self
         canvas.device = device
         canvas.inputManager = _inputManager
@@ -215,6 +224,7 @@ public class Engine: NSObject {
                     camera.render(commandBuffer)
                     _componentsManager.callCameraOnEndRender(camera, commandBuffer)
                 }
+                _postprocessManager.render(commandBuffer)
 #if os(macOS)
                 _guiManager.draw(commandBuffer)
 #endif

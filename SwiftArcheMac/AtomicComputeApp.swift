@@ -31,30 +31,6 @@ fileprivate class AtomicMaterial: BaseMaterial {
     }
 }
 
-fileprivate class ComputeScript: Script {
-    private var _computePass: ComputePass!
-    var renderer: MeshRenderer!
-    
-    override func onAwake() {
-        _computePass = ComputePass(engine.device)
-        _computePass.shader.append(ShaderPass(engine.library("app.shader"), "compute_atomic"))
-        _computePass.threadsPerGridX = 2
-        _computePass.threadsPerGridY = 2
-        _computePass.threadsPerGridZ = 2
-    }
-
-    override func onBeginRender(_ camera: Camera, _ commandBuffer: MTLCommandBuffer) {
-        if _computePass.data.count == 1  {
-            _computePass.data.append(renderer.getMaterial()!.shaderData)
-        }
-        if let computeCommandEncoder = commandBuffer.makeComputeCommandEncoder() {
-            _computePass.devicePipeline = camera.devicePipeline
-            _computePass.compute(commandEncoder: computeCommandEncoder)
-            computeCommandEncoder.endEncoding()
-        }
-    }
-}
-
 class AtomicComputeApp: NSViewController {
     var canvas: Canvas!
     var engine: Engine!
@@ -72,14 +48,20 @@ class AtomicComputeApp: NSViewController {
         cameraEntity.transform.lookAt(targetPosition: Vector3())
         let _: Camera = cameraEntity.addComponent()
         let _: OrbitControl = cameraEntity.addComponent()
-        let counter: ComputeScript = cameraEntity.addComponent()
 
         let cubeEntity = rootEntity.createChild()
         let renderer: MeshRenderer = cubeEntity.addComponent()
         renderer.mesh = PrimitiveMesh.createCuboid(engine, 0.1, 0.1, 0.1)
         let material = AtomicMaterial(engine)
         renderer.setMaterial(material)
-        counter.renderer = renderer
+        
+        let atomicCounter = ComputePass(engine.device)
+        atomicCounter.threadsPerGridX = 2
+        atomicCounter.threadsPerGridY = 2
+        atomicCounter.threadsPerGridZ = 2
+        atomicCounter.shader.append(ShaderPass(engine.library("app.shader"), "compute_atomic"))
+        atomicCounter.data.append(renderer.getMaterial()!.shaderData)
+        engine.postprocessManager.registerComputePass(atomicCounter)
 
         engine.run()
     }

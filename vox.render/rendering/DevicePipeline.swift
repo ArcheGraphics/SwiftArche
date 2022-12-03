@@ -22,7 +22,6 @@ public class DevicePipeline {
     var _resourceCache: ResourceCache
     var _backgroundSubpass: Subpass?
     public var mainRenderPass: RenderPass!
-    public var postProcessPass: ComputePass!
     public var shadowManager: ShadowManager!
 
     public init(_ camera: Camera) {
@@ -31,11 +30,6 @@ public class DevicePipeline {
         shadowManager = ShadowManager(self)
         mainRenderPass = RenderPass(self)
         mainRenderPass.addSubpass(ForwardSubpass())
-
-        postProcessPass = ComputePass(camera.engine.device)
-        postProcessPass.devicePipeline = self
-        postProcessPass.shader.append(ShaderPass(camera.engine.library(), "postprocess_merge"))
-        postProcessPass.data.append(camera.scene.shaderData)
     }
 
     public func commit(_ commandBuffer: MTLCommandBuffer) {
@@ -54,16 +48,6 @@ public class DevicePipeline {
             }
             let renderTarget = camera.renderTarget != nil ? camera.renderTarget! : renderPassDescriptor
             mainRenderPass.draw(commandBuffer, renderTarget)
-
-            if let computeEncoder = commandBuffer.makeComputeCommandEncoder() {
-                let texture = renderTarget.colorAttachments[0].texture!
-                postProcessPass.threadsPerGridX = texture.width
-                postProcessPass.threadsPerGridY = texture.height
-                postProcessPass.defaultShaderData.setImageView("framebufferInput", texture)
-                postProcessPass.defaultShaderData.setImageView("framebufferOutput", texture)
-                postProcessPass.compute(commandEncoder: computeEncoder)
-                computeEncoder.endEncoding()
-            }
         }
     }
 

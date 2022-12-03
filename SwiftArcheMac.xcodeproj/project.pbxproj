@@ -34,6 +34,7 @@
 		040F1E0B293AAFB1008BDC8D /* HDRLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 040F1E0A293AAFB1008BDC8D /* HDRLoader.m */; };
 		040F1E0E293AB2F2008BDC8D /* assets in Resources */ = {isa = PBXBuildFile; fileRef = 040F1E0D293AB2F2008BDC8D /* assets */; };
 		040F1E10293AB3B6008BDC8D /* cubemap_generator.metal in Sources */ = {isa = PBXBuildFile; fileRef = 040F1E0F293AB3B6008BDC8D /* cubemap_generator.metal */; };
+		040F1E12293B4436008BDC8D /* PostprocessManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 040F1E11293B4436008BDC8D /* PostprocessManager.swift */; };
 		04462F21293324A300F95387 /* Textures.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 04462F20293324A200F95387 /* Textures.xcassets */; };
 		3EB32B032932299A0019A4F3 /* Logging in Frameworks */ = {isa = PBXBuildFile; productRef = 3EB32B022932299A0019A4F3 /* Logging */; };
 		3EB32B7529322DB30019A4F3 /* PrimitiveApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EB32B7429322DB30019A4F3 /* PrimitiveApp.swift */; };
@@ -510,6 +511,7 @@
 		040F1E0C293AAFC7008BDC8D /* HDRLoader.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HDRLoader.h; sourceTree = "<group>"; };
 		040F1E0D293AB2F2008BDC8D /* assets */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = assets; sourceTree = SOURCE_ROOT; };
 		040F1E0F293AB3B6008BDC8D /* cubemap_generator.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = cubemap_generator.metal; sourceTree = "<group>"; };
+		040F1E11293B4436008BDC8D /* PostprocessManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostprocessManager.swift; sourceTree = "<group>"; };
 		04462F20293324A200F95387 /* Textures.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Textures.xcassets; sourceTree = SOURCE_ROOT; };
 		3EB32B7429322DB30019A4F3 /* PrimitiveApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrimitiveApp.swift; sourceTree = "<group>"; };
 		3EB32B832932303A0019A4F3 /* libc++abi.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libc++abi.tbd"; path = "usr/lib/libc++abi.tbd"; sourceTree = SDKROOT; };
@@ -1490,6 +1492,7 @@
 				3EC03959293218BA002187DC /* ComputePipelineState.swift */,
 				3EC03958293218BA002187DC /* ReflectionUniform.swift */,
 				3EC0395B293218BA002187DC /* ResourceCache.swift */,
+				040F1E11293B4436008BDC8D /* PostprocessManager.swift */,
 			);
 			path = rendering;
 			sourceTree = "<group>";
@@ -2532,6 +2535,7 @@
 				3EC038AF29321835002187DC /* PhysXCollider.swift in Sources */,
 				3EC0393729321893002187DC /* ShadowCascadesMode.swift in Sources */,
 				3EC0392B29321885002187DC /* SkyBoxMaterial.swift in Sources */,
+				040F1E12293B4436008BDC8D /* PostprocessManager.swift in Sources */,
 				3EC0398F293218D1002187DC /* TextureCoordinate.swift in Sources */,
 				3EC03948293218A3002187DC /* RenderTargetBlendState.swift in Sources */,
 				3EC92AE12939F97300423396 /* RenderCommandEncoder.swift in Sources */,
