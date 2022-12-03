@@ -100,11 +100,9 @@ kernel void build_specular(texturecube<float, access::sample> input [[ texture(0
                            texturecube<float, access::write> output [[ texture(1) ]],
                            constant float &lod_roughness [[ buffer(0) ]],
                            uint3 tpig [[ thread_position_in_grid ]]) {
-    float inputWidth = input.get_width();
     float width = output.get_width();
-    float scale = inputWidth / width;
+    float2 inputuv = float2(tpig.xy) / width;
     uint face = tpig.z;
-    float2 inputuv = float2(tpig.xy) / inputWidth;
 
     float u = 2.0 * inputuv.x - 1.0;
     float v = -2.0 * inputuv.y + 1.0;
@@ -137,10 +135,9 @@ kernel void build_specular(texturecube<float, access::sample> input [[ texture(0
         constexpr sampler s(mip_filter::linear, filter::linear);
         color = input.sample(s, direction);
     } else {
-        float3 integratedBRDF = specular(direction, lod_roughness, inputWidth, input);
+        float3 integratedBRDF = specular(direction, lod_roughness, width, input);
         color = float4(integratedBRDF, 1.);
     }
 
-    uint2 outputuv = uint2(tpig.x/scale, tpig.y/scale);
-    output.write(color, outputuv, face);
+    output.write(color, tpig.xy, face);
 }

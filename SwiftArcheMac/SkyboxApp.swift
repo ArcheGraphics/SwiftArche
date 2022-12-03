@@ -82,8 +82,9 @@ class SkyboxApp: NSViewController {
         engine = Engine(canvas: canvas)
 
         let scene = engine.sceneManager.activeScene!
+        scene.postprocessManager.autoExposure = true
         let rootEntity = scene.createRootEntity()
-        // let _: GUI = rootEntity.addComponent()
+         let _: GUI = rootEntity.addComponent()
 
         let skyMaterial = SkyBoxMaterial(engine)
         // method1: load cubemap

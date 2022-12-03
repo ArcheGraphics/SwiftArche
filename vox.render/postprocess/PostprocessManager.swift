@@ -11,7 +11,7 @@ public class PostprocessManager {
     var _canvas: Canvas
     weak var _scene: Scene!
     var _shaderData: ShaderData
-    var _postprocessData = PostprocessData(manualExposureValue: 0.5, exposureKey: 0.5)
+    var _postprocessData = PostprocessData(manualExposureValue: 0.5, exposureKey: 0.25)
     var _autoExposure: Bool = false
 
     // default pass

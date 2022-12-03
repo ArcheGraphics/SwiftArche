@@ -11,6 +11,7 @@ public class Luminance: ComputePass {
     private let kLogLuminanceTargetScale: Float = 0.25
     private let device: MTLDevice
     private var _logLuminanceTexture: MTLTexture!
+    private var _canvasChanged: Canvas?
 
     var logLuminanceTexture: MTLTexture {
         get {
@@ -36,11 +37,7 @@ public class Luminance: ComputePass {
     }
 
     func resize(type: Int?, param: AnyObject?) -> Void {
-        let canvas = param as! Canvas
-        if let renderTarget = canvas.currentRenderPassDescriptor,
-           let texture = renderTarget.colorAttachments[0].texture {
-            createTexture(texture.width, texture.height)
-        }
+        _canvasChanged = (param as! Canvas) // wait update until next frame
     }
 
     func createTexture(_ width: Int, _ height: Int) {
@@ -54,5 +51,17 @@ public class Luminance: ComputePass {
 
         threadsPerGridX = width
         threadsPerGridY = height
+    }
+    
+    public override func compute(commandEncoder: MTLComputeCommandEncoder) {
+        if let canvas = _canvasChanged {
+            if let renderTarget = canvas.currentRenderPassDescriptor,
+               let texture = renderTarget.colorAttachments[0].texture {
+                createTexture(texture.width, texture.height)
+                _canvasChanged = nil
+            }
+        }
+        
+        super.compute(commandEncoder: commandEncoder)
     }
 }

@@ -34,16 +34,6 @@ fileprivate class GUI: Script {
     }
 }
 
-fileprivate class MoveScript: Script {
-    private var _rTri: Float = 0
-    private let radius: Float = 10
-
-    override func onUpdate(_ deltaTime: Float) {
-        _rTri += deltaTime * 0.25
-        entity.transform.position = Vector3(sin(_rTri) * radius, 0, cos(_rTri) * radius)
-    }
-}
-
 fileprivate struct Material {
     var name: String = ""
     var baseColor: Color = Color()
@@ -127,7 +117,6 @@ class IblApp: NSViewController {
         cameraEntity.transform.lookAt(targetPosition: Vector3())
         let _: Camera = cameraEntity.addComponent()
         let _: OrbitControl = cameraEntity.addComponent()
-        let _: MoveScript = cameraEntity.addComponent()
 
         let mat = _materials[7]
 
