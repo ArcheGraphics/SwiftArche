@@ -30,7 +30,7 @@ vertex VertexOut vertex_cubemap(const VertexIn in [[stage_in]],
 fragment float4 fragment_cubemap(VertexOut in [[stage_in]],
                                  texture2d<float> u_baseTexture [[texture(0)]],
                                  constant int& u_faceIndex [[buffer(2)]]) {
-    constexpr sampler s(coord::normalized, filter::linear,
+    constexpr sampler s(coord::normalized, mip_filter::linear, filter::linear,
                         address::clamp_to_edge, compare_func:: less);
     
     float2 uv = in.v_uv;

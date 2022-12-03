@@ -19,11 +19,21 @@ public class AmbientLight {
     private var _specularTexture: MTLTexture?
     private static var _specularTextureProperty = "u_env_specularTexture"
     private static var _specularSamplerProperty = "u_env_specularSampler"
+    private var _sampler = MTLSamplerDescriptor()
 
     private var _scenes: [Scene] = []
     private var _diffuseMode: DiffuseMode = .SolidColor
 
-    public init() {}
+    public init() {
+        _sampler.mipFilter = .linear
+        _sampler.minFilter = .linear
+        _sampler.magFilter = .linear
+        _sampler.lodMinClamp = -1000
+        _sampler.lodMaxClamp = 10000
+        _sampler.rAddressMode = .repeat
+        _sampler.sAddressMode = .clampToEdge
+        _sampler.tAddressMode = .clampToEdge
+    }
 
     /// Diffuse mode of ambient light.
     public var diffuseMode: DiffuseMode {
@@ -135,6 +145,7 @@ public class AmbientLight {
     private func _setSpecularTexture(_ sceneShaderData: ShaderData) {
         if (_specularTexture != nil) {
             sceneShaderData.setImageView(AmbientLight._specularTextureProperty, AmbientLight._specularSamplerProperty, _specularTexture)
+            sceneShaderData.setSampler(AmbientLight._specularSamplerProperty, _sampler)
             _envMapLight.mipMapLevel = Int32(_specularTexture!.mipmapLevelCount)
             sceneShaderData.setData(AmbientLight._envMapProperty, _envMapLight)
             sceneShaderData.enableMacro(HAS_SPECULAR_ENV.rawValue)

@@ -75,7 +75,7 @@ float3 specular(float3 N, float lodRoughness, float u_textureSize, texturecube<f
         float3 L  = normalize(2.0 * dot(V, H) * H - V);
 
         float NdotL = max(dot(N, L), 0.0);
-        constexpr sampler EnvMapSampler(filter::linear);
+        constexpr sampler EnvMapSampler(mip_filter::linear, filter::linear);
 
         if(NdotL > 0.0) {
             float dotNH = dot(N,H);
@@ -134,7 +134,7 @@ kernel void build_specular(texturecube<float, access::sample> input [[ texture(0
     
     float4 color;
     if (lod_roughness == 0.) {
-        constexpr sampler s(filter::linear);
+        constexpr sampler s(mip_filter::linear, filter::linear);
         color = input.sample(s, direction);
     } else {
         float3 integratedBRDF = specular(direction, lod_roughness, inputWidth, input);

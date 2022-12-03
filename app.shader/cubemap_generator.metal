@@ -44,7 +44,7 @@ kernel void cubemap_generator(texture2d<float, access::sample> hdr [[ texture(0)
             break;
     }
     direction = normalize(direction);
-    constexpr sampler linearFilterSampler(coord::normalized, address::clamp_to_edge, filter::linear);
+    constexpr sampler linearFilterSampler(coord::normalized, address::clamp_to_edge, mip_filter::linear, filter::linear);
     float4 color = equirectangularSample(direction, linearFilterSampler, hdr);
     
     output.write(float4(clamp(color.rgb, 0.f, 500), 1.f), tpig.xy, face);

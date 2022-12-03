@@ -109,7 +109,7 @@ kernel void compute_sh(texturecube<float, access::sample> input [[ texture(0) ]]
             break;
     }
     
-    constexpr sampler s(filter::linear);
+    constexpr sampler s(mip_filter::linear, filter::linear);
     auto color = input.sample(s, dir);
     
     float solid_angle = 4.f / (length(dir) * length_squared(dir));

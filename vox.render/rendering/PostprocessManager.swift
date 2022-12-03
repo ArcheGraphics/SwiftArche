@@ -10,7 +10,7 @@ public class PostprocessManager {
     var _resourceCache: ResourceCache
     var _canvas: Canvas
     var _shaderData: ShaderData
-    var _manualExposure: Float = 1.0
+    var _manualExposure: Float = 0.5
     
     // default pass
     public var postProcessPass: ComputePass!
@@ -37,7 +37,7 @@ public class PostprocessManager {
         postProcessPass.shader.append(ShaderPass(engine.library(), "postprocess_merge"))
         postProcessPass.data.append(_shaderData)
         
-        manualExposure = 1.0
+        manualExposure = 0.5
     }
     
     public func registerComputePass(_ pass: ComputePass) {
