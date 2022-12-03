@@ -56,6 +56,7 @@ public class Canvas: MTKView {
             ImGui_ImplOSX_HandleEvent(event, self)
             return event
         }
+        enableEDR = true
 #endif
     }
     
@@ -111,10 +112,22 @@ public class Canvas: MTKView {
     public override func pressesCancelled(_ presses: Set<UIPress>, with event: UIPressesEvent?) {
     }
 #else
-    public func enableEDR() {
-        let metalLayer = layer as! CAMetalLayer
-        metalLayer.colorspace = nil
-        metalLayer.wantsExtendedDynamicRangeContent = true
+    public var enableEDR: Bool {
+        get {
+            let metalLayer = layer as! CAMetalLayer
+            return metalLayer.wantsExtendedDynamicRangeContent
+        }
+        set {
+            if newValue {
+                let metalLayer = layer as! CAMetalLayer
+                metalLayer.colorspace = nil
+                metalLayer.wantsExtendedDynamicRangeContent = true
+            } else {
+                let metalLayer = layer as! CAMetalLayer
+                metalLayer.colorspace = nil
+                metalLayer.wantsExtendedDynamicRangeContent = false
+            }
+        }
     }
     
     public override func updateTrackingAreas() {
