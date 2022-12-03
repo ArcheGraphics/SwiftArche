@@ -11,7 +11,7 @@ public class PostprocessManager {
     var _canvas: Canvas
     weak var _scene: Scene!
     var _shaderData: ShaderData
-    var _postprocessData = PostprocessData(manualExposureValue: 0.5, exposureKey: 1)
+    var _postprocessData = PostprocessData(manualExposureValue: 0.5, exposureKey: 0.5)
     var _autoExposure: Bool = false
 
     // default pass
@@ -88,12 +88,17 @@ public class PostprocessManager {
 
         if let renderTarget = _canvas.currentRenderPassDescriptor {
             let texture = renderTarget.colorAttachments[0].texture!
-            if let computeEncoder = commandBuffer.makeComputeCommandEncoder(),
-               let luminancePass = luminancePass {
+            if let luminancePass = luminancePass,
+               let computeEncoder = commandBuffer.makeComputeCommandEncoder() {
                 luminancePass.defaultShaderData.setImageView("input", texture)
                 postProcessPass.defaultShaderData.setImageView("logLuminanceIn", luminancePass.logLuminanceTexture)
                 luminancePass.compute(commandEncoder: computeEncoder)
                 computeEncoder.endEncoding()
+                
+                // must generate
+                let blit = commandBuffer.makeBlitCommandEncoder()!
+                blit.generateMipmaps(for: luminancePass.logLuminanceTexture)
+                blit.endEncoding()
             }
 
             if let computeEncoder = commandBuffer.makeComputeCommandEncoder() {

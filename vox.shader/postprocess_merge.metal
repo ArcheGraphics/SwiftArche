@@ -82,7 +82,7 @@ float keyExposureCoefficient(float averageLogLuminance, float key) {
 // Manual exposure ignores average luminance and, instead, applies
 // a direct pow function
 float manualExposureCoefficient(float exposureValue) {
-    return pow(2.f, exposureValue);
+    return pow(2.f, exposureValue) - 1.0;
 }
 
 kernel void postprocess_merge(texture2d<float, access::read> framebufferInput [[ texture(0) ]],
@@ -92,9 +92,9 @@ kernel void postprocess_merge(texture2d<float, access::read> framebufferInput [[
                               uint3 tpig [[ thread_position_in_grid ]]) {
     float exposureCoefficient = 1.f;
     if (isAutoExposure) {
-        constexpr sampler sampler(filter::linear);
+        constexpr sampler mipSampler(filter::linear, mip_filter::linear, lod_clamp(MAXFLOAT,MAXFLOAT));
         float2 texCoord = float2(tpig.xy) / float2(framebufferInput.get_width(), framebufferInput.get_height());
-        exposureCoefficient = keyExposureCoefficient(logLuminanceIn.sample(sampler, texCoord).r, u_postprocess.exposureKey);
+        exposureCoefficient = keyExposureCoefficient(logLuminanceIn.sample(mipSampler, texCoord).r, u_postprocess.exposureKey);
     } else {
         exposureCoefficient = manualExposureCoefficient(u_postprocess.manualExposureValue);
     }

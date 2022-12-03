@@ -21,11 +21,26 @@ fileprivate class GUI: Script {
         io.pointee.DisplayFramebufferScale = ImVec2(x: frameBufferScale, y: frameBufferScale)
         io.pointee.DeltaTime = deltaTime
 
+        let postprocess = scene.postprocessManager
         ImGuiNewFrame()
-        ImGuiSliderFloat("Manual Exposure", &scene.postprocessManager.manualExposure, 0.0, 1.0, nil, 1)
-        ImGuiSliderFloat("Exposure Key", &scene.postprocessManager.exposureKey, 0.0, 1.0, nil, 1)
+        ImGuiCheckbox("Auto Exposure ", &postprocess.autoExposure)
+        if postprocess.autoExposure {
+            ImGuiSliderFloat("Exposure Key", &scene.postprocessManager.exposureKey, 0.0, 1.0, nil, 1)
+        } else {
+            ImGuiSliderFloat("Manual Exposure", &scene.postprocessManager.manualExposure, 0.0, 1.0, nil, 1)
+        }
         // Rendering
         ImGuiRender()
+    }
+}
+
+fileprivate class MoveScript: Script {
+    private var _rTri: Float = 0
+    private let radius: Float = 10
+
+    override func onUpdate(_ deltaTime: Float) {
+        _rTri += deltaTime * 0.25
+        entity.transform.position = Vector3(sin(_rTri) * radius, 0, cos(_rTri) * radius)
     }
 }
 
@@ -112,6 +127,7 @@ class IblApp: NSViewController {
         cameraEntity.transform.lookAt(targetPosition: Vector3())
         let _: Camera = cameraEntity.addComponent()
         let _: OrbitControl = cameraEntity.addComponent()
+        let _: MoveScript = cameraEntity.addComponent()
 
         let mat = _materials[7]
 
@@ -119,7 +135,7 @@ class IblApp: NSViewController {
         for i in 0..<7 {
             for j in 0..<7 {
                 let sphereEntity = rootEntity.createChild("SphereEntity\(i)\(j)")
-                sphereEntity.transform.position = Vector3(Float(i - 3), Float(j - 3), 0)
+                sphereEntity.transform.position = Vector3(Float(i) - 3.5, Float(j) - 3.5, 0)
                 let sphereMtl = PBRMaterial(engine)
                 sphereMtl.baseColor = mat.baseColor
                 sphereMtl.metallic = simd_clamp(Float(i) / Float(7 - 1), 0, 1.0)

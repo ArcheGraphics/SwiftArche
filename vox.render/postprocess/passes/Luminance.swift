@@ -46,7 +46,7 @@ public class Luminance: ComputePass {
     func createTexture(_ width: Int, _ height: Int) {
         let width = Int(Float(width) * kLogLuminanceTargetScale)
         let height = Int(Float(height) * kLogLuminanceTargetScale)
-        let desc = MTLTextureDescriptor.texture2DDescriptor(pixelFormat: .r16Float, width: width, height: height, mipmapped: false)
+        let desc = MTLTextureDescriptor.texture2DDescriptor(pixelFormat: .r16Float, width: width, height: height, mipmapped: true)
         desc.usage = MTLTextureUsage(rawValue: MTLTextureUsage.shaderRead.rawValue | MTLTextureUsage.shaderWrite.rawValue)
         desc.storageMode = .private
         _logLuminanceTexture = device.makeTexture(descriptor: desc)
