@@ -9,36 +9,67 @@ import Metal
 public class PostprocessManager {
     var _resourceCache: ResourceCache
     var _canvas: Canvas
+    weak var _scene: Scene!
     var _shaderData: ShaderData
-    var _manualExposure: Float = 0.5
+    var _postprocessData = PostprocessData(manualExposureValue: 0.5, exposureKey: 1)
+    var _autoExposure: Bool = false
     
     // default pass
     public var postProcessPass: ComputePass!
+    public var luminancePass: Luminance?
     public var computePasses: [ComputePass] = []
 
-    /// Tone Mapping exposure
+    /// manual exposure
     public var manualExposure: Float {
         get {
-            _manualExposure
+            _postprocessData.manualExposureValue
         }
         set {
-            _manualExposure = newValue
-            _shaderData.setData("u_exposure", newValue)
+            _postprocessData.manualExposureValue = newValue
+            _shaderData.setData("u_postprocess", _postprocessData)
+        }
+    }
+    
+    /// exposure key used in auto mode
+    public var exposureKey: Float {
+        get {
+            _postprocessData.exposureKey
+        }
+        set {
+            _postprocessData.exposureKey = newValue
+            _shaderData.setData("u_postprocess", _postprocessData)
+        }
+    }
+    
+    // enable auto exposure
+    public var autoExposure: Bool {
+        get {
+            _autoExposure
+        }
+        set {
+            _autoExposure = newValue
+            if newValue {
+                luminancePass = Luminance(_scene)
+                _shaderData.enableMacro(IS_AUTO_EXPOSURE.rawValue)
+            } else {
+                luminancePass = nil
+                _shaderData.disableMacro(IS_AUTO_EXPOSURE.rawValue)
+            }
         }
     }
 
     init(_ scene: Scene) {
+        _scene = scene
         _canvas = scene.engine.canvas
         let device = scene.engine.device
         _resourceCache = ResourceCache(device)
         _shaderData = scene.shaderData
-        
+        _shaderData.setData("u_postprocess", _postprocessData)
+
         postProcessPass = ComputePass(device)
         postProcessPass.resourceCache = _resourceCache
         postProcessPass.shader.append(ShaderPass(scene.engine.library(), "postprocess_merge"))
         postProcessPass.data.append(_shaderData)
-        
-        manualExposure = 0.5
     }
     
     public func registerComputePass(_ pass: ComputePass) {
@@ -57,6 +88,12 @@ public class PostprocessManager {
         if let renderTarget = _canvas.currentRenderPassDescriptor ,
            let computeEncoder = commandBuffer.makeComputeCommandEncoder() {
             let texture = renderTarget.colorAttachments[0].texture!
+            if let luminancePass = luminancePass {
+                luminancePass.defaultShaderData.setImageView("input", texture)
+                postProcessPass.defaultShaderData.setImageView("logLuminanceIn", luminancePass.logLuminanceTexture)
+                luminancePass.compute(commandEncoder: computeEncoder)
+            }
+            
             postProcessPass.threadsPerGridX = texture.width
             postProcessPass.threadsPerGridY = texture.height
             postProcessPass.defaultShaderData.setImageView("framebufferInput", texture)

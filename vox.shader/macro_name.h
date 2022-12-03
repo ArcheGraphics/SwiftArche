@@ -61,5 +61,8 @@ typedef enum {
     NEED_RECEIVE_SHADOWS =               65503,
     CASCADED_COUNT =                     65502,
     CASCADED_SHADOW_MAP =                65501,
-    SHADOW_MODE =                        65500
+    SHADOW_MODE =                        65500,
+    
+    // Postprocess
+    IS_AUTO_EXPOSURE =                   65499
 } MacroName;

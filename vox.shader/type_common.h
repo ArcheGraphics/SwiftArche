@@ -94,3 +94,8 @@ struct PBRSpecularData {
     vector_float3 specularColor;
     float glossiness;
 };
+
+struct PostprocessData {
+    float manualExposureValue;
+    float exposureKey;
+};

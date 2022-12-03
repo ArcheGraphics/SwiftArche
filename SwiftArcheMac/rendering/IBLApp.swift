@@ -22,7 +22,8 @@ fileprivate class GUI: Script {
         io.pointee.DeltaTime = deltaTime
 
         ImGuiNewFrame()
-        ImGuiSliderFloat("Exposure", &scene.postprocessManager.manualExposure, 0.0, 1.0, nil, 1)
+        ImGuiSliderFloat("Manual Exposure", &scene.postprocessManager.manualExposure, 0.0, 1.0, nil, 1)
+        ImGuiSliderFloat("Exposure Key", &scene.postprocessManager.exposureKey, 0.0, 1.0, nil, 1)
         // Rendering
         ImGuiRender()
     }
@@ -101,6 +102,7 @@ class IblApp: NSViewController {
 
         let scene = engine.sceneManager.activeScene!
         loadHDR(scene)
+        scene.postprocessManager.autoExposure = true
         // loadPCGSky(scene)
 
         let rootEntity = scene.createRootEntity()

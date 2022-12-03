@@ -35,6 +35,8 @@
 		040F1E0E293AB2F2008BDC8D /* assets in Resources */ = {isa = PBXBuildFile; fileRef = 040F1E0D293AB2F2008BDC8D /* assets */; };
 		040F1E10293AB3B6008BDC8D /* cubemap_generator.metal in Sources */ = {isa = PBXBuildFile; fileRef = 040F1E0F293AB3B6008BDC8D /* cubemap_generator.metal */; };
 		040F1E12293B4436008BDC8D /* PostprocessManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 040F1E11293B4436008BDC8D /* PostprocessManager.swift */; };
+		040F1E14293B86AC008BDC8D /* luminance.metal in Sources */ = {isa = PBXBuildFile; fileRef = 040F1E13293B86AC008BDC8D /* luminance.metal */; };
+		040F1E18293B887C008BDC8D /* Luminance.swift in Sources */ = {isa = PBXBuildFile; fileRef = 040F1E17293B887C008BDC8D /* Luminance.swift */; };
 		04462F21293324A300F95387 /* Textures.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 04462F20293324A200F95387 /* Textures.xcassets */; };
 		3EB32B032932299A0019A4F3 /* Logging in Frameworks */ = {isa = PBXBuildFile; productRef = 3EB32B022932299A0019A4F3 /* Logging */; };
 		3EB32B7529322DB30019A4F3 /* PrimitiveApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EB32B7429322DB30019A4F3 /* PrimitiveApp.swift */; };
@@ -512,6 +514,8 @@
 		040F1E0D293AB2F2008BDC8D /* assets */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = assets; sourceTree = SOURCE_ROOT; };
 		040F1E0F293AB3B6008BDC8D /* cubemap_generator.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = cubemap_generator.metal; sourceTree = "<group>"; };
 		040F1E11293B4436008BDC8D /* PostprocessManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostprocessManager.swift; sourceTree = "<group>"; };
+		040F1E13293B86AC008BDC8D /* luminance.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = luminance.metal; sourceTree = "<group>"; };
+		040F1E17293B887C008BDC8D /* Luminance.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Luminance.swift; sourceTree = "<group>"; };
 		04462F20293324A200F95387 /* Textures.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Textures.xcassets; sourceTree = SOURCE_ROOT; };
 		3EB32B7429322DB30019A4F3 /* PrimitiveApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrimitiveApp.swift; sourceTree = "<group>"; };
 		3EB32B832932303A0019A4F3 /* libc++abi.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libc++abi.tbd"; path = "usr/lib/libc++abi.tbd"; sourceTree = SDKROOT; };
@@ -1046,6 +1050,25 @@
 			path = rendering;
 			sourceTree = "<group>";
 		};
+		040F1E15293B881E008BDC8D /* postprocess */ = {
+			isa = PBXGroup;
+			children = (
+				3EC0395E293218BA002187DC /* ComputePass.swift */,
+				040F1E16293B884D008BDC8D /* passes */,
+				3EC03959293218BA002187DC /* ComputePipelineState.swift */,
+				040F1E11293B4436008BDC8D /* PostprocessManager.swift */,
+			);
+			path = postprocess;
+			sourceTree = "<group>";
+		};
+		040F1E16293B884D008BDC8D /* passes */ = {
+			isa = PBXGroup;
+			children = (
+				040F1E17293B887C008BDC8D /* Luminance.swift */,
+			);
+			path = passes;
+			sourceTree = "<group>";
+		};
 		3EB32B7E29322E850019A4F3 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -1322,6 +1345,7 @@
 				3EC0383D29321495002187DC /* background_shading.metal */,
 				3EC0383C29321495002187DC /* pbr_shading.h */,
 				3EC0384029321495002187DC /* pbr_shading.metal */,
+				040F1E13293B86AC008BDC8D /* luminance.metal */,
 				3EC92AC72939A1ED00423396 /* postprocess_merge.metal */,
 			);
 			path = vox.shader;
@@ -1347,6 +1371,7 @@
 				3EC0386A29321700002187DC /* material */,
 				3EC0386B29321707002187DC /* mesh */,
 				3EC0386C29321710002187DC /* rendering */,
+				040F1E15293B881E008BDC8D /* postprocess */,
 				3EC03869293216F9002187DC /* lighting */,
 				3EC0386E2932171F002187DC /* shadow */,
 				3EC0386F29321726002187DC /* sky */,
@@ -1483,16 +1508,13 @@
 			children = (
 				3EC0395C293218BA002187DC /* RenderElement.swift */,
 				3EC03957293218BA002187DC /* DevicePipeline.swift */,
-				3EC0395E293218BA002187DC /* ComputePass.swift */,
 				3EC03956293218BA002187DC /* RenderPass.swift */,
 				3EC0395D293218BA002187DC /* Subpass.swift */,
 				3EC0387929321799002187DC /* subpasses */,
 				3EC92AE02939F97300423396 /* RenderCommandEncoder.swift */,
 				3EC0395A293218BA002187DC /* RenderPipelineState.swift */,
-				3EC03959293218BA002187DC /* ComputePipelineState.swift */,
 				3EC03958293218BA002187DC /* ReflectionUniform.swift */,
 				3EC0395B293218BA002187DC /* ResourceCache.swift */,
-				040F1E11293B4436008BDC8D /* PostprocessManager.swift */,
 			);
 			path = rendering;
 			sourceTree = "<group>";
@@ -2399,6 +2421,7 @@
 				3EC03857293214A2002187DC /* shadow_shading.metal in Sources */,
 				3EC0384D29321496002187DC /* pbr_shading.metal in Sources */,
 				3EC92AC82939A1ED00423396 /* postprocess_merge.metal in Sources */,
+				040F1E14293B86AC008BDC8D /* luminance.metal in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2550,6 +2573,7 @@
 				3EC03989293218CB002187DC /* PBRBaseMaterial.swift in Sources */,
 				3EC039E629321918002187DC /* LayerState.swift in Sources */,
 				3EC038AE29321835002187DC /* PhysicsManager.swift in Sources */,
+				040F1E18293B887C008BDC8D /* Luminance.swift in Sources */,
 				3EC0392429321872002187DC /* KHR_texture_transform.swift in Sources */,
 				3EC039E829321918002187DC /* AnimationProperty.swift in Sources */,
 				3EC039E529321918002187DC /* InterpolationType.swift in Sources */,

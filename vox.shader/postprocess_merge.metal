@@ -6,6 +6,8 @@
 
 #include <metal_stdlib>
 using namespace metal;
+#include "function_constant.h"
+#include "type_common.h"
 
 // Notes on the math for the following tonemapping operators:
 //
@@ -72,13 +74,34 @@ float3 toneMapACES(float3 x) {
     return saturate((x*(a*x+b))/(x*(c*x+d)+e));
 }
 
+//Sample high level mipmap and apply exp()
+float keyExposureCoefficient(float averageLogLuminance, float key) {
+    return key / exp(averageLogLuminance);
+}
+
+// Manual exposure ignores average luminance and, instead, applies
+// a direct pow function
+float manualExposureCoefficient(float exposureValue) {
+    return pow(2.f, exposureValue);
+}
+
 kernel void postprocess_merge(texture2d<float, access::read> framebufferInput [[ texture(0) ]],
                               texture2d<float, access::write> framebufferOutput [[ texture(1) ]],
-                              constant float& u_exposure [[buffer(0)]],
+                              texture2d<float> logLuminanceIn [[texture(2), function_constant(isAutoExposure)]],
+                              constant PostprocessData& u_postprocess [[buffer(0)]],
                               uint3 tpig [[ thread_position_in_grid ]]) {
+    float exposureCoefficient = 1.f;
+    if (isAutoExposure) {
+        constexpr sampler sampler(filter::linear);
+        float2 texCoord = float2(tpig.xy) / float2(framebufferInput.get_width(), framebufferInput.get_height());
+        exposureCoefficient = keyExposureCoefficient(logLuminanceIn.sample(sampler, texCoord).r, u_postprocess.exposureKey);
+    } else {
+        exposureCoefficient = manualExposureCoefficient(u_postprocess.manualExposureValue);
+    }
+    
     // ACES tonemapping
     float4 color = framebufferInput.read(tpig.xy);
-    color.rgb = toneMapACES( color.rgb * u_exposure );
+    color.rgb = toneMapACES( color.rgb * exposureCoefficient );
     
     // gamma correction
     framebufferOutput.write(float4(pow(color.rgb, float3(1.0 / 2.2)), color.a), tpig.xy);

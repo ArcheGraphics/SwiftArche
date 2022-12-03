@@ -1,0 +1,52 @@
+//  Copyright (c) 2022 Feng Yang
+//
+//  I am making my contributions/submissions to this project solely in my
+//  personal capacity and am not conveying any rights to any intellectual
+//  property of any third parties.
+
+import Metal
+
+public class Luminance: ComputePass {
+    // Target for luminance calculation is fixed at 1/8 the number of pixels of native resolution.
+    private let kLogLuminanceTargetScale: Float = 0.25
+    private let device: MTLDevice
+    private var _logLuminanceTexture: MTLTexture!
+    
+    var logLuminanceTexture: MTLTexture {
+        get {
+            _logLuminanceTexture
+        }
+    }
+
+    init(_ scene: Scene) {
+        let engine = scene.engine
+        device = engine.device
+        super.init(device)
+
+        let canvas = engine.canvas
+        let flag = ListenerUpdateFlag()
+        flag.listener = resize
+        canvas.updateFlagManager.addFlag(flag: flag)
+        createTexture(canvas.bounds.width, canvas.bounds.height)
+
+        shader.append(ShaderPass(engine.library(), "logLuminance"))
+    }
+
+    func resize(type: Int?, param: AnyObject?) -> Void {
+        let canvas = param as! Canvas
+        createTexture(canvas.bounds.width, canvas.bounds.height)
+    }
+
+    func createTexture(_ width: CGFloat, _ height: CGFloat) {
+        let width = Int(Float(width) * kLogLuminanceTargetScale)
+        let height = Int(Float(height) * kLogLuminanceTargetScale)
+        let desc = MTLTextureDescriptor.texture2DDescriptor(pixelFormat: .r16Float, width: width, height: height, mipmapped: false)
+        desc.usage = MTLTextureUsage(rawValue: MTLTextureUsage.shaderRead.rawValue | MTLTextureUsage.shaderWrite.rawValue)
+        desc.storageMode = .private
+        _logLuminanceTexture = device.makeTexture(descriptor: desc)
+        defaultShaderData.setImageView("output", _logLuminanceTexture)
+
+        threadsPerGridX = width
+        threadsPerGridY = height
+    }
+}
