@@ -208,6 +208,7 @@ func ImGui_ImplOSX_HandleEvent(_ event: NSEvent, _ view: NSView) -> Bool {
         mousePoint = view.convert(mousePoint, from: nil)
         mousePoint = NSPoint(x: mousePoint.x, y: view.bounds.size.height - mousePoint.y)
         io.pointee.MousePos = ImVec2(x: Float(mousePoint.x), y: Float(mousePoint.y))
+        return io.pointee.WantCaptureMouse
     }
     
     if event.type == .scrollWheel {

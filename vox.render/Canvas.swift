@@ -147,60 +147,81 @@ public class Canvas: MTKView {
     }
     
     public override func keyDown(with event: NSEvent) {
-        inputManager?._keyboardManager._onKeyEvent(event)
+        if !ImGui_ImplOSX_HandleEvent(event, self) {
+            inputManager?._keyboardManager._onKeyEvent(event)
+        }
     }
 
     public override func keyUp(with event: NSEvent) {
-        inputManager?._keyboardManager._onKeyEvent(event)
+        if !ImGui_ImplOSX_HandleEvent(event, self) {
+            inputManager?._keyboardManager._onKeyEvent(event)
+        }
     }
     
     public override func mouseDown(with event: NSEvent) {
-        ImGui_ImplOSX_HandleEvent(event, self)
-        inputManager?._pointerManager._onPointerEvent(event)
+        if !ImGui_ImplOSX_HandleEvent(event, self) {
+            inputManager?._pointerManager._onPointerEvent(event)
+        }
     }
 
     public override func mouseUp(with event: NSEvent) {
-        ImGui_ImplOSX_HandleEvent(event, self)
-        inputManager?._pointerManager._onPointerEvent(event)
+        if !ImGui_ImplOSX_HandleEvent(event, self) {
+            inputManager?._pointerManager._onPointerEvent(event)
+        }
     }
 
     public override func mouseDragged(with event: NSEvent) {
-        ImGui_ImplOSX_HandleEvent(event, self)
-        inputManager?._pointerManager._onPointerEvent(event)
+        if !ImGui_ImplOSX_HandleEvent(event, self) {
+            inputManager?._pointerManager._onPointerEvent(event)
+        }
     }
 
     public override func mouseMoved(with event: NSEvent) {
-        ImGui_ImplOSX_HandleEvent(event, self)
-        inputManager?._pointerManager._onPointerEvent(event)
+        if !ImGui_ImplOSX_HandleEvent(event, self) {
+            inputManager?._pointerManager._onPointerEvent(event)
+        }
     }
 
     public override func rightMouseDown(with event: NSEvent) {
-        inputManager?._pointerManager._onPointerEvent(event)
+        if !ImGui_ImplOSX_HandleEvent(event, self) {
+            inputManager?._pointerManager._onPointerEvent(event)
+        }
     }
 
     public override func rightMouseUp(with event: NSEvent) {
-        inputManager?._pointerManager._onPointerEvent(event)
+        if !ImGui_ImplOSX_HandleEvent(event, self) {
+            inputManager?._pointerManager._onPointerEvent(event)
+        }
     }
 
     public override func rightMouseDragged(with event: NSEvent) {
-        inputManager?._pointerManager._onPointerEvent(event)
+        if !ImGui_ImplOSX_HandleEvent(event, self) {
+            inputManager?._pointerManager._onPointerEvent(event)
+        }
     }
 
     public override func otherMouseDown(with event: NSEvent) {
-        inputManager?._pointerManager._onPointerEvent(event)
+        if !ImGui_ImplOSX_HandleEvent(event, self) {
+            inputManager?._pointerManager._onPointerEvent(event)
+        }
     }
 
     public override func otherMouseUp(with event: NSEvent) {
-        inputManager?._pointerManager._onPointerEvent(event)
+        if !ImGui_ImplOSX_HandleEvent(event, self) {
+            inputManager?._pointerManager._onPointerEvent(event)
+        }
     }
 
     public override func otherMouseDragged(with event: NSEvent) {
-        inputManager?._pointerManager._onPointerEvent(event)
+        if !ImGui_ImplOSX_HandleEvent(event, self) {
+            inputManager?._pointerManager._onPointerEvent(event)
+        }
     }
 
     public override func scrollWheel(with event: NSEvent) {
-        ImGui_ImplOSX_HandleEvent(event, self)
-        inputManager?._wheelManager._onWheelEvent(event)
+        if !ImGui_ImplOSX_HandleEvent(event, self) {
+            inputManager?._wheelManager._onWheelEvent(event)
+        }
     }
     
 #endif
