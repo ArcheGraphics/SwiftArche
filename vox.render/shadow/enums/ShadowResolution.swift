@@ -7,7 +7,7 @@
 import Foundation
 
 /// Default shadow resolution.
-public enum ShadowResolution {
+public enum ShadowResolution: Int {
     /// Low shadow map resolution.
     case  Low
     /// Medium shadow map resolution.

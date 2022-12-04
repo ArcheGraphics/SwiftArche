@@ -40,6 +40,7 @@
 		040F1E1A293C6E75008BDC8D /* shadow_visual.metal in Sources */ = {isa = PBXBuildFile; fileRef = 040F1E19293C6E75008BDC8D /* shadow_visual.metal */; };
 		040F1E1C293C6EDA008BDC8D /* function_common.metal in Sources */ = {isa = PBXBuildFile; fileRef = 040F1E1B293C6EDA008BDC8D /* function_common.metal */; };
 		040F1E27293C727D008BDC8D /* transparent_shadow.metal in Sources */ = {isa = PBXBuildFile; fileRef = 040F1E1E293C70BB008BDC8D /* transparent_shadow.metal */; };
+		040F1E29293C865E008BDC8D /* UIElement.swift in Sources */ = {isa = PBXBuildFile; fileRef = 040F1E28293C865E008BDC8D /* UIElement.swift */; };
 		04462F21293324A300F95387 /* Textures.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 04462F20293324A200F95387 /* Textures.xcassets */; };
 		3EB32B032932299A0019A4F3 /* Logging in Frameworks */ = {isa = PBXBuildFile; productRef = 3EB32B022932299A0019A4F3 /* Logging */; };
 		3EB32B7529322DB30019A4F3 /* PrimitiveApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EB32B7429322DB30019A4F3 /* PrimitiveApp.swift */; };
@@ -391,6 +392,7 @@
 		43D8CC8E6EC814867725CBD1 /* PhysXDebug.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8CCD2428D0365772246E7 /* PhysXDebug.swift */; };
 		43D8CE4CE0A0E392D06A3B25 /* PhysXUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8CF2C4FC2C2529FFE5E7F /* PhysXUtils.swift */; };
 		43D8CF515E4D90196E7E806B /* PhysXCollisionDetectionApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8C0A4A7B56D737C3F4FE2 /* PhysXCollisionDetectionApp.swift */; };
+		E63B19C92479C2BE78B928A9 /* CascadeShadowApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = E63B17CA98EEF9BD19C003ED /* CascadeShadowApp.swift */; };
 		E63B1AB88F741EC4FFD734F6 /* InputCastApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = E63B1700C137922B042BB8C2 /* InputCastApp.swift */; };
 /* End PBXBuildFile section */
 
@@ -523,6 +525,7 @@
 		040F1E19293C6E75008BDC8D /* shadow_visual.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = shadow_visual.metal; sourceTree = "<group>"; };
 		040F1E1B293C6EDA008BDC8D /* function_common.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = function_common.metal; sourceTree = "<group>"; };
 		040F1E1E293C70BB008BDC8D /* transparent_shadow.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = transparent_shadow.metal; sourceTree = "<group>"; };
+		040F1E28293C865E008BDC8D /* UIElement.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIElement.swift; sourceTree = "<group>"; };
 		04462F20293324A200F95387 /* Textures.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Textures.xcassets; sourceTree = SOURCE_ROOT; };
 		3EB32B7429322DB30019A4F3 /* PrimitiveApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrimitiveApp.swift; sourceTree = "<group>"; };
 		3EB32B832932303A0019A4F3 /* libc++abi.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libc++abi.tbd"; path = "usr/lib/libc++abi.tbd"; sourceTree = SDKROOT; };
@@ -893,6 +896,7 @@
 		43D8CFAFE0E0B5772488FA13 /* IBLApp.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IBLApp.swift; sourceTree = "<group>"; };
 		43D8CFE45C9E5B56F6B8A397 /* PhysXCompoundApp.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhysXCompoundApp.swift; sourceTree = "<group>"; };
 		E63B1700C137922B042BB8C2 /* InputCastApp.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InputCastApp.swift; sourceTree = "<group>"; };
+		E63B17CA98EEF9BD19C003ED /* CascadeShadowApp.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CascadeShadowApp.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -1027,6 +1031,7 @@
 				040F1DDA2934E772008BDC8D /* imgui_impl_metal.swift */,
 				040F1DDC2934E89F008BDC8D /* GUIShader.swift */,
 				040F1DE22934ED68008BDC8D /* GUIManager.swift */,
+				040F1E28293C865E008BDC8D /* UIElement.swift */,
 			);
 			path = gui;
 			sourceTree = "<group>";
@@ -1056,6 +1061,7 @@
 				43D8C159E7E7844EB632C57F /* IrradianceApp.swift */,
 				43D8CFAFE0E0B5772488FA13 /* IBLApp.swift */,
 				040F1DF2293781B0008BDC8D /* RenderingUtils.swift */,
+				E63B17CA98EEF9BD19C003ED /* CascadeShadowApp.swift */,
 			);
 			path = rendering;
 			sourceTree = "<group>";
@@ -2344,6 +2350,7 @@
 				43D8CE4CE0A0E392D06A3B25 /* PhysXUtils.swift in Sources */,
 				43D8CC8E6EC814867725CBD1 /* PhysXDebug.swift in Sources */,
 				E63B1AB88F741EC4FFD734F6 /* InputCastApp.swift in Sources */,
+				E63B19C92479C2BE78B928A9 /* CascadeShadowApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2629,6 +2636,7 @@
 				3EC0395F293218BA002187DC /* RenderPass.swift in Sources */,
 				3EC039AE293218F0002187DC /* EngineObject.swift in Sources */,
 				3EC039C3293218FB002187DC /* AnimationClipCurveBinding.swift in Sources */,
+				040F1E29293C865E008BDC8D /* UIElement.swift in Sources */,
 				3EC039C0293218FB002187DC /* AnimatorController.swift in Sources */,
 				3EC0389C29321826002187DC /* Entity.swift in Sources */,
 				3EC039AD293218F0002187DC /* Time.swift in Sources */,
