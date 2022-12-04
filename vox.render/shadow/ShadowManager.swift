@@ -7,19 +7,25 @@
 import Metal
 
 public class ShadowManager {
+    static let _shadowSamplerProperty = "u_shadowSampler"
+
     private let _camera: Camera
     private var _renderPass: RenderPass
     private let _cascadedShadowSubpass: CascadedShadowSubpass
     private var _descriptor = MTLRenderPassDescriptor()
-    private var _depthTexture: MTLTexture!
-    private let _shadowTextureProperty = "u_shadowTexture"
-    private let _shadowSamplerProperty = "u_shadowSampler"
+    private let _shadowSampler = MTLSamplerDescriptor()
 
     init(_ pipeline: DevicePipeline) {
         _camera = pipeline.camera
         _cascadedShadowSubpass = CascadedShadowSubpass(_camera)
         _renderPass = RenderPass(pipeline)
         _renderPass.addSubpass(_cascadedShadowSubpass)
+
+        _shadowSampler.compareFunction = .less
+        _shadowSampler.rAddressMode = .clampToEdge
+        _shadowSampler.sAddressMode = .clampToEdge
+        _shadowSampler.tAddressMode = .clampToEdge
+        _camera.scene.shaderData.setSampler(ShadowManager._shadowSamplerProperty, _shadowSampler)
     }
 
     public func draw(_ commandBuffer: MTLCommandBuffer) {
@@ -30,30 +36,14 @@ public class ShadowManager {
 
     private func _drawDirectShadowMap(_ commandBuffer: MTLCommandBuffer) {
         _cascadedShadowSubpass._updateShadowSettings();
-        _getAvailableRenderTarget()
-        _descriptor.depthAttachment.texture = _depthTexture
+        _descriptor.depthAttachment.texture = _cascadedShadowSubpass._depthTexture
 
         _renderPass.draw(commandBuffer, _descriptor)
-        _camera.scene.shaderData.setImageView(_shadowTextureProperty, _shadowSamplerProperty, _depthTexture)
     }
 
     private func _drawSpotShadowMap(_ commandBuffer: MTLCommandBuffer) {
     }
 
     private func _drawPointShadowMap(_ commandBuffer: MTLCommandBuffer) {
-    }
-
-    private func _getAvailableRenderTarget() {
-        if (_depthTexture == nil ||
-                _depthTexture.width != Int(_cascadedShadowSubpass._shadowMapSize.x) ||
-                _depthTexture.height != Int(_cascadedShadowSubpass._shadowMapSize.y) ||
-                _depthTexture.pixelFormat != _cascadedShadowSubpass._shadowMapFormat) {
-            let descriptor = MTLTextureDescriptor()
-            descriptor.width = Int(_cascadedShadowSubpass._shadowMapSize.x)
-            descriptor.height = Int(_cascadedShadowSubpass._shadowMapSize.y)
-            descriptor.pixelFormat = _cascadedShadowSubpass._shadowMapFormat
-            descriptor.usage = MTLTextureUsage.renderTarget
-            _depthTexture = _camera.engine.device.makeTexture(descriptor: descriptor)
-        }
     }
 }

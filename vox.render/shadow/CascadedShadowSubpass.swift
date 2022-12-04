@@ -16,32 +16,37 @@ class CascadedShadowSubpass: GeometrySubpass {
     private static let _shadowMatricesProperty = "u_shadowMatrices"
     private static let _shadowMapSize = "u_shadowMapSize"
     private static let _shadowInfosProperty = "u_shadowInfo"
+    private static let _shadowTextureProperty = "u_shadowTexture"
     private static let _shadowSplitSpheresProperty = "u_shadowSplitSpheres"
 
     private static var _maxCascades: Int = 4
     private static var _cascadesSplitDistance: [Float] = [Float](repeating: 0, count: CascadedShadowSubpass._maxCascades + 1)
 
     private let _camera: Camera
-    var _shadowMapFormat: MTLPixelFormat = .invalid
-    var _shadowMapSize: Vector4 = Vector4()
-    private var _existShadowMap: Bool = false
-    private var _shadowSliceData: ShadowSliceData = ShadowSliceData()
-    private var _shadowCascadeMode: ShadowCascadesMode = .NoCascades
+    private var _shaderPass: ShaderPass
+
     private var _shadowMapResolution: UInt32 = 0
+    private var _shadowMapSize: Vector4 = Vector4()
     private var _shadowTileResolution: UInt32 = 0
-    private var _viewportOffsets: [Vector2] = [Vector2](repeatElement(Vector2(), count: 4))
+    private var _shadowMapFormat: MTLPixelFormat = .invalid
+    private var _shadowCascadeMode: ShadowCascadesMode = .NoCascades
+    private var _shadowSliceData: ShadowSliceData = ShadowSliceData()
+    private var _existShadowMap: Bool = false
+
     private var _splitBoundSpheres = [Float](repeating: 0, count: 4 * CascadedShadowSubpass._maxCascades)
     /** The end is project precision problem in shader. */
-    private var _shadowMatrices = [simd_float4x4](repeating: simd_float4x4(), count: 4 + 1)
+    private var _shadowMatrices = [simd_float4x4](repeating: simd_float4x4(), count: CascadedShadowSubpass._maxCascades + 1)
     // strength, null, lightIndex
     private var _shadowInfos = SIMD3<Float>()
-    private var _shaderPass: ShaderPass
     private var _bufferPool: BufferPool
+    var _depthTexture: MTLTexture!
+    private var _viewportOffsets: [Vector2] = [Vector2](repeatElement(Vector2(), count: 4))
 
     init(_ camera: Camera) {
         _camera = camera
         _shaderPass = ShaderPass(camera.engine.library(), "vertex_shadowmap", nil)
         _bufferPool = BufferPool(camera.engine.device, MemoryLayout<Matrix>.size * 4)
+        _shadowSliceData.virtualCamera.isOrthographic = true
         super.init()
     }
 
@@ -57,6 +62,11 @@ class CascadedShadowSubpass: GeometrySubpass {
 
         if (_existShadowMap) {
             _updateReceiversShaderData()
+            _camera.scene.shaderData.setImageView(CascadedShadowSubpass._shadowTextureProperty,
+                    ShadowManager._shadowSamplerProperty, _depthTexture)
+        } else {
+            _camera.scene.shaderData.setImageView(CascadedShadowSubpass._shadowTextureProperty,
+                    ShadowManager._shadowSamplerProperty, nil)
         }
     }
 
@@ -108,18 +118,18 @@ class CascadedShadowSubpass: GeometrySubpass {
     private func _renderDirectShadowMap(_ encoder: inout RenderCommandEncoder) {
         let shadowCascades = _camera.scene.shadowCascades.rawValue
         let boundSphere = _shadowSliceData.splitBoundSphere
-        let sunLightIndex = _camera.engine._lightManager._getSunLightIndex()
         let bufferBlock = _bufferPool.requestBufferBlock(minimum_size: 4 * MemoryLayout<Matrix>.size)
 
-        if (sunLightIndex != -1) {
-            let light = _camera.scene._sunLight
+        let sunLightIndex = _camera.engine._lightManager._getSunLightIndex()
+        if sunLightIndex != -1,
+           let light = _camera.scene._sunLight {
             let shadowFar = min(_camera.scene.shadowDistance, _camera.farClipPlane)
             _getCascadesSplitDistance(shadowFar)
-            _shadowInfos.x = light!.shadowStrength
+            _shadowInfos.x = light.shadowStrength
             _shadowInfos.z = Float(sunLightIndex)
 
             // prepare light and camera direction
-            let lightWorld = Matrix.rotationQuaternion(quaternion: light!.entity.transform.worldRotationQuaternion)
+            let lightWorld = Matrix.rotationQuaternion(quaternion: light.entity.transform.worldRotationQuaternion)
             let lightSide = Vector3(lightWorld.elements.columns.0[0], lightWorld.elements.columns.0[1], lightWorld.elements.columns.0[2])
             let lightUp = Vector3(lightWorld.elements.columns.1[0], lightWorld.elements.columns.1[1], lightWorld.elements.columns.1[2])
             let lightForward = Vector3(-lightWorld.elements.columns.2[0], -lightWorld.elements.columns.2[1], -lightWorld.elements.columns.2[2])
@@ -145,7 +155,7 @@ class CascadedShadowSubpass: GeometrySubpass {
                         lightSide: lightSide,
                         lightForward: lightForward,
                         cascadeIndex: j,
-                        nearPlane: light!.shadowNearPlane,
+                        nearPlane: light.shadowNearPlane,
                         shadowResolution: _shadowTileResolution,
                         shadowSliceData: _shadowSliceData,
                         outShadowMatrices: &_shadowMatrices
@@ -178,11 +188,16 @@ class CascadedShadowSubpass: GeometrySubpass {
                 let renderers = _camera.engine._componentsManager._renderers
                 let elements = renderers._elements
                 for k in 0..<renderers.count {
-                    ShadowUtils.shadowCullFrustum(_shadowSliceData.virtualCamera, pipeline, elements[k]!, _shadowSliceData)
+                    ShadowUtils.shadowCullFrustum(_shadowSliceData.virtualCamera, pipeline, _camera, light, elements[k]!, _shadowSliceData)
                 }
                 pipeline._opaqueQueue.sort(by: DevicePipeline._compareFromNearToFar)
                 pipeline._alphaTestQueue.sort(by: DevicePipeline._compareFromNearToFar)
 
+                encoder.handle.setViewport(MTLViewport(originX: Double(_viewportOffsets[j].x), originY: Double(_viewportOffsets[j].y),
+                        width: Double(_shadowTileResolution), height: Double(_shadowTileResolution), znear: 0, zfar: 1))
+                // for no cascade is for the edge,for cascade is for the beyond maxCascade pixel can use (0,0,0) trick sample the shadowMap
+                encoder.handle.setScissorRect(MTLScissorRect(x: Int(_viewportOffsets[j].x + 1), y: Int(_viewportOffsets[j].y + 1),
+                        width: Int(_shadowTileResolution - 2), height: Int(_shadowTileResolution - 2)))
                 for i in 0..<pipeline._opaqueQueue.count {
                     pipeline._opaqueQueue[i].shaderPass = _shaderPass
                     super._drawElement(&encoder, pipeline._opaqueQueue[i])
@@ -245,8 +260,15 @@ class CascadedShadowSubpass: GeometrySubpass {
     private func _updateReceiversShaderData() {
         let scene = _camera.scene
         let shadowCascades = scene.shadowCascades.rawValue
-        for i in (shadowCascades * 4)..<(4 * 4) {
-            _splitBoundSpheres[i] = 0.0
+        if shadowCascades > 1 {
+            for i in (shadowCascades * 4)..<_splitBoundSpheres.count {
+                _splitBoundSpheres[i] = 0.0
+            }
+        }
+
+        // set zero matrix to project the index out of max cascade
+        for i in shadowCascades..<_shadowMatrices.count {
+            _shadowMatrices[i] = simd_float4x4()
         }
 
         let shaderData = scene.shaderData
@@ -269,4 +291,17 @@ class CascadedShadowSubpass: GeometrySubpass {
         sceneShaderData.setData(CascadedShadowSubpass._lightViewProjMatProperty, allocation)
     }
 
+    private func _getAvailableRenderTarget() {
+        if (_depthTexture == nil ||
+                _depthTexture.width != Int(_shadowMapSize.x) ||
+                _depthTexture.height != Int(_shadowMapSize.y) ||
+                _depthTexture.pixelFormat != _shadowMapFormat) {
+            let descriptor = MTLTextureDescriptor()
+            descriptor.width = Int(_shadowMapSize.x)
+            descriptor.height = Int(_shadowMapSize.y)
+            descriptor.pixelFormat = _shadowMapFormat
+            descriptor.usage = MTLTextureUsage.renderTarget
+            _depthTexture = _camera.engine.device.makeTexture(descriptor: descriptor)
+        }
+    }
 }

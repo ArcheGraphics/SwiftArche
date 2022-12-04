@@ -123,8 +123,7 @@ class ShadowUtils {
             if (normal.x * (normal.x >= 0.0 ? bounds.max.x : bounds.min.x) +
                     normal.y * (normal.y >= 0.0 ? bounds.max.y : bounds.min.y) +
                     normal.z * (normal.z >= 0.0 ? bounds.max.z : bounds.min.z) <
-                    -plane.distance
-               ) {
+                    -plane.distance) {
                 return false
             }
         }
@@ -132,9 +131,14 @@ class ShadowUtils {
     }
 
     static func shadowCullFrustum(_ cameraInfo: CameraInfo, _ renderPipeline: DevicePipeline,
+                                  _ camera:Camera, _ light: Light,
                                   _ renderer: Renderer, _ shadowSliceData: ShadowSliceData) {
-        if (renderer.castShadows && ShadowUtils.cullingRenderBounds(renderer.bounds, shadowSliceData.cullPlaneCount, shadowSliceData.cullPlanes)) {
-            renderer._prepareRender(cameraInfo, renderPipeline)
+        // filter by camera culling mask.
+        let layer = renderer._entity.layer
+        if (camera.cullingMask.rawValue & layer.rawValue != 0 && light.cullingMask.rawValue & layer.rawValue != 0) {
+            if (renderer.castShadows && ShadowUtils.cullingRenderBounds(renderer.bounds, shadowSliceData.cullPlaneCount, shadowSliceData.cullPlanes)) {
+                renderer._prepareRender(cameraInfo, renderPipeline)
+            }
         }
     }
 

@@ -11,6 +11,9 @@ public class Light: Component {
     /// Each type of light source is at most 10, beyond which it will not take effect.
     static var _maxLight: Int = 10
 
+    /// Culling mask - which layers the light affect.
+    /// - Remark: Support bit manipulation, corresponding to `Layer`.
+    public var cullingMask: Layer = Layer.Everything
     /// Light Intensity
     public var intensity: Float = 1
     /// How this light casts shadows.
