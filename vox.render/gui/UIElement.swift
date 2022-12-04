@@ -5,19 +5,27 @@
 //  property of any third parties.
 
 import ImGui
+import Cocoa
 
 public class UIElement {
-    public static func selection(_ title: String, _ names: [String], _ selected:inout Int) {
+    public static func Init(_ view: Canvas, _ deltaTime: Float) {
+        let io = ImGuiGetIO()!
+        io.pointee.DisplaySize.x = Float(view.bounds.size.width)
+        io.pointee.DisplaySize.y = Float(view.bounds.size.height)
+        let frameBufferScale = Float(view.window?.screen?.backingScaleFactor ?? NSScreen.main!.backingScaleFactor)
+        io.pointee.DisplayFramebufferScale = ImVec2(x: frameBufferScale, y: frameBufferScale)
+        io.pointee.DeltaTime = deltaTime
+    }
+
+    public static func selection(_ title: String, _ names: [String], _ selected: inout Int) {
         // Simple selection popup (if you want to show the current selection inside the Button itself,
         // you may want to build a string using the "###" operator to preserve a constant ID with a variable label)
-        if (ImGuiButton("Select..", ImVec2(x: 0, y: 0))) {
-            ImGuiOpenPopup("my_select_popup", 0)
+        if (ImGuiButton("Select \(title) ..", ImVec2(x: 0, y: 0))) {
+            ImGuiOpenPopup(title + "select_popup", 0)
         }
         ImGuiSameLine(0, -1)
         ImGuiTextUnformatted(selected == -1 ? "<None>" : names[selected]);
-        if (ImGuiBeginPopup("my_select_popup", 0)) {
-            ImGuiTextV(title)
-            ImGuiSeparator()
+        if (ImGuiBeginPopup(title + "select_popup", 0)) {
             for i in 0..<names.count {
                 if (ImGuiSelectable(names[i], false, 0, ImVec2(x: 0, y: 0))) {
                     selected = i

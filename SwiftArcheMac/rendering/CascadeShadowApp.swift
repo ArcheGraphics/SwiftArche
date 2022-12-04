@@ -127,13 +127,7 @@ fileprivate class GUI: Script {
     }
 
     override func onUpdate(_ deltaTime: Float) {
-        let view = engine.canvas
-        let io = ImGuiGetIO()!
-        io.pointee.DisplaySize.x = Float(view.bounds.size.width)
-        io.pointee.DisplaySize.y = Float(view.bounds.size.height)
-        let frameBufferScale = Float(view.window?.screen?.backingScaleFactor ?? NSScreen.main!.backingScaleFactor)
-        io.pointee.DisplayFramebufferScale = ImVec2(x: frameBufferScale, y: frameBufferScale)
-        io.pointee.DeltaTime = deltaTime
+        UIElement.Init(engine.canvas, deltaTime)
 
         ImGuiNewFrame()
         ImGuiCheckbox("pause", &pause)
