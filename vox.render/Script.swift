@@ -98,6 +98,12 @@ open class Script: Component {
     open func onCollisionStay(_ other: ColliderShape) {
     }
 
+    /// Called when the pointer is casted while over the ColliderShape.
+    ///   - hitResult: The pointer hit result
+    ///   - type: The event type depend on platform (NSEvent.type or UITouch.phase)
+    open func onPointerCast(_ hitResult: HitResult, _ type: UInt) {
+    }
+
     /// Called when be disabled.
     open func onDisable() {
     }

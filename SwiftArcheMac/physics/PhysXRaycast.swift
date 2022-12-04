@@ -31,7 +31,6 @@ fileprivate class GeometryGenerator: Script {
 fileprivate class Raycast: Script {
     var camera: Camera!
     var ray = Ray()
-    var hit = HitResult()
 
     override func onAwake() {
         camera = entity.getComponent()
@@ -43,8 +42,7 @@ fileprivate class Raycast: Script {
         if (!pointers.isEmpty && inputManager.isPointerTrigger(.leftMouseDown)) {
             _ = camera.screenPointToRay(pointers[0].screenPoint(engine.canvas), ray)
 
-            let result = engine.physicsManager.raycast(ray, Float.greatestFiniteMagnitude, Layer.Layer0, hit)
-            if (result) {
+            if let hit = engine.physicsManager.raycast(ray, Float.greatestFiniteMagnitude, Layer.Layer0) {
                 let mtl = PBRMaterial(engine)
                 mtl.baseColor = Color(Float.random(in: 0...1), Float.random(in: 0...1), Float.random(in: 0...1), 1.0)
                 mtl.metallic = 0.0

@@ -185,29 +185,24 @@ extension PhysicsManager {
     ///   - ray: The ray
     ///   - outHitResult: If true is returned, outHitResult will contain more detailed collision information
     /// - Returns: Returns true if the ray intersects with a Collider, otherwise false.
-    public func raycast(_ ray: Ray, _ outHitResult: HitResult) -> Bool {
+    public func raycast(_ ray: Ray) -> HitResult? {
         let distance = Float.greatestFiniteMagnitude
         let layerMask = Layer.Everything
 
+        var hitResult = HitResult()
         let result = _nativePhysicsManager.raycast(ray, distance, { [self](idx, distance, position, normal) in
-            outHitResult.entity = _physicalObjectsMap[idx]!._collider!.entity
-            outHitResult.distance = distance
-            outHitResult.normal = normal
-            outHitResult.point = position
+            hitResult.entity = _physicalObjectsMap[idx]!._collider!.entity
+            hitResult.distance = distance
+            hitResult.normal = normal
+            hitResult.point = position
         })
 
         if (result) {
-            if (outHitResult.entity!.layer.rawValue & layerMask.rawValue != 0) {
-                return true
-            } else {
-                outHitResult.entity = nil
-                outHitResult.distance = 0
-                outHitResult.point = Vector3()
-                outHitResult.normal = Vector3()
-                return false
+            if (hitResult.entity!.layer.rawValue & layerMask.rawValue != 0) {
+                return hitResult
             }
         }
-        return false
+        return nil
     }
 
     /// Casts a ray through the Scene and returns the first hit.
@@ -225,28 +220,23 @@ extension PhysicsManager {
     ///   - distance: The max distance the ray should check
     ///   - outHitResult: If true is returned, outHitResult will contain more detailed collision information
     /// - Returns: Returns true if the ray intersects with a Collider, otherwise false.
-    public func raycast(_ ray: Ray, _ distance: Float, _ outHitResult: HitResult) -> Bool {
+    public func raycast(_ ray: Ray, _ distance: Float) -> HitResult? {
         let layerMask = Layer.Everything
 
+        var hitResult = HitResult()
         let result = _nativePhysicsManager.raycast(ray, distance, { [self](idx, distance, position, normal) in
-            outHitResult.entity = _physicalObjectsMap[idx]!._collider!.entity
-            outHitResult.distance = distance
-            outHitResult.normal = normal
-            outHitResult.point = position
+            hitResult.entity = _physicalObjectsMap[idx]!._collider!.entity
+            hitResult.distance = distance
+            hitResult.normal = normal
+            hitResult.point = position
         })
 
         if (result) {
-            if (outHitResult.entity!.layer.rawValue & layerMask.rawValue != 0) {
-                return true
-            } else {
-                outHitResult.entity = nil
-                outHitResult.distance = 0
-                outHitResult.point = Vector3()
-                outHitResult.normal = Vector3()
-                return false
+            if (hitResult.entity!.layer.rawValue & layerMask.rawValue != 0) {
+                return hitResult
             }
         }
-        return false
+        return nil
     }
 
     /// Casts a ray through the Scene and returns the first hit.
@@ -266,25 +256,20 @@ extension PhysicsManager {
     ///   - layerMask: Layer mask that is used to selectively ignore Colliders when casting
     ///   - outHitResult: If true is returned, outHitResult will contain more detailed collision information
     /// - Returns: Returns true if the ray intersects with a Collider, otherwise false.
-    public func raycast(_ ray: Ray, _ distance: Float, _ layerMask: Layer, _ outHitResult: HitResult) -> Bool {
+    public func raycast(_ ray: Ray, _ distance: Float, _ layerMask: Layer) -> HitResult? {
+        var hitResult = HitResult()
         let result = _nativePhysicsManager.raycast(ray, distance, { [self](idx, distance, position, normal) in
-            outHitResult.entity = _physicalObjectsMap[idx]!._collider!.entity
-            outHitResult.distance = distance
-            outHitResult.normal = normal
-            outHitResult.point = position
+            hitResult.entity = _physicalObjectsMap[idx]!._collider!.entity
+            hitResult.distance = distance
+            hitResult.normal = normal
+            hitResult.point = position
         })
 
         if (result) {
-            if (outHitResult.entity!.layer.rawValue & layerMask.rawValue != 0) {
-                return true
-            } else {
-                outHitResult.entity = nil
-                outHitResult.distance = 0
-                outHitResult.point = Vector3()
-                outHitResult.normal = Vector3()
-                return false
+            if (hitResult.entity!.layer.rawValue & layerMask.rawValue != 0) {
+                return hitResult
             }
         }
-        return false
+        return nil
     }
 }

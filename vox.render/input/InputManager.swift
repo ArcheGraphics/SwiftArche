@@ -21,7 +21,15 @@ public class InputManager {
     var _wheelManager: WheelManager
     var _keyboardManager: KeyboardManager
 #endif
-    
+
+    public var firePointerEvent: Bool {
+        get {
+            _pointerManager.firePointerEvent
+        }
+        set {
+            _pointerManager.firePointerEvent = newValue
+        }
+    }
 #if os(iOS)
     /// Pointer list.
     public var pointers: [UITouch] {
@@ -37,16 +45,16 @@ public class InputManager {
         }
     }
 #endif
-    
+
     init(engine: Engine) {
-        _pointerManager = PointerManager()
+        _pointerManager = PointerManager(engine)
 #if os(macOS)
         _wheelManager = WheelManager()
         _keyboardManager = KeyboardManager()
 #endif
         _initialized = true
     }
-    
+
 #if os(iOS)
     /// Whether the pointer is being held down, if there is no parameter, return whether any pointer is being held down.
     /// - Returns: Whether the pointer is being held down
@@ -67,18 +75,18 @@ public class InputManager {
             return false
         }
     }
-    
+
     /// Get the change of the scroll wheel on the x-axis.
-    public var wheelDelta:Vector3 {
+    public var wheelDelta: Vector3 {
         get {
             _wheelManager._delta
         }
     }
-    
+
     /// Whether the key is being held down, if there is no parameter, return whether any key is being held down.
     /// - Parameter key: The keys of the keyboard
     /// - Returns: Whether the key is being held down
-    public func isKeyHeldDown(_ key: Keys? = nil)->Bool {
+    public func isKeyHeldDown(_ key: Keys? = nil) -> Bool {
         if (_initialized) {
             if (key == nil) {
                 return _keyboardManager._curFrameHeldDownList.count > 0
@@ -89,11 +97,11 @@ public class InputManager {
             return false
         }
     }
-    
+
     /// Whether the key starts to be pressed down during the current frame, if there is no parameter, return whether any key starts to be pressed down during the current frame.
     /// - Parameter key: The keys of the keyboard
     /// - Returns: Whether the key starts to be pressed down during the current frame
-    public func isKeyDown(_ key: Keys? = nil)->Bool {
+    public func isKeyDown(_ key: Keys? = nil) -> Bool {
         if (_initialized) {
             if (key == nil) {
                 return _keyboardManager._curFrameDownList.count > 0
@@ -104,11 +112,11 @@ public class InputManager {
             return false
         }
     }
-    
+
     /// Whether the key is released during the current frame, if there is no parameter, return whether any key released during the current frame.
     /// - Parameter key: The keys of the keyboard
     /// - Returns: Whether the key is released during the current frame
-    public func isKeyUp(_ key: Keys? = nil)->Bool {
+    public func isKeyUp(_ key: Keys? = nil) -> Bool {
         if (_initialized) {
             if (key == nil) {
                 return _keyboardManager._curFrameUpList.count > 0
@@ -120,7 +128,7 @@ public class InputManager {
         }
     }
 #endif
-    
+
     func _update() {
         if (_initialized) {
             _pointerManager._update()

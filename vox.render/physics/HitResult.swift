@@ -7,7 +7,7 @@
 import vox_math
 
 /// Structure used to get information back from a raycast or a sweep.
-public class HitResult {
+public struct HitResult {
     /// The entity that was hit.
     public var entity: Entity? = nil
     /// The distance from the ray's origin to the impact point.
