@@ -388,6 +388,7 @@
 		43D8CC8E6EC814867725CBD1 /* PhysXDebug.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8CCD2428D0365772246E7 /* PhysXDebug.swift */; };
 		43D8CE4CE0A0E392D06A3B25 /* PhysXUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8CF2C4FC2C2529FFE5E7F /* PhysXUtils.swift */; };
 		43D8CF515E4D90196E7E806B /* PhysXCollisionDetectionApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8C0A4A7B56D737C3F4FE2 /* PhysXCollisionDetectionApp.swift */; };
+		E63B1AB88F741EC4FFD734F6 /* InputCastApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = E63B1700C137922B042BB8C2 /* InputCastApp.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -885,6 +886,7 @@
 		43D8CF2C4FC2C2529FFE5E7F /* PhysXUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhysXUtils.swift; sourceTree = "<group>"; };
 		43D8CFAFE0E0B5772488FA13 /* IBLApp.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IBLApp.swift; sourceTree = "<group>"; };
 		43D8CFE45C9E5B56F6B8A397 /* PhysXCompoundApp.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhysXCompoundApp.swift; sourceTree = "<group>"; };
+		E63B1700C137922B042BB8C2 /* InputCastApp.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InputCastApp.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -1148,6 +1150,7 @@
 				3EB32B7429322DB30019A4F3 /* PrimitiveApp.swift */,
 				43D8C50348EB9AC72BD7BF83 /* SkyboxApp.swift */,
 				43D8C888ABFCE2075E7AA5BE /* AtomicComputeApp.swift */,
+				E63B1700C137922B042BB8C2 /* InputCastApp.swift */,
 				3EC92A3F29360C6800423396 /* physics */,
 				040F1DF129378195008BDC8D /* rendering */,
 			);
@@ -2321,6 +2324,7 @@
 				43D8C645AB2BDFD62E330B9C /* PhysXRaycast.swift in Sources */,
 				43D8CE4CE0A0E392D06A3B25 /* PhysXUtils.swift in Sources */,
 				43D8CC8E6EC814867725CBD1 /* PhysXDebug.swift in Sources */,
+				E63B1AB88F741EC4FFD734F6 /* InputCastApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -1,0 +1,74 @@
+//  Copyright (c) 2022 Feng Yang
+//
+//  I am making my contributions/submissions to this project solely in my
+//  personal capacity and am not conveying any rights to any intellectual
+//  property of any third parties.
+
+import Cocoa
+import vox_render
+import vox_math
+import vox_toolkit
+
+class ClickScript: Script {
+    private var material: PBRMaterial!
+
+    override func onStart() {
+        let renderer: MeshRenderer = entity.getComponent()!
+        material = (renderer.getMaterial() as! PBRMaterial)
+    }
+
+    override func onPointerCast(_ hitResult: HitResult, _ type: UInt) {
+        material.baseColor = Color(Float.random(in: 0...1), Float.random(in: 0...1), Float.random(in: 0...1), 1.0)
+    }
+}
+
+class InputCastApp: NSViewController {
+    var canvas: Canvas!
+    var engine: Engine!
+
+    func createBox(_ rootEntity: Entity, _ x: Float, _ y: Float, _ z: Float) -> Entity {
+        // create box test entity
+        let cubeSize: Float = 2.0
+        let boxEntity = rootEntity.createChild("BoxEntity")
+        boxEntity.transform.position = Vector3(x, y, z)
+
+        let boxMtl = PBRMaterial(engine)
+        let boxRenderer: MeshRenderer = boxEntity.addComponent()
+        boxMtl.baseColor = Color(0.6, 0.3, 0.3, 1.0)
+        boxRenderer.mesh = PrimitiveMesh.createCuboid(engine, cubeSize, cubeSize, cubeSize)
+        boxRenderer.setMaterial(boxMtl)
+
+        let boxCollider: StaticCollider = boxEntity.addComponent()
+        let boxColliderShape = BoxColliderShape()
+        boxColliderShape.size = Vector3(cubeSize, cubeSize, cubeSize)
+        boxCollider.addShape(boxColliderShape)
+        return boxEntity
+    }
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        canvas = Canvas(with: view)
+        engine = Engine(canvas: canvas)
+
+        let scene = engine.sceneManager.activeScene!
+        let hdr = engine.textureLoader.loadHDR(with: "assets/kloppenheim_06_4k.hdr")!
+        let cubeMap = createCubemap(engine, with: hdr, size: 256, level: 3)
+        scene.ambientLight = loadAmbientLight(engine, withHDR: cubeMap)
+        let rootEntity = scene.createRootEntity()
+
+        let cameraEntity = rootEntity.createChild()
+        cameraEntity.transform.position = Vector3(5, 5, 5)
+        cameraEntity.transform.lookAt(targetPosition: Vector3())
+        let _: Camera = cameraEntity.addComponent()
+
+        let light = rootEntity.createChild("light")
+        light.transform.position = Vector3(1, 3, 0)
+        light.transform.lookAt(targetPosition: Vector3())
+        let _: DirectLight = light.addComponent()
+
+        let _: ClickScript = createBox(rootEntity, 0, 0, 0).addComponent()
+
+        engine.run()
+    }
+}
+

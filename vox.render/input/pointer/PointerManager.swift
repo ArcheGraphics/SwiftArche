@@ -74,7 +74,6 @@ class PointerManager {
         for event in _pointers {
             switch event.type {
             case .leftMouseDown, .rightMouseDown, .otherMouseDown,
-                 .leftMouseDragged, .rightMouseDragged, .otherMouseDragged,
                  .leftMouseUp, .rightMouseUp, .otherMouseUp:
                 if let hitResult = raycast(event) {
                     let scripts = hitResult.entity!._scripts;
