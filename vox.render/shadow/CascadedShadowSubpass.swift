@@ -117,7 +117,6 @@ class CascadedShadowSubpass: GeometrySubpass {
 
     private func _renderDirectShadowMap(_ encoder: inout RenderCommandEncoder) {
         let shadowCascades = _camera.scene.shadowCascades.rawValue
-        let boundSphere = _shadowSliceData.splitBoundSphere
         let bufferBlock = _bufferPool.requestBufferBlock(minimum_size: 4 * MemoryLayout<Matrix>.size)
 
         let sunLightIndex = _camera.engine._lightManager._getSunLightIndex()
@@ -173,8 +172,8 @@ class CascadedShadowSubpass: GeometrySubpass {
                 _updateSingleShadowCasterShaderData(bufferBlock, (light as! DirectLight), _shadowSliceData)
 
                 // upload pre-cascade infos.
-                let center = boundSphere.center
-                let radius = boundSphere.radius
+                let center = _shadowSliceData.splitBoundSphere.center
+                let radius = _shadowSliceData.splitBoundSphere.radius
                 let offset = j * 4
                 _splitBoundSpheres[offset] = center.x
                 _splitBoundSpheres[offset + 1] = center.y

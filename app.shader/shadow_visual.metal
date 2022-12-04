@@ -85,9 +85,9 @@ int computeCascadeIndex(float3 positionWS, constant float4* u_shadowSplitSpheres
     return index;
 }
 
-fragment float4 fragment_shadowMap_visual(VertexOut in [[stage_in]],
-                                          constant float4 &u_baseColor [[buffer(0)]],
-                                          constant float4* u_shadowSplitSpheres [[buffer(11), function_constant(needCalculateShadow)]]) {
+fragment float4 shadowMap_visual(VertexOut in [[stage_in]],
+                                 constant float4 &u_baseColor [[buffer(0)]],
+                                 constant float4* u_shadowSplitSpheres [[buffer(11), function_constant(needCalculateShadow)]]) {
     float4 baseColor = u_baseColor;
     
     if (needCalculateShadow) {

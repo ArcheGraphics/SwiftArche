@@ -163,10 +163,24 @@ fileprivate class Rotation: Script {
 }
 
 fileprivate class CSSMVisualMaterial: BaseMaterial {
+    private var _baseColor = Color(1, 1, 1, 1)
+
+    /// Base color.
+    public var baseColor: Color {
+        get {
+            _baseColor
+        }
+        set {
+            _baseColor = newValue
+            shaderData.setData(CSSMVisualMaterial._baseColorProp, newValue.toLinear())
+        }
+    }
+    
     public init(_ engine: Engine, _ name: String = "") {
         super.init(engine.device, name)
-        shader.append(ShaderPass(engine.library("app.shader"), "vertex_unlit", "fragment_shadowmap_visual"))
+        shader.append(ShaderPass(engine.library("app.shader"), "vertex_unlit", "shadowMap_visual"))
         shaderData.enableMacro(NEED_WORLDPOS.rawValue)
+        shaderData.setData(CSSMVisualMaterial._baseColorProp, _baseColor)
     }
 }
 

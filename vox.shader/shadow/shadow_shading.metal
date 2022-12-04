@@ -134,14 +134,17 @@ int ShadowShading::computeCascadeIndex(float3 positionWS) {
                                dot(fromCenter1, fromCenter1) < u_shadowSplitSpheres[1].w,
                                dot(fromCenter2, fromCenter2) < u_shadowSplitSpheres[2].w,
                                dot(fromCenter3, fromCenter3) < u_shadowSplitSpheres[3].w);
-    comparison.yzw = clamp(comparison.yzw - comparison.xyz,0.0,1.0);//keep the nearest
-    float4 indexCoefficient = float4(4.0,3.0,2.0,1.0);
+    comparison.yzw = clamp(comparison.yzw - comparison.xyz, -1.0, 1.0);//keep the nearest
+    float4 indexCoefficient = float4(4.0, 3.0, 2.0, 1.0);
     int index = 4 - int(dot(comparison, indexCoefficient));
     return index;
 }
 
 float3 ShadowShading::getShadowCoord() {
-    int cascadeIndex = computeCascadeIndex(v_pos);
+    int cascadeIndex = 0;
+    if (cascadeCount != 1) {
+        cascadeIndex = computeCascadeIndex(v_pos);
+    }
     matrix_float4x4 shadowMatrix = u_shadowMatrices[cascadeIndex];
     float4 shadowCoord = shadowMatrix * float4(v_pos, 1.0);
     return shadowCoord.xyz / shadowCoord.w;
@@ -183,7 +186,7 @@ float ShadowShading::sampleShadowMapFiltered9(float3 shadowCoord) {
 float ShadowShading::sampleShadowMap() {
     float3 shadowCoord = getShadowCoord();
     float attenuation = 1.0;
-    if(shadowCoord.z > 0.0 && shadowCoord.z < 1.0) {
+    if(shadowCoord.z > -1.0 && shadowCoord.z < 1.0) {
         if (shadowMode == 1) {
             attenuation = u_shadowMap.sample_compare(u_shadowMapSampler, shadowCoord.xy, shadowCoord.z);
         }

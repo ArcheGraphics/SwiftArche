@@ -7,19 +7,19 @@
 import Foundation
 
 open class BaseMaterial: Material {
-    static let _tilingOffsetProp = "u_tilingOffset"
+    public static let _tilingOffsetProp = "u_tilingOffset"
 
-    static let _baseColorProp = "u_baseColor"
-    static let _baseTextureProp = "u_baseTexture"
-    static let _baseSamplerProp = "u_baseSampler"
+    public static let _baseColorProp = "u_baseColor"
+    public static let _baseTextureProp = "u_baseTexture"
+    public static let _baseSamplerProp = "u_baseSampler"
 
-    static let _normalIntensityProp = "u_normalIntensity"
-    static let _normalTextureProp = "u_normalTexture"
-    static let _normalSamplerProp = "u_normalSampler"
+    public static let _normalIntensityProp = "u_normalIntensity"
+    public static let _normalTextureProp = "u_normalTexture"
+    public static let _normalSamplerProp = "u_normalSampler"
 
-    static let _emissiveColorProp = "u_emissiveColor"
-    static let _emissiveTextureProp = "u_emissiveTexture"
-    static let _emissiveSamplerProp = "u_emissiveSampler"
+    public static let _emissiveColorProp = "u_emissiveColor"
+    public static let _emissiveTextureProp = "u_emissiveTexture"
+    public static let _emissiveSamplerProp = "u_emissiveSampler"
 
     private static let _alphaCutoffProp = "u_alphaCutoff"
     private var _alphaCutoff: Float = 0
