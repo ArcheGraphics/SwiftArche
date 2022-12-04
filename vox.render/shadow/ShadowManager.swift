@@ -36,8 +36,10 @@ public class ShadowManager {
 
     private func _drawDirectShadowMap(_ commandBuffer: MTLCommandBuffer) {
         _cascadedShadowSubpass._updateShadowSettings();
+        _cascadedShadowSubpass._getAvailableRenderTarget()
         _descriptor.depthAttachment.texture = _cascadedShadowSubpass._depthTexture
-
+        _descriptor.depthAttachment.loadAction = .clear
+        _descriptor.depthAttachment.storeAction = .store
         _renderPass.draw(commandBuffer, _descriptor)
     }
 

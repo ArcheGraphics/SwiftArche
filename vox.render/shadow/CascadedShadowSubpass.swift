@@ -45,7 +45,7 @@ class CascadedShadowSubpass: GeometrySubpass {
     init(_ camera: Camera) {
         _camera = camera
         _shaderPass = ShaderPass(camera.engine.library(), "vertex_shadowmap", nil)
-        _bufferPool = BufferPool(camera.engine.device, MemoryLayout<Matrix>.size * 4)
+        _bufferPool = BufferPool(camera.engine.device, 256 * 4)
         _shadowSliceData.virtualCamera.isOrthographic = true
         super.init()
     }
@@ -291,16 +291,17 @@ class CascadedShadowSubpass: GeometrySubpass {
         sceneShaderData.setData(CascadedShadowSubpass._lightViewProjMatProperty, allocation)
     }
 
-    private func _getAvailableRenderTarget() {
+    func _getAvailableRenderTarget() {
         if (_depthTexture == nil ||
-                _depthTexture.width != Int(_shadowMapSize.x) ||
-                _depthTexture.height != Int(_shadowMapSize.y) ||
+                _depthTexture.width != Int(_shadowMapSize.z) ||
+                _depthTexture.height != Int(_shadowMapSize.w) ||
                 _depthTexture.pixelFormat != _shadowMapFormat) {
             let descriptor = MTLTextureDescriptor()
-            descriptor.width = Int(_shadowMapSize.x)
-            descriptor.height = Int(_shadowMapSize.y)
+            descriptor.width = Int(_shadowMapSize.z)
+            descriptor.height = Int(_shadowMapSize.w)
             descriptor.pixelFormat = _shadowMapFormat
-            descriptor.usage = MTLTextureUsage.renderTarget
+            descriptor.usage = MTLTextureUsage(rawValue: MTLTextureUsage.renderTarget.rawValue | MTLTextureUsage.shaderRead.rawValue)
+            descriptor.storageMode = .private
             _depthTexture = _camera.engine.device.makeTexture(descriptor: descriptor)
         }
     }

@@ -601,8 +601,8 @@ fragment float4 fragment_pbr(VertexOut in [[stage_in]],
                              constant matrix_float4x4* u_shadowMatrices [[buffer(12), function_constant(needCalculateShadow)]],
                              constant float4 &u_shadowMapSize [[buffer(13), function_constant(needCalculateShadow)]],
                              constant float3 &u_shadowInfo [[buffer(14), function_constant(needCalculateShadow)]],
-                             depth2d<float> u_shadowMap [[texture(11), function_constant(needCalculateShadow)]],
-                             sampler u_shadowMapSampler [[sampler(11), function_constant(needCalculateShadow)]],
+                             depth2d<float> u_shadowTexture [[texture(11), function_constant(needCalculateShadow)]],
+                             sampler u_shadowSampler [[sampler(11), function_constant(needCalculateShadow)]],
                              bool is_front_face [[front_facing]]) {
     PBRShading shading;
     
@@ -624,8 +624,8 @@ fragment float4 fragment_pbr(VertexOut in [[stage_in]],
     }
     
     if (needCalculateShadow) {
-        shading.shadowShading.u_shadowMap = u_shadowMap;
-        shading.shadowShading.u_shadowMapSampler = u_shadowMapSampler;
+        shading.shadowShading.u_shadowMap = u_shadowTexture;
+        shading.shadowShading.u_shadowMapSampler = u_shadowSampler;
         shading.shadowShading.u_shadowInfo = u_shadowInfo;
         shading.shadowShading.u_shadowMapSize = u_shadowMapSize;
         shading.shadowShading.u_shadowMatrices = u_shadowMatrices;

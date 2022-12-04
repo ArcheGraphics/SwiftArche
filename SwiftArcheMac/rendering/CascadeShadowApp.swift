@@ -203,7 +203,7 @@ class CascadeShadowApp: NSViewController {
         let directLight: DirectLight = light.addComponent()
         gui.rotation = light.addComponent()
         directLight.shadowStrength = 1.0
-//        directLight.shadowType = ShadowType.SoftLow
+        directLight.shadowType = ShadowType.SoftLow
         gui.directLight = directLight
 
         // Create plane

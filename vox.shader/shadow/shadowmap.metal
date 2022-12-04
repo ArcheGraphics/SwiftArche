@@ -28,9 +28,8 @@ float3 applyShadowNormalBias(float3 positionWS, float3 normalWS, float3 u_lightD
 
 vertex VertexOut vertex_shadowmap(const VertexIn in [[stage_in]],
                                   uint v_id [[vertex_id]],
-                                  constant matrix_float4x4 &u_normalMat [[buffer(1)]],
-                                  constant matrix_float4x4 &u_modelMat [[buffer(2)]],
-                                  constant matrix_float4x4 &u_VPMat [[buffer(3)]],
+                                  constant CameraData &u_camera [[buffer(2)]],
+                                  constant RendererData &u_renderer [[buffer(3)]],
                                   constant float4 &u_tilingOffset [[buffer(4)]],
                                   constant float2 &u_shadowBias [[buffer(5)]],
                                   constant float3 &u_lightDirection [[buffer(6)]],
@@ -92,17 +91,17 @@ vertex VertexOut vertex_shadowmap(const VertexIn in [[stage_in]],
         }
     }
     
-    float4 positionWS = u_modelMat * position;
+    float4 positionWS = u_renderer.u_modelMat * position;
 
     positionWS.xyz = applyShadowBias(positionWS.xyz, u_lightDirection, u_shadowBias);
     if (!omitNormal && hasNormal) {
-        float3 v_normal = normalize(matrix_float3x3(u_normalMat[0][0], u_normalMat[0][1], u_normalMat[0][2],
-                                                    u_normalMat[1][0], u_normalMat[1][1], u_normalMat[1][2],
-                                                    u_normalMat[2][0], u_normalMat[2][1], u_normalMat[2][2]) * normal);
+        float3 v_normal = normalize(matrix_float3x3(u_renderer.u_normalMat[0][0], u_renderer.u_normalMat[0][1], u_renderer.u_normalMat[0][2],
+                                                    u_renderer.u_normalMat[1][0], u_renderer.u_normalMat[1][1], u_renderer.u_normalMat[1][2],
+                                                    u_renderer.u_normalMat[2][0], u_renderer.u_normalMat[2][1], u_renderer.u_normalMat[2][2]) * normal);
         positionWS.xyz = applyShadowNormalBias(positionWS.xyz, v_normal, u_lightDirection, u_shadowBias);
     }
     
-    out.position = u_VPMat * positionWS;
+    out.position = u_camera.u_VPMat * positionWS;
     out.position.z = max(out.position.z, -1.0);// clamp to min ndc z
     return out;
 }
