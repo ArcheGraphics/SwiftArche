@@ -198,7 +198,7 @@ class CascadeShadowApp: NSViewController {
         let _: OrbitControl = cameraEntity.addComponent()
 
         let light = rootEntity.createChild("light")
-        light.transform.position = Vector3(10, 10, 10)
+        light.transform.position = Vector3(10, 10, 0)
         light.transform.lookAt(targetPosition: Vector3())
         let directLight: DirectLight = light.addComponent()
         gui.rotation = light.addComponent()
@@ -220,7 +220,8 @@ class CascadeShadowApp: NSViewController {
         gui.planeMaterial = planeMaterial
 
         planeRenderer.setMaterial(planeMaterial)
-
+        planeRenderer.castShadows = false
+        
         // Create box
         let boxMesh = PrimitiveMesh.createCuboid(engine, 2.0, 2.0, 2.0)
         let boxMaterial = PBRMaterial(engine)

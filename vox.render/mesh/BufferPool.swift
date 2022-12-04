@@ -44,7 +44,7 @@ public struct BufferAllocation {
     }
 
     public func update<T>(_ value: T, offset: Int = 0) {
-        if MemoryLayout<T>.size + offset < _size {
+        if MemoryLayout<T>.size + offset <= _size {
             withUnsafePointer(to: value) {
                 _buffer.contents().advanced(by: _baseOffset + offset).copyMemory(from: $0, byteCount: MemoryLayout<T>.stride)
             }

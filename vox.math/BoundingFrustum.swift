@@ -137,13 +137,13 @@ extension BoundingFrustum {
         _right = Plane(Vector3(m14 - m11, m24 - m21, m34 - m31), m44 - m41)
         _ = _right.normalize()
 
-        // top
-        _top = Plane(Vector3(m14 + m12, m24 + m22, m34 + m32), m44 + m42)
-        _ = _top.normalize()
-
         // bottom
-        _bottom = Plane(Vector3(m14 - m12, m24 - m22, m34 - m32), m44 - m42)
+        _bottom = Plane(Vector3(m14 + m12, m24 + m22, m34 + m32), m44 + m42)
         _ = _bottom.normalize()
+
+        // top
+        _top = Plane(Vector3(m14 - m12, m24 - m22, m34 - m32), m44 - m42)
+        _ = _top.normalize()
     }
 
     /// Get whether or not a specified bounding box intersects with this frustum (Contains or Intersects).

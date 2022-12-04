@@ -28,8 +28,8 @@ float3 applyShadowNormalBias(float3 positionWS, float3 normalWS, float3 u_lightD
 
 vertex VertexOut vertex_shadowmap(const VertexIn in [[stage_in]],
                                   uint v_id [[vertex_id]],
-                                  constant CameraData &u_camera [[buffer(2)]],
-                                  constant RendererData &u_renderer [[buffer(3)]],
+                                  constant RendererData &u_renderer [[buffer(2)]],
+                                  constant matrix_float4x4 &u_lightViewProjMat [[buffer(3)]],
                                   constant float4 &u_tilingOffset [[buffer(4)]],
                                   constant float2 &u_shadowBias [[buffer(5)]],
                                   constant float3 &u_lightDirection [[buffer(6)]],
@@ -101,7 +101,7 @@ vertex VertexOut vertex_shadowmap(const VertexIn in [[stage_in]],
         positionWS.xyz = applyShadowNormalBias(positionWS.xyz, v_normal, u_lightDirection, u_shadowBias);
     }
     
-    out.position = u_camera.u_VPMat * positionWS;
+    out.position = u_lightViewProjMat * positionWS;
     out.position.z = max(out.position.z, -1.0);// clamp to min ndc z
     return out;
 }
