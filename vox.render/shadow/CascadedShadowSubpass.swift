@@ -114,6 +114,7 @@ class CascadedShadowSubpass: GeometrySubpass {
 
     private func _renderDirectShadowMap(_ encoder: inout RenderCommandEncoder) {
         let shadowCascades = _camera.scene.shadowCascades.rawValue
+        let bufferBlock = _camera.engine.requestBufferBlock(minimum_size: 4 * 256)
 
         let sunLightIndex = _camera.engine._lightManager._getSunLightIndex()
         if sunLightIndex != -1,
@@ -166,7 +167,7 @@ class CascadedShadowSubpass: GeometrySubpass {
                             outShadowMatrices: &_shadowMatrices
                     )
                 }
-                _updateSingleShadowCasterShaderData(&encoder, (light as! DirectLight), _shadowSliceData)
+                _updateSingleShadowCasterShaderData(bufferBlock, (light as! DirectLight), _shadowSliceData)
 
                 // upload pre-cascade infos.
                 let center = _shadowSliceData.splitBoundSphere.center
@@ -268,23 +269,24 @@ class CascadedShadowSubpass: GeometrySubpass {
         }
 
         let shaderData = scene.shaderData
-        shaderData.setData(CascadedShadowSubpass._shadowMatricesProperty, _shadowMatrices)
-        shaderData.setData(CascadedShadowSubpass._shadowInfosProperty, _shadowInfos)
-        shaderData.setData(CascadedShadowSubpass._shadowSplitSpheresProperty, _splitBoundSpheres)
-        shaderData.setData(CascadedShadowSubpass._shadowMapSize, _shadowMapSize)
+        shaderData.setDynamicData(CascadedShadowSubpass._shadowMatricesProperty, _shadowMatrices)
+        shaderData.setDynamicData(CascadedShadowSubpass._shadowInfosProperty, _shadowInfos)
+        shaderData.setDynamicData(CascadedShadowSubpass._shadowSplitSpheresProperty, _splitBoundSpheres)
+        shaderData.setDynamicData(CascadedShadowSubpass._shadowMapSize, _shadowMapSize)
     }
 
-    private func _updateSingleShadowCasterShaderData(_ encoder: inout RenderCommandEncoder,
+    private func _updateSingleShadowCasterShaderData(_ bufferBlock: BufferBlock,
                                                      _ light: DirectLight, _ shadowSliceData: ShadowSliceData) {
         let virtualCamera = shadowSliceData.virtualCamera
         let shadowBias = ShadowUtils.getShadowBias(light: light, projectionMatrix: virtualCamera.projectionMatrix, shadowResolution: _shadowTileResolution)
 
-        let sceneShaderData = _camera.scene.shaderData
-        sceneShaderData.setData(CascadedShadowSubpass._lightShadowBiasProperty, shadowBias)
-        sceneShaderData.setData(CascadedShadowSubpass._lightDirectionProperty, light.direction)
+        let shaderData = _camera.scene.shaderData
+        shaderData.setDynamicData(CascadedShadowSubpass._lightShadowBiasProperty, shadowBias)
+        shaderData.setDynamicData(CascadedShadowSubpass._lightDirectionProperty, light.direction)
 
-        encoder.handle.setVertexBytes(&shadowSliceData.virtualCamera.viewProjectionMatrix,
-                                      length: MemoryLayout<Matrix>.stride, index: 3)
+        let allocation = bufferBlock.allocate(MemoryLayout<Matrix>.size)!
+        allocation.update(shadowSliceData.virtualCamera.viewProjectionMatrix)
+        shaderData.setDynamicData(CascadedShadowSubpass._lightViewProjMatProperty, allocation)
     }
 
     func _getAvailableRenderTarget() {

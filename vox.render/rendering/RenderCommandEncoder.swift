@@ -43,6 +43,7 @@ public struct RenderCommandEncoder {
             camera.shaderData.bindData(handle, pso.uniformBlock, cache)
             _uploadCamera = camera
         }
+        camera.shaderData.bindDynamicData(handle, pso.uniformBlock, cache)
     }
 
     public mutating func bind(material: Material, _ pso: RenderPipelineState, _ cache: ResourceCache) {
@@ -53,6 +54,7 @@ public struct RenderCommandEncoder {
             material.shaderData.bindData(handle, pso.uniformBlock, cache)
             _uploadMaterial = material
         }
+        material.shaderData.bindDynamicData(handle, pso.uniformBlock, cache)
     }
 
     public mutating func bind(renderer: Renderer, _ pso: RenderPipelineState, _ cache: ResourceCache) {
@@ -63,6 +65,7 @@ public struct RenderCommandEncoder {
             renderer.shaderData.bindData(handle, pso.uniformBlock, cache)
             _uploadRenderer = renderer
         }
+        renderer.shaderData.bindDynamicData(handle, pso.uniformBlock, cache)
     }
 
     public mutating func bind(scene: Scene, _ pso: RenderPipelineState, _ cache: ResourceCache) {
@@ -73,6 +76,7 @@ public struct RenderCommandEncoder {
             scene.shaderData.bindData(handle, pso.uniformBlock, cache)
             _uploadScene = scene
         }
+        scene.shaderData.bindDynamicData(handle, pso.uniformBlock, cache)
     }
 
     public mutating func bind(mesh: Mesh) {

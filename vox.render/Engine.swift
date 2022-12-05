@@ -13,6 +13,7 @@ let logger = Logger(label: "com.arche.main")
 public class Engine: NSObject {
     // The max number of command buffers in flight
     let _maxFramesInFlight = 3
+    let _bufferPools: [BufferPool]
     let _commandQueue: MTLCommandQueue
     let _macroCollection: ShaderMacroCollection = ShaderMacroCollection()
     let _componentsManager: ComponentsManager = ComponentsManager()
@@ -135,7 +136,8 @@ public class Engine: NSObject {
         }
         _commandQueue = commandQueue
         _inFlightSemaphore = DispatchSemaphore(value: _maxFramesInFlight)
-
+        _bufferPools = [BufferPool](repeating: BufferPool(_device, 256), count: _maxFramesInFlight)
+        
         super.init()
         _ = createShaderLibrary("vox.shader")
         _physicsManager = PhysicsManager(engine: self)
@@ -180,7 +182,11 @@ public class Engine: NSObject {
             return createShaderLibrary(name)
         }
     }
-
+    
+    public func requestBufferBlock(minimum_size: Int) -> BufferBlock {
+        _bufferPools[_currentBufferIndex].requestBufferBlock(minimum_size: minimum_size)
+    }
+    
     /// Execution engine loop.
     public func run() {
         isPaused = false
@@ -192,7 +198,12 @@ public class Engine: NSObject {
         time.tick();
 
         if !_isPaused {
+            // Wait to ensure only maxFramesInFlight are getting processed by any stage in the Metal
+            //   pipeline (App, Metal, Drivers, GPU, etc)
+            _inFlightSemaphore.wait()
             _currentBufferIndex = (_currentBufferIndex + 1) % _maxFramesInFlight
+            _bufferPools[_currentBufferIndex].reset()
+            
             let scene = _sceneManager._activeScene
             let componentsManager = _componentsManager
             if (scene != nil) {
@@ -222,10 +233,6 @@ public class Engine: NSObject {
 
         let cameras = scene._activeCameras
         if (cameras.count > 0) {
-            // Wait to ensure only maxFramesInFlight are getting processed by any stage in the Metal
-            //   pipeline (App, Metal, Drivers, GPU, etc)
-            _inFlightSemaphore.wait()
-            
             if let commandBuffer = commandQueue.makeCommandBuffer(),
                let currentDrawable = canvas.currentDrawable {
                 // Add completion hander which signals inFlightSemaphore
