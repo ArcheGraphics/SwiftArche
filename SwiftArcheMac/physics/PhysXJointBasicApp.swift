@@ -117,9 +117,10 @@ class PhysXJointBasicApp: NSViewController {
         let _: ShootScript = cameraEntity.addComponent();
 
         let light = rootEntity.createChild("light")
-        light.transform.position = Vector3(1, 3, 0)
+        light.transform.position = Vector3(-10, 10, 10)
         light.transform.lookAt(targetPosition: Vector3())
-        let _: DirectLight = light.addComponent()
+        let directLight: DirectLight = light.addComponent()
+        directLight.shadowType = .SoftLow
 
         createChain(rootEntity, Vector3(8.0, 10.0, 0.0), Quaternion(), 10, 2.0)
         createSpring(rootEntity, Vector3(-4.0, 4.0, 1.0), Quaternion())

@@ -57,8 +57,8 @@ class PhysXAttractorApp: NSViewController {
         let planeEntity = rootEntity.createChild()
         planeEntity.layer = Layer.Layer1
 
-        let renderer: MeshRenderer = planeEntity.addComponent()
-        renderer.mesh = PrimitiveMesh.createPlane(rootEntity.engine, 10, 10)
+        // let renderer: MeshRenderer = planeEntity.addComponent()
+        // renderer.mesh = PrimitiveMesh.createPlane(rootEntity.engine, 10, 10)
         // renderer.setMaterial(mtl)
         planeEntity.transform.position = position
         planeEntity.transform.rotationQuaternion = rotation
@@ -150,16 +150,16 @@ class PhysXAttractorApp: NSViewController {
         light.transform.position = Vector3(5, 0, -10)
         light.transform.lookAt(targetPosition: Vector3(0, 0, 0))
         light.transform.lookAt(targetPosition: Vector3())
-        let _: DirectLight = light.addComponent()
-//        p.shadowType = ShadowType.SoftLow
+        let directLight: DirectLight = light.addComponent()
+        directLight.shadowType = ShadowType.SoftLow
 
         let attractorEntity = rootEntity.createChild()
         let interaction: Interaction = attractorEntity.addComponent()
         interaction.camera = camera
-        let mtl = PBRMaterial(engine)
-        mtl.baseColor = Color(1, 1, 1, 1.0)
-        let renderer: MeshRenderer = attractorEntity.addComponent()
-        renderer.mesh = PrimitiveMesh.createSphere(engine, 2)
+        // let mtl = PBRMaterial(engine)
+        // mtl.baseColor = Color(1, 1, 1, 1.0)
+        // let renderer: MeshRenderer = attractorEntity.addComponent()
+        // renderer.mesh = PrimitiveMesh.createSphere(engine, 2)
         // renderer.setMaterial(mtl)
 
         let attractorSphere = SphereColliderShape()

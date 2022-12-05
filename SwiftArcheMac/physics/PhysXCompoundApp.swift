@@ -135,6 +135,7 @@ class PhysXCompoundApp: NSViewController {
         let hdr = engine.textureLoader.loadHDR(with: "assets/kloppenheim_06_4k.hdr")!
         let cubeMap = createCubemap(engine, with: hdr, size: 256, level: 3)
         scene.ambientLight = loadAmbientLight(engine, withHDR: cubeMap)
+        scene.shadowDistance = 30
         let rootEntity = scene.createRootEntity()
 
         let cameraEntity = rootEntity.createChild()
@@ -144,9 +145,10 @@ class PhysXCompoundApp: NSViewController {
         let _: OrbitControl = cameraEntity.addComponent()
 
         let light = rootEntity.createChild("light")
-        light.transform.position = Vector3(1, 3, 0)
+        light.transform.position = Vector3(-0.3, 1, 0.4)
         light.transform.lookAt(targetPosition: Vector3())
-        let _: DirectLight = light.addComponent()
+        let directLight: DirectLight = light.addComponent()
+        directLight.shadowType = .SoftLow
 
         _ = addPlane(rootEntity, Vector2(30, 30), Vector3(), Quaternion())
         let _: TableGenerator = rootEntity.addComponent()

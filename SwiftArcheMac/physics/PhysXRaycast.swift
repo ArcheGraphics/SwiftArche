@@ -94,6 +94,8 @@ class PhysXRaycastApp: NSViewController {
         let hdr = engine.textureLoader.loadHDR(with: "assets/kloppenheim_06_4k.hdr")!
         let cubeMap = createCubemap(engine, with: hdr, size: 256, level: 3)
         scene.ambientLight = loadAmbientLight(engine, withHDR: cubeMap)
+        scene.shadowDistance = 50
+
         let rootEntity = scene.createRootEntity()
         let _: GeometryGenerator = rootEntity.addComponent()
 
@@ -105,10 +107,12 @@ class PhysXRaycastApp: NSViewController {
         let _: Raycast = cameraEntity.addComponent()
 
         let light = rootEntity.createChild("light")
-        light.transform.position = Vector3(1, 3, 0)
+        light.transform.position = Vector3(-0.3, 1, 0.4)
         light.transform.lookAt(targetPosition: Vector3())
-        let _: DirectLight = light.addComponent()
-
+        let directLight: DirectLight = light.addComponent()
+        directLight.shadowType = .SoftLow
+        directLight.shadowStrength = 1
+        
         initialize(rootEntity)
 
         engine.run()

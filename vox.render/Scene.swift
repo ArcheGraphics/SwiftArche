@@ -19,7 +19,7 @@ public class Scene: EngineObject {
     /// If cast shadows.
     public var castShadows: Bool = true
     /// The resolution of the shadow maps.
-    public var shadowResolution: ShadowResolution = ShadowResolution.Medium
+    public var shadowResolution: ShadowResolution = ShadowResolution.High
     /// The splits of two cascade distribution.
     public var shadowTwoCascadeSplits: Float = 1.0 / 3.0
     /// The splits of four cascade distribution.
