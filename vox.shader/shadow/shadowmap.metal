@@ -102,6 +102,7 @@ vertex VertexOut vertex_shadowmap(const VertexIn in [[stage_in]],
     }
     
     out.position = u_lightViewProjMat * positionWS;
-    out.position.z = max(out.position.z, -1.0);// clamp to min ndc z
+    out.position.z = out.position.z * 0.5 + 0.5; // map to [0, 1]
+    out.position.z = max(out.position.z, 0.0);// clamp to min ndc z
     return out;
 }

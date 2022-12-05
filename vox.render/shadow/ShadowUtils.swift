@@ -20,9 +20,10 @@ enum FrustumCorner: Int {
 }
 
 class ShadowUtils {
+    // negative bacause of y-flip
     private static var _shadowMapCoordMatrix: Matrix = Matrix(
             m11: 0.5, m12: 0.0, m13: 0.0, m14: 0.0,
-            m21: 0.0, m22: 0.5, m23: 0.0, m24: 0.0,
+            m21: 0.0, m22: -0.5, m23: 0.0, m24: 0.0,
             m31: 0.0, m32: 0.0, m33: 0.5, m34: 0.0,
             m41: 0.5, m42: 0.5, m43: 0.5, m44: 1.0
     )
@@ -113,7 +114,7 @@ class ShadowUtils {
     }
 
     static func shadowDepthFormat(_ value: ShadowResolution) -> MTLPixelFormat {
-        .depth16Unorm
+        .depth32Float
     }
 
     static func cullingRenderBounds(_ bounds: BoundingBox, _ cullPlaneCount: Int, _ cullPlanes: [Plane]) -> Bool {

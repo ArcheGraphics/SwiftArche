@@ -226,7 +226,6 @@ class CascadeShadowApp: NSViewController {
         planeRenderer.mesh = PrimitiveMesh.createPlane(engine, 10, 400)
         gui.planeRenderer = planeRenderer
 
-//        let planeMaterial = TransparentShadowMaterial(engine)
         let planeMaterial = PBRMaterial(engine)
         planeMaterial.baseColor = Color(1.0, 0.2, 0, 1.0)
         planeMaterial.roughness = 0.8
