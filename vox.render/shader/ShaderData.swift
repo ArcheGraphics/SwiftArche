@@ -7,7 +7,7 @@
 import Metal
 
 public class ShaderData {
-    private var _device: MTLDevice
+    private var _engine: Engine
     private var _shaderBuffers: [String: BufferView] = [:]
     private var _shaderBufferFunctors: [String: () -> BufferView] = [:]
     private var _imageViews: [String: MTLTexture] = [:]
@@ -15,8 +15,8 @@ public class ShaderData {
     static private var _defaultSamplerDesc: MTLSamplerDescriptor = MTLSamplerDescriptor()
     internal var _macroCollection = ShaderMacroCollection()
 
-    public init(_ device: MTLDevice) {
-        _device = device
+    public init(_ engine: Engine) {
+        _engine = engine
     }
 
     public func setBufferFunctor(_ property: String, _ functor: @escaping () -> BufferView) {
@@ -32,7 +32,7 @@ public class ShaderData {
             key == property
         }
         if value == nil {
-            _shaderBuffers[property] = BufferView(device: _device, array: [data])
+            _shaderBuffers[property] = BufferView(device: _engine.device, array: [data])
         } else {
             value!.value.assign(data)
         }
@@ -43,7 +43,7 @@ public class ShaderData {
             key == property
         }
         if value == nil {
-            _shaderBuffers[property] = BufferView(device: _device, array: data)
+            _shaderBuffers[property] = BufferView(device: _engine.device, array: data)
         } else {
             value!.value.assign(with: data)
         }

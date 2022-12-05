@@ -13,7 +13,7 @@ fileprivate class BakerMaterial: BaseMaterial {
     private var _texture: MTLTexture?
 
     init(_ engine: Engine) {
-        super.init(engine.device)
+        super.init(engine)
         let shaderPass = ShaderPass(engine.library("app.shader"), "vertex_cubemap", "fragment_cubemap")
         shaderPass.setRenderFace(.Double)
         shader.append(shaderPass)

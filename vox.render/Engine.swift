@@ -11,12 +11,16 @@ import Logging
 let logger = Logger(label: "com.arche.main")
 
 public class Engine: NSObject {
-    public let canvas: Canvas
+    // The max number of command buffers in flight
+    let _maxFramesInFlight = 3
     let _commandQueue: MTLCommandQueue
     let _macroCollection: ShaderMacroCollection = ShaderMacroCollection()
     let _componentsManager: ComponentsManager = ComponentsManager()
     let _lightManager = LightManager()
+    public let canvas: Canvas
 
+    // Current buffer index to fill with dynamic uniform data and set for the current frame
+    private var _currentBufferIndex: Int = 0
     private var _library: [String: MTLLibrary] = [:]
     private var _time: Time = Time();
     private var _settings: EngineSettings? = nil
@@ -30,9 +34,17 @@ public class Engine: NSObject {
     private var _guiManager: GUIManager!
 #endif
 
+    // The semaphore used to control GPU-CPU synchronization of frames.
+    private let _inFlightSemaphore: DispatchSemaphore
     private var _textureLoader: TextureLoader!
-
     private var _isPaused: Bool = true;
+    
+    /// buffer index
+    var currentBufferIndex: Int {
+        get {
+            _currentBufferIndex
+        }
+    }
 
     /// Settings of Engine.
     public var settings: EngineSettings? {
@@ -121,7 +133,8 @@ public class Engine: NSObject {
         guard let commandQueue = device.makeCommandQueue() else {
             fatalError("Unable to create default Metal Device")
         }
-        self._commandQueue = commandQueue
+        _commandQueue = commandQueue
+        _inFlightSemaphore = DispatchSemaphore(value: _maxFramesInFlight)
 
         super.init()
         _ = createShaderLibrary("vox.shader")
@@ -179,6 +192,7 @@ public class Engine: NSObject {
         time.tick();
 
         if !_isPaused {
+            _currentBufferIndex = (_currentBufferIndex + 1) % _maxFramesInFlight
             let scene = _sceneManager._activeScene
             let componentsManager = _componentsManager
             if (scene != nil) {
@@ -208,8 +222,19 @@ public class Engine: NSObject {
 
         let cameras = scene._activeCameras
         if (cameras.count > 0) {
+            // Wait to ensure only maxFramesInFlight are getting processed by any stage in the Metal
+            //   pipeline (App, Metal, Drivers, GPU, etc)
+            _inFlightSemaphore.wait()
+            
             if let commandBuffer = commandQueue.makeCommandBuffer(),
                let currentDrawable = canvas.currentDrawable {
+                // Add completion hander which signals inFlightSemaphore
+                // when Metal and the GPU has fully finished processing the commands encoded for this frame.
+                // This indicates when the dynamic buffers, written this frame, will no longer be needed by Metal and the GPU.
+                commandBuffer.addCompletedHandler { [weak self] _ in
+                    self?._inFlightSemaphore.signal()
+                }
+                
                 for camera in cameras {
                     _componentsManager.callCameraOnBeginRender(camera, commandBuffer)
                     camera.render(commandBuffer)

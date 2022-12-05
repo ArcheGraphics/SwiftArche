@@ -14,7 +14,7 @@ fileprivate class AtomicMaterial: BaseMaterial {
 
     init(_ engine: Engine) {
         _atomicBuffer = BufferView(device: engine.device, count: 1, stride: MemoryLayout<UInt32>.stride)
-        super.init(engine.device)
+        super.init(engine)
         atomicBuffer = _atomicBuffer
         shader.append(ShaderPass(engine.library("app.shader"), "vertex_atomic", "fragment_atomic"))
     }
@@ -55,7 +55,7 @@ class AtomicComputeApp: NSViewController {
         let material = AtomicMaterial(engine)
         renderer.setMaterial(material)
 
-        let atomicCounter = ComputePass(engine.device)
+        let atomicCounter = ComputePass(engine)
         atomicCounter.threadsPerGridX = 2
         atomicCounter.threadsPerGridY = 2
         atomicCounter.threadsPerGridZ = 2

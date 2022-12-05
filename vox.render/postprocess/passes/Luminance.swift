@@ -22,7 +22,7 @@ public class Luminance: ComputePass {
     init(_ scene: Scene) {
         let engine = scene.engine
         device = engine.device
-        super.init(device)
+        super.init(engine)
 
         let canvas = engine.canvas
         let flag = ListenerUpdateFlag()

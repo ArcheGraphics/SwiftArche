@@ -51,8 +51,8 @@ public class UnlitMaterial: BaseMaterial {
         }
     }
 
-    public init(_ engine: Engine, _ name: String = "") {
-        super.init(engine.device, name)
+    public override init(_ engine: Engine, _ name: String = "") {
+        super.init(engine, name)
         shader.append(ShaderPass(engine.library(), "vertex_unlit", "fragment_unlit"))
 
         shaderData.enableMacro(OMIT_NORMAL.rawValue)

@@ -24,8 +24,8 @@ open class ComputePass {
         }
     }
 
-    public init(_ device: MTLDevice) {
-        data.append(ShaderData(device))
+    public init(_ engine: Engine) {
+        data.append(ShaderData(engine))
     }
 
     /// Compute function

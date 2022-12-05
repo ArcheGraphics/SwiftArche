@@ -67,7 +67,7 @@ public class PostprocessManager {
         _shaderData = scene.shaderData
         _shaderData.setData("u_postprocess", _postprocessData)
 
-        postProcessPass = ComputePass(device)
+        postProcessPass = ComputePass(scene.engine)
         postProcessPass.resourceCache = _resourceCache
         postProcessPass.shader.append(ShaderPass(scene.engine.library(), "postprocess_merge"))
         postProcessPass.data.append(_shaderData)

@@ -176,8 +176,8 @@ fileprivate class CSSMVisualMaterial: BaseMaterial {
         }
     }
     
-    public init(_ engine: Engine, _ name: String = "") {
-        super.init(engine.device, name)
+    public override init(_ engine: Engine, _ name: String = "") {
+        super.init(engine, name)
         shader.append(ShaderPass(engine.library("app.shader"), "vertex_unlit", "shadowMap_visual"))
         shaderData.enableMacro(NEED_WORLDPOS.rawValue)
         shaderData.setData(CSSMVisualMaterial._baseColorProp, _baseColor)

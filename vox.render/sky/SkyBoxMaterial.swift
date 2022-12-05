@@ -41,9 +41,9 @@ public class SkyBoxMaterial: Material {
         }
     }
 
-    public init(_ engine: Engine, _ name: String = "") {
+    public override init(_ engine: Engine, _ name: String = "") {
         _library = engine.library()
-        super.init(engine.device, name)
+        super.init(engine, name)
         shader.append(ShaderPass(_library, "vertex_skybox", "fragment_skybox"))
     }
 }

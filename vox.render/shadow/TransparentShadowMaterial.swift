@@ -20,8 +20,8 @@ public class TransparentShadowMaterial: BaseMaterial {
         }
     }
     
-    public init(_ engine: Engine, _ name: String = "") {
-        super.init(engine.device, name)
+    public override init(_ engine: Engine, _ name: String = "") {
+        super.init(engine, name)
         shader.append(ShaderPass(engine.library(), "vertex_unlit_worldPos", "fragment_transparent_shadow"))
         isTransparent = true
         shaderData.enableMacro(NEED_WORLDPOS.rawValue)

@@ -212,7 +212,7 @@ public class Camera: Component {
         _isViewMatrixDirty = _transform.registerWorldChangeFlag()
         _isInvViewProjDirty = _transform.registerWorldChangeFlag()
         _frustumViewChangeFlag = _transform.registerWorldChangeFlag()
-        shaderData = ShaderData(entity.engine.device)
+        shaderData = ShaderData(entity.engine)
 
         super.init(entity)
         devicePipeline = DevicePipeline(self)

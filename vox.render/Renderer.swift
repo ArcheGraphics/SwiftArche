@@ -67,7 +67,7 @@ public class Renderer: Component {
     }
 
     public required init(_ entity: Entity) {
-        shaderData = ShaderData(entity.engine.device)
+        shaderData = ShaderData(entity.engine)
         super.init(entity)
         _registerEntityTransformListener()
         shaderData.enableMacro(NEED_RECEIVE_SHADOWS.rawValue)

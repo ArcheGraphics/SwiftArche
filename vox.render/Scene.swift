@@ -92,7 +92,7 @@ public class Scene: EngineObject {
     ///   - name: Name
     public init(_ engine: Engine, _ name: String = "") {
         self.name = name
-        shaderData = ShaderData(engine.device)
+        shaderData = ShaderData(engine)
         super.init(engine)
 
         ambientLight = AmbientLight();

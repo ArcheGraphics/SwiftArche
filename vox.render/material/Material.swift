@@ -24,8 +24,8 @@ open class Material {
     /// - Parameters:
     ///   - device: Metal Device
     ///   - name: Material name
-    public init(_ device: MTLDevice, _ name: String = "") {
-        shaderData = ShaderData(device)
+    public init(_ engine: Engine, _ name: String = "") {
+        shaderData = ShaderData(engine)
         self.name = name
     }
 }
