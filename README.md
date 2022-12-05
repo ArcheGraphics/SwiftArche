@@ -30,5 +30,9 @@ git submodule update
 
 1. ARKit integration
 2. PhysX
-3. Cascade Shadow
-4. Skinned Animation and Morph
+3. Cascade Stable ShadowMap
+4. PBR Rendering (roghness-metallic, clearcoat)
+4. HDR IBL Lighting
+5. Fog (Linear, Exponential, ExponentialSquared)
+6. ACES ToneMapping with auto luminance exposure
+7. Skinned Animation and Morph
