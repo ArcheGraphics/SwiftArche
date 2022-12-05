@@ -8,6 +8,18 @@ import Cocoa
 import vox_render
 import vox_math
 import vox_toolkit
+import ImGui
+
+fileprivate class GUI: Script {
+    override func onUpdate(_ deltaTime: Float) {
+        UIElement.Init(engine.canvas, deltaTime)
+
+        ImGuiNewFrame()
+        UIElement.frameRate()
+        ImGuiRender()
+    }
+}
+
 
 fileprivate class Attractor: Script {
     private var collider: DynamicCollider!
@@ -139,6 +151,7 @@ class PhysXAttractorApp: NSViewController {
         let cubeMap = createCubemap(engine, with: hdr, size: 256, level: 3)
         scene.ambientLight = loadAmbientLight(engine, withHDR: cubeMap)
         let rootEntity = scene.createRootEntity()
+        let _: GUI = rootEntity.addComponent()
 
         // init camera
         let cameraEntity = rootEntity.createChild("camera")

@@ -34,4 +34,11 @@ public class UIElement {
             ImGuiEndPopup()
         }
     }
+    
+    public static func frameRate() {
+        let io = ImGuiGetIO()!
+        let avg: Float = (1000.0 / io.pointee.Framerate)
+        let fps = io.pointee.Framerate
+        ImGuiTextV(String(format: "Application average %.3f ms/frame (%.1f FPS)", avg, fps))
+    }
 }

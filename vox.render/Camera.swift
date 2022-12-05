@@ -410,7 +410,7 @@ extension Camera {
         _cameraData.u_projMat = projectionMatrix.elements
         _cameraData.u_VPMat = (projectionMatrix * viewMatrix).elements
         _cameraData.u_cameraPos = _transform.worldPosition.internalValue
-        shaderData.setData(Camera._cameraProperty, _cameraData)
+        shaderData.setDynamicData(Camera._cameraProperty, _cameraData)
     }
 
     /// The inverse matrix of view projection matrix.

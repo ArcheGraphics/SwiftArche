@@ -174,7 +174,7 @@ public class Renderer: Component {
         var normalMatrix = Matrix.invert(a: worldMatrix)
         _rendererData.u_normalMat = normalMatrix.transpose().elements
 
-        shaderData.setData(Renderer._renderProperty, _rendererData)
+        shaderData.setDynamicData(Renderer._renderProperty, _rendererData)
     }
 
     func _registerEntityTransformListener() {
