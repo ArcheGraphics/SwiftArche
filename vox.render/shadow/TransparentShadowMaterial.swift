@@ -23,6 +23,7 @@ public class TransparentShadowMaterial: BaseMaterial {
     public init(_ engine: Engine, _ name: String = "") {
         super.init(engine.device, name)
         shader.append(ShaderPass(engine.library(), "vertex_unlit_worldPos", "fragment_transparent_shadow"))
+        isTransparent = true
         shaderData.enableMacro(NEED_WORLDPOS.rawValue)
         shaderData.setData(TransparentShadowMaterial._baseColorProp, _baseColor)
     }
