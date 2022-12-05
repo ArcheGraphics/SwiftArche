@@ -93,6 +93,8 @@ private:
     
     void initMaterial();
     
+    float computeFogIntensity(float fogDepth, FogData u_fog);
+    
 private:
     Geometry geometry;
     Material material;
@@ -164,4 +166,7 @@ public:
     sampler u_shadowMapSampler;
     float4 u_shadowMapSize;
     float3 u_shadowInfo;
+    
+    float3 v_positionVS;
+    FogData u_fog;
 };

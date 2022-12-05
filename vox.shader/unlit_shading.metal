@@ -13,6 +13,7 @@ using namespace metal;
 typedef struct {
     float4 position [[position]];
     float2 v_uv;
+    float3 v_positionVS [[function_constant(hasFog)]];
 } VertexOut;
 
 vertex VertexOut vertex_unlit(const VertexIn in [[stage_in]],
@@ -72,16 +73,37 @@ vertex VertexOut vertex_unlit(const VertexIn in [[stage_in]],
         out.v_uv = out.v_uv * u_tilingOffset.xy + u_tilingOffset.zw;
     }
     
+    // fog
+    if (hasFog) {
+        out.v_positionVS = (u_camera.u_viewMat * u_renderer.u_modelMat * position).xyz;
+    }
+    
     out.position = u_camera.u_VPMat * u_renderer.u_modelMat * position;
     
     return out;
+}
+
+float computeFogIntensity(float fogDepth, FogData u_fog) {
+    if (fogMode == 1) {
+        // (end-z) / (end-start) = z * (-1/(end-start)) + (end/(end-start))
+        return clamp(fogDepth * u_fog.params.x + u_fog.params.y, 0.0, 1.0);
+    } else if (fogMode == 2) {
+        // exp(-z * density) = exp2((-z * density)/ln(2)) = exp2(-z * density/ln(2))
+        return  clamp(exp2(-fogDepth * u_fog.params.z), 0.0, 1.0);
+    } else if (fogMode == 3) {
+        // exp(-(z * density)^2) = exp2(-(z * density)^2/ln(2)) = exp2(-(z * density/sprt(ln(2)))^2)
+        float factor = fogDepth * u_fog.params.w;
+        return clamp(exp2(-factor * factor), 0.0, 1.0);
+    }
+    return 1.0;
 }
 
 fragment float4 fragment_unlit(VertexOut in [[stage_in]],
                                constant float4 &u_baseColor [[buffer(0)]],
                                constant float &u_alphaCutoff [[buffer(1)]],
                                sampler u_baseSampler [[sampler(0), function_constant(hasBaseTexture)]],
-                               texture2d<float> u_baseTexture [[texture(0), function_constant(hasBaseTexture)]]) {
+                               texture2d<float> u_baseTexture [[texture(0), function_constant(hasBaseTexture)]],
+                               constant FogData &u_fog [[buffer(2), function_constant(hasFog)]]) {
     float4 baseColor = u_baseColor;
     
     if (hasBaseTexture) {
@@ -94,7 +116,10 @@ fragment float4 fragment_unlit(VertexOut in [[stage_in]],
         }
     }
     
+    if (hasFog) {
+        float fogIntensity = computeFogIntensity(length(in.v_positionVS), u_fog);
+        baseColor.rgb = mix(u_fog.color.rgb, baseColor.rgb, fogIntensity);
+    }
+    
     return baseColor;
 }
-
-

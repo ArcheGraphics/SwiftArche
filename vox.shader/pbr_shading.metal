@@ -366,6 +366,21 @@ void PBRShading::initMaterial(){
     material.opacity = baseColor.a;
 }
 
+float PBRShading::computeFogIntensity(float fogDepth, FogData u_fog) {
+    if (fogMode == 1) {
+        // (end-z) / (end-start) = z * (-1/(end-start)) + (end/(end-start))
+        return clamp(fogDepth * u_fog.params.x + u_fog.params.y, 0.0, 1.0);
+    } else if (fogMode == 2) {
+        // exp(-z * density) = exp2((-z * density)/ln(2)) = exp2(-z * density/ln(2))
+        return  clamp(exp2(-fogDepth * u_fog.params.z), 0.0, 1.0);
+    } else if (fogMode == 3) {
+        // exp(-(z * density)^2) = exp2(-(z * density)^2/ln(2)) = exp2(-(z * density/sprt(ln(2)))^2)
+        float factor = fogDepth * u_fog.params.w;
+        return clamp(exp2(-factor * factor), 0.0, 1.0);
+    }
+    return 1.0;
+}
+
 float4 PBRShading::execute() {
     initGeometry();
     initMaterial();
@@ -421,6 +436,11 @@ float4 PBRShading::execute() {
     reflectedLight.indirectSpecular +
     emissiveRadiance;
     
+    if (hasFog) {
+        float fogIntensity = computeFogIntensity(length(v_positionVS), u_fog);
+        totalRadiance.rgb = mix(u_fog.color.rgb, totalRadiance.rgb, fogIntensity);
+    }
+    
     return float4(totalRadiance, material.opacity);
 }
 
@@ -435,6 +455,7 @@ typedef struct {
     float3 tangentW [[function_constant(hasNormalAndHasTangentAndHasNormalTexture)]];
     float3 bitangentW [[function_constant(hasNormalAndHasTangentAndHasNormalTexture)]];
     float3 v_normal [[function_constant(hasNormalNotHasTangentOrHasNormalTexture)]];
+    float3 v_positionVS [[function_constant(hasFog)]];
 } VertexOut;
 
 vertex VertexOut vertex_pbr(const VertexIn in [[stage_in]],
@@ -554,6 +575,11 @@ vertex VertexOut vertex_pbr(const VertexIn in [[stage_in]],
         out.v_pos = temp_pos.xyz / temp_pos.w;
     }
     
+    // fog
+    if (hasFog) {
+        out.v_positionVS = (u_camera.u_viewMat * u_renderer.u_modelMat * position).xyz;
+    }
+    
     out.position = u_camera.u_VPMat * u_renderer.u_modelMat * position;
     
     return out;
@@ -603,6 +629,8 @@ fragment float4 fragment_pbr(VertexOut in [[stage_in]],
                              constant float3 &u_shadowInfo [[buffer(14), function_constant(needCalculateShadow)]],
                              depth2d<float> u_shadowTexture [[texture(11), function_constant(needCalculateShadow)]],
                              sampler u_shadowSampler [[sampler(11), function_constant(needCalculateShadow)]],
+                             // fog
+                             constant FogData &u_fog [[buffer(15), function_constant(hasFog)]],
                              bool is_front_face [[front_facing]]) {
     PBRShading shading;
     
@@ -724,5 +752,11 @@ fragment float4 fragment_pbr(VertexOut in [[stage_in]],
     if (needWorldPos) {
         shading.view_pos = in.v_pos;
     }
+    
+    if (hasFog) {
+        shading.v_positionVS = in.v_positionVS;
+        shading.u_fog = u_fog;
+    }
+    
     return shading.execute();
 }

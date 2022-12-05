@@ -8,7 +8,7 @@ import Metal
 import vox_math
 
 public class Scene: EngineObject {
-    private static let _fogProperty = "u_Fog"
+    private static let _fogProperty = "u_fog"
 
     /// Scene name.
     public var name: String
