@@ -133,6 +133,7 @@ class CascadedShadowSubpass: GeometrySubpass {
             let lightUp = Vector3(lightWorld.elements.columns.1[0], lightWorld.elements.columns.1[1], lightWorld.elements.columns.1[2])
             let lightForward = Vector3(-lightWorld.elements.columns.2[0], -lightWorld.elements.columns.2[1], -lightWorld.elements.columns.2[2])
             var cameraWorldForward = _camera.entity.transform.worldForward
+            _shadowSliceData.virtualCamera.forward = lightForward
 
             for j in 0..<shadowCascades {
                 ShadowUtils.getBoundSphereByFrustum(
