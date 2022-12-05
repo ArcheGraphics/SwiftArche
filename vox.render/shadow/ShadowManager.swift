@@ -22,6 +22,8 @@ public class ShadowManager {
         _renderPass.addSubpass(_cascadedShadowSubpass)
 
         _shadowSampler.compareFunction = .less
+        _shadowSampler.minFilter = .linear
+        _shadowSampler.magFilter = .linear
         _shadowSampler.rAddressMode = .clampToEdge
         _shadowSampler.sAddressMode = .clampToEdge
         _shadowSampler.tAddressMode = .clampToEdge

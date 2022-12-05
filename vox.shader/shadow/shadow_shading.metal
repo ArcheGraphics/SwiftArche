@@ -158,10 +158,10 @@ float ShadowShading::sampleShadowMapFiltered4(float3 shadowCoord) {
     float3 shadowCoord1 = shadowCoord + float3(offset.x,-offset.y,0.0);
     float3 shadowCoord2 = shadowCoord + float3(-offset.x,offset.y,0.0);
     float3 shadowCoord3 = shadowCoord + float3(offset,0.0);
-    attenuation4.x = u_shadowMap.sample_compare(u_shadowMapSampler, shadowCoord0.xy, shadowCoord0.z);
-    attenuation4.y = u_shadowMap.sample_compare(u_shadowMapSampler, shadowCoord1.xy, shadowCoord1.z);
-    attenuation4.z = u_shadowMap.sample_compare(u_shadowMapSampler, shadowCoord2.xy, shadowCoord2.z);
-    attenuation4.w = u_shadowMap.sample_compare(u_shadowMapSampler, shadowCoord3.xy, shadowCoord3.z);
+    attenuation4.x = u_shadowMap.gather_compare(u_shadowMapSampler, shadowCoord0.xy, shadowCoord0.z).r;
+    attenuation4.y = u_shadowMap.gather_compare(u_shadowMapSampler, shadowCoord1.xy, shadowCoord1.z).r;
+    attenuation4.z = u_shadowMap.gather_compare(u_shadowMapSampler, shadowCoord2.xy, shadowCoord2.z).r;
+    attenuation4.w = u_shadowMap.gather_compare(u_shadowMapSampler, shadowCoord3.xy, shadowCoord3.z).r;
     attenuation = dot(attenuation4, float4(0.25));
     return attenuation;
 }
@@ -171,15 +171,15 @@ float ShadowShading::sampleShadowMapFiltered9(float3 shadowCoord) {
     float fetchesWeights[9];
     float2 fetchesUV[9];
     sampleShadowComputeSamplesTent5x5(u_shadowMapSize, shadowCoord.xy, fetchesWeights, fetchesUV);
-    attenuation = fetchesWeights[0] * u_shadowMap.sample_compare(u_shadowMapSampler, fetchesUV[0].xy, shadowCoord.z);
-    attenuation += fetchesWeights[1] * u_shadowMap.sample_compare(u_shadowMapSampler, fetchesUV[1].xy, shadowCoord.z);
-    attenuation += fetchesWeights[2] * u_shadowMap.sample_compare(u_shadowMapSampler, fetchesUV[2].xy, shadowCoord.z);
-    attenuation += fetchesWeights[3] * u_shadowMap.sample_compare(u_shadowMapSampler, fetchesUV[3].xy, shadowCoord.z);
-    attenuation += fetchesWeights[4] * u_shadowMap.sample_compare(u_shadowMapSampler, fetchesUV[4].xy, shadowCoord.z);
-    attenuation += fetchesWeights[5] * u_shadowMap.sample_compare(u_shadowMapSampler, fetchesUV[5].xy, shadowCoord.z);
-    attenuation += fetchesWeights[6] * u_shadowMap.sample_compare(u_shadowMapSampler, fetchesUV[6].xy, shadowCoord.z);
-    attenuation += fetchesWeights[7] * u_shadowMap.sample_compare(u_shadowMapSampler, fetchesUV[7].xy, shadowCoord.z);
-    attenuation += fetchesWeights[8] * u_shadowMap.sample_compare(u_shadowMapSampler, fetchesUV[8].xy, shadowCoord.z);
+    attenuation = fetchesWeights[0] * u_shadowMap.gather_compare(u_shadowMapSampler, fetchesUV[0].xy, shadowCoord.z).r;
+    attenuation += fetchesWeights[1] * u_shadowMap.gather_compare(u_shadowMapSampler, fetchesUV[1].xy, shadowCoord.z).r;
+    attenuation += fetchesWeights[2] * u_shadowMap.gather_compare(u_shadowMapSampler, fetchesUV[2].xy, shadowCoord.z).r;
+    attenuation += fetchesWeights[3] * u_shadowMap.gather_compare(u_shadowMapSampler, fetchesUV[3].xy, shadowCoord.z).r;
+    attenuation += fetchesWeights[4] * u_shadowMap.gather_compare(u_shadowMapSampler, fetchesUV[4].xy, shadowCoord.z).r;
+    attenuation += fetchesWeights[5] * u_shadowMap.gather_compare(u_shadowMapSampler, fetchesUV[5].xy, shadowCoord.z).r;
+    attenuation += fetchesWeights[6] * u_shadowMap.gather_compare(u_shadowMapSampler, fetchesUV[6].xy, shadowCoord.z).r;
+    attenuation += fetchesWeights[7] * u_shadowMap.gather_compare(u_shadowMapSampler, fetchesUV[7].xy, shadowCoord.z).r;
+    attenuation += fetchesWeights[8] * u_shadowMap.gather_compare(u_shadowMapSampler, fetchesUV[8].xy, shadowCoord.z).r;
     return attenuation;
 }
 
@@ -188,7 +188,7 @@ float ShadowShading::sampleShadowMap() {
     float attenuation = 1.0;
     if(shadowCoord.z > 0.0 && shadowCoord.z < 1.0) {
         if (shadowMode == 1) {
-            attenuation = u_shadowMap.sample_compare(u_shadowMapSampler, shadowCoord.xy, shadowCoord.z);
+            attenuation = u_shadowMap.gather_compare(u_shadowMapSampler, shadowCoord.xy, shadowCoord.z).r;
         }
         
         if (shadowMode == 2) {

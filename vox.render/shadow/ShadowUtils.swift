@@ -24,8 +24,8 @@ class ShadowUtils {
     private static var _shadowMapCoordMatrix: Matrix = Matrix(
             m11: 0.5, m12: 0.0, m13: 0.0, m14: 0.0,
             m21: 0.0, m22: -0.5, m23: 0.0, m24: 0.0,
-            m31: 0.0, m32: 0.0, m33: 0.5, m34: 0.0,
-            m41: 0.5, m42: 0.5, m43: 0.5, m44: 1.0
+            m31: 0.0, m32: 0.0, m33: 1.0, m34: 0.0,
+            m41: 0.5, m42: 0.5, m43: 0.0, m44: 1.0
     )
     private static var _frustumCorners: [Vector3] = [Vector3](repeating: Vector3(), count: 8)
     private static var _backPlaneFaces: [FrustumFace] = [FrustumFace](repeating: .Near, count: 5)

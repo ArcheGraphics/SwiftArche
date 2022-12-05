@@ -199,7 +199,7 @@ class CascadeShadowApp: NSViewController {
         scene.ambientLight = loadAmbientLight(engine, withHDR: cubeMap)
 
         scene.shadowResolution = ShadowResolution.High
-        scene.shadowDistance = 1000
+        scene.shadowDistance = 300
         scene.shadowCascades = ShadowCascadesMode.FourCascades
 
         let rootEntity = scene.createRootEntity()

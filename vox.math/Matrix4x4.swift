@@ -298,12 +298,12 @@ extension Matrix {
 
                 m31: 0,
                 m32: 0,
-                m33: 2 * nf,
+                m33: nf,
                 m34: 0,
 
                 m41: (left + right) * lr,
                 m42: (top + bottom) * bt,
-                m43: (far + near) * nf,
+                m43: near * nf,
                 m44: 1)
     }
 

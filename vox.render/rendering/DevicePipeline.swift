@@ -37,8 +37,11 @@ public class DevicePipeline {
         _changeBackground(background)
 
         let canvas = camera.engine.canvas
+        let scene = camera.scene
         if let renderPassDescriptor = canvas.currentRenderPassDescriptor {
-            shadowManager.draw(commandBuffer)
+            if (scene.castShadows && scene._sunLight?.shadowType != ShadowType.None) {
+                shadowManager.draw(commandBuffer)
+            }
 
             if background.mode == BackgroundMode.SolidColor {
                 let color = background.solidColor.toLinear()
