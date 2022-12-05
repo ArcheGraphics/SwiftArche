@@ -266,15 +266,17 @@ class ShadowUtils {
         let upLen = ceil(Vector3.dot(left: center, right: lightUp) * sizeUnit) * radiusUnit
         let sideLen = ceil(Vector3.dot(left: center, right: lightSide) * sizeUnit) * radiusUnit
         let forwardLen = Vector3.dot(left: center, right: lightForward)
-        let newCenter = Vector3(lightUp.x * upLen + lightSide.x * sideLen + lightForward.x * forwardLen,
-                lightUp.y * upLen + lightSide.y * sideLen + lightForward.y * forwardLen,
-                lightUp.z * upLen + lightSide.z * sideLen + lightForward.z * forwardLen)
+        let newCenter = Vector3(
+            lightUp.x * upLen + lightSide.x * sideLen + lightForward.x * forwardLen,
+            lightUp.y * upLen + lightSide.y * sideLen + lightForward.y * forwardLen,
+            lightUp.z * upLen + lightSide.z * sideLen + lightForward.z * forwardLen
+        )
         shadowSliceData.splitBoundSphere = BoundingSphere(newCenter, radius)
 
         // Direction light use shadow pancaking tech,do special dispose with nearPlane.
         let virtualCamera = shadowSliceData.virtualCamera
-        virtualCamera.position = center - lightForward * (radius + nearPlane)
-        virtualCamera.viewMatrix = Matrix.lookAt(eye: virtualCamera.position, target: center, up: lightUp)
+        virtualCamera.position = newCenter - lightForward * (radius + nearPlane)
+        virtualCamera.viewMatrix = Matrix.lookAt(eye: virtualCamera.position, target: newCenter, up: lightUp)
         virtualCamera.projectionMatrix = Matrix.ortho(
                 left: -borderRadius,
                 right: borderRadius,
@@ -357,6 +359,6 @@ class ShadowUtils {
         slice.columns.3[2] = 0
         slice.columns.3[3] = 1
 
-        outShadowMatrices[cascadeIndex] *= slice
+        outShadowMatrices[cascadeIndex] = slice * outShadowMatrices[cascadeIndex]
     }
 }

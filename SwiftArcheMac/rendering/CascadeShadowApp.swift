@@ -110,7 +110,7 @@ fileprivate class GUI: Script {
 
     private var shadowFourCascadeSplitRatioY: Float {
         get {
-            scene.shadowFourCascadeSplits.z
+            scene.shadowFourCascadeSplits.y
         }
         set {
             scene.shadowFourCascadeSplits = Vector3(scene.shadowFourCascadeSplits.x, newValue, scene.shadowFourCascadeSplits.z)
