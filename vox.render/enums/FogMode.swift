@@ -9,11 +9,11 @@ import Foundation
 /// Fog Mode.
 public enum FogMode: Int {
   /// Disable fog.
-  case None
+  case None = 0
   /// Linear fog.
-  case Linear
+  case Linear = 1
   /// Exponential fog.
-  case Exponential
+  case Exponential = 2
   /// Exponential squared fog.
-  case ExponentialSquared
+  case ExponentialSquared = 3
 }

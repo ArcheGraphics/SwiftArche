@@ -12,14 +12,17 @@ import ModelIO
 import ImGui
 
 fileprivate class GUI: Script {
+    private var fogMode: Int {
+        get {
+            scene.fogMode.rawValue
+        }
+        set {
+            scene.fogMode = FogMode(rawValue: newValue)!
+        }
+    }
+    
     override func onUpdate(_ deltaTime: Float) {
-        let view = engine.canvas
-        let io = ImGuiGetIO()!
-        io.pointee.DisplaySize.x = Float(view.bounds.size.width)
-        io.pointee.DisplaySize.y = Float(view.bounds.size.height)
-        let frameBufferScale = Float(view.window?.screen?.backingScaleFactor ?? NSScreen.main!.backingScaleFactor)
-        io.pointee.DisplayFramebufferScale = ImVec2(x: frameBufferScale, y: frameBufferScale)
-        io.pointee.DeltaTime = deltaTime
+        UIElement.Init(engine.canvas, deltaTime)
 
         let postprocess = scene.postprocessManager
         ImGuiNewFrame()
@@ -29,6 +32,10 @@ fileprivate class GUI: Script {
         } else {
             ImGuiSliderFloat("Manual Exposure", &scene.postprocessManager.manualExposure, 0.0, 1.0, nil, 1)
         }
+        UIElement.selection("Fog Mode", ["None", "Linear", "Exponential", "ExponentialSquared"], &fogMode)
+        ImGuiSliderFloat("Fog Distance", &scene.fogDensity, 0.0, 1.0, nil, 1)
+        ImGuiSliderFloat("Fog Start", &scene.fogStart, 0.0, 1.0, nil, 1)
+        ImGuiSliderFloat("Fog End", &scene.fogEnd, 0.0, 1.0, nil, 1)
         // Rendering
         ImGuiRender()
     }
