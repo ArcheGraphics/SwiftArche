@@ -78,4 +78,6 @@ DeclBoolMacro(hasCascadeShadowMap, CASCADED_SHADOW_MAP)
 DeclIntMacro(shadowMode, SHADOW_MODE)
 constant bool needCalculateShadow = hasCascadeShadowMap && needReceiveShadow;
 
+DeclBoolMacro(fogMode, FOG_MODE)
+
 DeclBoolMacro(isAutoExposure, IS_AUTO_EXPOSURE)

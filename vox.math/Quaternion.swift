@@ -370,7 +370,9 @@ extension Quaternion {
     /// Converts this quaternion into a unit quaternion.
     /// - Returns: This quaternion
     public mutating func normalize() -> Quaternion {
-        self = Quaternion.normalize(left: self)
+        if simd_length(elements) > Float.leastNonzeroMagnitude {
+            self = Quaternion.normalize(left: self)
+        }
         return self
     }
 

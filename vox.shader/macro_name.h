@@ -63,6 +63,9 @@ typedef enum {
     CASCADED_SHADOW_MAP =                65501,
     SHADOW_MODE =                        65500,
     
+    // Fog
+    FOG_MODE =                           65499,
+    
     // Postprocess
-    IS_AUTO_EXPOSURE =                   65499
+    IS_AUTO_EXPOSURE =                   65498
 } MacroName;

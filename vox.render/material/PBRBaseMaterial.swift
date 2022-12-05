@@ -40,7 +40,7 @@ public class PBRBaseMaterial: BaseMaterial {
     /// Base color.
     public var baseColor: Color {
         get {
-            Color(_pbrBaseData.baseColor)
+            Color(_pbrBaseData.baseColor).toGamma()
         }
 
         set {
@@ -104,7 +104,7 @@ public class PBRBaseMaterial: BaseMaterial {
     /// Emissive color.
     public var emissiveColor: Color {
         get {
-            Color(_pbrBaseData.emissiveColor, 1.0)
+            Color(_pbrBaseData.emissiveColor, 1.0).toGamma()
         }
 
         set {

@@ -278,7 +278,9 @@ extension Vector2 {
     /// Converts this vector into a unit vector.
     /// - Returns: This vector
     public mutating func normalize() -> Vector2 {
-        elements = simd_normalize(elements)
+        if simd_length(elements) > Float.leastNonzeroMagnitude {
+            elements = simd_normalize(elements)
+        }
         return self
     }
 

@@ -52,7 +52,7 @@ public class AmbientLight {
     /// - Remark: Effective when diffuse reflection mode is `DiffuseMode.SolidColor`.
     public var diffuseSolidColor: Color {
         get {
-            Color(_envMapLight.diffuse, 1.0)
+            Color(_envMapLight.diffuse, 1.0).toGamma()
         }
         set {
             _envMapLight.diffuse = newValue.toLinear().rgb

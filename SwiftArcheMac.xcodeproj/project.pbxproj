@@ -43,6 +43,7 @@
 		040F1E29293C865E008BDC8D /* UIElement.swift in Sources */ = {isa = PBXBuildFile; fileRef = 040F1E28293C865E008BDC8D /* UIElement.swift */; };
 		04462F21293324A300F95387 /* Textures.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 04462F20293324A200F95387 /* Textures.xcassets */; };
 		3E6D2F01293E13DF00B63F73 /* BufferPool.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E6D2F00293E13DF00B63F73 /* BufferPool.swift */; };
+		3E6D2F03293E336500B63F73 /* FogMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E6D2F02293E336500B63F73 /* FogMode.swift */; };
 		3EB32B032932299A0019A4F3 /* Logging in Frameworks */ = {isa = PBXBuildFile; productRef = 3EB32B022932299A0019A4F3 /* Logging */; };
 		3EB32B7529322DB30019A4F3 /* PrimitiveApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EB32B7429322DB30019A4F3 /* PrimitiveApp.swift */; };
 		3EB32B7F29322E850019A4F3 /* libvox.math.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3EC037382932125F002187DC /* libvox.math.a */; };
@@ -529,6 +530,7 @@
 		040F1E28293C865E008BDC8D /* UIElement.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIElement.swift; sourceTree = "<group>"; };
 		04462F20293324A200F95387 /* Textures.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Textures.xcassets; sourceTree = SOURCE_ROOT; };
 		3E6D2F00293E13DF00B63F73 /* BufferPool.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BufferPool.swift; sourceTree = "<group>"; };
+		3E6D2F02293E336500B63F73 /* FogMode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FogMode.swift; sourceTree = "<group>"; };
 		3EB32B7429322DB30019A4F3 /* PrimitiveApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrimitiveApp.swift; sourceTree = "<group>"; };
 		3EB32B832932303A0019A4F3 /* libc++abi.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libc++abi.tbd"; path = "usr/lib/libc++abi.tbd"; sourceTree = SDKROOT; };
 		3EB32B842932303A0019A4F3 /* libc++.1.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libc++.1.tbd"; path = "usr/lib/libc++.1.tbd"; sourceTree = SDKROOT; };
@@ -1479,6 +1481,7 @@
 			children = (
 				3EC0399E293218E9002187DC /* CameraClearFlags.swift */,
 				3EC0399F293218E9002187DC /* ColorSpace.swift */,
+				3E6D2F02293E336500B63F73 /* FogMode.swift */,
 			);
 			path = enums;
 			sourceTree = "<group>";
@@ -2624,6 +2627,7 @@
 				3EC03998293218DA002187DC /* AmbientLight.swift in Sources */,
 				3EC038DE29321845002187DC /* Joint.swift in Sources */,
 				3EC0399A293218DA002187DC /* SpotLight.swift in Sources */,
+				3E6D2F03293E336500B63F73 /* FogMode.swift in Sources */,
 				3EC038E529321845002187DC /* HingeJoint.swift in Sources */,
 				3EC0398D293218CB002187DC /* Material.swift in Sources */,
 				3EC038E029321845002187DC /* PhysXTranslationalJoint.swift in Sources */,

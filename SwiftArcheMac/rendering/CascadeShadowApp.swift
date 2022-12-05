@@ -168,7 +168,7 @@ fileprivate class CSSMVisualMaterial: BaseMaterial {
     /// Base color.
     public var baseColor: Color {
         get {
-            _baseColor
+            _baseColor.toGamma()
         }
         set {
             _baseColor = newValue

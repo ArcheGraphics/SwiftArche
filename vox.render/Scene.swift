@@ -8,6 +8,8 @@ import Metal
 import vox_math
 
 public class Scene: EngineObject {
+    private static let _fogProperty = "u_Fog"
+
     /// Scene name.
     public var name: String
 
@@ -36,6 +38,11 @@ public class Scene: EngineObject {
     private var _shadowCascades: ShadowCascadesMode = ShadowCascadesMode.NoCascades
     private var _ambientLight: AmbientLight!
     private var _postprocessManager: PostprocessManager!
+    private var _fogMode: FogMode = FogMode.None
+    private var _fogStart: Float = 0
+    private var _fogEnd: Float = 300
+    private var _fogDensity: Float = 0.01
+    private var _fogData = FogData(color: vector_float4(0.5, 0.5, 0.5, 1.0), params: vector_float4())
 
     /// Get the post-process manager.
     public var postprocessManager: PostprocessManager {
@@ -43,7 +50,7 @@ public class Scene: EngineObject {
             _postprocessManager
         }
     }
-    
+
     /// Number of cascades to use for directional light shadows.
     public var shadowCascades: ShadowCascadesMode {
         get {
@@ -72,6 +79,74 @@ public class Scene: EngineObject {
         }
     }
 
+    /// Fog mode.
+    /// - Remarks:
+    /// If set to `FogMode.None`, the fog will be disabled.
+    /// If set to `FogMode.Linear`, the fog will be linear and controlled by `fogStart` and `fogEnd`.
+    /// If set to `FogMode.Exponential`, the fog will be exponential and controlled by `fogDensity`.
+    /// If set to `FogMode.ExponentialSquared`, the fog will be exponential squared and controlled by `fogDensity`.
+    public var fogMode: FogMode {
+        get {
+            _fogMode
+        }
+        set {
+            if (_fogMode != newValue) {
+                shaderData.enableMacro(FOG_MODE.rawValue, (newValue.rawValue, .int))
+                _fogMode = newValue
+            }
+        }
+    }
+
+    /// Fog color.
+    public var fogColor: Color {
+        get {
+            Color(_fogData.color).toGamma()
+        }
+        set {
+            _fogData.color = newValue.toLinear().internalValue
+            shaderData.setData(Scene._fogProperty, _fogData)
+        }
+    }
+
+    /// Fog start.
+    public var fogStart: Float {
+        get {
+            _fogStart
+        }
+        set {
+            if (_fogStart != newValue) {
+                _computeLinearFogParams(newValue, _fogEnd)
+                _fogStart = newValue
+            }
+        }
+    }
+
+    /// Fog end.
+    public var fogEnd: Float {
+        get {
+            _fogEnd
+        }
+        set {
+            if (_fogEnd != newValue) {
+                _computeLinearFogParams(_fogStart, newValue)
+                _fogEnd = newValue
+            }
+        }
+    }
+
+    /// Fog density.
+    public var fogDensity: Float {
+        get {
+            _fogDensity
+        }
+        set {
+            if (_fogDensity != newValue) {
+                _computeExponentialFogParams(newValue)
+                _fogDensity = newValue
+            }
+        }
+    }
+
     /// Count of root entities.
     public var rootEntitiesCount: Int {
         get {
@@ -95,10 +170,14 @@ public class Scene: EngineObject {
         shaderData = ShaderData(engine)
         super.init(engine)
 
-        ambientLight = AmbientLight();
+        ambientLight = AmbientLight()
         _postprocessManager = PostprocessManager(self)
         engine.sceneManager._allScenes.append(self)
-        shaderData.enableMacro(CASCADED_COUNT.rawValue, (shadowCascades.rawValue, .int));
+
+        shaderData.enableMacro(FOG_MODE.rawValue, (_fogMode.rawValue, .int))
+        shaderData.enableMacro(CASCADED_COUNT.rawValue, (shadowCascades.rawValue, .int))
+        _computeLinearFogParams(_fogStart, _fogEnd)
+        _computeExponentialFogParams(_fogDensity)
     }
 
     deinit {
@@ -286,7 +365,7 @@ extension Scene {
             }
         }
     }
-    
+
     func postprocess(_ commandBuffer: MTLCommandBuffer) {
         _postprocessManager.render(commandBuffer)
     }
@@ -342,6 +421,19 @@ extension Scene {
                 _rootEntities[i]._siblingIndex = _rootEntities[i]._siblingIndex + 1
             }
         }
+    }
+
+    private func _computeLinearFogParams(_ fogStart: Float, _ fogEnd: Float) {
+        let fogRange = fogEnd - fogStart
+        _fogData.params.x = -1 / fogRange
+        _fogData.params.y = fogEnd / fogRange
+        shaderData.setData(Scene._fogProperty, _fogData)
+    }
+
+    private func _computeExponentialFogParams(_ density: Float) {
+        _fogData.params.z = density / log(2)
+        _fogData.params.w = density / sqrt(log(2))
+        shaderData.setData(Scene._fogProperty, _fogData)
     }
 }
 

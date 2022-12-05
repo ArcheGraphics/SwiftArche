@@ -99,3 +99,8 @@ struct PostprocessData {
     float manualExposureValue;
     float exposureKey;
 };
+
+struct FogData {
+    vector_float4 color;
+    vector_float4 params;
+};

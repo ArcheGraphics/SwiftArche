@@ -4,7 +4,7 @@
 //  personal capacity and am not conveying any rights to any intellectual
 //  property of any third parties.
 
-import Foundation
+import simd
 
 /// Represents a plane in three dimensional space.
 public struct Plane {

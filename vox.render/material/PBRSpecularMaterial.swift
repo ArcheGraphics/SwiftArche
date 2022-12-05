@@ -18,7 +18,7 @@ public class PBRSpecularMaterial: PBRBaseMaterial {
     /// Specular color.
     public var specularColor: Color {
         get {
-            Color(_pbrSpecularData.specularColor, 1.0)
+            Color(_pbrSpecularData.specularColor, 1.0).toGamma()
         }
 
         set {
