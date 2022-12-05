@@ -10,7 +10,6 @@ public class ShaderData {
     private var _device: MTLDevice
     private var _shaderBuffers: [String: BufferView] = [:]
     private var _shaderBufferFunctors: [String: () -> BufferView] = [:]
-    private var _shaderBufferPools: [String: BufferAllocation] = [:]
     private var _imageViews: [String: MTLTexture] = [:]
     private var _samplers: [String: MTLSamplerDescriptor] = [:]
     static private var _defaultSamplerDesc: MTLSamplerDescriptor = MTLSamplerDescriptor()
@@ -22,10 +21,6 @@ public class ShaderData {
 
     public func setBufferFunctor(_ property: String, _ functor: @escaping () -> BufferView) {
         _shaderBufferFunctors[property] = functor
-    }
-
-    public func setData(_ property: String, _ value: BufferAllocation) {
-        _shaderBufferPools[property] = value
     }
 
     public func setData(_ property: String, _ value: BufferView) {
@@ -126,29 +121,21 @@ extension ShaderData {
         for uniform in reflectionUniforms {
             switch uniform.bindingType {
             case .buffer:
-                let buffer = _shaderBuffers[uniform.name]
-                if buffer != nil {
-                    commandEncoder.setBuffer(buffer!.buffer, offset: 0, index: uniform.location)
+                if let buffer = _shaderBuffers[uniform.name] {
+                    commandEncoder.setBuffer(buffer.buffer, offset: 0, index: uniform.location)
                 }
-                let bufferPool = _shaderBufferPools[uniform.name]
-                if bufferPool != nil {
-                    commandEncoder.setBuffer(bufferPool!.buffer, offset: bufferPool!.offset, index: uniform.location)
-                }
-                let bufferFunctor = _shaderBufferFunctors[uniform.name]
-                if bufferFunctor != nil {
-                    commandEncoder.setBuffer(bufferFunctor!().buffer, offset: 0, index: uniform.location)
+                if let bufferFunctor = _shaderBufferFunctors[uniform.name] {
+                    commandEncoder.setBuffer(bufferFunctor().buffer, offset: 0, index: uniform.location)
                 }
                 break
             case .texture:
-                let image = _imageViews[uniform.name]
-                if image != nil {
-                    commandEncoder.setTexture(image!, index: uniform.location)
+                if let image = _imageViews[uniform.name] {
+                    commandEncoder.setTexture(image, index: uniform.location)
                 }
                 break
             case .sampler:
-                let sampler = _samplers[uniform.name]
-                if sampler != nil {
-                    commandEncoder.setSamplerState(resourceCache.requestSamplers(sampler!), index: uniform.location)
+                if let sampler = _samplers[uniform.name] {
+                    commandEncoder.setSamplerState(resourceCache.requestSamplers(sampler), index: uniform.location)
                 }
                 break
             default:
@@ -163,53 +150,40 @@ extension ShaderData {
         for uniform in reflectionUniforms {
             switch uniform.bindingType {
             case .buffer:
-                let buffer = _shaderBuffers[uniform.name]
-                if buffer != nil {
+                if let buffer = _shaderBuffers[uniform.name] {
                     if uniform.functionType == .vertex {
-                        commandEncoder.setVertexBuffer(buffer!.buffer, offset: 0, index: uniform.location)
+                        commandEncoder.setVertexBuffer(buffer.buffer, offset: 0, index: uniform.location)
                     }
                     if uniform.functionType == .fragment {
-                        commandEncoder.setFragmentBuffer(buffer!.buffer, offset: 0, index: uniform.location)
+                        commandEncoder.setFragmentBuffer(buffer.buffer, offset: 0, index: uniform.location)
                     }
                 }
-                let bufferPool = _shaderBufferPools[uniform.name]
-                if bufferPool != nil {
+                if let bufferFunctor = _shaderBufferFunctors[uniform.name] {
                     if uniform.functionType == .vertex {
-                        commandEncoder.setVertexBuffer(bufferPool!.buffer, offset: bufferPool!.offset, index: uniform.location)
+                        commandEncoder.setVertexBuffer(bufferFunctor().buffer, offset: 0, index: uniform.location)
                     }
                     if uniform.functionType == .fragment {
-                        commandEncoder.setFragmentBuffer(bufferPool!.buffer, offset: bufferPool!.offset, index: uniform.location)
-                    }
-                }
-                let bufferFunctor = _shaderBufferFunctors[uniform.name]
-                if bufferFunctor != nil {
-                    if uniform.functionType == .vertex {
-                        commandEncoder.setVertexBuffer(bufferFunctor!().buffer, offset: 0, index: uniform.location)
-                    }
-                    if uniform.functionType == .fragment {
-                        commandEncoder.setFragmentBuffer(bufferFunctor!().buffer, offset: 0, index: uniform.location)
+                        commandEncoder.setFragmentBuffer(bufferFunctor().buffer, offset: 0, index: uniform.location)
                     }
                 }
                 break
             case .texture:
-                let image = _imageViews[uniform.name]
-                if image != nil {
+                if let image = _imageViews[uniform.name] {
                     if uniform.functionType == .vertex {
-                        commandEncoder.setVertexTexture(image!, index: uniform.location)
+                        commandEncoder.setVertexTexture(image, index: uniform.location)
                     }
                     if uniform.functionType == .fragment {
-                        commandEncoder.setFragmentTexture(image!, index: uniform.location)
+                        commandEncoder.setFragmentTexture(image, index: uniform.location)
                     }
                 }
                 break
             case .sampler:
-                let sampler = _samplers[uniform.name]
-                if sampler != nil {
+                if let sampler = _samplers[uniform.name] {
                     if uniform.functionType == .vertex {
-                        commandEncoder.setVertexSamplerState(resourceCache.requestSamplers(sampler!), index: uniform.location)
+                        commandEncoder.setVertexSamplerState(resourceCache.requestSamplers(sampler), index: uniform.location)
                     }
                     if uniform.functionType == .fragment {
-                        commandEncoder.setFragmentSamplerState(resourceCache.requestSamplers(sampler!), index: uniform.location)
+                        commandEncoder.setFragmentSamplerState(resourceCache.requestSamplers(sampler), index: uniform.location)
                     }
                 }
                 break

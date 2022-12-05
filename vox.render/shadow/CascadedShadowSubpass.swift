@@ -38,14 +38,12 @@ class CascadedShadowSubpass: GeometrySubpass {
     private var _shadowMatrices = [simd_float4x4](repeating: simd_float4x4(), count: CascadedShadowSubpass._maxCascades + 1)
     // strength, null, lightIndex
     private var _shadowInfos = SIMD3<Float>()
-    private var _bufferPool: BufferPool
     var _depthTexture: MTLTexture!
     private var _viewportOffsets: [Vector2] = [Vector2](repeatElement(Vector2(), count: 4))
 
     init(_ camera: Camera) {
         _camera = camera
         _shaderPass = ShaderPass(camera.engine.library(), "vertex_shadowmap", nil)
-        _bufferPool = BufferPool(camera.engine.device, 256 * 4)
         _shadowSliceData.virtualCamera.isOrthographic = true
         super.init()
     }
@@ -56,7 +54,6 @@ class CascadedShadowSubpass: GeometrySubpass {
     }
 
     override func drawElement(_ encoder: inout RenderCommandEncoder) {
-        _bufferPool.reset()
         _existShadowMap = false
         _renderDirectShadowMap(&encoder)
 
@@ -117,7 +114,6 @@ class CascadedShadowSubpass: GeometrySubpass {
 
     private func _renderDirectShadowMap(_ encoder: inout RenderCommandEncoder) {
         let shadowCascades = _camera.scene.shadowCascades.rawValue
-        let bufferBlock = _bufferPool.requestBufferBlock(minimum_size: 4 * MemoryLayout<Matrix>.size)
 
         let sunLightIndex = _camera.engine._lightManager._getSunLightIndex()
         if sunLightIndex != -1,
@@ -170,7 +166,7 @@ class CascadedShadowSubpass: GeometrySubpass {
                             outShadowMatrices: &_shadowMatrices
                     )
                 }
-                _updateSingleShadowCasterShaderData(bufferBlock, (light as! DirectLight), _shadowSliceData)
+                _updateSingleShadowCasterShaderData(&encoder, (light as! DirectLight), _shadowSliceData)
 
                 // upload pre-cascade infos.
                 let center = _shadowSliceData.splitBoundSphere.center
@@ -278,7 +274,8 @@ class CascadedShadowSubpass: GeometrySubpass {
         shaderData.setData(CascadedShadowSubpass._shadowMapSize, _shadowMapSize)
     }
 
-    private func _updateSingleShadowCasterShaderData(_ bufferBlock: BufferBlock, _ light: DirectLight, _ shadowSliceData: ShadowSliceData) {
+    private func _updateSingleShadowCasterShaderData(_ encoder: inout RenderCommandEncoder,
+                                                     _ light: DirectLight, _ shadowSliceData: ShadowSliceData) {
         let virtualCamera = shadowSliceData.virtualCamera
         let shadowBias = ShadowUtils.getShadowBias(light: light, projectionMatrix: virtualCamera.projectionMatrix, shadowResolution: _shadowTileResolution)
 
@@ -286,9 +283,8 @@ class CascadedShadowSubpass: GeometrySubpass {
         sceneShaderData.setData(CascadedShadowSubpass._lightShadowBiasProperty, shadowBias)
         sceneShaderData.setData(CascadedShadowSubpass._lightDirectionProperty, light.direction)
 
-        let allocation = bufferBlock.allocate(MemoryLayout<Matrix>.size)!
-        allocation.update(shadowSliceData.virtualCamera.viewProjectionMatrix)
-        sceneShaderData.setData(CascadedShadowSubpass._lightViewProjMatProperty, allocation)
+        encoder.handle.setVertexBytes(&shadowSliceData.virtualCamera.viewProjectionMatrix,
+                                      length: MemoryLayout<Matrix>.stride, index: 3)
     }
 
     func _getAvailableRenderTarget() {

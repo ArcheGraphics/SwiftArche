@@ -297,7 +297,6 @@
 		3EC03979293218C3002187DC /* IndexBufferBinding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EC0396C293218C3002187DC /* IndexBufferBinding.swift */; };
 		3EC0397A293218C3002187DC /* Mesh.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EC0396D293218C3002187DC /* Mesh.swift */; };
 		3EC0397B293218C3002187DC /* SubMesh.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EC0396E293218C3002187DC /* SubMesh.swift */; };
-		3EC0397C293218C3002187DC /* BufferPool.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EC0396F293218C3002187DC /* BufferPool.swift */; };
 		3EC0397D293218C3002187DC /* ModelMesh.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EC03970293218C3002187DC /* ModelMesh.swift */; };
 		3EC0397E293218C3002187DC /* BlendShapeFrame.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EC03971293218C3002187DC /* BlendShapeFrame.swift */; };
 		3EC0397F293218C3002187DC /* SkinnedMeshRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EC03972293218C3002187DC /* SkinnedMeshRenderer.swift */; };
@@ -798,7 +797,6 @@
 		3EC0396C293218C3002187DC /* IndexBufferBinding.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IndexBufferBinding.swift; sourceTree = "<group>"; };
 		3EC0396D293218C3002187DC /* Mesh.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Mesh.swift; sourceTree = "<group>"; };
 		3EC0396E293218C3002187DC /* SubMesh.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SubMesh.swift; sourceTree = "<group>"; };
-		3EC0396F293218C3002187DC /* BufferPool.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BufferPool.swift; sourceTree = "<group>"; };
 		3EC03970293218C3002187DC /* ModelMesh.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ModelMesh.swift; sourceTree = "<group>"; };
 		3EC03971293218C3002187DC /* BlendShapeFrame.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BlendShapeFrame.swift; sourceTree = "<group>"; };
 		3EC03972293218C3002187DC /* SkinnedMeshRenderer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SkinnedMeshRenderer.swift; sourceTree = "<group>"; };
@@ -1514,7 +1512,6 @@
 		3EC0386B29321707002187DC /* mesh */ = {
 			isa = PBXGroup;
 			children = (
-				3EC0396F293218C3002187DC /* BufferPool.swift */,
 				3EC03973293218C3002187DC /* BufferView.swift */,
 				3EC0396C293218C3002187DC /* IndexBufferBinding.swift */,
 				3EC0396E293218C3002187DC /* SubMesh.swift */,
@@ -2536,7 +2533,6 @@
 				3EC039332932188D002187DC /* CascadedShadowSubpass.swift in Sources */,
 				3EC038B329321835002187DC /* Collider.swift in Sources */,
 				3EC039CF29321903002187DC /* AnimatorStatePlayData.swift in Sources */,
-				3EC0397C293218C3002187DC /* BufferPool.swift in Sources */,
 				3EC03988293218CB002187DC /* PBRMaterial.swift in Sources */,
 				3EC0393929321893002187DC /* ShadowType.swift in Sources */,
 				3EC038EF2932184C002187DC /* PhysicsMaterialCombineMode.swift in Sources */,
