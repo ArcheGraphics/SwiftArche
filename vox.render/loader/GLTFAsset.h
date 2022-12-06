@@ -530,3 +530,23 @@ GLTFKIT2_EXPORT
 @end
 
 NS_ASSUME_NONNULL_END
+
+//MARK: -
+extern NSData *_Nullable GLTFLineIndexDataForLineLoopIndexData(NSData *_Nonnull lineLoopIndexData,
+        int lineLoopIndexCount, int bytesPerIndex);
+
+extern NSData *_Nullable GLTFLineIndexDataForLineStripIndexData(NSData *_Nonnull lineStripIndexData,
+        int lineStripIndexCount,
+        int bytesPerIndex);
+
+extern NSData *_Nullable GLTFTrianglesIndexDataForTriangleFanIndexData(NSData *_Nonnull triangleFanIndexData,
+        int triangleFanIndexCount,
+        int bytesPerIndex);
+
+extern NSData *_Nullable GLTFPackedUInt16DataFromPackedUInt8(UInt8 *_Nonnull bytes, size_t count);
+
+extern NSData *_Nullable GLTFSCNPackedDataForAccessor(GLTFAccessor *_Nonnull accessor);
+
+extern NSArray<NSNumber *> *_Nullable GLTFKeyTimeArrayForAccessor(GLTFAccessor *_Nonnull accessor, NSTimeInterval maxKeyTime);
+
+extern NSArray<NSArray<NSNumber *> *> *_Nullable GLTFWeightsArraysForAccessor(GLTFAccessor *_Nonnull accessor, NSUInteger targetCount);

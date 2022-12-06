@@ -23,9 +23,10 @@ struct GLTFInfo {
 }
 
 class LoaderGUI: Script {
-    var currentItem: Int = 0
+    var currentItem: Int = -1
     let gltfInfo = [
         GLTFInfo("Box", "glb", "glTF-Sample-Models/2.0/Box/glTF-Binary"),
+        GLTFInfo("BoxInterleaved", "glb", "glTF-Sample-Models/2.0/BoxInterleaved/glTF-Binary"),
     ]
 
     private var loaderItem: Int {

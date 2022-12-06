@@ -33,11 +33,18 @@ class MeshParser: Parser {
 
                 // load position
                 var vertexCount: Int = 0
+                var bufferFloat3: [Float] = []
                 if let accessor: GLTFAccessor = gltfPrimitive.attributes["POSITION"] {
                     vertexCount = accessor.count
-                    var position = [Vector3](repeating: Vector3(), count: vertexCount)
-                    GLTFUtil.convert(accessor, out: &position)
+                    bufferFloat3 = [Float](repeating: 0, count: vertexCount * 3)
+                    var position: [Vector3] = []
+                    position.reserveCapacity(vertexCount)
+                    GLTFUtil.convert(accessor, out: &bufferFloat3)
+                    for i in 0..<vertexCount {
+                        position.append(Vector3(bufferFloat3[i * 3], bufferFloat3[i * 3 + 1], bufferFloat3[i * 3 + 2]))
+                    }
                     mesh.setPositions(positions: position)
+                    
                     if accessor.minValues.count == 3 && accessor.maxValues.count == 3 {
                         mesh.bounds = BoundingBox(Vector3(
                                 Float(truncating: accessor.minValues[0]),
@@ -65,8 +72,12 @@ class MeshParser: Parser {
                     }
                     switch accessor.key {
                     case "NORMAL":
-                        var normal = [Vector3](repeating: Vector3(), count: vertexCount)
-                        GLTFUtil.convert(accessor.value, out: &normal)
+                        var normal: [Vector3] = []
+                        normal.reserveCapacity(vertexCount)
+                        GLTFUtil.convert(accessor.value, out: &bufferFloat3)
+                        for i in 0..<vertexCount {
+                            normal.append(Vector3(bufferFloat3[i * 3], bufferFloat3[i * 3 + 1], bufferFloat3[i * 3 + 2]))
+                        }
                         mesh.setNormals(normals: normal)
                         break
                     case "TEXCOORD_0":

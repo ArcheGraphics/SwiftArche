@@ -11,10 +11,8 @@ class GLTFUtil {
         let bytesPerComponent = GLTFBytesPerComponentForComponentType(accessor.componentType)
         let componentCount = GLTFComponentCountForDimension(accessor.dimension)
         let elementSize = Int(bytesPerComponent * componentCount)
-        if let bufferView = accessor.bufferView,
-           let data = bufferView.buffer.data {
-            let offset = accessor.offset + bufferView.offset
-            (data as NSData).getBytes(&out, range: NSRange(location: offset, length: elementSize * accessor.count))
+        if let data = GLTFSCNPackedDataForAccessor(accessor) {
+            (data as NSData).getBytes(&out, range: NSRange(location: 0, length: elementSize * accessor.count))
         }
     }
 }

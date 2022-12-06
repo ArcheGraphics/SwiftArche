@@ -190,7 +190,6 @@ public class PrimitiveMesh {
 
         var indices = [UInt32](repeating: 0, count: 36)
 
-        // prettier-ignore
         // Up
         indices[0] = 0
         indices[1] = 2

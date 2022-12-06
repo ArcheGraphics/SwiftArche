@@ -36,7 +36,8 @@ class GltfLoaderApp: NSViewController {
         light.transform.lookAt(targetPosition: Vector3())
         let _: DirectLight = light.addComponent()
 
-        let _: LoaderGUI = rootEntity.addComponent()
+        let gltfRoot = rootEntity.createChild()
+        let _: LoaderGUI = gltfRoot.addComponent()
         engine.run()
     }
 }

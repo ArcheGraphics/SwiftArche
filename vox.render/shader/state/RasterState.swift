@@ -9,7 +9,7 @@ import Metal
 /// Raster state.
 public class RasterState {
     /// Specifies whether or not front- and/or back-facing polygons can be culled.
-    public var cullMode: MTLCullMode = .front
+    public var cullMode: MTLCullMode = .back
     /// A constant bias applied to all fragments.
     public var depthBias: Float = 0
     /// A bias that scales with the depth gradient of the primitive.
@@ -22,9 +22,9 @@ public class RasterState {
         renderEncoder.setCullMode(cullMode)
 
         if frontFaceInvert {
-            renderEncoder.setFrontFacing(.counterClockwise)
-        } else {
             renderEncoder.setFrontFacing(.clockwise)
+        } else {
+            renderEncoder.setFrontFacing(.counterClockwise)
         }
 
         if (depthBias != 0 || depthSlopeScale != 0 || depthClamp != 0) {

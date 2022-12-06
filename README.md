@@ -32,7 +32,15 @@ git submodule update
 2. PhysX
 3. Cascade Stable ShadowMap
 4. PBR Rendering (roghness-metallic, clearcoat)
-4. HDR IBL Lighting
+4. HDR IBL Lighting and baker (pure compute shader)
 5. Fog (Linear, Exponential, ExponentialSquared)
 6. ACES ToneMapping with auto luminance exposure
 7. Skinned Animation and Morph
+
+## Assets
+In order to speed up the speed of git clone, assets are not introduced in the way of submodule. 
+Since this project mainly builds and tests on the Mac, and then develops on the iOS platform, 
+a series of assets are required for Mac testing:
+1. [glTF-Sample-Models](https://github.com/KhronosGroup/glTF-Sample-Models)
+2. [other assets](https://github.com/ArcheGraphics/assets)
+Please downloads these files and copy into the folder.

@@ -651,3 +651,198 @@ NSData *GLTFCreateImageDataFromDataURI(NSString *uriData) {
 }
 
 @end
+
+// MARK: - Helpers
+NSData *GLTFLineIndexDataForLineLoopIndexData(NSData *_Nonnull lineLoopIndexData,
+        int lineLoopIndexCount,
+        int bytesPerIndex) {
+    if (lineLoopIndexCount < 2) {
+        return nil;
+    }
+
+    int lineIndexCount = 2 * lineLoopIndexCount;
+    size_t bufferSize = lineIndexCount * bytesPerIndex;
+    unsigned char *lineIndices = malloc(bufferSize);
+    unsigned char *lineIndicesCursor = lineIndices;
+    unsigned char *lineLoopIndices = (unsigned char *) lineLoopIndexData.bytes;
+
+    // Create a line from the last index element to the first index element.
+    int lastLineIndexOffset = (lineIndexCount - 1) * bytesPerIndex;
+    memcpy(lineIndicesCursor, lineLoopIndices, bytesPerIndex);
+    memcpy(lineIndicesCursor + lastLineIndexOffset, lineLoopIndices, bytesPerIndex);
+    lineIndicesCursor += bytesPerIndex;
+
+    // Duplicate indices in-between to fill in the loop.
+    for (int i = 1; i < lineLoopIndexCount; ++i) {
+        memcpy(lineIndicesCursor, lineLoopIndices + (i * bytesPerIndex), bytesPerIndex);
+        lineIndicesCursor += bytesPerIndex;
+        memcpy(lineIndicesCursor, lineLoopIndices + (i * bytesPerIndex), bytesPerIndex);
+        lineIndicesCursor += bytesPerIndex;
+    }
+
+    return [NSData dataWithBytesNoCopy:lineIndices
+                                length:bufferSize
+                          freeWhenDone:YES];
+}
+
+NSData *GLTFLineIndexDataForLineStripIndexData(NSData *_Nonnull lineStripIndexData,
+        int lineStripIndexCount,
+        int bytesPerIndex) {
+    if (lineStripIndexCount < 2) {
+        return nil;
+    }
+
+    int lineIndexCount = 2 * (lineStripIndexCount - 1);
+    size_t bufferSize = lineIndexCount * bytesPerIndex;
+    unsigned char *lineIndices = malloc(bufferSize);
+    unsigned char *lineIndicesCursor = lineIndices;
+    unsigned char *lineStripIndices = (unsigned char *) lineStripIndexData.bytes;
+
+    // Place the first and last indices.
+    int lastLineIndexOffset = (lineIndexCount - 1) * bytesPerIndex;
+    int lastLineStripIndexOffset = (lineStripIndexCount - 1) * bytesPerIndex;
+    memcpy(lineIndicesCursor, lineStripIndices, bytesPerIndex);
+    memcpy(lineIndicesCursor + lastLineIndexOffset,
+            lineStripIndices + lastLineStripIndexOffset,
+            bytesPerIndex);
+    lineIndicesCursor += bytesPerIndex;
+
+    // Duplicate all indices in-between.
+    for (int i = 1; i < lineStripIndexCount; ++i) {
+        memcpy(lineIndicesCursor, lineStripIndices + (i * bytesPerIndex), bytesPerIndex);
+        lineIndicesCursor += bytesPerIndex;
+        memcpy(lineIndicesCursor, lineStripIndices + (i * bytesPerIndex), bytesPerIndex);
+        lineIndicesCursor += bytesPerIndex;
+    }
+
+    return [NSData dataWithBytesNoCopy:lineIndices
+                                length:bufferSize
+                          freeWhenDone:YES];
+}
+
+NSData *GLTFTrianglesIndexDataForTriangleFanIndexData(NSData *_Nonnull triangleFanIndexData,
+        int triangleFanIndexCount,
+        int bytesPerIndex) {
+    if (triangleFanIndexCount < 3) {
+        return nil;
+    }
+
+    int trianglesIndexCount = 3 * (triangleFanIndexCount - 2);
+    size_t bufferSize = trianglesIndexCount * bytesPerIndex;
+    unsigned char *trianglesIndices = malloc(bufferSize);
+    unsigned char *trianglesIndicesCursor = trianglesIndices;
+    unsigned char *triangleFanIndices = (unsigned char *) triangleFanIndexData.bytes;
+
+    for (int i = 1; i < triangleFanIndexCount; ++i) {
+        memcpy(trianglesIndicesCursor, triangleFanIndices, bytesPerIndex);
+        trianglesIndicesCursor += bytesPerIndex;
+        memcpy(trianglesIndicesCursor, triangleFanIndices + (i * bytesPerIndex), 2 * bytesPerIndex);
+        trianglesIndicesCursor += 2 * bytesPerIndex;
+    }
+
+    return [NSData dataWithBytesNoCopy:trianglesIndices
+                                length:bufferSize
+                          freeWhenDone:YES];
+}
+
+NSData *GLTFPackedUInt16DataFromPackedUInt8(UInt8 *bytes, size_t count) {
+    size_t bufferSize = sizeof(UInt16) * count;
+    UInt16 *shorts = malloc(bufferSize);
+    // This is begging to be parallelized. Can this be done with Accelerate?
+    for (int i = 0; i < count; ++i) {
+        shorts[i] = (UInt16) bytes[i];
+    }
+    return [NSData dataWithBytesNoCopy:shorts length:bufferSize freeWhenDone:YES];
+}
+
+NSData *GLTFSCNPackedDataForAccessor(GLTFAccessor *accessor) {
+    GLTFBufferView *bufferView = accessor.bufferView;
+    GLTFBuffer *buffer = bufferView.buffer;
+    size_t bytesPerComponent = GLTFBytesPerComponentForComponentType(accessor.componentType);
+    size_t componentCount = GLTFComponentCountForDimension(accessor.dimension);
+    size_t elementSize = bytesPerComponent * componentCount;
+    size_t bufferLength = elementSize * accessor.count;
+    void *bytes = malloc(bufferLength);
+    if (bufferView != nil) {
+        void *bufferViewBaseAddr = (void *) buffer.data.bytes + bufferView.offset;
+        if (bufferView.stride == 0 || bufferView.stride == elementSize) {
+            // Fast path
+            memcpy(bytes, bufferViewBaseAddr + accessor.offset, accessor.count * elementSize);
+        } else {
+            // Slow path, element by element
+            size_t sourceStride = bufferView.stride ?: elementSize;
+            for (int i = 0; i < accessor.count; ++i) {
+                void *src = bufferViewBaseAddr + (i * sourceStride) + accessor.offset;
+                void *dest = bytes + (i * elementSize);
+                memcpy(dest, src, elementSize);
+            }
+        }
+    } else {
+        // 3.6.2.3. Sparse Accessors
+        // When accessor.bufferView is undefined, the sparse accessor is initialized as
+        // an array of zeros of size (size of the accessor element) * (accessor.count) bytes.
+        // https://www.khronos.org/registry/glTF/specs/2.0/glTF-2.0.html#sparse-accessors
+        memset(bytes, 0, bufferLength);
+    }
+    if (accessor.sparse) {
+        assert(accessor.sparse.indexComponentType == GLTFComponentTypeUnsignedShort ||
+                accessor.sparse.indexComponentType == GLTFComponentTypeUnsignedInt);
+        const void *baseSparseIndexBufferViewPtr = accessor.sparse.indices.buffer.data.bytes +
+                accessor.sparse.indices.offset;
+        const void *baseSparseIndexAccessorPtr = baseSparseIndexBufferViewPtr + accessor.sparse.indexOffset;
+
+        const void *baseValueBufferViewPtr = accessor.sparse.values.buffer.data.bytes + accessor.sparse.values.offset;
+        const void *baseSrcPtr = baseValueBufferViewPtr + accessor.sparse.valueOffset;
+        const size_t srcValueStride = accessor.sparse.values.stride ?: elementSize;
+
+        void *baseDestPtr = bytes;
+
+        if (accessor.sparse.indexComponentType == GLTFComponentTypeUnsignedShort) {
+            const UInt16 *sparseIndices = (UInt16 *) baseSparseIndexAccessorPtr;
+            for (int i = 0; i < accessor.sparse.count; ++i) {
+                UInt16 sparseIndex = sparseIndices[i];
+                memcpy(baseDestPtr + sparseIndex * elementSize, baseSrcPtr + (i * srcValueStride), elementSize);
+            }
+        } else if (accessor.sparse.indexComponentType == GLTFComponentTypeUnsignedInt) {
+            const UInt32 *sparseIndices = (UInt32 *) baseSparseIndexAccessorPtr;
+            for (int i = 0; i < accessor.sparse.count; ++i) {
+                UInt32 sparseIndex = sparseIndices[i];
+                memcpy(baseDestPtr + sparseIndex * elementSize, baseSrcPtr + (i * srcValueStride), elementSize);
+            }
+        }
+    }
+    return [NSData dataWithBytesNoCopy:bytes length:bufferLength freeWhenDone:YES];
+}
+
+NSArray<NSNumber *> *GLTFKeyTimeArrayForAccessor(GLTFAccessor *accessor, NSTimeInterval maxKeyTime) {
+    // TODO: This is actually not assured by the spec. We should convert from normalized int types when necessary
+    assert(accessor.componentType == GLTFComponentTypeFloat);
+    assert(accessor.dimension == GLTFValueDimensionScalar);
+    NSMutableArray *values = [NSMutableArray arrayWithCapacity:accessor.count];
+    const void *bufferViewBaseAddr = accessor.bufferView.buffer.data.bytes + accessor.bufferView.offset;
+    float scale = (maxKeyTime > 0) ? (1.0f / maxKeyTime) : 1.0f;
+    for (int i = 0; i < accessor.count; ++i) {
+        const float *x = bufferViewBaseAddr + (i * (accessor.bufferView.stride ?: sizeof(float))) + accessor.offset;
+        NSNumber *value = @(x[0] * scale);
+        [values addObject:value];
+    }
+    return values;
+}
+
+NSArray<NSArray<NSNumber *> *> *GLTFWeightsArraysForAccessor(GLTFAccessor *accessor, NSUInteger targetCount) {
+    assert(accessor.componentType == GLTFComponentTypeFloat);
+    assert(accessor.dimension == GLTFValueDimensionScalar);
+    size_t keyframeCount = accessor.count / targetCount;
+    NSMutableArray<NSMutableArray *> *weights = [NSMutableArray arrayWithCapacity:keyframeCount];
+    for (int t = 0; t < targetCount; ++t) {
+        [weights addObject:[NSMutableArray arrayWithCapacity:targetCount]];
+    }
+    const void *bufferViewBaseAddr = accessor.bufferView.buffer.data.bytes + accessor.bufferView.offset;
+    const float *values = (float *) (bufferViewBaseAddr + accessor.offset);
+    for (int k = 0; k < keyframeCount; ++k) {
+        for (int t = 0; t < targetCount; ++t) {
+            [weights[t] addObject:@(values[k * targetCount + t])];
+        }
+    }
+    return weights;
+}

@@ -85,7 +85,8 @@ public class SkySubpass: Subpass {
         encoder.bind(material: material, _pso, pipeline._resourceCache)
         encoder.bind(mesh: mesh)
         encoder.handle.setDepthStencilState(_depthStencilState)
-        encoder.handle.setFrontFacing(.counterClockwise)
+        encoder.handle.setFrontFacing(.clockwise)
+        encoder.handle.setCullMode(.back)
         encoder.draw(subMesh: mesh.subMesh!, with: mesh)
 
         encoder.handle.popDebugGroup()

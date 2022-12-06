@@ -582,7 +582,7 @@ fragment float4 fragment_pbr(VertexOut in [[stage_in]],
                              bool is_front_face [[front_facing]]) {
     PBRShading shading;
     
-    shading.normalShading.isFrontFacing = !is_front_face;
+    shading.normalShading.isFrontFacing = is_front_face;
     if (needWorldPos) {
         shading.normalShading.v_pos = in.v_pos;
     }
