@@ -8,31 +8,31 @@ import Metal
 
 /// Product after GLTF parser, usually, `defaultSceneRoot` is only needed to use.
 public class GLTFResource {
-    var engine: Engine!
+    public var engine: Engine!
     /** GLTF file url. */
-    var url: URL!
+    public var url: URL!
     /** GLTF file content. */
-    var gltf: GLTFAsset!
+    public var gltf: GLTFAsset!
     /** Oasis Texture2D after TextureParser. */
-    var textures: [MTLTexture]?
+    public var textures: [MTLTexture]?
     /** Oasis Sampler after TextureParser. */
-    var samplers: [MTLSamplerDescriptor]?
+    public var samplers: [MTLSamplerDescriptor]?
     /** Oasis Material after MaterialParser. */
-    var materials: [Material]?
+    public var materials: [Material]?
     /** Oasis ModelMesh after MeshParser. */
-    var meshes: [[ModelMesh]]?
+    public var meshes: [[ModelMesh]]?
     /** Oasis Skin after SkinParser. */
-    var skins: [Skin]?
+    public var skins: [Skin]?
     /** Oasis AnimationClip after AnimationParser. */
-    var animations: [AnimationClip]?
+    public var animations: [AnimationClip]?
     /** Oasis Entity after EntityParser. */
-    var entities: [Entity]!
+    public var entities: [Entity]!
     /** Oasis Camera after SceneParser. */
-    var cameras: [Camera]?
+    public var cameras: [Camera]?
     /** GLTF can export lights in extension KHR_lights_punctual */
-    var lights: [Light]?
+    public var lights: [Light]?
     /** Oasis RootEntities after SceneParser. */
-    var sceneRoots: [Entity]!
+    public var sceneRoots: [Entity]!
     /** Oasis RootEntity after SceneParser. */
-    var defaultSceneRoot: Entity!
+    public var defaultSceneRoot: Entity!
 }
