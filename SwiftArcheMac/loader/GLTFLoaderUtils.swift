@@ -33,13 +33,15 @@ class LoaderGUI: Script {
             currentItem
         }
         set {
-            currentItem = newValue
-            let assetURL = Bundle.main.url(forResource: gltfInfo[newValue].name,
-                    withExtension: gltfInfo[newValue].ext,
-                    subdirectory: gltfInfo[newValue].dir)!
-            GLTFLoader.parse(engine, assetURL) { [self] resource in
-                entity.clearChildren()
-                entity.addChild(resource.defaultSceneRoot)
+            if newValue != currentItem {
+                currentItem = newValue
+                let assetURL = Bundle.main.url(forResource: gltfInfo[newValue].name,
+                                               withExtension: gltfInfo[newValue].ext,
+                                               subdirectory: gltfInfo[newValue].dir)!
+                GLTFLoader.parse(engine, assetURL) { [self] resource in
+                    entity.clearChildren()
+                    entity.addChild(resource.defaultSceneRoot)
+                }
             }
         }
     }

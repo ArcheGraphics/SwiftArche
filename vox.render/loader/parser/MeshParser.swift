@@ -32,9 +32,9 @@ class MeshParser: Parser {
                 primitivePromises.append(mesh)
 
                 // load position
-                let vertexCount: Int = 0
-                if let accessor: GLTFAccessor = gltfPrimitive.attributes["position"] {
-                    let vertexCount = accessor.count
+                var vertexCount: Int = 0
+                if let accessor: GLTFAccessor = gltfPrimitive.attributes["POSITION"] {
+                    vertexCount = accessor.count
                     var position = [Vector3](repeating: Vector3(), count: vertexCount)
                     GLTFUtil.convert(accessor, out: &position)
                     mesh.setPositions(positions: position)

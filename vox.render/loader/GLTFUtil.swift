@@ -8,13 +8,13 @@ import Foundation
 
 class GLTFUtil {
     static func convert<T>(_ accessor: GLTFAccessor, out: inout [T]) {
+        let bytesPerComponent = GLTFBytesPerComponentForComponentType(accessor.componentType)
+        let componentCount = GLTFComponentCountForDimension(accessor.dimension)
+        let elementSize = Int(bytesPerComponent * componentCount)
         if let bufferView = accessor.bufferView,
            let data = bufferView.buffer.data {
             let offset = accessor.offset + bufferView.offset
-            (data as NSData).getBytes(&out,
-                    range: NSRange(location: offset,
-                            length: MemoryLayout<T>.stride * accessor.count))
-
+            (data as NSData).getBytes(&out, range: NSRange(location: offset, length: elementSize * accessor.count))
         }
     }
 }
