@@ -10,7 +10,7 @@ class Validator: Parser {
     override func parse(_ context: ParserContext) {
         let gltf = context.glTFResource.gltf!
 
-        let gltfVersion = Int(gltf.version)!
+        let gltfVersion = Float(gltf.version)!
         if (!(gltfVersion >= 2 && gltfVersion < 3)) {
             fatalError("Only support gltf 2.x.")
         }

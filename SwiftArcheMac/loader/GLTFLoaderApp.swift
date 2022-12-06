@@ -13,13 +13,13 @@ class GltfLoaderApp: NSViewController {
     var canvas: Canvas!
     var engine: Engine!
     var iblBaker: IBLBaker!
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
         canvas = Canvas(with: view)
         engine = Engine(canvas: canvas)
         iblBaker = IBLBaker(engine)
-        
+
         let scene = engine.sceneManager.activeScene!
         let hdr = engine.textureLoader.loadHDR(with: "assets/kloppenheim_06_4k.hdr")!
         iblBaker.bake(scene, with: hdr, size: 256, level: 3)
@@ -35,12 +35,8 @@ class GltfLoaderApp: NSViewController {
         light.transform.position = Vector3(1, 3, 0)
         light.transform.lookAt(targetPosition: Vector3())
         let _: DirectLight = light.addComponent()
-        
-        let url = URL(string: "glTF-Sample-Models/2.0/Box/glTF-Binary/Box.glb")!
-        GLTFLoader.parse(engine, url) { resource in
-            rootEntity.addChild(resource.defaultSceneRoot)
-            print("lala")
-        }
+
+        let _: LoaderGUI = rootEntity.addComponent()
         engine.run()
     }
 }

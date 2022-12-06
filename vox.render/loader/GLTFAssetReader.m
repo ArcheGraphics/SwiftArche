@@ -10,7 +10,7 @@
 
 #import "cgltf.h"
 
-static NSString *const GLTFErrorDomain = @"com.metalbyexample.gltfkit2";
+static NSString *const GLTFErrorDomain = @"com.arche.graphics";
 
 enum GLTFErrorCode {
     GLTFErrorCodeNoDataToLoad = 1010,
