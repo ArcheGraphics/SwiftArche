@@ -59,7 +59,8 @@ fileprivate class Interaction: Script {
 class PhysXAttractorApp: NSViewController {
     var canvas: Canvas!
     var engine: Engine!
-
+    var iblBaker: IBLBaker!
+    
     func addPlane(_ rootEntity: Entity,
                   _ position: Vector3,
                   _ rotation: Quaternion) -> Entity {
@@ -145,11 +146,12 @@ class PhysXAttractorApp: NSViewController {
         super.viewDidLoad()
         canvas = Canvas(with: view)
         engine = Engine(canvas: canvas)
+        iblBaker = IBLBaker(engine)
         
         let scene = engine.sceneManager.activeScene!
         let hdr = engine.textureLoader.loadHDR(with: "assets/kloppenheim_06_4k.hdr")!
-        let cubeMap = createCubemap(engine, with: hdr, size: 256, level: 3)
-        scene.ambientLight = loadAmbientLight(engine, withHDR: cubeMap)
+        iblBaker.bake(scene, with: hdr, size: 256, level: 3)
+
         let rootEntity = scene.createRootEntity()
         let _: GUI = rootEntity.addComponent()
 

@@ -55,7 +55,8 @@ fileprivate class ShootScript: Script {
 class PhysXJointBasicApp: NSViewController {
     var canvas: Canvas!
     var engine: Engine!
-
+    var iblBaker: IBLBaker!
+    
     func transform(_ position: Vector3, _ rotation: Quaternion, _ outPosition: inout Vector3, _ outRotation: inout Quaternion) {
         outRotation *= rotation
         outPosition = Vector3.transformByQuat(v: outPosition, quaternion: rotation) + position
@@ -103,13 +104,13 @@ class PhysXJointBasicApp: NSViewController {
         super.viewDidLoad()
         canvas = Canvas(with: view)
         engine = Engine(canvas: canvas)
-
+        iblBaker = IBLBaker(engine)
+        
         let scene = engine.sceneManager.activeScene!
         let hdr = engine.textureLoader.loadHDR(with: "assets/kloppenheim_06_4k.hdr")!
-        let cubeMap = createCubemap(engine, with: hdr, size: 256, level: 3)
-        scene.ambientLight = loadAmbientLight(engine, withHDR: cubeMap)
-        let rootEntity = scene.createRootEntity()
+        iblBaker.bake(scene, with: hdr, size: 256, level: 3)
 
+        let rootEntity = scene.createRootEntity()
         let cameraEntity = rootEntity.createChild()
         cameraEntity.transform.position = Vector3(3, 1, 22)
         cameraEntity.transform.lookAt(targetPosition: Vector3(3, 1, 0))

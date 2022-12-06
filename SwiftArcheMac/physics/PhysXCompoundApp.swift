@@ -101,7 +101,8 @@ fileprivate class TableGenerator: Script {
 class PhysXCompoundApp: NSViewController {
     var canvas: Canvas!
     var engine: Engine!
-
+    var iblBaker: IBLBaker!
+    
     func addPlane(_ rootEntity: Entity,
                   _ size: Vector2,
                   _ position: Vector3,
@@ -130,14 +131,14 @@ class PhysXCompoundApp: NSViewController {
         super.viewDidLoad()
         canvas = Canvas(with: view)
         engine = Engine(canvas: canvas)
-
+        iblBaker = IBLBaker(engine)
+        
         let scene = engine.sceneManager.activeScene!
-        let hdr = engine.textureLoader.loadHDR(with: "assets/kloppenheim_06_4k.hdr")!
-        let cubeMap = createCubemap(engine, with: hdr, size: 256, level: 3)
-        scene.ambientLight = loadAmbientLight(engine, withHDR: cubeMap)
         scene.shadowDistance = 30
+        let hdr = engine.textureLoader.loadHDR(with: "assets/kloppenheim_06_4k.hdr")!
+        iblBaker.bake(scene, with: hdr, size: 256, level: 3)
+        
         let rootEntity = scene.createRootEntity()
-
         let cameraEntity = rootEntity.createChild()
         cameraEntity.transform.position = Vector3(15, 15, 15)
         cameraEntity.transform.lookAt(targetPosition: Vector3())

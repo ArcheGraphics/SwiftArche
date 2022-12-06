@@ -25,7 +25,8 @@ class ClickScript: Script {
 class InputCastApp: NSViewController {
     var canvas: Canvas!
     var engine: Engine!
-
+    var iblBaker: IBLBaker!
+    
     func createBox(_ rootEntity: Entity, _ x: Float, _ y: Float, _ z: Float) -> Entity {
         // create box test entity
         let cubeSize: Float = 2.0
@@ -49,13 +50,13 @@ class InputCastApp: NSViewController {
         super.viewDidLoad()
         canvas = Canvas(with: view)
         engine = Engine(canvas: canvas)
-
+        iblBaker = IBLBaker(engine)
+        
         let scene = engine.sceneManager.activeScene!
         let hdr = engine.textureLoader.loadHDR(with: "assets/kloppenheim_06_4k.hdr")!
-        let cubeMap = createCubemap(engine, with: hdr, size: 256, level: 3)
-        scene.ambientLight = loadAmbientLight(engine, withHDR: cubeMap)
+        iblBaker.bake(scene, with: hdr, size: 256, level: 3)
+        
         let rootEntity = scene.createRootEntity()
-
         let cameraEntity = rootEntity.createChild()
         cameraEntity.transform.position = Vector3(5, 5, 5)
         cameraEntity.transform.lookAt(targetPosition: Vector3())

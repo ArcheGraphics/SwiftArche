@@ -47,18 +47,19 @@ fileprivate class MoveScript: Script {
 class PhysXDebugApp: NSViewController {
     var canvas: Canvas!
     var engine: Engine!
-
+    var iblBaker: IBLBaker!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         canvas = Canvas(with: view)
         engine = Engine(canvas: canvas)
-
+        iblBaker = IBLBaker(engine)
+        
         let scene = engine.sceneManager.activeScene!
         let hdr = engine.textureLoader.loadHDR(with: "assets/kloppenheim_06_4k.hdr")!
-        let cubeMap = createCubemap(engine, with: hdr, size: 256, level: 3)
-        scene.ambientLight = loadAmbientLight(engine, withHDR: cubeMap)
-        let rootEntity = scene.createRootEntity()
+        iblBaker.bake(scene, with: hdr, size: 256, level: 3)
 
+        let rootEntity = scene.createRootEntity()
         let cameraEntity = rootEntity.createChild()
         cameraEntity.transform.position = Vector3(10, 10, 10)
         cameraEntity.transform.lookAt(targetPosition: Vector3())

@@ -187,21 +187,21 @@ fileprivate class CSSMVisualMaterial: BaseMaterial {
 class CascadeShadowApp: NSViewController {
     var canvas: Canvas!
     var engine: Engine!
-
+    var iblBaker: IBLBaker!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         canvas = Canvas(with: view)
         engine = Engine(canvas: canvas)
-
+        iblBaker = IBLBaker(engine)
+        
         let scene = engine.sceneManager.activeScene!
-        let hdr = engine.textureLoader.loadHDR(with: "assets/kloppenheim_06_4k.hdr")!
-        let cubeMap = createCubemap(engine, with: hdr, size: 256, level: 3)
-        scene.ambientLight = loadAmbientLight(engine, withHDR: cubeMap)
-
         scene.shadowResolution = ShadowResolution.High
         scene.shadowDistance = 300
         scene.shadowCascades = ShadowCascadesMode.FourCascades
-
+        let hdr = engine.textureLoader.loadHDR(with: "assets/kloppenheim_06_4k.hdr")!
+        iblBaker.bake(scene, with: hdr, size: 256, level: 3)
+        
         let rootEntity = scene.createRootEntity()
         let gui: GUI = rootEntity.addComponent()
         let cameraEntity = rootEntity.createChild()

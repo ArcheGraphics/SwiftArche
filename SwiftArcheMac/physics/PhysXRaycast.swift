@@ -60,7 +60,8 @@ fileprivate class Raycast: Script {
 class PhysXRaycastApp: NSViewController {
     var canvas: Canvas!
     var engine: Engine!
-
+    var iblBaker: IBLBaker!
+    
     func initialize(_ rootEntity: Entity) {
         var quat = Quaternion(0, 0, 0.3, 0.7)
         _ = quat.normalize()
@@ -89,12 +90,12 @@ class PhysXRaycastApp: NSViewController {
         super.viewDidLoad()
         canvas = Canvas(with: view)
         engine = Engine(canvas: canvas)
-
+        iblBaker = IBLBaker(engine)
+        
         let scene = engine.sceneManager.activeScene!
-        let hdr = engine.textureLoader.loadHDR(with: "assets/kloppenheim_06_4k.hdr")!
-        let cubeMap = createCubemap(engine, with: hdr, size: 256, level: 3)
-        scene.ambientLight = loadAmbientLight(engine, withHDR: cubeMap)
         scene.shadowDistance = 50
+        let hdr = engine.textureLoader.loadHDR(with: "assets/kloppenheim_06_4k.hdr")!
+        iblBaker.bake(scene, with: hdr, size: 256, level: 3)
 
         let rootEntity = scene.createRootEntity()
         let _: GeometryGenerator = rootEntity.addComponent()
