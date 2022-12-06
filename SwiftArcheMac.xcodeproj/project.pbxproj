@@ -388,6 +388,7 @@
 		43D8C808C0FA018090454567 /* PhysXAttractorApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8C5E1D5FA1D3B1F819147 /* PhysXAttractorApp.swift */; };
 		43D8C8847DCDFE5DABA15585 /* WireframePrimitive.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8CB37C6DA6DAEFDC5A2A4 /* WireframePrimitive.swift */; };
 		43D8C96F57FDDC6923756F57 /* GridControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8CB2BAD2A9385A0612F78 /* GridControl.swift */; };
+		43D8CA0AB31B8C46122C1EAB /* IBLBaker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8C355424505E83C14B2A4 /* IBLBaker.swift */; };
 		43D8CB27974E2712F873405E /* WireframeManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8C0CC365128B7B18E4074 /* WireframeManager.swift */; };
 		43D8CC13B0B39DD99DEE0DC4 /* PhysXCompoundApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8CFE45C9E5B56F6B8A397 /* PhysXCompoundApp.swift */; };
 		43D8CC2C3372F5E3258A852D /* IrradianceApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8C159E7E7844EB632C57F /* IrradianceApp.swift */; };
@@ -889,6 +890,7 @@
 		43D8C0CC365128B7B18E4074 /* WireframeManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WireframeManager.swift; sourceTree = "<group>"; };
 		43D8C12DBC7510CB05B703F8 /* PhysXJointBasicApp.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhysXJointBasicApp.swift; sourceTree = "<group>"; };
 		43D8C159E7E7844EB632C57F /* IrradianceApp.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IrradianceApp.swift; sourceTree = "<group>"; };
+		43D8C355424505E83C14B2A4 /* IBLBaker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IBLBaker.swift; sourceTree = "<group>"; };
 		43D8C50348EB9AC72BD7BF83 /* SkyboxApp.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SkyboxApp.swift; sourceTree = "<group>"; };
 		43D8C5E1D5FA1D3B1F819147 /* PhysXAttractorApp.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhysXAttractorApp.swift; sourceTree = "<group>"; };
 		43D8C645B5CB351C0BFE24C7 /* PhysXRaycast.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhysXRaycast.swift; sourceTree = "<group>"; };
@@ -1066,6 +1068,7 @@
 				43D8CFAFE0E0B5772488FA13 /* IBLApp.swift */,
 				040F1DF2293781B0008BDC8D /* RenderingUtils.swift */,
 				E63B17CA98EEF9BD19C003ED /* CascadeShadowApp.swift */,
+				43D8C355424505E83C14B2A4 /* IBLBaker.swift */,
 			);
 			path = rendering;
 			sourceTree = "<group>";
@@ -2357,6 +2360,7 @@
 				43D8CC8E6EC814867725CBD1 /* PhysXDebug.swift in Sources */,
 				E63B1AB88F741EC4FFD734F6 /* InputCastApp.swift in Sources */,
 				E63B19C92479C2BE78B928A9 /* CascadeShadowApp.swift in Sources */,
+				43D8CA0AB31B8C46122C1EAB /* IBLBaker.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

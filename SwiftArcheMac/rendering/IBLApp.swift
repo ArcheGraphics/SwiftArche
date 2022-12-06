@@ -20,7 +20,7 @@ fileprivate class GUI: Script {
             scene.fogMode = FogMode(rawValue: newValue)!
         }
     }
-    
+
     override func onUpdate(_ deltaTime: Float) {
         UIElement.Init(engine.canvas, deltaTime)
 
@@ -61,6 +61,8 @@ fileprivate struct Material {
 class IblApp: NSViewController {
     var canvas: Canvas!
     var engine: Engine!
+    var iblBaker: IBLBaker!
+
     private var _materials: [Material] = [
         Material("Gold", Color(1.0, 0.765557, 0.336057, 1.0), 0.1, 1.0),
         Material("Copper", Color(0.955008, 0.637427, 0.538163, 1.0), 0.1, 1.0),
@@ -75,12 +77,11 @@ class IblApp: NSViewController {
         Material("Blue", Color(0.0, 0.0, 1.0, 1.0), 0.1, 1.0),
         Material("Black", Color(0.0, 1.0, 1.0, 1.0), 0.1, 1.0)
     ]
-    
+
     func loadHDR(_ scene: Scene) {
         let hdr = engine.textureLoader.loadHDR(with: "assets/kloppenheim_06_4k.hdr")!
-        let cubeMap = createCubemap(engine, with: hdr, size: 256, level: 3)
-        scene.ambientLight = loadAmbientLight(engine, withHDR: cubeMap)
-        
+        iblBaker.bake(scene, with: hdr, size: 256, level: 3)
+
         let skyMaterial = SkyBoxMaterial(engine)
         skyMaterial.textureCubeMap = hdr
         skyMaterial.equirectangular = true
@@ -90,14 +91,14 @@ class IblApp: NSViewController {
         scene.background.mode = .Sky
         scene.background.sky = skySubpass
     }
-    
+
     func loadPCGSky(_ scene: Scene) {
-         let pcgSky = MDLSkyCubeTexture(name: "natrual", channelEncoding: .float16,
-                                            textureDimensions: [512, 512], turbidity: 1.0, sunElevation: 1.0,
-                                            sunAzimuth: 1.0, upperAtmosphereScattering: 1.0, groundAlbedo: 1.0)
+        let pcgSky = MDLSkyCubeTexture(name: "natrual", channelEncoding: .float16,
+                textureDimensions: [512, 512], turbidity: 1.0, sunElevation: 1.0,
+                sunAzimuth: 1.0, upperAtmosphereScattering: 1.0, groundAlbedo: 1.0)
         let cubeMap = try! engine.textureLoader.loadTexture(with: pcgSky)!
         scene.ambientLight = loadAmbientLight(engine, withPCG: cubeMap, lodStart: 2, lodEnd: 5)
-        
+
         let skyMaterial = SkyBoxMaterial(engine)
         skyMaterial.textureCubeMap = cubeMap
         let skySubpass = SkySubpass()
@@ -111,6 +112,7 @@ class IblApp: NSViewController {
         super.viewDidLoad()
         canvas = Canvas(with: view)
         engine = Engine(canvas: canvas)
+        iblBaker = IBLBaker(engine)
 
         let scene = engine.sceneManager.activeScene!
         loadHDR(scene)
