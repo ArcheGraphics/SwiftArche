@@ -21,10 +21,9 @@ func createSphericalHarmonicsCoefficients(_ engine: Engine, with cube: MTLTextur
         commandEncoder.setBuffer(bufferView.buffer, offset: 0, index: 0)
         commandEncoder.setTexture(cube, index: 0)
 
-        let size = Int(Float(cube.width))
         let w = pipelineState.threadExecutionWidth
         let h = pipelineState.maxTotalThreadsPerThreadgroup / w
-        commandEncoder.dispatchThreads(MTLSizeMake(size, size, 6),
+        commandEncoder.dispatchThreads(MTLSizeMake(9, 6, 1),
                 threadsPerThreadgroup: MTLSizeMake(w, h, 1))
         commandEncoder.endEncoding()
 

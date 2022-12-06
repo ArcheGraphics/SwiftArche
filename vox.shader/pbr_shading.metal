@@ -71,78 +71,26 @@ float3 PBRShading::BRDF_Diffuse_Lambert(float3 diffuseColor) {
 
 // MARK: - IBL
 float3 PBRShading::getLightProbeIrradiance(float3 normal){
-    /**
-     * Basis constants
-     *
-     * 0: 1/2 * std::sqrt(1 / M_PI_F)
-     *
-     * 1: -1/2 * std::sqrt(3 / M_PI_F)
-     * 2: 1/2 * std::sqrt(3 / M_PI_F)
-     * 3: -1/2 * std::sqrt(3 / M_PI_F)
-     *
-     * 4: 1/2 * std::sqrt(15 / M_PI_F)
-     * 5: -1/2 * std::sqrt(15 / M_PI_F)
-     * 6: 1/4 * std::sqrt(5 / M_PI_F)
-     * 7: -1/2 * std::sqrt(15 / M_PI_F)
-     * 8: 1/4 * std::sqrt(15 / M_PI_F)
-     */
+    array<float3, 9> env_sh;
+    for (int i = 0; i < 9; i++) {
+        for (int j = 0; j < 3; j++) {
+            env_sh[i][j] = u_env_sh[i * 3 + j];
+        }
+    }
 
-    /**
-     * Convolution kernel
-     *
-     * 0: M_PI_F
-     * 1: (2 * M_PI_F) / 3
-     * 2: M_PI_F / 4
-     */
-    float scale = 4 * M_PI_F / u_env_sh[27];
-    array<float3, 9> out;
-    // l0
-    out[0].x = u_env_sh[0] * 0.886227; // kernel0 * basis0 = 0.886227
-    out[0].y = u_env_sh[1] * 0.886227;
-    out[0].z = u_env_sh[2] * 0.886227;
-    
-    // l1
-    out[1].x = u_env_sh[3] * -1.023327; // kernel1 * basis1 = -1.023327;
-    out[1].y = u_env_sh[4] * -1.023327;
-    out[1].z = u_env_sh[5] * -1.023327;
-    out[2].x = u_env_sh[6] * 1.023327; // kernel1 * basis2 = 1.023327
-    out[2].y = u_env_sh[7] * 1.023327;
-    out[2].z = u_env_sh[8] * 1.023327;
-    out[3].x = u_env_sh[9] * -1.023327; // kernel1 * basis3 = -1.023327
-    out[3].y = u_env_sh[10] * -1.023327;
-    out[3].z = u_env_sh[11] * -1.023327;
-
-    // l2
-    out[4].x = u_env_sh[12] * 0.858086; // kernel2 * basis4 = 0.858086
-    out[4].y = u_env_sh[13] * 0.858086;
-    out[4].z = u_env_sh[14] * 0.858086;
-    out[5].x = u_env_sh[15] * -0.858086; // kernel2 * basis5 = -0.858086
-    out[5].y = u_env_sh[16] * -0.858086;
-    out[5].z = u_env_sh[17] * -0.858086;
-    out[6].x = u_env_sh[18] * 0.247708; // kernel2 * basis6 = 0.247708
-    out[6].y = u_env_sh[19] * 0.247708;
-    out[6].z = u_env_sh[20] * 0.247708;
-    out[7].x = u_env_sh[21] * -0.858086; // kernel2 * basis7 = -0.858086
-    out[7].y = u_env_sh[22] * -0.858086;
-    out[7].z = u_env_sh[23] * -0.858086;
-    out[8].x = u_env_sh[24] * 0.429042; // kernel2 * basis8 = 0.429042
-    out[8].y = u_env_sh[25] * 0.429042;
-    out[8].z = u_env_sh[26] * 0.429042;
-    
     normal.x = -normal.x;
-    float3 result = out[0] +
-    out[1] * (normal.y) +
-    out[2] * (normal.z) +
-    out[3] * (normal.x) +
+    float3 result = env_sh[0] +
+    env_sh[1] * (normal.y) +
+    env_sh[2] * (normal.z) +
+    env_sh[3] * (normal.x) +
     
-    out[4] * (normal.y * normal.x) +
-    out[5] * (normal.y * normal.z) +
-    out[6] * (3.0 * normal.z * normal.z - 1.0) +
-    out[7] * (normal.z * normal.x) +
-    out[8] * (normal.x * normal.x - normal.y * normal.y);
+    env_sh[4] * (normal.y * normal.x) +
+    env_sh[5] * (normal.y * normal.z) +
+    env_sh[6] * (3.0 * normal.z * normal.z - 1.0) +
+    env_sh[7] * (normal.z * normal.x) +
+    env_sh[8] * (normal.x * normal.x - normal.y * normal.y);
         
-    return max(result * scale, float3(0.0));
-    
+    return max(result / u_env_sh[27], float3(0.0));
 }
 
 // ref: https://www.unrealengine.com/blog/physically-based-shading-on-mobile - environmentBRDF for GGX on mobile

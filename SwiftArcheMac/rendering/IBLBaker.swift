@@ -41,7 +41,7 @@ public class IBLBaker {
         specularTexture = _engine.textureLoader.makeTexture(descriptor)
 
         // first 27 is parameter, the last is scale
-        shBuffer = BufferView(device: _engine.device, count: 28, stride: MemoryLayout<Float>.stride)
+        shBuffer = BufferView(device: _engine.device, count: 3 * 9 + 1, stride: MemoryLayout<Float>.stride)
 
         if let commandBuffer = _engine.commandQueue.makeCommandBuffer() {
             _createCubemap(commandBuffer);
@@ -89,10 +89,9 @@ public class IBLBaker {
             commandEncoder.setBuffer(shBuffer.buffer, offset: 0, index: 0)
             commandEncoder.setTexture(cubeMap, index: 0)
 
-            let size = Int(Float(cubeMap.width))
             let w = pipelineState.threadExecutionWidth
             let h = pipelineState.maxTotalThreadsPerThreadgroup / w
-            commandEncoder.dispatchThreads(MTLSizeMake(size, size, 6),
+            commandEncoder.dispatchThreads(MTLSizeMake(9, 6, 1),
                     threadsPerThreadgroup: MTLSizeMake(w, h, 1))
             commandEncoder.endEncoding()
         }
