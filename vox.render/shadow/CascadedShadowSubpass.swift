@@ -167,7 +167,7 @@ class CascadedShadowSubpass: GeometrySubpass {
                             outShadowMatrices: &_shadowMatrices
                     )
                 }
-                _updateSingleShadowCasterShaderData(bufferBlock, (light as! DirectLight), _shadowSliceData)
+                _updateSingleShadowCasterShaderData(&encoder, bufferBlock, (light as! DirectLight), _shadowSliceData)
 
                 // upload pre-cascade infos.
                 let center = _shadowSliceData.splitBoundSphere.center
@@ -275,7 +275,7 @@ class CascadedShadowSubpass: GeometrySubpass {
         shaderData.setDynamicData(CascadedShadowSubpass._shadowMapSize, _shadowMapSize)
     }
 
-    private func _updateSingleShadowCasterShaderData(_ bufferBlock: BufferBlock,
+    private func _updateSingleShadowCasterShaderData(_ encoder: inout RenderCommandEncoder, _ bufferBlock: BufferBlock,
                                                      _ light: DirectLight, _ shadowSliceData: ShadowSliceData) {
         let virtualCamera = shadowSliceData.virtualCamera
         let shadowBias = ShadowUtils.getShadowBias(light: light, projectionMatrix: virtualCamera.projectionMatrix, shadowResolution: _shadowTileResolution)
@@ -286,7 +286,7 @@ class CascadedShadowSubpass: GeometrySubpass {
 
         let allocation = bufferBlock.allocate(MemoryLayout<Matrix>.size)!
         allocation.update(shadowSliceData.virtualCamera.viewProjectionMatrix)
-        shaderData.setDynamicData(CascadedShadowSubpass._lightViewProjMatProperty, allocation)
+        encoder.handle.setVertexBuffer(allocation.buffer, offset: allocation.offset, index: 3)
     }
 
     func _getAvailableRenderTarget() {

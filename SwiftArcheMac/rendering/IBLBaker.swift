@@ -47,14 +47,14 @@ public class IBLBaker {
             _createCubemap(commandBuffer);
             _createSpecularTexture(commandBuffer);
             _createSphericalHarmonicsCoefficients(commandBuffer);
-            commandBuffer.commit()
-            commandBuffer.addCompletedHandler { [self] _ in
+            commandBuffer.addCompletedHandler { [specularTexture, shBuffer] _ in
                 let ambientLight = AmbientLight();
                 ambientLight.specularTexture = specularTexture
                 ambientLight.diffuseSphericalHarmonics = shBuffer
                 ambientLight.diffuseMode = DiffuseMode.SphericalHarmonics
                 scene.ambientLight = ambientLight
             }
+            commandBuffer.commit()
         }
     }
 
