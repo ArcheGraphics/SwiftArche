@@ -27,10 +27,10 @@ public class ShadowManager {
         _shadowSampler.rAddressMode = .clampToEdge
         _shadowSampler.sAddressMode = .clampToEdge
         _shadowSampler.tAddressMode = .clampToEdge
-        _camera.scene.shaderData.setSampler(ShadowManager._shadowSamplerProperty, _shadowSampler)
     }
 
     public func draw(_ commandBuffer: MTLCommandBuffer) {
+        _camera.scene.shaderData.setSampler(ShadowManager._shadowSamplerProperty, _shadowSampler)
         _drawDirectShadowMap(commandBuffer)
         _drawSpotShadowMap(commandBuffer)
         _drawPointShadowMap(commandBuffer)

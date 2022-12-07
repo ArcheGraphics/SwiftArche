@@ -28,7 +28,7 @@ class GltfLoaderApp: NSViewController {
         let cameraEntity = rootEntity.createChild()
         cameraEntity.transform.position = Vector3(5, 5, 5)
         cameraEntity.transform.lookAt(targetPosition: Vector3())
-        let _: Camera = cameraEntity.addComponent()
+        let camera: Camera = cameraEntity.addComponent()
         let _: OrbitControl = cameraEntity.addComponent()
 
         let light = rootEntity.createChild("light")
@@ -37,7 +37,8 @@ class GltfLoaderApp: NSViewController {
         let _: DirectLight = light.addComponent()
 
         let gltfRoot = rootEntity.createChild()
-        let _: LoaderGUI = gltfRoot.addComponent()
+        let gui: LoaderGUI = gltfRoot.addComponent()
+        gui.camera = camera
         engine.run()
     }
 }

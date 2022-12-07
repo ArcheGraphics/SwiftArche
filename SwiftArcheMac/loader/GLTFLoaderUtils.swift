@@ -25,6 +25,7 @@ struct GLTFInfo {
 }
 
 class LoaderGUI: Script {
+    var camera: Camera!
     var currentItem: Int = -1
     let gltfInfo = [
         // Standard
@@ -35,7 +36,7 @@ class LoaderGUI: Script {
         GLTFInfo("Box With Spaces", "Box with URI-encoded spaces in the texture names used by a simple PBR material.", "gltf", "glTF-Sample-Models/2.0/Box With Spaces/glTF"),
         GLTFInfo("BoxVertexColors", "Box with vertex colors applied."),
         GLTFInfo("Cube", "A cube with non-smoothed faces.", "gltf", "glTF-Sample-Models/2.0/Cube/glTF"),
-        GLTFInfo("AnimatedCube", "Same as previous cube having a linear rotation animation."),
+        GLTFInfo("AnimatedCube", "Same as previous cube having a linear rotation animation.", "gltf", "glTF-Sample-Models/2.0/AnimatedCube/glTF"),
         GLTFInfo("Duck", "The COLLADA duck. One texture."),
         GLTFInfo("2CylinderEngine", "Small CAD data set, including hierarchy."),
         GLTFInfo("ReciprocatingSaw", "Small CAD data set, including hierarchy."),
@@ -134,6 +135,14 @@ class LoaderGUI: Script {
                 GLTFLoader.parse(engine, assetURL) { [self] resource in
                     entity.clearChildren()
                     entity.addChild(resource.defaultSceneRoot)
+                    let renderers: [Renderer] = resource.defaultSceneRoot.getComponentsIncludeChildren()
+                    var bounds = BoundingBox()
+                    for renderer in renderers {
+                        bounds = BoundingBox.merge(box1: bounds, box2: renderer.bounds)
+                    }
+                    let scale = 1 / bounds.getExtent().internalValue.max()
+                    resource.defaultSceneRoot.transform.worldPosition = Vector3()
+                    resource.defaultSceneRoot.transform.scale *= scale
                 }
             }
         }
@@ -151,6 +160,9 @@ class LoaderGUI: Script {
             ImGuiTextUnformatted(gltfInfo[loaderItem].description)
         }
         ImGuiSeparator()
+        if ImGuiButton("Reset Camera", ImVec2(x: 100, y: 20)) {
+            camera.entity.transform.worldPosition = Vector3(5, 5, 5)
+        }
         ImGuiSliderFloat("Manual Exposure", &scene.postprocessManager.manualExposure, 0.0, 1.0, nil, 1)
         UIElement.frameRate()
         // Rendering
