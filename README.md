@@ -42,5 +42,8 @@ In order to speed up the speed of git clone, assets are not introduced in the wa
 Since this project mainly builds and tests on the Mac, and then develops on the iOS platform, 
 a series of assets are required for Mac testing:
 1. [glTF-Sample-Models](https://github.com/KhronosGroup/glTF-Sample-Models)
-2. [other assets](https://github.com/ArcheGraphics/assets)
-Please downloads these files and copy into the folder.
+2. [other assets](https://github.com/ArcheGraphics/assets) include hdr, texture and others downloads from:
+    1. [Polyhaven](https://polyhaven.com)
+    2. [Sketchfab](https://sketchfab.com/)
+Please downloads these files and copy into the folder. 
+If you add new assets, please include them into the xcode project which will package them.
