@@ -15,12 +15,18 @@ struct GLTFInfo {
     let ext: String
     let dir: String
     let description: String
+    let fileName: String
 
-    init(_ name: String, _ description: String = "", _ ext: String = "glb", _ dir: String = "") {
+    init(_ name: String, _ description: String = "", _ ext: String = "glb", _ dir: String = "", _ fileName: String = "") {
         self.name = name
         self.description = description
         self.ext = ext
         self.dir = dir != "" ? dir : "glTF-Sample-Models/2.0/\(name)/glTF-Binary"
+        if fileName == "" {
+            self.fileName = name
+        } else {
+            self.fileName = fileName
+        }
     }
 }
 
@@ -28,7 +34,18 @@ class LoaderGUI: Script {
     var camera: Camera!
     var currentItem: Int = -1
     let gltfInfo = [
-        // Standard
+        GLTFInfo("AntiqueCamera"),
+        GLTFInfo("Avocado"),
+        GLTFInfo("BarramundiFish"),
+        GLTFInfo("BoomBox"),
+        GLTFInfo("Corset"),
+        GLTFInfo("DamagedHelmet"),
+        GLTFInfo("FlightHelmet", "", "gltf", "glTF-Sample-Models/2.0/FlightHelmet/glTF"),
+        GLTFInfo("Lantern"),
+        GLTFInfo("SciFiHelmet", "", "gltf", "glTF-Sample-Models/2.0/SciFiHelmet/glTF"),
+        GLTFInfo("Suzanne", "", "gltf", "glTF-Sample-Models/2.0/Suzanne/glTF"),
+        GLTFInfo("WaterBottle"),
+        GLTFInfo("------------------Standard-------------------------------", "", "gltf", "glTF-Sample-Models/2.0/Cube/glTF", "Cube"),
         GLTFInfo("Box", "One mesh and one material. Start with this."),
         GLTFInfo("BoxInterleaved", "Box example with interleaved position and normal attributes."),
         GLTFInfo("BoxTextured", "Box with one texture. Start with this to test textures."),
@@ -49,12 +66,13 @@ class LoaderGUI: Script {
         GLTFInfo("CesiumMan", "Textured. Animations. Skins."),
         GLTFInfo("BrainStem", "Animations. Skins."),
         GLTFInfo("Fox", "Multiple animations cycles: Survey, Walk, Run."),
-        GLTFInfo("VirtualCity", "Textured. Animations."),
-        GLTFInfo("Sponza", "Building interior, often used to test lighting."),
-        GLTFInfo("TwoSidedPlane", "A plane having the two sided material parameter enabled."),
+        GLTFInfo("VirtualCity", "Textured. Animations.", "glb", "glTF-Sample-Models/2.0/VC/glTF-Binary", "VC"),
+        GLTFInfo("Sponza", "Building interior, often used to test lighting.", "gltf", "glTF-Sample-Models/2.0/Sponza/glTF"),
+        GLTFInfo("TwoSidedPlane", "A plane having the two sided material parameter enabled.", "gltf", "glTF-Sample-Models/2.0/TwoSidedPlane/glTF"),
         // Feature Tests
+        GLTFInfo("-----------------Feature Tests----------------------------", "", "gltf", "glTF-Sample-Models/2.0/BoomBoxWithAxes/glTF", "BoomBoxWithAxes"),
         GLTFInfo("AlphaBlendModeTest", "Tests alpha modes and settings."),
-        GLTFInfo("BoomBoxWithAxes", "Shows X, Y, and Z axis default orientations."),
+        GLTFInfo("BoomBoxWithAxes", "Shows X, Y, and Z axis default orientations.", "gltf", "glTF-Sample-Models/2.0/BoomBoxWithAxes/glTF"),
         GLTFInfo("MetalRoughSpheres", "Tests various metal and roughness values (texture mapped)."),
         GLTFInfo("MetalRoughSpheresNoTextures", "Tests various metal and roughness values (textureless)."),
         GLTFInfo("MorphPrimitivesTest", "Tests a morph target on multiple primitives."),
@@ -69,31 +87,21 @@ class LoaderGUI: Script {
         GLTFInfo("TextureSettingsTest", "Tests single/double-sided and various texturing modes."),
         GLTFInfo("VertexColorTest", "Tests if vertex colors are supported."),
         // Minimal Tests
-        GLTFInfo("TriangleWithoutIndices", "The simplest possible glTF asset: A single `scene` with a single `node` and a single `mesh` with a single `mesh.primitive` with a single triangle with a single attribute, without indices and without a `material` "),
-        GLTFInfo("Triangle", "A very simple glTF asset: The basic structure is the same as in [Triangle Without Indices](TriangleWithoutIndices), but here, the `mesh.primitive` describes an *indexed* geometry"),
-        GLTFInfo("AnimatedTriangle", "This sample is similar to the [Triangle](Triangle), but the `node` has a `rotation` property that is modified with a simple `animation`"),
+        GLTFInfo("-----------------Minimal Tests-----------------------------", "", "gltf", "glTF-Sample-Models/2.0/SimpleSkin/glTF", "SimpleSkin"),
+        GLTFInfo("TriangleWithoutIndices", "The simplest possible glTF asset: A single `scene` with a single `node` and a single `mesh` with a single `mesh.primitive` with a single triangle with a single attribute, without indices and without a `material` ", "gltf", "glTF-Sample-Models/2.0/TriangleWithoutIndices/glTF"),
+        GLTFInfo("Triangle", "A very simple glTF asset: The basic structure is the same as in [Triangle Without Indices](TriangleWithoutIndices), but here, the `mesh.primitive` describes an *indexed* geometry", "gltf", "glTF-Sample-Models/2.0/Triangle/glTF"),
+        GLTFInfo("AnimatedTriangle", "This sample is similar to the [Triangle](Triangle), but the `node` has a `rotation` property that is modified with a simple `animation`", "gltf", "glTF-Sample-Models/2.0/AnimatedTriangle/glTF"),
         GLTFInfo("AnimatedMorphCube", "Demonstrates a simple cube with two simple morph targets and an animation that transitions between them both."),
         GLTFInfo("AnimatedMorphSphere", "This sample is similar to the [Animated Morph Cube](AnimatedMorphCube), but the two morph targets move many more vertices and are more extreme than with the cube."),
-        GLTFInfo("SimpleMeshes", "A simple `scene` with two `nodes`, both containing the same `mesh`, namely a `mesh` with a single `mesh.primitive` with a single indexed triangle with *multiple* attributes (positions, normals and texture coordinates), but without a `material`"),
-        GLTFInfo("SimpleMorph", "A triangle with a morph animation applied"),
-        GLTFInfo("SimpleSparseAccessor", "A simple mesh that uses sparse accessors"),
-        GLTFInfo("SimpleSkin", "A simple example of vertex skinning in glTF"),
-        GLTFInfo("Cameras", "A sample with two different `camera` objects"),
+        GLTFInfo("SimpleMeshes", "A simple `scene` with two `nodes`, both containing the same `mesh`, namely a `mesh` with a single `mesh.primitive` with a single indexed triangle with *multiple* attributes (positions, normals and texture coordinates), but without a `material`", "gltf", "glTF-Sample-Models/2.0/SimpleMeshes/glTF"),
+        GLTFInfo("SimpleMorph", "A triangle with a morph animation applied", "gltf", "glTF-Sample-Models/2.0/SimpleMorph/glTF"),
+        GLTFInfo("SimpleSparseAccessor", "A simple mesh that uses sparse accessors", "gltf", "glTF-Sample-Models/2.0/SimpleSparseAccessor/glTF"),
+        GLTFInfo("SimpleSkin", "A simple example of vertex skinning in glTF", "gltf", "glTF-Sample-Models/2.0/SimpleSkin/glTF"),
+        GLTFInfo("Cameras", "A sample with two different `camera` objects", "gltf", "glTF-Sample-Models/2.0/Cameras/glTF"),
         GLTFInfo("InterpolationTest", "A sample with three different `animation` interpolations"),
         GLTFInfo("Unicode❤♻Test", "A sample with Unicode characters in file, material, and mesh names"),
-        //
-        GLTFInfo("AntiqueCamera"),
-        GLTFInfo("Avocado"),
-        GLTFInfo("BarramundiFish"),
-        GLTFInfo("BoomBox"),
-        GLTFInfo("Corset"),
-        GLTFInfo("DamagedHelmet"),
-        GLTFInfo("FlightHelmet"),
-        GLTFInfo("Lantern"),
-        GLTFInfo("SciFiHelmet"),
-        GLTFInfo("Suzanne"),
-        GLTFInfo("WaterBottle"),
         // Extensions Feature Tests
+        GLTFInfo("-----------------Extensions Feature Tests------------------", "", "glb", "glTF-Sample-Models/2.0/UnlitTest/glTF-Binary", "UnlitTest"),
         GLTFInfo("AttenuationTest", "Tests the interactions between attenuation, thickness, and scale."),
         GLTFInfo("ClearCoatTest", "Tests if the KHR_materials_clearcoat extension is supported properly."),
         GLTFInfo("EmissiveStrengthTest", "Tests if the KHR_materials_emissive_strength extension is supported properly."),
@@ -109,6 +117,7 @@ class LoaderGUI: Script {
         GLTFInfo("TransmissionTest", "Tests if the KHR_materials_transmission extension is supported properly."),
         GLTFInfo("UnlitTest", "Tests if the KHR_materials_unlit extension is supported properly."),
         // Extensions Showcase
+        GLTFInfo("----------------Extensions Showcase-------------------------", "", "glb", "glTF-Sample-Models/2.0/ToyCar/glTF-Binary", "ToyCar"),
         GLTFInfo("ABeautifulGame", "Chess set using [transmission][volume]"),
         GLTFInfo("DragonAttenuation", "Dragon with background, using [material variants][transmission][volume]"),
         GLTFInfo("GlamVelvetSofa", "Sofa using [material variants][sheen][specular]"),
@@ -122,14 +131,14 @@ class LoaderGUI: Script {
         GLTFInfo("ToyCar", "Toy car example using [transmission][clearcoat][sheen]")
     ]
 
-    private var loaderItem: Int {
+    var loaderItem: Int {
         get {
             currentItem
         }
         set {
             if newValue != currentItem {
                 currentItem = newValue
-                let assetURL = Bundle.main.url(forResource: gltfInfo[newValue].name,
+                let assetURL = Bundle.main.url(forResource: gltfInfo[newValue].fileName,
                         withExtension: gltfInfo[newValue].ext,
                         subdirectory: gltfInfo[newValue].dir)!
                 GLTFLoader.parse(engine, assetURL) { [self] resource in
@@ -161,7 +170,7 @@ class LoaderGUI: Script {
         }
         ImGuiSeparator()
         if ImGuiButton("Reset Camera", ImVec2(x: 100, y: 20)) {
-            camera.entity.transform.worldPosition = Vector3(5, 5, 5)
+            camera.entity.transform.worldPosition = Vector3(3, 2, 3)
         }
         ImGuiSliderFloat("Manual Exposure", &scene.postprocessManager.manualExposure, 0.0, 1.0, nil, 1)
         UIElement.frameRate()

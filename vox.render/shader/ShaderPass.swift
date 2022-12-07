@@ -77,7 +77,7 @@ public class ShaderPass {
     /// Set if is transparent of the shader pass render state.
     /// - Parameter type: RenderQueueType
     func setRenderQueueType(_ type: RenderQueueType) {
-        _renderState!.renderQueueType = RenderQueueType.Transparent
+        _renderState!.renderQueueType = type
         switch type {
         case RenderQueueType.Transparent:
             _renderState!.blendState.targetBlendState.enabled = true

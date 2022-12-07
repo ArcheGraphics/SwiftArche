@@ -9,7 +9,7 @@ import vox_render
 import vox_math
 import vox_toolkit
 
-class GltfLoaderApp: NSViewController {
+class GltfViewerApp: NSViewController {
     var canvas: Canvas!
     var engine: Engine!
     var iblBaker: IBLBaker!
@@ -21,23 +21,39 @@ class GltfLoaderApp: NSViewController {
         iblBaker = IBLBaker(engine)
 
         let scene = engine.sceneManager.activeScene!
+        scene.postprocessManager.manualExposure = 1
+        scene.shadowCascades = .FourCascades
         let hdr = engine.textureLoader.loadHDR(with: "assets/kloppenheim_06_4k.hdr")!
         iblBaker.bake(scene, with: hdr, size: 256, level: 3)
         let rootEntity = scene.createRootEntity()
 
         let cameraEntity = rootEntity.createChild()
-        cameraEntity.transform.position = Vector3(5, 5, 5)
+        cameraEntity.transform.position = Vector3(3, 2, 3)
         cameraEntity.transform.lookAt(targetPosition: Vector3())
         let camera: Camera = cameraEntity.addComponent()
         let _: OrbitControl = cameraEntity.addComponent()
 
         let light = rootEntity.createChild("light")
-        light.transform.position = Vector3(1, 3, 0)
+        light.transform.position = Vector3(0.1, 5, 0.1)
         light.transform.lookAt(targetPosition: Vector3())
-        let _: DirectLight = light.addComponent()
-
+        let directLight: DirectLight = light.addComponent()
+        directLight.shadowType = .SoftLow
+        
+        let planeEntity = rootEntity.createChild()
+        planeEntity.transform.position = Vector3(0, -1, 0)
+        let shadowPlane: MeshRenderer = planeEntity.addComponent()
+        shadowPlane.mesh = PrimitiveMesh.createPlane(engine, 10, 10)
+        let shadowMtl = PBRMaterial(engine)
+        shadowMtl.baseColor = Color(0.6, 0.6, 0.6, 1.0)
+        shadowMtl.roughness = 1
+        shadowMtl.metallic = 0
+        shadowMtl.shader[0].setRenderFace(.Double)
+        shadowPlane.setMaterial(shadowMtl)
+        shadowPlane.castShadows = false
+        
         let gltfRoot = rootEntity.createChild()
         let gui: LoaderGUI = gltfRoot.addComponent()
+        gui.loaderItem = 8
         gui.camera = camera
         engine.run()
     }
