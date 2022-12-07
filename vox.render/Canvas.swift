@@ -17,11 +17,13 @@ import AppKit
 public class Canvas: MTKView {
 #if os(iOS)
     public static let colorPixelFormat = MTLPixelFormat.bgra8Unorm
+    public static let depthPixelFormat = MTLPixelFormat.depth32Float_stencil8
+    public static var stencilPixelFormat: MTLPixelFormat? = MTLPixelFormat.depth32Float_stencil8
 #else
     public static let colorPixelFormat = MTLPixelFormat.rgba16Float
-#endif
     public static let depthPixelFormat = MTLPixelFormat.depth32Float
     public static var stencilPixelFormat: MTLPixelFormat?
+#endif
 
     var inputManager: InputManager?
     public var updateFlagManager = UpdateFlagManager()

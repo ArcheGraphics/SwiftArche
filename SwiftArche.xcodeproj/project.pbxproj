@@ -92,6 +92,23 @@
 		3E0F7C952926644F00C4A843 /* StaticCollider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E0F7C922926644F00C4A843 /* StaticCollider.swift */; };
 		3E0F7C97292664DF00C4A843 /* Collider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E0F7C96292664DF00C4A843 /* Collider.swift */; };
 		3E0F7C9829270B6F00C4A843 /* BufferView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8C99F4B73069C1988F340 /* BufferView.swift */; };
+		3E58E1AA2940B866006A49CD /* PostprocessManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E58E1A72940B866006A49CD /* PostprocessManager.swift */; };
+		3E58E1AB2940B866006A49CD /* ComputePass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E58E1A82940B866006A49CD /* ComputePass.swift */; };
+		3E58E1AC2940B866006A49CD /* ComputePipelineState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E58E1A92940B866006A49CD /* ComputePipelineState.swift */; };
+		3E58E1AF2940B881006A49CD /* Luminance.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E58E1AE2940B881006A49CD /* Luminance.swift */; };
+		3E58E1B22940B8A6006A49CD /* HDRLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 3E58E1B12940B8A6006A49CD /* HDRLoader.m */; };
+		3E58E1B72940B8DA006A49CD /* luminance.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3E58E1B32940B8DA006A49CD /* luminance.metal */; };
+		3E58E1B82940B8DA006A49CD /* postprocess_merge.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3E58E1B52940B8DA006A49CD /* postprocess_merge.metal */; };
+		3E58E1B92940B8DA006A49CD /* cluster_compute.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3E58E1B62940B8DA006A49CD /* cluster_compute.metal */; };
+		3E58E1BB2940B8E2006A49CD /* transparent_shadow.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3E58E1BA2940B8E2006A49CD /* transparent_shadow.metal */; };
+		3E58E1C02940B8F1006A49CD /* shadow_visual.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3E58E1BC2940B8F1006A49CD /* shadow_visual.metal */; };
+		3E58E1C12940B8F1006A49CD /* cubemap_generator.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3E58E1BD2940B8F1006A49CD /* cubemap_generator.metal */; };
+		3E58E1C22940B8F1006A49CD /* light_sprite.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3E58E1BE2940B8F1006A49CD /* light_sprite.metal */; };
+		3E58E1C32940B8F1006A49CD /* cluster_visual.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3E58E1BF2940B8F1006A49CD /* cluster_visual.metal */; };
+		3E58E1C62940B90D006A49CD /* function_common.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3E58E1C52940B90D006A49CD /* function_common.metal */; };
+		3E58E1C82940B94C006A49CD /* FogMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E58E1C72940B94C006A49CD /* FogMode.swift */; };
+		3E58E1CB2940BCA4006A49CD /* IBLBaker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E58E1CA2940BCA4006A49CD /* IBLBaker.swift */; };
+		3E58E1CE2940BCD2006A49CD /* assets in Resources */ = {isa = PBXBuildFile; fileRef = 3E58E1CC2940BCD2006A49CD /* assets */; };
 		3E5D867C292B1C3C00759BA9 /* Keyframe.swift in Sources */ = {isa = PBXBuildFile; fileRef = E63B152B56D2F2BE0AE76CA0 /* Keyframe.swift */; };
 		3E5D867D292B1CF900759BA9 /* AnimationCurve.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8C5FB606CD86F901949A4 /* AnimationCurve.swift */; };
 		3E5D867E292B1D5600759BA9 /* AnimationCurveOwner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04462EFD292AEF3400F95387 /* AnimationCurveOwner.swift */; };
@@ -216,7 +233,6 @@
 		43D8C820CF87E72BB10AB1D4 /* GLTFResource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8C96383A8B0F458BBA4B3 /* GLTFResource.swift */; };
 		43D8C87F208559AB9669EB85 /* SceneParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8C058DA27D2BC1365273F /* SceneParser.swift */; };
 		43D8C88A3903131798FB09AA /* AnimationQuaternionCurve.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8CCF0CCCEBC531A44ED23 /* AnimationQuaternionCurve.swift */; };
-		43D8C88ACAE60431C443C85C /* ComputePass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8C15F86CB93FDBB5AB528 /* ComputePass.swift */; };
 		43D8C8CE36C33163DDB2FBD7 /* ResourceCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8CD34E1337864CB67AF7E /* ResourceCache.swift */; };
 		43D8C8DA95DABECFDE06AC41 /* JointLimits.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8CB23455968ACCFC0E47E /* JointLimits.swift */; };
 		43D8C90AE24197CDB540FB64 /* BlendShapeFrame.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8C9942022F6DC1C633DC6 /* BlendShapeFrame.swift */; };
@@ -269,7 +285,6 @@
 		43D8CEE05C4F1021A3652A8D /* MaterialParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8C5A3314DCAAF4732626D /* MaterialParser.swift */; };
 		43D8CEF8E23C12D9326BDA90 /* ColorSpace.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8CF595B22621DDE5D976D /* ColorSpace.swift */; };
 		43D8CF98C05E60C0A40F11E4 /* StencilState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8C55ADD0B573F9BE441A2 /* StencilState.swift */; };
-		43D8CF9A819FABF732156575 /* ComputePipelineState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8C5458496A0164715E24D /* ComputePipelineState.swift */; };
 		43D8CFDE172582A4463B835E /* PrimitiveMesh.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8C0E825225EDCF4195D57 /* PrimitiveMesh.swift */; };
 		E63B10A5AD9B371E044CF012 /* AnimatorStatePlayState.swift in Sources */ = {isa = PBXBuildFile; fileRef = E63B1F7F363BDA85D54F674E /* AnimatorStatePlayState.swift */; };
 		E63B113C5609C5F386EDF786 /* WrapMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = E63B1D15496DFF9775F04BA0 /* WrapMode.swift */; };
@@ -326,6 +341,27 @@
 			proxyType = 1;
 			remoteGlobalIDString = 3E0F7BB82925FBBF00C4A843;
 			remoteInfo = vox.physics;
+		};
+		3E58E1D02940BDC3006A49CD /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 3E67EDBD291B2F7600ED60C8 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 040F1DFA293785BC008BDC8D;
+			remoteInfo = app.shader;
+		};
+		3E58E1D22940BDC3006A49CD /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 3E67EDBD291B2F7600ED60C8 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 3EC92A882937422700423396;
+			remoteInfo = toolkit.shader;
+		};
+		3E58E1D42940BDC3006A49CD /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 3E67EDBD291B2F7600ED60C8 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 3E67EDFC291B301700ED60C8;
+			remoteInfo = vox.shader;
 		};
 		3E67EDDF291B2F7800ED60C8 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -613,6 +649,25 @@
 		3E0F7C912926644F00C4A843 /* DynamicCollider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DynamicCollider.swift; sourceTree = "<group>"; };
 		3E0F7C922926644F00C4A843 /* StaticCollider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StaticCollider.swift; sourceTree = "<group>"; };
 		3E0F7C96292664DF00C4A843 /* Collider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Collider.swift; sourceTree = "<group>"; };
+		3E58E1A72940B866006A49CD /* PostprocessManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PostprocessManager.swift; sourceTree = "<group>"; };
+		3E58E1A82940B866006A49CD /* ComputePass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ComputePass.swift; sourceTree = "<group>"; };
+		3E58E1A92940B866006A49CD /* ComputePipelineState.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ComputePipelineState.swift; sourceTree = "<group>"; };
+		3E58E1AE2940B881006A49CD /* Luminance.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Luminance.swift; sourceTree = "<group>"; };
+		3E58E1B02940B8A6006A49CD /* HDRLoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HDRLoader.h; sourceTree = "<group>"; };
+		3E58E1B12940B8A6006A49CD /* HDRLoader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HDRLoader.m; sourceTree = "<group>"; };
+		3E58E1B32940B8DA006A49CD /* luminance.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; path = luminance.metal; sourceTree = "<group>"; };
+		3E58E1B42940B8DA006A49CD /* cluster_compute.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cluster_compute.h; sourceTree = "<group>"; };
+		3E58E1B52940B8DA006A49CD /* postprocess_merge.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; path = postprocess_merge.metal; sourceTree = "<group>"; };
+		3E58E1B62940B8DA006A49CD /* cluster_compute.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; path = cluster_compute.metal; sourceTree = "<group>"; };
+		3E58E1BA2940B8E2006A49CD /* transparent_shadow.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; path = transparent_shadow.metal; sourceTree = "<group>"; };
+		3E58E1BC2940B8F1006A49CD /* shadow_visual.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; path = shadow_visual.metal; sourceTree = "<group>"; };
+		3E58E1BD2940B8F1006A49CD /* cubemap_generator.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; path = cubemap_generator.metal; sourceTree = "<group>"; };
+		3E58E1BE2940B8F1006A49CD /* light_sprite.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; path = light_sprite.metal; sourceTree = "<group>"; };
+		3E58E1BF2940B8F1006A49CD /* cluster_visual.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; path = cluster_visual.metal; sourceTree = "<group>"; };
+		3E58E1C52940B90D006A49CD /* function_common.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; path = function_common.metal; sourceTree = "<group>"; };
+		3E58E1C72940B94C006A49CD /* FogMode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FogMode.swift; sourceTree = "<group>"; };
+		3E58E1CA2940BCA4006A49CD /* IBLBaker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IBLBaker.swift; sourceTree = "<group>"; };
+		3E58E1CC2940BCD2006A49CD /* assets */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = assets; sourceTree = SOURCE_ROOT; };
 		3E67EDC5291B2F7600ED60C8 /* SwiftArche.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SwiftArche.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		3E67EDC8291B2F7600ED60C8 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		3E67EDCA291B2F7600ED60C8 /* ar_shading.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = ar_shading.metal; sourceTree = "<group>"; };
@@ -690,7 +745,6 @@
 		43D8C0E825225EDCF4195D57 /* PrimitiveMesh.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PrimitiveMesh.swift; sourceTree = "<group>"; };
 		43D8C0EA6C54B16C4DBBDB8C /* ForwardSubpass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ForwardSubpass.swift; sourceTree = "<group>"; };
 		43D8C11CC2C81E2597C1A743 /* ListenerUpdateFlag .swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "ListenerUpdateFlag .swift"; sourceTree = "<group>"; };
-		43D8C15F86CB93FDBB5AB528 /* ComputePass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ComputePass.swift; sourceTree = "<group>"; };
 		43D8C16C159DE4ABBC466DA3 /* RasterState.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RasterState.swift; sourceTree = "<group>"; };
 		43D8C16E408A6BA2D7B12F79 /* BackgroundSubpass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BackgroundSubpass.swift; sourceTree = "<group>"; };
 		43D8C1E5621B240E0DF2CAC8 /* RenderTargetBlendState.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RenderTargetBlendState.swift; sourceTree = "<group>"; };
@@ -718,7 +772,6 @@
 		43D8C4FB7FE01E2F173F67CA /* ShadowResolution.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ShadowResolution.swift; sourceTree = "<group>"; };
 		43D8C518C7B03C3787F9676C /* DepthState.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DepthState.swift; sourceTree = "<group>"; };
 		43D8C51FABA0980F27EB7615 /* RenderPass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RenderPass.swift; sourceTree = "<group>"; };
-		43D8C5458496A0164715E24D /* ComputePipelineState.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ComputePipelineState.swift; sourceTree = "<group>"; };
 		43D8C54936F3EFC16FD740F6 /* SpringJoint.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SpringJoint.swift; sourceTree = "<group>"; };
 		43D8C55ADD0B573F9BE441A2 /* StencilState.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StencilState.swift; sourceTree = "<group>"; };
 		43D8C5A3314DCAAF4732626D /* MaterialParser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MaterialParser.swift; sourceTree = "<group>"; };
@@ -909,11 +962,16 @@
 				040F1E03293785ED008BDC8D /* type_common.h */,
 				040F1E05293785EE008BDC8D /* macro_name.h */,
 				040F1E06293785EE008BDC8D /* function_constant.h */,
+				3E58E1C42940B902006A49CD /* copy */,
 				3EC92ABF2938923A00423396 /* atomic_counter.metal */,
 				040F1E02293785ED008BDC8D /* texture_packer.metal */,
 				3EC92AC22938923B00423396 /* cubemap_shading.metal */,
 				3EC92AC02938923A00423396 /* sh_baker.metal */,
 				3EC92AC12938923A00423396 /* specular_baker.metal */,
+				3E58E1BF2940B8F1006A49CD /* cluster_visual.metal */,
+				3E58E1BD2940B8F1006A49CD /* cubemap_generator.metal */,
+				3E58E1BE2940B8F1006A49CD /* light_sprite.metal */,
+				3E58E1BC2940B8F1006A49CD /* shadow_visual.metal */,
 			);
 			path = app.shader;
 			sourceTree = "<group>";
@@ -1017,6 +1075,7 @@
 		3E0F7B1229220F5D00C4A843 /* shadow */ = {
 			isa = PBXGroup;
 			children = (
+				3E58E1BA2940B8E2006A49CD /* transparent_shadow.metal */,
 				3E0F7B1329220F8C00C4A843 /* shadowmap.metal */,
 				04ED07DC292284A100DD55AB /* shadow_shading.h */,
 				04ED07DD292284FD00DD55AB /* shadow_shading.metal */,
@@ -1259,6 +1318,41 @@
 			path = controller;
 			sourceTree = "<group>";
 		};
+		3E58E1A62940B854006A49CD /* postprocess */ = {
+			isa = PBXGroup;
+			children = (
+				3E58E1AD2940B873006A49CD /* passes */,
+				3E58E1A82940B866006A49CD /* ComputePass.swift */,
+				3E58E1A92940B866006A49CD /* ComputePipelineState.swift */,
+				3E58E1A72940B866006A49CD /* PostprocessManager.swift */,
+			);
+			path = postprocess;
+			sourceTree = "<group>";
+		};
+		3E58E1AD2940B873006A49CD /* passes */ = {
+			isa = PBXGroup;
+			children = (
+				3E58E1AE2940B881006A49CD /* Luminance.swift */,
+			);
+			path = passes;
+			sourceTree = "<group>";
+		};
+		3E58E1C42940B902006A49CD /* copy */ = {
+			isa = PBXGroup;
+			children = (
+				3E58E1C52940B90D006A49CD /* function_common.metal */,
+			);
+			path = copy;
+			sourceTree = "<group>";
+		};
+		3E58E1C92940BC6A006A49CD /* rendering */ = {
+			isa = PBXGroup;
+			children = (
+				3E58E1CA2940BCA4006A49CD /* IBLBaker.swift */,
+			);
+			path = rendering;
+			sourceTree = "<group>";
+		};
 		3E5D8679292B1BCD00759BA9 /* animationCurveOwner */ = {
 			isa = PBXGroup;
 			children = (
@@ -1337,6 +1431,7 @@
 		3E67EDC7291B2F7600ED60C8 /* SwiftArche */ = {
 			isa = PBXGroup;
 			children = (
+				3E58E1CC2940BCD2006A49CD /* assets */,
 				3E67EDD1291B2F7600ED60C8 /* Main.storyboard */,
 				040F1D9C293369DC008BDC8D /* Textures.xcassets */,
 				3E67EDD4291B2F7800ED60C8 /* Assets.xcassets */,
@@ -1344,6 +1439,7 @@
 				040F1E0929378616008BDC8D /* bridging.h */,
 				3E67EDC8291B2F7600ED60C8 /* AppDelegate.swift */,
 				E63B17AB94CBF9AAB3956248 /* PrimitiveApp.swift */,
+				3E58E1C92940BC6A006A49CD /* rendering */,
 			);
 			path = SwiftArche;
 			sourceTree = "<group>";
@@ -1368,6 +1464,10 @@
 		3E67EDFE291B301700ED60C8 /* vox.shader */ = {
 			isa = PBXGroup;
 			children = (
+				3E58E1B42940B8DA006A49CD /* cluster_compute.h */,
+				3E58E1B62940B8DA006A49CD /* cluster_compute.metal */,
+				3E58E1B32940B8DA006A49CD /* luminance.metal */,
+				3E58E1B52940B8DA006A49CD /* postprocess_merge.metal */,
 				3E0F7B1229220F5D00C4A843 /* shadow */,
 				043E2C9C2920D0BC0057BDD1 /* type_common.h */,
 				43D8C3D9132283C53EF428E3 /* macro_name.h */,
@@ -1397,6 +1497,7 @@
 				3E67EEC9291FAA1600ED60C8 /* material */,
 				3E67EECE29206B5E00ED60C8 /* mesh */,
 				3E67EECA291FD7E700ED60C8 /* rendering */,
+				3E58E1A62940B854006A49CD /* postprocess */,
 				043E2C9D2920D6360057BDD1 /* lighting */,
 				3E67EEBD291DCB6B00ED60C8 /* shadow */,
 				04176A7C2927287600B1775A /* ar */,
@@ -1512,6 +1613,7 @@
 		3E67EEBC291D03D100ED60C8 /* enums */ = {
 			isa = PBXGroup;
 			children = (
+				3E58E1C72940B94C006A49CD /* FogMode.swift */,
 				43D8C08D2843709803F5744E /* CameraClearFlags.swift */,
 				43D8CF595B22621DDE5D976D /* ColorSpace.swift */,
 			);
@@ -1584,14 +1686,12 @@
 			children = (
 				E63B16A52D7461C2352D44C3 /* RenderElement.swift */,
 				E63B14B2CEF6930B88416E69 /* DevicePipeline.swift */,
-				43D8C15F86CB93FDBB5AB528 /* ComputePass.swift */,
 				43D8C51FABA0980F27EB7615 /* RenderPass.swift */,
 				43D8C5BA82AE969237F234DC /* Subpass.swift */,
 				3E0F7B202923584A00C4A843 /* subpasses */,
 				3E0F7B1E292331B000C4A843 /* ReflectionUniform.swift */,
 				3EC92AE2293A055F00423396 /* RenderCommandEncoder.swift */,
 				43D8C4992F109CE7A2BD9E97 /* RenderPipelineState.swift */,
-				43D8C5458496A0164715E24D /* ComputePipelineState.swift */,
 				43D8CD34E1337864CB67AF7E /* ResourceCache.swift */,
 			);
 			path = rendering;
@@ -1693,6 +1793,8 @@
 				43D8C96383A8B0F458BBA4B3 /* GLTFResource.swift */,
 				43D8C6A845BA09F1A5C6D61D /* GLTFUtil.swift */,
 				43D8C20CB57C5A32D0E5CCD0 /* TextureLoader.swift */,
+				3E58E1B02940B8A6006A49CD /* HDRLoader.h */,
+				3E58E1B12940B8A6006A49CD /* HDRLoader.m */,
 			);
 			path = loader;
 			sourceTree = "<group>";
@@ -1773,6 +1875,9 @@
 			buildRules = (
 			);
 			dependencies = (
+				3E58E1D12940BDC3006A49CD /* PBXTargetDependency */,
+				3E58E1D32940BDC3006A49CD /* PBXTargetDependency */,
+				3E58E1D52940BDC3006A49CD /* PBXTargetDependency */,
 				04176ACB29275DB700B1775A /* PBXTargetDependency */,
 				04176ACD29275DB700B1775A /* PBXTargetDependency */,
 				3E67EE14291B312B00ED60C8 /* PBXTargetDependency */,
@@ -2013,6 +2118,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				040F1D9D293369DC008BDC8D /* Textures.xcassets in Resources */,
+				3E58E1CE2940BCD2006A49CD /* assets in Resources */,
 				3E67EDD5291B2F7800ED60C8 /* Assets.xcassets in Resources */,
 				3E67EDD3291B2F7600ED60C8 /* Main.storyboard in Resources */,
 			);
@@ -2059,7 +2165,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "cp \"$TARGET_BUILD_DIR/vox.shader.metallib\" \"$TARGET_BUILD_DIR/$UNLOCALIZED_RESOURCES_FOLDER_PATH/.\"\n";
+			shellScript = "cp \"$TARGET_BUILD_DIR/vox.shader.metallib\" \"$TARGET_BUILD_DIR/$UNLOCALIZED_RESOURCES_FOLDER_PATH/.\"\ncp \"$TARGET_BUILD_DIR/toolkit.shader.metallib\" \"$TARGET_BUILD_DIR/$UNLOCALIZED_RESOURCES_FOLDER_PATH/.\"\ncp \"$TARGET_BUILD_DIR/app.shader.metallib\" \"$TARGET_BUILD_DIR/$UNLOCALIZED_RESOURCES_FOLDER_PATH/.\"\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -2069,9 +2175,14 @@
 			buildActionMask = 2147483647;
 			files = (
 				3EC92AC52938923B00423396 /* specular_baker.metal in Sources */,
+				3E58E1C22940B8F1006A49CD /* light_sprite.metal in Sources */,
+				3E58E1C02940B8F1006A49CD /* shadow_visual.metal in Sources */,
 				040F1E07293785EE008BDC8D /* texture_packer.metal in Sources */,
 				3EC92AC62938923B00423396 /* cubemap_shading.metal in Sources */,
+				3E58E1C32940B8F1006A49CD /* cluster_visual.metal in Sources */,
+				3E58E1C62940B90D006A49CD /* function_common.metal in Sources */,
 				3EC92AC32938923B00423396 /* atomic_counter.metal in Sources */,
+				3E58E1C12940B8F1006A49CD /* cubemap_generator.metal in Sources */,
 				3EC92AC42938923B00423396 /* sh_baker.metal in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -2124,6 +2235,7 @@
 			files = (
 				3E67EDC9291B2F7600ED60C8 /* AppDelegate.swift in Sources */,
 				E63B123A289AA1AE61CCA67E /* PrimitiveApp.swift in Sources */,
+				3E58E1CB2940BCA4006A49CD /* IBLBaker.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2154,9 +2266,13 @@
 				3E0F7B1429220F8C00C4A843 /* shadowmap.metal in Sources */,
 				04ED07DA29226E9C00DD55AB /* normal_shading.metal in Sources */,
 				04ED07DE292284FD00DD55AB /* shadow_shading.metal in Sources */,
+				3E58E1B72940B8DA006A49CD /* luminance.metal in Sources */,
 				3E67EED12921D9C800ED60C8 /* unlit_shading.metal in Sources */,
+				3E58E1B92940B8DA006A49CD /* cluster_compute.metal in Sources */,
 				3E0F7B1C2922374400C4A843 /* pbr_shading.metal in Sources */,
 				3E0F7B0C2921F63B00C4A843 /* skybox_shading.metal in Sources */,
+				3E58E1B82940B8DA006A49CD /* postprocess_merge.metal in Sources */,
+				3E58E1BB2940B8E2006A49CD /* transparent_shadow.metal in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2219,6 +2335,7 @@
 				43D8C4A0C09957580D8029FA /* RenderQueueType.swift in Sources */,
 				3E5D867E292B1D5600759BA9 /* AnimationCurveOwner.swift in Sources */,
 				43D8C1B2AED98876E2A587FC /* BaseMaterial.swift in Sources */,
+				3E58E1AB2940B866006A49CD /* ComputePass.swift in Sources */,
 				43D8CE61BE3200DB2073AC80 /* BlendMode.swift in Sources */,
 				43D8C91C88772F8F3AB795F2 /* RenderFace.swift in Sources */,
 				43D8CDB093F067C1F7E65758 /* UnlitMaterial.swift in Sources */,
@@ -2234,6 +2351,7 @@
 				43D8CCBC80181D80F3E9A7CA /* PBRSpecularMaterial.swift in Sources */,
 				43D8CA3CFB85DE87A2237A01 /* IndexBufferBinding.swift in Sources */,
 				43D8C24FBA43B612E59B13DE /* SubMesh.swift in Sources */,
+				3E58E1AC2940B866006A49CD /* ComputePipelineState.swift in Sources */,
 				3E0F7C522926036F00C4A843 /* PhysXDynamicCollider.swift in Sources */,
 				43D8C77DD4198A013659D501 /* Mesh.swift in Sources */,
 				3E0F7C552926036F00C4A843 /* PhysXPhysicsManager.swift in Sources */,
@@ -2257,14 +2375,13 @@
 				3E0F7C6E2926039500C4A843 /* PhysXSphericalJoint.swift in Sources */,
 				E63B1C21D23A62BB4C35D54C /* LightManager.swift in Sources */,
 				43D8CC46810990E2EF50CBB6 /* AmbientLight.swift in Sources */,
+				3E58E1B22940B8A6006A49CD /* HDRLoader.m in Sources */,
 				3E0F7C5F2926038E00C4A843 /* PhysXCapsuleColliderShape.swift in Sources */,
 				3E5D868B292B44BB00759BA9 /* AnimatorState.swift in Sources */,
 				43D8C90C0E2864B1E8311355 /* EngineSettings.swift in Sources */,
 				43D8C16073098E7394206F0E /* RenderPipelineState.swift in Sources */,
 				3E5D8683292B3BFE00759BA9 /* AnimatorLayerData.swift in Sources */,
-				43D8CF9A819FABF732156575 /* ComputePipelineState.swift in Sources */,
 				3E0F7C692926039500C4A843 /* PhysXHingeJoint.swift in Sources */,
-				43D8C88ACAE60431C443C85C /* ComputePass.swift in Sources */,
 				3E5D8682292B3BE900759BA9 /* AnimationEventHandler.swift in Sources */,
 				3E0F7C84292607AB00C4A843 /* ColliderShapeUpAxis.swift in Sources */,
 				43D8C3009A7DB108E86AD131 /* RenderPass.swift in Sources */,
@@ -2275,6 +2392,7 @@
 				E63B1FBDADAAF1E683C7D956 /* ShadowUtils.swift in Sources */,
 				3E0F7C6F2926039500C4A843 /* PhysXConfigurableJoint.swift in Sources */,
 				43D8C4BD6BB477FAF132C5DE /* SkyBoxMaterial.swift in Sources */,
+				3E58E1C82940B94C006A49CD /* FogMode.swift in Sources */,
 				3E0F7C8F2926642E00C4A843 /* PlaneColliderShape.swift in Sources */,
 				3E0F7C942926644F00C4A843 /* DynamicCollider.swift in Sources */,
 				3E0F7C6D2926039500C4A843 /* PhysXJoint.swift in Sources */,
@@ -2313,6 +2431,7 @@
 				3E5D8688292B44BB00759BA9 /* AnimatorController.swift in Sources */,
 				E63B155F6165E95781BFCB26 /* AnimatorLayerBlendingMode.swift in Sources */,
 				E63B10A5AD9B371E044CF012 /* AnimatorStatePlayState.swift in Sources */,
+				3E58E1AA2940B866006A49CD /* PostprocessManager.swift in Sources */,
 				E63B1816639E944D107AF911 /* InterpolationType.swift in Sources */,
 				E63B16863F22CC3922BF0245 /* LayerState.swift in Sources */,
 				3E5D867C292B1C3C00759BA9 /* Keyframe.swift in Sources */,
@@ -2342,6 +2461,7 @@
 				43D8CC13F4EA7765C1149E6C /* KHR_lights_punctual.swift in Sources */,
 				43D8C344EAB77D48436627E3 /* KHR_texture_transform.swift in Sources */,
 				43D8C168F6E9DD9180DC89CB /* ParserContext.swift in Sources */,
+				3E58E1AF2940B881006A49CD /* Luminance.swift in Sources */,
 				43D8CC3C079FDD168292402E /* Parser.swift in Sources */,
 				43D8C928565BB08B8E070ED4 /* TextureParser.swift in Sources */,
 				43D8CEE05C4F1021A3652A8D /* MaterialParser.swift in Sources */,
@@ -2441,6 +2561,21 @@
 			isa = PBXTargetDependency;
 			target = 3E0F7BB82925FBBF00C4A843 /* vox.physics */;
 			targetProxy = 3E0F7C852926126000C4A843 /* PBXContainerItemProxy */;
+		};
+		3E58E1D12940BDC3006A49CD /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 040F1DFA293785BC008BDC8D /* app.shader */;
+			targetProxy = 3E58E1D02940BDC3006A49CD /* PBXContainerItemProxy */;
+		};
+		3E58E1D32940BDC3006A49CD /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 3EC92A882937422700423396 /* toolkit.shader */;
+			targetProxy = 3E58E1D22940BDC3006A49CD /* PBXContainerItemProxy */;
+		};
+		3E58E1D52940BDC3006A49CD /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 3E67EDFC291B301700ED60C8 /* vox.shader */;
+			targetProxy = 3E58E1D42940BDC3006A49CD /* PBXContainerItemProxy */;
 		};
 		3E67EDE0291B2F7800ED60C8 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;

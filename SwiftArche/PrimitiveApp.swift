@@ -18,7 +18,7 @@ class ARScript: Script {
             _cubeEntity = entity.createChild()
             let renderer: MeshRenderer = _cubeEntity!.addComponent()
             renderer.mesh = PrimitiveMesh.createCuboid(engine, 0.1, 0.1, 0.1)
-            let material = UnlitMaterial(engine)
+            let material = PBRMaterial(engine)
             material.baseColor = Color(0.4, 0.6, 0.6)
             renderer.setMaterial(material)
 
@@ -30,7 +30,7 @@ class ARScript: Script {
 
         _rTri += 90 * deltaTime
         if _cubeEntity != nil {
-            _cubeEntity!.transform.setRotation(x: 0, y: _rTri, z: 0)
+            _cubeEntity!.transform.rotation = Vector3(0, _rTri, 0)
         }
     }
 }
@@ -38,15 +38,18 @@ class ARScript: Script {
 class PrimitiveApp: UIViewController {
     var canvas: Canvas!
     var engine: Engine!
+    var iblBaker: IBLBaker!
 
     override func viewDidLoad() {
         super.viewDidLoad()
         canvas = Canvas(with: view)
-
         engine = Engine(canvas: canvas)
         engine.initArSession()
+        iblBaker = IBLBaker(engine)
 
         let scene = engine.sceneManager.activeScene!
+        let hdr = engine.textureLoader.loadHDR(with: "assets/kloppenheim_06_4k.hdr")!
+        iblBaker.bake(scene, with: hdr, size: 256, level: 3)
         let rootEntity = scene.createRootEntity()
         let _: ARScript = rootEntity.addComponent()
 
@@ -55,17 +58,9 @@ class PrimitiveApp: UIViewController {
         engine.arManager!.camera = camera
 
         let light = rootEntity.createChild("light")
-        light.transform.setPosition(x: 0, y: 3, z: 0)
-        let pointLight: PointLight = light.addComponent()
-        pointLight.intensity = 0.3
-
-        let cubeEntity = rootEntity.createChild()
-        cubeEntity.transform.setPosition(x: 0, y: 0.1, z: -0.3)
-        let renderer: MeshRenderer = cubeEntity.addComponent()
-        renderer.mesh = PrimitiveMesh.createCuboid(engine, 0.1, 0.1, 0.1)
-        let material = UnlitMaterial(engine)
-        material.baseColor = Color(0.4, 0.0, 0.0)
-        renderer.setMaterial(material)
+        light.transform.position = Vector3(1, 3, 0)
+        light.transform.lookAt(targetPosition: Vector3())
+        let _: DirectLight = light.addComponent()
 
         engine.run()
     }

@@ -4,5 +4,6 @@
 //  personal capacity and am not conveying any rights to any intellectual
 //  property of any third parties.
 
-//#include "../toolkit.shader/macro_name.h"
+#include "../vox.render/bridging.h"
+#include "../vox.toolkit/bridging.h"
 #include "../app.shader/type_common.h"

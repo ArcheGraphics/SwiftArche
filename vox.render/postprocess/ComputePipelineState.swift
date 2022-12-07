@@ -45,14 +45,12 @@ class ComputePipelineState {
         if count != 0 {
             for i in 0..<count {
                 let aug = _reflection.bindings[i]
-                if aug.isUsed {
-                    var shaderUniform = ReflectionUniform()
-                    shaderUniform.name = aug.name
-                    shaderUniform.location = aug.index
-                    shaderUniform.functionType = .kernel
-                    shaderUniform.bindingType = aug.type
-                    uniformBlock.append(shaderUniform)
-                }
+                var shaderUniform = ReflectionUniform()
+                shaderUniform.name = aug.name
+                shaderUniform.location = aug.index
+                shaderUniform.functionType = .kernel
+                shaderUniform.bindingType = aug.type
+                uniformBlock.append(shaderUniform)
             }
         }
     }
