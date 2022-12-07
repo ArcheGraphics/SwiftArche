@@ -5,12 +5,12 @@
 //  property of any third parties.
 
 import Metal
-import ModelIO
 import MetalKit
 
 class TextureParser: Parser {
     override func parse(_ context: ParserContext) {
         let gltf = context.glTFResource.gltf!
+        let device = context.glTFResource.engine.device
         var textures: [MTLTexture] = []
         var samplers: [MTLSamplerDescriptor] = []
         for index in 0..<gltf.textures.count {
@@ -19,24 +19,7 @@ class TextureParser: Parser {
             }
 
             if let source = gltf.textures[index].source {
-                if let uri = source.uri {
-                    let mdlTexture = MDLURLTexture(url: uri, name: source.name ?? "")
-                    if let tex = try? loadTexture(context.glTFResource.engine.device, mdlTexture) {
-                        textures.append(tex)
-                    }
-                } else {
-                    let cgImage: CGImage = source.newCGImage() as! CGImage
-                    let width = cgImage.width
-                    let height = cgImage.height
-                    let dataProvider = cgImage.dataProvider!
-                    let data = dataProvider.data
-                    let mdlTexture = MDLTexture(data: data as Data?, topLeftOrigin: true, name: source.name ?? "",
-                            dimensions: vector_int2(Int32(width), Int32(height)),
-                            rowStride: width * 4, channelCount: 4, channelEncoding: .uint8, isCube: false)
-                    if let tex = try? loadTexture(context.glTFResource.engine.device, mdlTexture) {
-                        textures.append(tex)
-                    }
-                }
+                textures.append(newTextureFromImage(source, device)!)
             }
 
             if let sampler = gltf.textures[index].sampler {
@@ -106,22 +89,5 @@ class TextureParser: Parser {
         }
         context.glTFResource.samplers = samplers
         context.glTFResource.textures = textures
-    }
-
-    /// static method to load texture from a instance of MDLTexture
-    /// - Parameter device: device
-    /// - Parameter texture: a source of texel data
-    /// - Throws: a pointer to an NSError object if an error occurred, or nil if the texture was fully loaded and initialized.
-    /// - Returns: a fully loaded and initialized Metal texture, or nil if an error occurred.
-    func loadTexture(_ device: MTLDevice, _ texture: MDLTexture) throws -> MTLTexture? {
-        let textureLoader = MTKTextureLoader(device: device)
-        let textureLoaderOptions: [MTKTextureLoader.Option: Any] =
-                [.origin: MTKTextureLoader.Origin.topLeft,
-                 .SRGB: false,
-                 .textureUsage: NSNumber(value: MTLTextureUsage.shaderRead.rawValue),
-                 .generateMipmaps: NSNumber(booleanLiteral: true)]
-        let texture = try? textureLoader.newTexture(texture: texture,
-                options: textureLoaderOptions)
-        return texture
     }
 }

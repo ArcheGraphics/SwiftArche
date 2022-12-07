@@ -846,3 +846,47 @@ NSArray<NSArray<NSNumber *> *> *GLTFWeightsArraysForAccessor(GLTFAccessor *acces
     }
     return weights;
 }
+
+id<MTLTexture> newTextureFromImage(GLTFImage *_Nonnull image, id<MTLDevice> device) {
+    CGImageRef cgImage = [image newCGImage];
+
+    int width = (int)CGImageGetWidth(cgImage);
+    int height = (int)CGImageGetHeight(cgImage);
+    int bytesPerRow = width * 4;
+    void *data = malloc(bytesPerRow * height);
+    memset(data, 0, bytesPerRow * height);
+    CGColorSpaceRef colorSpace = CGColorSpaceCreateWithName(kCGColorSpaceSRGB);
+    int bitmapInfo = kCGBitmapByteOrder32Little | kCGImageAlphaPremultipliedFirst;
+    CGContextRef context = CGBitmapContextCreate(data, width, height, 8, bytesPerRow, colorSpace, bitmapInfo);
+    CGContextDrawImage(context, CGRectMake(0, 0, width, height), cgImage);
+
+    MTLTextureDescriptor *textureDescriptor = [MTLTextureDescriptor texture2DDescriptorWithPixelFormat:MTLPixelFormatBGRA8Unorm_sRGB
+                                                                                                 width:width
+                                                                                                height:height
+                                                                                             mipmapped:NO];
+    textureDescriptor.usage = MTLTextureUsageShaderRead;
+    id<MTLTexture> texture = [device newTextureWithDescriptor:textureDescriptor];
+    [texture replaceRegion:MTLRegionMake2D(0, 0, width, height) mipmapLevel:0 withBytes:data bytesPerRow:bytesPerRow];
+
+    CGContextRelease(context);
+    CFRelease(colorSpace);
+    free(data);
+
+    return texture;
+}
+
+CGImageRef newImageFromTexture(id<MTLTexture> texture) {
+    int width = (int)texture.width;
+    int height = (int)texture.height;
+    int bytesPerRow = width * 4;
+    void *data = malloc(bytesPerRow * height);
+    [texture getBytes:data bytesPerRow:bytesPerRow fromRegion:MTLRegionMake2D(0, 0, width, height) mipmapLevel:0];
+    CGColorSpaceRef colorSpace = CGColorSpaceCreateWithName(kCGColorSpaceLinearSRGB);
+    int bitmapInfo = kCGBitmapByteOrder32Little | kCGImageAlphaPremultipliedFirst;
+    CGContextRef context = CGBitmapContextCreate(data, width, height, 8, bytesPerRow, colorSpace, bitmapInfo);
+    CGImageRef image = CGBitmapContextCreateImage(context);
+    CGContextRelease(context);
+    CFRelease(colorSpace);
+    free(data);
+    return image;
+}

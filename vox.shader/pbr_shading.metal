@@ -552,8 +552,8 @@ fragment float4 fragment_pbr(VertexOut in [[stage_in]],
                              constant PBRData &u_pbr [[buffer(9)]],
                              constant PBRSpecularData &u_pbrSpecular [[buffer(10)]],
                              // pbr_texture_frag_define
-                             texture2d<float> u_baseColorTexture [[texture(2), function_constant(hasBaseTexture)]],
-                             sampler u_baseColorSampler [[sampler(2), function_constant(hasBaseTexture)]],
+                             texture2d<float> u_baseTexture [[texture(2), function_constant(hasBaseTexture)]],
+                             sampler u_baseSampler [[sampler(2), function_constant(hasBaseTexture)]],
                              texture2d<float> u_normalTexture [[texture(3), function_constant(hasNormalTexture)]],
                              sampler u_normalSampler [[sampler(3), function_constant(hasNormalTexture)]],
                              texture2d<float> u_emissiveTexture [[texture(4), function_constant(hasEmissiveTexture)]],
@@ -648,8 +648,8 @@ fragment float4 fragment_pbr(VertexOut in [[stage_in]],
     }
     
     if (hasBaseTexture) {
-        shading.u_baseTexture = u_baseColorTexture;
-        shading.u_baseSampler = u_baseColorSampler;
+        shading.u_baseTexture = u_baseTexture;
+        shading.u_baseSampler = u_baseSampler;
     }
     
     if (hasNormalTexture) {

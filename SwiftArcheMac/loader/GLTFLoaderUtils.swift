@@ -32,7 +32,7 @@ class LoaderGUI: Script {
         GLTFInfo("BoxInterleaved", "Box example with interleaved position and normal attributes."),
         GLTFInfo("BoxTextured", "Box with one texture. Start with this to test textures."),
         GLTFInfo("BoxTexturedNonPowerOfTwo", "Box with a non-power-of-2 (NPOT) texture.  Not all implementations support NPOT textures."),
-        GLTFInfo("BoxWithSpaces", "Box with URI-encoded spaces in the texture names used by a simple PBR material."),
+        // GLTFInfo("BoxWithSpaces", "Box with URI-encoded spaces in the texture names used by a simple PBR material."),
         GLTFInfo("BoxVertexColors", "Box with vertex colors applied."),
         GLTFInfo("Cube", "A cube with non-smoothed faces."),
         GLTFInfo("AnimatedCube", "Same as previous cube having a linear rotation animation."),
@@ -79,7 +79,7 @@ class LoaderGUI: Script {
         GLTFInfo("SimpleSkin", "A simple example of vertex skinning in glTF"),
         GLTFInfo("Cameras", "A sample with two different `camera` objects"),
         GLTFInfo("InterpolationTest", "A sample with three different `animation` interpolations"),
-        GLTFInfo("UnicodeTest", "A sample with Unicode characters in file, material, and mesh names"),
+        GLTFInfo("Unicode❤♻Test", "A sample with Unicode characters in file, material, and mesh names"),
         //
         GLTFInfo("AntiqueCamera"),
         GLTFInfo("Avocado"),

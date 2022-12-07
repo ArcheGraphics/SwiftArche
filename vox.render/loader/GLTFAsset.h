@@ -9,6 +9,7 @@
 #import <Foundation/Foundation.h>
 #import <simd/simd.h>
 #import <CoreGraphics/CoreGraphics.h>
+#import <Metal/Metal.h>
 
 #import "GLTFTypes.h"
 
@@ -550,3 +551,7 @@ extern NSData *_Nullable GLTFSCNPackedDataForAccessor(GLTFAccessor *_Nonnull acc
 extern NSArray<NSNumber *> *_Nullable GLTFKeyTimeArrayForAccessor(GLTFAccessor *_Nonnull accessor, NSTimeInterval maxKeyTime);
 
 extern NSArray<NSArray<NSNumber *> *> *_Nullable GLTFWeightsArraysForAccessor(GLTFAccessor *_Nonnull accessor, NSUInteger targetCount);
+
+id<MTLTexture> _Nullable newTextureFromImage(GLTFImage *_Nonnull image, id<MTLDevice> _Nonnull device);
+
+CGImageRef _Nullable newImageFromTexture(id<MTLTexture> _Nonnull texture);

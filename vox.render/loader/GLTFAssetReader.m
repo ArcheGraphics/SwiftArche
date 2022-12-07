@@ -199,7 +199,7 @@ static dispatch_queue_t _loaderQueue;
 
 + (dispatch_queue_t)loaderQueue {
     if (_loaderQueue == nil) {
-        _loaderQueue = dispatch_queue_create("com.metalbyexample.gltfkit2.asset-loader", DISPATCH_QUEUE_CONCURRENT);
+        _loaderQueue = dispatch_queue_create("com.arche.graphics.asset-loader", DISPATCH_QUEUE_CONCURRENT);
     }
     return _loaderQueue;
 }
