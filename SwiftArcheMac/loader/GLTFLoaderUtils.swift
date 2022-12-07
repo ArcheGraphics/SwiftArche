@@ -62,7 +62,7 @@ class LoaderGUI: Script {
         GLTFInfo("ReciprocatingSaw", "Small CAD data set, including hierarchy."),
         GLTFInfo("GearboxAssy", "Medium-sized CAD data set, including hierarchy."),
         GLTFInfo("Buggy", "Medium-sized CAD data set, including hierarchy."),
-        GLTFInfo("BoxAnimated", "Rotation and Translation Animations. Start with this to test animations."),
+        GLTFInfo("BoxAnimated", "Rotation and Translation Animations. Start with this to test animations.", "glb", "glTF-Sample-Models/2.0/BoxAnimated/glTF-Binary", "", "Animation1"),
         GLTFInfo("CesiumMilkTruck", "Textured. Multiple nodes/meshes. Animations."),
         GLTFInfo("RiggedSimple", "Animations. Skins. Start with this to test skinning."),
         GLTFInfo("RiggedFigure", "Animations. Skins."),

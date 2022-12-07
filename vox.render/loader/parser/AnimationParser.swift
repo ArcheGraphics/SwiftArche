@@ -58,7 +58,7 @@ class AnimationParser: Parser {
 
                 switch target.path {
                 case "translation":
-                    let curve: AnimationCurve<Vector3, AnimationVector3Curve> = _addCurve(gltfChannel, sampleDataCollection)
+                    let curve: AnimationCurve<Vector3, AnimationVector3Curve> = _addCurveVector3(gltfChannel, sampleDataCollection)
                     animationClip.addCurveBinding(relativePath, Transform.self, .Position, curve)
                     break
                 case "rotation":
@@ -66,7 +66,7 @@ class AnimationParser: Parser {
                     animationClip.addCurveBinding(relativePath, Transform.self, .Rotation, curve)
                     break
                 case "scale":
-                    let curve: AnimationCurve<Vector3, AnimationVector3Curve> = _addCurve(gltfChannel, sampleDataCollection)
+                    let curve: AnimationCurve<Vector3, AnimationVector3Curve> = _addCurveVector3(gltfChannel, sampleDataCollection)
                     animationClip.addCurveBinding(relativePath, Transform.self, .Scale, curve)
                     break
                 case "weights":
@@ -112,6 +112,42 @@ class AnimationParser: Parser {
                 keyframe.outTangent = output[i * 3 + 2]
             } else {
                 keyframe.value = output[i]
+            }
+
+            curve.addKey(keyframe)
+        }
+        return curve
+    }
+    
+    private func _addCurveVector3(
+            _ gltfChannel: GLTFAnimationChannel,
+            _ sampleDataCollection: [SampleData]
+    ) -> AnimationCurve<Vector3, AnimationVector3Curve> {
+
+        let sampleData = sampleDataCollection[gltfChannel.sampler.index]
+        let curve = AnimationCurve<Vector3, AnimationVector3Curve>()
+        curve.interpolation = sampleData.interpolation
+        let outputAccessorSize = sampleData.output.count / sampleData.input.count
+
+        var input = [Float](repeating: 0, count: sampleData.input.count)
+        GLTFUtil.convert(sampleData.input, out: &input)
+        var output: [Float] = []
+        if sampleData.interpolation == .CubicSpine {
+            output = [Float](repeating: 0, count: 3 * sampleData.output.count * 3 * outputAccessorSize)
+        } else {
+            output = [Float](repeating: 0, count: 3 * sampleData.output.count * outputAccessorSize)
+        }
+        GLTFUtil.convert(sampleData.output, out: &output)
+
+        for i in 0..<sampleData.input.count {
+            let keyframe = Keyframe<Vector3>()
+            keyframe.time = input[i]
+            if sampleData.interpolation == .CubicSpine {
+                keyframe.value = Vector3(output[9 * i], output[9 * i + 1], output[9 * i + 2])
+                keyframe.inTangent = Vector3(output[9 * i + 3], output[9 * i + 4], output[9 * i + 5])
+                keyframe.outTangent = Vector3(output[9 * i + 6], output[9 * i + 7], output[9 * i + 8])
+            } else {
+                keyframe.value = Vector3(output[3 * i], output[3 * i + 1], output[3 * i + 2])
             }
 
             curve.addKey(keyframe)
