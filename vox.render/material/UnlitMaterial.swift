@@ -31,10 +31,12 @@ public class UnlitMaterial: BaseMaterial {
         }
         set {
             _baseTexture = newValue
-            shaderData.setImageView(UnlitMaterial._baseTextureProp, UnlitMaterial._baseSamplerProp, newValue)
-            if newValue != nil {
+            if let newValue = newValue {
+                shaderData.setImageView(UnlitMaterial._baseTextureProp, UnlitMaterial._baseSamplerProp,
+                                        newValue.makeTextureView(pixelFormat: .bgra8Unorm_srgb))
                 shaderData.enableMacro(HAS_BASE_TEXTURE.rawValue)
             } else {
+                shaderData.setImageView(UnlitMaterial._baseTextureProp, UnlitMaterial._baseSamplerProp, nil)
                 shaderData.disableMacro(HAS_BASE_TEXTURE.rawValue)
             }
         }

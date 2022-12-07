@@ -56,10 +56,12 @@ public class PBRBaseMaterial: BaseMaterial {
         }
         set {
             _baseTexture = newValue
-            shaderData.setImageView(PBRBaseMaterial._baseTextureProp, PBRBaseMaterial._baseSamplerProp, newValue)
-            if newValue != nil {
+            if let newValue = newValue {
+                shaderData.setImageView(PBRBaseMaterial._baseTextureProp, PBRBaseMaterial._baseSamplerProp,
+                                        newValue.makeTextureView(pixelFormat: .bgra8Unorm_srgb))
                 shaderData.enableMacro(HAS_BASE_TEXTURE.rawValue)
             } else {
+                shaderData.setImageView(PBRBaseMaterial._baseTextureProp, PBRBaseMaterial._baseSamplerProp, nil)
                 shaderData.disableMacro(HAS_BASE_TEXTURE.rawValue)
             }
         }
@@ -120,10 +122,12 @@ public class PBRBaseMaterial: BaseMaterial {
         }
         set {
             _emissiveTexture = newValue
-            shaderData.setImageView(PBRBaseMaterial._emissiveTextureProp, PBRBaseMaterial._emissiveSamplerProp, newValue)
-            if newValue != nil {
+            if let newValue = newValue {
+                shaderData.setImageView(PBRBaseMaterial._emissiveTextureProp, PBRBaseMaterial._emissiveSamplerProp,
+                                        newValue.makeTextureView(pixelFormat: .bgra8Unorm_srgb))
                 shaderData.enableMacro(HAS_EMISSIVE_TEXTURE.rawValue)
             } else {
+                shaderData.setImageView(PBRBaseMaterial._emissiveTextureProp, PBRBaseMaterial._emissiveSamplerProp, nil)
                 shaderData.disableMacro(HAS_EMISSIVE_TEXTURE.rawValue)
             }
         }

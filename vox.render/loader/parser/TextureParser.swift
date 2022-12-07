@@ -10,7 +10,8 @@ import MetalKit
 class TextureParser: Parser {
     override func parse(_ context: ParserContext) {
         let gltf = context.glTFResource.gltf!
-        let device = context.glTFResource.engine.device
+        let engine = context.glTFResource.engine!
+        let device = engine.device
         var textures: [MTLTexture] = []
         var samplers: [MTLSamplerDescriptor?] = []
         for index in 0..<gltf.textures.count {
@@ -89,6 +90,18 @@ class TextureParser: Parser {
                 samplers.append(nil)
             }
         }
+        
+        // generate all mipmap
+        if let commandBuffer = engine.commandQueue.makeCommandBuffer() {
+            if let commandEncoder = commandBuffer.makeBlitCommandEncoder() {
+                for texture in textures {
+                    commandEncoder.generateMipmaps(for: texture)
+                }
+                commandEncoder.endEncoding()
+            }
+            commandBuffer.commit()
+        }
+        
         context.glTFResource.samplers = samplers
         context.glTFResource.textures = textures
     }

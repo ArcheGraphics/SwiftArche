@@ -860,10 +860,10 @@ id<MTLTexture> newTextureFromImage(GLTFImage *_Nonnull image, id<MTLDevice> devi
     CGContextRef context = CGBitmapContextCreate(data, width, height, 8, bytesPerRow, colorSpace, bitmapInfo);
     CGContextDrawImage(context, CGRectMake(0, 0, width, height), cgImage);
 
-    MTLTextureDescriptor *textureDescriptor = [MTLTextureDescriptor texture2DDescriptorWithPixelFormat:MTLPixelFormatBGRA8Unorm_sRGB
+    MTLTextureDescriptor *textureDescriptor = [MTLTextureDescriptor texture2DDescriptorWithPixelFormat:MTLPixelFormatBGRA8Unorm
                                                                                                  width:width
                                                                                                 height:height
-                                                                                             mipmapped:NO];
+                                                                                             mipmapped:YES];
     textureDescriptor.usage = MTLTextureUsageShaderRead;
     id<MTLTexture> texture = [device newTextureWithDescriptor:textureDescriptor];
     [texture replaceRegion:MTLRegionMake2D(0, 0, width, height) mipmapLevel:0 withBytes:data bytesPerRow:bytesPerRow];

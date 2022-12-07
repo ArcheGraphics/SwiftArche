@@ -19,6 +19,12 @@ public class ShaderData {
     public init(_ engine: Engine) {
         _engine = engine
         _shaderDynamicBuffers = [[String: BufferView]](repeating: [:], count: engine._maxFramesInFlight)
+        ShaderData._defaultSamplerDesc.magFilter = .linear
+        ShaderData._defaultSamplerDesc.minFilter = .linear
+        ShaderData._defaultSamplerDesc.mipFilter = .linear
+        ShaderData._defaultSamplerDesc.rAddressMode = .repeat
+        ShaderData._defaultSamplerDesc.sAddressMode = .repeat
+        ShaderData._defaultSamplerDesc.tAddressMode = .repeat
     }
 
     public func setBufferFunctor(_ property: String, _ functor: @escaping () -> BufferView) {

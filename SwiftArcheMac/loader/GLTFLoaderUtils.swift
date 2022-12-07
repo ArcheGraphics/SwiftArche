@@ -151,6 +151,7 @@ class LoaderGUI: Script {
             ImGuiTextUnformatted(gltfInfo[loaderItem].description)
         }
         ImGuiSeparator()
+        ImGuiSliderFloat("Manual Exposure", &scene.postprocessManager.manualExposure, 0.0, 1.0, nil, 1)
         UIElement.frameRate()
         // Rendering
         ImGuiRender()

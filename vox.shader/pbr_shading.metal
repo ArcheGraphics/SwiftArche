@@ -695,6 +695,7 @@ fragment float4 fragment_pbr(VertexOut in [[stage_in]],
     if (hasVertexColor) {
         shading.v_color = in.v_color;
     }
+    shading.normalShading.v_uv = in.v_uv;
     shading.v_uv = in.v_uv;
     shading.u_cameraPos = u_camera.u_cameraPos;
     if (needWorldPos) {
