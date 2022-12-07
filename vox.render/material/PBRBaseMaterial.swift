@@ -76,7 +76,7 @@ public class PBRBaseMaterial: BaseMaterial {
         }
         set {
             _normalTexture = newValue
-            shaderData.setImageView(PBRBaseMaterial._normalTextureProp, PBRBaseMaterial._normalTextureProp, newValue)
+            shaderData.setImageView(PBRBaseMaterial._normalTextureProp, PBRBaseMaterial._normalSamplerProp, newValue)
             if newValue != nil {
                 shaderData.enableMacro(HAS_NORMAL_TEXTURE.rawValue)
             } else {

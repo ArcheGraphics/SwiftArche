@@ -558,8 +558,8 @@ fragment float4 fragment_pbr(VertexOut in [[stage_in]],
                              sampler u_normalSampler [[sampler(3), function_constant(hasNormalTexture)]],
                              texture2d<float> u_emissiveTexture [[texture(4), function_constant(hasEmissiveTexture)]],
                              sampler u_emissiveSampler [[sampler(4), function_constant(hasEmissiveTexture)]],
-                             texture2d<float> u_metallicRoughnessTexture [[texture(5), function_constant(hasRoughnessMetallicTexture)]],
-                             sampler u_metallicRoughnessSampler [[sampler(5), function_constant(hasRoughnessMetallicTexture)]],
+                             texture2d<float> u_roughnessMetallicTexture [[texture(5), function_constant(hasRoughnessMetallicTexture)]],
+                             sampler u_roughnessMetallicSampler [[sampler(5), function_constant(hasRoughnessMetallicTexture)]],
                              texture2d<float> u_specularGlossinessTexture [[texture(6), function_constant(hasSpecularGlossinessTexture)]],
                              sampler u_specularGlossineseSampler [[sampler(6), function_constant(hasSpecularGlossinessTexture)]],
                              texture2d<float> u_occlusionTexture [[texture(7), function_constant(hasOcclusionTexture)]],
@@ -663,8 +663,8 @@ fragment float4 fragment_pbr(VertexOut in [[stage_in]],
     }
     
     if (hasRoughnessMetallicTexture) {
-        shading.u_roughnessMetallicTexture = u_metallicRoughnessTexture;
-        shading.u_roughnessMetallicSampler = u_metallicRoughnessSampler;
+        shading.u_roughnessMetallicTexture = u_roughnessMetallicTexture;
+        shading.u_roughnessMetallicSampler = u_roughnessMetallicSampler;
     }
     
     if (hasSpecularGlossinessTexture) {

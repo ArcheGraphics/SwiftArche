@@ -18,10 +18,13 @@ class KHR_materials_pbrSpecularGlossiness {
                 schema.diffuseFactor.w
         )
 
-        if (schema.diffuseTexture != nil) {
-            material.baseTexture = glTFResource.textures![schema.diffuseTexture!.index]
-            material.setBaseSampler(value: glTFResource.samplers![schema.diffuseTexture!.index])
-            KHR_texture_transform.parseEngineResource(schema.diffuseTexture!.transform, material, context)
+        if let diffuseTexture = schema.diffuseTexture,
+           let samplers = glTFResource.samplers {
+            material.baseTexture = glTFResource.textures![diffuseTexture.index]
+            if let sampler = samplers[diffuseTexture.index] {
+                material.setBaseSampler(value: sampler)
+            }
+            KHR_texture_transform.parseEngineResource(diffuseTexture.transform, material, context)
         }
 
         material.specularColor = Color(
@@ -32,10 +35,13 @@ class KHR_materials_pbrSpecularGlossiness {
         )
         material.glossiness = schema.glossinessFactor
 
-        if (schema.specularGlossinessTexture != nil) {
-            material.specularGlossinessTexture = glTFResource.textures![schema.specularGlossinessTexture!.index]
-            material.setSpecularGlossinessSampler(value: glTFResource.samplers![schema.specularGlossinessTexture!.index])
-            KHR_texture_transform.parseEngineResource(schema.specularGlossinessTexture!.transform, material, context)
+        if let specularGlossinessTexture = schema.specularGlossinessTexture,
+           let samplers = glTFResource.samplers {
+            material.specularGlossinessTexture = glTFResource.textures![specularGlossinessTexture.index]
+            if let sampler = samplers[specularGlossinessTexture.index] {
+                material.setSpecularGlossinessSampler(value: sampler)
+            }
+            KHR_texture_transform.parseEngineResource(specularGlossinessTexture.transform, material, context)
         }
 
         return material

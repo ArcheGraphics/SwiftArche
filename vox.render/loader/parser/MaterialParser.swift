@@ -43,25 +43,34 @@ class MaterialParser: Parser {
                             Color.linearToGammaSpace(value: pbrMetallicRoughness.baseColorFactor.z),
                             pbrMetallicRoughness.baseColorFactor.w
                     )
-                    if let baseColorTexture = pbrMetallicRoughness.baseColorTexture {
+                    if let baseColorTexture = pbrMetallicRoughness.baseColorTexture,
+                       let samplers = glTFResource.samplers {
                         pbrMtl.baseTexture = glTFResource.textures![baseColorTexture.index]
-                        pbrMtl.setBaseSampler(value: glTFResource.samplers![baseColorTexture.index])
+                        if let sampler = samplers[baseColorTexture.index] {
+                            pbrMtl.setBaseSampler(value: sampler)
+                        }
                         KHR_texture_transform.parseEngineResource(baseColorTexture.transform, pbrMtl, context)
                     }
                     if let pbrMtl = pbrMtl as? PBRMaterial {
                         pbrMtl.roughness = pbrMetallicRoughness.roughnessFactor
                         pbrMtl.metallic = pbrMetallicRoughness.metallicFactor
-                        if let metallicRoughnessTexture = pbrMetallicRoughness.metallicRoughnessTexture {
+                        if let metallicRoughnessTexture = pbrMetallicRoughness.metallicRoughnessTexture,
+                           let samplers = glTFResource.samplers {
                             pbrMtl.roughnessMetallicTexture = glTFResource.textures![metallicRoughnessTexture.index]
-                            pbrMtl.setRoughnessMetallicSampler(value: glTFResource.samplers![metallicRoughnessTexture.index])
+                            if let sampler = samplers[metallicRoughnessTexture.index] {
+                                pbrMtl.setRoughnessMetallicSampler(value: sampler)
+                            }
                             KHR_texture_transform.parseEngineResource(metallicRoughnessTexture.transform, pbrMtl, context)
                         }
                     }
                 }
 
-                if let emissiveTexture = gltfMaterial.emissiveTexture {
+                if let emissiveTexture = gltfMaterial.emissiveTexture,
+                    let samplers = glTFResource.samplers {
                     pbrMtl.emissiveTexture = glTFResource.textures![emissiveTexture.index]
-                    pbrMtl.setEmissiveSampler(value: glTFResource.samplers![emissiveTexture.index])
+                    if let sampler = samplers[emissiveTexture.index] {
+                        pbrMtl.setEmissiveSampler(value: sampler)
+                    }
                     KHR_texture_transform.parseEngineResource(emissiveTexture.transform, pbrMtl, context)
                 }
                 pbrMtl.emissiveColor = Color(
@@ -71,14 +80,18 @@ class MaterialParser: Parser {
                         1
                 )
 
-                if let normalTexture = gltfMaterial.normalTexture {
+                if let normalTexture = gltfMaterial.normalTexture,
+                   let samplers = glTFResource.samplers {
                     pbrMtl.normalTextureIntensity = normalTexture.scale
                     pbrMtl.normalTexture = glTFResource.textures![normalTexture.index]
-                    pbrMtl.setNormalSampler(value: glTFResource.samplers![normalTexture.index])
+                    if let sampler = samplers[normalTexture.index] {
+                        pbrMtl.setNormalSampler(value: sampler)
+                    }
                     KHR_texture_transform.parseEngineResource(normalTexture.transform, pbrMtl, context)
                 }
 
-                if let occlusionTexture = gltfMaterial.occlusionTexture {
+                if let occlusionTexture = gltfMaterial.occlusionTexture,
+                   let samplers = glTFResource.samplers {
                     if (occlusionTexture.texCoord == TextureCoordinate.UV1.rawValue) {
                         pbrMtl.occlusionTextureCoord = TextureCoordinate.UV1
                     } else if (occlusionTexture.texCoord > TextureCoordinate.UV1.rawValue) {
@@ -87,7 +100,9 @@ class MaterialParser: Parser {
 
                     pbrMtl.occlusionTextureIntensity = occlusionTexture.scale
                     pbrMtl.occlusionTexture = glTFResource.textures![occlusionTexture.index]
-                    pbrMtl.setOcclusionSampler(value: glTFResource.samplers![occlusionTexture.index])
+                    if let sampler = samplers[occlusionTexture.index] {
+                        pbrMtl.setOcclusionSampler(value: sampler)
+                    }
                     KHR_texture_transform.parseEngineResource(occlusionTexture.transform, pbrMtl, context)
                 }
             }
