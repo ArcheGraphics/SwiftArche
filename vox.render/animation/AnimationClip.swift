@@ -45,7 +45,7 @@ public class AnimationClip {
     public func addEvent(_ event: AnimationEvent) {
         _events.append(event)
         _events.sort { a, b in
-            a.time - b.time > 0
+            a.time - b.time < 0
         }
     }
 

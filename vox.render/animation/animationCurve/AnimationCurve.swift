@@ -49,7 +49,7 @@ public class AnimationCurve<V: KeyframeValueType, Calculator: IAnimationCurveCal
             _length = key.time
         }
         keys.sort { (a: Keyframe<V>, b: Keyframe<V>) in
-            a.time - b.time > 0
+            a.time - b.time < 0
         }
     }
 

@@ -75,7 +75,7 @@ public class GridControl: Script {
             material.farClipPlane = camera.farClipPlane
 
             if (_flipGrid) {
-                _progress += deltaTime / 1000
+                _progress += deltaTime
                 var percent = simd_clamp(_progress * speed, 0, 1)
                 if (percent >= 1) {
                     _flipGrid = false

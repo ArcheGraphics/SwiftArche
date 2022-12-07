@@ -15,14 +15,14 @@ public class Animator: Component {
 
     private var _animatorLayersData: [Int: AnimatorLayerData] = [:]
     private var _crossOwnerCollection: [AnimationCurveOwnerBase] = []
-    private var _animationCurveOwners: [[Int: AnimationCurveOwnerBase]] = []
+    private var _animationCurveOwners: [Int: [Int: AnimationCurveOwnerBase]] = [:]
     private var _animationEventHandlerPool: [AnimationEventHandler] = []
 
     /// The playback speed of the Animator, 1.0 is normal playback speed.
-    var speed: Float = 1.0
+    public var speed: Float = 1.0
 
     /// All layers from the AnimatorController which belongs this Animator.
-    var animatorController: AnimatorController {
+    public var animatorController: AnimatorController {
         get {
             _animatorController
         }
@@ -43,7 +43,7 @@ public class Animator: Component {
     ///   - stateName: The state name
     ///   - layerIndex: The layer index(default -1). If layer is -1, play the first state with the given state name
     ///   - normalizedTimeOffset: The time offset between 0 and 1(default 0)
-    func play(_ stateName: String, _ layerIndex: Int = -1, _ normalizedTimeOffset: Float = 0) {
+    public func play(_ stateName: String, _ layerIndex: Int = -1, _ normalizedTimeOffset: Float = 0) {
         if (_controllerUpdateFlag?.flag != nil) {
             _clearPlayData()
         }
@@ -80,10 +80,10 @@ public class Animator: Component {
     ///   - normalizedTransitionDuration: The duration of the transition (normalized)
     ///   - layerIndex: The layer index(default -1). If layer is -1, play the first state with the given state name
     ///   - normalizedTimeOffset: The time offset between 0 and 1(default 0)
-    func crossFade(_ stateName: String,
-                   _ normalizedTransitionDuration: Float,
-                   _ layerIndex: Int = -1,
-                   _ normalizedTimeOffset: Float = 0) {
+    public func crossFade(_ stateName: String,
+                          _ normalizedTransitionDuration: Float,
+                          _ layerIndex: Int = -1,
+                          _ normalizedTimeOffset: Float = 0) {
         if (_controllerUpdateFlag?.flag != nil) {
             _clearPlayData()
         }
@@ -107,7 +107,7 @@ public class Animator: Component {
         if (_animatorController == nil) {
             return
         }
-        if (_controllerUpdateFlag?.flag != nil) {
+        if (_controllerUpdateFlag!.flag) {
             return
         }
         deltaTime *= speed
@@ -117,7 +117,7 @@ public class Animator: Component {
                 continue
             }
 
-            _updateLayer(i, i == 0, deltaTime / 1000)
+            _updateLayer(i, i == 0, deltaTime)
         }
     }
 
@@ -131,7 +131,7 @@ public class Animator: Component {
 
     func _reset() {
         for propertyOwners in _animationCurveOwners {
-            for property in propertyOwners {
+            for property in propertyOwners.value {
                 let owner = property.value
                 if owner.hasSavedDefaultValue {
                     owner.revertDefaultValue()
@@ -186,6 +186,7 @@ public class Animator: Component {
 
     private func _saveAnimatorStateData(_ animatorState: AnimatorState, _ animatorStateData: AnimatorStateData) {
         let curves = animatorState.clip!._curveBindings
+        animatorStateData.curveOwners = [AnimationCurveOwnerBase?](repeating: nil, count: curves.count)
         for i in 0..<curves.count {
             let curve = curves[i]
             switch curve.property {
@@ -194,10 +195,56 @@ public class Animator: Component {
                 let targetEntity = curveType.relativePath == "" ? entity : entity.findByPath(curveType.relativePath)
                 if (targetEntity != nil) {
                     let instanceId = targetEntity!.instanceId
-                    _animationCurveOwners[instanceId] = [:]
-                    animatorStateData.curveOwners[i] = curveType._createCurveOwner(targetEntity!)
+                    if _animationCurveOwners[instanceId] == nil {
+                        _animationCurveOwners[instanceId] = [:]
+                    }
+                    if let value = _animationCurveOwners[instanceId]![curveType.property.rawValue] {
+                        animatorStateData.curveOwners[i] = value
+                    } else {
+                        let value = curveType._createCurveOwner(targetEntity!)
+                        animatorStateData.curveOwners[i] = value
+                        _animationCurveOwners[instanceId]![curveType.property.rawValue] = value
+                    }
                 } else {
-                    animatorStateData.curveOwners[i] = nil
+                    logger.warning("(The entity don\'t have the child entity which path is \(curve.relativePath!).");
+                }
+                break
+            case .Scale:
+                let curveType = curve as! AnimationClipCurveBinding<Vector3, AnimationVector3Curve>
+                let targetEntity = curveType.relativePath == "" ? entity : entity.findByPath(curveType.relativePath)
+                if (targetEntity != nil) {
+                    let instanceId = targetEntity!.instanceId
+                    if _animationCurveOwners[instanceId] == nil {
+                        _animationCurveOwners[instanceId] = [:]
+                    }
+                    if let value = _animationCurveOwners[instanceId]![curveType.property.rawValue] {
+                        animatorStateData.curveOwners[i] = value
+                    } else {
+                        let value = curveType._createCurveOwner(targetEntity!)
+                        animatorStateData.curveOwners[i] = value
+                        _animationCurveOwners[instanceId]![curveType.property.rawValue] = value
+                    }
+                } else {
+                    logger.warning("(The entity don\'t have the child entity which path is \(curve.relativePath!).");
+                }
+                break
+            case .Rotation:
+                let curveType = curve as! AnimationClipCurveBinding<Quaternion, AnimationQuaternionCurve>
+                let targetEntity = curveType.relativePath == "" ? entity : entity.findByPath(curveType.relativePath)
+                if (targetEntity != nil) {
+                    let instanceId = targetEntity!.instanceId
+                    if _animationCurveOwners[instanceId] == nil {
+                        _animationCurveOwners[instanceId] = [:]
+                    }
+                    if let value = _animationCurveOwners[instanceId]![curveType.property.rawValue] {
+                        animatorStateData.curveOwners[i] = value
+                    } else {
+                        let value = curveType._createCurveOwner(targetEntity!)
+                        animatorStateData.curveOwners[i] = value
+                        _animationCurveOwners[instanceId]![curveType.property.rawValue] = value
+                    }
+                } else {
+                    logger.warning("(The entity don\'t have the child entity which path is \(curve.relativePath!).");
                 }
                 break
             default:
@@ -315,10 +362,12 @@ public class Animator: Component {
         let animLayerData = _animatorLayersData[layerIndex]!
         let srcPlayData = animLayerData.srcPlayData
         let destPlayData = animLayerData.destPlayData
-        let crossFadeTransitionInfo = animLayerData.crossFadeTransition!
+        let crossFadeTransitionInfo = animLayerData.crossFadeTransition
         let layerAdditive = blendingMode == AnimatorLayerBlendingMode.Additive
         let layerWeight = firstLayer ? 1.0 : weight
-        _checkTransition(srcPlayData, crossFadeTransitionInfo, layerIndex)
+        if animLayerData.layerState != .FixedCrossFading {
+            _checkTransition(srcPlayData, crossFadeTransitionInfo, layerIndex)
+        }
         switch (animLayerData.layerState) {
         case LayerState.Playing:
             _updatePlayingState(srcPlayData, animLayerData, layerIndex, layerWeight, deltaTime, layerAdditive)
@@ -638,7 +687,7 @@ public class Animator: Component {
     }
 
     private func _checkTransition(_ stateData: AnimatorStatePlayData,
-                                  _ crossFadeTransition: AnimatorStateTransition,
+                                  _ crossFadeTransition: AnimatorStateTransition?,
                                   _ layerIndex: Int) {
         let state = stateData.state
         let clipTime = stateData.clipTime
@@ -812,7 +861,7 @@ public class Animator: Component {
     private func _clearPlayData() {
         _animatorLayersData = [:]
         _crossOwnerCollection = []
-        _animationCurveOwners = []
+        _animationCurveOwners = [:]
 
         if _controllerUpdateFlag != nil {
             _controllerUpdateFlag!.flag = false

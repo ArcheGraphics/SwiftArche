@@ -39,13 +39,14 @@ public class AnimationCurveOwner<V: KeyframeValueType, Calculator: IAnimationCur
     init(_ target: Entity, _ property: AnimationProperty,
          _ assembler: IAnimationCurveOwnerAssembler<V, Calculator>) {
         _assembler = assembler
-
-        if (Calculator._isReferenceType) {
-            referenceTargetValue = _assembler.getTargetValue()!
-        }
+        
         super.init()
         self.target = target
         self.property = property
+        _assembler.initialize(owner: self)
+        if (Calculator._isReferenceType) {
+            referenceTargetValue = _assembler.getTargetValue()!
+        }
     }
 
     public func evaluateAndApplyValue(_ curve: AnimationCurve<V, Calculator>, _ time: Float,

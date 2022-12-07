@@ -16,8 +16,10 @@ struct GLTFInfo {
     let dir: String
     let description: String
     let fileName: String
+    let animation: String?
 
-    init(_ name: String, _ description: String = "", _ ext: String = "glb", _ dir: String = "", _ fileName: String = "") {
+    init(_ name: String, _ description: String = "", _ ext: String = "glb", _ dir: String = "",
+         _ fileName: String = "", _ animation: String? = nil) {
         self.name = name
         self.description = description
         self.ext = ext
@@ -27,6 +29,7 @@ struct GLTFInfo {
         } else {
             self.fileName = fileName
         }
+        self.animation = animation
     }
 }
 
@@ -53,7 +56,7 @@ class LoaderGUI: Script {
         GLTFInfo("Box With Spaces", "Box with URI-encoded spaces in the texture names used by a simple PBR material.", "gltf", "glTF-Sample-Models/2.0/Box With Spaces/glTF"),
         GLTFInfo("BoxVertexColors", "Box with vertex colors applied."),
         GLTFInfo("Cube", "A cube with non-smoothed faces.", "gltf", "glTF-Sample-Models/2.0/Cube/glTF"),
-        GLTFInfo("AnimatedCube", "Same as previous cube having a linear rotation animation.", "gltf", "glTF-Sample-Models/2.0/AnimatedCube/glTF"),
+        GLTFInfo("AnimatedCube", "Same as previous cube having a linear rotation animation.", "gltf", "glTF-Sample-Models/2.0/AnimatedCube/glTF", "", "animation_AnimatedCube"),
         GLTFInfo("Duck", "The COLLADA duck. One texture."),
         GLTFInfo("2CylinderEngine", "Small CAD data set, including hierarchy."),
         GLTFInfo("ReciprocatingSaw", "Small CAD data set, including hierarchy."),
@@ -152,6 +155,12 @@ class LoaderGUI: Script {
                     let scale = 1 / bounds.getExtent().internalValue.max()
                     resource.defaultSceneRoot.transform.worldPosition = Vector3()
                     resource.defaultSceneRoot.transform.scale *= scale
+                    
+                    let animator: Animator? = resource.defaultSceneRoot!.getComponent()
+                    if let animator = animator,
+                       let clipName = gltfInfo[newValue].animation {
+                        animator.play(clipName)
+                    }
                 }
             }
         }

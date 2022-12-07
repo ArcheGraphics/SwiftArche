@@ -6,7 +6,7 @@
 
 import Foundation
 
-public enum AnimationProperty {
+public enum AnimationProperty: Int {
     case Position
     case Rotation
     case Scale
