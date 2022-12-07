@@ -9,7 +9,7 @@ import ARKit
 import vox_render
 import vox_math
 
-class ARScript: Script {
+fileprivate class ARScript: Script {
     private var _rTri: Float = 0
     private var _cubeEntity: Entity?
 

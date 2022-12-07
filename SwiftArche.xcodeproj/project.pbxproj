@@ -109,6 +109,8 @@
 		3E58E1C82940B94C006A49CD /* FogMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E58E1C72940B94C006A49CD /* FogMode.swift */; };
 		3E58E1CB2940BCA4006A49CD /* IBLBaker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E58E1CA2940BCA4006A49CD /* IBLBaker.swift */; };
 		3E58E1CE2940BCD2006A49CD /* assets in Resources */ = {isa = PBXBuildFile; fileRef = 3E58E1CC2940BCD2006A49CD /* assets */; };
+		3E58E1D72940C019006A49CD /* glTF in Resources */ = {isa = PBXBuildFile; fileRef = 3E58E1D62940C019006A49CD /* glTF */; };
+		3E58E1D92940C033006A49CD /* GLTFViewerApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E58E1D82940C033006A49CD /* GLTFViewerApp.swift */; };
 		3E5D867C292B1C3C00759BA9 /* Keyframe.swift in Sources */ = {isa = PBXBuildFile; fileRef = E63B152B56D2F2BE0AE76CA0 /* Keyframe.swift */; };
 		3E5D867D292B1CF900759BA9 /* AnimationCurve.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8C5FB606CD86F901949A4 /* AnimationCurve.swift */; };
 		3E5D867E292B1D5600759BA9 /* AnimationCurveOwner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04462EFD292AEF3400F95387 /* AnimationCurveOwner.swift */; };
@@ -668,6 +670,8 @@
 		3E58E1C72940B94C006A49CD /* FogMode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FogMode.swift; sourceTree = "<group>"; };
 		3E58E1CA2940BCA4006A49CD /* IBLBaker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IBLBaker.swift; sourceTree = "<group>"; };
 		3E58E1CC2940BCD2006A49CD /* assets */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = assets; sourceTree = SOURCE_ROOT; };
+		3E58E1D62940C019006A49CD /* glTF */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = glTF; path = "glTF-Sample-Models/2.0/SciFiHelmet/glTF"; sourceTree = SOURCE_ROOT; };
+		3E58E1D82940C033006A49CD /* GLTFViewerApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GLTFViewerApp.swift; sourceTree = "<group>"; };
 		3E67EDC5291B2F7600ED60C8 /* SwiftArche.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SwiftArche.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		3E67EDC8291B2F7600ED60C8 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		3E67EDCA291B2F7600ED60C8 /* ar_shading.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = ar_shading.metal; sourceTree = "<group>"; };
@@ -1431,6 +1435,7 @@
 		3E67EDC7291B2F7600ED60C8 /* SwiftArche */ = {
 			isa = PBXGroup;
 			children = (
+				3E58E1D62940C019006A49CD /* glTF */,
 				3E58E1CC2940BCD2006A49CD /* assets */,
 				3E67EDD1291B2F7600ED60C8 /* Main.storyboard */,
 				040F1D9C293369DC008BDC8D /* Textures.xcassets */,
@@ -1439,6 +1444,7 @@
 				040F1E0929378616008BDC8D /* bridging.h */,
 				3E67EDC8291B2F7600ED60C8 /* AppDelegate.swift */,
 				E63B17AB94CBF9AAB3956248 /* PrimitiveApp.swift */,
+				3E58E1D82940C033006A49CD /* GLTFViewerApp.swift */,
 				3E58E1C92940BC6A006A49CD /* rendering */,
 			);
 			path = SwiftArche;
@@ -2120,6 +2126,7 @@
 				040F1D9D293369DC008BDC8D /* Textures.xcassets in Resources */,
 				3E58E1CE2940BCD2006A49CD /* assets in Resources */,
 				3E67EDD5291B2F7800ED60C8 /* Assets.xcassets in Resources */,
+				3E58E1D72940C019006A49CD /* glTF in Resources */,
 				3E67EDD3291B2F7600ED60C8 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -2235,6 +2242,7 @@
 			files = (
 				3E67EDC9291B2F7600ED60C8 /* AppDelegate.swift in Sources */,
 				E63B123A289AA1AE61CCA67E /* PrimitiveApp.swift in Sources */,
+				3E58E1D92940C033006A49CD /* GLTFViewerApp.swift in Sources */,
 				3E58E1CB2940BCA4006A49CD /* IBLBaker.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
