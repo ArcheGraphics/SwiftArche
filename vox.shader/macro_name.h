@@ -27,7 +27,6 @@ typedef enum {
     // Skin
     HAS_SKIN =                           65527,
     HAS_JOINT_TEXTURE =                  65526,
-    JOINTS_COUNT =                       65525,
 
     // Material
     NEED_ALPHA_CUTOFF =                  65524,

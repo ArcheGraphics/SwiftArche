@@ -26,6 +26,7 @@ class SkinParser: Parser {
                 GLTFUtil.convert(inverseBindMatrices, out: &skin.inverseBindMatrices)
             }
 
+            skin.joints = [String](repeating: "", count: jointCount)
             for j in 0..<jointCount {
                 skin.joints[i] = glTFResource.entities[gltfSkin.joints[j].index].name
             }

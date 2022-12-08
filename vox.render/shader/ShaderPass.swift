@@ -100,6 +100,7 @@ public class ShaderPass {
         do {
             return try _library.makeFunction(name: source, constantValues: functionConstants)
         } catch {
+            print("Unexpected error: \(error).")
             return nil
         }
     }

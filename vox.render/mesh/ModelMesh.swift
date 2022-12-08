@@ -665,6 +665,36 @@ extension ModelMesh {
             offset += 4
         }
 
+        if (_boneWeights != nil) {
+            if (_vertexChangeFlag & ValueChanged.BoneWeight.rawValue != 0) {
+                for i in 0..<_vertexCount {
+                    let start = _elementCount * i + offset
+                    let weight = _boneWeights![i]
+                    vertices[start] = weight.x
+                    vertices[start + 1] = weight.y
+                    vertices[start + 2] = weight.z
+                    vertices[start + 3] = weight.w
+
+                }
+            }
+            offset += 4
+        }
+
+        if (_boneIndices != nil) {
+            if (_vertexChangeFlag & ValueChanged.BoneIndex.rawValue != 0) {
+                for i in 0..<_vertexCount {
+                    let start = _elementCount * i + offset
+                    let joints = _boneIndices![i]
+                    vertices[start] = joints.x
+                    vertices[start + 1] = joints.y
+                    vertices[start + 2] = joints.z
+                    vertices[start + 3] = joints.w
+
+                }
+            }
+            offset += 4
+        }
+
         if (_tangents != nil) {
             if (_vertexChangeFlag & ValueChanged.Tangent.rawValue != 0) {
                 for i in 0..<_vertexCount {

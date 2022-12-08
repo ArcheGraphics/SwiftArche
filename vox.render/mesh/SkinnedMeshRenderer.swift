@@ -10,6 +10,7 @@ import simd
 
 public class SkinnedMeshRenderer: MeshRenderer {
     private static let _jointCountProperty = "u_jointCount"
+    private static let _jointTextureProperty = "u_jointTexture"
     private static let _jointSamplerProperty = "u_jointSampler"
     private static let _jointMatrixProperty = "u_jointMatrix"
     private static var _maxJoints: Int = 0
@@ -23,9 +24,8 @@ public class SkinnedMeshRenderer: MeshRenderer {
     private var _rootBone: Entity?
     private var _localBounds: BoundingBox = BoundingBox()
     private var _jointMatrixs: [simd_float4x4] = []
-    private var _jointBuffer: MTLBuffer?
     private var _jointTexture: MTLTexture?
-    private var _jointEntities: [Entity] = []
+    private var _jointEntities: [Entity?] = []
     private var _listenerFlag: ListenerUpdateFlag?
 
     var _condensedBlendShapeWeights: [Float] = []
@@ -84,7 +84,29 @@ public class SkinnedMeshRenderer: MeshRenderer {
         }
     }
 
-    func update() {
+    override func update(_ deltaTime: Float) {
+        if (!_hasInitJoints) {
+            _initJoints()
+            _hasInitJoints = true
+        }
+        if let skin = _skin {
+            let ibms = skin.inverseBindMatrices
+            let worldMatrix = _rootBone != nil ? _rootBone!.transform.worldMatrix : entity.transform.worldMatrix
+            let worldToLocal = simd_inverse(worldMatrix.elements)
+
+            for i in 0..<_jointEntities.count {
+                let joint = _jointEntities[i]
+                if let joint = joint {
+                    _jointMatrixs[i] = joint.transform.worldMatrix.elements * ibms[i].elements
+                } else {
+                    _jointMatrixs[i] = ibms[i].elements
+                }
+                _jointMatrixs[i] = worldToLocal * _jointMatrixs[i]
+            }
+            if (_useJointTexture) {
+                _createJointTexture()
+            }
+        }
     }
 
     override func _updateShaderData(_ cameraInfo: CameraInfo) {
@@ -117,16 +139,19 @@ public class SkinnedMeshRenderer: MeshRenderer {
             descriptor.mipmapLevelCount = 1
             _jointTexture = engine.device.makeTexture(descriptor: descriptor)
             shaderData.enableMacro(HAS_JOINT_TEXTURE.rawValue)
-            shaderData.setImageView(SkinnedMeshRenderer._jointSamplerProperty, "", _jointTexture)
+            shaderData.setImageView(SkinnedMeshRenderer._jointTextureProperty, SkinnedMeshRenderer._jointSamplerProperty, _jointTexture)
+
+            let samplerDesc = MTLSamplerDescriptor()
+            samplerDesc.mipFilter = .nearest
+            samplerDesc.magFilter = .nearest
+            samplerDesc.mipFilter = .nearest
+            shaderData.setSampler(SkinnedMeshRenderer._jointSamplerProperty, samplerDesc)
         }
 
-        if let commandBuffer = _engine.commandQueue.makeCommandBuffer(),
-           let commandEncoder = commandBuffer.makeBlitCommandEncoder() {
-            _jointBuffer!.contents().copyMemory(from: _jointMatrixs, byteCount: _jointMatrixs.count * MemoryLayout<simd_float4x4>.stride)
-            commandEncoder.copy(from: _jointBuffer!, sourceOffset: 0, sourceBytesPerRow: 0, sourceBytesPerImage: 0, sourceSize: MTLSize(),
-                    to: _jointTexture!, destinationSlice: 0, destinationLevel: 0, destinationOrigin: MTLOrigin())
-            commandEncoder.endEncoding()
-            commandBuffer.commit()
+        if let texture = _jointTexture {
+            texture.replace(region: MTLRegion(origin: MTLOrigin(x: 0, y: 0, z: 0),
+                    size: MTLSize(width: texture.width, height: texture.height, depth: 1)),
+                    mipmapLevel: 0, withBytes: &_jointMatrixs, bytesPerRow: 64)
         }
     }
 
@@ -144,7 +169,6 @@ public class SkinnedMeshRenderer: MeshRenderer {
         }
         _jointEntities = jointEntities
         _jointMatrixs = [simd_float4x4](repeating: simd_float4x4(), count: jointCount)
-        _jointBuffer = engine.device.makeBuffer(length: jointCount * MemoryLayout<simd_float4x4>.stride)
 
         let lastRootBone = _rootBone
         let rootBone = _findByEntityName(entity, skin!.skeleton)
@@ -181,7 +205,6 @@ public class SkinnedMeshRenderer: MeshRenderer {
                 let maxJoints = max(SkinnedMeshRenderer._maxJoints, jointCount)
                 SkinnedMeshRenderer._maxJoints = maxJoints
                 shaderData.disableMacro(HAS_JOINT_TEXTURE.rawValue)
-                shaderData.enableMacro(JOINTS_COUNT.rawValue, (maxJoints, .int))
             }
         } else {
             shaderData.disableMacro(HAS_SKIN.rawValue)

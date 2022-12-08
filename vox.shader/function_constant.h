@@ -34,7 +34,6 @@ DeclBoolMacro(hasBlendShapeNormal, HAS_BLENDSHAPE_NORMAL)
 DeclBoolMacro(hasBlendShapeTangent, HAS_BLENDSHAPE_TANGENT)
 
 //MARK: - Skin
-DeclIntMacro(jointsCount, JOINTS_COUNT)
 DeclBoolMacro(hasSkin, HAS_SKIN)
 DeclBoolMacro(hasJointTexture, HAS_JOINT_TEXTURE)
 constant bool hasSkinAndHasJointTexture = hasSkin && hasJointTexture;

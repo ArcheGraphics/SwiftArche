@@ -122,11 +122,10 @@ class MeshParser: Parser {
                         break
                     case "COLOR_0":
                         if accessor.value.dimension == .vector3 {
-                            var colorVec = [Vector3](repeating: Vector3(), count: vertexCount)
-                            GLTFUtil.convert(accessor.value, out: &colorVec)
+                            GLTFUtil.convert(accessor.value, out: &bufferFloat3)
                             var color = [Color](repeating: Color(), count: vertexCount)
-                            for k in 0..<vertexCount {
-                                color[k] = Color(colorVec[k].x, colorVec[k].y, colorVec[k].z)
+                            for i in 0..<vertexCount {
+                                color[i] = Color(bufferFloat3[i * 3], bufferFloat3[i * 3 + 1], bufferFloat3[i * 3 + 2])
                             }
                             mesh.setColors(colors: color)
                         } else {
@@ -142,7 +141,22 @@ class MeshParser: Parser {
                         break
                     case "JOINTS_0":
                         var joint = [Vector4](repeating: Vector4(), count: vertexCount)
-                        GLTFUtil.convert(accessor.value, out: &joint)
+                        let bytesPerComponent = GLTFBytesPerComponentForComponentType(accessor.value.componentType)
+                        if bytesPerComponent == 2 {
+                            var uint16Buffer = [UInt16](repeating: 0, count: vertexCount * 4)
+                            GLTFUtil.convert(accessor.value, out: &uint16Buffer)
+                            for i in 0..<vertexCount {
+                                joint[i] = Vector4(Float(uint16Buffer[i * 4]), Float(uint16Buffer[i * 4 + 1]),
+                                                   Float(uint16Buffer[i * 4 + 2]), Float(uint16Buffer[i * 4 + 3]))
+                            }
+                        } else if bytesPerComponent == 1 {
+                            var uint8Buffer = [UInt8](repeating: 0, count: vertexCount * 4)
+                            GLTFUtil.convert(accessor.value, out: &uint8Buffer)
+                            for i in 0..<vertexCount {
+                                joint[i] = Vector4(Float(uint8Buffer[i * 4]), Float(uint8Buffer[i * 4 + 1]),
+                                                   Float(uint8Buffer[i * 4 + 2]), Float(uint8Buffer[i * 4 + 3]))
+                            }
+                        }
                         mesh.setBoneIndices(joint)
                         break
                     case "WEIGHTS_0":
