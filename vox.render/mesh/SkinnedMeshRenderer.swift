@@ -34,7 +34,6 @@ public class SkinnedMeshRenderer: MeshRenderer {
     /// - Remark: Array index is BlendShape index.
     var blendShapeWeights: [Float] {
         get {
-            _checkBlendShapeWeightLength()
             return _blendShapeWeights
         }
         set {
@@ -151,7 +150,7 @@ public class SkinnedMeshRenderer: MeshRenderer {
         if let texture = _jointTexture {
             texture.replace(region: MTLRegion(origin: MTLOrigin(x: 0, y: 0, z: 0),
                     size: MTLSize(width: texture.width, height: texture.height, depth: 1)),
-                    mipmapLevel: 0, withBytes: &_jointMatrixs, bytesPerRow: 64)
+                            mipmapLevel: 0, withBytes: &_jointMatrixs, bytesPerRow: 16 * MemoryLayout<Float>.stride)
         }
     }
 

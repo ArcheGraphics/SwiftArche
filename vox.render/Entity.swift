@@ -159,8 +159,8 @@ public final class Entity: EngineObject {
     /// Get components which match the type.
     /// - Parameter results: The components which match type.
     /// - Returns: The components which match type.
-    public func getComponents<T: Component>(_ results: inout [T]) -> [T] {
-        results = []
+    public func getComponents<T: Component>() -> [T] {
+        var results: [T] = []
         for i in 0..<_components.count {
             let component = _components[i]
             if (component is T) {

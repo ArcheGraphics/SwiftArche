@@ -145,55 +145,53 @@ public class BlendShapeManager {
         descriptor.mipmapLevelCount = 1
         _vertexTexture = _engine.device.makeTexture(descriptor: descriptor)
 
-        _vertices = [Float](repeating: 0, count: blendShapeCount * textureWidth * textureHeight * 4)
+        _vertices = [Float](repeating: 0, count: textureWidth * textureHeight * 4)
         _dataTextureInfo.x = UInt32(_vertexElementCount)
         _dataTextureInfo.y = UInt32(textureWidth)
         _dataTextureInfo.z = UInt32(textureHeight)
     }
 
     private func _updateTextureArray(_ vertexCount: Int, _ force: Bool) {
-        let subBlendShapeDataStride = _vertexTexture.width * _vertexTexture.height * 4
         for i in 0..<_blendShapes.count {
             let subDirtyFlag = _subDataDirtyFlags[i]
             if (force || subDirtyFlag.flag) {
                 let frames = _blendShapes[i].frames
-                let frameCount = frames.count
-                let endFrame = frames[frameCount - 1]
-                if (frameCount > 0 && endFrame.deltaPositions.count != vertexCount) {
+                if let endFrame = frames.last,
+                   endFrame.deltaPositions.count == vertexCount {
+                    var offset = 0
+                    for j in 0..<vertexCount {
+                        let position = endFrame.deltaPositions[j]
+                        _vertices[offset] = position.x
+                        _vertices[offset + 1] = position.y
+                        _vertices[offset + 2] = position.z
+                        offset += 4
+
+                        if (endFrame.deltaNormals != nil) {
+                            let normal = endFrame.deltaNormals![j]
+                            _vertices[offset] = normal.x
+                            _vertices[offset + 1] = normal.y
+                            _vertices[offset + 2] = normal.z
+                            offset += 4
+                        }
+
+                        if (endFrame.deltaTangents != nil) {
+                            let tangent = endFrame.deltaTangents![j]
+                            _vertices[offset] = tangent.x
+                            _vertices[offset + 1] = tangent.y
+                            _vertices[offset + 2] = tangent.z
+                            offset += 4
+                        }
+                    }
+                    _vertexTexture.replace(region: MTLRegionMake2D(0, 0, _vertexTexture.width, _vertexTexture.height),
+                                           mipmapLevel: 0, slice: i, withBytes: &_vertices,
+                                           bytesPerRow: _vertexTexture.width * 4 * MemoryLayout<Float>.stride,
+                                           bytesPerImage: _vertices.count * MemoryLayout<Float>.stride)
+                    subDirtyFlag.flag = false
+                } else {
                     fatalError("BlendShape frame deltaPositions length must same with mesh vertexCount.")
                 }
-
-                var offset = i * subBlendShapeDataStride
-                for j in 0..<vertexCount {
-                    let position = endFrame.deltaPositions[j]
-                    _vertices[offset] = position.x
-                    _vertices[offset + 1] = position.y
-                    _vertices[offset + 2] = position.z
-                    offset += 4
-
-                    if (endFrame.deltaNormals != nil) {
-                        let normal = endFrame.deltaNormals![j]
-                        _vertices[offset] = normal.x
-                        _vertices[offset + 1] = normal.y
-                        _vertices[offset + 2] = normal.z
-                        offset += 4
-                    }
-
-                    if (endFrame.deltaTangents != nil) {
-                        let tangent = endFrame.deltaTangents![j]
-                        _vertices[offset] = tangent.x
-                        _vertices[offset + 1] = tangent.y
-                        _vertices[offset + 2] = tangent.z
-                        offset += 4
-                    }
-                }
-                subDirtyFlag.flag = false
             }
         }
-        _vertexTexture.replace(region: MTLRegionMake2D(0, 0, _vertexTexture.width, _vertexTexture.height),
-                               mipmapLevel: 0, slice: 0, withBytes: &_vertices,
-                               bytesPerRow: _vertexTexture.width * 4 * MemoryLayout<Float>.stride,
-                               bytesPerImage: subBlendShapeDataStride * MemoryLayout<Float>.stride)
     }
 
     private func _updateLayoutChange(_ a: Int?, _ blendShape: AnyObject?) {

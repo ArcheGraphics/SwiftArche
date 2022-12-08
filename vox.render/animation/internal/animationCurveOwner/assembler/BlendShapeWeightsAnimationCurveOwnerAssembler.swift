@@ -8,17 +8,21 @@ import vox_math
 
 public final class BlendShapeWeightsAnimationCurveOwnerAssembler<Calculator: IAnimationCurveCalculator>:
         IAnimationCurveOwnerAssembler<[Float], Calculator> where Calculator.V == [Float] {
-    private var _skinnedMeshRenderer: SkinnedMeshRenderer!
+    private var _renderers: [SkinnedMeshRenderer] = []
+    private var _targetValue: [Float] = []
 
     public override func initialize(owner: AnimationCurveOwner<[Float], Calculator>) {
-        _skinnedMeshRenderer = owner.target.getComponent()
+        _renderers = owner.target.getComponents()
     }
 
     public override func getTargetValue() -> [Float]? {
-        _skinnedMeshRenderer.blendShapeWeights
+        _targetValue
     }
 
     public override func setTargetValue(_ value: [Float]) {
-        _skinnedMeshRenderer.blendShapeWeights = value
+        _targetValue = value
+        for renderer in _renderers {
+            renderer.blendShapeWeights = value
+        }
     }
 }
