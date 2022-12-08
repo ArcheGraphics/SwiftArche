@@ -81,7 +81,7 @@ class LoaderGUI: Script {
         GLTFInfo("TwoSidedPlane", "A plane having the two sided material parameter enabled.",
                  "gltf", "glTF-Sample-Models/2.0/TwoSidedPlane/glTF"),
         // Feature Tests
-        GLTFInfo("-----------------Feature Tests----------------------------", "", "gltf", "glTF-Sample-Models/2.0/BoomBoxWithAxes/glTF", "BoomBoxWithAxes"),
+        GLTFInfo("-----------------Feature Tests----------------------------", "", "gltf", "glTF-Sample-Models/2.0/AlphaBlendModeTest/glTF", "AlphaBlendModeTest"),
         GLTFInfo("AlphaBlendModeTest", "Tests alpha modes and settings."),
         GLTFInfo("BoomBoxWithAxes", "Shows X, Y, and Z axis default orientations.",
                  "gltf", "glTF-Sample-Models/2.0/BoomBoxWithAxes/glTF"),
@@ -99,7 +99,7 @@ class LoaderGUI: Script {
         GLTFInfo("TextureSettingsTest", "Tests single/double-sided and various texturing modes."),
         GLTFInfo("VertexColorTest", "Tests if vertex colors are supported."),
         // Minimal Tests
-        GLTFInfo("-----------------Minimal Tests-----------------------------", "", "gltf", "glTF-Sample-Models/2.0/SimpleSkin/glTF", "SimpleSkin"),
+        GLTFInfo("-----------------Minimal Tests-----------------------------", "", "gltf", "glTF-Sample-Models/2.0/Unicode❤♻Test/glTF", "Unicode❤♻Test"),
         GLTFInfo("TriangleWithoutIndices", "The simplest possible glTF asset: A single `scene` with a single `node` and a single `mesh` with a single `mesh.primitive` with a single triangle with a single attribute, without indices and without a `material` ", "gltf", "glTF-Sample-Models/2.0/TriangleWithoutIndices/glTF"),
         GLTFInfo("Triangle", "A very simple glTF asset: The basic structure is the same as in [Triangle Without Indices](TriangleWithoutIndices), but here, the `mesh.primitive` describes an *indexed* geometry", "gltf", "glTF-Sample-Models/2.0/Triangle/glTF"),
         GLTFInfo("AnimatedTriangle", "This sample is similar to the [Triangle](Triangle), but the `node` has a `rotation` property that is modified with a simple `animation`", "gltf", "glTF-Sample-Models/2.0/AnimatedTriangle/glTF"),

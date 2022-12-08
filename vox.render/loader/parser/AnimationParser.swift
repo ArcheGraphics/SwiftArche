@@ -62,7 +62,7 @@ class AnimationParser: Parser {
                     animationClip.addCurveBinding(relativePath, Transform.self, .Position, curve)
                     break
                 case "rotation":
-                    let curve: AnimationCurve<Quaternion, AnimationQuaternionCurve> = _addCurve(gltfChannel, sampleDataCollection)
+                    let curve: AnimationCurve<Quaternion, AnimationQuaternionCurve> = _addCurveQuaternion(gltfChannel, sampleDataCollection)
                     animationClip.addCurveBinding(relativePath, Transform.self, .Rotation, curve)
                     break
                 case "scale":
@@ -70,7 +70,7 @@ class AnimationParser: Parser {
                     animationClip.addCurveBinding(relativePath, Transform.self, .Scale, curve)
                     break
                 case "weights":
-                    let curve: AnimationCurve<[Float], AnimationArrayCurve> = _addCurve(gltfChannel, sampleDataCollection)
+                    let curve: AnimationCurve<[Float], AnimationArrayCurve> = _addCurveFloatArray(gltfChannel, sampleDataCollection)
                     animationClip.addCurveBinding(relativePath, SkinnedMeshRenderer.self, .BlendShapeWeights, curve)
                     break
                 default:
@@ -83,28 +83,22 @@ class AnimationParser: Parser {
         glTFResource.animations = animationClips
     }
 
-    private func _addCurve<V: KeyframeValueType, Calculator: IAnimationCurveCalculator>(
+    private func _addCurveQuaternion(
             _ gltfChannel: GLTFAnimationChannel,
             _ sampleDataCollection: [SampleData]
-    ) -> AnimationCurve<V, Calculator> where Calculator.V == V, V == V.TangentType {
-
+    ) -> AnimationCurve<Quaternion, AnimationQuaternionCurve> {
         let sampleData = sampleDataCollection[gltfChannel.sampler.index]
-        let curve = AnimationCurve<V, Calculator>()
+        let curve = AnimationCurve<Quaternion, AnimationQuaternionCurve>()
         curve.interpolation = sampleData.interpolation
         let outputAccessorSize = sampleData.output.count / sampleData.input.count
 
         var input = [Float](repeating: 0, count: sampleData.input.count)
         GLTFUtil.convert(sampleData.input, out: &input)
-        var output: [V] = []
-        if sampleData.interpolation == .CubicSpine {
-            output = [V](repeating: V(), count: sampleData.output.count * 3 * outputAccessorSize)
-        } else {
-            output = [V](repeating: V(), count: sampleData.output.count * outputAccessorSize)
-        }
+        var output = [Quaternion](repeating: Quaternion(), count: sampleData.output.count)
         GLTFUtil.convert(sampleData.output, out: &output)
 
         for i in 0..<sampleData.input.count {
-            let keyframe = Keyframe<V>()
+            let keyframe = Keyframe<Quaternion>()
             keyframe.time = input[i]
             if sampleData.interpolation == .CubicSpine {
                 keyframe.value = output[i * 3]
@@ -131,12 +125,7 @@ class AnimationParser: Parser {
 
         var input = [Float](repeating: 0, count: sampleData.input.count)
         GLTFUtil.convert(sampleData.input, out: &input)
-        var output: [Float] = []
-        if sampleData.interpolation == .CubicSpine {
-            output = [Float](repeating: 0, count: 3 * sampleData.output.count * 3 * outputAccessorSize)
-        } else {
-            output = [Float](repeating: 0, count: 3 * sampleData.output.count * outputAccessorSize)
-        }
+        var output = [Float](repeating: 0, count: sampleData.output.count)
         GLTFUtil.convert(sampleData.output, out: &output)
 
         for i in 0..<sampleData.input.count {
@@ -148,6 +137,37 @@ class AnimationParser: Parser {
                 keyframe.outTangent = Vector3(output[9 * i + 6], output[9 * i + 7], output[9 * i + 8])
             } else {
                 keyframe.value = Vector3(output[3 * i], output[3 * i + 1], output[3 * i + 2])
+            }
+
+            curve.addKey(keyframe)
+        }
+        return curve
+    }
+    
+    private func _addCurveFloatArray(
+            _ gltfChannel: GLTFAnimationChannel,
+            _ sampleDataCollection: [SampleData]
+    ) -> AnimationCurve<[Float], AnimationArrayCurve> {
+
+        let sampleData = sampleDataCollection[gltfChannel.sampler.index]
+        let curve = AnimationCurve<[Float], AnimationArrayCurve>()
+        curve.interpolation = sampleData.interpolation
+        let outputAccessorSize = sampleData.output.count / sampleData.input.count
+
+        var input = [Float](repeating: 0, count: sampleData.input.count)
+        GLTFUtil.convert(sampleData.input, out: &input)
+        var output = [Float](repeating: 0, count: sampleData.output.count)
+        GLTFUtil.convert(sampleData.output, out: &output)
+
+        for i in 0..<sampleData.input.count {
+            let keyframe = Keyframe<[Float]>()
+            keyframe.time = input[i]
+            if sampleData.interpolation == .CubicSpine {
+                keyframe.value = [Float](output[outputAccessorSize * i * 3..<outputAccessorSize * (i * 3 + 1)])
+                keyframe.inTangent = [Float](output[outputAccessorSize * (i * 3 + 1)..<outputAccessorSize * (i * 3 + 2)])
+                keyframe.outTangent = [Float](output[outputAccessorSize * (i * 3 + 2)..<outputAccessorSize * (i * 3 + 3)])
+            } else {
+                keyframe.value = [Float](output[outputAccessorSize * i..<outputAccessorSize * (i + 1)])
             }
 
             curve.addKey(keyframe)

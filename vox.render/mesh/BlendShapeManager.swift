@@ -10,7 +10,9 @@ import Metal
 public class BlendShapeManager {
     private static let _blendShapeWeightsProperty = "u_blendShapeWeights"
     private static let _blendShapeTextureProperty = "u_blendShapeTexture"
+    private static let _blendShapeSamplerProperty = "u_blendShapeSampler"
     private static let _blendShapeTextureInfoProperty = "u_blendShapeTextureInfo"
+    private static let _blendSamplerDesc = MTLSamplerDescriptor()
 
     var _blendShapeCount: Int = 0
     var _blendShapes: [BlendShape] = []
@@ -18,7 +20,6 @@ public class BlendShapeManager {
     var _subDataDirtyFlags: [BoolUpdateFlag] = []
     var _listenerFlags: [ListenerUpdateFlag] = []
     var _vertexTexture: MTLTexture!
-    var _vertexBuffer: MTLBuffer!
     var _vertices: [Float] = []
     let maxTextureSize = 4096
 
@@ -35,6 +36,9 @@ public class BlendShapeManager {
     init(_ engine: Engine, _ modelMesh: ModelMesh) {
         _engine = engine
         _modelMesh = modelMesh
+        BlendShapeManager._blendSamplerDesc.mipFilter = .nearest
+        BlendShapeManager._blendSamplerDesc.magFilter = .nearest
+        BlendShapeManager._blendSamplerDesc.mipFilter = .nearest
     }
 
     func _addBlendShape(_ blendShape: BlendShape) {
@@ -63,7 +67,8 @@ public class BlendShapeManager {
     func _updateShaderData(_ shaderData: ShaderData, _ skinnedMeshRenderer: SkinnedMeshRenderer) {
         if (_blendShapeCount > 0) {
             shaderData.enableMacro(HAS_BLENDSHAPE.rawValue)
-            shaderData.setImageView(BlendShapeManager._blendShapeTextureProperty, "", _vertexTexture)
+            shaderData.setImageView(BlendShapeManager._blendShapeTextureProperty, BlendShapeManager._blendShapeSamplerProperty, _vertexTexture)
+            shaderData.setSampler(BlendShapeManager._blendShapeSamplerProperty, BlendShapeManager._blendSamplerDesc)
             shaderData.setData(BlendShapeManager._blendShapeTextureInfoProperty, _dataTextureInfo)
             shaderData.setData(BlendShapeManager._blendShapeWeightsProperty, skinnedMeshRenderer.blendShapeWeights)
             shaderData.enableMacro(BLENDSHAPE_COUNT.rawValue, (_blendShapeCount, .int))
@@ -132,6 +137,7 @@ public class BlendShapeManager {
 
         let blendShapeCount = _blendShapes.count
         let descriptor = MTLTextureDescriptor()
+        descriptor.textureType = .type2DArray
         descriptor.width = textureWidth
         descriptor.height = textureHeight
         descriptor.arrayLength = blendShapeCount
@@ -139,15 +145,14 @@ public class BlendShapeManager {
         descriptor.mipmapLevelCount = 1
         _vertexTexture = _engine.device.makeTexture(descriptor: descriptor)
 
-        _vertexBuffer = _engine.device.makeBuffer(length: blendShapeCount * textureWidth * textureHeight * 4 * MemoryLayout<Float>.stride)
         _vertices = [Float](repeating: 0, count: blendShapeCount * textureWidth * textureHeight * 4)
         _dataTextureInfo = Vector3(Float(_vertexElementCount), Float(textureWidth), Float(textureHeight))
     }
 
     private func _updateTextureArray(_ vertexCount: Int, _ force: Bool) {
+        let subBlendShapeDataStride = _vertexTexture.width * _vertexTexture.height * 4
         for i in 0..<_blendShapes.count {
             let subDirtyFlag = _subDataDirtyFlags[i]
-            let subBlendShapeDataStride = _vertexTexture.width * _vertexTexture.height * 4
             if (force || subDirtyFlag.flag) {
                 let frames = _blendShapes[i].frames
                 let frameCount = frames.count
@@ -183,14 +188,10 @@ public class BlendShapeManager {
                 subDirtyFlag.flag = false
             }
         }
-        if let commandBuffer = _engine.commandQueue.makeCommandBuffer(),
-           let commandEncoder = commandBuffer.makeBlitCommandEncoder() {
-            _vertexBuffer.contents().copyMemory(from: _vertices, byteCount: _vertices.count * MemoryLayout<Float>.stride)
-            commandEncoder.copy(from: _vertexBuffer, sourceOffset: 0, sourceBytesPerRow: 0, sourceBytesPerImage: 0, sourceSize: MTLSize(),
-                    to: _vertexTexture, destinationSlice: 0, destinationLevel: 0, destinationOrigin: MTLOrigin())
-            commandEncoder.endEncoding()
-            commandBuffer.commit()
-        }
+        _vertexTexture.replace(region: MTLRegionMake2D(0, 0, _vertexTexture.width, _vertexTexture.height),
+                               mipmapLevel: 0, slice: 0, withBytes: &_vertices,
+                               bytesPerRow: _vertexTexture.width * 4 * MemoryLayout<Float>.stride,
+                               bytesPerImage: subBlendShapeDataStride * MemoryLayout<Float>.stride)
     }
 
     private func _updateLayoutChange(_ a: Int?, _ blendShape: AnyObject?) {

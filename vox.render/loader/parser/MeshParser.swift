@@ -207,6 +207,12 @@ class MeshParser: Parser {
                         var indices = [UInt32](repeating: 0, count: indexAccessor.count)
                         GLTFUtil.convert(indexAccessor, out: &indices)
                         mesh.setIndices(indices: indices)
+                    } else if indexAccessor.componentType == .unsignedByte {
+                        var indicesBuffer = [UInt8](repeating: 0, count: indexAccessor.count)
+                        GLTFUtil.convert(indexAccessor, out: &indicesBuffer)
+                        mesh.setIndices(indices: indicesBuffer.map { value in
+                            UInt16(value)
+                        })
                     }
                     _ = mesh.addSubMesh(0, indexAccessor.count, mode)
                 } else {

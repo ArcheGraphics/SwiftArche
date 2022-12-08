@@ -56,6 +56,9 @@ public class Time {
     public func tick() {
         let now = Date()
         _deltaTime = Float(now.timeIntervalSince(_lastTickTime)) * timeScale
+        if _deltaTime < 0 {
+            fatalError()
+        }
         _lastTickTime = now
     }
 
