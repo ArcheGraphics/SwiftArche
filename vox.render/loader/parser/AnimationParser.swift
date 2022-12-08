@@ -90,7 +90,6 @@ class AnimationParser: Parser {
         let sampleData = sampleDataCollection[gltfChannel.sampler.index]
         let curve = AnimationCurve<Quaternion, AnimationQuaternionCurve>()
         curve.interpolation = sampleData.interpolation
-        let outputAccessorSize = sampleData.output.count / sampleData.input.count
 
         var input = [Float](repeating: 0, count: sampleData.input.count)
         GLTFUtil.convert(sampleData.input, out: &input)
@@ -121,7 +120,6 @@ class AnimationParser: Parser {
         let sampleData = sampleDataCollection[gltfChannel.sampler.index]
         let curve = AnimationCurve<Vector3, AnimationVector3Curve>()
         curve.interpolation = sampleData.interpolation
-        let outputAccessorSize = sampleData.output.count / sampleData.input.count
 
         var input = [Float](repeating: 0, count: sampleData.input.count)
         GLTFUtil.convert(sampleData.input, out: &input)

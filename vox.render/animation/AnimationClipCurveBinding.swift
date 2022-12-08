@@ -41,6 +41,12 @@ class AnimationClipCurveBinding<V: KeyframeValueType, Calculator: IAnimationCurv
         Calculator._initializeOwner(owner)
         return owner
     }
+    
+    func _createCurveOwner(_ entity: Entity) -> AnimationCurveOwner<V, Calculator> where Calculator.V == [Float] {
+        let owner = AnimationCurveOwner<[Float], Calculator>(entity, property, BlendShapeWeightsAnimationCurveOwnerAssembler<Calculator>())
+        Calculator._initializeOwner(owner)
+        return owner
+    }
 
     func _getTempCurveOwner(entity: Entity) -> AnimationCurveOwner<V, Calculator> where Calculator.V == Vector3 {
         let instanceId = entity.instanceId
@@ -51,6 +57,14 @@ class AnimationClipCurveBinding<V: KeyframeValueType, Calculator: IAnimationCurv
     }
 
     func _getTempCurveOwner(entity: Entity) -> AnimationCurveOwner<V, Calculator> where Calculator.V == Quaternion {
+        let instanceId = entity.instanceId
+        if (_tempCurveOwner[instanceId] == nil) {
+            _tempCurveOwner[instanceId] = _createCurveOwner(entity)
+        }
+        return _tempCurveOwner[instanceId]!
+    }
+    
+    func _getTempCurveOwner(entity: Entity) -> AnimationCurveOwner<V, Calculator> where Calculator.V == [Float] {
         let instanceId = entity.instanceId
         if (_tempCurveOwner[instanceId] == nil) {
             _tempCurveOwner[instanceId] = _createCurveOwner(entity)

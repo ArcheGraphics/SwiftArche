@@ -247,6 +247,25 @@ public class Animator: Component {
                     logger.warning("(The entity don\'t have the child entity which path is \(curve.relativePath!).");
                 }
                 break
+            case .BlendShapeWeights:
+                let curveType = curve as! AnimationClipCurveBinding<[Float], AnimationArrayCurve>
+                let targetEntity = curveType.relativePath == "" ? entity : entity.findByPath(curveType.relativePath)
+                if (targetEntity != nil) {
+                    let instanceId = targetEntity!.instanceId
+                    if _animationCurveOwners[instanceId] == nil {
+                        _animationCurveOwners[instanceId] = [:]
+                    }
+                    if let value = _animationCurveOwners[instanceId]![curveType.property.rawValue] {
+                        animatorStateData.curveOwners[i] = value
+                    } else {
+                        let value = curveType._createCurveOwner(targetEntity!)
+                        animatorStateData.curveOwners[i] = value
+                        _animationCurveOwners[instanceId]![curveType.property.rawValue] = value
+                    }
+                } else {
+                    logger.warning("(The entity don\'t have the child entity which path is \(curve.relativePath!).");
+                }
+                break
             default:
                 break
             }
@@ -433,6 +452,11 @@ public class Animator: Component {
                     let curveBindingType = curveBindings[i] as! AnimationClipCurveBinding<Vector3, AnimationVector3Curve>
                     ownerType.evaluateAndApplyValue(curveBindingType.curve, clipTime, weight, additive)
                     break
+                case .BlendShapeWeights:
+                    let ownerType = curveOwners[i] as! AnimationCurveOwner<[Float], AnimationArrayCurve>
+                    let curveBindingType = curveBindings[i] as! AnimationClipCurveBinding<[Float], AnimationArrayCurve>
+                    ownerType.evaluateAndApplyValue(curveBindingType.curve, clipTime, weight, additive)
+                    break
                 default:
                     break
                 }
@@ -565,6 +589,22 @@ public class Animator: Component {
                         additive
                 )
                 break
+            case .BlendShapeWeights:
+                let crossCurveDataType = crossCurveData as! AnimationCurveOwner<[Float], AnimationArrayCurve>
+                let crossSrcCurveIndex = crossCurveDataType.crossSrcCurveIndex
+                let crossDestCurveIndex = crossCurveDataType.crossDestCurveIndex
+                let srcCurvesType = srcCurves[crossSrcCurveIndex] as! AnimationClipCurveBinding<[Float], AnimationArrayCurve>
+                let destCurvesType = destCurves[crossDestCurveIndex] as! AnimationClipCurveBinding<[Float], AnimationArrayCurve>
+                crossCurveDataType.crossFadeAndApplyValue(
+                        crossSrcCurveIndex >= 0 ? srcCurvesType.curve : nil,
+                        crossDestCurveIndex >= 0 ? destCurvesType.curve : nil,
+                        srcClipTime,
+                        destClipTime,
+                        crossWeight,
+                        weight,
+                        additive
+                )
+                break
             default:
                 break
             }
@@ -638,6 +678,18 @@ public class Animator: Component {
                 let crossCurveDataType = crossCurveData as! AnimationCurveOwner<Vector3, AnimationVector3Curve>
                 let crossDestCurveIndex = crossCurveDataType.crossDestCurveIndex
                 let curveType = curveBindings[crossDestCurveIndex] as! AnimationClipCurveBinding<Vector3, AnimationVector3Curve>
+
+                crossCurveDataType.crossFadeFromPoseAndApplyValue(
+                        crossDestCurveIndex >= 0 ? curveType.curve : nil,
+                        destClipTime,
+                        crossWeight,
+                        weight,
+                        additive)
+                break
+            case .BlendShapeWeights:
+                let crossCurveDataType = crossCurveData as! AnimationCurveOwner<[Float], AnimationArrayCurve>
+                let crossDestCurveIndex = crossCurveDataType.crossDestCurveIndex
+                let curveType = curveBindings[crossDestCurveIndex] as! AnimationClipCurveBinding<[Float], AnimationArrayCurve>
 
                 crossCurveDataType.crossFadeFromPoseAndApplyValue(
                         crossDestCurveIndex >= 0 ? curveType.curve : nil,
