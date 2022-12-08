@@ -32,7 +32,7 @@ public class SkinnedMeshRenderer: MeshRenderer {
 
     /// The weights of the BlendShapes.
     /// - Remark: Array index is BlendShape index.
-    var blendShapeWeights: [Float] {
+    public var blendShapeWeights: [Float] {
         get {
             return _blendShapeWeights
         }
@@ -49,7 +49,7 @@ public class SkinnedMeshRenderer: MeshRenderer {
     }
 
     /// Skin Object.
-    var skin: Skin? {
+    public var skin: Skin? {
         get {
             _skin
         }
@@ -62,7 +62,7 @@ public class SkinnedMeshRenderer: MeshRenderer {
     }
 
     /// Local bounds.
-    var localBounds: BoundingBox {
+    public var localBounds: BoundingBox {
         get {
             _localBounds
         }
@@ -73,7 +73,7 @@ public class SkinnedMeshRenderer: MeshRenderer {
     }
 
     /// Root bone.
-    var rootBone: Entity? {
+    public var rootBone: Entity? {
         get {
             _rootBone
         }

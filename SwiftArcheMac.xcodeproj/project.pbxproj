@@ -43,6 +43,8 @@
 		040F1E29293C865E008BDC8D /* UIElement.swift in Sources */ = {isa = PBXBuildFile; fileRef = 040F1E28293C865E008BDC8D /* UIElement.swift */; };
 		04462F21293324A300F95387 /* Textures.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 04462F20293324A200F95387 /* Textures.xcassets */; };
 		3E6B235C2941BF88000AC29F /* BlendShapeWeightsAnimationCurveOwnerAssembler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E6B235B2941BF88000AC29F /* BlendShapeWeightsAnimationCurveOwnerAssembler.swift */; };
+		3E6B235E294220BC000AC29F /* FaceMorphApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E6B235D294220BC000AC29F /* FaceMorphApp.swift */; };
+		3E6B2360294224C1000AC29F /* FaceGUI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E6B235F294224C1000AC29F /* FaceGUI.swift */; };
 		3E6D2F01293E13DF00B63F73 /* BufferPool.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E6D2F00293E13DF00B63F73 /* BufferPool.swift */; };
 		3E6D2F03293E336500B63F73 /* FogMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E6D2F02293E336500B63F73 /* FogMode.swift */; };
 		3E6D2F06293ED76300B63F73 /* light_sprite.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3E6D2F04293ED76300B63F73 /* light_sprite.metal */; };
@@ -538,6 +540,8 @@
 		040F1E28293C865E008BDC8D /* UIElement.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIElement.swift; sourceTree = "<group>"; };
 		04462F20293324A200F95387 /* Textures.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Textures.xcassets; sourceTree = SOURCE_ROOT; };
 		3E6B235B2941BF88000AC29F /* BlendShapeWeightsAnimationCurveOwnerAssembler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlendShapeWeightsAnimationCurveOwnerAssembler.swift; sourceTree = "<group>"; };
+		3E6B235D294220BC000AC29F /* FaceMorphApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FaceMorphApp.swift; sourceTree = "<group>"; };
+		3E6B235F294224C1000AC29F /* FaceGUI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FaceGUI.swift; sourceTree = "<group>"; };
 		3E6D2F00293E13DF00B63F73 /* BufferPool.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BufferPool.swift; sourceTree = "<group>"; };
 		3E6D2F02293E336500B63F73 /* FogMode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FogMode.swift; sourceTree = "<group>"; };
 		3E6D2F04293ED76300B63F73 /* light_sprite.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; path = light_sprite.metal; sourceTree = "<group>"; };
@@ -1122,6 +1126,8 @@
 			children = (
 				3E6D2F0C293F137300B63F73 /* GLTFViewerApp.swift */,
 				3E6D2F10293F1AAB00B63F73 /* GLTFLoaderUtils.swift */,
+				3E6B235D294220BC000AC29F /* FaceMorphApp.swift */,
+				3E6B235F294224C1000AC29F /* FaceGUI.swift */,
 			);
 			path = loader;
 			sourceTree = "<group>";
@@ -2380,6 +2386,7 @@
 				3EC92A3E29358C9600423396 /* PBRApp.swift in Sources */,
 				3E6D2F0D293F137300B63F73 /* GLTFViewerApp.swift in Sources */,
 				3EB32B7529322DB30019A4F3 /* PrimitiveApp.swift in Sources */,
+				3E6B235E294220BC000AC29F /* FaceMorphApp.swift in Sources */,
 				3EC0370529321131002187DC /* AppDelegate.swift in Sources */,
 				43D8C62B488D6837DDD5BBA8 /* SkyboxApp.swift in Sources */,
 				43D8CC2C3372F5E3258A852D /* IrradianceApp.swift in Sources */,
@@ -2388,6 +2395,7 @@
 				040F1DF3293781B0008BDC8D /* RenderingUtils.swift in Sources */,
 				43D8CF515E4D90196E7E806B /* PhysXCollisionDetectionApp.swift in Sources */,
 				43D8C808C0FA018090454567 /* PhysXAttractorApp.swift in Sources */,
+				3E6B2360294224C1000AC29F /* FaceGUI.swift in Sources */,
 				43D8CC13B0B39DD99DEE0DC4 /* PhysXCompoundApp.swift in Sources */,
 				43D8C1413D08147985256B8A /* PhysXJointBasicApp.swift in Sources */,
 				43D8C645AB2BDFD62E330B9C /* PhysXRaycast.swift in Sources */,
