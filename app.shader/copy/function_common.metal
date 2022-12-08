@@ -21,7 +21,7 @@ float4x4 getJointMatrix(texture2d<float> joint_tex,
 }
 
 float3 getBlendShapeVertexElement(int blendShapeIndex, int vertexElementIndex,
-                                  int3 u_blendShapeTextureInfo,
+                                  uint3 u_blendShapeTextureInfo,
                                   texture2d_array<float> u_blendShapeTexture) {
     int y = vertexElementIndex / u_blendShapeTextureInfo.y;
     int x = vertexElementIndex - y * u_blendShapeTextureInfo.y;

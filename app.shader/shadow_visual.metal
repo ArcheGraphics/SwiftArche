@@ -26,7 +26,7 @@ vertex VertexOut vertex_unlit(const VertexIn in [[stage_in]],
                               constant matrix_float4x4 *u_jointMatrix [[buffer(6), function_constant(hasSkinNotHasJointTexture)]],
                               // morph
                               texture2d_array<float> u_blendShapeTexture [[texture(1), function_constant(hasBlendShape)]],
-                              constant int3 &u_blendShapeTextureInfo [[buffer(7), function_constant(hasBlendShape)]],
+                              constant uint3 &u_blendShapeTextureInfo [[buffer(7), function_constant(hasBlendShape)]],
                               constant float *u_blendShapeWeights [[buffer(8), function_constant(hasBlendShape)]]) {
     VertexOut out;
     

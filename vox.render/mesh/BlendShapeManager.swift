@@ -31,7 +31,7 @@ public class BlendShapeManager {
     private var _engine: Engine
     private var _modelMesh: ModelMesh
     private var _lastCreateHostInfo: Vector3 = Vector3(0, 0, 0)
-    private var _dataTextureInfo: Vector3 = Vector3()
+    private var _dataTextureInfo: SIMD3<UInt32> = SIMD3<UInt32>()
 
     init(_ engine: Engine, _ modelMesh: ModelMesh) {
         _engine = engine
@@ -146,7 +146,9 @@ public class BlendShapeManager {
         _vertexTexture = _engine.device.makeTexture(descriptor: descriptor)
 
         _vertices = [Float](repeating: 0, count: blendShapeCount * textureWidth * textureHeight * 4)
-        _dataTextureInfo = Vector3(Float(_vertexElementCount), Float(textureWidth), Float(textureHeight))
+        _dataTextureInfo.x = UInt32(_vertexElementCount)
+        _dataTextureInfo.y = UInt32(textureWidth)
+        _dataTextureInfo.z = UInt32(textureHeight)
     }
 
     private func _updateTextureArray(_ vertexCount: Int, _ force: Bool) {

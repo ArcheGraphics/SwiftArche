@@ -54,12 +54,11 @@ public class Time {
 
     /// Call every frame, update delta time and other data.
     public func tick() {
-        let now = Date()
-        _deltaTime = Float(now.timeIntervalSince(_lastTickTime)) * timeScale
+        _deltaTime = Float(Date.now.timeIntervalSince(_lastTickTime)) * timeScale
         if _deltaTime < 0 {
             fatalError()
         }
-        _lastTickTime = now
+        _lastTickTime = Date.now
     }
 
     public func reset() {

@@ -419,7 +419,7 @@ vertex VertexOut vertex_pbr(const VertexIn in [[stage_in]],
                             // morph
                             texture2d_array<float> u_blendShapeTexture [[texture(1), function_constant(hasBlendShape)]],
                             sampler u_blendShapeSampler [[sampler(1), function_constant(hasBlendShape)]],
-                            constant int3 &u_blendShapeTextureInfo [[buffer(7), function_constant(hasBlendShape)]],
+                            constant uint3 &u_blendShapeTextureInfo [[buffer(7), function_constant(hasBlendShape)]],
                             constant float *u_blendShapeWeights [[buffer(8), function_constant(hasBlendShape)]]) {
     VertexOut out;
     

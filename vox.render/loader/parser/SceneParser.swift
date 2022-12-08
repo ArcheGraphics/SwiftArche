@@ -89,7 +89,9 @@ class SceneParser: Parser {
                     skinRenderer.skin = glTFResource.skins![skin.index]
                 }
                 if let blendShapeWeights = blendShapeWeights {
-                    skinRenderer.blendShapeWeights = [Float](repeating: 0, count: blendShapeWeights.count)
+                    skinRenderer.blendShapeWeights = blendShapeWeights.map { value in
+                        value.floatValue
+                    }
                 }
                 renderer = skinRenderer
             } else {

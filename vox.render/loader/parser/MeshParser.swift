@@ -230,17 +230,34 @@ class MeshParser: Parser {
                         var deltaNormals: [Vector3]? = nil
                         var deltaTangents: [Vector3]? = nil
 
+                        var floatBuffer: [Float] = []
                         if let deltaPosAccessor = deltaPosAccessor {
-                            deltaPositions = [Vector3](repeating: Vector3(), count: deltaPosAccessor.count)
-                            GLTFUtil.convert(deltaPosAccessor, out: &deltaPositions!)
+                            floatBuffer = [Float](repeating: 0, count: deltaPosAccessor.count * 3)
+                            GLTFUtil.convert(deltaPosAccessor, out: &floatBuffer)
+                            
+                            deltaPositions = []
+                            deltaPositions!.reserveCapacity(vertexCount)
+                            for i in 0..<vertexCount {
+                                deltaPositions!.append(Vector3(floatBuffer[i * 3], floatBuffer[i * 3 + 1], floatBuffer[i * 3 + 2]))
+                            }
                         }
                         if let deltaNorAccessor = deltaNorAccessor {
-                            deltaNormals = [Vector3](repeating: Vector3(), count: deltaNorAccessor.count)
-                            GLTFUtil.convert(deltaNorAccessor, out: &deltaNormals!)
+                            GLTFUtil.convert(deltaNorAccessor, out: &floatBuffer)
+                            
+                            deltaNormals = []
+                            deltaNormals!.reserveCapacity(vertexCount)
+                            for i in 0..<vertexCount {
+                                deltaNormals!.append(Vector3(floatBuffer[i * 3], floatBuffer[i * 3 + 1], floatBuffer[i * 3 + 2]))
+                            }
                         }
                         if let deltaTanAccessor = deltaTanAccessor {
-                            deltaTangents = [Vector3](repeating: Vector3(), count: deltaTanAccessor.count)
-                            GLTFUtil.convert(deltaTanAccessor, out: &deltaTangents!)
+                            GLTFUtil.convert(deltaTanAccessor, out: &floatBuffer)
+                            
+                            deltaTangents = []
+                            deltaTangents!.reserveCapacity(vertexCount)
+                            for i in 0..<vertexCount {
+                                deltaTangents!.append(Vector3(floatBuffer[i * 3], floatBuffer[i * 3 + 1], floatBuffer[i * 3 + 2]))
+                            }
                         }
 
                         let blendShape = BlendShape("blendShape\(j)")
