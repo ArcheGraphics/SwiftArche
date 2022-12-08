@@ -255,7 +255,7 @@ public final class Entity: EngineObject {
     /// - Parameter name: The name of the entity which want to be found.
     /// - Returns: The component which be found.
     public func findByName(_ name: String) -> Entity? {
-        if (name == name) {
+        if (self.name == name) {
           return self
         }
         for child in _children {

@@ -93,7 +93,12 @@ class AnimationParser: Parser {
 
         var input = [Float](repeating: 0, count: sampleData.input.count)
         GLTFUtil.convert(sampleData.input, out: &input)
-        var output = [Quaternion](repeating: Quaternion(), count: sampleData.output.count)
+        var output: [Quaternion] = []
+        if sampleData.interpolation == .CubicSpine {
+            output = [Quaternion](repeating: Quaternion(), count: sampleData.output.count * 3)
+        } else {
+            output = [Quaternion](repeating: Quaternion(), count: sampleData.output.count)
+        }        
         GLTFUtil.convert(sampleData.output, out: &output)
 
         for i in 0..<sampleData.input.count {
