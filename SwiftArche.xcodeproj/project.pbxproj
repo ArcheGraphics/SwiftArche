@@ -172,6 +172,8 @@
 		3E67EEC6291DF54F00ED60C8 /* DepthState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8C518C7B03C3787F9676C /* DepthState.swift */; };
 		3E67EED12921D9C800ED60C8 /* unlit_shading.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3E67EED02921D9C800ED60C8 /* unlit_shading.metal */; };
 		3E67EED42921DB4A00ED60C8 /* function_common.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3E67EED32921DB4A00ED60C8 /* function_common.metal */; };
+		3E6B2362294291E8000AC29F /* BlendShapeWeightsAnimationCurveOwnerAssembler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E6B2361294291E8000AC29F /* BlendShapeWeightsAnimationCurveOwnerAssembler.swift */; };
+		3E6B236429429240000AC29F /* FaceAnchorApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E6B236329429240000AC29F /* FaceAnchorApp.swift */; };
 		3EC92A9E2937427200423396 /* grid_shading.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3EC92A9C2937427100423396 /* grid_shading.metal */; };
 		3EC92AA5293742D400423396 /* WireframePrimitive.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EC92AA3293742D300423396 /* WireframePrimitive.swift */; };
 		3EC92AA6293742D400423396 /* WireframeManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EC92AA4293742D400423396 /* WireframeManager.swift */; };
@@ -721,6 +723,8 @@
 		3E67EED02921D9C800ED60C8 /* unlit_shading.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = unlit_shading.metal; sourceTree = "<group>"; };
 		3E67EED22921DB3F00ED60C8 /* function_common.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = function_common.h; sourceTree = "<group>"; };
 		3E67EED32921DB4A00ED60C8 /* function_common.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = function_common.metal; sourceTree = "<group>"; };
+		3E6B2361294291E8000AC29F /* BlendShapeWeightsAnimationCurveOwnerAssembler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BlendShapeWeightsAnimationCurveOwnerAssembler.swift; sourceTree = "<group>"; };
+		3E6B236329429240000AC29F /* FaceAnchorApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FaceAnchorApp.swift; sourceTree = "<group>"; };
 		3EB32B9529323DA30019A4F3 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		3EC92A892937422700423396 /* toolkit.shader.metallib */ = {isa = PBXFileReference; explicitFileType = "archive.metal-library"; includeInIndex = 0; path = toolkit.shader.metallib; sourceTree = BUILT_PRODUCTS_DIR; };
 		3EC92A942937424400423396 /* libvox.toolkit.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libvox.toolkit.a; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -1373,6 +1377,7 @@
 				43D8C84B8971A3B2CD9E0AC8 /* PositionAnimationCurveOwnerAssembler.swift */,
 				43D8C65ABA75CCC2C82E9050 /* RotationAnimationCurveOwnerAssembler.swift */,
 				43D8C0C1445D6673F2644B5C /* ScaleAnimationCurveOwnerAssembler.swift */,
+				3E6B2361294291E8000AC29F /* BlendShapeWeightsAnimationCurveOwnerAssembler.swift */,
 			);
 			path = assembler;
 			sourceTree = "<group>";
@@ -1446,6 +1451,7 @@
 				E63B17AB94CBF9AAB3956248 /* PrimitiveApp.swift */,
 				3E58E1D82940C033006A49CD /* GLTFViewerApp.swift */,
 				3E58E1C92940BC6A006A49CD /* rendering */,
+				3E6B236329429240000AC29F /* FaceAnchorApp.swift */,
 			);
 			path = SwiftArche;
 			sourceTree = "<group>";
@@ -2241,6 +2247,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				3E67EDC9291B2F7600ED60C8 /* AppDelegate.swift in Sources */,
+				3E6B236429429240000AC29F /* FaceAnchorApp.swift in Sources */,
 				E63B123A289AA1AE61CCA67E /* PrimitiveApp.swift in Sources */,
 				3E58E1D92940C033006A49CD /* GLTFViewerApp.swift in Sources */,
 				3E58E1CB2940BCA4006A49CD /* IBLBaker.swift in Sources */,
@@ -2457,6 +2464,7 @@
 				43D8C7759AA52F6E7219BD79 /* AnimationVector4Curve.swift in Sources */,
 				43D8CD9DE7CBD78E7B5FF1B7 /* PositionAnimationCurveOwnerAssembler.swift in Sources */,
 				3E5D868C292B44BB00759BA9 /* AnimatorControllerLayer.swift in Sources */,
+				3E6B2362294291E8000AC29F /* BlendShapeWeightsAnimationCurveOwnerAssembler.swift in Sources */,
 				43D8CA34B1F2CB3690D38D8C /* RotationAnimationCurveOwnerAssembler.swift in Sources */,
 				43D8CD2BA2E5A9DE50147A42 /* ScaleAnimationCurveOwnerAssembler.swift in Sources */,
 				43D8C70412541939D0EEEFD7 /* AnimationProperty.swift in Sources */,

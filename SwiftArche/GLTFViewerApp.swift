@@ -13,7 +13,6 @@ fileprivate class ARScript: Script {
     private var _isInitialize: Bool = false
 
     override func onARUpdate(_ deltaTime: Float, _ frame: ARFrame) {
-        let a:ARFaceAnchor.BlendShapeLocation.r!
         if !_isInitialize {
             _isInitialize = true
             let assetURL = Bundle.main.url(forResource: "SciFiHelmet",

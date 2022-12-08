@@ -31,10 +31,8 @@ public class ARManager: NSObject {
         _session.delegate = self
     }
     
-    public func run() {
-        // Create a session configuration
-        let configuration = ARWorldTrackingConfiguration()
-        // Run the view's session
+    public func run(_ configuration: ARConfiguration = ARWorldTrackingConfiguration(),
+                    options: ARSession.RunOptions = []) {
         session.run(configuration)
     }
     
