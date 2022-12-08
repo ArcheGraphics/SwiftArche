@@ -295,20 +295,11 @@ public class Scene: EngineObject {
     /// - Parameter name: Entity name
     /// - Returns: Entity
     public func findEntityByName(_ name: String) -> Entity? {
-        let children = _rootEntities
-        for i in 0..<children.count {
-            let child = children[i]
-            if (child.name == name) {
-                return child
-            }
-        }
-
-        for i in 0..<children.count {
-            let child = children[i]
-            let entity = child.findByName(name)
-            if (entity != nil) {
-                return entity
-            }
+        for root in _rootEntities {
+          let entity = root.findByName(name)
+          if entity != nil {
+            return entity
+          }
         }
         return nil
     }
@@ -319,17 +310,23 @@ public class Scene: EngineObject {
     public func findEntityByPath(_ path: String) -> Entity? {
         let splits = path.split(separator: "/")
         for i in 0..<rootEntitiesCount {
-            var findEntity = getRootEntity(i)
-            if (findEntity!.name != splits[0]) {
-                continue
-            }
-            for j in 1..<splits.count {
-                findEntity = Entity._findChildByName(findEntity!, String(splits[j]))
-                if findEntity == nil {
-                    break
+            if let findEntity = getRootEntity(i) {
+                if (findEntity.name != splits[0]) {
+                    continue
+                }
+                
+                var result: [Entity] = [findEntity]
+                for j in 1..<splits.count {
+                    result = Entity._findChildByName(result, String(splits[j]))
+                    if result.isEmpty {
+                        break
+                    }
+                }
+                
+                if !result.isEmpty {
+                    return result[0]
                 }
             }
-            return findEntity
         }
         return nil
     }

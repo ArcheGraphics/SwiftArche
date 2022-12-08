@@ -123,7 +123,12 @@ class AnimationParser: Parser {
 
         var input = [Float](repeating: 0, count: sampleData.input.count)
         GLTFUtil.convert(sampleData.input, out: &input)
-        var output = [Float](repeating: 0, count: sampleData.output.count)
+        var output: [Float] = []
+        if sampleData.interpolation == .CubicSpine {
+            output = [Float](repeating: 0, count: 3 * sampleData.output.count * 3)
+        } else {
+            output = [Float](repeating: 0, count: 3 * sampleData.output.count)
+        }
         GLTFUtil.convert(sampleData.output, out: &output)
 
         for i in 0..<sampleData.input.count {

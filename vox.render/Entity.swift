@@ -255,17 +255,14 @@ public final class Entity: EngineObject {
     /// - Parameter name: The name of the entity which want to be found.
     /// - Returns: The component which be found.
     public func findByName(_ name: String) -> Entity? {
-        let children = _children
-        let child = Entity._findChildByName(self, name)
-        if (child != nil) {
-            return child
+        if (name == name) {
+          return self
         }
-        for i in 0..<children.count {
-            let child = children[i]
-            let grandson = child.findByName(name)
-            if (grandson != nil) {
-                return grandson
-            }
+        for child in _children {
+          let target = child.findByName(name)
+          if target != nil {
+            return target
+          }
         }
         return nil
     }
@@ -275,15 +272,15 @@ public final class Entity: EngineObject {
     /// - Returns: The component which be found.
     public func findByPath(_ path: String) -> Entity? {
         let splits = path.split(separator: "/")
-        var entity: Entity? = self
-        for i in 0..<splits.count {
-            let split = splits[i]
-            entity = Entity._findChildByName(entity!, String(split))
-            if (entity == nil) {
-                return nil
-            }
+        var result: [Entity] = [self]
+        for split in splits {
+            result = Entity._findChildByName(result, String(split))
         }
-        return entity
+        if result.isEmpty {
+            return nil
+        } else {
+            return result[0] // only have single right animation node in the path
+        }
     }
 
     /// Create child entity.
@@ -519,13 +516,16 @@ extension Entity {
 //MARK:- Static Methods
 
 extension Entity {
-    internal static func _findChildByName(_ root: Entity, _ name: String) -> Entity? {
-        for child in root._children {
-            if (child.name == name) {
-                return child
+    internal static func _findChildByName(_ root: [Entity], _ name: String) -> [Entity] {
+        var result: [Entity] = []
+        for entity in root {
+            for child in entity._children {
+                if (child.name == name) {
+                    result.append(child)
+                }
             }
         }
-        return nil
+        return result
     }
 
     internal static func _traverseSetOwnerScene(_ entity: Entity, _ scene: Scene?) {
