@@ -414,7 +414,7 @@ extension ModelMesh {
 
         if _indicesFormat == MTLIndexType.uint16 {
             _setIndexBufferBinding(IndexBufferBinding(BufferView(device: _device, array: _indices16!), .uint16))
-        } else {
+        } else if _indicesFormat == MTLIndexType.uint32 {
             _setIndexBufferBinding(IndexBufferBinding(BufferView(device: _device, array: _indices32!), .uint32))
         }
 
@@ -534,7 +534,7 @@ extension ModelMesh {
             desc.offset = offset
             desc.bufferIndex = 0
             descriptor.attributes[Int(Joints_0.rawValue)] = desc
-            offset += MemoryLayout<u_short>.stride * 4
+            offset += MemoryLayout<Float>.stride * 4
             elementCount += 4
         }
         if (_tangents != nil) {

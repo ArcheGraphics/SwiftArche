@@ -28,7 +28,7 @@ class SkinParser: Parser {
 
             skin.joints = [String](repeating: "", count: jointCount)
             for j in 0..<jointCount {
-                skin.joints[i] = glTFResource.entities[gltfSkin.joints[j].index].name
+                skin.joints[j] = glTFResource.entities[gltfSkin.joints[j].index].name
             }
 
             if (gltfSkin.skeleton != nil) {
@@ -49,14 +49,14 @@ class SkinParser: Parser {
 
     private func _findSkeletonRootBone(_ joints: [GLTFNode], _ entities: [Entity]) -> Entity? {
         var paths: [Int: [Entity]] = [:]
-        for index in 0..<joints.count {
+        for joint in joints {
             var path: [Entity] = []
-            var entity: Entity? = entities[index]
+            var entity: Entity? = entities[joint.index]
             while (entity != nil) {
                 path.insert(entity!, at: 0)
                 entity = entity!.parent
             }
-            paths[index] = path
+            paths[joint.index] = path
         }
 
         var rootNode: Entity? = nil

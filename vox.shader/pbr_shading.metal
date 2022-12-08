@@ -570,8 +570,8 @@ fragment float4 fragment_pbr(VertexOut in [[stage_in]],
                              sampler u_clearCoatSampler [[sampler(8), function_constant(hasClearCoatTexture)]],
                              texture2d<float> u_clearCoatNormalTexture [[texture(9), function_constant(hasClearCoatNormalTexture)]],
                              sampler u_clearCoatNormalSampler [[sampler(9), function_constant(hasClearCoatNormalTexture)]],
-                             texture2d<float> u_clearCoatRoghnessTexture [[texture(10), function_constant(hasClearCoatRoughnessTexture)]],
-                             sampler u_clearCoatRoghnessSampler [[sampler(10), function_constant(hasClearCoatRoughnessTexture)]],
+                             texture2d<float> u_clearCoatRoughnessTexture [[texture(10), function_constant(hasClearCoatRoughnessTexture)]],
+                             sampler u_clearCoatRoughnessSampler [[sampler(10), function_constant(hasClearCoatRoughnessTexture)]],
                              // shadow
                              constant float4* u_shadowSplitSpheres [[buffer(11), function_constant(needCalculateShadow)]],
                              constant matrix_float4x4* u_shadowMatrices [[buffer(12), function_constant(needCalculateShadow)]],
@@ -690,8 +690,8 @@ fragment float4 fragment_pbr(VertexOut in [[stage_in]],
     }
     
     if (hasClearCoatRoughnessTexture) {
-        shading.u_clearCoatRoughnessTexture = u_clearCoatRoghnessTexture;
-        shading.u_clearCoatRoughnessSampler = u_clearCoatRoghnessSampler;
+        shading.u_clearCoatRoughnessTexture = u_clearCoatRoughnessTexture;
+        shading.u_clearCoatRoughnessSampler = u_clearCoatRoughnessSampler;
     }
     
     if (hasVertexColor) {

@@ -97,9 +97,11 @@ class SceneParser: Parser {
                 renderer.mesh = mesh
             }
 
-            let materialIndex: Int = gltfMeshPrimitives[i].material!.index
-            let material = glTFResource.materials?[materialIndex] ?? SceneParser._getDefaultMaterial(glTFResource.engine)
-            renderer.setMaterial(material)
+            if let gltfMaterial = gltfMeshPrimitives[i].material {
+                renderer.setMaterial(glTFResource.materials![gltfMaterial.index])
+            } else {
+                renderer.setMaterial(SceneParser._getDefaultMaterial(glTFResource.engine))
+            }
         }
     }
 
