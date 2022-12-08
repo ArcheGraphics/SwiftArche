@@ -16,10 +16,8 @@ struct GLTFInfo {
     let dir: String
     let description: String
     let fileName: String
-    let animation: String?
 
-    init(_ name: String, _ description: String = "", _ ext: String = "glb", _ dir: String = "",
-         _ fileName: String = "", _ animation: String? = nil) {
+    init(_ name: String, _ description: String = "", _ ext: String = "glb", _ dir: String = "", _ fileName: String = "") {
         self.name = name
         self.description = description
         self.ext = ext
@@ -29,13 +27,16 @@ struct GLTFInfo {
         } else {
             self.fileName = fileName
         }
-        self.animation = animation
     }
 }
 
 class LoaderGUI: Script {
     var camera: Camera!
     var currentItem: Int = -1
+    var currentAnimationItem: Int = -1
+    var animator: Animator?
+    var animationName: [String] = []
+    
     let gltfInfo = [
         GLTFInfo("AntiqueCamera"),
         GLTFInfo("Avocado"),
@@ -56,13 +57,13 @@ class LoaderGUI: Script {
         GLTFInfo("Box With Spaces", "Box with URI-encoded spaces in the texture names used by a simple PBR material.", "gltf", "glTF-Sample-Models/2.0/Box With Spaces/glTF"),
         GLTFInfo("BoxVertexColors", "Box with vertex colors applied."),
         GLTFInfo("Cube", "A cube with non-smoothed faces.", "gltf", "glTF-Sample-Models/2.0/Cube/glTF"),
-        GLTFInfo("AnimatedCube", "Same as previous cube having a linear rotation animation.", "gltf", "glTF-Sample-Models/2.0/AnimatedCube/glTF", "", "animation_AnimatedCube"),
+        GLTFInfo("AnimatedCube", "Same as previous cube having a linear rotation animation.", "gltf", "glTF-Sample-Models/2.0/AnimatedCube/glTF", ""),
         GLTFInfo("Duck", "The COLLADA duck. One texture."),
         GLTFInfo("2CylinderEngine", "Small CAD data set, including hierarchy."),
         GLTFInfo("ReciprocatingSaw", "Small CAD data set, including hierarchy."),
         GLTFInfo("GearboxAssy", "Medium-sized CAD data set, including hierarchy."),
         GLTFInfo("Buggy", "Medium-sized CAD data set, including hierarchy."),
-        GLTFInfo("BoxAnimated", "Rotation and Translation Animations. Start with this to test animations.", "glb", "glTF-Sample-Models/2.0/BoxAnimated/glTF-Binary", "", "Animation1"),
+        GLTFInfo("BoxAnimated", "Rotation and Translation Animations. Start with this to test animations.", "glb", "glTF-Sample-Models/2.0/BoxAnimated/glTF-Binary", ""),
         GLTFInfo("CesiumMilkTruck", "Textured. Multiple nodes/meshes. Animations."),
         GLTFInfo("RiggedSimple", "Animations. Skins. Start with this to test skinning."),
         GLTFInfo("RiggedFigure", "Animations. Skins."),
@@ -146,6 +147,10 @@ class LoaderGUI: Script {
                         subdirectory: gltfInfo[newValue].dir)!
                 GLTFLoader.parse(engine, assetURL) { [self] resource in
                     entity.clearChildren()
+                    animationName = []
+                    animator = nil
+                    currentAnimationItem = -1
+                    
                     entity.addChild(resource.defaultSceneRoot)
                     let renderers: [Renderer] = resource.defaultSceneRoot.getComponentsIncludeChildren()
                     var bounds = BoundingBox()
@@ -156,11 +161,27 @@ class LoaderGUI: Script {
                     resource.defaultSceneRoot.transform.worldPosition = Vector3()
                     resource.defaultSceneRoot.transform.scale *= scale
                     
-                    let animator: Animator? = resource.defaultSceneRoot!.getComponent()
-                    if let animator = animator,
-                       let clipName = gltfInfo[newValue].animation {
-                        animator.play(clipName)
+                    animator = resource.defaultSceneRoot!.getComponent()
+                    if let animation = resource.animations {
+                        animationName = animation.map { clip in
+                            return clip.name
+                        }
+                        animationItem = 0
                     }
+                }
+            }
+        }
+    }
+    
+    var animationItem: Int {
+        get {
+            currentAnimationItem
+        }
+        set {
+            if newValue != currentAnimationItem {
+                currentAnimationItem = newValue
+                if let animator = animator {
+                    animator.play(animationName[currentAnimationItem])
                 }
             }
         }
@@ -174,6 +195,11 @@ class LoaderGUI: Script {
         UIElement.selection("GLTF Name", gltfInfo.map { info in
             return info.name
         }, &loaderItem)
+        if !animationName.isEmpty {
+            UIElement.selection("Animation Name", animationName, &animationItem)
+            ImGuiSliderFloat("Speed", &animator!.speed, -1.0, 1.0, nil, 1)
+        }
+        
         if loaderItem > -1 {
             ImGuiTextUnformatted(gltfInfo[loaderItem].description)
         }
