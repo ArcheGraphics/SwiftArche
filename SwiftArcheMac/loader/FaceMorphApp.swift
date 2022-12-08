@@ -52,16 +52,6 @@ class FaceMorphApp: NSViewController {
                     faceGUI.morphRenderer.entity.transform.worldPosition = Vector3()
                 }
             }
-            
-            for nodeMeshes in resource.meshes! {
-                for mesh in nodeMeshes {
-                    if (mesh.blendShapeCount > 0) {
-                        for k in 0..<mesh.blendShapeCount {
-                            faceGUI.morphName.append(mesh.getBlendShapeName(at: k))
-                        }
-                    }
-                }
-            }
         }
 
         engine.run()
