@@ -73,7 +73,6 @@ fileprivate class ARScript: Script {
         let assetURL = Bundle.main.url(forResource: "arkit52", withExtension: "glb", subdirectory: "assets")!
         GLTFLoader.parse(engine, assetURL) { [self] resource in
             let avatar = resource.defaultSceneRoot!
-            avatar.transform.position = Vector3(0, 0, -3.5)
             entity.addChild(avatar)
             _avatar = avatar
 
@@ -91,7 +90,7 @@ fileprivate class ARScript: Script {
     }
     
     override func onARUpdate(_ deltaTime: Float, _ frame: ARFrame) {
-        if _avatar != nil, let light = _light {
+        if let avatar = _avatar, let light = _light {
             light.transform.localMatrix = Matrix(frame.camera.transform)
 
             for anchor in frame.anchors {
@@ -100,7 +99,11 @@ fileprivate class ARScript: Script {
                 for blendShape in blendShapes {
                     _morphRenderer.blendShapeWeights[morphMap[blendShape.key]!] = blendShape.value.floatValue
                 }
-                entity.transform.localMatrix = Matrix(faceAnchor.transform)
+
+                var translation = matrix_identity_float4x4
+                translation.columns.3.y = 1.0
+                translation.columns.3.z = -3.5
+                avatar.transform.localMatrix = Matrix(simd_mul(translation, faceAnchor.transform))
             }
         }
     }
