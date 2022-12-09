@@ -8,9 +8,11 @@ import UIKit
 import ARKit
 import vox_render
 import vox_math
+import simd
 
 fileprivate class ARScript: Script {
-    private var _isInitialize: Bool = false
+    private var _light: Entity?
+    private var _avatar: Entity?
     private var _morphRenderer: SkinnedMeshRenderer!
     var morphMap: [ARFaceAnchor.BlendShapeLocation : Int] = [
         .browDownLeft:        51,
@@ -66,37 +68,40 @@ fileprivate class ARScript: Script {
         .noseSneerRight:       1,
         .tongueOut:            0,
     ]
-    override func onARUpdate(_ deltaTime: Float, _ frame: ARFrame) {
-        if !_isInitialize {
-            let assetURL = Bundle.main.url(forResource: "ARkit_with_eyegazin", withExtension: "glb", subdirectory: "assets")!
-            GLTFLoader.parse(engine, assetURL) { [self] resource in
-                entity.addChild(resource.defaultSceneRoot)
-                
-                // Create a transform with a translation of 0.2 meters in front of the camera
-                var translation = matrix_identity_float4x4
-                translation.columns.3.z = -0.5
-                translation.columns.3.y = -0.5
-                entity.transform.localMatrix = Matrix(simd_mul(frame.camera.transform, translation))
-                
-                let skinRenderers: [SkinnedMeshRenderer] = resource.defaultSceneRoot.getComponentsIncludeChildren()
-                for renderer in skinRenderers {
-                    if !renderer.blendShapeWeights.isEmpty {
-                        _morphRenderer = renderer
-                    }
+    
+    override func onAwake() {
+        let assetURL = Bundle.main.url(forResource: "arkit52", withExtension: "glb", subdirectory: "assets")!
+        GLTFLoader.parse(engine, assetURL) { [self] resource in
+            let avatar = resource.defaultSceneRoot!
+            avatar.transform.position = Vector3(0, 0, -3.5)
+            entity.addChild(avatar)
+            _avatar = avatar
+
+            let skinRenderers: [SkinnedMeshRenderer] = avatar.getComponentsIncludeChildren()
+            for renderer in skinRenderers {
+                if !renderer.blendShapeWeights.isEmpty {
+                    _morphRenderer = renderer
                 }
-                _isInitialize = true
             }
-        }
         
-        if _isInitialize {
+            _light = entity.createChild("light")
+            let directLight: DirectLight = _light!.addComponent()
+            directLight.intensity = 0.9;
+        }
+    }
+    
+    override func onARUpdate(_ deltaTime: Float, _ frame: ARFrame) {
+        if _avatar != nil, let light = _light {
+            light.transform.localMatrix = Matrix(frame.camera.transform)
+
             for anchor in frame.anchors {
                 guard let faceAnchor = anchor as? ARFaceAnchor else { continue }
                 let blendShapes = faceAnchor.blendShapes
                 for blendShape in blendShapes {
                     _morphRenderer.blendShapeWeights[morphMap[blendShape.key]!] = blendShape.value.floatValue
                 }
+                entity.transform.localMatrix = Matrix(faceAnchor.transform)
             }
-
         }
     }
 }
@@ -121,12 +126,6 @@ class FaceAnchorApp: UIViewController {
         let cameraEntity = rootEntity.createChild()
         let camera: Camera = cameraEntity.addComponent()
         engine.arManager!.camera = camera
-
-        let light = rootEntity.createChild("light")
-        light.transform.position = Vector3(0.1, 5, 0.1)
-        light.transform.lookAt(targetPosition: Vector3())
-        let directLight: DirectLight = light.addComponent()
-        directLight.shadowType = .SoftLow
         
         let arEntity = rootEntity.createChild()
         let _: ARScript = arEntity.addComponent()
@@ -140,7 +139,6 @@ class FaceAnchorApp: UIViewController {
         if #available(iOS 13.0, *) {
             configuration.maximumNumberOfTrackedFaces = ARFaceTrackingConfiguration.supportedNumberOfTrackedFaces
         }
-        configuration.isLightEstimationEnabled = true
         engine.arManager?.run(configuration, options: [.resetTracking, .removeExistingAnchors])
     }
 

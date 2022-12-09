@@ -21,18 +21,17 @@ class FaceMorphApp: NSViewController {
         iblBaker = IBLBaker(engine)
 
         let scene = engine.sceneManager.activeScene!
-        scene.postprocessManager.manualExposure = 1
         scene.shadowCascades = .FourCascades
         let hdr = engine.textureLoader.loadHDR(with: "assets/kloppenheim_06_4k.hdr")!
         iblBaker.bake(scene, with: hdr, size: 256, level: 3)
         let rootEntity = scene.createRootEntity()
 
         let cameraEntity = rootEntity.createChild()
-        cameraEntity.transform.position = Vector3(0, 7, 6)
+        cameraEntity.transform.position = Vector3(0, 1, 6)
         cameraEntity.transform.lookAt(targetPosition: Vector3())
         let _: Camera = cameraEntity.addComponent()
         let control: OrbitControl = cameraEntity.addComponent()
-        control.target = Vector3(0, 7, 0)
+        control.target = Vector3(0, 1, 0)
         
         let light = rootEntity.createChild("light")
         light.transform.position = Vector3(0.1, 5, 0.1)
@@ -40,7 +39,7 @@ class FaceMorphApp: NSViewController {
         let _: DirectLight = light.addComponent()
 
         let gltfRoot = rootEntity.createChild()
-        let assetURL = Bundle.main.url(forResource: "ARkit_with_eyegazin", withExtension: "glb", subdirectory: "assets")!
+        let assetURL = Bundle.main.url(forResource: "arkit52", withExtension: "glb", subdirectory: "assets")!
         GLTFLoader.parse(engine, assetURL) { [] resource in
             let faceGUI: FaceGUI = gltfRoot.addComponent()
             gltfRoot.addChild(resource.defaultSceneRoot)
