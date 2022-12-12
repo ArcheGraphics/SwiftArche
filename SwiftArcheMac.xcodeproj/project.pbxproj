@@ -47,6 +47,8 @@
 		3E6B2360294224C1000AC29F /* FaceGUI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E6B235F294224C1000AC29F /* FaceGUI.swift */; };
 		3E6B23B62946B3E5000AC29F /* physics_helpers.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3E6B23B52946B3E5000AC29F /* physics_helpers.metal */; };
 		3E6B23BF2946F135000AC29F /* path_tracing1.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3E6B23BE2946F135000AC29F /* path_tracing1.metal */; };
+		3E6B23C129470187000AC29F /* PathTracingApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E6B23C029470187000AC29F /* PathTracingApp.swift */; };
+		3E6B23C329470F30000AC29F /* quad_shading.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3E6B23C229470F30000AC29F /* quad_shading.metal */; };
 		3E6D2F01293E13DF00B63F73 /* BufferPool.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E6D2F00293E13DF00B63F73 /* BufferPool.swift */; };
 		3E6D2F03293E336500B63F73 /* FogMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E6D2F02293E336500B63F73 /* FogMode.swift */; };
 		3E6D2F06293ED76300B63F73 /* light_sprite.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3E6D2F04293ED76300B63F73 /* light_sprite.metal */; };
@@ -549,6 +551,8 @@
 		3E6B23B52946B3E5000AC29F /* physics_helpers.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = physics_helpers.metal; sourceTree = "<group>"; };
 		3E6B23BA2946B9FF000AC29F /* physics_helpers.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = physics_helpers.h; sourceTree = "<group>"; };
 		3E6B23BE2946F135000AC29F /* path_tracing1.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = path_tracing1.metal; sourceTree = "<group>"; };
+		3E6B23C029470187000AC29F /* PathTracingApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PathTracingApp.swift; sourceTree = "<group>"; };
+		3E6B23C229470F30000AC29F /* quad_shading.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = quad_shading.metal; sourceTree = "<group>"; };
 		3E6D2F00293E13DF00B63F73 /* BufferPool.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BufferPool.swift; sourceTree = "<group>"; };
 		3E6D2F02293E336500B63F73 /* FogMode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FogMode.swift; sourceTree = "<group>"; };
 		3E6D2F04293ED76300B63F73 /* light_sprite.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; path = light_sprite.metal; sourceTree = "<group>"; };
@@ -1091,6 +1095,7 @@
 				040F1E19293C6E75008BDC8D /* shadow_visual.metal */,
 				3E6D2F05293ED76300B63F73 /* cluster_visual.metal */,
 				3E6D2F04293ED76300B63F73 /* light_sprite.metal */,
+				3E6B23C229470F30000AC29F /* quad_shading.metal */,
 			);
 			path = app.shader;
 			sourceTree = "<group>";
@@ -1211,9 +1216,9 @@
 				3EC0385D2932152D002187DC /* vox.render */,
 				3EC92A452936F44600423396 /* toolkit.shader */,
 				040F1DA429336A56008BDC8D /* vox.toolkit */,
-				040F1DE7293780B3008BDC8D /* app.shader */,
 				3E6B23A92946B3CA000AC29F /* vox.flex */,
 				3E6B23B42946B3E5000AC29F /* flex.shader */,
+				040F1DE7293780B3008BDC8D /* app.shader */,
 				3EC0370329321131002187DC /* SwiftArcheMac */,
 				3EC0371A29321133002187DC /* SwiftArcheMacTests */,
 				3EC0372429321133002187DC /* SwiftArcheMacUITests */,
@@ -1259,6 +1264,7 @@
 				3E6D2F0B293F135000B63F73 /* loader */,
 				3EC92A3F29360C6800423396 /* physics */,
 				040F1DF129378195008BDC8D /* rendering */,
+				3E6B23C029470187000AC29F /* PathTracingApp.swift */,
 			);
 			path = SwiftArcheMac;
 			sourceTree = "<group>";
@@ -2371,11 +2377,11 @@
 				3EC92A432936F44500423396 /* toolkit.shader */,
 				040F1DA229336A56008BDC8D /* vox.toolkit */,
 				040F1DE5293780B3008BDC8D /* app.shader */,
+				3E6B23A72946B3CA000AC29F /* vox.flex */,
+				3E6B23B22946B3E4000AC29F /* flex.shader */,
 				3EC0370029321131002187DC /* SwiftArcheMac */,
 				3EC0371629321133002187DC /* SwiftArcheMacTests */,
 				3EC0372029321133002187DC /* SwiftArcheMacUITests */,
-				3E6B23A72946B3CA000AC29F /* vox.flex */,
-				3E6B23B22946B3E4000AC29F /* flex.shader */,
 			);
 		};
 /* End PBXProject section */
@@ -2427,7 +2433,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "cp \"$TARGET_BUILD_DIR/vox.shader.metallib\" \"$TARGET_BUILD_DIR/$UNLOCALIZED_RESOURCES_FOLDER_PATH/.\"\ncp \"$TARGET_BUILD_DIR/toolkit.shader.metallib\" \"$TARGET_BUILD_DIR/$UNLOCALIZED_RESOURCES_FOLDER_PATH/.\"\ncp \"$TARGET_BUILD_DIR/app.shader.metallib\" \"$TARGET_BUILD_DIR/$UNLOCALIZED_RESOURCES_FOLDER_PATH/.\"\n";
+			shellScript = "cp \"$TARGET_BUILD_DIR/vox.shader.metallib\" \"$TARGET_BUILD_DIR/$UNLOCALIZED_RESOURCES_FOLDER_PATH/.\"\ncp \"$TARGET_BUILD_DIR/toolkit.shader.metallib\" \"$TARGET_BUILD_DIR/$UNLOCALIZED_RESOURCES_FOLDER_PATH/.\"\ncp \"$TARGET_BUILD_DIR/app.shader.metallib\" \"$TARGET_BUILD_DIR/$UNLOCALIZED_RESOURCES_FOLDER_PATH/.\"\ncp \"$TARGET_BUILD_DIR/flex.shader.metallib\" \"$TARGET_BUILD_DIR/$UNLOCALIZED_RESOURCES_FOLDER_PATH/.\"\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -2463,6 +2469,7 @@
 				3EC92ABE29388A9C00423396 /* sh_baker.metal in Sources */,
 				040F1DEF293780D5008BDC8D /* texture_packer.metal in Sources */,
 				3E6D2F06293ED76300B63F73 /* light_sprite.metal in Sources */,
+				3E6B23C329470F30000AC29F /* quad_shading.metal in Sources */,
 				040F1E1C293C6EDA008BDC8D /* function_common.metal in Sources */,
 				3EC92ABC2938834900423396 /* atomic_counter.metal in Sources */,
 				3EC92AB62938633E00423396 /* cubemap_shading.metal in Sources */,
@@ -2494,6 +2501,7 @@
 				3E6D2F0D293F137300B63F73 /* GLTFViewerApp.swift in Sources */,
 				3EB32B7529322DB30019A4F3 /* PrimitiveApp.swift in Sources */,
 				3E6B235E294220BC000AC29F /* FaceMorphApp.swift in Sources */,
+				3E6B23C129470187000AC29F /* PathTracingApp.swift in Sources */,
 				3EC0370529321131002187DC /* AppDelegate.swift in Sources */,
 				43D8C62B488D6837DDD5BBA8 /* SkyboxApp.swift in Sources */,
 				43D8CC2C3372F5E3258A852D /* IrradianceApp.swift in Sources */,

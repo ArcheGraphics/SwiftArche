@@ -17,20 +17,21 @@ open class ComputePass {
 
     public var shader: [ShaderPass] = []
     public var data: [ShaderData] = []
-    
-    var defaultShaderData: ShaderData {
+    public weak var engine: Engine!
+    public var defaultShaderData: ShaderData {
         get {
             data[0]
         }
     }
 
     public init(_ engine: Engine) {
+        self.engine = engine
         data.append(ShaderData(engine))
     }
 
     /// Compute function
     /// - Parameter commandEncoder: CommandEncoder to use to record compute commands
-    public func compute(commandEncoder: MTLComputeCommandEncoder) {
+    open func compute(commandEncoder: MTLComputeCommandEncoder) {
         if let resourceCache = resourceCache {
             let compileMacros = ShaderMacroCollection()
             for shaderData in data {
