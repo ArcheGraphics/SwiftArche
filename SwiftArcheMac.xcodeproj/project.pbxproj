@@ -41,12 +41,12 @@
 		040F1E1C293C6EDA008BDC8D /* function_common.metal in Sources */ = {isa = PBXBuildFile; fileRef = 040F1E1B293C6EDA008BDC8D /* function_common.metal */; };
 		040F1E27293C727D008BDC8D /* transparent_shadow.metal in Sources */ = {isa = PBXBuildFile; fileRef = 040F1E1E293C70BB008BDC8D /* transparent_shadow.metal */; };
 		040F1E29293C865E008BDC8D /* UIElement.swift in Sources */ = {isa = PBXBuildFile; fileRef = 040F1E28293C865E008BDC8D /* UIElement.swift */; };
+		040F1E4B29475EAA008BDC8D /* path_tracing1.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3E6B23BE2946F135000AC29F /* path_tracing1.metal */; };
 		04462F21293324A300F95387 /* Textures.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 04462F20293324A200F95387 /* Textures.xcassets */; };
 		3E6B235C2941BF88000AC29F /* BlendShapeWeightsAnimationCurveOwnerAssembler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E6B235B2941BF88000AC29F /* BlendShapeWeightsAnimationCurveOwnerAssembler.swift */; };
 		3E6B235E294220BC000AC29F /* FaceMorphApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E6B235D294220BC000AC29F /* FaceMorphApp.swift */; };
 		3E6B2360294224C1000AC29F /* FaceGUI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E6B235F294224C1000AC29F /* FaceGUI.swift */; };
 		3E6B23B62946B3E5000AC29F /* physics_helpers.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3E6B23B52946B3E5000AC29F /* physics_helpers.metal */; };
-		3E6B23BF2946F135000AC29F /* path_tracing1.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3E6B23BE2946F135000AC29F /* path_tracing1.metal */; };
 		3E6B23C129470187000AC29F /* PathTracingApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E6B23C029470187000AC29F /* PathTracingApp.swift */; };
 		3E6B23C329470F30000AC29F /* quad_shading.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3E6B23C229470F30000AC29F /* quad_shading.metal */; };
 		3E6D2F01293E13DF00B63F73 /* BufferPool.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E6D2F00293E13DF00B63F73 /* BufferPool.swift */; };
@@ -433,6 +433,13 @@
 			proxyType = 1;
 			remoteGlobalIDString = 040F1DE5293780B3008BDC8D;
 			remoteInfo = app.shader;
+		};
+		040F1E4729475D86008BDC8D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 3EC036F929321131002187DC /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 3E6B23B22946B3E4000AC29F;
+			remoteInfo = flex.shader;
 		};
 		3EB32B7629322E7E0019A4F3 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -2157,6 +2164,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				040F1E4829475D86008BDC8D /* PBXTargetDependency */,
 				040F1DF829378520008BDC8D /* PBXTargetDependency */,
 				3EC92A4C2936F46B00423396 /* PBXTargetDependency */,
 				040F1DD22933AF7D008BDC8D /* PBXTargetDependency */,
@@ -2488,8 +2496,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				040F1E4B29475EAA008BDC8D /* path_tracing1.metal in Sources */,
 				3E6B23B62946B3E5000AC29F /* physics_helpers.metal in Sources */,
-				3E6B23BF2946F135000AC29F /* path_tracing1.metal in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2864,6 +2872,11 @@
 			isa = PBXTargetDependency;
 			target = 040F1DE5293780B3008BDC8D /* app.shader */;
 			targetProxy = 040F1DF729378520008BDC8D /* PBXContainerItemProxy */;
+		};
+		040F1E4829475D86008BDC8D /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 3E6B23B22946B3E4000AC29F /* flex.shader */;
+			targetProxy = 040F1E4729475D86008BDC8D /* PBXContainerItemProxy */;
 		};
 		3EB32B7729322E7E0019A4F3 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
