@@ -46,6 +46,7 @@
 		3E6B235E294220BC000AC29F /* FaceMorphApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E6B235D294220BC000AC29F /* FaceMorphApp.swift */; };
 		3E6B2360294224C1000AC29F /* FaceGUI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E6B235F294224C1000AC29F /* FaceGUI.swift */; };
 		3E6B23B62946B3E5000AC29F /* physics_helpers.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3E6B23B52946B3E5000AC29F /* physics_helpers.metal */; };
+		3E6B23BF2946F135000AC29F /* path_tracing1.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3E6B23BE2946F135000AC29F /* path_tracing1.metal */; };
 		3E6D2F01293E13DF00B63F73 /* BufferPool.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E6D2F00293E13DF00B63F73 /* BufferPool.swift */; };
 		3E6D2F03293E336500B63F73 /* FogMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E6D2F02293E336500B63F73 /* FogMode.swift */; };
 		3E6D2F06293ED76300B63F73 /* light_sprite.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3E6D2F04293ED76300B63F73 /* light_sprite.metal */; };
@@ -547,6 +548,7 @@
 		3E6B23B32946B3E4000AC29F /* flex.shader.metallib */ = {isa = PBXFileReference; explicitFileType = "archive.metal-library"; includeInIndex = 0; path = flex.shader.metallib; sourceTree = BUILT_PRODUCTS_DIR; };
 		3E6B23B52946B3E5000AC29F /* physics_helpers.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = physics_helpers.metal; sourceTree = "<group>"; };
 		3E6B23BA2946B9FF000AC29F /* physics_helpers.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = physics_helpers.h; sourceTree = "<group>"; };
+		3E6B23BE2946F135000AC29F /* path_tracing1.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = path_tracing1.metal; sourceTree = "<group>"; };
 		3E6D2F00293E13DF00B63F73 /* BufferPool.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BufferPool.swift; sourceTree = "<group>"; };
 		3E6D2F02293E336500B63F73 /* FogMode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FogMode.swift; sourceTree = "<group>"; };
 		3E6D2F04293ED76300B63F73 /* light_sprite.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; path = light_sprite.metal; sourceTree = "<group>"; };
@@ -1143,10 +1145,19 @@
 		3E6B23B42946B3E5000AC29F /* flex.shader */ = {
 			isa = PBXGroup;
 			children = (
+				3E6B23BD2946F0FF000AC29F /* smallpt */,
 				3E6B23BA2946B9FF000AC29F /* physics_helpers.h */,
 				3E6B23B52946B3E5000AC29F /* physics_helpers.metal */,
 			);
 			path = flex.shader;
+			sourceTree = "<group>";
+		};
+		3E6B23BD2946F0FF000AC29F /* smallpt */ = {
+			isa = PBXGroup;
+			children = (
+				3E6B23BE2946F135000AC29F /* path_tracing1.metal */,
+			);
+			path = smallpt;
 			sourceTree = "<group>";
 		};
 		3E6D2F0B293F135000B63F73 /* loader */ = {
@@ -2301,6 +2312,7 @@
 					};
 					3E6B23A72946B3CA000AC29F = {
 						CreatedOnToolsVersion = 14.1;
+						LastSwiftMigration = 1410;
 					};
 					3E6B23B22946B3E4000AC29F = {
 						CreatedOnToolsVersion = 14.1;
@@ -2470,6 +2482,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				3E6B23B62946B3E5000AC29F /* physics_helpers.metal in Sources */,
+				3E6B23BF2946F135000AC29F /* path_tracing1.metal in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2972,22 +2985,37 @@
 		3E6B23AF2946B3CB000AC29F /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 4SL5L673UU;
 				EXECUTABLE_PREFIX = lib;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@loader_path/../Frameworks",
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
 			};
 			name = Debug;
 		};
 		3E6B23B02946B3CB000AC29F /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 4SL5L673UU;
 				EXECUTABLE_PREFIX = lib;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@loader_path/../Frameworks",
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 5.0;
 			};
 			name = Release;
 		};
