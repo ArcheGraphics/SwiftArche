@@ -45,6 +45,7 @@
 		3E6B235C2941BF88000AC29F /* BlendShapeWeightsAnimationCurveOwnerAssembler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E6B235B2941BF88000AC29F /* BlendShapeWeightsAnimationCurveOwnerAssembler.swift */; };
 		3E6B235E294220BC000AC29F /* FaceMorphApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E6B235D294220BC000AC29F /* FaceMorphApp.swift */; };
 		3E6B2360294224C1000AC29F /* FaceGUI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E6B235F294224C1000AC29F /* FaceGUI.swift */; };
+		3E6B23B62946B3E5000AC29F /* physics_helpers.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3E6B23B52946B3E5000AC29F /* physics_helpers.metal */; };
 		3E6D2F01293E13DF00B63F73 /* BufferPool.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E6D2F00293E13DF00B63F73 /* BufferPool.swift */; };
 		3E6D2F03293E336500B63F73 /* FogMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E6D2F02293E336500B63F73 /* FogMode.swift */; };
 		3E6D2F06293ED76300B63F73 /* light_sprite.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3E6D2F04293ED76300B63F73 /* light_sprite.metal */; };
@@ -542,6 +543,10 @@
 		3E6B235B2941BF88000AC29F /* BlendShapeWeightsAnimationCurveOwnerAssembler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlendShapeWeightsAnimationCurveOwnerAssembler.swift; sourceTree = "<group>"; };
 		3E6B235D294220BC000AC29F /* FaceMorphApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FaceMorphApp.swift; sourceTree = "<group>"; };
 		3E6B235F294224C1000AC29F /* FaceGUI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FaceGUI.swift; sourceTree = "<group>"; };
+		3E6B23A82946B3CA000AC29F /* libvox.flex.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libvox.flex.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		3E6B23B32946B3E4000AC29F /* flex.shader.metallib */ = {isa = PBXFileReference; explicitFileType = "archive.metal-library"; includeInIndex = 0; path = flex.shader.metallib; sourceTree = BUILT_PRODUCTS_DIR; };
+		3E6B23B52946B3E5000AC29F /* physics_helpers.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = physics_helpers.metal; sourceTree = "<group>"; };
+		3E6B23BA2946B9FF000AC29F /* physics_helpers.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = physics_helpers.h; sourceTree = "<group>"; };
 		3E6D2F00293E13DF00B63F73 /* BufferPool.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BufferPool.swift; sourceTree = "<group>"; };
 		3E6D2F02293E336500B63F73 /* FogMode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FogMode.swift; sourceTree = "<group>"; };
 		3E6D2F04293ED76300B63F73 /* light_sprite.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; path = light_sprite.metal; sourceTree = "<group>"; };
@@ -933,6 +938,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		3E6B23A62946B3CA000AC29F /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		3EC036FE29321131002187DC /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -1121,6 +1133,22 @@
 			path = copy;
 			sourceTree = "<group>";
 		};
+		3E6B23A92946B3CA000AC29F /* vox.flex */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = vox.flex;
+			sourceTree = "<group>";
+		};
+		3E6B23B42946B3E5000AC29F /* flex.shader */ = {
+			isa = PBXGroup;
+			children = (
+				3E6B23BA2946B9FF000AC29F /* physics_helpers.h */,
+				3E6B23B52946B3E5000AC29F /* physics_helpers.metal */,
+			);
+			path = flex.shader;
+			sourceTree = "<group>";
+		};
 		3E6D2F0B293F135000B63F73 /* loader */ = {
 			isa = PBXGroup;
 			children = (
@@ -1173,6 +1201,8 @@
 				3EC92A452936F44600423396 /* toolkit.shader */,
 				040F1DA429336A56008BDC8D /* vox.toolkit */,
 				040F1DE7293780B3008BDC8D /* app.shader */,
+				3E6B23A92946B3CA000AC29F /* vox.flex */,
+				3E6B23B42946B3E5000AC29F /* flex.shader */,
 				3EC0370329321131002187DC /* SwiftArcheMac */,
 				3EC0371A29321133002187DC /* SwiftArcheMacTests */,
 				3EC0372429321133002187DC /* SwiftArcheMacUITests */,
@@ -1194,6 +1224,8 @@
 				040F1DA329336A56008BDC8D /* libvox.toolkit.a */,
 				3EC92A442936F44500423396 /* toolkit.shader.metallib */,
 				040F1DE6293780B3008BDC8D /* app.shader.metallib */,
+				3E6B23A82946B3CA000AC29F /* libvox.flex.a */,
+				3E6B23B32946B3E4000AC29F /* flex.shader.metallib */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -1935,6 +1967,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		3E6B23A42946B3CA000AC29F /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		3EC037342932125F002187DC /* Headers */ = {
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
@@ -2055,6 +2094,38 @@
 			name = app.shader;
 			productName = app.shader;
 			productReference = 040F1DE6293780B3008BDC8D /* app.shader.metallib */;
+			productType = "com.apple.product-type.metal-library";
+		};
+		3E6B23A72946B3CA000AC29F /* vox.flex */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 3E6B23AE2946B3CB000AC29F /* Build configuration list for PBXNativeTarget "vox.flex" */;
+			buildPhases = (
+				3E6B23A42946B3CA000AC29F /* Headers */,
+				3E6B23A52946B3CA000AC29F /* Sources */,
+				3E6B23A62946B3CA000AC29F /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = vox.flex;
+			productName = vox.flex;
+			productReference = 3E6B23A82946B3CA000AC29F /* libvox.flex.a */;
+			productType = "com.apple.product-type.library.static";
+		};
+		3E6B23B22946B3E4000AC29F /* flex.shader */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 3E6B23B72946B3E5000AC29F /* Build configuration list for PBXNativeTarget "flex.shader" */;
+			buildPhases = (
+				3E6B23B12946B3E4000AC29F /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = flex.shader;
+			productName = flex.shader;
+			productReference = 3E6B23B32946B3E4000AC29F /* flex.shader.metallib */;
 			productType = "com.apple.product-type.metal-library";
 		};
 		3EC0370029321131002187DC /* SwiftArcheMac */ = {
@@ -2228,6 +2299,12 @@
 					040F1DE5293780B3008BDC8D = {
 						CreatedOnToolsVersion = 14.1;
 					};
+					3E6B23A72946B3CA000AC29F = {
+						CreatedOnToolsVersion = 14.1;
+					};
+					3E6B23B22946B3E4000AC29F = {
+						CreatedOnToolsVersion = 14.1;
+					};
 					3EC0370029321131002187DC = {
 						CreatedOnToolsVersion = 14.1;
 					};
@@ -2285,6 +2362,8 @@
 				3EC0370029321131002187DC /* SwiftArcheMac */,
 				3EC0371629321133002187DC /* SwiftArcheMacTests */,
 				3EC0372029321133002187DC /* SwiftArcheMacUITests */,
+				3E6B23A72946B3CA000AC29F /* vox.flex */,
+				3E6B23B22946B3E4000AC29F /* flex.shader */,
 			);
 		};
 /* End PBXProject section */
@@ -2376,6 +2455,21 @@
 				3EC92ABC2938834900423396 /* atomic_counter.metal in Sources */,
 				3EC92AB62938633E00423396 /* cubemap_shading.metal in Sources */,
 				040F1E10293AB3B6008BDC8D /* cubemap_generator.metal in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		3E6B23A52946B3CA000AC29F /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		3E6B23B12946B3E4000AC29F /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				3E6B23B62946B3E5000AC29F /* physics_helpers.metal in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2867,6 +2961,46 @@
 			name = Debug;
 		};
 		040F1DEB293780B3008BDC8D /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 4SL5L673UU;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+		3E6B23AF2946B3CB000AC29F /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 4SL5L673UU;
+				EXECUTABLE_PREFIX = lib;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+			};
+			name = Debug;
+		};
+		3E6B23B02946B3CB000AC29F /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 4SL5L673UU;
+				EXECUTABLE_PREFIX = lib;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+			};
+			name = Release;
+		};
+		3E6B23B82946B3E5000AC29F /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 4SL5L673UU;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		3E6B23B92946B3E5000AC29F /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
@@ -3370,6 +3504,24 @@
 			buildConfigurations = (
 				040F1DEA293780B3008BDC8D /* Debug */,
 				040F1DEB293780B3008BDC8D /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		3E6B23AE2946B3CB000AC29F /* Build configuration list for PBXNativeTarget "vox.flex" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				3E6B23AF2946B3CB000AC29F /* Debug */,
+				3E6B23B02946B3CB000AC29F /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		3E6B23B72946B3E5000AC29F /* Build configuration list for PBXNativeTarget "flex.shader" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				3E6B23B82946B3E5000AC29F /* Debug */,
+				3E6B23B92946B3E5000AC29F /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
