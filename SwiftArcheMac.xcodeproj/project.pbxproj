@@ -49,6 +49,9 @@
 		3E6B23BF2946F135000AC29F /* path_tracing1.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3E6B23BE2946F135000AC29F /* path_tracing1.metal */; };
 		3E6B23C129470187000AC29F /* PathTracingApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E6B23C029470187000AC29F /* PathTracingApp.swift */; };
 		3E6B23C329470F30000AC29F /* quad_shading.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3E6B23C229470F30000AC29F /* quad_shading.metal */; };
+		3E6B23C529488260000AC29F /* TriangleMesh.mm in Sources */ = {isa = PBXBuildFile; fileRef = 3E6B23C429488260000AC29F /* TriangleMesh.mm */; };
+		3E6B23CB2948BAB9000AC29F /* ImplicitTriangleMesh.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E6B23CA2948BAB9000AC29F /* ImplicitTriangleMesh.swift */; };
+		3E6B23D12948BC13000AC29F /* ImGui in Frameworks */ = {isa = PBXBuildFile; productRef = 3E6B23D02948BC13000AC29F /* ImGui */; };
 		3E6D2F01293E13DF00B63F73 /* BufferPool.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E6D2F00293E13DF00B63F73 /* BufferPool.swift */; };
 		3E6D2F03293E336500B63F73 /* FogMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E6D2F02293E336500B63F73 /* FogMode.swift */; };
 		3E6D2F06293ED76300B63F73 /* light_sprite.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3E6D2F04293ED76300B63F73 /* light_sprite.metal */; };
@@ -434,6 +437,27 @@
 			remoteGlobalIDString = 040F1DE5293780B3008BDC8D;
 			remoteInfo = app.shader;
 		};
+		3E6B23C7294882CB000AC29F /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 3EC036F929321131002187DC /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 3E6B23A72946B3CA000AC29F;
+			remoteInfo = vox.flex;
+		};
+		3E6B23CC2948BBC7000AC29F /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 3EC036F929321131002187DC /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 3EC0385B2932152C002187DC;
+			remoteInfo = vox.render;
+		};
+		3E6B23CE2948BBDA000AC29F /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 3EC036F929321131002187DC /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 3E6B23B22946B3E4000AC29F;
+			remoteInfo = flex.shader;
+		};
 		3EB32B7629322E7E0019A4F3 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 3EC036F929321131002187DC /* Project object */;
@@ -553,6 +577,10 @@
 		3E6B23BE2946F135000AC29F /* path_tracing1.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = path_tracing1.metal; sourceTree = "<group>"; };
 		3E6B23C029470187000AC29F /* PathTracingApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PathTracingApp.swift; sourceTree = "<group>"; };
 		3E6B23C229470F30000AC29F /* quad_shading.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = quad_shading.metal; sourceTree = "<group>"; };
+		3E6B23C429488260000AC29F /* TriangleMesh.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = TriangleMesh.mm; sourceTree = "<group>"; };
+		3E6B23C62948826B000AC29F /* TriangleMesh.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TriangleMesh.h; sourceTree = "<group>"; };
+		3E6B23C92948BAB8000AC29F /* bridging.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = bridging.h; sourceTree = "<group>"; };
+		3E6B23CA2948BAB9000AC29F /* ImplicitTriangleMesh.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImplicitTriangleMesh.swift; sourceTree = "<group>"; };
 		3E6D2F00293E13DF00B63F73 /* BufferPool.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BufferPool.swift; sourceTree = "<group>"; };
 		3E6D2F02293E336500B63F73 /* FogMode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FogMode.swift; sourceTree = "<group>"; };
 		3E6D2F04293ED76300B63F73 /* light_sprite.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; path = light_sprite.metal; sourceTree = "<group>"; };
@@ -948,6 +976,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3E6B23D12948BC13000AC29F /* ImGui in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1143,6 +1172,10 @@
 		3E6B23A92946B3CA000AC29F /* vox.flex */ = {
 			isa = PBXGroup;
 			children = (
+				3E6B23C92948BAB8000AC29F /* bridging.h */,
+				3E6B23C62948826B000AC29F /* TriangleMesh.h */,
+				3E6B23C429488260000AC29F /* TriangleMesh.mm */,
+				3E6B23CA2948BAB9000AC29F /* ImplicitTriangleMesh.swift */,
 			);
 			path = vox.flex;
 			sourceTree = "<group>";
@@ -2124,8 +2157,13 @@
 			buildRules = (
 			);
 			dependencies = (
+				3E6B23CF2948BBDA000AC29F /* PBXTargetDependency */,
+				3E6B23CD2948BBC7000AC29F /* PBXTargetDependency */,
 			);
 			name = vox.flex;
+			packageProductDependencies = (
+				3E6B23D02948BC13000AC29F /* ImGui */,
+			);
 			productName = vox.flex;
 			productReference = 3E6B23A82946B3CA000AC29F /* libvox.flex.a */;
 			productType = "com.apple.product-type.library.static";
@@ -2157,6 +2195,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				3E6B23C8294882CB000AC29F /* PBXTargetDependency */,
 				040F1DF829378520008BDC8D /* PBXTargetDependency */,
 				3EC92A4C2936F46B00423396 /* PBXTargetDependency */,
 				040F1DD22933AF7D008BDC8D /* PBXTargetDependency */,
@@ -2481,6 +2520,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3E6B23C529488260000AC29F /* TriangleMesh.mm in Sources */,
+				3E6B23CB2948BAB9000AC29F /* ImplicitTriangleMesh.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2865,6 +2906,21 @@
 			target = 040F1DE5293780B3008BDC8D /* app.shader */;
 			targetProxy = 040F1DF729378520008BDC8D /* PBXContainerItemProxy */;
 		};
+		3E6B23C8294882CB000AC29F /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 3E6B23A72946B3CA000AC29F /* vox.flex */;
+			targetProxy = 3E6B23C7294882CB000AC29F /* PBXContainerItemProxy */;
+		};
+		3E6B23CD2948BBC7000AC29F /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 3EC0385B2932152C002187DC /* vox.render */;
+			targetProxy = 3E6B23CC2948BBC7000AC29F /* PBXContainerItemProxy */;
+		};
+		3E6B23CF2948BBDA000AC29F /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 3E6B23B22946B3E4000AC29F /* flex.shader */;
+			targetProxy = 3E6B23CE2948BBDA000AC29F /* PBXContainerItemProxy */;
+		};
 		3EB32B7729322E7E0019A4F3 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 3EC037372932125F002187DC /* vox.math */;
@@ -3004,8 +3060,13 @@
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
+				SWIFT_OBJC_BRIDGING_HEADER = vox.flex/bridging.h;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
+				SYSTEM_HEADER_SEARCH_PATHS = (
+					./third_party/tinyobj,
+					./third_party/bvh/include,
+				);
 			};
 			name = Debug;
 		};
@@ -3023,7 +3084,12 @@
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
+				SWIFT_OBJC_BRIDGING_HEADER = vox.flex/bridging.h;
 				SWIFT_VERSION = 5.0;
+				SYSTEM_HEADER_SEARCH_PATHS = (
+					./third_party/tinyobj,
+					./third_party/bvh/include,
+				);
 			};
 			name = Release;
 		};
@@ -3676,6 +3742,11 @@
 			productName = ImGui;
 		};
 		040F1DE02934EB16008BDC8D /* ImGui */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 040F1DD42934E6B9008BDC8D /* XCRemoteSwiftPackageReference "SwiftImGui" */;
+			productName = ImGui;
+		};
+		3E6B23D02948BC13000AC29F /* ImGui */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 040F1DD42934E6B9008BDC8D /* XCRemoteSwiftPackageReference "SwiftImGui" */;
 			productName = ImGui;
