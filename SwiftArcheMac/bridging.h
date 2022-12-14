@@ -8,4 +8,5 @@
 
 #include "../vox.render/bridging.h"
 #include "../vox.toolkit/bridging.h"
+#include "../vox.flex/bridging.h"
 #include "../app.shader/type_common.h"
