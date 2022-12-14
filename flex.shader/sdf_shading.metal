@@ -11,13 +11,38 @@ using namespace metal;
 typedef struct {
     float4 position [[position]];
     float2 v_uv;
+    
+    float3 u_cameraPos;
+    float3 frustumA;
+    float3 frustumB;
+    float3 frustumC;
+    float3 frustumD;
 } VertexOut;
 
-vertex VertexOut vertex_sdf(uint v_id [[vertex_id]]) {
+vertex VertexOut vertex_sdf(uint v_id [[vertex_id]],
+                            constant CameraData &u_camera [[buffer(7)]]) {
     VertexOut out;
     
     out.v_uv = float2((v_id << 1) & 2, v_id & 2);
     out.position = float4(out.v_uv * float2(2, -2) + float2(-1, 1), 0.5, 1);
+    
+    auto invViewProj = u_camera.u_viewInvMat * u_camera.u_projInvMat;
+    const float4 A0 = invViewProj * float4(-1, 1, 0.2f, 1);
+    const float4 A1 = invViewProj * float4(-1, 1, 0.5f, 1);
+
+    const float4 B0 = invViewProj * float4(1, 1, 0.2f, 1);
+    const float4 B1 = invViewProj * float4(1, 1, 0.5f, 1);
+
+    const float4 C0 = invViewProj * float4(-1, -1, 0.2f, 1);
+    const float4 C1 = invViewProj * float4(-1, -1, 0.5f, 1);
+
+    const float4 D0 = invViewProj * float4(1, -1, 0.2f, 1);
+    const float4 D1 = invViewProj * float4(1, -1, 0.5f, 1);
+    out.frustumA = normalize(A1.xyz / A1.w - A0.xyz / A0.w);
+    out.frustumB = normalize(B1.xyz / B1.w - B0.xyz / B0.w);
+    out.frustumC = normalize(C1.xyz / C1.w - C0.xyz / C0.w);
+    out.frustumD = normalize(D1.xyz / D1.w - D0.xyz / D0.w);
+    out.u_cameraPos = u_camera.u_cameraPos;
     
     return out;
 }
@@ -49,17 +74,16 @@ fragment float4 fragment_sdf(VertexOut in [[stage_in]],
                              constant SDFData& u_sdfData [[buffer(0)]],
                              sampler u_sdfSampler [[sampler(0)]],
                              texture3d<float> u_sdfTexture [[texture(0)]]) {
-    float3 o = u_sdfData.Eye;
-    float3 d = normalize(mix(
-                             mix(u_sdfData.FrustumA, u_sdfData.FrustumB, in.v_uv.x),
-                             mix(u_sdfData.FrustumC, u_sdfData.FrustumD, in.v_uv.x), in.v_uv.y));
+    float3 o = in.u_cameraPos;
+    float3 d = normalize(mix(mix(in.frustumA, in.frustumB, in.v_uv.x),
+                             mix(in.frustumC, in.frustumD, in.v_uv.x), in.v_uv.y));
 
     float2 incts = intersectRayBox(o, d, u_sdfData.SDFLower, u_sdfData.SDFUpper);
     if(incts.x >= incts.y)
         return float4(0, 0, 0, 1);
 
     float t = incts.x + 0.01;
-    int i = 0;
+    uint i = 0;
 
     for(; i < u_sdfData.MaxTraceSteps; ++i) {
         float3 p = o + t * d;

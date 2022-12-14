@@ -7,31 +7,32 @@
 import Metal
 import vox_render
 
-class ImplicitTriangleMesh {
+public class ImplicitTriangleMesh {
     private var _triangleMesh = TriangleMesh()
     private var _engine: Engine
     var lower = SIMD3<Float>()
     var upper = SIMD3<Float>()
+    var extend = SIMD3<Float>()
     var res = SIMD3<Int>()
     var sdf: MTLTexture?
     
     public var signRayCount: UInt32 = 1
     
-    init(_ engine: Engine) {
+    public init(_ engine: Engine) {
         _engine = engine
     }
     
-    func load(with filename: String) {
+    public func load(with filename: String) {
         _triangleMesh.load(filename)
     }
     
-    func buildBVH() {
+    public func buildBVH() {
         _triangleMesh.buildBVH(_engine.device)
     }
     
-    func generateSDF(lower: SIMD3<Float>,
-                     upper: SIMD3<Float>,
-                     res: SIMD3<Int>) {
+    public func generateSDF(lower: SIMD3<Float>,
+                            upper: SIMD3<Float>,
+                            res: SIMD3<Int>) {
         if sdf == nil || res != self.res {
             let desc = MTLTextureDescriptor()
             desc.pixelFormat = .r32Float
@@ -59,7 +60,7 @@ class ImplicitTriangleMesh {
                     commandEncoder.setBuffer(_triangleMesh.verticesBuffer(), offset: 0, index: 2)
                     commandEncoder.setBuffer(_triangleMesh.normalBuffer(), offset: 0, index: 3)
                     
-                    var extend = upper - lower
+                    extend = upper - lower
                     commandEncoder.setBytes(&self.lower, length: MemoryLayout<SIMD3<Float>>.stride, index: 4)
                     commandEncoder.setBytes(&self.upper, length: MemoryLayout<SIMD3<Float>>.stride, index: 5)
                     commandEncoder.setBytes(&extend, length: MemoryLayout<SIMD3<Float>>.stride, index: 6)
