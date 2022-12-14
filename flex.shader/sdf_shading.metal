@@ -100,6 +100,5 @@ fragment float4 fragment_sdf(VertexOut in [[stage_in]],
     }
 
     float color = float(i) / (u_sdfData.MaxTraceSteps - 1);
-    color = pow(color, 1 / 2.2);
     return float4(color, color, color, 1);
 }

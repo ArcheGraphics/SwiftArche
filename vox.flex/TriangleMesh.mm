@@ -83,7 +83,11 @@ struct Node {
 }
 
 - (uint32_t)triangleCount {
-    return static_cast<uint32_t>(_pointIndices.size());
+    size_t triangleCount = _pointIndices.size();
+    if (triangleCount == 0) {
+        triangleCount = _points.size() / 3;
+    }
+    return static_cast<uint32_t>(triangleCount);
 }
 
 - (bool)load:(NSString *)filename {
@@ -176,18 +180,30 @@ struct Node {
 }
 
 - (void)prepare:(bool)resize {
-    size_t triangleCount = _uvIndices.size();
+    size_t triangleCount = _pointIndices.size();
+    if (triangleCount == 0) {
+        triangleCount = _points.size() / 3;
+    }
     globalBBox = bvh::BoundingBox<float>((bvh::Vector3<float>(std::numeric_limits<float>::max())),
-                                         (bvh::Vector3<float>(std::numeric_limits<float>::min())));
+                                         (bvh::Vector3<float>(-std::numeric_limits<float>::max())));
     primBBoxes = std::vector<bvh::BoundingBox<float>>(triangleCount);
     primCenters = std::vector<bvh::Vector3<float>>(triangleCount);
     for(size_t i = 0; i < triangleCount; ++i) {
-        auto v1 = _points[_pointIndices[i][0]];
-        auto v2 = _points[_pointIndices[i][1]];
-        auto v3 = _points[_pointIndices[i][2]];
+        bvh::Vector3<float> v1;
+        bvh::Vector3<float> v2;
+        bvh::Vector3<float> v3;
+        if (_pointIndices.empty()) {
+            v1 = _points[i * 3];
+            v2 = _points[i * 3 + 1];
+            v3 = _points[i * 3 + 2];
+        } else {
+            v1 = _points[_pointIndices[i][0]];
+            v2 = _points[_pointIndices[i][1]];
+            v3 = _points[_pointIndices[i][2]];
+        }
 
         bvh::BoundingBox<float> primBBox((bvh::Vector3<float>(std::numeric_limits<float>::max())),
-                                           (bvh::Vector3<float>(std::numeric_limits<float>::min())));
+                                           (bvh::Vector3<float>(-std::numeric_limits<float>::max())));
         primBBox.extend(v1);
         primBBox.extend(v2);
         primBBox.extend(v3);
@@ -222,7 +238,7 @@ struct Node {
 
 - (void)buildBVH:(id<MTLDevice>)device :(bool)resize {
     [self prepare:resize];
-    size_t triangleCount = _uvIndices.size();
+    size_t triangleCount = [self triangleCount];
     
     bvh::Bvh<float> tree;
     bvh::LocallyOrderedClusteringBuilder<bvh::Bvh<float>, uint32_t> builder(tree);
@@ -248,19 +264,39 @@ struct Node {
             const size_t iEnd = node.first_child_or_primitive + node.primitive_count;
             for(size_t i = node.first_child_or_primitive; i < iEnd; ++i) {
                 const size_t pi = tree.primitive_indices[i];
-                auto v = _points[_pointIndices[pi][0]];
-                vertices_.push_back(simd_make_float3(v[0], v[1], v[2]));
-                v = _points[_pointIndices[pi][1]];
-                vertices_.push_back(simd_make_float3(v[0], v[1], v[2]));
-                v = _points[_pointIndices[pi][2]];
-                vertices_.push_back(simd_make_float3(v[0], v[1], v[2]));
-
-                v = _normals[_normalIndices[pi][0]];
-                normals_.push_back(simd_make_float3(v[0], v[1], v[2]));
-                v = _normals[_normalIndices[pi][1]];
-                normals_.push_back(simd_make_float3(v[0], v[1], v[2]));
-                v = _normals[_normalIndices[pi][2]];
-                normals_.push_back(simd_make_float3(v[0], v[1], v[2]));
+                if (_pointIndices.empty()) {
+                    auto v = _points[pi * 3];
+                    vertices_.push_back(simd_make_float3(v[0], v[1], v[2]));
+                    v = _points[pi * 3 + 1];
+                    vertices_.push_back(simd_make_float3(v[0], v[1], v[2]));
+                    v = _points[pi * 3 + 2];
+                    vertices_.push_back(simd_make_float3(v[0], v[1], v[2]));
+                } else {
+                    auto v = _points[_pointIndices[pi][0]];
+                    vertices_.push_back(simd_make_float3(v[0], v[1], v[2]));
+                    v = _points[_pointIndices[pi][1]];
+                    vertices_.push_back(simd_make_float3(v[0], v[1], v[2]));
+                    v = _points[_pointIndices[pi][2]];
+                    vertices_.push_back(simd_make_float3(v[0], v[1], v[2]));
+                }
+                
+                if (!_normals.empty()) {
+                    if (_normalIndices.empty()) {
+                        auto v = _normals[pi * 3];
+                        normals_.push_back(simd_make_float3(v[0], v[1], v[2]));
+                        v = _normals[pi * 3 + 1];
+                        normals_.push_back(simd_make_float3(v[0], v[1], v[2]));
+                        v = _normals[pi * 3 + 2];
+                        normals_.push_back(simd_make_float3(v[0], v[1], v[2]));
+                    } else {
+                        auto v = _normals[_normalIndices[pi][0]];
+                        normals_.push_back(simd_make_float3(v[0], v[1], v[2]));
+                        v = _normals[_normalIndices[pi][1]];
+                        normals_.push_back(simd_make_float3(v[0], v[1], v[2]));
+                        v = _normals[_normalIndices[pi][2]];
+                        normals_.push_back(simd_make_float3(v[0], v[1], v[2]));
+                    }
+                }
             }
             const size_t primEnd = vertices_.size() / 3;
 
@@ -277,8 +313,13 @@ struct Node {
                                     options:MTLResourceStorageModeManaged];
     verticesBuffer = [device newBufferWithBytes:vertices_.data() length:vertices_.size() * sizeof(simd_float3)
                                         options:MTLResourceStorageModeManaged];
-    normalBuffer = [device newBufferWithBytes:normals_.data() length:normals_.size() * sizeof(simd_float3)
-                                      options:MTLResourceStorageModeManaged];
+    if (normals_.empty()) {
+        // todo
+        normalBuffer = [device newBufferWithLength:vertices_.size() * sizeof(simd_float3) options:MTLResourceStorageModeManaged];
+    } else {
+        normalBuffer = [device newBufferWithBytes:normals_.data() length:normals_.size() * sizeof(simd_float3)
+                                          options:MTLResourceStorageModeManaged];
+    }
 }
 
 @end
