@@ -52,6 +52,7 @@
 		3E6B23CB2948BAB9000AC29F /* ImplicitTriangleMesh.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E6B23CA2948BAB9000AC29F /* ImplicitTriangleMesh.swift */; };
 		3E6B23D12948BC13000AC29F /* ImGui in Frameworks */ = {isa = PBXBuildFile; productRef = 3E6B23D02948BC13000AC29F /* ImGui */; };
 		3E6B23D3294964B1000AC29F /* sdf_baker.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3E6B23D2294964B1000AC29F /* sdf_baker.metal */; };
+		3E6B23D629499B36000AC29F /* sdf_shading.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3E6B23D529499B36000AC29F /* sdf_shading.metal */; };
 		3E6D2F01293E13DF00B63F73 /* BufferPool.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E6D2F00293E13DF00B63F73 /* BufferPool.swift */; };
 		3E6D2F03293E336500B63F73 /* FogMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E6D2F02293E336500B63F73 /* FogMode.swift */; };
 		3E6D2F06293ED76300B63F73 /* light_sprite.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3E6D2F04293ED76300B63F73 /* light_sprite.metal */; };
@@ -582,6 +583,7 @@
 		3E6B23CA2948BAB9000AC29F /* ImplicitTriangleMesh.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImplicitTriangleMesh.swift; sourceTree = "<group>"; };
 		3E6B23D2294964B1000AC29F /* sdf_baker.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = sdf_baker.metal; sourceTree = "<group>"; };
 		3E6B23D429499327000AC29F /* type_common.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = type_common.h; sourceTree = "<group>"; };
+		3E6B23D529499B36000AC29F /* sdf_shading.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = sdf_shading.metal; sourceTree = "<group>"; };
 		3E6D2F00293E13DF00B63F73 /* BufferPool.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BufferPool.swift; sourceTree = "<group>"; };
 		3E6D2F02293E336500B63F73 /* FogMode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FogMode.swift; sourceTree = "<group>"; };
 		3E6D2F04293ED76300B63F73 /* light_sprite.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; path = light_sprite.metal; sourceTree = "<group>"; };
@@ -1188,6 +1190,7 @@
 				3E6B23BA2946B9FF000AC29F /* physics_helpers.h */,
 				3E6B23B52946B3E5000AC29F /* physics_helpers.metal */,
 				3E6B23D2294964B1000AC29F /* sdf_baker.metal */,
+				3E6B23D529499B36000AC29F /* sdf_shading.metal */,
 			);
 			path = flex.shader;
 			sourceTree = "<group>";
@@ -2523,6 +2526,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3E6B23D629499B36000AC29F /* sdf_shading.metal in Sources */,
 				3E6B23B62946B3E5000AC29F /* physics_helpers.metal in Sources */,
 				3E6B23D3294964B1000AC29F /* sdf_baker.metal in Sources */,
 			);
