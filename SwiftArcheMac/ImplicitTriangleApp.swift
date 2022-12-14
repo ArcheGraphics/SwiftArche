@@ -30,12 +30,10 @@ class ImplicitTriangleApp: NSViewController {
         
         let sdfMesh = ImplicitTriangleMesh(engine)
         sdfMesh.signRayCount = 12
-        let assetURL = Bundle.main.url(forResource: "bunny", withExtension: "obj", subdirectory: "assets")!
+        let assetURL = Bundle.main.url(forResource: "dragon", withExtension: "obj", subdirectory: "assets")!
         sdfMesh.load(with: assetURL)
         sdfMesh.buildBVH()
-        sdfMesh.generateSDF(lower: SIMD3<Float>(-1.2, -1.2, -1.2),
-                            upper: SIMD3<Float>(1.2, 1.2, 1.2),
-                            res: SIMD3<Int>(64, 64, 64))
+        sdfMesh.generateSDF(resolutionX: 100)
         
         let sdfMtl = ImplicitTriangleMaterial(engine)
         sdfMtl.mesh = sdfMesh

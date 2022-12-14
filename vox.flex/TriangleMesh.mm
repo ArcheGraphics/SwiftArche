@@ -70,6 +70,14 @@ struct Node {
     _uvIndices.emplace_back(newUvIndices);
 }
 
+- (simd_float3)lowerBounds {
+    return simd_make_float3(globalBBox.min[0], globalBBox.min[1], globalBBox.min[2]);
+}
+
+- (simd_float3)upperBounds {
+    return simd_make_float3(globalBBox.max[0], globalBBox.max[1], globalBBox.max[2]);
+}
+
 -(id<MTLBuffer>) nodeBuffer {
     return nodeBuffer;
 }
@@ -179,7 +187,7 @@ struct Node {
     }
 }
 
-- (void)prepare:(bool)resize {
+- (void)prepare {
     size_t triangleCount = _pointIndices.size();
     if (triangleCount == 0) {
         triangleCount = _points.size() / 3;
@@ -212,32 +220,10 @@ struct Node {
 
         globalBBox.extend(primBBox);
     }
-    
-    if (resize) {
-        bvh::Vector3<float> extent = globalBBox.max - globalBBox.min;
-        const float maxExtent = std::max(extent[2], std::max(extent[0], extent[1]));
-        const bvh::Vector3<float> offset = -0.5f * extent;
-        const float scale = 2 / maxExtent;
-        for(auto& vertex: _points) {
-            vertex = scale * (vertex + offset);
-        }
-        
-        for(auto& center: primCenters) {
-            center = scale * (center + offset);
-        }
-        
-        for(auto& bbox: primBBoxes) {
-            bbox.max = scale * (bbox.max + offset);
-            bbox.min = scale * (bbox.min + offset);
-        }
-        
-        globalBBox.max = scale * (globalBBox.max + offset);
-        globalBBox.min = scale * (globalBBox.min + offset);
-    }
 }
 
-- (void)buildBVH:(id<MTLDevice>)device :(bool)resize {
-    [self prepare:resize];
+- (void)buildBVH:(id<MTLDevice>)device {
+    [self prepare];
     size_t triangleCount = [self triangleCount];
     
     bvh::Bvh<float> tree;

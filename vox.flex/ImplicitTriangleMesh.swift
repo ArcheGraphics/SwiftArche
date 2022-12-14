@@ -26,29 +26,37 @@ public class ImplicitTriangleMesh {
         _triangleMesh.load(filename.path())
     }
     
-    public func buildBVH(_ resize: Bool = true) {
-        _triangleMesh.buildBVH(_engine.device, resize)
+    public func buildBVH() {
+        _triangleMesh.buildBVH(_engine.device)
     }
     
-    public func generateSDF(lower: SIMD3<Float>,
-                            upper: SIMD3<Float>,
-                            res: SIMD3<Int>) {
-        if sdf == nil || res != self.res {
+    public func generateSDF(resolutionX: Int = 32, margin: Float = 0.2) {
+        let lowerBounds = _triangleMesh.lowerBounds()
+        let upperBounds = _triangleMesh.upperBounds()
+        let scale = upperBounds - lowerBounds
+        
+        lower = lowerBounds - scale * margin
+        upper = upperBounds + scale * margin
+        extend = scale * (1 + margin * 2)
+
+        let resolutionY = Int(ceil(Float(resolutionX) * extend.y / extend.x))
+        let resolutionZ = Int(ceil(Float(resolutionX) * extend.z / extend.x))
+        let resolution = SIMD3<Int>(resolutionX, resolutionY, resolutionZ)
+        
+        if sdf == nil || resolution != res {
             let desc = MTLTextureDescriptor()
             desc.pixelFormat = .r32Float
-            desc.width = res.x
-            desc.height = res.y
-            desc.depth = res.z
+            desc.width = resolution.x
+            desc.height = resolution.y
+            desc.depth = resolution.z
             desc.textureType = .type3D
             desc.usage = MTLTextureUsage(rawValue: MTLTextureUsage.shaderRead.rawValue | MTLTextureUsage.shaderWrite.rawValue)
             desc.storageMode = .private
             sdf = _engine.device.makeTexture(descriptor: desc);
         }
         
-        if lower != self.lower || upper != self.upper || res != self.res {
-            self.lower = lower
-            self.upper = upper
-            self.res = res
+        if resolution != res {
+            res = resolution
             
             let function = _engine.library("flex.shader").makeFunction(name: "sdfBaker")
             let pipelineState = try! _engine.device.makeComputePipelineState(function: function!)
@@ -60,9 +68,8 @@ public class ImplicitTriangleMesh {
                     commandEncoder.setBuffer(_triangleMesh.verticesBuffer(), offset: 0, index: 2)
                     commandEncoder.setBuffer(_triangleMesh.normalBuffer(), offset: 0, index: 3)
                     
-                    extend = upper - lower
-                    commandEncoder.setBytes(&self.lower, length: MemoryLayout<SIMD3<Float>>.stride, index: 4)
-                    commandEncoder.setBytes(&self.upper, length: MemoryLayout<SIMD3<Float>>.stride, index: 5)
+                    commandEncoder.setBytes(&lower, length: MemoryLayout<SIMD3<Float>>.stride, index: 4)
+                    commandEncoder.setBytes(&upper, length: MemoryLayout<SIMD3<Float>>.stride, index: 5)
                     commandEncoder.setBytes(&extend, length: MemoryLayout<SIMD3<Float>>.stride, index: 6)
                     
                     var triangleCount = _triangleMesh.triangleCount()
