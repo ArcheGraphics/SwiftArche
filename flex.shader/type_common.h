@@ -6,6 +6,5 @@
 
 #pragma once
 
-#include "../vox.render/bridging.h"
-#include "../flex.shader/type_common.h"
-#include "TriangleMesh.h"
+#import "../vox.shader/type_common.h"
+#import <simd/simd.h>

@@ -78,6 +78,10 @@ struct Node {
     return normalBuffer;
 }
 
+- (uint32_t)triangleCount {
+    return static_cast<uint32_t>(_pointIndices.size());
+}
+
 - (bool)load:(NSString *)filename {
     std::ifstream file([filename cStringUsingEncoding:NSUTF8StringEncoding]);
     if (file) {

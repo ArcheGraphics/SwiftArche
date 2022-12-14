@@ -28,6 +28,8 @@
 
 - (void)buildBVH:(id<MTLDevice>)device;
 
+- (uint32_t)triangleCount;
+
 -(id<MTLBuffer>) nodeBuffer;
 
 -(id<MTLBuffer>) verticesBuffer;
