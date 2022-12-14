@@ -22,8 +22,8 @@ public class ImplicitTriangleMesh {
         _engine = engine
     }
     
-    public func load(with filename: String) {
-        _triangleMesh.load(filename)
+    public func load(with filename: URL) {
+        _triangleMesh.load(filename.path())
     }
     
     public func buildBVH() {
@@ -50,7 +50,7 @@ public class ImplicitTriangleMesh {
             self.upper = upper
             self.res = res
             
-            let function = _engine.library("app.shader").makeFunction(name: "cubemap_generator")
+            let function = _engine.library("flex.shader").makeFunction(name: "sdfBaker")
             let pipelineState = try! _engine.device.makeComputePipelineState(function: function!)
             if let commandBuffer = _engine.commandQueue.makeCommandBuffer() {
                 if let commandEncoder = commandBuffer.makeComputeCommandEncoder() {

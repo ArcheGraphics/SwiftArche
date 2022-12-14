@@ -243,11 +243,11 @@ struct Node {
     }
     
     nodeBuffer = [device newBufferWithBytes:nodes_.data() length:nodes_.size() * sizeof(Node)
-                                    options:MTLResourceStorageModePrivate];
+                                    options:MTLResourceStorageModeManaged];
     verticesBuffer = [device newBufferWithBytes:vertices_.data() length:vertices_.size() * sizeof(simd_float3)
-                                        options:MTLResourceStorageModePrivate];
+                                        options:MTLResourceStorageModeManaged];
     normalBuffer = [device newBufferWithBytes:normals_.data() length:normals_.size() * sizeof(simd_float3)
-                                      options:MTLResourceStorageModePrivate];
+                                      options:MTLResourceStorageModeManaged];
 }
 
 @end
