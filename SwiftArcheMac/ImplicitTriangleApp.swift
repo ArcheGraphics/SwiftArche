@@ -43,7 +43,7 @@ class ImplicitTriangleApp: NSViewController {
         sdfMtl.maxTraceSteps = 64
         
         let mesh = ModelMesh(engine)
-        _ = mesh.addSubMesh(0, 6)
+        _ = mesh.addSubMesh(0, 6, .triangleStrip)
         
         let sdfEntity = rootEntity.createChild()
         let sdfRenderer: MeshRenderer = sdfEntity.addComponent()

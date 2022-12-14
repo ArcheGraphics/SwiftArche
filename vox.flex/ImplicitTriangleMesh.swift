@@ -26,8 +26,8 @@ public class ImplicitTriangleMesh {
         _triangleMesh.load(filename.path())
     }
     
-    public func buildBVH() {
-        _triangleMesh.buildBVH(_engine.device)
+    public func buildBVH(_ resize: Bool = true) {
+        _triangleMesh.buildBVH(_engine.device, resize)
     }
     
     public func generateSDF(lower: SIMD3<Float>,
@@ -79,13 +79,12 @@ public class ImplicitTriangleMesh {
                         commandEncoder.setBytes(&xEnd, length: MemoryLayout<UInt32>.stride, index: 10)
                         
                         commandEncoder.dispatchThreads(MTLSizeMake(1, res.y, res.z),
-                                threadsPerThreadgroup: MTLSizeMake(w, h, 1))
+                                threadsPerThreadgroup: MTLSizeMake(1, w, h))
                     }
                     commandEncoder.endEncoding()
                 }
 
                 commandBuffer.commit()
-                commandBuffer.waitUntilCompleted()
             }
             
         }

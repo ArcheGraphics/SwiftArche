@@ -26,7 +26,9 @@
 
 - (void)addUvTriangle:(simd_uint3)newUvIndices;
 
-- (void)buildBVH:(id<MTLDevice>)device;
+- (void)prepare:(bool)resize;
+
+- (void)buildBVH:(id<MTLDevice>)device :(bool)resize;
 
 - (uint32_t)triangleCount;
 

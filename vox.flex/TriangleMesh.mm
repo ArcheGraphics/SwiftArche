@@ -37,6 +37,10 @@ struct Node {
     std::vector<simd_float3> vertices_;
     std::vector<simd_float3> normals_;
     
+    std::vector<bvh::BoundingBox<float>> primBBoxes;
+    std::vector<bvh::Vector3<float>> primCenters;
+    bvh::BoundingBox<float> globalBBox;
+    
     id<MTLBuffer> nodeBuffer;
     id<MTLBuffer> verticesBuffer;
     id<MTLBuffer> normalBuffer;
@@ -171,12 +175,12 @@ struct Node {
     }
 }
 
-- (void)buildBVH:(id<MTLDevice>)device {
+- (void)prepare:(bool)resize {
     size_t triangleCount = _uvIndices.size();
-    bvh::BoundingBox<float> globalBBox((bvh::Vector3<float>(std::numeric_limits<float>::max())),
-                                       (bvh::Vector3<float>(std::numeric_limits<float>::min())));
-    std::vector<bvh::BoundingBox<float>> primBBoxes(triangleCount);
-    std::vector<bvh::Vector3<float>> primCenters(triangleCount);
+    globalBBox = bvh::BoundingBox<float>((bvh::Vector3<float>(std::numeric_limits<float>::max())),
+                                         (bvh::Vector3<float>(std::numeric_limits<float>::min())));
+    primBBoxes = std::vector<bvh::BoundingBox<float>>(triangleCount);
+    primCenters = std::vector<bvh::Vector3<float>>(triangleCount);
     for(size_t i = 0; i < triangleCount; ++i) {
         auto v1 = _points[_pointIndices[i][0]];
         auto v2 = _points[_pointIndices[i][1]];
@@ -192,6 +196,33 @@ struct Node {
 
         globalBBox.extend(primBBox);
     }
+    
+    if (resize) {
+        bvh::Vector3<float> extent = globalBBox.max - globalBBox.min;
+        const float maxExtent = std::max(extent[2], std::max(extent[0], extent[1]));
+        const bvh::Vector3<float> offset = -0.5f * extent;
+        const float scale = 2 / maxExtent;
+        for(auto& vertex: _points) {
+            vertex = scale * (vertex + offset);
+        }
+        
+        for(auto& center: primCenters) {
+            center = scale * (center + offset);
+        }
+        
+        for(auto& bbox: primBBoxes) {
+            bbox.max = scale * (bbox.max + offset);
+            bbox.min = scale * (bbox.min + offset);
+        }
+        
+        globalBBox.max = scale * (globalBBox.max + offset);
+        globalBBox.min = scale * (globalBBox.min + offset);
+    }
+}
+
+- (void)buildBVH:(id<MTLDevice>)device :(bool)resize {
+    [self prepare:resize];
+    size_t triangleCount = _uvIndices.size();
     
     bvh::Bvh<float> tree;
     bvh::LocallyOrderedClusteringBuilder<bvh::Bvh<float>, uint32_t> builder(tree);
