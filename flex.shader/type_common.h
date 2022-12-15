@@ -15,3 +15,16 @@ struct SDFData {
     vector_float3 SDFUpper;
     float AbsThreshold;
 };
+
+struct VolumeParticleEmitterData {
+    vector_float3 initialVelocity;
+    float spacing;
+    
+    vector_float3 linearVelocity;
+    uint32_t maxNumberOfParticles;
+    
+    vector_float3 angularVelocity;
+    float jitter;
+    
+    vector_float3 lowerCorner;
+};

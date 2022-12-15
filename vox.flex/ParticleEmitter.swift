@@ -7,10 +7,23 @@
 import Metal
 import vox_render
 
-open class ParticleEmitter {
-    public var target: ParticleSystemData!
+open class ParticleEmitter : ComputePass {
+    private var _target: ParticleSystemData?
     public var isEnabled: Bool = true
+    
+    public var target: ParticleSystemData? {
+        get {
+            _target
+        }
+        set {
+            _target = newValue
+            if let target = _target {
+                data.append(target)
+            }
+        }
+    }
  
     /// Updates the emitter state from \p currentTimeInSeconds to the following time-step.
-    open func update(currentTimeInSeconds: Float, timeIntervalInSeconds: Float) {}
+    open func update(_ commandEncoder: MTLComputeCommandEncoder,
+                     currentTimeInSeconds: Float, timeIntervalInSeconds: Float) {}
 }

@@ -7,12 +7,11 @@
 import Metal
 import vox_render
 
-public class ParticleSystemData {
+public class ParticleSystemData: ShaderData {
     private static let positionProperty = "u_position"
     private static let velocityProperty = "u_velocity"
     private static let forceProperty = "u_force"
 
-    private var _engine: Engine
     private var _radius: Float = 1e-3
     private var _mass: Float = 1e-3
     private var _numberOfParticles: BufferView
@@ -67,8 +66,9 @@ public class ParticleSystemData {
     }
     
     public init(_ engine: Engine, maxLength: Int = 10000) {
-        _engine = engine
-        _numberOfParticles = BufferView(device: _engine.device, count: 1, stride: MemoryLayout<UInt32>.stride)
+        _numberOfParticles = BufferView(device: engine.device, count: 1, stride: MemoryLayout<UInt32>.stride)
+        super.init(engine)
+
         addScalarData(with: ParticleSystemData.positionProperty, initialVal: Vector3F(), maxLength: maxLength)
         addScalarData(with: ParticleSystemData.velocityProperty, initialVal: Vector3F(), maxLength: maxLength)
         addScalarData(with: ParticleSystemData.forceProperty, initialVal: Vector3F(), maxLength: maxLength)
@@ -80,7 +80,7 @@ public class ParticleSystemData {
     ///   - initialVal: Initial value of the new scalar data.
     ///   - maxLength: max length
     public func addScalarData<T>(with name: String, initialVal: T, maxLength: Int) {
-        _dataList[name] = BufferView(device: _engine.device, count: maxLength, stride: MemoryLayout<T>.stride)
+        _dataList[name] = BufferView(device: engine.device, count: maxLength, stride: MemoryLayout<T>.stride)
     }
     
     /// Returns custom scalar data layer at given name
