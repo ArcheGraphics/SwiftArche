@@ -85,9 +85,10 @@ fragment float4 fragment_sdf(VertexOut in [[stage_in]],
     float t = incts.x + 0.01;
     uint i = 0;
 
+    float3 extend = u_sdfData.SDFUpper - u_sdfData.SDFLower;
     for(; i < u_sdfData.MaxTraceSteps; ++i) {
         float3 p = o + t * d;
-        float3 uvw = (p - u_sdfData.SDFLower) / u_sdfData.SDFExtent;
+        float3 uvw = (p - u_sdfData.SDFLower) / extend;
         if(any(saturate(uvw) != uvw))
             break;
 

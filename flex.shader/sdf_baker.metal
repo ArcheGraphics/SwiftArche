@@ -292,7 +292,6 @@ kernel void sdfBaker(// bvh
                      // constant
                      constant float3& SDFLower [[buffer(4)]],
                      constant float3& SDFUpper [[buffer(5)]],
-                     constant float3& SDFExtent [[buffer(6)]],
                      constant uint32_t& TriangleCount [[buffer(7)]],
                      constant uint32_t& SignRayCount [[buffer(8)]],
                      constant uint32_t& XBeg [[buffer(9)]],
@@ -311,7 +310,7 @@ kernel void sdfBaker(// bvh
     int height = sdf.get_height();
     int depth = sdf.get_depth();
     
-    float dx = 1.05f * SDFExtent.x / width;
+    float dx = 1.05f * (SDFUpper.x - SDFLower.x) / width;
 
     float zf = mix(SDFLower.z, SDFUpper.z, (tpig.z + 0.5f) / depth);
     float yf = mix(SDFLower.y, SDFUpper.y, (tpig.y + 0.5f) / height);

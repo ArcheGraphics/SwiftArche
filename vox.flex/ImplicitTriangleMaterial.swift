@@ -25,7 +25,6 @@ public class ImplicitTriangleMaterial: BaseMaterial {
             if let sdf = _sdf {
                 _sdfData.SDFUpper = sdf.upper
                 _sdfData.SDFLower = sdf.lower
-                _sdfData.SDFExtent = sdf.extend
                 shaderData.setImageView(ImplicitTriangleMaterial.sdfTextureProperty, ImplicitTriangleMaterial.sdfSamplerProperty, sdf.sdf!)
                 shaderData.setData(ImplicitTriangleMaterial.sdfProperty, _sdfData)
             }

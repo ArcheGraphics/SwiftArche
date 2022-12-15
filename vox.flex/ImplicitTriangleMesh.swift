@@ -14,9 +14,12 @@ public class ImplicitTriangleMesh {
 
     var lower = SIMD3<Float>()
     var upper = SIMD3<Float>()
-    var extend = SIMD3<Float>()
     var res = SIMD3<Int>()
     var sdf: MTLTexture?
+    
+    public static func builder() -> Builder {
+        ImplicitTriangleMesh.Builder()
+    }
     
     public init(_ engine: Engine, mesh: TriangleMesh,
                 resolutionX: Int = 32, margin: Float = 0.2, signRayCount: UInt32 = 12,
@@ -31,8 +34,7 @@ public class ImplicitTriangleMesh {
         
         lower = lowerBounds - scale * margin
         upper = upperBounds + scale * margin
-        extend = scale * (1 + margin * 2)
-        
+        let extend = scale * (1 + margin * 2)
         let resolutionY = Int(ceil(Float(resolutionX) * extend.y / extend.x))
         let resolutionZ = Int(ceil(Float(resolutionX) * extend.z / extend.x))
         res = SIMD3<Int>(resolutionX, resolutionY, resolutionZ)
@@ -66,7 +68,6 @@ public class ImplicitTriangleMesh {
                 
                 commandEncoder.setBytes(&lower, length: MemoryLayout<SIMD3<Float>>.stride, index: 4)
                 commandEncoder.setBytes(&upper, length: MemoryLayout<SIMD3<Float>>.stride, index: 5)
-                commandEncoder.setBytes(&extend, length: MemoryLayout<SIMD3<Float>>.stride, index: 6)
                 
                 var triangleCount = _triangleMesh.triangleCount()
                 commandEncoder.setBytes(&triangleCount, length: MemoryLayout<UInt32>.stride, index: 7)
@@ -88,6 +89,54 @@ public class ImplicitTriangleMesh {
             }
             
             commandBuffer.commit()
+        }
+    }
+    
+    // MARK: - Builder
+    public class Builder {
+        private var _mesh: TriangleMesh?
+        private var _resolutionX: Int = 32
+        private var _margin: Float = 0.2
+        private var _transform = simd_float4x4()
+        private var _signRayCount: UInt32 = 12
+
+        /// Returns builder with triangle mesh.
+        public func withTriangleMesh(_ mesh: TriangleMesh) -> Builder {
+            _mesh = mesh
+            return self
+        }
+
+        /// Returns builder with resolution in x axis.
+        public func withResolutionX(_ resolutionX: Int) -> Builder {
+            _resolutionX = resolutionX
+            return self
+        }
+
+        /// Returns builder with margin around the mesh.
+        public func withMargin(_ margin: Float) -> Builder {
+            _margin = margin
+            return self
+        }
+        
+        /// Returns builder with sign ray count
+        public func withSignRayCount(_ signRayCount: UInt32) -> Builder {
+            _signRayCount = signRayCount
+            return self
+        }
+        
+        /// Returns builder with transform.
+        public func withTransform(_ transform: simd_float4x4) -> Builder {
+            _transform = transform
+            return self
+        }
+        /// Builds ImplicitTriangleMesh3.
+        public func build(_ engine: Engine) -> ImplicitTriangleMesh? {
+            if let mesh = _mesh {
+                return ImplicitTriangleMesh(engine, mesh: mesh, resolutionX: _resolutionX,
+                                            margin: _margin, signRayCount: _signRayCount, transform: _transform)
+            } else {
+                return nil
+            }
         }
     }
 }

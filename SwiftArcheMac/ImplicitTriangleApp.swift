@@ -47,8 +47,11 @@ class ImplicitTriangleApp: NSViewController {
         let triangleMesh = TriangleMesh(device: engine.device)!
         triangleMesh.load(assetURL)
         
-        let sdf = ImplicitTriangleMesh(engine, mesh: triangleMesh)
-        createSDFRenderer(rootEntity, sdf)
+        let sdf = ImplicitTriangleMesh.builder()
+            .withTriangleMesh(triangleMesh)
+            .withResolutionX(100)
+            .build(engine)
+        createSDFRenderer(rootEntity, sdf!)
         
         engine.run()
     }

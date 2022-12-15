@@ -14,5 +14,4 @@ struct SDFData {
     uint32_t   MaxTraceSteps;
     vector_float3 SDFUpper;
     float AbsThreshold;
-    vector_float3 SDFExtent;
 };
