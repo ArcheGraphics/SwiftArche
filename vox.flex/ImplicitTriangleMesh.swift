@@ -12,8 +12,8 @@ public class ImplicitTriangleMesh {
     private var _engine: Engine
     private var _signRayCount: UInt32
 
-    var lower = SIMD3<Float>()
-    var upper = SIMD3<Float>()
+    var lower = Vector3F()
+    var upper = Vector3F()
     var res = SIMD3<Int>()
     var sdf: MTLTexture?
     
@@ -66,8 +66,8 @@ public class ImplicitTriangleMesh {
                 commandEncoder.setBuffer(_triangleMesh.verticesBuffer(), offset: 0, index: 2)
                 commandEncoder.setBuffer(_triangleMesh.normalBuffer(), offset: 0, index: 3)
                 
-                commandEncoder.setBytes(&lower, length: MemoryLayout<SIMD3<Float>>.stride, index: 4)
-                commandEncoder.setBytes(&upper, length: MemoryLayout<SIMD3<Float>>.stride, index: 5)
+                commandEncoder.setBytes(&lower, length: MemoryLayout<Vector3F>.stride, index: 4)
+                commandEncoder.setBytes(&upper, length: MemoryLayout<Vector3F>.stride, index: 5)
                 
                 var triangleCount = _triangleMesh.triangleCount()
                 commandEncoder.setBytes(&triangleCount, length: MemoryLayout<UInt32>.stride, index: 7)

@@ -3,7 +3,9 @@
   <component name="VcsDirectoryMappings">
     <mapping directory="$PROJECT_DIR$" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/glTF-Sample-Models" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/third_party/bvh" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/third_party/cgltf" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/third_party/physx" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/third_party/tinyobj" vcs="Git" />
   </component>
 </project>
