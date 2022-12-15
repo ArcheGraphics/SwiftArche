@@ -24,7 +24,7 @@ extension SIMD3 where Scalar: BinaryFloatingPoint {
     }
 }
 
-//MARK:- Float Extension
+//MARK: - Float Extension
 
 extension SIMD3 where Scalar == Float {
     // MARK:- Basic setters
@@ -72,7 +72,7 @@ extension SIMD3 where Scalar == Float {
     }
 }
 
-// MARK:- Utility Extensions
+// MARK: - Utility Extensions
 
 public func monotonicCatmullRom(v0: SIMD3<Float>, v1: SIMD3<Float>,
                          v2: SIMD3<Float>, v3: SIMD3<Float>, f: Float) -> SIMD3<Float> {

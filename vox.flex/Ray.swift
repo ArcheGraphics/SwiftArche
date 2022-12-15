@@ -31,7 +31,7 @@ public struct Ray3F {
         direction = other.direction
     }
 
-    public func pointAt(_ t: Float) -> Vector3F {
+    public func point(at t: Float) -> Vector3F {
         origin + t * direction
     }
 }

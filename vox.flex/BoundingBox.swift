@@ -49,16 +49,16 @@ public struct BoundingBox3F {
     }
 
     /// Returns width of the box.
-    public func width() -> Float {
+    public var width: Float {
         upperCorner.x - lowerCorner.x
     }
 
     /// Returns height of the box.
-    public func height() -> Float {
+    public var height: Float {
         upperCorner.y - lowerCorner.y
     }
 
-    public func depth() -> Float {
+    public var depth: Float {
         upperCorner.z - lowerCorner.z
     }
 
@@ -174,17 +174,17 @@ public struct BoundingBox3F {
     }
 
     /// Returns the mid-point of this box.
-    public func midPoint() -> Vector3F {
+    public var midPoint: Vector3F {
         (upperCorner + lowerCorner) / 2
     }
 
     /// Returns diagonal length of this box.
-    public func diagonalLength() -> Float {
+    public var diagonalLength: Float {
         simd.length(upperCorner - lowerCorner)
     }
 
     /// Returns squared diagonal length of this box.
-    public func diagonalLengthSquared() -> Float {
+    public var diagonalLengthSquared: Float {
         length_squared(upperCorner - lowerCorner)
     }
 
@@ -234,7 +234,7 @@ public struct BoundingBox3F {
                                   [-h, +h, +h],
                                   [+h, +h, +h]]
 
-        return Vector3F(width(), height(), depth()) * offset[idx] + midPoint()
+        return Vector3F(width, height, depth) * offset[idx] + midPoint
     }
 
     /// Returns the clamped point.
@@ -243,7 +243,7 @@ public struct BoundingBox3F {
     }
 
     /// Returns true if the box is empty.
-    public func isEmpty() -> Bool {
+    public var isEmpty: Bool {
         (lowerCorner.x >= upperCorner.x ||
                 lowerCorner.y >= upperCorner.y ||
                 lowerCorner.z >= upperCorner.z)

@@ -14,12 +14,12 @@ extension matrix_float3x3 {
     }
 
     /// Returns number of rows of this matrix.
-    public var rows: size_t {
+    public var rows: Int {
         3
     }
 
     /// Returns number of columns of this matrix.
-    public var cols: size_t {
+    public var cols: Int {
         3
     }
 

@@ -7,23 +7,23 @@
 import simd
 
 extension matrix_float2x2 {
-    // MARK:- Basic getters
+    // MARK: - Basic getters
     /// Returns true if this matrix is a square matrix.
     public var isSquare: Bool {
         true
     }
 
     /// Returns number of rows of this matrix.
-    public var rows: size_t {
+    public var rows: Int {
         2
     }
 
     /// Returns number of columns of this matrix.
-    public var cols: size_t {
+    public var cols: Int {
         2
     }
 
-    // MARK:- Complex getters
+    // MARK: - Complex getters
     /// Returns sum of all elements.
     public var sum: Float {
         reduce_add(columns.0)
