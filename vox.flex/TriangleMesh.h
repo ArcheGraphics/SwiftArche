@@ -12,7 +12,13 @@
 
 @interface TriangleMesh : NSObject
 
-- (bool)load:(NSString *)filename;
+- (instancetype)initWithDevice:(id<MTLDevice>)device;
+
+- (void)invalidateCache;
+
+- (void)clear;
+
+- (bool)load:(NSURL *)url;
 
 - (void)addPoint:(simd_float3)pt;
 
@@ -25,10 +31,6 @@
 - (void)addNormalTriangle:(simd_uint3)newNormalIndices;
 
 - (void)addUvTriangle:(simd_uint3)newUvIndices;
-
-- (void)prepare;
-
-- (void)buildBVH:(id<MTLDevice>)device;
 
 - (simd_float3)lowerBounds;
 

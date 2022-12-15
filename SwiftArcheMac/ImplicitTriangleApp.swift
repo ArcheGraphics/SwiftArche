@@ -14,6 +14,21 @@ class ImplicitTriangleApp: NSViewController {
     var canvas: Canvas!
     var engine: Engine!
     
+    func createSDFRenderer(_ rootEntity: Entity, _ sdf: ImplicitTriangleMesh) {
+        let sdfMtl = ImplicitTriangleMaterial(engine)
+        sdfMtl.sdf = sdf
+        sdfMtl.absThreshold = 0.01
+        sdfMtl.maxTraceSteps = 64
+        
+        let mesh = ModelMesh(engine)
+        _ = mesh.addSubMesh(0, 6, .triangleStrip)
+        
+        let sdfEntity = rootEntity.createChild()
+        let sdfRenderer: MeshRenderer = sdfEntity.addComponent()
+        sdfRenderer.setMaterial(sdfMtl)
+        sdfRenderer.mesh = mesh
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         canvas = Canvas(with: view)
@@ -28,25 +43,12 @@ class ImplicitTriangleApp: NSViewController {
         let _: Camera = cameraEntity.addComponent()
         let _: OrbitControl = cameraEntity.addComponent()
         
-        let sdfMesh = ImplicitTriangleMesh(engine)
-        sdfMesh.signRayCount = 12
         let assetURL = Bundle.main.url(forResource: "dragon", withExtension: "obj", subdirectory: "assets")!
-        sdfMesh.load(with: assetURL)
-        sdfMesh.buildBVH()
-        sdfMesh.generateSDF(resolutionX: 100)
+        let triangleMesh = TriangleMesh(device: engine.device)!
+        triangleMesh.load(assetURL)
         
-        let sdfMtl = ImplicitTriangleMaterial(engine)
-        sdfMtl.mesh = sdfMesh
-        sdfMtl.absThreshold = 0.01
-        sdfMtl.maxTraceSteps = 64
-        
-        let mesh = ModelMesh(engine)
-        _ = mesh.addSubMesh(0, 6, .triangleStrip)
-        
-        let sdfEntity = rootEntity.createChild()
-        let sdfRenderer: MeshRenderer = sdfEntity.addComponent()
-        sdfRenderer.setMaterial(sdfMtl)
-        sdfRenderer.mesh = mesh
+        let sdf = ImplicitTriangleMesh(engine, mesh: triangleMesh)
+        createSDFRenderer(rootEntity, sdf)
         
         engine.run()
     }

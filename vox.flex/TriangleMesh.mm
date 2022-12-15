@@ -44,49 +44,189 @@ struct Node {
     id<MTLBuffer> nodeBuffer;
     id<MTLBuffer> verticesBuffer;
     id<MTLBuffer> normalBuffer;
+    
+    id<MTLDevice> _device;
+    bool _bvhInvalidated;
+    bool _boundInvalidated;
+}
+
+- (instancetype)initWithDevice:(id<MTLDevice>)device {
+    self = [super init];
+    if (self) {
+        self->_device = device;
+        [self invalidateCache];
+    }
+    return self;
+}
+
+- (void)invalidateCache {
+    _bvhInvalidated = true;
+    _boundInvalidated = true;
+}
+
+- (void)clear {
+    [self invalidateCache];
+    _uvs.clear();
+    _points.clear();
+    _normals.clear();
+    _pointIndices.clear();
+    _normalIndices.clear();
+    _uvIndices.clear();
+    
+    nodes_.clear();
+    vertices_.clear();
+    normals_.clear();
+    
+    primBBoxes.clear();
+    primCenters.clear();
+    globalBBox = bvh::BoundingBox<float>((bvh::Vector3<float>(std::numeric_limits<float>::max())),
+                                         (bvh::Vector3<float>(-std::numeric_limits<float>::max())));
+    
+    nodeBuffer = nil;
+    verticesBuffer = nil;
+    normalBuffer = nil;
 }
 
 - (void)addPoint:(simd_float3)pt {
+    [self invalidateCache];
     _points.emplace_back(bvh::Vector3<float>(pt[0], pt[1], pt[2]));
 }
 
 - (void)addNormal:(simd_float3)n {
+    [self invalidateCache];
     _normals.emplace_back(bvh::Vector3<float>(n[0], n[1], n[2]));
 }
 
 - (void)addUv:(simd_float2)t {
+    [self invalidateCache];
     _uvs.emplace_back(bvh::Vector<float, 2>(t[0], t[1]));
 }
 
 - (void)addPointTriangle:(simd_uint3)newPointIndices {
+    [self invalidateCache];
     _pointIndices.emplace_back(newPointIndices);
 }
 
 - (void)addNormalTriangle:(simd_uint3)newNormalIndices {
+    [self invalidateCache];
     _normalIndices.emplace_back(newNormalIndices);
 }
 
 - (void)addUvTriangle:(simd_uint3)newUvIndices {
+    [self invalidateCache];
     _uvIndices.emplace_back(newUvIndices);
 }
 
+- (bool)load:(NSURL *)url {
+    std::ifstream file([url.path cStringUsingEncoding:NSUTF8StringEncoding]);
+    if (file) {
+        [self invalidateCache];
+        tinyobj::attrib_t attrib;
+        std::vector<tinyobj::shape_t> shapes;
+        std::vector<tinyobj::material_t> materials;
+        std::string err;
+        std::string warn;
+        
+        const bool ret = tinyobj::LoadObj(&attrib, &shapes, &materials, &warn, &err, &file);
+        
+        // `err` may contain warning message.
+        if (!err.empty()) {
+            std::cerr << err;
+            return false;
+        }
+        
+        // Failed to load obj.
+        if (!ret) {
+            return false;
+        }
+        
+        // Read vertices
+        for (size_t idx = 0; idx < attrib.vertices.size() / 3; ++idx) {
+            // Access to vertex
+            tinyobj::real_t vx = attrib.vertices[3 * idx + 0];
+            tinyobj::real_t vy = attrib.vertices[3 * idx + 1];
+            tinyobj::real_t vz = attrib.vertices[3 * idx + 2];
+            [self addPoint:simd_make_float3(vx, vy, vz)];
+        }
+        
+        // Read normals
+        for (size_t idx = 0; idx < attrib.normals.size() / 3; ++idx) {
+            // Access to normal
+            tinyobj::real_t vx = attrib.normals[3 * idx + 0];
+            tinyobj::real_t vy = attrib.normals[3 * idx + 1];
+            tinyobj::real_t vz = attrib.normals[3 * idx + 2];
+            [self addNormal:simd_make_float3(vx, vy, vz)];
+        }
+        
+        // Read UVs
+        for (size_t idx = 0; idx < attrib.texcoords.size() / 2; ++idx) {
+            // Access to UV
+            tinyobj::real_t tu = attrib.texcoords[2 * idx + 0];
+            tinyobj::real_t tv = attrib.texcoords[2 * idx + 1];
+            [self addUv:simd_make_float2(tu, tv)];
+        }
+        
+        // Read faces
+        for (auto &shape: shapes) {
+            size_t idx = 0;
+            
+            for (size_t f = 0; f < shape.mesh.num_face_vertices.size(); ++f) {
+                const size_t fv = shape.mesh.num_face_vertices[f];
+                
+                if (fv == 3) {
+                    if (!attrib.vertices.empty()) {
+                        [self addPointTriangle:simd_make_uint3(shape.mesh.indices[idx].vertex_index,
+                                                               shape.mesh.indices[idx + 1].vertex_index,
+                                                               shape.mesh.indices[idx + 2].vertex_index)];
+                    }
+                    
+                    if (!attrib.normals.empty()) {
+                        [self addNormalTriangle:simd_make_uint3(shape.mesh.indices[idx].normal_index,
+                                                                shape.mesh.indices[idx + 1].normal_index,
+                                                                shape.mesh.indices[idx + 2].normal_index)];
+                    }
+                    
+                    if (!attrib.texcoords.empty()) {
+                        [self addUvTriangle:simd_make_uint3(shape.mesh.indices[idx].texcoord_index,
+                                                            shape.mesh.indices[idx + 1].texcoord_index,
+                                                            shape.mesh.indices[idx + 2].texcoord_index)];
+                    }
+                }
+                
+                idx += fv;
+            }
+        }
+        file.close();
+        
+        return true;
+    } else {
+        return false;
+    }
+}
+
+// MARK: - Builder
 - (simd_float3)lowerBounds {
+    [self prepare];
     return simd_make_float3(globalBBox.min[0], globalBBox.min[1], globalBBox.min[2]);
 }
 
 - (simd_float3)upperBounds {
+    [self prepare];
     return simd_make_float3(globalBBox.max[0], globalBBox.max[1], globalBBox.max[2]);
 }
 
 -(id<MTLBuffer>) nodeBuffer {
+    [self buildBVH];
     return nodeBuffer;
 }
 
 -(id<MTLBuffer>) verticesBuffer {
+    [self buildBVH];
     return verticesBuffer;
 }
 
 -(id<MTLBuffer>) normalBuffer {
+    [self buildBVH];
     return normalBuffer;
 }
 
@@ -98,213 +238,130 @@ struct Node {
     return static_cast<uint32_t>(triangleCount);
 }
 
-- (bool)load:(NSString *)filename {
-    std::ifstream file([filename cStringUsingEncoding:NSUTF8StringEncoding]);
-    if (file) {
-        tinyobj::attrib_t attrib;
-        std::vector<tinyobj::shape_t> shapes;
-        std::vector<tinyobj::material_t> materials;
-        std::string err;
-        std::string warn;
-
-        const bool ret = tinyobj::LoadObj(&attrib, &shapes, &materials, &warn, &err, &file);
-
-        // `err` may contain warning message.
-        if (!err.empty()) {
-            std::cerr << err;
-            return false;
-        }
-
-        // Failed to load obj.
-        if (!ret) {
-            return false;
-        }
-
-        // Read vertices
-        for (size_t idx = 0; idx < attrib.vertices.size() / 3; ++idx) {
-            // Access to vertex
-            tinyobj::real_t vx = attrib.vertices[3 * idx + 0];
-            tinyobj::real_t vy = attrib.vertices[3 * idx + 1];
-            tinyobj::real_t vz = attrib.vertices[3 * idx + 2];
-            [self addPoint:simd_make_float3(vx, vy, vz)];
-        }
-
-        // Read normals
-        for (size_t idx = 0; idx < attrib.normals.size() / 3; ++idx) {
-            // Access to normal
-            tinyobj::real_t vx = attrib.normals[3 * idx + 0];
-            tinyobj::real_t vy = attrib.normals[3 * idx + 1];
-            tinyobj::real_t vz = attrib.normals[3 * idx + 2];
-            [self addNormal:simd_make_float3(vx, vy, vz)];
-        }
-
-        // Read UVs
-        for (size_t idx = 0; idx < attrib.texcoords.size() / 2; ++idx) {
-            // Access to UV
-            tinyobj::real_t tu = attrib.texcoords[2 * idx + 0];
-            tinyobj::real_t tv = attrib.texcoords[2 * idx + 1];
-            [self addUv:simd_make_float2(tu, tv)];
-        }
-
-        // Read faces
-        for (auto &shape: shapes) {
-            size_t idx = 0;
-
-            for (size_t f = 0; f < shape.mesh.num_face_vertices.size(); ++f) {
-                const size_t fv = shape.mesh.num_face_vertices[f];
-
-                if (fv == 3) {
-                    if (!attrib.vertices.empty()) {
-                        [self addPointTriangle:simd_make_uint3(
-                                shape.mesh.indices[idx].vertex_index,
-                                shape.mesh.indices[idx + 1].vertex_index,
-                                shape.mesh.indices[idx + 2].vertex_index)];
-                    }
-
-                    if (!attrib.normals.empty()) {
-                        [self addNormalTriangle:simd_make_uint3(
-                                shape.mesh.indices[idx].normal_index,
-                                shape.mesh.indices[idx + 1].normal_index,
-                                shape.mesh.indices[idx + 2].normal_index)];
-                    }
-
-                    if (!attrib.texcoords.empty()) {
-                        [self addUvTriangle:simd_make_uint3(
-                                shape.mesh.indices[idx].texcoord_index,
-                                shape.mesh.indices[idx + 1].texcoord_index,
-                                shape.mesh.indices[idx + 2].texcoord_index)];
-                    }
-                }
-
-                idx += fv;
-            }
-        }
-        file.close();
-
-        return true;
-    } else {
-        return false;
-    }
-}
-
 - (void)prepare {
-    size_t triangleCount = _pointIndices.size();
-    if (triangleCount == 0) {
-        triangleCount = _points.size() / 3;
-    }
-    globalBBox = bvh::BoundingBox<float>((bvh::Vector3<float>(std::numeric_limits<float>::max())),
-                                         (bvh::Vector3<float>(-std::numeric_limits<float>::max())));
-    primBBoxes = std::vector<bvh::BoundingBox<float>>(triangleCount);
-    primCenters = std::vector<bvh::Vector3<float>>(triangleCount);
-    for(size_t i = 0; i < triangleCount; ++i) {
-        bvh::Vector3<float> v1;
-        bvh::Vector3<float> v2;
-        bvh::Vector3<float> v3;
-        if (_pointIndices.empty()) {
-            v1 = _points[i * 3];
-            v2 = _points[i * 3 + 1];
-            v3 = _points[i * 3 + 2];
-        } else {
-            v1 = _points[_pointIndices[i][0]];
-            v2 = _points[_pointIndices[i][1]];
-            v3 = _points[_pointIndices[i][2]];
+    if (_boundInvalidated) {
+        size_t triangleCount = _pointIndices.size();
+        if (triangleCount == 0) {
+            triangleCount = _points.size() / 3;
         }
-
-        bvh::BoundingBox<float> primBBox((bvh::Vector3<float>(std::numeric_limits<float>::max())),
-                                           (bvh::Vector3<float>(-std::numeric_limits<float>::max())));
-        primBBox.extend(v1);
-        primBBox.extend(v2);
-        primBBox.extend(v3);
-        primBBoxes[i] = primBBox;
-        primCenters[i] = 1.0f / 3 * (v1 + v2 + v3);
-
-        globalBBox.extend(primBBox);
+        globalBBox = bvh::BoundingBox<float>((bvh::Vector3<float>(std::numeric_limits<float>::max())),
+                                             (bvh::Vector3<float>(-std::numeric_limits<float>::max())));
+        primBBoxes = std::vector<bvh::BoundingBox<float>>(triangleCount);
+        primCenters = std::vector<bvh::Vector3<float>>(triangleCount);
+        for(size_t i = 0; i < triangleCount; ++i) {
+            bvh::Vector3<float> v1;
+            bvh::Vector3<float> v2;
+            bvh::Vector3<float> v3;
+            if (_pointIndices.empty()) {
+                v1 = _points[i * 3];
+                v2 = _points[i * 3 + 1];
+                v3 = _points[i * 3 + 2];
+            } else {
+                v1 = _points[_pointIndices[i][0]];
+                v2 = _points[_pointIndices[i][1]];
+                v3 = _points[_pointIndices[i][2]];
+            }
+            
+            bvh::BoundingBox<float> primBBox((bvh::Vector3<float>(std::numeric_limits<float>::max())),
+                                             (bvh::Vector3<float>(-std::numeric_limits<float>::max())));
+            primBBox.extend(v1);
+            primBBox.extend(v2);
+            primBBox.extend(v3);
+            primBBoxes[i] = primBBox;
+            primCenters[i] = 1.0f / 3 * (v1 + v2 + v3);
+            
+            globalBBox.extend(primBBox);
+        }
+        _boundInvalidated = false;
     }
 }
 
-- (void)buildBVH:(id<MTLDevice>)device {
+- (void)buildBVH {
     [self prepare];
-    size_t triangleCount = [self triangleCount];
-    
-    bvh::Bvh<float> tree;
-    bvh::LocallyOrderedClusteringBuilder<bvh::Bvh<float>, uint32_t> builder(tree);
-    builder.build(globalBBox, primBBoxes.data(), primCenters.data(), triangleCount);
-    bvh::LeafCollapser<bvh::Bvh<float>> leafCollapser(tree);
-    leafCollapser.collapse();
-    
-    // convert
-    vertices_.clear();
-    normals_.clear();
-    nodes_.resize(tree.node_count);
-    for(size_t ni = 0; ni < tree.node_count; ++ni) {
-        auto &node = tree.nodes[ni];
-        nodes_[ni].bbox[0] = node.bounds[0];
-        nodes_[ni].bbox[1] = node.bounds[2];
-        nodes_[ni].bbox[2] = node.bounds[4];
-        nodes_[ni].bbox[3] = node.bounds[1];
-        nodes_[ni].bbox[4] = node.bounds[3];
-        nodes_[ni].bbox[5] = node.bounds[5];
-
-        if(node.is_leaf()) {
-            const size_t primBeg = vertices_.size() / 3;
-            const size_t iEnd = node.first_child_or_primitive + node.primitive_count;
-            for(size_t i = node.first_child_or_primitive; i < iEnd; ++i) {
-                const size_t pi = tree.primitive_indices[i];
-                if (_pointIndices.empty()) {
-                    auto v = _points[pi * 3];
-                    vertices_.push_back(simd_make_float3(v[0], v[1], v[2]));
-                    v = _points[pi * 3 + 1];
-                    vertices_.push_back(simd_make_float3(v[0], v[1], v[2]));
-                    v = _points[pi * 3 + 2];
-                    vertices_.push_back(simd_make_float3(v[0], v[1], v[2]));
-                } else {
-                    auto v = _points[_pointIndices[pi][0]];
-                    vertices_.push_back(simd_make_float3(v[0], v[1], v[2]));
-                    v = _points[_pointIndices[pi][1]];
-                    vertices_.push_back(simd_make_float3(v[0], v[1], v[2]));
-                    v = _points[_pointIndices[pi][2]];
-                    vertices_.push_back(simd_make_float3(v[0], v[1], v[2]));
-                }
-                
-                if (!_normals.empty()) {
-                    if (_normalIndices.empty()) {
-                        auto v = _normals[pi * 3];
-                        normals_.push_back(simd_make_float3(v[0], v[1], v[2]));
-                        v = _normals[pi * 3 + 1];
-                        normals_.push_back(simd_make_float3(v[0], v[1], v[2]));
-                        v = _normals[pi * 3 + 2];
-                        normals_.push_back(simd_make_float3(v[0], v[1], v[2]));
+    if (_bvhInvalidated) {
+        size_t triangleCount = [self triangleCount];
+        
+        bvh::Bvh<float> tree;
+        bvh::LocallyOrderedClusteringBuilder<bvh::Bvh<float>, uint32_t> builder(tree);
+        builder.build(globalBBox, primBBoxes.data(), primCenters.data(), triangleCount);
+        bvh::LeafCollapser<bvh::Bvh<float>> leafCollapser(tree);
+        leafCollapser.collapse();
+        
+        // convert
+        vertices_.clear();
+        normals_.clear();
+        nodes_.resize(tree.node_count);
+        for(size_t ni = 0; ni < tree.node_count; ++ni) {
+            auto &node = tree.nodes[ni];
+            nodes_[ni].bbox[0] = node.bounds[0];
+            nodes_[ni].bbox[1] = node.bounds[2];
+            nodes_[ni].bbox[2] = node.bounds[4];
+            nodes_[ni].bbox[3] = node.bounds[1];
+            nodes_[ni].bbox[4] = node.bounds[3];
+            nodes_[ni].bbox[5] = node.bounds[5];
+            
+            if(node.is_leaf()) {
+                const size_t primBeg = vertices_.size() / 3;
+                const size_t iEnd = node.first_child_or_primitive + node.primitive_count;
+                for(size_t i = node.first_child_or_primitive; i < iEnd; ++i) {
+                    const size_t pi = tree.primitive_indices[i];
+                    if (_pointIndices.empty()) {
+                        auto v = _points[pi * 3];
+                        vertices_.push_back(simd_make_float3(v[0], v[1], v[2]));
+                        v = _points[pi * 3 + 1];
+                        vertices_.push_back(simd_make_float3(v[0], v[1], v[2]));
+                        v = _points[pi * 3 + 2];
+                        vertices_.push_back(simd_make_float3(v[0], v[1], v[2]));
                     } else {
-                        auto v = _normals[_normalIndices[pi][0]];
-                        normals_.push_back(simd_make_float3(v[0], v[1], v[2]));
-                        v = _normals[_normalIndices[pi][1]];
-                        normals_.push_back(simd_make_float3(v[0], v[1], v[2]));
-                        v = _normals[_normalIndices[pi][2]];
-                        normals_.push_back(simd_make_float3(v[0], v[1], v[2]));
+                        auto v = _points[_pointIndices[pi][0]];
+                        vertices_.push_back(simd_make_float3(v[0], v[1], v[2]));
+                        v = _points[_pointIndices[pi][1]];
+                        vertices_.push_back(simd_make_float3(v[0], v[1], v[2]));
+                        v = _points[_pointIndices[pi][2]];
+                        vertices_.push_back(simd_make_float3(v[0], v[1], v[2]));
+                    }
+                    
+                    if (!_normals.empty()) {
+                        if (_normalIndices.empty()) {
+                            auto v = _normals[pi * 3];
+                            normals_.push_back(simd_make_float3(v[0], v[1], v[2]));
+                            v = _normals[pi * 3 + 1];
+                            normals_.push_back(simd_make_float3(v[0], v[1], v[2]));
+                            v = _normals[pi * 3 + 2];
+                            normals_.push_back(simd_make_float3(v[0], v[1], v[2]));
+                        } else {
+                            auto v = _normals[_normalIndices[pi][0]];
+                            normals_.push_back(simd_make_float3(v[0], v[1], v[2]));
+                            v = _normals[_normalIndices[pi][1]];
+                            normals_.push_back(simd_make_float3(v[0], v[1], v[2]));
+                            v = _normals[_normalIndices[pi][2]];
+                            normals_.push_back(simd_make_float3(v[0], v[1], v[2]));
+                        }
                     }
                 }
+                const size_t primEnd = vertices_.size() / 3;
+                
+                assert(primEnd != primBeg);
+                nodes_[ni].childIndex = static_cast<uint32_t>(primBeg);
+                nodes_[ni].childCount = static_cast<uint32_t>(primEnd - primBeg);
+            } else {
+                nodes_[ni].childIndex = node.first_child_or_primitive;
+                nodes_[ni].childCount = 0;
             }
-            const size_t primEnd = vertices_.size() / 3;
-
-            assert(primEnd != primBeg);
-            nodes_[ni].childIndex = static_cast<uint32_t>(primBeg);
-            nodes_[ni].childCount = static_cast<uint32_t>(primEnd - primBeg);
-        } else {
-            nodes_[ni].childIndex = node.first_child_or_primitive;
-            nodes_[ni].childCount = 0;
         }
-    }
-    
-    nodeBuffer = [device newBufferWithBytes:nodes_.data() length:nodes_.size() * sizeof(Node)
-                                    options:MTLResourceStorageModeManaged];
-    verticesBuffer = [device newBufferWithBytes:vertices_.data() length:vertices_.size() * sizeof(simd_float3)
-                                        options:MTLResourceStorageModeManaged];
-    if (normals_.empty()) {
-        // todo
-        normalBuffer = [device newBufferWithLength:vertices_.size() * sizeof(simd_float3) options:MTLResourceStorageModeManaged];
-    } else {
-        normalBuffer = [device newBufferWithBytes:normals_.data() length:normals_.size() * sizeof(simd_float3)
-                                          options:MTLResourceStorageModeManaged];
+        
+        nodeBuffer = [_device newBufferWithBytes:nodes_.data() length:nodes_.size() * sizeof(Node)
+                                         options:MTLResourceStorageModeManaged];
+        verticesBuffer = [_device newBufferWithBytes:vertices_.data() length:vertices_.size() * sizeof(simd_float3)
+                                             options:MTLResourceStorageModeManaged];
+        if (normals_.empty()) {
+            // todo
+            normalBuffer = [_device newBufferWithLength:vertices_.size() * sizeof(simd_float3) options:MTLResourceStorageModeManaged];
+        } else {
+            normalBuffer = [_device newBufferWithBytes:normals_.data() length:normals_.size() * sizeof(simd_float3)
+                                               options:MTLResourceStorageModeManaged];
+        }
+        _bvhInvalidated = false;
     }
 }
 

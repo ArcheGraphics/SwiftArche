@@ -13,20 +13,20 @@ public class ImplicitTriangleMaterial: BaseMaterial {
     private static let sdfTextureProperty = "u_sdfTexture"
     private static let sdfSamplerProperty = "u_sdfSampler"
     private var _sdfData = SDFData()
-    private var _mesh: ImplicitTriangleMesh?
+    private var _sdf: ImplicitTriangleMesh?
 
     /// sdf mesh.
-    public var mesh: ImplicitTriangleMesh? {
+    public var sdf: ImplicitTriangleMesh? {
         get {
-            _mesh
+            _sdf
         }
         set {
-            _mesh = newValue
-            if let mesh = _mesh {
-                _sdfData.SDFUpper = mesh.upper
-                _sdfData.SDFLower = mesh.lower
-                _sdfData.SDFExtent = mesh.extend
-                shaderData.setImageView(ImplicitTriangleMaterial.sdfTextureProperty, ImplicitTriangleMaterial.sdfSamplerProperty, mesh.sdf!)
+            _sdf = newValue
+            if let sdf = _sdf {
+                _sdfData.SDFUpper = sdf.upper
+                _sdfData.SDFLower = sdf.lower
+                _sdfData.SDFExtent = sdf.extend
+                shaderData.setImageView(ImplicitTriangleMaterial.sdfTextureProperty, ImplicitTriangleMaterial.sdfSamplerProperty, sdf.sdf!)
                 shaderData.setData(ImplicitTriangleMaterial.sdfProperty, _sdfData)
             }
         }
