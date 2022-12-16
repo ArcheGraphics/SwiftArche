@@ -75,6 +75,9 @@
 		3EABF5DA294B1E7F009943C1 /* Matrix3x3.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EABF5D6294B1E7F009943C1 /* Matrix3x3.swift */; };
 		3EABF5DC294B1EA7009943C1 /* Ray.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EABF5DB294B1EA7009943C1 /* Ray.swift */; };
 		3EABF5E1294B6382009943C1 /* volume_emitter.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3EABF5E0294B6382009943C1 /* volume_emitter.metal */; };
+		3EABF5E6294C3716009943C1 /* VolumeEmitterApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EABF5E5294C3716009943C1 /* VolumeEmitterApp.swift */; };
+		3EABF5E9294C3841009943C1 /* particle_shading.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3EABF5E8294C3841009943C1 /* particle_shading.metal */; };
+		3EABF5EB294C3B16009943C1 /* VolumeParticleEmitterMaterial.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EABF5EA294C3B16009943C1 /* VolumeParticleEmitterMaterial.swift */; };
 		3EB32B032932299A0019A4F3 /* Logging in Frameworks */ = {isa = PBXBuildFile; productRef = 3EB32B022932299A0019A4F3 /* Logging */; };
 		3EB32B7529322DB30019A4F3 /* PrimitiveApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EB32B7429322DB30019A4F3 /* PrimitiveApp.swift */; };
 		3EB32B7F29322E850019A4F3 /* libvox.math.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3EC037382932125F002187DC /* libvox.math.a */; };
@@ -622,6 +625,9 @@
 		3EABF5E0294B6382009943C1 /* volume_emitter.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = volume_emitter.metal; sourceTree = "<group>"; };
 		3EABF5E2294C347C009943C1 /* function_constant.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = function_constant.h; sourceTree = "<group>"; };
 		3EABF5E3294C3485009943C1 /* macro_name.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = macro_name.h; sourceTree = "<group>"; };
+		3EABF5E5294C3716009943C1 /* VolumeEmitterApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VolumeEmitterApp.swift; sourceTree = "<group>"; };
+		3EABF5E8294C3841009943C1 /* particle_shading.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = particle_shading.metal; sourceTree = "<group>"; };
+		3EABF5EA294C3B16009943C1 /* VolumeParticleEmitterMaterial.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VolumeParticleEmitterMaterial.swift; sourceTree = "<group>"; };
 		3EB32B7429322DB30019A4F3 /* PrimitiveApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrimitiveApp.swift; sourceTree = "<group>"; };
 		3EB32B832932303A0019A4F3 /* libc++abi.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libc++abi.tbd"; path = "usr/lib/libc++abi.tbd"; sourceTree = SDKROOT; };
 		3EB32B842932303A0019A4F3 /* libc++.1.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libc++.1.tbd"; path = "usr/lib/libc++.1.tbd"; sourceTree = SDKROOT; };
@@ -1205,6 +1211,7 @@
 		3E6B23A92946B3CA000AC29F /* vox.flex */ = {
 			isa = PBXGroup;
 			children = (
+				3EABF5EC294C3C09009943C1 /* rendering */,
 				3E6B23C92948BAB8000AC29F /* bridging.h */,
 				3EABF5C9294AC6E5009943C1 /* Constants.swift */,
 				3EABF5CF294B1E11009943C1 /* MathUtils.swift */,
@@ -1217,7 +1224,6 @@
 				3E6B23C62948826B000AC29F /* TriangleMesh.h */,
 				3E6B23C429488260000AC29F /* TriangleMesh.mm */,
 				3E6B23CA2948BAB9000AC29F /* ImplicitTriangleMesh.swift */,
-				3E6B23D929499E99000AC29F /* ImplicitTriangleMaterial.swift */,
 				3EABF5C3294ABB7B009943C1 /* ParticleSystemData.swift */,
 				3EABF5C5294AC323009943C1 /* ParticleEmitter.swift */,
 				3EABF5C7294AC3F1009943C1 /* VolumeParticleEmitter.swift */,
@@ -1236,6 +1242,7 @@
 				3E6B23D2294964B1000AC29F /* sdf_baker.metal */,
 				3E6B23D529499B36000AC29F /* sdf_shading.metal */,
 				3EABF5E0294B6382009943C1 /* volume_emitter.metal */,
+				3EABF5E8294C3841009943C1 /* particle_shading.metal */,
 			);
 			path = flex.shader;
 			sourceTree = "<group>";
@@ -1249,6 +1256,24 @@
 				3E6B235F294224C1000AC29F /* FaceGUI.swift */,
 			);
 			path = loader;
+			sourceTree = "<group>";
+		};
+		3EABF5E4294C3702009943C1 /* flex */ = {
+			isa = PBXGroup;
+			children = (
+				3E6B23DB2949B32C000AC29F /* ImplicitTriangleApp.swift */,
+				3EABF5E5294C3716009943C1 /* VolumeEmitterApp.swift */,
+			);
+			path = flex;
+			sourceTree = "<group>";
+		};
+		3EABF5EC294C3C09009943C1 /* rendering */ = {
+			isa = PBXGroup;
+			children = (
+				3E6B23D929499E99000AC29F /* ImplicitTriangleMaterial.swift */,
+				3EABF5EA294C3B16009943C1 /* VolumeParticleEmitterMaterial.swift */,
+			);
+			path = rendering;
 			sourceTree = "<group>";
 		};
 		3EB32B7E29322E850019A4F3 /* Frameworks */ = {
@@ -1339,7 +1364,7 @@
 				3E6D2F0B293F135000B63F73 /* loader */,
 				3EC92A3F29360C6800423396 /* physics */,
 				040F1DF129378195008BDC8D /* rendering */,
-				3E6B23DB2949B32C000AC29F /* ImplicitTriangleApp.swift */,
+				3EABF5E4294C3702009943C1 /* flex */,
 			);
 			path = SwiftArcheMac;
 			sourceTree = "<group>";
@@ -2574,6 +2599,7 @@
 				3EABF5C8294AC3F1009943C1 /* VolumeParticleEmitter.swift in Sources */,
 				3EABF5DC294B1EA7009943C1 /* Ray.swift in Sources */,
 				3EABF5D7294B1E7F009943C1 /* Matrix4x4.swift in Sources */,
+				3EABF5EB294C3B16009943C1 /* VolumeParticleEmitterMaterial.swift in Sources */,
 				3EABF5D2294B1E11009943C1 /* Vector3.swift in Sources */,
 				3E6B23DA29499E99000AC29F /* ImplicitTriangleMaterial.swift in Sources */,
 			);
@@ -2585,6 +2611,7 @@
 			files = (
 				3E6B23D629499B36000AC29F /* sdf_shading.metal in Sources */,
 				3E6B23B62946B3E5000AC29F /* physics_helpers.metal in Sources */,
+				3EABF5E9294C3841009943C1 /* particle_shading.metal in Sources */,
 				3EABF5E1294B6382009943C1 /* volume_emitter.metal in Sources */,
 				3E6B23D3294964B1000AC29F /* sdf_baker.metal in Sources */,
 			);
@@ -2606,6 +2633,7 @@
 				43D8C40438F0527739C7D662 /* AtomicComputeApp.swift in Sources */,
 				040F1DF3293781B0008BDC8D /* RenderingUtils.swift in Sources */,
 				43D8CF515E4D90196E7E806B /* PhysXCollisionDetectionApp.swift in Sources */,
+				3EABF5E6294C3716009943C1 /* VolumeEmitterApp.swift in Sources */,
 				43D8C808C0FA018090454567 /* PhysXAttractorApp.swift in Sources */,
 				3E6B2360294224C1000AC29F /* FaceGUI.swift in Sources */,
 				43D8CC13B0B39DD99DEE0DC4 /* PhysXCompoundApp.swift in Sources */,
