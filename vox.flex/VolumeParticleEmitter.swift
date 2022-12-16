@@ -8,17 +8,20 @@ import Metal
 import vox_render
 
 public class VolumeParticleEmitter: ParticleEmitter {
+    private static let emitterProperty = "u_emitterData"
+    
     private var _jitter: Float = 0
-
+    private var _maxRegion = BoundingBox3F()
+    private var _spacing: Float = 0
+    private var _initialVelocity = Vector3F()
+    private var _linearVelocity = Vector3F()
+    private var _angularVelocity = Vector3F()
+    private var _maxNumberOfParticles: UInt32 = 0
+    private var _isOneShot: Bool = false
+    private var _allowOverlapping: Bool = false
+    private var _data = VolumeParticleEmitterData()
+    
     public var implicitSurface: ImplicitTriangleMesh?
-    public var maxRegion = BoundingBox3F()
-    public var spacing: Float = 0
-    public var initialVelocity = Vector3F()
-    public var linearVelocity = Vector3F()
-    public var angularVelocity = Vector3F()
-    public var maxNumberOfParticles: Int = 0
-    public var isOneShot: Bool = false
-    public var allowOverlapping: Bool = false
 
     public var jitter: Float {
         get {
@@ -26,12 +29,98 @@ public class VolumeParticleEmitter: ParticleEmitter {
         }
         set {
             _jitter = simd_clamp(newValue, 0.0, 1.0)
+            _data.jitter = _jitter
+            defaultShaderData.setData(VolumeParticleEmitter.emitterProperty, _data)
+        }
+    }
+    
+    public var maxRegion: BoundingBox3F {
+        get {
+            _maxRegion
+        }
+        set {
+            _maxRegion = newValue
+            _data.lowerCorner = newValue.lowerCorner
+            defaultShaderData.setData(VolumeParticleEmitter.emitterProperty, _data)
+        }
+    }
+    
+    public var spacing: Float {
+        get {
+            _spacing
+        }
+        set {
+            _spacing = newValue
+            _data.spacing = newValue
+            defaultShaderData.setData(VolumeParticleEmitter.emitterProperty, _data)
+        }
+    }
+    
+    public var initialVelocity: Vector3F {
+        get {
+            _initialVelocity
+        }
+        set {
+            _initialVelocity = newValue
+            _data.initialVelocity = newValue
+            defaultShaderData.setData(VolumeParticleEmitter.emitterProperty, _data)
+        }
+    }
+    
+    public var linearVelocity: Vector3F {
+        get {
+            _linearVelocity
+        }
+        set {
+            _linearVelocity = newValue
+            _data.linearVelocity = newValue
+            defaultShaderData.setData(VolumeParticleEmitter.emitterProperty, _data)
+        }
+    }
+    
+    public var angularVelocity: Vector3F {
+        get {
+            _angularVelocity
+        }
+        set {
+            _angularVelocity = newValue
+            _data.angularVelocity = newValue
+            defaultShaderData.setData(VolumeParticleEmitter.emitterProperty, _data)
+        }
+    }
+    
+    public var maxNumberOfParticles: UInt32 {
+        get {
+            _maxNumberOfParticles
+        }
+        set {
+            _maxNumberOfParticles = newValue
+            _data.maxNumberOfParticles = newValue
+            defaultShaderData.setData(VolumeParticleEmitter.emitterProperty, _data)
+        }
+    }
+    
+    public var isOneShot: Bool {
+        get {
+            _isOneShot
+        }
+        set {
+            _isOneShot = newValue
+        }
+    }
+    
+    public var allowOverlapping: Bool {
+        get {
+            _allowOverlapping
+        }
+        set {
+            _allowOverlapping = newValue
         }
     }
     
     public override init(_ engine: Engine) {
         super.init(engine)
-        shader.append(ShaderPass(engine.library("flex.shader"), "grid_point_generator"))
+        shader.append(ShaderPass(engine.library("flex.shader"), "volumeEmitter"))
     }
 
     public override func update(_ commandEncoder: MTLComputeCommandEncoder,
@@ -42,7 +131,7 @@ public class VolumeParticleEmitter: ParticleEmitter {
             }
             emit(commandEncoder, target)
             
-            if isOneShot {
+            if _isOneShot {
                 isEnabled = false
             }
         }
@@ -52,15 +141,15 @@ public class VolumeParticleEmitter: ParticleEmitter {
                       _ target: ParticleSystemData) {
         if let implicitSurface = implicitSurface,
            let sdf = implicitSurface.sdf {
-            defaultShaderData.setImageView("", "", sdf)
+            defaultShaderData.setImageView("u_sdfTexture", "u_sdfSampler", sdf)
             
-            let region = maxRegion
+            let region = _maxRegion
             let boxWidth = region.width
             let boxHeight = region.height
             let boxDepth = region.depth
-            threadsPerGridX = Int(boxWidth / spacing)
-            threadsPerGridY = Int(boxHeight / spacing)
-            threadsPerGridZ = Int(boxDepth / spacing)
+            threadsPerGridX = Int(boxWidth / _spacing)
+            threadsPerGridY = Int(boxHeight / _spacing)
+            threadsPerGridZ = Int(boxDepth / _spacing)
             compute(commandEncoder: commandEncoder)
         }
     }

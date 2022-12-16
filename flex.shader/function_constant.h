@@ -6,8 +6,8 @@
 
 #pragma once
 
-#include "../vox.render/bridging.h"
-#include "../flex.shader/type_common.h"
-#include "../flex.shader/macro_name.h"
+#include "../vox.shader/function_constant.h"
+#include "macro_name.h"
 
-#include "TriangleMesh.h"
+DeclBoolMacro(isOverLapping, IS_OVER_LAPPING)
+DeclBoolMacro(hasSDF, HAS_SDF)

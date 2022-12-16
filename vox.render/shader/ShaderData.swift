@@ -26,6 +26,10 @@ open class ShaderData {
         ShaderData._defaultSamplerDesc.sAddressMode = .repeat
         ShaderData._defaultSamplerDesc.tAddressMode = .repeat
     }
+    
+    public func getData(_ property: String) -> BufferView? {
+        _shaderBuffers[property]
+    }
 
     public func setBufferFunctor(_ property: String, _ functor: @escaping () -> BufferView) {
         _shaderBufferFunctors[property] = functor
