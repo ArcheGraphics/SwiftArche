@@ -8,7 +8,7 @@ import Metal
 import vox_render
 
 open class ParticleEmitter : ComputePass {
-    private var _target: ParticleSystemData?
+    var _target: ParticleSystemData?
     public var isEnabled: Bool = true
     
     public var target: ParticleSystemData? {

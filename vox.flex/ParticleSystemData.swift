@@ -15,6 +15,7 @@ public class ParticleSystemData: ShaderData {
 
     private var _radius: Float = 1e-3
     private var _mass: Float = 1e-3
+    private var _maxLength: UInt32 = 0
     
     /// the radius of the particles.
     public var radius: Float {
@@ -33,6 +34,13 @@ public class ParticleSystemData: ShaderData {
         }
         set {
             _mass = max(newValue, 0)
+        }
+    }
+
+    /// the  maxnumber of particles.
+    public var maxNumberOfParticles: UInt32 {
+        get {
+            _maxLength
         }
     }
     
@@ -64,13 +72,13 @@ public class ParticleSystemData: ShaderData {
         }
     }
     
-    public init(_ engine: Engine, maxLength: Int = 10000) {
+    public init(_ engine: Engine, maxLength: UInt32) {
         super.init(engine)
-        
+        _maxLength = maxLength
         addScalarData(with: ParticleSystemData.counterProperty, initialVal: UInt32(0), maxLength: 1)
-        addScalarData(with: ParticleSystemData.positionProperty, initialVal: Vector3F(), maxLength: maxLength)
-        addScalarData(with: ParticleSystemData.velocityProperty, initialVal: Vector3F(), maxLength: maxLength)
-        addScalarData(with: ParticleSystemData.forceProperty, initialVal: Vector3F(), maxLength: maxLength)
+        addScalarData(with: ParticleSystemData.positionProperty, initialVal: Vector3F(), maxLength: Int(maxLength))
+        addScalarData(with: ParticleSystemData.velocityProperty, initialVal: Vector3F(), maxLength: Int(maxLength))
+        addScalarData(with: ParticleSystemData.forceProperty, initialVal: Vector3F(), maxLength: Int(maxLength))
     }
     
     /// Adds a data layer

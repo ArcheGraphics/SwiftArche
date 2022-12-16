@@ -16,7 +16,7 @@ public class VolumeParticleEmitter: ParticleEmitter {
     private var _initialVelocity = Vector3F()
     private var _linearVelocity = Vector3F()
     private var _angularVelocity = Vector3F()
-    private var _maxNumberOfParticles: UInt32 = 0
+    private var _maxNumberOfParticles: UInt32 = UInt32.max
     private var _isOneShot: Bool = false
     private var _allowOverlapping: Bool = false
     private var _implicitSurface: ImplicitTriangleMesh?
@@ -104,13 +104,30 @@ public class VolumeParticleEmitter: ParticleEmitter {
         }
     }
     
+    public override var target: ParticleSystemData? {
+        get {
+            _target
+        }
+        set {
+            _target = newValue
+            if let target = _target {
+                maxNumberOfParticles = min(_maxNumberOfParticles, target.maxNumberOfParticles)
+                data.append(target)
+            }
+        }
+    }
+    
     public var maxNumberOfParticles: UInt32 {
         get {
             _maxNumberOfParticles
         }
         set {
-            _maxNumberOfParticles = newValue
-            _data.maxNumberOfParticles = newValue
+            if let target = target {
+                _maxNumberOfParticles = min(newValue, target.maxNumberOfParticles)
+            } else {
+                _maxNumberOfParticles = newValue
+            }
+            _data.maxNumberOfParticles = _maxNumberOfParticles
             defaultShaderData.setData(VolumeParticleEmitter.emitterProperty, _data)
         }
     }

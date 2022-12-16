@@ -15,12 +15,14 @@ kernel void volumeEmitter(sampler u_sdfSampler [[sampler(0), function_constant(h
                           device atomic_uint* u_counter[[buffer(1)]],
                           constant VolumeParticleEmitterData& u_emitterData [[buffer(2)]],
                           uint3 tpig [[ thread_position_in_grid ]]) {
-    float3 position;
-    position.z = tpig.z * u_emitterData.spacing + u_emitterData.lowerCorner.z;
-    position.y = tpig.y * u_emitterData.spacing + u_emitterData.lowerCorner.y;
-    position.x = tpig.x * u_emitterData.spacing + u_emitterData.lowerCorner.x;
     auto count = atomic_fetch_add_explicit(u_counter, 1, memory_order::memory_order_relaxed);
-    if (count <= u_emitterData.maxNumberOfParticles) {
-        u_position[count - 1] = position;
+    if (count < u_emitterData.maxNumberOfParticles) {
+        float3 position;
+        position.z = (tpig.z + 0.5) * u_emitterData.spacing + u_emitterData.lowerCorner.z;
+        position.y = (tpig.y + 0.5) * u_emitterData.spacing + u_emitterData.lowerCorner.y;
+        position.x = (tpig.x + 0.5) * u_emitterData.spacing + u_emitterData.lowerCorner.x;
+        u_position[count] = position;
+    } else {
+        atomic_fetch_sub_explicit(u_counter, 1, memory_order::memory_order_relaxed);
     }
 }
