@@ -19,10 +19,25 @@ public class VolumeParticleEmitter: ParticleEmitter {
     private var _maxNumberOfParticles: UInt32 = 0
     private var _isOneShot: Bool = false
     private var _allowOverlapping: Bool = false
+    private var _implicitSurface: ImplicitTriangleMesh?
     private var _data = VolumeParticleEmitterData()
-    
-    public var implicitSurface: ImplicitTriangleMesh?
 
+    public var implicitSurface: ImplicitTriangleMesh? {
+        get {
+            _implicitSurface
+        }
+        set {
+            _implicitSurface = newValue
+            if let sdf = newValue?.sdf {
+                defaultShaderData.setImageView("u_sdfTexture", "u_sdfSampler", sdf)
+                defaultShaderData.enableMacro(HAS_SDF.rawValue)
+            } else {
+                defaultShaderData.setImageView("u_sdfTexture", "u_sdfSampler", nil)
+                defaultShaderData.disableMacro(HAS_SDF.rawValue)
+            }
+        }
+    }
+    
     public var jitter: Float {
         get {
             _jitter
@@ -139,18 +154,13 @@ public class VolumeParticleEmitter: ParticleEmitter {
     
     private func emit(_ commandEncoder: MTLComputeCommandEncoder,
                       _ target: ParticleSystemData) {
-        if let implicitSurface = implicitSurface,
-           let sdf = implicitSurface.sdf {
-            defaultShaderData.setImageView("u_sdfTexture", "u_sdfSampler", sdf)
-            
-            let region = _maxRegion
-            let boxWidth = region.width
-            let boxHeight = region.height
-            let boxDepth = region.depth
-            threadsPerGridX = Int(boxWidth / _spacing)
-            threadsPerGridY = Int(boxHeight / _spacing)
-            threadsPerGridZ = Int(boxDepth / _spacing)
-            compute(commandEncoder: commandEncoder)
-        }
+        let region = _maxRegion
+        let boxWidth = region.width
+        let boxHeight = region.height
+        let boxDepth = region.depth
+        threadsPerGridX = Int(boxWidth / _spacing)
+        threadsPerGridY = Int(boxHeight / _spacing)
+        threadsPerGridZ = Int(boxDepth / _spacing)
+        compute(commandEncoder: commandEncoder)
     }
 }

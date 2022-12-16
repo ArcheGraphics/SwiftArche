@@ -14,6 +14,29 @@ class VolumeEmitterApp: NSViewController {
     var canvas: Canvas!
     var engine: Engine!
     
+    func createParticleRenderer(_ rootEntity: Entity, _ particleSystem: ParticleSystemData) {
+        let descriptor = MTLVertexDescriptor()
+        let desc = MTLVertexAttributeDescriptor()
+        desc.format = .float3
+        desc.offset = 0
+        desc.bufferIndex = 0
+        descriptor.attributes[Int(Position.rawValue)] = desc
+        descriptor.layouts[0].stride = 12
+
+        let particleMesh = Mesh()
+        particleMesh._vertexDescriptor = descriptor
+        _ = particleMesh.addSubMesh(0, particleSystem.numberOfParticles, .point)
+        particleMesh._setVertexBufferBinding(0, particleSystem.positions)
+        let particleMtl = VolumeParticleEmitterMaterial(engine)
+        particleMtl.pointRadius = 20
+        particleMtl.pointScale = 10
+        
+        let particleEntity = rootEntity.createChild()
+        let renderer: MeshRenderer = particleEntity.addComponent()
+        renderer.mesh = particleMesh
+        renderer.setMaterial(particleMtl)
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         canvas = Canvas(with: view)
@@ -27,7 +50,26 @@ class VolumeEmitterApp: NSViewController {
         cameraEntity.transform.lookAt(targetPosition: Vector3())
         let _: Camera = cameraEntity.addComponent()
         let _: OrbitControl = cameraEntity.addComponent()
-
+        
+        let particleSystem = ParticleSystemData(engine)
+        
+        let emitter = VolumeParticleEmitter(engine)
+        emitter.maxRegion = BoundingBox3F(point1: Vector3F(-1, -1, -1), point2: Vector3F(1, 1, 1))
+        emitter.spacing = 0.1
+        emitter.target = particleSystem
+        emitter.maxNumberOfParticles = 10000
+        // todo
+        emitter.resourceCache = scene.postprocessManager.postProcessPass.resourceCache!
+        if let commandBuffer = engine.commandQueue.makeCommandBuffer() {
+            if let commandEncoder = commandBuffer.makeComputeCommandEncoder() {
+                emitter.update(commandEncoder, currentTimeInSeconds: 0, timeIntervalInSeconds: 0)
+                commandEncoder.endEncoding()
+            }
+            commandBuffer.commit()
+            commandBuffer.waitUntilCompleted()
+        }
+        
+        createParticleRenderer(rootEntity, particleSystem)
         engine.run()
     }
 }

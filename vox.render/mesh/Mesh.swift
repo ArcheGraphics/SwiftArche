@@ -16,7 +16,7 @@ public class Mesh {
     var _instanceCount: Int = 1
     var _vertexBufferBindings =  [BufferView?](Array(repeating: nil, count: 31))
     var _indexBufferBinding: IndexBufferBinding?
-    var _vertexDescriptor = MTLVertexDescriptor()
+    public var _vertexDescriptor = MTLVertexDescriptor()
     var _subMeshes: [SubMesh] = []
     var _updateFlagManager: UpdateFlagManager = UpdateFlagManager()
 
@@ -33,6 +33,8 @@ public class Mesh {
             _subMeshes
         }
     }
+    
+    public init() {}
 
     /// Add sub-mesh, each sub-mesh can correspond to an independent material.
     /// - Parameter subMesh: Start drawing offset, if the index buffer is set, it means the offset in the index buffer, if not set, it means the offset in the vertex buffer
@@ -68,11 +70,11 @@ public class Mesh {
         _subMeshes = []
     }
 
-    func _setVertexBufferBinding(_ index: Int, _ binding: BufferView?) {
+    public func _setVertexBufferBinding(_ index: Int, _ binding: BufferView?) {
         _vertexBufferBindings[index] = binding
     }
 
-    func _setIndexBufferBinding(_ binding: IndexBufferBinding?) {
+    public func _setIndexBufferBinding(_ binding: IndexBufferBinding?) {
         _indexBufferBinding = binding
     }
 

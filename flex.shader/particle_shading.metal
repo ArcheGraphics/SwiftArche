@@ -89,7 +89,7 @@ float4 random_shading(uint iid, uint hlIndex, float2 point) {
     float r = iid % 16u / 16.f;
     float g = iid / 16u % 16u / 16.f;
     float b = iid / 16u % 16u / 16.f;
-    float4 rgba = float4(dot(lightDir, float3(x, y, z)) * float3(r, b, 0), 1);
+    float4 rgba = float4(dot(lightDir, float3(x, y, z)) * float3(r, g, b), 1);
     float4 white = float4(dot(lightDir, float3(x, y, z)) * float3(1, 1, 1), 1) + 0.2;
     if (iid == hlIndex)
         return white;
