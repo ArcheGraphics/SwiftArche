@@ -9,6 +9,8 @@ import vox_render
 
 public class VolumeParticleEmitter: ParticleEmitter {
     private static let emitterProperty = "u_emitterData"
+    private static let sdfTextureProperty = "u_sdfTexture"
+    private static let sdfSamplerProperty = "u_sdfSampler"
     
     private var _jitter: Float = 0
     private var _maxRegion = BoundingBox3F()
@@ -29,10 +31,12 @@ public class VolumeParticleEmitter: ParticleEmitter {
         set {
             _implicitSurface = newValue
             if let sdf = newValue?.sdf {
-                defaultShaderData.setImageView("u_sdfTexture", "u_sdfSampler", sdf)
+                defaultShaderData.setData("u_sdfData", newValue!.data)
+                defaultShaderData.setImageView(VolumeParticleEmitter.sdfTextureProperty, VolumeParticleEmitter.sdfSamplerProperty, sdf)
+                defaultShaderData.setSampler(VolumeParticleEmitter.sdfSamplerProperty, newValue!.sdfSampler)
                 defaultShaderData.enableMacro(HAS_SDF.rawValue)
             } else {
-                defaultShaderData.setImageView("u_sdfTexture", "u_sdfSampler", nil)
+                defaultShaderData.setImageView(VolumeParticleEmitter.sdfTextureProperty, VolumeParticleEmitter.sdfSamplerProperty, nil)
                 defaultShaderData.disableMacro(HAS_SDF.rawValue)
             }
         }

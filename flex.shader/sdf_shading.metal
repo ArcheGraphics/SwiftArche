@@ -72,6 +72,8 @@ float2 intersectRayBox(float3 o, float3 d, float3 SDFLower, float3 SDFUpper) {
 
 fragment float4 fragment_sdf(VertexOut in [[stage_in]],
                              constant SDFData& u_sdfData [[buffer(0)]],
+                             constant float& u_absThreshold [[buffer(1)]],
+                             constant uint& u_maxTraceSteps [[buffer(2)]],
                              sampler u_sdfSampler [[sampler(0)]],
                              texture3d<float> u_sdfTexture [[texture(0)]]) {
     float3 o = in.u_cameraPos;
@@ -86,7 +88,7 @@ fragment float4 fragment_sdf(VertexOut in [[stage_in]],
     uint i = 0;
 
     float3 extend = u_sdfData.SDFUpper - u_sdfData.SDFLower;
-    for(; i < u_sdfData.MaxTraceSteps; ++i) {
+    for(; i < u_maxTraceSteps; ++i) {
         float3 p = o + t * d;
         float3 uvw = (p - u_sdfData.SDFLower) / extend;
         if(any(saturate(uvw) != uvw))
@@ -94,12 +96,12 @@ fragment float4 fragment_sdf(VertexOut in [[stage_in]],
 
         float sdf = u_sdfTexture.sample(u_sdfSampler, uvw).r;
         float udf = abs(sdf);
-        if(udf <= u_sdfData.AbsThreshold)
+        if(udf <= u_absThreshold)
             break;
 
         t += udf;
     }
 
-    float color = float(i) / (u_sdfData.MaxTraceSteps - 1);
+    float color = float(i) / (u_maxTraceSteps - 1);
     return float4(color, color, color, 1);
 }

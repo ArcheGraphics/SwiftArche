@@ -11,9 +11,7 @@
 
 struct SDFData {
     vector_float3 SDFLower;
-    uint32_t   MaxTraceSteps;
     vector_float3 SDFUpper;
-    float AbsThreshold;
 };
 
 struct VolumeParticleEmitterData {

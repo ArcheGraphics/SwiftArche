@@ -12,10 +12,10 @@ public class ImplicitTriangleMesh {
     private var _engine: Engine
     private var _signRayCount: UInt32
 
-    var lower = Vector3F()
-    var upper = Vector3F()
+    var data = SDFData()
     var res = SIMD3<Int>()
     var sdf: MTLTexture?
+    var sdfSampler = MTLSamplerDescriptor()
     
     public static func builder() -> Builder {
         ImplicitTriangleMesh.Builder()
@@ -28,12 +28,19 @@ public class ImplicitTriangleMesh {
         _triangleMesh = mesh
         _signRayCount = signRayCount
         
+        sdfSampler.magFilter = .linear
+        sdfSampler.minFilter = .linear
+        sdfSampler.mipFilter = .linear
+        sdfSampler.rAddressMode = .clampToEdge
+        sdfSampler.sAddressMode = .clampToEdge
+        sdfSampler.tAddressMode = .clampToEdge
+        
         let lowerBounds = _triangleMesh.lowerBounds()
         let upperBounds = _triangleMesh.upperBounds()
         let scale = upperBounds - lowerBounds
         
-        lower = lowerBounds - scale * margin
-        upper = upperBounds + scale * margin
+        data.SDFLower = lowerBounds - scale * margin
+        data.SDFUpper = upperBounds + scale * margin
         let extend = scale * (1 + margin * 2)
         let resolutionY = Int(ceil(Float(resolutionX) * extend.y / extend.x))
         let resolutionZ = Int(ceil(Float(resolutionX) * extend.z / extend.x))
@@ -66,12 +73,11 @@ public class ImplicitTriangleMesh {
                 commandEncoder.setBuffer(_triangleMesh.verticesBuffer(), offset: 0, index: 2)
                 commandEncoder.setBuffer(_triangleMesh.normalBuffer(), offset: 0, index: 3)
                 
-                commandEncoder.setBytes(&lower, length: MemoryLayout<Vector3F>.stride, index: 4)
-                commandEncoder.setBytes(&upper, length: MemoryLayout<Vector3F>.stride, index: 5)
+                commandEncoder.setBytes(&data, length: MemoryLayout<SDFData>.stride, index: 4)
                 
                 var triangleCount = _triangleMesh.triangleCount()
-                commandEncoder.setBytes(&triangleCount, length: MemoryLayout<UInt32>.stride, index: 7)
-                commandEncoder.setBytes(&_signRayCount, length: MemoryLayout<UInt32>.stride, index: 8)
+                commandEncoder.setBytes(&triangleCount, length: MemoryLayout<UInt32>.stride, index: 5)
+                commandEncoder.setBytes(&_signRayCount, length: MemoryLayout<UInt32>.stride, index: 6)
                 
                 let w = pipelineState.threadExecutionWidth
                 let h = pipelineState.maxTotalThreadsPerThreadgroup / w
@@ -79,8 +85,8 @@ public class ImplicitTriangleMesh {
                 for xBeg in stride(from: 0, to: res.x, by: X_SLICE_SIZE) {
                     var xBeg = xBeg
                     var xEnd = UInt32(min(res.x, xBeg + X_SLICE_SIZE))
-                    commandEncoder.setBytes(&xBeg, length: MemoryLayout<UInt32>.stride, index: 9)
-                    commandEncoder.setBytes(&xEnd, length: MemoryLayout<UInt32>.stride, index: 10)
+                    commandEncoder.setBytes(&xBeg, length: MemoryLayout<UInt32>.stride, index: 7)
+                    commandEncoder.setBytes(&xEnd, length: MemoryLayout<UInt32>.stride, index: 8)
                     
                     commandEncoder.dispatchThreads(MTLSizeMake(1, res.y, res.z),
                                                    threadsPerThreadgroup: MTLSizeMake(1, w, h))

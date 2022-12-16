@@ -10,11 +10,14 @@ import vox_render
 /// sdf Material.
 public class ImplicitTriangleMaterial: BaseMaterial {
     private static let sdfProperty = "u_sdfData"
+    private static let absThresholdProperty = "u_absThreshold"
+    private static let maxTraceStepsProperty = "u_maxTraceSteps"
     private static let sdfTextureProperty = "u_sdfTexture"
     private static let sdfSamplerProperty = "u_sdfSampler"
-    private var _sdfData = SDFData()
     private var _sdf: ImplicitTriangleMesh?
-
+    private var _absThreshold: Float = 0.001
+    private var _maxTraceSteps: UInt32 = 2
+    
     /// sdf mesh.
     public var sdf: ImplicitTriangleMesh? {
         get {
@@ -23,31 +26,30 @@ public class ImplicitTriangleMaterial: BaseMaterial {
         set {
             _sdf = newValue
             if let sdf = _sdf {
-                _sdfData.SDFUpper = sdf.upper
-                _sdfData.SDFLower = sdf.lower
                 shaderData.setImageView(ImplicitTriangleMaterial.sdfTextureProperty, ImplicitTriangleMaterial.sdfSamplerProperty, sdf.sdf!)
-                shaderData.setData(ImplicitTriangleMaterial.sdfProperty, _sdfData)
+                shaderData.setSampler(ImplicitTriangleMaterial.sdfSamplerProperty, sdf.sdfSampler)
+                shaderData.setData(ImplicitTriangleMaterial.sdfProperty, sdf.data)
             }
         }
     }
     
     public var absThreshold: Float {
         get {
-            _sdfData.AbsThreshold
+            _absThreshold
         }
         set {
-            _sdfData.AbsThreshold = newValue
-            shaderData.setData(ImplicitTriangleMaterial.sdfProperty, _sdfData)
+            _absThreshold = newValue
+            shaderData.setData(ImplicitTriangleMaterial.absThresholdProperty, newValue)
         }
     }
     
     public var maxTraceSteps: UInt32 {
         get {
-            _sdfData.MaxTraceSteps
+            _maxTraceSteps
         }
         set {
-            _sdfData.MaxTraceSteps = newValue
-            shaderData.setData(ImplicitTriangleMaterial.sdfProperty, _sdfData)
+            _maxTraceSteps = newValue
+            shaderData.setData(ImplicitTriangleMaterial.maxTraceStepsProperty, newValue)
         }
     }
 
@@ -58,8 +60,7 @@ public class ImplicitTriangleMaterial: BaseMaterial {
         shaderData.enableMacro(OMIT_NORMAL.rawValue)
         shaderData.enableMacro(NEED_TILINGOFFSET.rawValue)
         
-        _sdfData.AbsThreshold = 0.001;
-        _sdfData.MaxTraceSteps = 2;
-        shaderData.setData(ImplicitTriangleMaterial.sdfProperty, _sdfData)
+        shaderData.setData(ImplicitTriangleMaterial.absThresholdProperty, _absThreshold)
+        shaderData.setData(ImplicitTriangleMaterial.maxTraceStepsProperty, _maxTraceSteps)
     }
 }

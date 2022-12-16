@@ -290,12 +290,11 @@ kernel void sdfBaker(// bvh
                      constant float3* Vertices [[buffer(2)]],
                      constant float3* Normals [[buffer(3)]],
                      // constant
-                     constant float3& SDFLower [[buffer(4)]],
-                     constant float3& SDFUpper [[buffer(5)]],
-                     constant uint32_t& TriangleCount [[buffer(7)]],
-                     constant uint32_t& SignRayCount [[buffer(8)]],
-                     constant uint32_t& XBeg [[buffer(9)]],
-                     constant uint32_t& XEnd [[buffer(10)]],
+                     constant SDFData& u_sdfData [[buffer(4)]],
+                     constant uint32_t& TriangleCount [[buffer(5)]],
+                     constant uint32_t& SignRayCount [[buffer(6)]],
+                     constant uint32_t& XBeg [[buffer(7)]],
+                     constant uint32_t& XEnd [[buffer(8)]],
                      // output
                      texture3d<float, access::write> sdf [[ texture(0) ]],
                      uint3 tpig [[ thread_position_in_grid ]]) {
@@ -310,14 +309,14 @@ kernel void sdfBaker(// bvh
     int height = sdf.get_height();
     int depth = sdf.get_depth();
     
-    float dx = 1.05f * (SDFUpper.x - SDFLower.x) / width;
+    float dx = 1.05f * (u_sdfData.SDFUpper.x - u_sdfData.SDFLower.x) / width;
 
-    float zf = mix(SDFLower.z, SDFUpper.z, (tpig.z + 0.5f) / depth);
-    float yf = mix(SDFLower.y, SDFUpper.y, (tpig.y + 0.5f) / height);
+    float zf = mix(u_sdfData.SDFLower.z, u_sdfData.SDFUpper.z, (tpig.z + 0.5f) / depth);
+    float yf = mix(u_sdfData.SDFLower.y, u_sdfData.SDFUpper.y, (tpig.y + 0.5f) / height);
 
     float lastUDF = -100 * dx;
     for(uint x = XBeg; x < XEnd; ++x) {
-        float xf = mix(SDFLower.x, SDFUpper.x, (x + 0.5f) / width);
+        float xf = mix(u_sdfData.SDFLower.x, u_sdfData.SDFUpper.x, (x + 0.5f) / width);
         float upperBound = lastUDF + dx;
 
         float newSDF = baker.sdf(float3(xf, yf, zf), upperBound);

@@ -45,7 +45,7 @@ class VolumeEmitterApp: NSViewController {
         desc.offset = 0
         desc.bufferIndex = 0
         descriptor.attributes[Int(Position.rawValue)] = desc
-        descriptor.layouts[0].stride = 12
+        descriptor.layouts[0].stride = 16
 
         let particleMesh = Mesh()
         particleMesh._vertexDescriptor = descriptor
@@ -53,7 +53,7 @@ class VolumeEmitterApp: NSViewController {
         _ = particleMesh.addSubMesh(0, maxNumber, .point)
         particleMesh._setVertexBufferBinding(0, particleSystem.positions)
         let particleMtl = VolumeParticleEmitterMaterial(engine)
-        particleMtl.pointRadius = 15
+        particleMtl.pointRadius = 5
         particleMtl.pointScale = 10
         gui.particleMtl = particleMtl
         gui.maxNumber = Int32(maxNumber)
@@ -62,6 +62,17 @@ class VolumeEmitterApp: NSViewController {
         let renderer: MeshRenderer = particleEntity.addComponent()
         renderer.mesh = particleMesh
         renderer.setMaterial(particleMtl)
+    }
+    
+    func createSDF() -> ImplicitTriangleMesh {
+        let assetURL = Bundle.main.url(forResource: "bunny", withExtension: "obj", subdirectory: "assets")!
+        let triangleMesh = TriangleMesh(device: engine.device)!
+        triangleMesh.load(assetURL)
+        
+        return ImplicitTriangleMesh.builder()
+            .withTriangleMesh(triangleMesh)
+            .withResolutionX(100)
+            .build(engine)!
     }
     
     override func viewDidLoad() {
@@ -84,7 +95,8 @@ class VolumeEmitterApp: NSViewController {
         let emitter = VolumeParticleEmitter(engine)
         emitter.target = particleSystem
         emitter.maxRegion = BoundingBox3F(point1: Vector3F(-1, -1, -1), point2: Vector3F(1, 1, 1))
-        emitter.spacing = 0.2
+        emitter.spacing = 0.02
+        emitter.implicitSurface = createSDF()
         // emitter.maxNumberOfParticles = 100
         // todo
         emitter.resourceCache = scene.postprocessManager.postProcessPass.resourceCache!
