@@ -7,7 +7,9 @@
 import Foundation
 
 public class ListenerUpdateFlag: UpdateFlag {
-    var listener: ((Int?, AnyObject?) -> Void)?
+    public var listener: ((Int?, AnyObject?) -> Void)?
+    
+    public override init() {}
 
     public override func dispatch(bit: Int?, param: AnyObject?) {
         guard let listener = listener else {

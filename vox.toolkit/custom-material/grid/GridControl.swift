@@ -9,29 +9,6 @@ import vox_math
 
 /// Grid Control
 public class GridControl: Script {
-    /// Create Mesh with position in clipped space.
-    /// - Parameter engine:
-    /// - Returns: Mesh
-    static func createGridPlane(_ engine: Engine) -> ModelMesh {
-        var positions: [Vector3] = []
-        positions.append(Vector3(1, 1, 0))
-        positions.append(Vector3(-1, -1, 0))
-        positions.append(Vector3(-1, 1, 0))
-        positions.append(Vector3(-1, -1, 0))
-        positions.append(Vector3(1, 1, 0))
-        positions.append(Vector3(1, -1, 0))
-
-        let indices: [UInt16] = [2, 1, 0, 5, 4, 3]
-        let mesh = ModelMesh(engine)
-        mesh.setPositions(positions: positions)
-        mesh.setIndices(indices: indices)
-        mesh.uploadData(true)
-        _ = mesh.addSubMesh(0, 6)
-        mesh.bounds = BoundingBox(Vector3(-Float.greatestFiniteMagnitude, -Float.greatestFiniteMagnitude, -Float.greatestFiniteMagnitude),
-                Vector3(Float.greatestFiniteMagnitude, Float.greatestFiniteMagnitude, Float.greatestFiniteMagnitude))
-        return mesh
-    }
-
     private var _material: GridMaterial!
     private var _progress: Float = 0
     private var _is2DGrid: Bool = false
@@ -64,7 +41,7 @@ public class GridControl: Script {
 
     public override func onAwake() {
         let gridRenderer: MeshRenderer! = entity.addComponent()
-        gridRenderer.mesh = GridControl.createGridPlane(engine)
+        gridRenderer.mesh = PrimitiveMesh.createQuadPlane(engine)
         _material = GridMaterial(engine)
         gridRenderer.setMaterial(_material)
     }

@@ -45,7 +45,7 @@ public class SkySubpass: Subpass {
         _depthStencilState = pipeline._resourceCache.requestDepthStencilState(_depthStencilDescriptor)
     }
 
-    override func draw(_ encoder: inout RenderCommandEncoder) {
+    public override func draw(_ encoder: inout RenderCommandEncoder) {
         if (material == nil) {
             logger.warning("The material of sky is not defined.")
             return

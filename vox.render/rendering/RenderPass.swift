@@ -34,7 +34,7 @@ public class RenderPass {
         }
     }
 
-    func draw(_ commandBuffer: MTLCommandBuffer, _ descriptor: MTLRenderPassDescriptor, _ label: String = "") {
+    public func draw(_ commandBuffer: MTLCommandBuffer, _ descriptor: MTLRenderPassDescriptor, _ label: String = "") {
         var encoder = RenderCommandEncoder(commandBuffer, descriptor, label)
         for subpass in _subpasses {
             subpass.draw(&encoder)

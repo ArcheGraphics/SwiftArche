@@ -9,6 +9,29 @@ import vox_math
 
 /// Used to generate common primitive meshes.
 public class PrimitiveMesh {
+    /// Create Mesh with position in clipped space.
+    /// - Parameter engine:
+    /// - Returns: Mesh
+    public static func createQuadPlane(_ engine: Engine) -> ModelMesh {
+        var positions: [Vector3] = []
+        positions.append(Vector3(1, 1, 0))
+        positions.append(Vector3(-1, -1, 0))
+        positions.append(Vector3(-1, 1, 0))
+        positions.append(Vector3(-1, -1, 0))
+        positions.append(Vector3(1, 1, 0))
+        positions.append(Vector3(1, -1, 0))
+
+        let indices: [UInt16] = [2, 1, 0, 5, 4, 3]
+        let mesh = ModelMesh(engine)
+        mesh.setPositions(positions: positions)
+        mesh.setIndices(indices: indices)
+        mesh.uploadData(true)
+        _ = mesh.addSubMesh(0, 6)
+        mesh.bounds = BoundingBox(Vector3(-Float.greatestFiniteMagnitude, -Float.greatestFiniteMagnitude, -Float.greatestFiniteMagnitude),
+                Vector3(Float.greatestFiniteMagnitude, Float.greatestFiniteMagnitude, Float.greatestFiniteMagnitude))
+        return mesh
+    }
+    
     /// Create a sphere mesh.
     /// - Parameters:
     ///   - engine: Engine

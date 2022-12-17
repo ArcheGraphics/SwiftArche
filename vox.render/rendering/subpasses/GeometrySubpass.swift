@@ -6,25 +6,27 @@
 
 import Metal
 
-public class GeometrySubpass: Subpass {
+open class GeometrySubpass: Subpass {
     var shaderMacro = ShaderMacroCollection()
+    
+    public override init() {}
 
-    func drawElement(_ encoder: inout RenderCommandEncoder) {
+    open func drawElement(_ encoder: inout RenderCommandEncoder) {
         // rewrite by subclass
     }
 
-    func prepare(_ pipelineDescriptor: MTLRenderPipelineDescriptor,
-                 _ depthStencilDescriptor: MTLDepthStencilDescriptor) {
+    open func prepare(_ pipelineDescriptor: MTLRenderPipelineDescriptor,
+                      _ depthStencilDescriptor: MTLDepthStencilDescriptor) {
         // rewrite by subclass
     }
 
-    override func draw(_ encoder: inout RenderCommandEncoder) {
+    open override func draw(_ encoder: inout RenderCommandEncoder) {
         encoder.handle.pushDebugGroup("Draw Element")
         drawElement(&encoder)
         encoder.handle.popDebugGroup()
     }
 
-    func _drawElement(_ encoder: inout RenderCommandEncoder, _ element: RenderElement) {
+    public func _drawElement(_ encoder: inout RenderCommandEncoder, _ element: RenderElement) {
         let pipeline = _renderPass.pipeline!
         let cache = pipeline._resourceCache
         let mesh = element.mesh

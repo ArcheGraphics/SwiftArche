@@ -65,7 +65,7 @@ public class BackgroundSubpass: Subpass {
         _depthStencilState = pipeline._resourceCache.requestDepthStencilState(_depthStencilDescriptor)
     }
 
-    override func draw(_ encoder: inout RenderCommandEncoder) {
+    public override func draw(_ encoder: inout RenderCommandEncoder) {
         encoder.handle.pushDebugGroup("Background")
         if (_pso == nil) {
             prepare(encoder.handle)
