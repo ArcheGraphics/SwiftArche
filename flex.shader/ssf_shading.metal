@@ -6,6 +6,7 @@
 
 #include <metal_stdlib>
 #include "type_common.h"
+#include "function_constant.h"
 using namespace metal;
 
 typedef struct {
@@ -123,10 +124,13 @@ public:
                 return float3(0.8, 0.8, 0.8);
             else
                 return float3(0.6, 0.6, 0.6);
+        } else {
+            if (hasSpecularEnv) {
+                return u_skyboxTexture.sample(u_skyboxSampler, world_d).rgb;
+            } else {
+                return u_envMapLight.diffuse;
+            }
         }
-        else
-            return u_skyboxTexture.sample(u_skyboxSampler, world_d).rgb;
-            // return float3(0.8, 0.8, 0.8);
     }
     
     float4 shading_fresnel() {
@@ -225,6 +229,8 @@ public:
     texture2d<float> u_normalDepthTexture;
     sampler u_thickSampler;
     texture2d<float> u_thickTexture;
+    
+    EnvMapLight u_envMapLight;
     sampler u_skyboxSampler;
     texturecube<float> u_skyboxTexture;
 };
@@ -237,15 +243,21 @@ fragment fragmentOut fragment_ssf(VertexOut in [[stage_in]],
                                   texture2d<float> u_normalDepthTexture [[texture(0)]],
                                   sampler u_thickSampler [[sampler(1)]],
                                   texture2d<float> u_thickTexture [[texture(1)]],
-                                  sampler u_skyboxSampler [[sampler(2)]],
-                                  texturecube<float> u_skyboxTexture [[texture(2)]]) {
+                                  // env
+                                  constant EnvMapLight &u_envMapLight [[buffer(5)]],
+                                  texturecube<float> u_env_specularTexture [[texture(2), function_constant(hasSpecularEnv)]],
+                                  sampler u_env_specularSampler [[sampler(2), function_constant(hasSpecularEnv)]]) {
     ScreenSpaceFluid ssf;
     ssf.u_normalDepthSampler = u_normalDepthSampler;
     ssf.u_normalDepthTexture = u_normalDepthTexture;
     ssf.u_thickTexture = u_thickTexture;
     ssf.u_thickSampler = u_thickSampler;
-    ssf.u_skyboxTexture = u_skyboxTexture;
-    ssf.u_skyboxSampler = u_skyboxSampler;
+    // env
+    ssf.u_envMapLight = u_envMapLight;
+    if (hasSpecularEnv) {
+        ssf.u_skyboxTexture = u_env_specularTexture;
+        ssf.u_skyboxSampler = u_env_specularSampler;
+    }
     
     float n1 = 1.3333f;
     float t = (n1 - 1) / (n1 + 1);

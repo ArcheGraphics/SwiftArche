@@ -57,8 +57,20 @@ public class ScreenSpaceFluidMaterial: BaseMaterial {
 //MARK: - DepthThickMaterial
 public class DepthThickMaterial: BaseMaterial {
     private static let radiusProperty = "pointRadius"
-    var _pointRadius: Float = 0
-
+    private static let lightProperty = "lightDir"
+    private var _pointRadius: Float = 0
+    private var _lightDir = Vector3F()
+    
+    public var lightDir: Vector3F {
+        get {
+            _lightDir
+        }
+        set {
+            _lightDir = newValue
+            shaderData.setData(DepthThickMaterial.lightProperty, _lightDir)
+        }
+    }
+    
     public var pointRadius: Float {
         get {
             _pointRadius
@@ -72,6 +84,9 @@ public class DepthThickMaterial: BaseMaterial {
     public override init(_ engine: Engine, _ name: String = "") {
         super.init(engine, name)
         shader.append(ShaderPass(engine.library("flex.shader"), "vertex_ssf_depth_thick", "fragment_ssf_depth_thick"))
+        
+        lightDir = Vector3F(0, 1, 0)
+        pointRadius = 10
     }
 }
 
@@ -152,6 +167,15 @@ public class ScreenSpaceFluid: Script {
         }
     }
     
+    public var lightDir: Vector3F {
+        get {
+            depthThickMtl.lightDir
+        }
+        set {
+            depthThickMtl.lightDir = newValue
+        }
+    }
+    
     public var kernelRadius: Int {
         get {
             _kernelRadius
@@ -162,22 +186,22 @@ public class ScreenSpaceFluid: Script {
         }
     }
     
-    public var blurRadius: Float {
+    public var sigmaRadius: Float {
         get {
-            _blurRadius
+            1 / _blurRadius
         }
         set {
-            _blurRadius = newValue
+            _blurRadius = 1 / newValue
             smoothPass.defaultShaderData.setData("blur_r", _blurRadius)
         }
     }
     
-    public var blurDepth: Float {
+    public var sigmaDepth: Float {
         get {
-            _blurDepth
+            1 / _blurDepth
         }
         set {
-            _blurDepth = newValue
+            _blurDepth = 1 / newValue
             smoothPass.defaultShaderData.setData("blur_z", _blurDepth)
         }
     }
@@ -208,6 +232,10 @@ public class ScreenSpaceFluid: Script {
         
         super.init(entity)
         
+        kernelRadius = 10
+        sigmaRadius = 6
+        sigmaDepth = 0.1
+
         let canvas = engine.canvas
         let flag = ListenerUpdateFlag()
         flag.listener = resize
@@ -222,17 +250,17 @@ public class ScreenSpaceFluid: Script {
         let width = Int(Float(width))
         let height = Int(Float(height))
         var desc = MTLTextureDescriptor.texture2DDescriptor(pixelFormat: .r16Float, width: width, height: height, mipmapped: true)
-        desc.usage = MTLTextureUsage(rawValue: MTLTextureUsage.shaderRead.rawValue | MTLTextureUsage.shaderWrite.rawValue)
+        desc.usage = MTLTextureUsage(rawValue: MTLTextureUsage.shaderRead.rawValue | MTLTextureUsage.renderTarget.rawValue)
         desc.storageMode = .private
         depthThickPassDesc.colorAttachments[0].texture = engine.device.makeTexture(descriptor: desc)
         
         desc = MTLTextureDescriptor.texture2DDescriptor(pixelFormat: .depth32Float, width: width, height: height, mipmapped: false)
-        desc.usage = .shaderRead
+        desc.usage = MTLTextureUsage(rawValue: MTLTextureUsage.shaderRead.rawValue | MTLTextureUsage.renderTarget.rawValue)
         desc.storageMode = .private
         depthThickPassDesc.depthAttachment.texture = engine.device.makeTexture(descriptor: desc)
         
         desc = MTLTextureDescriptor.texture2DDescriptor(pixelFormat: .rgba32Float, width: width, height: height, mipmapped: false)
-        desc.usage = .shaderRead
+        desc.usage = MTLTextureUsage(rawValue: MTLTextureUsage.shaderRead.rawValue | MTLTextureUsage.shaderWrite.rawValue)
         desc.storageMode = .private
         normalDepthTexture = engine.device.makeTexture(descriptor: desc)
         
