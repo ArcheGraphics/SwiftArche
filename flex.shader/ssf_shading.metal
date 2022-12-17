@@ -21,8 +21,8 @@ typedef struct {
 vertex VertexOut vertex_ssf(const VertexIn in [[stage_in]]) {
     VertexOut out;
     out.position = float4(in.position, 1.0);
-    out.v_uv = in.position.xy;
-    
+    out.v_uv = in.position.xy * 0.5 + 0.5;
+    out.v_uv.y = 1 - out.v_uv.y;
     return out;
 }
 
@@ -51,7 +51,7 @@ public:
         float z_ndc = proj(-ze);
         
         fragmentOut out;
-        out.depth = 0.5 * (z_ndc + 1);
+        out.depth = ze;
         switch(shading_option) {
             case depth:
                 out.color = shading_depth();
@@ -267,7 +267,7 @@ fragment fragmentOut fragment_ssf(VertexOut in [[stage_in]],
     ssf.texCoord = in.v_uv;
     ssf.iview = u_camera.u_viewInvMat;
     
-    ssf.shading_option = ScreenSpaceFluid::depth;
+    ssf.shading_option = ScreenSpaceFluid::reflect;
     
     return ssf.execute();
 }

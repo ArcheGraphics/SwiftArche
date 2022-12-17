@@ -15,14 +15,15 @@ import AppKit
 #endif
 
 public class Canvas: MTKView {
+    public var size = CGSize()
 #if os(iOS)
     public static let colorPixelFormat = MTLPixelFormat.bgra8Unorm
     public static let depthPixelFormat = MTLPixelFormat.depth32Float_stencil8
     public static var stencilPixelFormat: MTLPixelFormat? = MTLPixelFormat.depth32Float_stencil8
 #else
     public static let colorPixelFormat = MTLPixelFormat.rgba16Float
-    public static let depthPixelFormat = MTLPixelFormat.depth32Float
-    public static var stencilPixelFormat: MTLPixelFormat?
+    public static let depthPixelFormat = MTLPixelFormat.depth32Float_stencil8
+    public static var stencilPixelFormat: MTLPixelFormat? = MTLPixelFormat.depth32Float_stencil8
 #endif
 
     var inputManager: InputManager?
@@ -72,7 +73,8 @@ public class Canvas: MTKView {
         ])
     }
 
-    public func dispatchResize() {
+    public func dispatchResize(_ size: CGSize) {
+        self.size = size
         updateFlagManager.dispatch(type: nil, param: self)
     }
 

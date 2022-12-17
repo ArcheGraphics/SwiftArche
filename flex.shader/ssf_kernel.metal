@@ -93,5 +93,5 @@ kernel void ssf_restoreNormal(constant SSFData& u_ssf [[buffer(0)]],
     }
     
     float3 n = float3(-c_y * dzdx, -c_x * dzdy, c_x*c_y*z);
-    u_normalDepthOut.write(float4(n, z), tpig.xy);
+    u_normalDepthOut.write(float4(normalize(n), z), tpig.xy);
 }

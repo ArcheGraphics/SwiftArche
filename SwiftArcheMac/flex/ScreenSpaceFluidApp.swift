@@ -28,6 +28,21 @@ fileprivate class GUI: Script {
 class ScreenSpaceFluidApp: NSViewController {
     var canvas: Canvas!
     var engine: Engine!
+    var iblBaker: IBLBaker!
+
+    func loadHDR(_ scene: Scene) {
+        let hdr = engine.textureLoader.loadHDR(with: "assets/kloppenheim_06_4k.hdr")!
+        iblBaker.bake(scene, with: hdr, size: 256, level: 3)
+
+        let skyMaterial = SkyBoxMaterial(engine)
+        skyMaterial.textureCubeMap = hdr
+        skyMaterial.equirectangular = true
+        let skySubpass = SkySubpass()
+        skySubpass.material = skyMaterial
+        skySubpass.mesh = PrimitiveMesh.createCuboid(engine)
+        scene.background.mode = .Sky
+        scene.background.sky = skySubpass
+    }
     
     func createSDF() -> ImplicitTriangleMesh {
         let assetURL = Bundle.main.url(forResource: "bunny", withExtension: "obj", subdirectory: "assets")!
@@ -44,8 +59,10 @@ class ScreenSpaceFluidApp: NSViewController {
         super.viewDidLoad()
         canvas = Canvas(with: view)
         engine = Engine(canvas: canvas)
-        
+        iblBaker = IBLBaker(engine)
+
         let scene = engine.sceneManager.activeScene!
+        loadHDR(scene)
         let rootEntity = scene.createRootEntity()
         let gui: GUI = rootEntity.addComponent()
 

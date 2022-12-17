@@ -270,7 +270,7 @@ extension Engine: MTKViewDelegate {
     ///   - view: MTKView which called this method
     ///   - size: New drawable size in pixels
     public func mtkView(_ view: MTKView, drawableSizeWillChange size: CGSize) {
-        canvas.dispatchResize()
+        canvas.dispatchResize(size)
     }
 
     /// Called on the delegate when it is asked to render into the view

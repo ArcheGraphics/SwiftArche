@@ -73,10 +73,10 @@ public class DepthThickMaterial: BaseMaterial {
     
     public var pointRadius: Float {
         get {
-            _pointRadius
+            1 / _pointRadius
         }
         set {
-            _pointRadius = newValue
+            _pointRadius = 1 / newValue
             shaderData.setData(DepthThickMaterial.radiusProperty, _pointRadius)
         }
     }
@@ -86,7 +86,7 @@ public class DepthThickMaterial: BaseMaterial {
         shader.append(ShaderPass(engine.library("flex.shader"), "vertex_ssf_depth_thick", "fragment_ssf_depth_thick"))
         
         lightDir = Vector3F(0, 1, 0)
-        pointRadius = 10
+        pointRadius = 50
     }
 }
 
@@ -249,9 +249,7 @@ public class ScreenSpaceFluid: Script {
     }
     
     func createTexture(_ width: Int, _ height: Int) {
-        let width = Int(Float(width))
-        let height = Int(Float(height))
-        var desc = MTLTextureDescriptor.texture2DDescriptor(pixelFormat: .r16Float, width: width, height: height, mipmapped: true)
+        var desc = MTLTextureDescriptor.texture2DDescriptor(pixelFormat: .r16Float, width: width, height: height, mipmapped: false)
         desc.usage = MTLTextureUsage(rawValue: MTLTextureUsage.shaderRead.rawValue | MTLTextureUsage.renderTarget.rawValue)
         desc.storageMode = .private
         depthThickPassDesc.colorAttachments[0].texture = engine.device.makeTexture(descriptor: desc)
@@ -295,11 +293,8 @@ public class ScreenSpaceFluid: Script {
     
     public override func onBeginRender(_ camera: Camera, _ commandBuffer: MTLCommandBuffer) {
         if let canvas = _canvasChanged {
-            if let renderTarget = canvas.currentRenderPassDescriptor,
-               let texture = renderTarget.colorAttachments[0].texture {
-                createTexture(texture.width, texture.height)
-                _canvasChanged = nil
-            }
+            createTexture(Int(canvas.size.width), Int(canvas.size.height))
+            _canvasChanged = nil
         }
         
         if let mesh = _particleMesh {
