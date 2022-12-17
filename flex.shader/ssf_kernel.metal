@@ -60,35 +60,30 @@ kernel void ssf_smoothDepth(constant int& kernel_r [[buffer(1)]],
     normalDepth.write(float4(0, 0, 0, zz), tpig.xy);
 }
 
-kernel void ssf_restoreNormal(constant float& p_n [[buffer(0)]],
-                              constant float& p_f [[buffer(1)]],
-                              constant float& p_t [[buffer(2)]],
-                              constant float& p_r [[buffer(3)]],
-                              constant float& s_w [[buffer(4)]],
-                              constant float& s_h [[buffer(5)]],
+kernel void ssf_restoreNormal(constant SSFData& u_ssf [[buffer(0)]],
                               // output
                               texture2d<float, access::sample> u_normalDepthIn [[texture(1)]],
                               texture2d<float, access::write> u_normalDepthOut [[texture(2)]],
                               uint3 tpig [[ thread_position_in_grid ]],
                               uint3 gridSize [[threads_per_grid]]) {
     /* global */
-    float f_x = p_n / p_r;
-    float f_y = p_n / p_t;
-    float c_x = 2 / (s_w * f_x);
-    float c_y = 2 / (s_h * f_y);
+    float f_x = u_ssf.p_n / u_ssf.p_r;
+    float f_y = u_ssf.p_n / u_ssf.p_t;
+    float c_x = 2 / (u_ssf.canvasWidth * f_x);
+    float c_y = 2 / (u_ssf.canvasHeight * f_y);
 
     /* (x, y) in [0, 1] */
     float x = float(tpig.x) / gridSize.x, y = float(tpig.y) / gridSize.y;
-    float dx = 1 / s_w, dy = 1 / s_h;
+    float dx = 1 / u_ssf.canvasWidth, dy = 1 / u_ssf.canvasHeight;
     
     constexpr sampler depthSampler(mip_filter::linear,
                                    mag_filter::linear,
                                    min_filter::linear);
-    float z = u_normalDepthIn.sample(depthSampler, float2(x, y)).z;
-    float dzdx = u_normalDepthIn.sample(depthSampler, float2(x + dx, y)).z - z;
-    float dzdy = u_normalDepthIn.sample(depthSampler, float2(x, y + dy)).z - z;
-    float dzdx2 = z - u_normalDepthIn.sample(depthSampler, float2(x - dx, y)).z;
-    float dzdy2 = z - u_normalDepthIn.sample(depthSampler, float2(x, y - dy)).z;
+    float z = u_normalDepthIn.sample(depthSampler, float2(x, y)).w;
+    float dzdx = u_normalDepthIn.sample(depthSampler, float2(x + dx, y)).w - z;
+    float dzdy = u_normalDepthIn.sample(depthSampler, float2(x, y + dy)).w - z;
+    float dzdx2 = z - u_normalDepthIn.sample(depthSampler, float2(x - dx, y)).w;
+    float dzdy2 = z - u_normalDepthIn.sample(depthSampler, float2(x, y - dy)).w;
     
     /* Skip silhouette */
     bool keep_edge = true;

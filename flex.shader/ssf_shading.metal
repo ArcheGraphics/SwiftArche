@@ -32,6 +32,17 @@ struct fragmentOut {
 
 class ScreenSpaceFluid {
 public:
+    enum ShadingOption {
+        depth,
+        thick,
+        normal,
+        fresnel_scale,
+        reflect,
+        refract,
+        refract_tinted,
+        fresnel
+    };
+    
     fragmentOut execute() {
         // ze to z_ndc to gl_FragDepth
         // REF: https://computergraphics.stackexchange.com/questions/6308/why-does-this-gl-fragdepth-calculation-work?utm_medium=organic&utm_source=google_rich_qa&utm_campaign=google_rich_qa
@@ -40,37 +51,46 @@ public:
         
         fragmentOut out;
         out.depth = 0.5 * (z_ndc + 1);
-        int shading_option = 1;
-        if (shading_option == 1)
-            out.color = shading_depth();
-        else if (shading_option == 2)
-            out.color = shading_thick();
-        else if (shading_option == 3)
-            out.color = shading_normal();
-        else if (shading_option == 4)
-            out.color = shading_fresnel_scale();
-        else if (shading_option == 5)
-            out.color = shading_reflect();
-        else if (shading_option == 6)
-            out.color = shading_refract();
-        else if (shading_option == 7)
-            out.color = shading_refract_tinted();
-        else
-            out.color = shading_fresnel();
+        switch(shading_option) {
+            case depth:
+                out.color = shading_depth();
+                break;
+            case thick:
+                out.color = shading_thick();
+                break;
+            case normal:
+                out.color = shading_normal();
+                break;
+            case fresnel_scale:
+                out.color = shading_fresnel_scale();
+                break;
+            case reflect:
+                out.color = shading_reflect();
+                break;
+            case refract:
+                out.color = shading_refract();
+                break;
+            case refract_tinted:
+                out.color = shading_refract_tinted();
+                break;
+            case fresnel:
+                out.color = shading_fresnel();
+                break;
+        }
         
         return out;
     }
     
     float proj(float ze) {
-        return (p_f + p_n) / (p_f - p_n) + 2 * p_f*p_n / ((p_f - p_n) * ze);
+        return (u_ssf.p_f + u_ssf.p_n) / (u_ssf.p_f - u_ssf.p_n) + 2 * u_ssf.p_f * u_ssf.p_n / ((u_ssf.p_f - u_ssf.p_n) * ze);
     }
 
     float3 getPos() {
         /* Return in right-hand coord */
-        float z = u_normalDepthTexture.sample(u_normalDepthSampler, texCoord).z;
+        float z = u_normalDepthTexture.sample(u_normalDepthSampler, texCoord).w;
         float x = texCoord.x, y = texCoord.y;
-        x = (2 * x - 1)*p_r*z / p_n;
-        y = (2 * y - 1)*p_t*z / p_n;
+        x = (2 * x - 1) * u_ssf.p_r * z / u_ssf.p_n;
+        y = (2 * y - 1) * u_ssf.p_t * z / u_ssf.p_n;
         return float3(x, y, -z);
     }
 
@@ -132,7 +152,6 @@ public:
         float3 n = u_normalDepthTexture.sample(u_normalDepthSampler, texCoord).xyz;
         float3 p = getPos();
         float3 e = normalize(-p);
-        float r = r0 + (1 - r0)*pow(1 - dot(n, e), 3);
 
         float3 view_refract = -e - 0.2*n;
 
@@ -170,11 +189,7 @@ public:
     }
     
     float4 shading_depth() {
-        float4 normalDepth = u_normalDepthTexture.sample(u_normalDepthSampler, texCoord);
-        float3 n = normalDepth.xyz;
-        float3 p = getPos();
-        float3 e = normalize(-p);
-        float z = normalDepth.w;
+        float z = u_normalDepthTexture.sample(u_normalDepthSampler, texCoord).w;
         if (z > 50) discard_fragment();
 
         float c = exp(z)/(exp(z)+1);
@@ -184,11 +199,7 @@ public:
     }
 
     float4 shading_thick() {
-        float4 normalDepth = u_normalDepthTexture.sample(u_normalDepthSampler, texCoord);
-        float3 n = normalDepth.xyz;
-        float3 p = getPos();
-        float3 e = normalize(-p);
-        float z = normalDepth.w;
+        float z = u_normalDepthTexture.sample(u_normalDepthSampler, texCoord).w;
         if (z > 50) discard_fragment();
         float t = u_thickTexture.sample(u_thickSampler, texCoord).x;
 
@@ -199,15 +210,13 @@ public:
     }
     
 public:
+    ShadingOption shading_option = depth;
     /* Schlick's approximation on Fresnel factor (reflection coef)
      * r0: Reflection coef when incoming light parallel to the normal
      * r0 = [(n1 - n2)/(n1 + n2)]^2
      */
     float r0;
-    float p_n;
-    float p_f;
-    float p_t;
-    float p_r;
+    SSFData u_ssf;
     
     float2 texCoord;
     matrix_float4x4 iview;
@@ -221,12 +230,8 @@ public:
 };
 
 fragment fragmentOut fragment_ssf(VertexOut in [[stage_in]],
-                                  constant matrix_float4x4& iview [[buffer(1)]],
-                                  constant float& p_n [[buffer(2)]],
-                                  constant float& p_f [[buffer(3)]],
-                                  constant float& p_t [[buffer(4)]],
-                                  constant float& p_r [[buffer(5)]],
-                                  constant float& r0 [[buffer(6)]],
+                                  constant CameraData& u_camera [[buffer(1)]],
+                                  constant SSFData& u_ssf [[buffer(2)]],
                                   // texture
                                   sampler u_normalDepthSampler [[sampler(0)]],
                                   texture2d<float> u_normalDepthTexture [[texture(0)]],
@@ -235,13 +240,22 @@ fragment fragmentOut fragment_ssf(VertexOut in [[stage_in]],
                                   sampler u_skyboxSampler [[sampler(2)]],
                                   texturecube<float> u_skyboxTexture [[texture(2)]]) {
     ScreenSpaceFluid ssf;
-    ssf.texCoord = in.v_uv;
     ssf.u_normalDepthSampler = u_normalDepthSampler;
     ssf.u_normalDepthTexture = u_normalDepthTexture;
     ssf.u_thickTexture = u_thickTexture;
     ssf.u_thickSampler = u_thickSampler;
     ssf.u_skyboxTexture = u_skyboxTexture;
     ssf.u_skyboxSampler = u_skyboxSampler;
+    
+    float n1 = 1.3333f;
+    float t = (n1 - 1) / (n1 + 1);
+    ssf.r0 = t * t;
+    ssf.u_ssf = u_ssf;
+    
+    ssf.texCoord = in.v_uv;
+    ssf.iview = u_camera.u_viewInvMat;
+    
+    ssf.shading_option = ScreenSpaceFluid::depth;
     
     return ssf.execute();
 }

@@ -26,3 +26,13 @@ struct VolumeParticleEmitterData {
     
     vector_float3 lowerCorner;
 };
+
+struct SSFData {
+    float p_n;
+    float p_f;
+    float p_t;
+    float p_r;
+    
+    float canvasWidth;
+    float canvasHeight;
+};

@@ -19,14 +19,14 @@ typedef struct {
 } VertexOut;
 
 vertex VertexOut vertex_ssf_depth_thick(const VertexIn vertexIn [[stage_in]],
-                                        constant float &pointRadius [[buffer(5)]],
-                                        constant float &canvasHeight [[buffer(6)]],
+                                        constant SSFData &u_ssf [[buffer(5)]],
+                                        constant float &pointRadius [[buffer(6)]],
                                         constant CameraData &u_camera [[buffer(7)]]) {
     VertexOut out;
     
     out.viewPos = u_camera.u_viewMat * float4(vertexIn.position, 1.0);
     out.position = u_camera.u_projMat * out.viewPos;
-    out.pointSize = pointRadius * canvasHeight * u_camera.u_projMat[1][1] / (-out.viewPos.z);
+    out.pointSize = pointRadius * u_ssf.canvasHeight * u_camera.u_projMat[1][1] / (-out.viewPos.z);
     
     
     return out;
