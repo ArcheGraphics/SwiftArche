@@ -7,7 +7,7 @@
 import Metal
 
 public class PostprocessManager {
-    var _resourceCache: ResourceCache
+    public var resourceCache: ResourceCache
     var _canvas: Canvas
     weak var _scene: Scene!
     var _shaderData: ShaderData
@@ -50,7 +50,7 @@ public class PostprocessManager {
             _autoExposure = newValue
             if newValue {
                 luminancePass = Luminance(_scene)
-                luminancePass!.resourceCache = _resourceCache
+                luminancePass!.resourceCache = resourceCache
                 _shaderData.enableMacro(IS_AUTO_EXPOSURE.rawValue)
             } else {
                 luminancePass = nil
@@ -63,18 +63,18 @@ public class PostprocessManager {
         _scene = scene
         _canvas = scene.engine.canvas
         let device = scene.engine.device
-        _resourceCache = ResourceCache(device)
+        resourceCache = ResourceCache(device)
         _shaderData = scene.shaderData
         _shaderData.setData("u_postprocess", _postprocessData)
 
         postProcessPass = ComputePass(scene.engine)
-        postProcessPass.resourceCache = _resourceCache
+        postProcessPass.resourceCache = resourceCache
         postProcessPass.shader.append(ShaderPass(scene.engine.library(), "postprocess_merge"))
         postProcessPass.data.append(_shaderData)
     }
 
     public func registerComputePass(_ pass: ComputePass) {
-        pass.resourceCache = _resourceCache
+        pass.resourceCache = resourceCache
         computePasses.append(pass)
     }
 
@@ -90,6 +90,7 @@ public class PostprocessManager {
             let texture = renderTarget.colorAttachments[0].texture!
             if let luminancePass = luminancePass,
                let computeEncoder = commandBuffer.makeComputeCommandEncoder() {
+                computeEncoder.label = "luminance approximation"
                 luminancePass.defaultShaderData.setImageView("input", texture)
                 postProcessPass.defaultShaderData.setImageView("logLuminanceIn", luminancePass.logLuminanceTexture)
                 luminancePass.compute(commandEncoder: computeEncoder)
@@ -102,6 +103,7 @@ public class PostprocessManager {
             }
 
             if let computeEncoder = commandBuffer.makeComputeCommandEncoder() {
+                computeEncoder.label = "gamme correction"
                 postProcessPass.threadsPerGridX = texture.width
                 postProcessPass.threadsPerGridY = texture.height
                 postProcessPass.defaultShaderData.setImageView("framebufferInput", texture)

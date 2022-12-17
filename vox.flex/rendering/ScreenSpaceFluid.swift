@@ -221,9 +221,11 @@ public class ScreenSpaceFluid: Script {
         renderPass.addSubpass(subpass)
         
         smoothPass = ComputePass(entity.engine)
+        smoothPass.resourceCache = entity.scene.postprocessManager.resourceCache
         smoothPass.shader.append(ShaderPass(entity.engine.library("flex.shader"), "ssf_smoothDepth"))
         restoreNormalPass = ComputePass(entity.engine)
-        smoothPass.shader.append(ShaderPass(entity.engine.library("flex.shader"), "ssf_restoreNormal"))
+        restoreNormalPass.resourceCache = entity.scene.postprocessManager.resourceCache
+        restoreNormalPass.shader.append(ShaderPass(entity.engine.library("flex.shader"), "ssf_restoreNormal"))
 
         material = ScreenSpaceFluidMaterial(entity.engine, "ssf")
         renderer = entity.addComponent()
@@ -268,9 +270,13 @@ public class ScreenSpaceFluid: Script {
         material.normalDepthTexture = normalDepthTexture
         material.thickTexture = depthThickPassDesc.colorAttachments[0].texture
         
+        smoothPass.threadsPerGridX = width
+        smoothPass.threadsPerGridY = height
         smoothPass.defaultShaderData.setImageView("depth", depthThickPassDesc.depthAttachment.texture)
         smoothPass.defaultShaderData.setImageView("normalDepth", normalDepthTexture)
-        
+
+        restoreNormalPass.threadsPerGridX = width
+        restoreNormalPass.threadsPerGridY = height
         restoreNormalPass.defaultShaderData.setImageView("u_normalDepthIn", normalDepthTexture)
         restoreNormalPass.defaultShaderData.setImageView("u_normalDepthOut", normalDepthTexture)
         
@@ -298,9 +304,10 @@ public class ScreenSpaceFluid: Script {
         
         if let mesh = _particleMesh {
             subpass.element = RenderElement(renderer, mesh, mesh.subMesh!, depthThickMtl, depthThickMtl.shader[0])
-            renderPass.draw(commandBuffer, depthThickPassDesc)
+            renderPass.draw(commandBuffer, depthThickPassDesc, "ssf depthThick")
             
             if let encoder = commandBuffer.makeComputeCommandEncoder() {
+                encoder.label = "ssf compute"
                 smoothPass.compute(commandEncoder: encoder)
                 restoreNormalPass.compute(commandEncoder: encoder)
                 encoder.endEncoding()

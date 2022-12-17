@@ -243,8 +243,9 @@ public class Engine: NSObject {
                 }
                 
                 for camera in cameras {
+                    camera.update()
                     _componentsManager.callCameraOnBeginRender(camera, commandBuffer)
-                    camera.render(commandBuffer)
+                    camera.devicePipeline.commit(commandBuffer)
                     _componentsManager.callCameraOnEndRender(camera, commandBuffer)
                 }
                 scene.postprocess(commandBuffer)

@@ -361,7 +361,7 @@ extension Camera {
     }
 
     /// Manually call the rendering of the camera.
-    public func render(_ commandBuffer: MTLCommandBuffer) {
+    public func update() {
         _cameraInfo.viewProjectionMatrix = projectionMatrix * viewMatrix
         _cameraInfo.position = _transform.worldPosition
         if (_cameraInfo.isOrthographic) {
@@ -383,8 +383,6 @@ extension Camera {
                 shaderData._macroCollection,
                 _globalShaderMacro
         )
-
-        devicePipeline.commit(commandBuffer)
     }
 }
 

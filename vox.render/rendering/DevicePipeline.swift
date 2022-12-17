@@ -50,7 +50,7 @@ public class DevicePipeline {
                 )
             }
             let renderTarget = camera.renderTarget != nil ? camera.renderTarget! : renderPassDescriptor
-            mainRenderPass.draw(commandBuffer, renderTarget)
+            mainRenderPass.draw(commandBuffer, renderTarget, "main pipeline")
         }
     }
 
