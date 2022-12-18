@@ -52,17 +52,17 @@ kernel void ssf_smoothDepth(constant int& kernel_r [[buffer(1)]],
                             constant float& blur_r [[buffer(2)]],
                             constant float& blur_z [[buffer(3)]],
                             // output
-                            texture2d<float, access::read> depth [[ texture(0) ]],
-                            texture2d<float, access::write> normalDepth [[texture(1)]],
+                            texture2d<float, access::read> depthIn [[ texture(0) ]],
+                            texture2d<float, access::write> depthOut [[texture(1)]],
                             uint3 tpig [[ thread_position_in_grid ]]) {
-    float zz = bilateral(tpig.xy, depth, kernel_r, blur_r, blur_z);
+    float zz = bilateral(tpig.xy, depthIn, kernel_r, blur_r, blur_z);
     // float zz = gaussian(tpig.xy, depth, kernel_r, blur_r);
-    normalDepth.write(float4(0, 0, 0, zz), tpig.xy);
+    depthOut.write(float4(zz, 0, 0, 0), tpig.xy);
 }
 
 kernel void ssf_restoreNormal(constant SSFData& u_ssf [[buffer(0)]],
                               // output
-                              texture2d<float, access::sample> u_normalDepthIn [[texture(1)]],
+                              texture2d<float, access::sample> u_depthIn [[texture(1)]],
                               texture2d<float, access::write> u_normalDepthOut [[texture(2)]],
                               uint3 tpig [[ thread_position_in_grid ]],
                               uint3 gridSize [[threads_per_grid]]) {
@@ -76,14 +76,14 @@ kernel void ssf_restoreNormal(constant SSFData& u_ssf [[buffer(0)]],
     float x = float(tpig.x) / gridSize.x, y = float(tpig.y) / gridSize.y;
     float dx = 1 / u_ssf.canvasWidth, dy = 1 / u_ssf.canvasHeight;
     
-    constexpr sampler depthSampler(mip_filter::linear,
-                                   mag_filter::linear,
-                                   min_filter::linear);
-    float z = u_normalDepthIn.sample(depthSampler, float2(x, y)).w;
-    float dzdx = u_normalDepthIn.sample(depthSampler, float2(x + dx, y)).w - z;
-    float dzdy = u_normalDepthIn.sample(depthSampler, float2(x, y + dy)).w - z;
-    float dzdx2 = z - u_normalDepthIn.sample(depthSampler, float2(x - dx, y)).w;
-    float dzdy2 = z - u_normalDepthIn.sample(depthSampler, float2(x, y - dy)).w;
+    constexpr sampler depthSampler(mip_filter::nearest,
+                                   mag_filter::nearest,
+                                   min_filter::nearest);
+    float z = u_depthIn.sample(depthSampler, float2(x, y)).r;
+    float dzdx = u_depthIn.sample(depthSampler, float2(x + dx, y)).r - z;
+    float dzdy = u_depthIn.sample(depthSampler, float2(x, y + dy)).r - z;
+    float dzdx2 = z - u_depthIn.sample(depthSampler, float2(x - dx, y)).r;
+    float dzdy2 = z - u_depthIn.sample(depthSampler, float2(x, y - dy)).r;
     
     /* Skip silhouette */
     bool keep_edge = true;
@@ -93,5 +93,9 @@ kernel void ssf_restoreNormal(constant SSFData& u_ssf [[buffer(0)]],
     }
     
     float3 n = float3(-c_y * dzdx, -c_x * dzdy, c_x*c_y*z);
-    u_normalDepthOut.write(float4(normalize(n), z), tpig.xy);
+    if (length(n) == 0) {
+        u_normalDepthOut.write(float4(0, 0, 0, z), tpig.xy);
+    } else {
+        u_normalDepthOut.write(float4(normalize(n), z), tpig.xy);
+    }
 }

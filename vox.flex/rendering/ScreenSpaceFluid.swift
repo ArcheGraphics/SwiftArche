@@ -87,7 +87,7 @@ public class ThickMaterial: BaseMaterial {
         isTransparent = true
 
         lightDir = Vector3F(0, 0, 1)
-        pointRadius = 50
+        pointRadius = 20
     }
 }
 
@@ -110,7 +110,7 @@ public class DepthMaterial: BaseMaterial {
         super.init(engine, name)
         shader.append(ShaderPass(engine.library("flex.shader"), "vertex_ssf_depth_thick", "fragment_ssf_depth"))
 
-        pointRadius = 50
+        pointRadius = 20
     }
 }
 
@@ -141,7 +141,7 @@ public class ScreenSpaceFluid: Script {
     let thickMtl: ThickMaterial
     var thickTexture: MTLTexture!
     let depthMtl: DepthMaterial
-    var depthTexture: MTLTexture!
+    var depthTexture: [MTLTexture] = []
     var depthThickPassDesc: MTLRenderPassDescriptor
     var renderPass: RenderPass
     var subpass: ScreenSpaceSubpass
@@ -188,6 +188,8 @@ public class ScreenSpaceFluid: Script {
         }
     }
     
+    public var smoothIter: Int32 = 2
+
     public var pointRadius: Float {
         get {
             thickMtl.pointRadius
@@ -287,10 +289,13 @@ public class ScreenSpaceFluid: Script {
         thickTexture = engine.device.makeTexture(descriptor: desc)
         
         desc = MTLTextureDescriptor.texture2DDescriptor(pixelFormat: .r32Float, width: width, height: height, mipmapped: false)
-        desc.usage = MTLTextureUsage(rawValue: MTLTextureUsage.shaderRead.rawValue | MTLTextureUsage.renderTarget.rawValue)
+        desc.usage = MTLTextureUsage(rawValue: MTLTextureUsage.shaderRead.rawValue
+                                     | MTLTextureUsage.shaderWrite.rawValue
+                                     | MTLTextureUsage.renderTarget.rawValue)
         desc.storageMode = .private
-        depthTexture = engine.device.makeTexture(descriptor: desc)
-        
+        depthTexture.append( engine.device.makeTexture(descriptor: desc)!)
+        depthTexture.append( engine.device.makeTexture(descriptor: desc)!)
+
         desc = MTLTextureDescriptor.texture2DDescriptor(pixelFormat: .depth32Float, width: width, height: height, mipmapped: false)
         desc.usage = MTLTextureUsage(rawValue: MTLTextureUsage.shaderRead.rawValue | MTLTextureUsage.renderTarget.rawValue)
         desc.storageMode = .private
@@ -307,12 +312,9 @@ public class ScreenSpaceFluid: Script {
         
         smoothPass.threadsPerGridX = width
         smoothPass.threadsPerGridY = height
-        smoothPass.defaultShaderData.setImageView("depth", depthTexture)
-        smoothPass.defaultShaderData.setImageView("normalDepth", normalDepthTexture)
 
         restoreNormalPass.threadsPerGridX = width
         restoreNormalPass.threadsPerGridY = height
-        restoreNormalPass.defaultShaderData.setImageView("u_normalDepthIn", normalDepthTexture)
         restoreNormalPass.defaultShaderData.setImageView("u_normalDepthOut", normalDepthTexture)
         
         // calculate camera parameter
@@ -343,12 +345,20 @@ public class ScreenSpaceFluid: Script {
             
             subpass.element = RenderElement(renderer, mesh, mesh.subMesh!, depthMtl, depthMtl.shader[0])
             subpass.pixelFormat = .r32Float
-            depthThickPassDesc.colorAttachments[0].texture = depthTexture
+            depthThickPassDesc.colorAttachments[0].texture = depthTexture[0]
             renderPass.draw(commandBuffer, depthThickPassDesc, "ssf depth")
             
             if let encoder = commandBuffer.makeComputeCommandEncoder() {
                 encoder.label = "ssf compute"
-                smoothPass.compute(commandEncoder: encoder)
+                var currentIdx = 0
+                for _ in 0..<smoothIter {
+                    smoothPass.defaultShaderData.setImageView("depthIn", depthTexture[currentIdx])
+                    smoothPass.defaultShaderData.setImageView("depthOut", depthTexture[1 - currentIdx])
+                    smoothPass.compute(commandEncoder: encoder)
+                    currentIdx = 1 - currentIdx
+                }
+                
+                restoreNormalPass.defaultShaderData.setImageView("u_depthIn", depthTexture[currentIdx])
                 restoreNormalPass.compute(commandEncoder: encoder)
                 encoder.endEncoding()
             }

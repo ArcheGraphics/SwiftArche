@@ -27,8 +27,9 @@ fileprivate class GUI: Script {
         UIElement.Init(engine.canvas, deltaTime)
 
         ImGuiNewFrame()
-        ImGuiSliderFloat("point radius", &ssf.pointRadius, 0.0, 50.0, nil, 1)
-        ImGuiSliderInt("kernelRadius", &kernelRadius, 0, 50, nil, ImGuiSliderFlags())
+        ImGuiSliderFloat("point radius", &ssf.pointRadius, 0.0, 100.0, nil, 1)
+        ImGuiSliderInt("smooth iter count", &ssf.smoothIter, 0, 10, nil, ImGuiSliderFlags())
+        ImGuiSliderInt("kernel radius", &kernelRadius, 0, 10, nil, ImGuiSliderFlags())
         ImGuiSliderFloat("sigma radius", &ssf.sigmaRadius, 0.0, 50.0, nil, 1)
         ImGuiSliderFloat("sigma depth", &ssf.sigmaDepth, 0.0, 50.0, nil, 1)
 
