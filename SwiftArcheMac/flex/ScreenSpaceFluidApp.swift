@@ -67,7 +67,7 @@ class ScreenSpaceFluidApp: NSViewController {
         let gui: GUI = rootEntity.addComponent()
 
         let cameraEntity = rootEntity.createChild()
-        cameraEntity.transform.position = Vector3(5, 5, 5)
+        cameraEntity.transform.position = Vector3(2, 2, 2)
         cameraEntity.transform.lookAt(targetPosition: Vector3())
         let _: Camera = cameraEntity.addComponent()
         let _: OrbitControl = cameraEntity.addComponent()

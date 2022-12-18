@@ -13,7 +13,6 @@ public class ScreenSpaceFluidMaterial: BaseMaterial {
     private static let _normalDepthSamplerProp = "u_normalDepthSampler"
     private static let _thickTextureProp = "u_thickTexture"
     private static let _thickSamplerProp = "u_thickSampler"
-    private static let _ssfProperty = "u_ssf"
 
     private var _normalDepthTexture: MTLTexture?
     private var _thickTexture: MTLTexture?
@@ -54,8 +53,8 @@ public class ScreenSpaceFluidMaterial: BaseMaterial {
     }
 }
 
-//MARK: - DepthThickMaterial
-public class DepthThickMaterial: BaseMaterial {
+//MARK: - ThickMaterial
+public class ThickMaterial: BaseMaterial {
     private static let radiusProperty = "pointRadius"
     private static let lightProperty = "lightDir"
     private var _pointRadius: Float = 0
@@ -67,7 +66,7 @@ public class DepthThickMaterial: BaseMaterial {
         }
         set {
             _lightDir = newValue
-            shaderData.setData(DepthThickMaterial.lightProperty, _lightDir)
+            shaderData.setData(ThickMaterial.lightProperty, _lightDir)
         }
     }
     
@@ -77,15 +76,40 @@ public class DepthThickMaterial: BaseMaterial {
         }
         set {
             _pointRadius = 1 / newValue
-            shaderData.setData(DepthThickMaterial.radiusProperty, _pointRadius)
+            shaderData.setData(ThickMaterial.radiusProperty, _pointRadius)
         }
     }
     
     public override init(_ engine: Engine, _ name: String = "") {
         super.init(engine, name)
-        shader.append(ShaderPass(engine.library("flex.shader"), "vertex_ssf_depth_thick", "fragment_ssf_depth_thick"))
-        
-        lightDir = Vector3F(0, 1, 0)
+        shader.append(ShaderPass(engine.library("flex.shader"), "vertex_ssf_depth_thick", "fragment_ssf_thick"))
+        shader[0].setBlendMode(.Additive)
+        isTransparent = true
+
+        lightDir = Vector3F(0, 0, 1)
+        pointRadius = 50
+    }
+}
+
+//MARK: - DepthMaterial
+public class DepthMaterial: BaseMaterial {
+    private static let radiusProperty = "pointRadius"
+    private var _pointRadius: Float = 0
+    
+    public var pointRadius: Float {
+        get {
+            1 / _pointRadius
+        }
+        set {
+            _pointRadius = 1 / newValue
+            shaderData.setData(DepthMaterial.radiusProperty, _pointRadius)
+        }
+    }
+    
+    public override init(_ engine: Engine, _ name: String = "") {
+        super.init(engine, name)
+        shader.append(ShaderPass(engine.library("flex.shader"), "vertex_ssf_depth_thick", "fragment_ssf_depth"))
+
         pointRadius = 50
     }
 }
@@ -93,6 +117,7 @@ public class DepthThickMaterial: BaseMaterial {
 // MARK: - ScreenSpaceSubpass
 class ScreenSpaceSubpass: GeometrySubpass {
     var element: RenderElement!
+    var pixelFormat: MTLPixelFormat = .invalid
     
     override init() {
         super.init()
@@ -100,7 +125,7 @@ class ScreenSpaceSubpass: GeometrySubpass {
     
     override func prepare(_ pipelineDescriptor: MTLRenderPipelineDescriptor, _ depthStencilDescriptor: MTLDepthStencilDescriptor) {
         pipelineDescriptor.label = "Screen-Space Fluid Pipeline"
-        pipelineDescriptor.colorAttachments[0].pixelFormat = .r16Float
+        pipelineDescriptor.colorAttachments[0].pixelFormat = pixelFormat
         pipelineDescriptor.depthAttachmentPixelFormat = .depth32Float
     }
     
@@ -111,7 +136,12 @@ class ScreenSpaceSubpass: GeometrySubpass {
 
 //MARK: - ScreenSpaceFluid
 public class ScreenSpaceFluid: Script {
-    let depthThickMtl: DepthThickMaterial
+    private static let _ssfProperty = "u_ssf"
+
+    let thickMtl: ThickMaterial
+    var thickTexture: MTLTexture!
+    let depthMtl: DepthMaterial
+    var depthTexture: MTLTexture!
     var depthThickPassDesc: MTLRenderPassDescriptor
     var renderPass: RenderPass
     var subpass: ScreenSpaceSubpass
@@ -160,19 +190,20 @@ public class ScreenSpaceFluid: Script {
     
     public var pointRadius: Float {
         get {
-            depthThickMtl.pointRadius
+            thickMtl.pointRadius
         }
         set {
-            depthThickMtl.pointRadius = newValue
+            depthMtl.pointRadius = newValue
+            thickMtl.pointRadius = newValue
         }
     }
     
     public var lightDir: Vector3F {
         get {
-            depthThickMtl.lightDir
+            thickMtl.lightDir
         }
         set {
-            depthThickMtl.lightDir = newValue
+            thickMtl.lightDir = newValue
         }
     }
     
@@ -212,7 +243,8 @@ public class ScreenSpaceFluid: Script {
     
     required init(_ entity: Entity) {
         camera = entity.getComponent()!
-        depthThickMtl = DepthThickMaterial(entity.engine, "ssf-depth-thick")
+        thickMtl = ThickMaterial(entity.engine, "ssf-thick")
+        depthMtl = DepthMaterial(entity.engine, "ssf-depth")
         depthThickPassDesc = MTLRenderPassDescriptor();
         depthThickPassDesc.depthAttachment.loadAction = .clear
         depthThickPassDesc.colorAttachments[0].loadAction = .clear
@@ -252,7 +284,12 @@ public class ScreenSpaceFluid: Script {
         var desc = MTLTextureDescriptor.texture2DDescriptor(pixelFormat: .r16Float, width: width, height: height, mipmapped: false)
         desc.usage = MTLTextureUsage(rawValue: MTLTextureUsage.shaderRead.rawValue | MTLTextureUsage.renderTarget.rawValue)
         desc.storageMode = .private
-        depthThickPassDesc.colorAttachments[0].texture = engine.device.makeTexture(descriptor: desc)
+        thickTexture = engine.device.makeTexture(descriptor: desc)
+        
+        desc = MTLTextureDescriptor.texture2DDescriptor(pixelFormat: .r32Float, width: width, height: height, mipmapped: false)
+        desc.usage = MTLTextureUsage(rawValue: MTLTextureUsage.shaderRead.rawValue | MTLTextureUsage.renderTarget.rawValue)
+        desc.storageMode = .private
+        depthTexture = engine.device.makeTexture(descriptor: desc)
         
         desc = MTLTextureDescriptor.texture2DDescriptor(pixelFormat: .depth32Float, width: width, height: height, mipmapped: false)
         desc.usage = MTLTextureUsage(rawValue: MTLTextureUsage.shaderRead.rawValue | MTLTextureUsage.renderTarget.rawValue)
@@ -266,11 +303,11 @@ public class ScreenSpaceFluid: Script {
         
         // binding texture
         material.normalDepthTexture = normalDepthTexture
-        material.thickTexture = depthThickPassDesc.colorAttachments[0].texture
+        material.thickTexture = thickTexture
         
         smoothPass.threadsPerGridX = width
         smoothPass.threadsPerGridY = height
-        smoothPass.defaultShaderData.setImageView("depth", depthThickPassDesc.depthAttachment.texture)
+        smoothPass.defaultShaderData.setImageView("depth", depthTexture)
         smoothPass.defaultShaderData.setImageView("normalDepth", normalDepthTexture)
 
         restoreNormalPass.threadsPerGridX = width
@@ -286,9 +323,10 @@ public class ScreenSpaceFluid: Script {
         _ssfData.p_n = camera.nearClipPlane
         _ssfData.p_t = tanHalfFov * camera.nearClipPlane
         _ssfData.p_r = camera.aspectRatio * _ssfData.p_t
-        depthThickMtl.shaderData.setData("u_ssf", _ssfData)
-        restoreNormalPass.defaultShaderData.setData("u_ssf", _ssfData)
-        material.shaderData.setData("u_ssf", _ssfData)
+        thickMtl.shaderData.setData(ScreenSpaceFluid._ssfProperty, _ssfData)
+        depthMtl.shaderData.setData(ScreenSpaceFluid._ssfProperty, _ssfData)
+        restoreNormalPass.defaultShaderData.setData(ScreenSpaceFluid._ssfProperty, _ssfData)
+        material.shaderData.setData(ScreenSpaceFluid._ssfProperty, _ssfData)
     }
     
     public override func onBeginRender(_ camera: Camera, _ commandBuffer: MTLCommandBuffer) {
@@ -298,8 +336,15 @@ public class ScreenSpaceFluid: Script {
         }
         
         if let mesh = _particleMesh {
-            subpass.element = RenderElement(renderer, mesh, mesh.subMesh!, depthThickMtl, depthThickMtl.shader[0])
-            renderPass.draw(commandBuffer, depthThickPassDesc, "ssf depthThick")
+            subpass.element = RenderElement(renderer, mesh, mesh.subMesh!, thickMtl, thickMtl.shader[0])
+            subpass.pixelFormat = .r16Float
+            depthThickPassDesc.colorAttachments[0].texture = thickTexture
+            renderPass.draw(commandBuffer, depthThickPassDesc, "ssf thick")
+            
+            subpass.element = RenderElement(renderer, mesh, mesh.subMesh!, depthMtl, depthMtl.shader[0])
+            subpass.pixelFormat = .r32Float
+            depthThickPassDesc.colorAttachments[0].texture = depthTexture
+            renderPass.draw(commandBuffer, depthThickPassDesc, "ssf depth")
             
             if let encoder = commandBuffer.makeComputeCommandEncoder() {
                 encoder.label = "ssf compute"

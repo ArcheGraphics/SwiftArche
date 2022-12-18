@@ -8,14 +8,14 @@
 using namespace metal;
 #include "type_common.h"
 
-float bilateral(uint2 xy, depth2d<float, access::read> depth,
+float bilateral(uint2 xy, texture2d<float, access::read> depth,
                 int kernel_r, float blur_r, float blur_z) {
-    float z = depth.read(xy);
+    float z = depth.read(xy).r;
     float sum = 0, wsum = 0;
 
     for(int dx = -kernel_r; dx <= kernel_r; dx++)
         for (int dy = -kernel_r; dy <= kernel_r; dy++) {
-            float s = depth.read(xy + uint2(dx, dy));
+            float s = depth.read(xy + uint2(dx, dy)).r;
 
             float w = exp(- (dx*dx + dy*dy) * blur_r * blur_r);
 
@@ -31,13 +31,13 @@ float bilateral(uint2 xy, depth2d<float, access::read> depth,
     return sum;
 }
 
-float gaussian(uint2 xy, depth2d<float, access::read> depth,
+float gaussian(uint2 xy, texture2d<float, access::read> depth,
                int kernel_r, float blur_r) {
     float sum = 0, wsum = 0;
 
     for (int dx = -kernel_r; dx <= kernel_r; dx++)
         for (int dy = -kernel_r; dy <= kernel_r; dy++) {
-            float s = depth.read(xy + uint2(dx, dy));
+            float s = depth.read(xy + uint2(dx, dy)).r;
             float w = exp(-(dx*dx + dy * dy) * blur_r * blur_r);
 
             sum += s * w;
@@ -52,7 +52,7 @@ kernel void ssf_smoothDepth(constant int& kernel_r [[buffer(1)]],
                             constant float& blur_r [[buffer(2)]],
                             constant float& blur_z [[buffer(3)]],
                             // output
-                            depth2d<float, access::read> depth [[ texture(0) ]],
+                            texture2d<float, access::read> depth [[ texture(0) ]],
                             texture2d<float, access::write> normalDepth [[texture(1)]],
                             uint3 tpig [[ thread_position_in_grid ]]) {
     float zz = bilateral(tpig.xy, depth, kernel_r, blur_r, blur_z);

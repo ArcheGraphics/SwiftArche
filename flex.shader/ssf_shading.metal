@@ -267,7 +267,7 @@ fragment fragmentOut fragment_ssf(VertexOut in [[stage_in]],
     ssf.texCoord = in.v_uv;
     ssf.iview = u_camera.u_viewInvMat;
     
-    ssf.shading_option = ScreenSpaceFluid::reflect;
+    ssf.shading_option = ScreenSpaceFluid::depth;
     
     return ssf.execute();
 }
