@@ -14,11 +14,24 @@ import ImGui
 fileprivate class GUI: Script {
     var ssf: ScreenSpaceFluid!
     
+    private var kernelRadius: Int32 {
+        get {
+            Int32(ssf.kernelRadius)
+        }
+        set {
+            ssf.kernelRadius = Int(newValue)
+        }
+    }
+    
     override func onUpdate(_ deltaTime: Float) {
         UIElement.Init(engine.canvas, deltaTime)
 
         ImGuiNewFrame()
         ImGuiSliderFloat("point radius", &ssf.pointRadius, 0.0, 50.0, nil, 1)
+        ImGuiSliderInt("kernelRadius", &kernelRadius, 0, 50, nil, ImGuiSliderFlags())
+        ImGuiSliderFloat("sigma radius", &ssf.sigmaRadius, 0.0, 50.0, nil, 1)
+        ImGuiSliderFloat("sigma depth", &ssf.sigmaDepth, 0.0, 50.0, nil, 1)
+
         ImGuiSeparator()
         UIElement.frameRate()
         ImGuiRender()

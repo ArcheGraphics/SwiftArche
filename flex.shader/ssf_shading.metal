@@ -48,10 +48,13 @@ public:
         // ze to z_ndc to gl_FragDepth
         // REF: https://computergraphics.stackexchange.com/questions/6308/why-does-this-gl-fragdepth-calculation-work?utm_medium=organic&utm_source=google_rich_qa&utm_campaign=google_rich_qa
         float ze = u_normalDepthTexture.sample(u_normalDepthSampler, texCoord).w;
+        if (ze < 0.001) {
+            ze = -10000;
+        }
         float z_ndc = proj(-ze);
         
         fragmentOut out;
-        out.depth = ze;
+        out.depth = z_ndc;
         switch(shading_option) {
             case depth:
                 out.color = shading_depth();
@@ -107,30 +110,30 @@ public:
     }
 
     float3 trace_color(float3 p, float3 d) {
-        float4 world_pos = iview * float4(p, 1);
+//        float4 world_pos = iview * float4(p, 1);
         float3 world_d = matrix_float3x3(iview.columns[0].xyz, iview.columns[1].xyz, iview.columns[2].xyz) * d;
-        float t = -world_pos.z / world_d.z;
-        float3 world_its = world_pos.xyz + t * world_d;
-
-        if (t > 0 && abs(world_its.x) < 5 && abs(world_its.y) < 5) {
-            float scale = 10;
-            float2 uv = scale * (world_its.xy - float2(-5, -5)) / 10;
-            float u = fmod(uv.x, 1), v = fmod(uv.y, 1);
-            int flip = 1;
-            if (u > 0.5) flip = 1 - flip;
-            if (v > 0.5) flip = 1 - flip;
-
-            if (flip == 1)
-                return float3(0.8, 0.8, 0.8);
-            else
-                return float3(0.6, 0.6, 0.6);
-        } else {
+//        float t = -world_pos.z / world_d.z;
+//        float3 world_its = world_pos.xyz + t * world_d;
+//
+//        if (t > 0 && abs(world_its.x) < 5 && abs(world_its.y) < 5) {
+//            float scale = 10;
+//            float2 uv = scale * (world_its.xy - float2(-5, -5)) / 10;
+//            float u = fmod(uv.x, 1), v = fmod(uv.y, 1);
+//            int flip = 1;
+//            if (u > 0.5) flip = 1 - flip;
+//            if (v > 0.5) flip = 1 - flip;
+//
+//            if (flip == 1)
+//                return float3(0.8, 0.8, 0.8);
+//            else
+//                return float3(0.6, 0.6, 0.6);
+//        } else {
             if (hasSpecularEnv) {
                 return u_skyboxTexture.sample(u_skyboxSampler, world_d).rgb;
             } else {
                 return u_envMapLight.diffuse;
             }
-        }
+//        }
     }
     
     float4 shading_fresnel() {
@@ -146,8 +149,8 @@ public:
         float attenuate = max(exp(0.5*-thickness), 0.2);
         float3 tint_color = float3(6, 105, 217) / 256;
         // vec3 refract_color = mix(tint_color, trace_color(p, view_refract), 0.8);
-        float3 refract_color = mix(tint_color, trace_color(p, view_refract), attenuate);
-        float3 reflect_color = trace_color(p, view_reflect);
+        float3 refract_color = mix(tint_color, trace_color(p, -view_refract), attenuate);
+        float3 reflect_color = trace_color(p, -view_reflect);
 
         return float4(mix(refract_color, reflect_color, r), 1);
     }
@@ -194,8 +197,6 @@ public:
     
     float4 shading_depth() {
         float z = u_normalDepthTexture.sample(u_normalDepthSampler, texCoord).w;
-        if (z > 50) discard_fragment();
-
         float c = exp(z)/(exp(z)+1);
         c = (c - 0.5) * 2;
 
@@ -203,10 +204,7 @@ public:
     }
 
     float4 shading_thick() {
-        float z = u_normalDepthTexture.sample(u_normalDepthSampler, texCoord).w;
-        if (z > 50) discard_fragment();
         float t = u_thickTexture.sample(u_thickSampler, texCoord).x;
-
         t = exp(t) / (exp(t) + 1);
         t = (t - 0.5) * 2;
 
