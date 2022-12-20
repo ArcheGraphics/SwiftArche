@@ -418,6 +418,11 @@
 		3ED9BCE1294D616700876ABC /* ssf_shading.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3ED9BCE0294D616700876ABC /* ssf_shading.metal */; };
 		3ED9BCE3294D753900876ABC /* ScreenSpaceFluid.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3ED9BCE2294D753900876ABC /* ScreenSpaceFluid.swift */; };
 		3ED9BCE6294DA4F300876ABC /* ScreenSpaceFluidApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3ED9BCE5294DA4F300876ABC /* ScreenSpaceFluidApp.swift */; };
+		3ED9BCE929514A0700876ABC /* cellular_noise.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3ED9BCE829514A0700876ABC /* cellular_noise.metal */; };
+		3ED9BCEB29515B9D00876ABC /* noise_common.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3ED9BCEA29515B9D00876ABC /* noise_common.metal */; };
+		3ED9BCEF29515C6800876ABC /* perlin_noise.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3ED9BCEE29515C6800876ABC /* perlin_noise.metal */; };
+		3ED9BCF22951614E00876ABC /* simplex_noise.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3ED9BCF12951614E00876ABC /* simplex_noise.metal */; };
+		3ED9BCF52951658E00876ABC /* psrd_noise.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3ED9BCF42951658E00876ABC /* psrd_noise.metal */; };
 		43D8C033021F4B86E95953E6 /* IBLApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8CFAFE0E0B5772488FA13 /* IBLApp.swift */; };
 		43D8C1413D08147985256B8A /* PhysXJointBasicApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8C12DBC7510CB05B703F8 /* PhysXJointBasicApp.swift */; };
 		43D8C40438F0527739C7D662 /* AtomicComputeApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8C888ABFCE2075E7AA5BE /* AtomicComputeApp.swift */; };
@@ -991,6 +996,16 @@
 		3ED9BCE0294D616700876ABC /* ssf_shading.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = ssf_shading.metal; sourceTree = "<group>"; };
 		3ED9BCE2294D753900876ABC /* ScreenSpaceFluid.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenSpaceFluid.swift; sourceTree = "<group>"; };
 		3ED9BCE5294DA4F300876ABC /* ScreenSpaceFluidApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenSpaceFluidApp.swift; sourceTree = "<group>"; };
+		3ED9BCE829514A0700876ABC /* cellular_noise.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = cellular_noise.metal; sourceTree = "<group>"; };
+		3ED9BCEA29515B9D00876ABC /* noise_common.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = noise_common.metal; sourceTree = "<group>"; };
+		3ED9BCEC29515BB600876ABC /* noise_common.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = noise_common.h; sourceTree = "<group>"; };
+		3ED9BCED29515C0800876ABC /* cellular_noise.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = cellular_noise.h; sourceTree = "<group>"; };
+		3ED9BCEE29515C6800876ABC /* perlin_noise.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = perlin_noise.metal; sourceTree = "<group>"; };
+		3ED9BCF0295160A600876ABC /* perlin_noise.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = perlin_noise.h; sourceTree = "<group>"; };
+		3ED9BCF12951614E00876ABC /* simplex_noise.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = simplex_noise.metal; sourceTree = "<group>"; };
+		3ED9BCF32951648C00876ABC /* simplex_noise.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = simplex_noise.h; sourceTree = "<group>"; };
+		3ED9BCF42951658E00876ABC /* psrd_noise.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = psrd_noise.metal; sourceTree = "<group>"; };
+		3ED9BCF6295166B500876ABC /* psrd_noise.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = psrd_noise.h; sourceTree = "<group>"; };
 		43D8C090F42BE8E48D6FC4E1 /* GridMaterial.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GridMaterial.swift; sourceTree = "<group>"; };
 		43D8C0A4A7B56D737C3F4FE2 /* PhysXCollisionDetectionApp.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhysXCollisionDetectionApp.swift; sourceTree = "<group>"; };
 		43D8C0CC365128B7B18E4074 /* WireframeManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WireframeManager.swift; sourceTree = "<group>"; };
@@ -1247,6 +1262,7 @@
 				3E6B23D429499327000AC29F /* type_common.h */,
 				3EABF5E3294C3485009943C1 /* macro_name.h */,
 				3EABF5E2294C347C009943C1 /* function_constant.h */,
+				3ED9BCE7295149F100876ABC /* noise */,
 				3E6B23BA2946B9FF000AC29F /* physics_helpers.h */,
 				3E6B23B52946B3E5000AC29F /* physics_helpers.metal */,
 				3E6B23D2294964B1000AC29F /* sdf_baker.metal */,
@@ -2089,6 +2105,23 @@
 			path = grid;
 			sourceTree = "<group>";
 		};
+		3ED9BCE7295149F100876ABC /* noise */ = {
+			isa = PBXGroup;
+			children = (
+				3ED9BCEC29515BB600876ABC /* noise_common.h */,
+				3ED9BCEA29515B9D00876ABC /* noise_common.metal */,
+				3ED9BCED29515C0800876ABC /* cellular_noise.h */,
+				3ED9BCE829514A0700876ABC /* cellular_noise.metal */,
+				3ED9BCF0295160A600876ABC /* perlin_noise.h */,
+				3ED9BCEE29515C6800876ABC /* perlin_noise.metal */,
+				3ED9BCF32951648C00876ABC /* simplex_noise.h */,
+				3ED9BCF12951614E00876ABC /* simplex_noise.metal */,
+				3ED9BCF6295166B500876ABC /* psrd_noise.h */,
+				3ED9BCF42951658E00876ABC /* psrd_noise.metal */,
+			);
+			path = noise;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
@@ -2625,14 +2658,19 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3ED9BCF52951658E00876ABC /* psrd_noise.metal in Sources */,
 				3E6B23D629499B36000AC29F /* sdf_shading.metal in Sources */,
+				3ED9BCEF29515C6800876ABC /* perlin_noise.metal in Sources */,
 				3ED9BCDF294D5A1300876ABC /* ssf_kernel.metal in Sources */,
 				3E6B23B62946B3E5000AC29F /* physics_helpers.metal in Sources */,
 				3ED9BCE1294D616700876ABC /* ssf_shading.metal in Sources */,
 				3EABF5E9294C3841009943C1 /* particle_shading.metal in Sources */,
 				3EABF5E1294B6382009943C1 /* volume_emitter.metal in Sources */,
 				3E6B23D3294964B1000AC29F /* sdf_baker.metal in Sources */,
+				3ED9BCE929514A0700876ABC /* cellular_noise.metal in Sources */,
 				3EABF5EE294CBCD4009943C1 /* ssf_depth_thick_shading.metal in Sources */,
+				3ED9BCEB29515B9D00876ABC /* noise_common.metal in Sources */,
+				3ED9BCF22951614E00876ABC /* simplex_noise.metal in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

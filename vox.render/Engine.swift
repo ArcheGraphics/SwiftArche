@@ -194,8 +194,8 @@ public class Engine: NSObject {
 
     /// Update the engine loop manually. If you call engine.run(), you generally don't need to call this function.
     func update() {
-        let deltaTime = time.deltaTime;
         time.tick();
+        let deltaTime = time.deltaTime;
 
         if !_isPaused {
             // Wait to ensure only maxFramesInFlight are getting processed by any stage in the Metal
