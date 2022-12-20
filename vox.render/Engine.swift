@@ -163,6 +163,20 @@ public class Engine: NSObject {
     }
 #endif
     
+    public func createCaptureScope(name: String) -> MTLCaptureScope {
+        let scope = MTLCaptureManager.shared().makeCaptureScope(device: device)
+        scope.label = name
+        let captureDescriptor = MTLCaptureDescriptor()
+        captureDescriptor.captureObject = scope
+        captureDescriptor.destination = .developerTools
+        do {
+            try MTLCaptureManager.shared().startCapture(with: captureDescriptor)
+        } catch let error {
+            fatalError("Error creating capture scope \(name), error \(error)")
+        }
+        return scope
+    }
+    
     public func createShaderLibrary(_ name: String) -> MTLLibrary {
         // Load all the shader files with a metal file extension in the project
         let libraryURL = Bundle.main.url(forResource: name, withExtension: "metallib")!
