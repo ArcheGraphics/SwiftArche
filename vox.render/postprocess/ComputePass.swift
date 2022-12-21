@@ -50,7 +50,51 @@ open class ComputePass {
                 let nHeight = min(threadsPerGridY, pipelineState.handle.maxTotalThreadsPerThreadgroup / nWidth)
                 commandEncoder.dispatchThreads(MTLSize(width: threadsPerGridX, height: threadsPerGridY, depth: threadsPerGridZ),
                         threadsPerThreadgroup: MTLSize(width: nWidth, height: nHeight, depth: 1))
-                let a = MTLDispatchThreadgroupsIndirectArguments()
+            }
+        }
+    }
+    
+    /// Compute function
+    /// - Parameter commandEncoder: CommandEncoder to use to record compute commands
+    open func compute(commandEncoder: MTLComputeCommandEncoder,
+                      threadgroupsPerGrid: MTLSize, threadsPerThreadgroup: MTLSize) {
+        if let resourceCache = resourceCache {
+            let compileMacros = ShaderMacroCollection()
+            for shaderData in data {
+                ShaderMacroCollection.unionCollection(compileMacros, shaderData._macroCollection, compileMacros)
+            }
+
+            for shaderPass in shader {
+                _pipelineDescriptor.computeFunction = resourceCache.requestShaderModule(shaderPass, compileMacros)[0]
+                let pipelineState = resourceCache.requestComputePipeline(_pipelineDescriptor)
+                for shaderData in data {
+                    shaderData.bindData(commandEncoder, pipelineState.uniformBlock, resourceCache)
+                }
+                commandEncoder.setComputePipelineState(pipelineState.handle)
+                commandEncoder.dispatchThreadgroups(threadgroupsPerGrid, threadsPerThreadgroup: threadsPerThreadgroup)
+            }
+        }
+    }
+    
+    /// Compute function
+    /// - Parameter commandEncoder: CommandEncoder to use to record compute commands
+    open func compute(commandEncoder: MTLComputeCommandEncoder,
+                      indirectBuffer: MTLBuffer, threadsPerThreadgroup: MTLSize) {
+        if let resourceCache = resourceCache {
+            let compileMacros = ShaderMacroCollection()
+            for shaderData in data {
+                ShaderMacroCollection.unionCollection(compileMacros, shaderData._macroCollection, compileMacros)
+            }
+
+            for shaderPass in shader {
+                _pipelineDescriptor.computeFunction = resourceCache.requestShaderModule(shaderPass, compileMacros)[0]
+                let pipelineState = resourceCache.requestComputePipeline(_pipelineDescriptor)
+                for shaderData in data {
+                    shaderData.bindData(commandEncoder, pipelineState.uniformBlock, resourceCache)
+                }
+                commandEncoder.setComputePipelineState(pipelineState.handle)
+                commandEncoder.dispatchThreadgroups(indirectBuffer: indirectBuffer,
+                                                    indirectBufferOffset: 0, threadsPerThreadgroup: threadsPerThreadgroup)
             }
         }
     }

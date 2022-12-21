@@ -9,8 +9,8 @@ using namespace metal;
 
 kernel void stepBitonicSort(constant uint& g_NumElements [[buffer(1)]],
                             device float2* Data [[buffer(2)]],
-                            constant int& nMergeSubSize [[buffer(3)]],
-                            constant int& nMergeSubSizeHigh [[buffer(4)]],
+                            constant uint& nMergeSubSize [[buffer(3)]],
+                            constant uint& nMergeSubSizeHigh [[buffer(4)]],
                             constant int& nMergeSubSizeLow [[buffer(5)]],
                             uint3 Gid [[threadgroup_position_in_grid]],
                             uint3 GTid [[thread_position_in_threadgroup]]) {
