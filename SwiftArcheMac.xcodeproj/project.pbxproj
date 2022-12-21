@@ -428,6 +428,7 @@
 		3ED9BCFD29529D0700876ABC /* inner_bitonic_sort.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3ED9BCFC29529D0700876ABC /* inner_bitonic_sort.metal */; };
 		3ED9BCFF2952A13F00876ABC /* step_bitonic_sort.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3ED9BCFE2952A13F00876ABC /* step_bitonic_sort.metal */; };
 		3ED9BD012952A45500876ABC /* BitonicSort.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3ED9BD002952A45500876ABC /* BitonicSort.swift */; };
+		3ED9BD032952B23F00876ABC /* BitonicSortApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3ED9BD022952B23F00876ABC /* BitonicSortApp.swift */; };
 		43D8C033021F4B86E95953E6 /* IBLApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8CFAFE0E0B5772488FA13 /* IBLApp.swift */; };
 		43D8C1413D08147985256B8A /* PhysXJointBasicApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8C12DBC7510CB05B703F8 /* PhysXJointBasicApp.swift */; };
 		43D8C40438F0527739C7D662 /* AtomicComputeApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8C888ABFCE2075E7AA5BE /* AtomicComputeApp.swift */; };
@@ -1016,6 +1017,7 @@
 		3ED9BCFC29529D0700876ABC /* inner_bitonic_sort.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = inner_bitonic_sort.metal; sourceTree = "<group>"; };
 		3ED9BCFE2952A13F00876ABC /* step_bitonic_sort.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = step_bitonic_sort.metal; sourceTree = "<group>"; };
 		3ED9BD002952A45500876ABC /* BitonicSort.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BitonicSort.swift; sourceTree = "<group>"; };
+		3ED9BD022952B23F00876ABC /* BitonicSortApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BitonicSortApp.swift; sourceTree = "<group>"; };
 		43D8C090F42BE8E48D6FC4E1 /* GridMaterial.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GridMaterial.swift; sourceTree = "<group>"; };
 		43D8C0A4A7B56D737C3F4FE2 /* PhysXCollisionDetectionApp.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhysXCollisionDetectionApp.swift; sourceTree = "<group>"; };
 		43D8C0CC365128B7B18E4074 /* WireframeManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WireframeManager.swift; sourceTree = "<group>"; };
@@ -1305,6 +1307,7 @@
 				3E6B23DB2949B32C000AC29F /* ImplicitTriangleApp.swift */,
 				3EABF5E5294C3716009943C1 /* VolumeEmitterApp.swift */,
 				3ED9BCE5294DA4F300876ABC /* ScreenSpaceFluidApp.swift */,
+				3ED9BD022952B23F00876ABC /* BitonicSortApp.swift */,
 			);
 			path = flex;
 			sourceTree = "<group>";
@@ -2714,6 +2717,7 @@
 				43D8C62B488D6837DDD5BBA8 /* SkyboxApp.swift in Sources */,
 				43D8CC2C3372F5E3258A852D /* IrradianceApp.swift in Sources */,
 				3ED9BCE6294DA4F300876ABC /* ScreenSpaceFluidApp.swift in Sources */,
+				3ED9BD032952B23F00876ABC /* BitonicSortApp.swift in Sources */,
 				3E6B23DC2949B32C000AC29F /* ImplicitTriangleApp.swift in Sources */,
 				43D8C033021F4B86E95953E6 /* IBLApp.swift in Sources */,
 				43D8C40438F0527739C7D662 /* AtomicComputeApp.swift in Sources */,
