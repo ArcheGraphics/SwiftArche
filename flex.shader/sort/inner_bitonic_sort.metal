@@ -17,18 +17,16 @@ kernel void innerBitonicSort(constant uint& g_NumElements [[buffer(1)]],
                              uint GI [[thread_index_in_threadgroup]]) {
     threadgroup float2 g_LDS[SORT_SIZE];
     
-    int2 tgp;
-    tgp.x = Gid.x * 256;
-    tgp.y = 0;
-    uint tgpw = min(512, max(0, int(g_NumElements - Gid.x * 512)));
+    int tgpx = Gid.x * 256;
+    int tgpw = min(512, max(0, int(g_NumElements - Gid.x * 512)));
     
-    int GlobalBaseIndex = tgp.y + tgp.x*2 + GTid.x;
+    int GlobalBaseIndex = tgpx * 2 + GTid.x;
     int LocalBaseIndex  = GI;
     int i;
     
     // Load shared data
     for(i = 0; i < 2; ++i) {
-        if(GI + i * NUM_THREADS < tgpw) {
+        if (int(GI + i * NUM_THREADS) < tgpw) {
             g_LDS[LocalBaseIndex + i * NUM_THREADS] = Data[GlobalBaseIndex + i * NUM_THREADS];
         }
     }
@@ -37,13 +35,13 @@ kernel void innerBitonicSort(constant uint& g_NumElements [[buffer(1)]],
     // sort threadgroup shared memory
     for (int nMergeSubSize = SORT_SIZE >> 1; nMergeSubSize > 0; nMergeSubSize = nMergeSubSize >> 1){
         int tmp_index = GI;
-        int index_low = tmp_index & (nMergeSubSize-1);
-        int index_high = 2*(tmp_index-index_low);
+        int index_low = tmp_index & (nMergeSubSize - 1);
+        int index_high = 2 * (tmp_index - index_low);
         int index = index_high + index_low;
 
         unsigned int nSwapElem = index_high + nMergeSubSize + index_low;
 
-        if (nSwapElem < tgpw) {
+        if (int(nSwapElem) < tgpw) {
             float2 a = g_LDS[index];
             float2 b = g_LDS[nSwapElem];
 
@@ -57,8 +55,8 @@ kernel void innerBitonicSort(constant uint& g_NumElements [[buffer(1)]],
     
     // Store shared data
     for (i = 0; i < 2; ++i) {
-        if (GI + i * NUM_THREADS < tgpw) {
-            Data[GlobalBaseIndex + i*NUM_THREADS] = g_LDS[LocalBaseIndex + i * NUM_THREADS];
+        if (int(GI + i * NUM_THREADS) < tgpw) {
+            Data[GlobalBaseIndex + i * NUM_THREADS] = g_LDS[LocalBaseIndex + i * NUM_THREADS];
         }
     }
 }
