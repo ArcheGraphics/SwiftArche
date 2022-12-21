@@ -50,6 +50,7 @@ open class ComputePass {
                 let nHeight = min(threadsPerGridY, pipelineState.handle.maxTotalThreadsPerThreadgroup / nWidth)
                 commandEncoder.dispatchThreads(MTLSize(width: threadsPerGridX, height: threadsPerGridY, depth: threadsPerGridZ),
                         threadsPerThreadgroup: MTLSize(width: nWidth, height: nHeight, depth: 1))
+                let a = MTLDispatchThreadgroupsIndirectArguments()
             }
         }
     }

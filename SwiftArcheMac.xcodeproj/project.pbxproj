@@ -423,6 +423,10 @@
 		3ED9BCEF29515C6800876ABC /* perlin_noise.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3ED9BCEE29515C6800876ABC /* perlin_noise.metal */; };
 		3ED9BCF22951614E00876ABC /* simplex_noise.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3ED9BCF12951614E00876ABC /* simplex_noise.metal */; };
 		3ED9BCF52951658E00876ABC /* psrd_noise.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3ED9BCF42951658E00876ABC /* psrd_noise.metal */; };
+		3ED9BCF9295295B100876ABC /* init_sort_args.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3ED9BCF8295295B100876ABC /* init_sort_args.metal */; };
+		3ED9BCFB2952968700876ABC /* pre_bitonic_sort.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3ED9BCFA2952968700876ABC /* pre_bitonic_sort.metal */; };
+		3ED9BCFD29529D0700876ABC /* inner_bitonic_sort.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3ED9BCFC29529D0700876ABC /* inner_bitonic_sort.metal */; };
+		3ED9BCFF2952A13F00876ABC /* step_bitonic_sort.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3ED9BCFE2952A13F00876ABC /* step_bitonic_sort.metal */; };
 		43D8C033021F4B86E95953E6 /* IBLApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8CFAFE0E0B5772488FA13 /* IBLApp.swift */; };
 		43D8C1413D08147985256B8A /* PhysXJointBasicApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8C12DBC7510CB05B703F8 /* PhysXJointBasicApp.swift */; };
 		43D8C40438F0527739C7D662 /* AtomicComputeApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8C888ABFCE2075E7AA5BE /* AtomicComputeApp.swift */; };
@@ -1006,6 +1010,10 @@
 		3ED9BCF32951648C00876ABC /* simplex_noise.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = simplex_noise.h; sourceTree = "<group>"; };
 		3ED9BCF42951658E00876ABC /* psrd_noise.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = psrd_noise.metal; sourceTree = "<group>"; };
 		3ED9BCF6295166B500876ABC /* psrd_noise.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = psrd_noise.h; sourceTree = "<group>"; };
+		3ED9BCF8295295B100876ABC /* init_sort_args.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = init_sort_args.metal; sourceTree = "<group>"; };
+		3ED9BCFA2952968700876ABC /* pre_bitonic_sort.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = pre_bitonic_sort.metal; sourceTree = "<group>"; };
+		3ED9BCFC29529D0700876ABC /* inner_bitonic_sort.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = inner_bitonic_sort.metal; sourceTree = "<group>"; };
+		3ED9BCFE2952A13F00876ABC /* step_bitonic_sort.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = step_bitonic_sort.metal; sourceTree = "<group>"; };
 		43D8C090F42BE8E48D6FC4E1 /* GridMaterial.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GridMaterial.swift; sourceTree = "<group>"; };
 		43D8C0A4A7B56D737C3F4FE2 /* PhysXCollisionDetectionApp.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhysXCollisionDetectionApp.swift; sourceTree = "<group>"; };
 		43D8C0CC365128B7B18E4074 /* WireframeManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WireframeManager.swift; sourceTree = "<group>"; };
@@ -1263,6 +1271,7 @@
 				3EABF5E3294C3485009943C1 /* macro_name.h */,
 				3EABF5E2294C347C009943C1 /* function_constant.h */,
 				3ED9BCE7295149F100876ABC /* noise */,
+				3ED9BCF7295293FA00876ABC /* sort */,
 				3E6B23BA2946B9FF000AC29F /* physics_helpers.h */,
 				3E6B23B52946B3E5000AC29F /* physics_helpers.metal */,
 				3E6B23D2294964B1000AC29F /* sdf_baker.metal */,
@@ -2122,6 +2131,17 @@
 			path = noise;
 			sourceTree = "<group>";
 		};
+		3ED9BCF7295293FA00876ABC /* sort */ = {
+			isa = PBXGroup;
+			children = (
+				3ED9BCF8295295B100876ABC /* init_sort_args.metal */,
+				3ED9BCFA2952968700876ABC /* pre_bitonic_sort.metal */,
+				3ED9BCFC29529D0700876ABC /* inner_bitonic_sort.metal */,
+				3ED9BCFE2952A13F00876ABC /* step_bitonic_sort.metal */,
+			);
+			path = sort;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
@@ -2660,16 +2680,20 @@
 			files = (
 				3ED9BCF52951658E00876ABC /* psrd_noise.metal in Sources */,
 				3E6B23D629499B36000AC29F /* sdf_shading.metal in Sources */,
+				3ED9BCF9295295B100876ABC /* init_sort_args.metal in Sources */,
+				3ED9BCFD29529D0700876ABC /* inner_bitonic_sort.metal in Sources */,
 				3ED9BCEF29515C6800876ABC /* perlin_noise.metal in Sources */,
 				3ED9BCDF294D5A1300876ABC /* ssf_kernel.metal in Sources */,
 				3E6B23B62946B3E5000AC29F /* physics_helpers.metal in Sources */,
 				3ED9BCE1294D616700876ABC /* ssf_shading.metal in Sources */,
+				3ED9BCFB2952968700876ABC /* pre_bitonic_sort.metal in Sources */,
 				3EABF5E9294C3841009943C1 /* particle_shading.metal in Sources */,
 				3EABF5E1294B6382009943C1 /* volume_emitter.metal in Sources */,
 				3E6B23D3294964B1000AC29F /* sdf_baker.metal in Sources */,
 				3ED9BCE929514A0700876ABC /* cellular_noise.metal in Sources */,
 				3EABF5EE294CBCD4009943C1 /* ssf_depth_thick_shading.metal in Sources */,
 				3ED9BCEB29515B9D00876ABC /* noise_common.metal in Sources */,
+				3ED9BCFF2952A13F00876ABC /* step_bitonic_sort.metal in Sources */,
 				3ED9BCF22951614E00876ABC /* simplex_noise.metal in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
