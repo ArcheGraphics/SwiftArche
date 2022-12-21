@@ -27,25 +27,21 @@ class BitonicSortApp: NSViewController {
         cameraEntity.transform.lookAt(targetPosition: Vector3())
         let _: Camera = cameraEntity.addComponent()
         
-        let scope = engine.createCaptureScope(name: "bitonic")
+        let count: UInt = 10000
+        var sortArray: [SIMD2<Float>] = []
+        for i in 0..<count {
+            sortArray.append(SIMD2<Float>(Float.random(in: 0..<5), Float(i)))
+        }
+        
         let bitonicSort = BitonicSort(engine)
-        let sortBuffer = BufferView(device: engine.device, array: [
-            SIMD2<Float>(0.2, 1),
-            SIMD2<Float>(0.5, 2),
-            SIMD2<Float>(0.1, 3),
-            SIMD2<Float>(0.01, 4),
-            SIMD2<Float>(0.3, 5),
-            SIMD2<Float>(0.7, 6),
-            SIMD2<Float>(0.4, 7),
-            SIMD2<Float>(0.24, 8),
-            SIMD2<Float>(0, 0),
-            SIMD2<Float>(0, 0),
-        ])
-        let itemCount = BufferView(device: engine.device, array: [UInt(8)])
+        let sortBuffer = BufferView(device: engine.device, array: sortArray)
+        let itemCount = BufferView(device: engine.device, array: [count])
+        let scope = engine.createCaptureScope(name: "bitonic")
         scope.begin()
         if let commandBuffer = engine.commandQueue.makeCommandBuffer(),
            let commandEncoder = commandBuffer.makeComputeCommandEncoder() {
-            bitonicSort.run(commandEncoder: commandEncoder, maxSize: 8, sortBuffer: sortBuffer, itemCount: itemCount)
+            commandEncoder.label = "bitonic sort"
+            bitonicSort.run(commandEncoder: commandEncoder, maxSize: count, sortBuffer: sortBuffer, itemCount: itemCount)
             commandEncoder.endEncoding()
             commandBuffer.commit()
             commandBuffer.waitUntilCompleted()

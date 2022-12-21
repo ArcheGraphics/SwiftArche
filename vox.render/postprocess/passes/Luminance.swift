@@ -53,7 +53,7 @@ public class Luminance: ComputePass {
         threadsPerGridY = height
     }
     
-    public override func compute(commandEncoder: MTLComputeCommandEncoder) {
+    public override func compute(commandEncoder: MTLComputeCommandEncoder, label: String = "") {
         if let canvas = _canvasChanged {
             if let renderTarget = canvas.currentRenderPassDescriptor,
                let texture = renderTarget.colorAttachments[0].texture {
@@ -62,6 +62,6 @@ public class Luminance: ComputePass {
             }
         }
         
-        super.compute(commandEncoder: commandEncoder)
+        super.compute(commandEncoder: commandEncoder, label: label)
     }
 }

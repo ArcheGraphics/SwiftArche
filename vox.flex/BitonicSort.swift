@@ -45,7 +45,7 @@ public class BitonicSort {
     public func run(commandEncoder: MTLComputeCommandEncoder, maxSize: UInt,
                     sortBuffer: BufferView, itemCount: BufferView) {
         initSortArgsPass.defaultShaderData.setData("g_NumElements", itemCount)
-        initSortArgsPass.compute(commandEncoder: commandEncoder)
+        initSortArgsPass.compute(commandEncoder: commandEncoder, label: "init sort args")
         
         preSortPass.defaultShaderData.setData("g_NumElements", itemCount)
         preSortPass.defaultShaderData.setData("Data", sortBuffer)
@@ -78,7 +78,8 @@ public class BitonicSort {
         let ITERATIONS = HALF_SIZE > 1024 ? HALF_SIZE / 1024 : 1
         let NUM_THREADS = HALF_SIZE / ITERATIONS
         preSortPass.compute(commandEncoder: commandEncoder, indirectBuffer: indirectSortArgsBuffer.buffer,
-                            threadsPerThreadgroup: MTLSize(width: NUM_THREADS, height: 1, depth: 1))
+                            threadsPerThreadgroup: MTLSize(width: NUM_THREADS, height: 1, depth: 1),
+                            label: "pre sort")
         return bDone
     }
     
@@ -117,13 +118,13 @@ public class BitonicSort {
             commandEncoder.setBytes(&nMergeSubSizeHigh, length: MemoryLayout<UInt>.stride, index: 4)
             commandEncoder.setBytes(&nMergeSubSizeLow, length: MemoryLayout<Int>.stride, index: 5)
             stepSortPass.compute(commandEncoder: commandEncoder, threadgroupsPerGrid: MTLSize(width: 256, height: 1, depth: 1),
-                                 threadsPerThreadgroup: MTLSize(width: Int(numThreadGroups), height: 1, depth: 1))
+                                 threadsPerThreadgroup: MTLSize(width: Int(numThreadGroups), height: 1, depth: 1), label: "step sort")
             
             nMergeSubSize = nMergeSubSize >> 1
         }
         let NUM_THREADS = SORT_SIZE / 2
         innerSortPass.compute(commandEncoder: commandEncoder, threadgroupsPerGrid: MTLSize(width: NUM_THREADS, height: 1, depth: 1),
-                              threadsPerThreadgroup: MTLSize(width: Int(numThreadGroups), height: 1, depth: 1))
+                              threadsPerThreadgroup: MTLSize(width: Int(numThreadGroups), height: 1, depth: 1), label: "inner sort")
         
         return bDone
     }

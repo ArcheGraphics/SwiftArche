@@ -31,7 +31,8 @@ open class ComputePass {
 
     /// Compute function
     /// - Parameter commandEncoder: CommandEncoder to use to record compute commands
-    open func compute(commandEncoder: MTLComputeCommandEncoder) {
+    open func compute(commandEncoder: MTLComputeCommandEncoder, label: String = "") {
+        commandEncoder.pushDebugGroup(label)
         if let resourceCache = resourceCache {
             let compileMacros = ShaderMacroCollection()
             for shaderData in data {
@@ -52,12 +53,14 @@ open class ComputePass {
                         threadsPerThreadgroup: MTLSize(width: nWidth, height: nHeight, depth: 1))
             }
         }
+        commandEncoder.popDebugGroup()
     }
     
     /// Compute function
     /// - Parameter commandEncoder: CommandEncoder to use to record compute commands
     open func compute(commandEncoder: MTLComputeCommandEncoder,
-                      threadgroupsPerGrid: MTLSize, threadsPerThreadgroup: MTLSize) {
+                      threadgroupsPerGrid: MTLSize, threadsPerThreadgroup: MTLSize, label: String = "") {
+        commandEncoder.pushDebugGroup(label)
         if let resourceCache = resourceCache {
             let compileMacros = ShaderMacroCollection()
             for shaderData in data {
@@ -74,12 +77,14 @@ open class ComputePass {
                 commandEncoder.dispatchThreadgroups(threadgroupsPerGrid, threadsPerThreadgroup: threadsPerThreadgroup)
             }
         }
+        commandEncoder.popDebugGroup()
     }
     
     /// Compute function
     /// - Parameter commandEncoder: CommandEncoder to use to record compute commands
     open func compute(commandEncoder: MTLComputeCommandEncoder,
-                      indirectBuffer: MTLBuffer, threadsPerThreadgroup: MTLSize) {
+                      indirectBuffer: MTLBuffer, threadsPerThreadgroup: MTLSize, label: String = "") {
+        commandEncoder.pushDebugGroup(label)
         if let resourceCache = resourceCache {
             let compileMacros = ShaderMacroCollection()
             for shaderData in data {
@@ -97,5 +102,6 @@ open class ComputePass {
                                                     indirectBufferOffset: 0, threadsPerThreadgroup: threadsPerThreadgroup)
             }
         }
+        commandEncoder.popDebugGroup()
     }
 }
