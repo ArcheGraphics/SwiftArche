@@ -27,6 +27,10 @@ public class HashGrid {
         }
     }
     
+    public static func builder() -> Builder {
+        HashGrid.Builder()
+    }
+    
     public init(_ engine: Engine,
                 _ resolutionX: UInt32,
                 _ resolutionY: UInt32,
@@ -81,7 +85,7 @@ public class HashGrid {
         _sortPass = BitonicSort(engine)
     }
     
-    public func build(commandEncoder: MTLComputeCommandEncoder, positions: BufferView,
+    public func build(commandBuffer: MTLCommandBuffer, positions: BufferView,
                       itemCount: BufferView, maxNumberOfParticles: UInt32) {
         if _sortedIndices == nil || _sortedIndices.count != maxNumberOfParticles {
             _sortedIndices = BufferView(device: _engine.device, count: Int(maxNumberOfParticles),
@@ -91,14 +95,25 @@ public class HashGrid {
         _shaderData.setData("u_positions", positions)
         _shaderData.setData("g_NumElements", itemCount)
 
-        commandEncoder.label = "HashGrid"
-        _fillPass.compute(commandEncoder: commandEncoder, label: "fillPass")
+        if let commandEncoder = commandBuffer.makeComputeCommandEncoder() {
+            _fillPass.compute(commandEncoder: commandEncoder, label: "fillPass")
+            commandEncoder.endEncoding()
+        }
         
-        _initArgsPass.compute(commandEncoder: commandEncoder, label: "initArgs")
+        if let commandEncoder = commandBuffer.makeComputeCommandEncoder() {
+            _initArgsPass.compute(commandEncoder: commandEncoder, label: "initArgs")
+            commandEncoder.endEncoding()
+        }
         
-        _preparePass.compute(commandEncoder: commandEncoder, indirectBuffer: _indirectArgsBuffer.buffer,
+        if let commandEncoder = commandBuffer.makeComputeCommandEncoder() {
+            _preparePass.compute(commandEncoder: commandEncoder, indirectBuffer: _indirectArgsBuffer.buffer,
                              threadsPerThreadgroup: MTLSize(width: 512, height: 1, depth: 1), label: "prepare sort")
-        _sortPass.run(commandEncoder: commandEncoder, maxSize: UInt(maxNumberOfParticles), sortBuffer: _sortedIndices, itemCount: itemCount)
+            commandEncoder.endEncoding()
+        }
+        if let commandEncoder = commandBuffer.makeComputeCommandEncoder() {
+            _sortPass.run(commandEncoder: commandEncoder, maxSize: UInt(maxNumberOfParticles), sortBuffer: _sortedIndices, itemCount: itemCount)
+            commandEncoder.endEncoding()
+        }
         // Now _points and _keys are sorted by points' hash key values.
         // Let's fill in start/end index table with _keys.
 
@@ -110,8 +125,33 @@ public class HashGrid {
         //       ^5    ^8   ^10
         // So that _endIndexTable[i] - _startIndexTable[i] is the number points
         // in i-th table bucket.
-        _buildPass.compute(commandEncoder: commandEncoder, indirectBuffer: _indirectArgsBuffer.buffer,
-                           threadsPerThreadgroup: MTLSize(width: 512, height: 1, depth: 1), label: "build hash grid")
+        if let commandEncoder = commandBuffer.makeComputeCommandEncoder() {
+            _buildPass.compute(commandEncoder: commandEncoder, indirectBuffer: _indirectArgsBuffer.buffer,
+                               threadsPerThreadgroup: MTLSize(width: 512, height: 1, depth: 1), label: "build hash grid")
+            commandEncoder.endEncoding()
+        }
     }
     
+    // MARK: - Builder
+    public class Builder {
+        var _resolution = SIMD3<UInt32>(64, 64, 64)
+        var _gridSpacing: Float = 1.0;
+        
+        //! Returns builder with resolution.
+        public func withResolution(_ resolution: SIMD3<UInt32>) -> Builder {
+            _resolution = resolution
+            return self
+        }
+
+        //! Returns builder with grid spacing.
+        public func withGridSpacing(_ gridSpacing: Float) -> Builder {
+            _gridSpacing = gridSpacing
+            return self
+        }
+
+        //! Builds PointParallelHashGridSearcher3 instance.
+        public func build(_ engine: Engine) -> HashGrid {
+            HashGrid(engine, _resolution.x, _resolution.y, _resolution.z, _gridSpacing)
+        }
+    }
 }

@@ -140,24 +140,24 @@ void PointHashGridSearcher::ForEachNearbyPointFunc<Callback>::operator()(Index i
 
 
 // MARK: - Builder
-kernel void initHashGridArgs(constant uint& g_NumElements [[buffer(1)]],
-                             device MTLDispatchThreadgroupsIndirectArguments& args [[buffer(2)]]) {
-    args.threadgroupsPerGrid[0] = ((g_NumElements - 1) >> 9) + 1;
-    args.threadgroupsPerGrid[1] = 1;
-    args.threadgroupsPerGrid[2] = 1;
-}
-
-kernel void fillHashGrid(device uint32_t* u_startIndexTable [[buffer(0)]],
-                         device uint32_t* u_endIndexTable [[buffer(1)]],
+kernel void fillHashGrid(device uint* u_startIndexTable [[buffer(0)]],
+                         device uint* u_endIndexTable [[buffer(1)]],
                          uint3 tpig [[ thread_position_in_grid ]]) {
     u_startIndexTable[tpig.x] = 0xffffffff;
     u_endIndexTable[tpig.x] = 0xffffffff;
 }
 
-kernel void prepareSortHash(device float2* u_sortedIndices [[buffer(0)]],
-                            device float3* u_positions [[buffer(1)]],
-                            constant HashGridData& u_hashGridData [[buffer(2)]],
-                            constant uint& g_NumElements [[buffer(3)]],
+kernel void initHashGridArgs(constant uint& g_NumElements [[buffer(2)]],
+                             device MTLDispatchThreadgroupsIndirectArguments& args [[buffer(3)]]) {
+    args.threadgroupsPerGrid[0] = ((g_NumElements - 1) >> 9) + 1;
+    args.threadgroupsPerGrid[1] = 1;
+    args.threadgroupsPerGrid[2] = 1;
+}
+
+kernel void prepareSortHash(device float2* u_sortedIndices [[buffer(4)]],
+                            device float3* u_positions [[buffer(5)]],
+                            constant HashGridData& u_hashGridData [[buffer(6)]],
+                            constant uint& g_NumElements [[buffer(2)]],
                             uint3 tpig [[ thread_position_in_grid ]]) {
     if (tpig.x < g_NumElements) {
         PointHashGridSearcher::HashUtils hashUtils(u_hashGridData.gridSpacing,
@@ -167,20 +167,20 @@ kernel void prepareSortHash(device float2* u_sortedIndices [[buffer(0)]],
     }
 }
 
-kernel void buildHashGrid(device uint32_t* u_startIndexTable [[buffer(0)]],
-                          device uint32_t* u_endIndexTable [[buffer(1)]],
-                          device float2* u_sortedIndices [[buffer(2)]],
-                          constant uint& g_NumElements [[buffer(3)]],
+kernel void buildHashGrid(device uint* u_startIndexTable [[buffer(0)]],
+                          device uint* u_endIndexTable [[buffer(1)]],
+                          device float2* u_sortedIndices [[buffer(4)]],
+                          constant uint& g_NumElements [[buffer(2)]],
                           uint3 tpig [[ thread_position_in_grid ]]) {
     if (tpig.x == 0) {
-        u_startIndexTable[uint32_t(u_sortedIndices[0].x)] = 0;
-        u_endIndexTable[uint32_t(u_sortedIndices[g_NumElements - 1].x)] = g_NumElements;
+        u_startIndexTable[uint(u_sortedIndices[0].x)] = 0;
+        u_endIndexTable[uint(u_sortedIndices[g_NumElements - 1].x)] = g_NumElements;
         return;
     }
     
     if (tpig.x > 1 && tpig.x < g_NumElements) {
-        uint32_t k = u_sortedIndices[tpig.x].x;
-        uint32_t kLeft = u_sortedIndices[tpig.x - 1].x;
+        uint k = u_sortedIndices[tpig.x].x;
+        uint kLeft = u_sortedIndices[tpig.x - 1].x;
         if (k > kLeft) {
             u_startIndexTable[k] = tpig.x;
             u_endIndexTable[kLeft] = tpig.x;
