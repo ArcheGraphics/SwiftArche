@@ -36,3 +36,10 @@ struct SSFData {
     float canvasWidth;
     float canvasHeight;
 };
+
+struct HashGridData {
+    uint32_t resolutionX;
+    uint32_t resolutionY;
+    uint32_t resolutionZ;
+    float gridSpacing;
+};
