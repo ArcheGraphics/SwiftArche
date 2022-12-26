@@ -88,7 +88,7 @@ PointHashGridSearcher::ForEachNearbyPointFunc<
 Callback>::ForEachNearbyPointFunc(float r, float gridSpacing,
                                   uint3 resolution, device const uint32_t* sit,
                                   device const uint32_t* eit, device const float2* si,
-                                  device const float4* p, device const float4* o,
+                                  device const float3* p, device const float3* o,
                                   Callback cb)
 : _hashUtils(gridSpacing, resolution),
 _radius(r),
@@ -102,7 +102,7 @@ _callback(cb) {}
 template <typename Callback>
 template <typename Index>
 void PointHashGridSearcher::ForEachNearbyPointFunc<Callback>::operator()(Index idx) {
-    const float4 origin = _origins[idx];
+    const float3 origin = _origins[idx];
     
     uint32_t nearbyKeys[8];
     _hashUtils.getNearbyKeys(origin, nearbyKeys);
@@ -120,19 +120,13 @@ void PointHashGridSearcher::ForEachNearbyPointFunc<Callback>::operator()(Index i
         
         uint32_t end = _endIndexTable[nearbyKey];
         
-        for (uint32_t jj = start; jj < end; ++jj) {
-            uint32_t j = _sortedIndices[jj];
-            float4 p = _points[jj];
-            float4 direction = p - origin;
+        for (uint32_t j = start; j < end; ++j) {
+            uint32_t index = _sortedIndices[j].y;
+            float3 p = _points[index];
+            float3 direction = p - origin;
             float distanceSquared = length_squared(direction);
             if (distanceSquared <= queryRadiusSquared) {
-                float distance = 0.0f;
-                if (distanceSquared > 0) {
-                    distance = sqrt(distanceSquared);
-                    direction /= distance;
-                }
-                
-                _callback(idx, origin, j, p);
+                _callback(idx, origin, index, p);
             }
         }
     }

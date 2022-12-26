@@ -36,8 +36,8 @@ public:
     class ForEachNearbyPointFunc {
     public:
         ForEachNearbyPointFunc(float r, float gridSpacing, uint3 resolution, device const uint32_t* sit,
-                               device const uint32_t* eit, device const float2* si, device const float4* p,
-                               device const float4* o, Callback cb);
+                               device const uint32_t* eit, device const float2* si, device const float3* p,
+                               device const float3* o, Callback cb);
         
         template <typename Index>
         void operator()(Index idx);
@@ -48,8 +48,8 @@ public:
         device const uint32_t* _startIndexTable;
         device const uint32_t* _endIndexTable;
         device const float2* _sortedIndices;
-        device const float4* _points;
-        device const float4* _origins;
+        device const float3* _points;
+        device const float3* _origins;
         Callback _callback;
     };
 };

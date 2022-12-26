@@ -42,6 +42,7 @@
 		040F1E27293C727D008BDC8D /* transparent_shadow.metal in Sources */ = {isa = PBXBuildFile; fileRef = 040F1E1E293C70BB008BDC8D /* transparent_shadow.metal */; };
 		040F1E29293C865E008BDC8D /* UIElement.swift in Sources */ = {isa = PBXBuildFile; fileRef = 040F1E28293C865E008BDC8D /* UIElement.swift */; };
 		04462F21293324A300F95387 /* Textures.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 04462F20293324A200F95387 /* Textures.xcassets */; };
+		3E0E0B432959C7F700B25625 /* hash_grid_visual.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3E0E0B422959C7F700B25625 /* hash_grid_visual.metal */; };
 		3E6B235C2941BF88000AC29F /* BlendShapeWeightsAnimationCurveOwnerAssembler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E6B235B2941BF88000AC29F /* BlendShapeWeightsAnimationCurveOwnerAssembler.swift */; };
 		3E6B235E294220BC000AC29F /* FaceMorphApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E6B235D294220BC000AC29F /* FaceMorphApp.swift */; };
 		3E6B2360294224C1000AC29F /* FaceGUI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E6B235F294224C1000AC29F /* FaceGUI.swift */; };
@@ -604,6 +605,7 @@
 		040F1E1E293C70BB008BDC8D /* transparent_shadow.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = transparent_shadow.metal; sourceTree = "<group>"; };
 		040F1E28293C865E008BDC8D /* UIElement.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIElement.swift; sourceTree = "<group>"; };
 		04462F20293324A200F95387 /* Textures.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Textures.xcassets; sourceTree = SOURCE_ROOT; };
+		3E0E0B422959C7F700B25625 /* hash_grid_visual.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = hash_grid_visual.metal; sourceTree = "<group>"; };
 		3E6B235B2941BF88000AC29F /* BlendShapeWeightsAnimationCurveOwnerAssembler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlendShapeWeightsAnimationCurveOwnerAssembler.swift; sourceTree = "<group>"; };
 		3E6B235D294220BC000AC29F /* FaceMorphApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FaceMorphApp.swift; sourceTree = "<group>"; };
 		3E6B235F294224C1000AC29F /* FaceGUI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FaceGUI.swift; sourceTree = "<group>"; };
@@ -2163,6 +2165,7 @@
 			children = (
 				3ED9BD0F2956762F00876ABC /* hash_grid.h */,
 				3ED9BD102956767900876ABC /* hash_grid.metal */,
+				3E0E0B422959C7F700B25625 /* hash_grid_visual.metal */,
 			);
 			path = "hash-grid";
 			sourceTree = "<group>";
@@ -2713,6 +2716,7 @@
 				3ED9BCDF294D5A1300876ABC /* ssf_kernel.metal in Sources */,
 				3E6B23B62946B3E5000AC29F /* physics_helpers.metal in Sources */,
 				3ED9BCE1294D616700876ABC /* ssf_shading.metal in Sources */,
+				3E0E0B432959C7F700B25625 /* hash_grid_visual.metal in Sources */,
 				3ED9BCFB2952968700876ABC /* pre_bitonic_sort.metal in Sources */,
 				3EABF5E9294C3841009943C1 /* particle_shading.metal in Sources */,
 				3EABF5E1294B6382009943C1 /* volume_emitter.metal in Sources */,
