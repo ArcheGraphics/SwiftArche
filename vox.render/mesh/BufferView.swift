@@ -44,8 +44,8 @@ public struct BufferView {
     }
 
     /// Initializes the buffer with the contents of the provided array.
-    public init<Element>(device: MTLDevice, array: [Element], options: MTLResourceOptions = []) {
-        guard let buffer = device.makeBuffer(bytes: array, length: MemoryLayout<Element>.stride * array.count, options: .storageModeShared) else {
+    public init<Element>(device: MTLDevice, array: [Element], options: MTLResourceOptions = .storageModeShared) {
+        guard let buffer = device.makeBuffer(bytes: array, length: MemoryLayout<Element>.stride * array.count, options: options) else {
             fatalError("Failed to create MTLBuffer")
         }
         _buffer = buffer

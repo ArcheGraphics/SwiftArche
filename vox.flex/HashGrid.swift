@@ -20,7 +20,7 @@ public class HashGrid {
     let _preparePass: ComputePass
     let _buildPass: ComputePass
     let _sortPass: BitonicSort
-
+    
     public var shaderData: ShaderData {
         get {
             _shaderData
@@ -48,9 +48,11 @@ public class HashGrid {
         
         let totalCount = Int(_resolution.x * _resolution.y * _resolution.z)
         _shaderData.setData("u_startIndexTable",
-                            BufferView(device: engine.device, count: totalCount, stride: MemoryLayout<UInt>.stride))
+                            BufferView(device: engine.device, count: totalCount,
+                                       stride: MemoryLayout<UInt>.stride, options: .storageModePrivate))
         _shaderData.setData("u_endIndexTable",
-                            BufferView(device: engine.device, count: totalCount, stride: MemoryLayout<UInt>.stride))
+                            BufferView(device: engine.device, count: totalCount,
+                                       stride: MemoryLayout<UInt>.stride, options: .storageModePrivate))
         _shaderData.setData("u_hashGridData", HashGridData(resolutionX: _resolution.x,
                                                            resolutionY: _resolution.y,
                                                            resolutionZ: _resolution.z,
@@ -82,55 +84,45 @@ public class HashGrid {
         _sortPass = BitonicSort(engine)
     }
     
-    public func build(positions: BufferView, itemCount: BufferView, maxNumberOfParticles: UInt32) {
+    public func build(commandBuffer: MTLCommandBuffer, positions: BufferView,
+                      itemCount: BufferView, maxNumberOfParticles: UInt32) {
         if _sortedIndices == nil || _sortedIndices.count != maxNumberOfParticles {
             _sortedIndices = BufferView(device: _engine.device, count: Int(maxNumberOfParticles),
-                                        stride: MemoryLayout<SIMD2<Float>>.stride)
+                                        stride: MemoryLayout<SIMD2<Float>>.stride, options: .storageModePrivate)
             _shaderData.setData("u_sortedIndices", _sortedIndices!)
         }
         _shaderData.setData("u_positions", positions)
         _shaderData.setData("g_NumElements", itemCount)
         
-        if let commandBuffer = _engine.commandQueue.makeCommandBuffer() ,
-           let commandEncoder = commandBuffer.makeComputeCommandEncoder() {
-            commandBuffer.label = "hash grid initialize argument"
+        commandBuffer.label = "hash grid builder"
+        if let commandEncoder = commandBuffer.makeComputeCommandEncoder() {
             commandEncoder.label = "hash grid initialize argument"
             _initArgsPass.compute(commandEncoder: commandEncoder, label: "initArgs")
             commandEncoder.endEncoding()
-            commandBuffer.commit()
         }
         
-        if let commandBuffer = _engine.commandQueue.makeCommandBuffer() ,
-           let commandEncoder = commandBuffer.makeComputeCommandEncoder() {
-            commandBuffer.label = "hash grid initialize"
+        if let commandEncoder = commandBuffer.makeComputeCommandEncoder() {
             commandEncoder.label = "hash grid initialize"
             _fillPass.compute(commandEncoder: commandEncoder, label: "fillPass")
             commandEncoder.endEncoding()
-            commandBuffer.commit()
         }
-
-        if let commandBuffer = _engine.commandQueue.makeCommandBuffer() ,
-           let commandEncoder = commandBuffer.makeComputeCommandEncoder() {
-            commandBuffer.label = "hash grid prepare"
+        
+        if let commandEncoder = commandBuffer.makeComputeCommandEncoder() {
             commandEncoder.label = "hash grid prepare"
             _preparePass.compute(commandEncoder: commandEncoder, indirectBuffer: _indirectArgsBuffer.buffer,
                                  threadsPerThreadgroup: MTLSize(width: 512, height: 1, depth: 1), label: "prepare sort")
             commandEncoder.endEncoding()
-            commandBuffer.commit()
         }
-
-        if let commandBuffer = _engine.commandQueue.makeCommandBuffer() ,
-           let commandEncoder = commandBuffer.makeComputeCommandEncoder() {
-            commandBuffer.label = "hash grid sort"
+        
+        if let commandEncoder = commandBuffer.makeComputeCommandEncoder() {
             commandEncoder.label = "hash grid sort"
             _sortPass.run(commandEncoder: commandEncoder, maxSize: UInt(maxNumberOfParticles), sortBuffer: _sortedIndices, itemCount: itemCount)
             commandEncoder.endEncoding()
-            commandBuffer.commit()
         }
-
+        
         // Now _points and _keys are sorted by points' hash key values.
         // Let's fill in start/end index table with _keys.
-
+        
         // Assume that _keys array looks like:
         // [5|8|8|10|10|10]
         // Then _startIndexTable and _endIndexTable should be like:
@@ -139,15 +131,11 @@ public class HashGrid {
         //       ^5    ^8   ^10
         // So that _endIndexTable[i] - _startIndexTable[i] is the number points
         // in i-th table bucket.
-        if let commandBuffer = _engine.commandQueue.makeCommandBuffer() ,
-           let commandEncoder = commandBuffer.makeComputeCommandEncoder() {
-            commandBuffer.label = "hash grid build"
+        if let commandEncoder = commandBuffer.makeComputeCommandEncoder() {
             commandEncoder.label = "hash grid build"
             _buildPass.compute(commandEncoder: commandEncoder, indirectBuffer: _indirectArgsBuffer.buffer,
                                threadsPerThreadgroup: MTLSize(width: 512, height: 1, depth: 1), label: "build hash grid")
             commandEncoder.endEncoding()
-            commandBuffer.commit()
-            commandBuffer.waitUntilCompleted()
         }
     }
     
