@@ -64,22 +64,26 @@ public class HashGrid {
         _fillPass.shader.append(ShaderPass(engine.library("flex.shader"), "fillHashGrid"))
         _fillPass.data.append(_shaderData)
         _fillPass.threadsPerGridX = totalCount
+        _fillPass.precompileAll()
         
         _initArgsPass = ComputePass(engine)
         _initArgsPass.resourceCache = resourceCache
         _initArgsPass.defaultShaderData.setData("args", _indirectArgsBuffer)
         _initArgsPass.shader.append(ShaderPass(engine.library("flex.shader"), "initSortArgs"))
         _initArgsPass.data.append(_shaderData)
-
+        _initArgsPass.precompileAll()
+        
         _preparePass = ComputePass(engine)
         _preparePass.resourceCache = resourceCache
         _preparePass.shader.append(ShaderPass(engine.library("flex.shader"), "prepareSortHash"))
         _preparePass.data.append(_shaderData)
-
+        _preparePass.precompileAll()
+        
         _buildPass = ComputePass(engine)
         _buildPass.resourceCache = resourceCache
         _buildPass.shader.append(ShaderPass(engine.library("flex.shader"), "buildHashGrid"))
         _buildPass.data.append(_shaderData)
+        _buildPass.precompileAll()
 
         _sortPass = BitonicSort(engine)
     }

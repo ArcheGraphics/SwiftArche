@@ -28,18 +28,22 @@ public class BitonicSort {
         initSortArgsPass.threadsPerGridY = 1
         initSortArgsPass.threadsPerGridZ = 1
         initSortArgsPass.defaultShaderData.setData("args", indirectSortArgsBuffer)
+        initSortArgsPass.precompileAll()
         
         preSortPass = ComputePass(engine)
         preSortPass.shader.append(ShaderPass(engine.library("flex.shader"), "preBitonicSort"))
         preSortPass.resourceCache = resourceCache
+        preSortPass.precompileAll()
         
         innerSortPass = ComputePass(engine)
         innerSortPass.shader.append(ShaderPass(engine.library("flex.shader"), "innerBitonicSort"))
         innerSortPass.resourceCache = resourceCache
+        innerSortPass.precompileAll()
         
         stepSortPass = ComputePass(engine)
         stepSortPass.shader.append(ShaderPass(engine.library("flex.shader"), "stepBitonicSort"))
         stepSortPass.resourceCache = resourceCache
+        stepSortPass.precompileAll()
     }
     
     public func run(commandEncoder: MTLComputeCommandEncoder, maxSize: UInt,
