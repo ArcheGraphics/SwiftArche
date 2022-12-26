@@ -42,12 +42,7 @@ class HashGridApp: NSViewController {
             .build(engine)
         let scope = engine.createCaptureScope(name: "hashGrid")
         scope.begin()
-        if let commandBuffer = engine.commandQueue.makeCommandBuffer() {
-            hashGrid.build(commandBuffer: commandBuffer, positions: positionBuffer, itemCount: itemCount,
-                           maxNumberOfParticles: UInt32(count))
-            commandBuffer.commit()
-            commandBuffer.waitUntilCompleted()
-        }
+        hashGrid.build(positions: positionBuffer, itemCount: itemCount, maxNumberOfParticles: UInt32(count))
         scope.end()
 
         engine.run()
