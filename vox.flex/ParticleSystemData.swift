@@ -16,6 +16,13 @@ public class ParticleSystemData: ShaderData {
     private var _radius: Float = 1e-3
     private var _mass: Float = 1e-3
     private var _maxLength: UInt32 = 0
+    private var _neighborSearcher: HashGrid?
+    
+    public var neighborSearcher: HashGrid? {
+        get {
+            _neighborSearcher
+        }
+    }
     
     /// the radius of the particles.
     public var radius: Float {
@@ -45,9 +52,9 @@ public class ParticleSystemData: ShaderData {
     }
     
     /// the number of particles.
-    public var numberOfParticles: Int {
+    public var numberOfParticles: BufferView {
         get {
-            getData(ParticleSystemData.counterProperty)![0]
+            getData(ParticleSystemData.counterProperty)!
         }
     }
     
@@ -90,5 +97,14 @@ public class ParticleSystemData: ShaderData {
         let data = BufferView(device: engine.device, count: maxLength, stride: MemoryLayout<T>.stride)
         data.assign(initialVal)
         setData(name, data)
+    }
+    
+    //! Builds neighbor searcher with given search radius.
+    public func buildNeighborSearcher(commandBuffer: MTLCommandBuffer, maxSearchRadius: Float, hashGridResolution: UInt32 = 64) {
+        if _neighborSearcher == nil {
+            _neighborSearcher = HashGrid(engine, hashGridResolution, hashGridResolution, hashGridResolution, maxSearchRadius * 2)
+        }
+        _neighborSearcher!.build(commandBuffer: commandBuffer, positions: positions,
+                                 itemCount: numberOfParticles, maxNumberOfParticles: maxNumberOfParticles)
     }
 }

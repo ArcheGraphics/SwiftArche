@@ -37,10 +37,47 @@ public:
     public:
         ForEachNearbyPointFunc(float r, float gridSpacing, uint3 resolution, device const uint32_t* sit,
                                device const uint32_t* eit, device const float2* si, device const float3* p,
-                               device const float3* o, Callback cb);
+                               device const float3* o, Callback cb)
+        : _hashUtils(gridSpacing, resolution),
+        _radius(r),
+        _startIndexTable(sit),
+        _endIndexTable(eit),
+        _sortedIndices(si),
+        _points(p),
+        _origins(o),
+        _callback(cb) {}
         
         template <typename Index>
-        void operator()(Index idx);
+        void operator()(Index idx) {
+            const float3 origin = _origins[idx];
+            
+            uint32_t nearbyKeys[8];
+            _hashUtils.getNearbyKeys(origin, nearbyKeys);
+            
+            const float queryRadiusSquared = _radius * _radius;
+            
+            for (int i = 0; i < 8; i++) {
+                uint32_t nearbyKey = nearbyKeys[i];
+                uint32_t start = _startIndexTable[nearbyKey];
+                
+                // Empty bucket -- continue to next bucket
+                if (start == 0xffffffff) {
+                    continue;
+                }
+                
+                uint32_t end = _endIndexTable[nearbyKey];
+                
+                for (uint32_t j = start; j < end; ++j) {
+                    uint32_t index = _sortedIndices[j].y;
+                    float3 p = _points[index];
+                    float3 direction = p - origin;
+                    float distanceSquared = length_squared(direction);
+                    if (distanceSquared <= queryRadiusSquared) {
+                        _callback(idx, origin, index, p);
+                    }
+                }
+            }
+        }
         
     private:
         HashUtils _hashUtils;

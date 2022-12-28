@@ -29,5 +29,5 @@ kernel void visualHashGrid(device uint* u_startIndexTable [[buffer(0)]],
     PointHashGridSearcher::ForEachNearbyPointFunc<Callback> searcher(10.0, u_hashGridData.gridSpacing,
                                                                      uint3(u_hashGridData.resolutionX, u_hashGridData.resolutionY, u_hashGridData.resolutionZ),
                                                                      u_startIndexTable, u_endIndexTable, u_sortedIndices, u_points, u_origins, callback);
-    searcher(0);
+    searcher(tpig.x);
 }

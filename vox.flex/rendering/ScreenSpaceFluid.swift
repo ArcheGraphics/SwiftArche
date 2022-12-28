@@ -180,7 +180,7 @@ public class ScreenSpaceFluid: Script {
 
                 let particleMesh = Mesh()
                 particleMesh._vertexDescriptor = descriptor
-                let maxNumber = particleSystem.numberOfParticles
+                let maxNumber: Int = particleSystem.numberOfParticles[0]
                 _ = particleMesh.addSubMesh(0, maxNumber, .point)
                 particleMesh._setVertexBufferBinding(0, particleSystem.positions)
                 _particleMesh = particleMesh
