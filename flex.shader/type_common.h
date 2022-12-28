@@ -27,6 +27,14 @@ struct VolumeParticleEmitterData {
     vector_float3 lowerCorner;
 };
 
+struct PointParticleEmitterData {
+    vector_float3 origin;
+    float speed;
+
+    vector_float3 direction;
+    float spreadAngleInRadians;
+};
+
 struct SSFData {
     float p_n;
     float p_f;
