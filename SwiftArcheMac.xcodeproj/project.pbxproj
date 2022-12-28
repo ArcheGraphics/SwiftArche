@@ -43,6 +43,8 @@
 		040F1E29293C865E008BDC8D /* UIElement.swift in Sources */ = {isa = PBXBuildFile; fileRef = 040F1E28293C865E008BDC8D /* UIElement.swift */; };
 		04462F21293324A300F95387 /* Textures.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 04462F20293324A200F95387 /* Textures.xcassets */; };
 		049F4D97295BF63D00AB07EF /* PointParticleEmitter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 049F4D96295BF63D00AB07EF /* PointParticleEmitter.swift */; };
+		049F4D9A295C6E9C00AB07EF /* PhysicsAnimation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 049F4D99295C6E9C00AB07EF /* PhysicsAnimation.swift */; };
+		049F4D9C295C728000AB07EF /* ParticleSystemSolver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 049F4D9B295C728000AB07EF /* ParticleSystemSolver.swift */; };
 		3E43DC9B295BDDDC00732AC0 /* physics_helpers.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3E6B23B52946B3E5000AC29F /* physics_helpers.metal */; };
 		3E43DC9C295BDDDC00732AC0 /* sdf_shading.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3E6B23D529499B36000AC29F /* sdf_shading.metal */; };
 		3E43DC9D295BDDDC00732AC0 /* sdf_baker.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3E6B23D2294964B1000AC29F /* sdf_baker.metal */; };
@@ -607,6 +609,8 @@
 		040F1E28293C865E008BDC8D /* UIElement.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIElement.swift; sourceTree = "<group>"; };
 		04462F20293324A200F95387 /* Textures.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Textures.xcassets; sourceTree = SOURCE_ROOT; };
 		049F4D96295BF63D00AB07EF /* PointParticleEmitter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PointParticleEmitter.swift; sourceTree = "<group>"; };
+		049F4D99295C6E9C00AB07EF /* PhysicsAnimation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhysicsAnimation.swift; sourceTree = "<group>"; };
+		049F4D9B295C728000AB07EF /* ParticleSystemSolver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParticleSystemSolver.swift; sourceTree = "<group>"; };
 		3E0E0B422959C7F700B25625 /* hash_grid_visual.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = hash_grid_visual.metal; sourceTree = "<group>"; };
 		3E6B235B2941BF88000AC29F /* BlendShapeWeightsAnimationCurveOwnerAssembler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlendShapeWeightsAnimationCurveOwnerAssembler.swift; sourceTree = "<group>"; };
 		3E6B235D294220BC000AC29F /* FaceMorphApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FaceMorphApp.swift; sourceTree = "<group>"; };
@@ -1286,6 +1290,8 @@
 				3EABF5C3294ABB7B009943C1 /* ParticleSystemData.swift */,
 				3ED9BD002952A45500876ABC /* BitonicSort.swift */,
 				3ED9BD0429544A7700876ABC /* HashGrid.swift */,
+				049F4D99295C6E9C00AB07EF /* PhysicsAnimation.swift */,
+				049F4D9B295C728000AB07EF /* ParticleSystemSolver.swift */,
 			);
 			path = vox.flex;
 			sourceTree = "<group>";
@@ -2694,9 +2700,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				049F4D9A295C6E9C00AB07EF /* PhysicsAnimation.swift in Sources */,
 				3E6B23C529488260000AC29F /* TriangleMesh.mm in Sources */,
 				3ED9BCE3294D753900876ABC /* ScreenSpaceFluid.swift in Sources */,
 				3EABF5DA294B1E7F009943C1 /* Matrix3x3.swift in Sources */,
+				049F4D9C295C728000AB07EF /* ParticleSystemSolver.swift in Sources */,
 				3EABF5C6294AC323009943C1 /* ParticleEmitter.swift in Sources */,
 				3E6B23CB2948BAB9000AC29F /* ImplicitTriangleMesh.swift in Sources */,
 				3EABF5D8294B1E7F009943C1 /* BoundingBox.swift in Sources */,

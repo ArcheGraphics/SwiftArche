@@ -63,6 +63,11 @@ public class PointParticleEmitter: ParticleEmitter {
         }
     }
     
+    public override init(_ engine: Engine) {
+        super.init(engine)
+        shader.append(ShaderPass(engine.library("flex.shader"), "pointEmitter"))
+    }
+    
     public override func update(_ commandEncoder: MTLComputeCommandEncoder, currentTimeInSeconds: Float, timeIntervalInSeconds: Float) {
         if let target = target {
             if (_numberOfEmittedParticles == 0) {

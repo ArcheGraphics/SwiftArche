@@ -8,7 +8,7 @@ import MetalKit
 import Metal
 import Logging
 
-let logger = Logger(label: "com.arche.main")
+public let logger = Logger(label: "com.arche.main")
 
 public class Engine: NSObject {
     // The max number of command buffers in flight
