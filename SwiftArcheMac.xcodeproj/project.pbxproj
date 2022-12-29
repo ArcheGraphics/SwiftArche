@@ -51,6 +51,8 @@
 		049F4DA5295D2DAC00AB07EF /* BccLatticePointGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 049F4DA4295D2DAC00AB07EF /* BccLatticePointGenerator.swift */; };
 		049F4DA7295D2DFF00AB07EF /* SPHKernels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 049F4DA6295D2DFF00AB07EF /* SPHKernels.swift */; };
 		049F4DA9295D322400AB07EF /* SphSolverBase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 049F4DA8295D322400AB07EF /* SphSolverBase.swift */; };
+		049F4DAB295D3E6500AB07EF /* WCSphSolver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 049F4DAA295D3E6500AB07EF /* WCSphSolver.swift */; };
+		049F4DAD295D3EA000AB07EF /* PCISphSolver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 049F4DAC295D3EA000AB07EF /* PCISphSolver.swift */; };
 		3E43DC9B295BDDDC00732AC0 /* physics_helpers.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3E6B23B52946B3E5000AC29F /* physics_helpers.metal */; };
 		3E43DC9C295BDDDC00732AC0 /* sdf_shading.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3E6B23D529499B36000AC29F /* sdf_shading.metal */; };
 		3E43DC9D295BDDDC00732AC0 /* sdf_baker.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3E6B23D2294964B1000AC29F /* sdf_baker.metal */; };
@@ -623,6 +625,8 @@
 		049F4DA4295D2DAC00AB07EF /* BccLatticePointGenerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BccLatticePointGenerator.swift; sourceTree = "<group>"; };
 		049F4DA6295D2DFF00AB07EF /* SPHKernels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPHKernels.swift; sourceTree = "<group>"; };
 		049F4DA8295D322400AB07EF /* SphSolverBase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SphSolverBase.swift; sourceTree = "<group>"; };
+		049F4DAA295D3E6500AB07EF /* WCSphSolver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WCSphSolver.swift; sourceTree = "<group>"; };
+		049F4DAC295D3EA000AB07EF /* PCISphSolver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PCISphSolver.swift; sourceTree = "<group>"; };
 		3E0E0B422959C7F700B25625 /* hash_grid_visual.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = hash_grid_visual.metal; sourceTree = "<group>"; };
 		3E6B235B2941BF88000AC29F /* BlendShapeWeightsAnimationCurveOwnerAssembler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlendShapeWeightsAnimationCurveOwnerAssembler.swift; sourceTree = "<group>"; };
 		3E6B235D294220BC000AC29F /* FaceMorphApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FaceMorphApp.swift; sourceTree = "<group>"; };
@@ -1318,6 +1322,8 @@
 				049F4DA6295D2DFF00AB07EF /* SPHKernels.swift */,
 				049F4D9F295D29D500AB07EF /* SphSystemData.swift */,
 				049F4DA8295D322400AB07EF /* SphSolverBase.swift */,
+				049F4DAA295D3E6500AB07EF /* WCSphSolver.swift */,
+				049F4DAC295D3EA000AB07EF /* PCISphSolver.swift */,
 			);
 			path = vox.flex;
 			sourceTree = "<group>";
@@ -2738,7 +2744,9 @@
 				3E6B23CB2948BAB9000AC29F /* ImplicitTriangleMesh.swift in Sources */,
 				3EABF5D8294B1E7F009943C1 /* BoundingBox.swift in Sources */,
 				049F4D97295BF63D00AB07EF /* PointParticleEmitter.swift in Sources */,
+				049F4DAB295D3E6500AB07EF /* WCSphSolver.swift in Sources */,
 				3ED9BD0529544A7700876ABC /* HashGrid.swift in Sources */,
+				049F4DAD295D3EA000AB07EF /* PCISphSolver.swift in Sources */,
 				3ED9BD012952A45500876ABC /* BitonicSort.swift in Sources */,
 				049F4D9E295D211B00AB07EF /* ParticleSystemSolver.swift in Sources */,
 				3EABF5CA294AC6E5009943C1 /* Constants.swift in Sources */,
