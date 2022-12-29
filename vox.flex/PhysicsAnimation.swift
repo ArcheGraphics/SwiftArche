@@ -18,30 +18,32 @@ open class PhysicsAnimation: Script {
     public var numberOfFixedSubTimeSteps: UInt = 1
     
     public override func onUpdate(_ timeIntervalInSeconds: Float) {
-        if isUsingFixedSubTimeSteps {
-            logger.info("Using fixed sub-timesteps: \(numberOfFixedSubTimeSteps)")
-
-            // Perform fixed time-stepping
-            let actualTimeInterval = timeIntervalInSeconds / Float(numberOfFixedSubTimeSteps)
-            for _ in 0..<numberOfFixedSubTimeSteps {
-                logger.info("Begin onAdvanceTimeStep: \(actualTimeInterval) (1/\(1.0 / actualTimeInterval)) seconds")
-                onAdvanceTimeStep(actualTimeInterval)
-            }
-        } else {
-            logger.info("Using adaptive sub-timesteps")
-
-            // Perform adaptive time-stepping
-            var remainingTime = timeIntervalInSeconds
-            while (remainingTime > Float.leastNonzeroMagnitude) {
-                let numSteps = numberOfSubTimeSteps(remainingTime)
-                let actualTimeInterval = remainingTime / Float(numSteps)
-
-                logger.info("Number of remaining sub-timesteps: \(numSteps)")
-                logger.info("Begin onAdvanceTimeStep: \(actualTimeInterval) (1/\(1.0 / actualTimeInterval)) seconds")
-
-                onAdvanceTimeStep(actualTimeInterval)
-
-                remainingTime -= actualTimeInterval
+        if let commandBuffer = engine.commandQueue.makeCommandBuffer() {
+            if isUsingFixedSubTimeSteps {
+                logger.info("Using fixed sub-timesteps: \(numberOfFixedSubTimeSteps)")
+                
+                // Perform fixed time-stepping
+                let actualTimeInterval = timeIntervalInSeconds / Float(numberOfFixedSubTimeSteps)
+                for _ in 0..<numberOfFixedSubTimeSteps {
+                    logger.info("Begin onAdvanceTimeStep: \(actualTimeInterval) (1/\(1.0 / actualTimeInterval)) seconds")
+                    onAdvanceTimeStep(commandBuffer, actualTimeInterval)
+                }
+            } else {
+                logger.info("Using adaptive sub-timesteps")
+                
+                // Perform adaptive time-stepping
+                var remainingTime = timeIntervalInSeconds
+                while (remainingTime > Float.leastNonzeroMagnitude) {
+                    let numSteps = numberOfSubTimeSteps(remainingTime)
+                    let actualTimeInterval = remainingTime / Float(numSteps)
+                    
+                    logger.info("Number of remaining sub-timesteps: \(numSteps)")
+                    logger.info("Begin onAdvanceTimeStep: \(actualTimeInterval) (1/\(1.0 / actualTimeInterval)) seconds")
+                    
+                    onAdvanceTimeStep(commandBuffer, actualTimeInterval)
+                    
+                    remainingTime -= actualTimeInterval
+                }
             }
         }
     }
@@ -55,7 +57,7 @@ open class PhysicsAnimation: Script {
     /// implement this function for its own physics model.
     /// 
     /// - Parameter timeIntervalInSeconds: The time interval in seconds
-    open func onAdvanceTimeStep(_ timeIntervalInSeconds: Float) {}
+    open func onAdvanceTimeStep(_ commandBuffer: MTLCommandBuffer, _ timeIntervalInSeconds: Float) {}
     
     /// Returns the required number of sub-timesteps for given time interval.
     ///

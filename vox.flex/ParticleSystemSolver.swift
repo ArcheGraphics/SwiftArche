@@ -7,73 +7,33 @@
 import Metal
 import vox_render
 
-///
-/// Basic 3-D particle system solver.
-///
-/// This class implements basic particle system solver. It includes gravity,
-/// air drag, and collision. But it does not compute particle-to-particle
-/// interaction. Thus, this solver is suitable for performing simple spray-like
-/// simulations with low computational cost. This class can be further extend
-/// to add more sophisticated simulations, such as SPH, to handle
-/// particle-to-particle intersection.
-///
-open class ParticleSystemSolver: PhysicsAnimation {
-    private var _emitter: ParticleEmitter?
-    private var _particleSystemData: ParticleSystemData
-    private var _dragCoefficient: Float = 1e-4
-    private var _restitutionCoefficient: Float = 0
+open class ParticleSystemSolver: ParticleSystemSolverBase {
+    private var _radius: Float = 1e-3
+    private var _mass: Float = 1e-3
     
-    /// the gravity.
-    public var gravity = Vector3F(0, -9.8, 0)
-    
-    /// The drag coefficient.
-    public var dragCoefficient: Float {
+    public var radius: Float {
         get {
-            _dragCoefficient
+            _radius
         }
         set {
-            _dragCoefficient = max(newValue, 0)
+            _radius = newValue
         }
     }
-    
-    /// The restitution coefficient.
-    public var restitutionCoefficient: Float {
+
+    public var mass: Float {
         get {
-            _restitutionCoefficient
+            _mass
         }
         set {
-            _restitutionCoefficient = simd_clamp(newValue, 0, 1)
+            _mass = newValue
         }
     }
     
-    /// the particle system data.
-    public var particleSystemData: ParticleSystemData {
-        get {
-            _particleSystemData
-        }
-    }
-    
-    /// the emitter.
-    public var emitter: ParticleEmitter? {
-        get {
-            _emitter
-        }
-        set {
-            _emitter = newValue
-            _emitter?.target = _particleSystemData
-        }
-    }
-    
-    public init(_ entity: Entity, maxLength: UInt32) {
-        _particleSystemData = ParticleSystemData(entity.engine, maxLength: maxLength)
+    public override init(_ entity: Entity, maxLength: UInt32) {
         super.init(entity)
     }
     
     required public init(_ entity: Entity) {
         fatalError("init(_:) has not been implemented")
-    }
-    
-    open override func onAdvanceTimeStep(_ timeIntervalInSeconds: Float) {
-        
     }
 }
