@@ -48,6 +48,8 @@ open class PhysicsAnimation: Script {
         }
     }
     
+    open func initialize(_ commandBuffer: MTLCommandBuffer) {}
+    
     /// Called when a single time-step should be advanced.
     ///
     /// When Animation::update function is called, this class will internally
