@@ -29,11 +29,7 @@ final class ParticleSystemSolver: ParticleSystemSolverBase {
         }
     }
     
-    public override init(_ entity: Entity, maxLength: UInt32) {
+    public required init(_ entity: Entity) {
         super.init(entity)
-    }
-    
-    required public init(_ entity: Entity) {
-        fatalError("init(_:) has not been implemented")
     }
 }

@@ -18,8 +18,11 @@ import vox_render
 /// particle-to-particle intersection.
 ///
 open class ParticleSystemSolverBase: PhysicsAnimation {
-    private var _emitter: ParticleEmitter?
-    private var _particleSystemData: ParticleSystemData
+    public static var maxLength: UInt32 = 10000
+    
+    var _emitter: ParticleEmitter?
+    var _particleSystemData: ParticleSystemData?
+    
     private var _dragCoefficient: Float = 1e-4
     private var _restitutionCoefficient: Float = 0
     private var _gravity = Vector3F(0, -9.8, 0)
@@ -55,7 +58,7 @@ open class ParticleSystemSolverBase: PhysicsAnimation {
     }
     
     /// the particle system data.
-    public var particleSystemData: ParticleSystemData {
+    public var particleSystemData: ParticleSystemData? {
         get {
             _particleSystemData
         }
@@ -68,17 +71,15 @@ open class ParticleSystemSolverBase: PhysicsAnimation {
         }
         set {
             _emitter = newValue
+            if _particleSystemData == nil {
+                _particleSystemData = ParticleSystemData(engine, maxLength: ParticleSystemSolverBase.maxLength)
+            }
             _emitter?.target = _particleSystemData
         }
     }
     
-    public init(_ entity: Entity, maxLength: UInt32) {
-        _particleSystemData = ParticleSystemData(entity.engine, maxLength: maxLength)
+    public required init(_ entity: Entity) {
         super.init(entity)
-    }
-    
-    required public init(_ entity: Entity) {
-        fatalError("init(_:) has not been implemented")
     }
     
     open override func onAdvanceTimeStep(_ commandBuffer: MTLCommandBuffer, _ timeIntervalInSeconds: Float) {
