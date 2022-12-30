@@ -42,9 +42,11 @@ final class ParticleSystemSolver: ParticleSystemSolverBase {
     
     public override func onAdvanceTimeStep(_ commandBuffer: MTLCommandBuffer, _ timeStepInSeconds: Float) {
         beginAdvanceTimeStep(commandBuffer, timeStepInSeconds)
+        
         accumulateForces(commandBuffer, timeStepInSeconds)
         timeIntegration(commandBuffer, timeStepInSeconds)
         resolveCollision(commandBuffer)
+        
         endAdvanceTimeStep(commandBuffer, timeStepInSeconds)
     }
     
@@ -62,9 +64,6 @@ final class ParticleSystemSolver: ParticleSystemSolverBase {
     public func onEndAdvanceTimeStep(_ commandBuffer: MTLCommandBuffer, _ timeStepInSeconds: Float) {
     }
     
-    /// Resolves any collisions occured by the particles.
-    public func resolveCollision(_ commandBuffer: MTLCommandBuffer) {}
-    
     public func beginAdvanceTimeStep(_ commandBuffer: MTLCommandBuffer, _ timeStepInSeconds: Float) {
         // Update collider and emitter
         updateCollider(commandBuffer, timeStepInSeconds)
@@ -80,6 +79,9 @@ final class ParticleSystemSolver: ParticleSystemSolverBase {
     public func accumulateExternalForces(_ commandBuffer: MTLCommandBuffer) {}
 
     public func timeIntegration(_ commandBuffer: MTLCommandBuffer, _ timeStepInSeconds: Float) {}
+    
+    /// Resolves any collisions occured by the particles.
+    public func resolveCollision(_ commandBuffer: MTLCommandBuffer) {}
 
     public func updateCollider(_ commandBuffer: MTLCommandBuffer, _ timeStepInSeconds: Float) {}
 

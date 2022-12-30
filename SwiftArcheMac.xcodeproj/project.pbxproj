@@ -53,6 +53,7 @@
 		049F4DA9295D322400AB07EF /* SphSolverBase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 049F4DA8295D322400AB07EF /* SphSolverBase.swift */; };
 		049F4DAB295D3E6500AB07EF /* WCSphSolver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 049F4DAA295D3E6500AB07EF /* WCSphSolver.swift */; };
 		049F4DAD295D3EA000AB07EF /* PCISphSolver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 049F4DAC295D3EA000AB07EF /* PCISphSolver.swift */; };
+		049F4DB0295EDE7A00AB07EF /* semi_implicit_euler.metal in Sources */ = {isa = PBXBuildFile; fileRef = 049F4DAF295EDE7A00AB07EF /* semi_implicit_euler.metal */; };
 		3E43DC9B295BDDDC00732AC0 /* physics_helpers.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3E6B23B52946B3E5000AC29F /* physics_helpers.metal */; };
 		3E43DC9C295BDDDC00732AC0 /* sdf_shading.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3E6B23D529499B36000AC29F /* sdf_shading.metal */; };
 		3E43DC9D295BDDDC00732AC0 /* sdf_baker.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3E6B23D2294964B1000AC29F /* sdf_baker.metal */; };
@@ -627,6 +628,7 @@
 		049F4DA8295D322400AB07EF /* SphSolverBase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SphSolverBase.swift; sourceTree = "<group>"; };
 		049F4DAA295D3E6500AB07EF /* WCSphSolver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WCSphSolver.swift; sourceTree = "<group>"; };
 		049F4DAC295D3EA000AB07EF /* PCISphSolver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PCISphSolver.swift; sourceTree = "<group>"; };
+		049F4DAF295EDE7A00AB07EF /* semi_implicit_euler.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = semi_implicit_euler.metal; sourceTree = "<group>"; };
 		3E0E0B422959C7F700B25625 /* hash_grid_visual.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = hash_grid_visual.metal; sourceTree = "<group>"; };
 		3E6B235B2941BF88000AC29F /* BlendShapeWeightsAnimationCurveOwnerAssembler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlendShapeWeightsAnimationCurveOwnerAssembler.swift; sourceTree = "<group>"; };
 		3E6B235D294220BC000AC29F /* FaceMorphApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FaceMorphApp.swift; sourceTree = "<group>"; };
@@ -1293,6 +1295,14 @@
 			path = point_generators;
 			sourceTree = "<group>";
 		};
+		049F4DAE295EDE0D00AB07EF /* time-integration */ = {
+			isa = PBXGroup;
+			children = (
+				049F4DAF295EDE7A00AB07EF /* semi_implicit_euler.metal */,
+			);
+			path = "time-integration";
+			sourceTree = "<group>";
+		};
 		3E6B23A92946B3CA000AC29F /* vox.flex */ = {
 			isa = PBXGroup;
 			children = (
@@ -1337,6 +1347,7 @@
 				3ED9BCE7295149F100876ABC /* noise */,
 				3ED9BCF7295293FA00876ABC /* sort */,
 				3ED9BD062954512D00876ABC /* hash-grid */,
+				049F4DAE295EDE0D00AB07EF /* time-integration */,
 				3E6B23BA2946B9FF000AC29F /* physics_helpers.h */,
 				3E6B23B52946B3E5000AC29F /* physics_helpers.metal */,
 				3E6B23D2294964B1000AC29F /* sdf_baker.metal */,
@@ -2786,6 +2797,7 @@
 				3ED9BCFF2952A13F00876ABC /* step_bitonic_sort.metal in Sources */,
 				3ED9BCF22951614E00876ABC /* simplex_noise.metal in Sources */,
 				3E43DC9E295BDDDC00732AC0 /* volume_emitter.metal in Sources */,
+				049F4DB0295EDE7A00AB07EF /* semi_implicit_euler.metal in Sources */,
 				3E43DCA2295BDDDC00732AC0 /* ssf_depth_thick_shading.metal in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

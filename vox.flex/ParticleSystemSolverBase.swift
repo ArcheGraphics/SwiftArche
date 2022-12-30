@@ -81,8 +81,4 @@ open class ParticleSystemSolverBase: PhysicsAnimation {
     public required init(_ entity: Entity) {
         super.init(entity)
     }
-    
-    open override func onAdvanceTimeStep(_ commandBuffer: MTLCommandBuffer, _ timeIntervalInSeconds: Float) {
-        
-    }
 }
