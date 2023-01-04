@@ -7,7 +7,7 @@
 import Metal
 import vox_render
 
-final class ParticleSystemSolver: ParticleSystemSolverBase {
+public final class ParticleSystemSolver: ParticleSystemSolverBase {
     private var _radius: Float = 1e-3
     private var _mass: Float = 1e-3
     
