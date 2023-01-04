@@ -56,6 +56,7 @@
 		049F4DB0295EDE7A00AB07EF /* semi_implicit_euler.metal in Sources */ = {isa = PBXBuildFile; fileRef = 049F4DAF295EDE7A00AB07EF /* semi_implicit_euler.metal */; };
 		3E1076412965214100F751A5 /* point_emitter.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3E1076402965214100F751A5 /* point_emitter.metal */; };
 		3E107643296524CF00F751A5 /* samplers.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3E107642296524CF00F751A5 /* samplers.metal */; };
+		3E10764629653F0300F751A5 /* PointEmitterApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E10764529653F0300F751A5 /* PointEmitterApp.swift */; };
 		3E43DC9B295BDDDC00732AC0 /* physics_helpers.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3E6B23B52946B3E5000AC29F /* physics_helpers.metal */; };
 		3E43DC9C295BDDDC00732AC0 /* sdf_shading.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3E6B23D529499B36000AC29F /* sdf_shading.metal */; };
 		3E43DC9D295BDDDC00732AC0 /* sdf_baker.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3E6B23D2294964B1000AC29F /* sdf_baker.metal */; };
@@ -635,6 +636,7 @@
 		3E1076402965214100F751A5 /* point_emitter.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = point_emitter.metal; sourceTree = "<group>"; };
 		3E107642296524CF00F751A5 /* samplers.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = samplers.metal; sourceTree = "<group>"; };
 		3E107644296525F300F751A5 /* samplers.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = samplers.h; sourceTree = "<group>"; };
+		3E10764529653F0300F751A5 /* PointEmitterApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PointEmitterApp.swift; sourceTree = "<group>"; };
 		3E6B235B2941BF88000AC29F /* BlendShapeWeightsAnimationCurveOwnerAssembler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlendShapeWeightsAnimationCurveOwnerAssembler.swift; sourceTree = "<group>"; };
 		3E6B235D294220BC000AC29F /* FaceMorphApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FaceMorphApp.swift; sourceTree = "<group>"; };
 		3E6B235F294224C1000AC29F /* FaceGUI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FaceGUI.swift; sourceTree = "<group>"; };
@@ -1393,6 +1395,7 @@
 			children = (
 				3E6B23DB2949B32C000AC29F /* ImplicitTriangleApp.swift */,
 				3EABF5E5294C3716009943C1 /* VolumeEmitterApp.swift */,
+				3E10764529653F0300F751A5 /* PointEmitterApp.swift */,
 				3ED9BCE5294DA4F300876ABC /* ScreenSpaceFluidApp.swift */,
 				3ED9BD022952B23F00876ABC /* BitonicSortApp.swift */,
 				3ED9BD1229568E2D00876ABC /* HashGridApp.swift */,
@@ -2837,6 +2840,7 @@
 				3E6B23DC2949B32C000AC29F /* ImplicitTriangleApp.swift in Sources */,
 				43D8C033021F4B86E95953E6 /* IBLApp.swift in Sources */,
 				43D8C40438F0527739C7D662 /* AtomicComputeApp.swift in Sources */,
+				3E10764629653F0300F751A5 /* PointEmitterApp.swift in Sources */,
 				040F1DF3293781B0008BDC8D /* RenderingUtils.swift in Sources */,
 				43D8CF515E4D90196E7E806B /* PhysXCollisionDetectionApp.swift in Sources */,
 				3EABF5E6294C3716009943C1 /* VolumeEmitterApp.swift in Sources */,
