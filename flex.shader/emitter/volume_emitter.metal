@@ -6,15 +6,16 @@
 
 #include <metal_stdlib>
 using namespace metal;
-#include "type_common.h"
-#include "function_constant.h"
+#include "../type_common.h"
+#include "../function_constant.h"
 
 kernel void volumeEmitter(sampler u_sdfSampler [[sampler(0), function_constant(hasSDF)]],
                           texture3d<float> u_sdfTexture [[texture(0), function_constant(hasSDF)]],
                           device float3* u_position [[buffer(0)]],
-                          device atomic_uint* u_counter[[buffer(1)]],
-                          constant VolumeParticleEmitterData& u_emitterData [[buffer(2)]],
-                          constant SDFData& u_sdfData [[buffer(3), function_constant(hasSDF)]],
+                          device float3* u_velocity [[buffer(1)]],
+                          device atomic_uint* u_counter[[buffer(2)]],
+                          constant VolumeParticleEmitterData& u_emitterData [[buffer(3)]],
+                          constant SDFData& u_sdfData [[buffer(4), function_constant(hasSDF)]],
                           uint3 tpig [[ thread_position_in_grid ]],
                           uint3 gridSize [[ threads_per_grid ]]) {
     float3 wPos;
@@ -29,14 +30,20 @@ kernel void volumeEmitter(sampler u_sdfSampler [[sampler(0), function_constant(h
             auto count = atomic_fetch_add_explicit(u_counter, 1, memory_order::memory_order_relaxed);
             if (count < u_emitterData.maxNumberOfParticles) {
                 u_position[count] = wPos;
+                
+                float3 r = wPos;
+                u_velocity[count] = u_emitterData.linearVelocity + cross(u_emitterData.angularVelocity, r) + u_emitterData.initialVelocity;
             } else {
                 atomic_fetch_sub_explicit(u_counter, 1, memory_order::memory_order_relaxed);
             }
-        }\
+        }
     } else {
         auto count = atomic_fetch_add_explicit(u_counter, 1, memory_order::memory_order_relaxed);
         if (count < u_emitterData.maxNumberOfParticles) {
             u_position[count] = wPos;
+            
+            float3 r = wPos;
+            u_velocity[count] = u_emitterData.linearVelocity + cross(u_emitterData.angularVelocity, r) + u_emitterData.initialVelocity;
         } else {
             atomic_fetch_sub_explicit(u_counter, 1, memory_order::memory_order_relaxed);
         }

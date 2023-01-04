@@ -19,7 +19,8 @@ public class PointParticleEmitter: ParticleEmitter {
     private var _data = PointParticleEmitterData()
     private var _firstFrameTimeInSeconds: Float = 0.0
     private var _numberOfEmittedParticles: Int = 0
-    
+    private var _maxNumberOfParticles: UInt32 = UInt32.max
+
     /// max number of new particles per second.
     public var maxNumberOfNewParticlesPerSecond: Int = 1
     
@@ -59,6 +60,34 @@ public class PointParticleEmitter: ParticleEmitter {
         }
         set {
             _data.spreadAngleInRadians = newValue
+            defaultShaderData.setData(PointParticleEmitter.emitterProperty, _data)
+        }
+    }
+    
+    public override var target: ParticleSystemData? {
+        get {
+            _target
+        }
+        set {
+            _target = newValue
+            if let target = _target {
+                maxNumberOfParticles = min(_maxNumberOfParticles, target.maxNumberOfParticles)
+                data.append(target)
+            }
+        }
+    }
+    
+    public var maxNumberOfParticles: UInt32 {
+        get {
+            _maxNumberOfParticles
+        }
+        set {
+            if let target = target {
+                _maxNumberOfParticles = min(newValue, target.maxNumberOfParticles)
+            } else {
+                _maxNumberOfParticles = newValue
+            }
+            _data.maxNumberOfParticles = _maxNumberOfParticles
             defaultShaderData.setData(PointParticleEmitter.emitterProperty, _data)
         }
     }

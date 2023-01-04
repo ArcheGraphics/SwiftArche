@@ -33,6 +33,8 @@ struct PointParticleEmitterData {
 
     vector_float3 direction;
     float spreadAngleInRadians;
+    
+    uint32_t maxNumberOfParticles;
 };
 
 struct SSFData {

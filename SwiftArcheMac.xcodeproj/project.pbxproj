@@ -54,6 +54,8 @@
 		049F4DAB295D3E6500AB07EF /* WCSphSolver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 049F4DAA295D3E6500AB07EF /* WCSphSolver.swift */; };
 		049F4DAD295D3EA000AB07EF /* PCISphSolver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 049F4DAC295D3EA000AB07EF /* PCISphSolver.swift */; };
 		049F4DB0295EDE7A00AB07EF /* semi_implicit_euler.metal in Sources */ = {isa = PBXBuildFile; fileRef = 049F4DAF295EDE7A00AB07EF /* semi_implicit_euler.metal */; };
+		3E1076412965214100F751A5 /* point_emitter.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3E1076402965214100F751A5 /* point_emitter.metal */; };
+		3E107643296524CF00F751A5 /* samplers.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3E107642296524CF00F751A5 /* samplers.metal */; };
 		3E43DC9B295BDDDC00732AC0 /* physics_helpers.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3E6B23B52946B3E5000AC29F /* physics_helpers.metal */; };
 		3E43DC9C295BDDDC00732AC0 /* sdf_shading.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3E6B23D529499B36000AC29F /* sdf_shading.metal */; };
 		3E43DC9D295BDDDC00732AC0 /* sdf_baker.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3E6B23D2294964B1000AC29F /* sdf_baker.metal */; };
@@ -630,6 +632,9 @@
 		049F4DAC295D3EA000AB07EF /* PCISphSolver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PCISphSolver.swift; sourceTree = "<group>"; };
 		049F4DAF295EDE7A00AB07EF /* semi_implicit_euler.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = semi_implicit_euler.metal; sourceTree = "<group>"; };
 		3E0E0B422959C7F700B25625 /* hash_grid_visual.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = hash_grid_visual.metal; sourceTree = "<group>"; };
+		3E1076402965214100F751A5 /* point_emitter.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = point_emitter.metal; sourceTree = "<group>"; };
+		3E107642296524CF00F751A5 /* samplers.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = samplers.metal; sourceTree = "<group>"; };
+		3E107644296525F300F751A5 /* samplers.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = samplers.h; sourceTree = "<group>"; };
 		3E6B235B2941BF88000AC29F /* BlendShapeWeightsAnimationCurveOwnerAssembler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlendShapeWeightsAnimationCurveOwnerAssembler.swift; sourceTree = "<group>"; };
 		3E6B235D294220BC000AC29F /* FaceMorphApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FaceMorphApp.swift; sourceTree = "<group>"; };
 		3E6B235F294224C1000AC29F /* FaceGUI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FaceGUI.swift; sourceTree = "<group>"; };
@@ -1303,6 +1308,17 @@
 			path = "time-integration";
 			sourceTree = "<group>";
 		};
+		3E10763F2965212400F751A5 /* emitter */ = {
+			isa = PBXGroup;
+			children = (
+				3E107644296525F300F751A5 /* samplers.h */,
+				3E107642296524CF00F751A5 /* samplers.metal */,
+				3EABF5E0294B6382009943C1 /* volume_emitter.metal */,
+				3E1076402965214100F751A5 /* point_emitter.metal */,
+			);
+			path = emitter;
+			sourceTree = "<group>";
+		};
 		3E6B23A92946B3CA000AC29F /* vox.flex */ = {
 			isa = PBXGroup;
 			children = (
@@ -1347,12 +1363,12 @@
 				3ED9BCE7295149F100876ABC /* noise */,
 				3ED9BCF7295293FA00876ABC /* sort */,
 				3ED9BD062954512D00876ABC /* hash-grid */,
+				3E10763F2965212400F751A5 /* emitter */,
 				049F4DAE295EDE0D00AB07EF /* time-integration */,
 				3E6B23BA2946B9FF000AC29F /* physics_helpers.h */,
 				3E6B23B52946B3E5000AC29F /* physics_helpers.metal */,
 				3E6B23D2294964B1000AC29F /* sdf_baker.metal */,
 				3E6B23D529499B36000AC29F /* sdf_shading.metal */,
-				3EABF5E0294B6382009943C1 /* volume_emitter.metal */,
 				3EABF5E8294C3841009943C1 /* particle_shading.metal */,
 				3EABF5ED294CBCD4009943C1 /* ssf_depth_thick_shading.metal */,
 				3ED9BCDE294D5A1300876ABC /* ssf_kernel.metal */,
@@ -2779,6 +2795,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3E1076412965214100F751A5 /* point_emitter.metal in Sources */,
 				3ED9BCF52951658E00876ABC /* psrd_noise.metal in Sources */,
 				3E43DC9F295BDDDC00732AC0 /* ssf_kernel.metal in Sources */,
 				3ED9BCF9295295B100876ABC /* init_sort_args.metal in Sources */,
@@ -2792,6 +2809,7 @@
 				3E43DCA3295BDDE400732AC0 /* hash_grid.metal in Sources */,
 				3ED9BCE929514A0700876ABC /* cellular_noise.metal in Sources */,
 				3ED9BCEB29515B9D00876ABC /* noise_common.metal in Sources */,
+				3E107643296524CF00F751A5 /* samplers.metal in Sources */,
 				3E43DCA0295BDDDC00732AC0 /* ssf_shading.metal in Sources */,
 				3E43DC9D295BDDDC00732AC0 /* sdf_baker.metal in Sources */,
 				3ED9BCFF2952A13F00876ABC /* step_bitonic_sort.metal in Sources */,
