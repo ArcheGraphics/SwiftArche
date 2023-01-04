@@ -20,7 +20,7 @@ public class PointParticleEmitter: ParticleEmitter {
     private var _firstFrameTimeInSeconds: Float = 0.0
     private var _numberOfEmittedParticles: Int = 0
     private var _maxNumberOfParticles: UInt32 = UInt32.max
-
+    
     /// max number of new particles per second.
     public var maxNumberOfNewParticlesPerSecond: Int = 1
     
@@ -113,7 +113,7 @@ public class PointParticleEmitter: ParticleEmitter {
             if (maxNumberOfNewParticles > 0) {
                 threadsPerGridX = maxNumberOfNewParticles
                 _numberOfEmittedParticles += maxNumberOfNewParticles
-                compute(commandEncoder: commandEncoder)
+                compute(commandEncoder: commandEncoder, label: "point emitter")
             }
         }
     }

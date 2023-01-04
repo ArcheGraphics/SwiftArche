@@ -15,7 +15,7 @@ import vox_render
 ///
 open class PhysicsAnimation: Script {
     var _currentTime: Float = 0.0
-
+    
     public var isUsingFixedSubTimeSteps: Bool = true
     public var numberOfFixedSubTimeSteps: UInt = 1
     
@@ -24,9 +24,12 @@ open class PhysicsAnimation: Script {
             _currentTime
         }
     }
-
+    
     public override func onUpdate(_ timeIntervalInSeconds: Float) {
+        let scope = engine.createCaptureScope(name: "bitonic")
+        scope.begin()
         if let commandBuffer = engine.commandQueue.makeCommandBuffer() {
+            commandBuffer.label = "physics animation"
             if isUsingFixedSubTimeSteps {
                 logger.info("Using fixed sub-timesteps: \(numberOfFixedSubTimeSteps)")
                 
@@ -55,7 +58,9 @@ open class PhysicsAnimation: Script {
                     _currentTime += actualTimeInterval
                 }
             }
+            commandBuffer.commit()
         }
+        scope.end()
     }
     
     open func initialize(_ commandBuffer: MTLCommandBuffer) {}
@@ -67,7 +72,7 @@ open class PhysicsAnimation: Script {
     /// is then taken to move forward in time. This function is called for each
     /// time-step, and a subclass that inherits PhysicsAnimation class should
     /// implement this function for its own physics model.
-    /// 
+    ///
     /// - Parameter timeIntervalInSeconds: The time interval in seconds
     open func onAdvanceTimeStep(_ commandBuffer: MTLCommandBuffer, _ timeIntervalInSeconds: Float) {}
     
