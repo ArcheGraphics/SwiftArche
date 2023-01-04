@@ -24,7 +24,7 @@ public class ResourceCache {
     var samplers: [Int: MTLSamplerState] = [:]
     var depth_stencil_states: [Int: MTLDepthStencilState] = [:]
 
-    init(_ device: MTLDevice) {
+    public init(_ device: MTLDevice) {
         self.device = device
     }
 

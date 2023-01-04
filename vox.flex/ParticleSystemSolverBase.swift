@@ -27,6 +27,8 @@ open class ParticleSystemSolverBase: PhysicsAnimation {
     private var _restitutionCoefficient: Float = 0
     private var _gravity = Vector3F(0, -9.8, 0)
 
+    public var resourceCache: ResourceCache
+    
     /// the gravity.
     public var gravity: Vector3F {
         get {
@@ -75,10 +77,12 @@ open class ParticleSystemSolverBase: PhysicsAnimation {
                 _particleSystemData = ParticleSystemData(engine, maxLength: ParticleSystemSolverBase.maxLength)
             }
             _emitter?.target = _particleSystemData
+            _emitter?.resourceCache = resourceCache
         }
     }
     
     public required init(_ entity: Entity) {
+        resourceCache = ResourceCache(entity.engine.device)
         super.init(entity)
     }
 }

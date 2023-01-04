@@ -14,9 +14,17 @@ import vox_render
 /// specific functions to Animation class.
 ///
 open class PhysicsAnimation: Script {
+    var _currentTime: Float = 0.0
+
     public var isUsingFixedSubTimeSteps: Bool = true
     public var numberOfFixedSubTimeSteps: UInt = 1
     
+    public var currentTime: Float {
+        get {
+            _currentTime
+        }
+    }
+
     public override func onUpdate(_ timeIntervalInSeconds: Float) {
         if let commandBuffer = engine.commandQueue.makeCommandBuffer() {
             if isUsingFixedSubTimeSteps {
@@ -28,6 +36,7 @@ open class PhysicsAnimation: Script {
                     logger.info("Begin onAdvanceTimeStep: \(actualTimeInterval) (1/\(1.0 / actualTimeInterval)) seconds")
                     onAdvanceTimeStep(commandBuffer, actualTimeInterval)
                 }
+                _currentTime += actualTimeInterval
             } else {
                 logger.info("Using adaptive sub-timesteps")
                 
@@ -43,6 +52,7 @@ open class PhysicsAnimation: Script {
                     onAdvanceTimeStep(commandBuffer, actualTimeInterval)
                     
                     remainingTime -= actualTimeInterval
+                    _currentTime += actualTimeInterval
                 }
             }
         }
