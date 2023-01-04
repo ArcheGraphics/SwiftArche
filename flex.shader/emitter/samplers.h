@@ -10,3 +10,5 @@
 using namespace metal;
 
 float3 uniformSampleCone(float u1, float u2, float3 axis, float angle);
+
+float3 uniformSampleSphere(float u1, float u2);

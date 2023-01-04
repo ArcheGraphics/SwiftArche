@@ -157,6 +157,7 @@ public class VolumeParticleEmitter: ParticleEmitter {
     public override init(_ engine: Engine) {
         super.init(engine)
         shader.append(ShaderPass(engine.library("flex.shader"), "volumeEmitter"))
+        defaultShaderData.setImageView("u_randomTexture", "u_randomSampler", createRandomTexture(engine.device, 256))
     }
 
     public override func update(_ commandEncoder: MTLComputeCommandEncoder,

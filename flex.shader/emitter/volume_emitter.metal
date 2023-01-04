@@ -8,9 +8,12 @@
 using namespace metal;
 #include "../type_common.h"
 #include "../function_constant.h"
+#include "samplers.h"
 
 kernel void volumeEmitter(sampler u_sdfSampler [[sampler(0), function_constant(hasSDF)]],
                           texture3d<float> u_sdfTexture [[texture(0), function_constant(hasSDF)]],
+                          sampler u_randomSampler [[sampler(1)]],
+                          texture1d<float> u_randomTexture [[texture(1)]],
                           device float3* u_position [[buffer(0)]],
                           device float3* u_velocity [[buffer(1)]],
                           device atomic_uint* u_counter[[buffer(2)]],
@@ -22,16 +25,23 @@ kernel void volumeEmitter(sampler u_sdfSampler [[sampler(0), function_constant(h
     wPos.x = tpig.x * u_emitterData.spacing + u_emitterData.lowerCorner.x;
     wPos.y = tpig.y * u_emitterData.spacing + u_emitterData.lowerCorner.y;
     wPos.z = tpig.z * u_emitterData.spacing + u_emitterData.lowerCorner.z;
+
+    float maxJitterDist = 0.5 * u_emitterData.jitter * u_emitterData.spacing;
     
+    float2 random = u_randomTexture.sample(u_randomSampler, float(tpig.x) / float(gridSize.x)).rg;
+    float3 randomDir = uniformSampleSphere(random.x, random.y);
+    float3 offset = maxJitterDist * randomDir;
+    float3 candidate = wPos + offset;
+
     if (hasSDF) {
-        auto uvw = (wPos - u_sdfData.SDFLower) / (u_sdfData.SDFUpper - u_sdfData.SDFLower);
+        auto uvw = (candidate - u_sdfData.SDFLower) / (u_sdfData.SDFUpper - u_sdfData.SDFLower);
         float sdf = u_sdfTexture.sample(u_sdfSampler, uvw).r;
         if (sdf < 0.0) {
             auto count = atomic_fetch_add_explicit(u_counter, 1, memory_order::memory_order_relaxed);
             if (count < u_emitterData.maxNumberOfParticles) {
-                u_position[count] = wPos;
+                u_position[count] = candidate;
                 
-                float3 r = wPos;
+                float3 r = candidate;
                 u_velocity[count] = u_emitterData.linearVelocity + cross(u_emitterData.angularVelocity, r) + u_emitterData.initialVelocity;
             } else {
                 atomic_fetch_sub_explicit(u_counter, 1, memory_order::memory_order_relaxed);
@@ -40,9 +50,9 @@ kernel void volumeEmitter(sampler u_sdfSampler [[sampler(0), function_constant(h
     } else {
         auto count = atomic_fetch_add_explicit(u_counter, 1, memory_order::memory_order_relaxed);
         if (count < u_emitterData.maxNumberOfParticles) {
-            u_position[count] = wPos;
+            u_position[count] = candidate;
             
-            float3 r = wPos;
+            float3 r = candidate;
             u_velocity[count] = u_emitterData.linearVelocity + cross(u_emitterData.angularVelocity, r) + u_emitterData.initialVelocity;
         } else {
             atomic_fetch_sub_explicit(u_counter, 1, memory_order::memory_order_relaxed);

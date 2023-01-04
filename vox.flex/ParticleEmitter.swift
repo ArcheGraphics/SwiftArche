@@ -26,4 +26,22 @@ open class ParticleEmitter : ComputePass {
     /// Updates the emitter state from \p currentTimeInSeconds to the following time-step.
     open func update(_ commandEncoder: MTLComputeCommandEncoder,
                      currentTimeInSeconds: Float, timeIntervalInSeconds: Float) {}
+    
+    func createRandomTexture(_ device: MTLDevice, _ size: Int) -> MTLTexture {
+        let desc = MTLTextureDescriptor()
+        desc.width = size
+        desc.textureType = .type1D
+        desc.pixelFormat = .rg32Float
+        desc.usage = .shaderRead
+        let texture = device.makeTexture(descriptor: desc)!
+        
+        var buffer: [SIMD2<Float>] = []
+        buffer.reserveCapacity(size)
+        for _ in 0..<size {
+            buffer.append(SIMD2<Float>(Float.random(in: 0..<1), Float.random(in: 0..<1)))
+        }
+        texture.replace(region: MTLRegionMake1D(0, size), mipmapLevel: 0, withBytes: buffer,
+                        bytesPerRow: MemoryLayout<SIMD2<Float>>.stride * size)
+        return texture
+    }
 }
