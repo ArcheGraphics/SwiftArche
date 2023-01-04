@@ -10,8 +10,10 @@ import vox_render
 public final class ParticleSystemSolver: ParticleSystemSolverBase {
     private var _radius: Float = 1e-3
     private var _mass: Float = 1e-3
-    private var _timeIntegration: ComputePass
-    private var _accumulateExternalForces: ComputePass
+    private let _indirectArgsBuffer: BufferView
+    private let _initArgsPass: ComputePass
+    private let _timeIntegration: ComputePass
+    private let _accumulateExternalForces: ComputePass
     
     public var radius: Float {
         get {
@@ -32,17 +34,32 @@ public final class ParticleSystemSolver: ParticleSystemSolverBase {
     }
     
     public required init(_ entity: Entity) {
-        _timeIntegration = ComputePass(entity.engine)
-        _accumulateExternalForces = ComputePass(entity.engine)
+        let engine = entity.engine
+        _timeIntegration = ComputePass(engine)
+        _accumulateExternalForces = ComputePass(engine)
+        _indirectArgsBuffer = BufferView(device: engine.device, count: 1,
+                                         stride: MemoryLayout<MTLDispatchThreadgroupsIndirectArguments>.stride)
+        _initArgsPass = ComputePass(engine)
         super.init(entity)
-        
-        _timeIntegration.shader.append(ShaderPass(engine.library("vox.flex"), "semiImplicitEuler"))
-        _timeIntegration.resourceCache = resourceCache
-        _accumulateExternalForces.shader.append(ShaderPass(engine.library("vox.flex"), "gravityForce"))
-        _accumulateExternalForces.resourceCache = resourceCache
     }
     
     public override func initialize(_ commandBuffer: MTLCommandBuffer) {
+        if let particleSystemData = particleSystemData {
+            _initArgsPass.resourceCache = resourceCache
+            _initArgsPass.shader.append(ShaderPass(engine.library("flex.shader"), "initSortArgs"))
+            _initArgsPass.defaultShaderData.setData("args", _indirectArgsBuffer)
+            _initArgsPass.defaultShaderData.setData("g_NumElements", particleSystemData.numberOfParticles)
+            _initArgsPass.precompileAll()
+            
+            _timeIntegration.shader.append(ShaderPass(engine.library("flex.shader"), "semiImplicitEuler"))
+            _timeIntegration.resourceCache = resourceCache
+            _timeIntegration.data.append(particleSystemData)
+            
+            _accumulateExternalForces.shader.append(ShaderPass(engine.library("flex.shader"), "gravityForce"))
+            _accumulateExternalForces.resourceCache = resourceCache
+            _accumulateExternalForces.data.append(particleSystemData)
+        }
+        
         // When initializing the solver, update the collider and emitter state as
         // well since they also affects the initial condition of the simulation.
         updateCollider(commandBuffer, 0.0)
@@ -87,14 +104,16 @@ public final class ParticleSystemSolver: ParticleSystemSolverBase {
 
     public func accumulateExternalForces(_ commandBuffer: MTLCommandBuffer) {
         if let commandEncoder = commandBuffer.makeComputeCommandEncoder() {
-            _accumulateExternalForces.compute(commandEncoder: commandEncoder, label: "accumulate external forces")
+            _accumulateExternalForces.compute(commandEncoder: commandEncoder, indirectBuffer: _indirectArgsBuffer.buffer,
+                                              threadsPerThreadgroup: MTLSize(width: 512, height: 1, depth: 1), label: "accumulate external forces")
             commandEncoder.endEncoding()
         }
     }
 
     public func timeIntegration(_ commandBuffer: MTLCommandBuffer, _ timeStepInSeconds: Float) {
         if let commandEncoder = commandBuffer.makeComputeCommandEncoder() {
-            _timeIntegration.compute(commandEncoder: commandEncoder, label: "time integration")
+            _timeIntegration.compute(commandEncoder: commandEncoder, indirectBuffer: _indirectArgsBuffer.buffer,
+                                     threadsPerThreadgroup: MTLSize(width: 512, height: 1, depth: 1), label: "time integration")
             commandEncoder.endEncoding()
         }
     }
@@ -108,6 +127,7 @@ public final class ParticleSystemSolver: ParticleSystemSolverBase {
         if let emitter = _emitter,
            let commandEncoder = commandBuffer.makeComputeCommandEncoder() {
             emitter.update(commandEncoder, currentTimeInSeconds: currentTime, timeIntervalInSeconds: timeStepInSeconds)
+            _initArgsPass.compute(commandEncoder: commandEncoder, label: "initArgs")
             commandEncoder.endEncoding()
         }
     }

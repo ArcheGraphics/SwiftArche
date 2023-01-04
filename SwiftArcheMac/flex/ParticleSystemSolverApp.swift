@@ -92,6 +92,12 @@ class ParticleSystemSolverApp: NSViewController {
         let particleSolver: ParticleSystemSolver = particleEntity.addComponent()
         particleSolver.emitter = emitter
         createParticleRenderer(particleEntity, particleSolver.particleSystemData!, gui)
+        
+        if let commandBuffer = engine.commandQueue.makeCommandBuffer() {
+            particleSolver.initialize(commandBuffer)
+            commandBuffer.commit()
+            commandBuffer.waitUntilCompleted()
+        }
         engine.run()
     }
 }
