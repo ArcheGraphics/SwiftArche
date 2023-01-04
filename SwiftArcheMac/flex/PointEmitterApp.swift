@@ -84,9 +84,9 @@ class PointEmitterApp: NSViewController {
         let emitter = PointParticleEmitter(engine)
         emitter.target = particleSystem
         emitter.origin = Vector3F()
-        emitter.direction = Vector3F(0, -1, 0)
-        emitter.speed = 2
-        emitter.spreadAngleInRadians = 30
+        emitter.direction = Vector3F(0, 1, 0)
+        emitter.speed = 1
+        emitter.spreadAngleInDegrees = 30
         emitter.maxNumberOfNewParticlesPerSecond = 10
         // todo
         emitter.resourceCache = scene.postprocessManager.postProcessPass.resourceCache!

@@ -54,12 +54,12 @@ public class PointParticleEmitter: ParticleEmitter {
         }
     }
     
-    public var spreadAngleInRadians: Float {
+    public var spreadAngleInDegrees: Float {
         get {
-            _data.spreadAngleInRadians
+            Math.radiansToDegrees(angleInRadians: _data.spreadAngleInRadians)
         }
         set {
-            _data.spreadAngleInRadians = newValue
+            _data.spreadAngleInRadians = Math.degreesToRadians(angleInDegrees: newValue)
             defaultShaderData.setData(PointParticleEmitter.emitterProperty, _data)
         }
     }

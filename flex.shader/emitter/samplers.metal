@@ -10,7 +10,7 @@ float3 uniformSampleCone(float u1, float u2, float3 axis, float angle) {
     float cosAngle_2 = cos(angle / 2);
     float y = 1 - (1 - cosAngle_2) * u1;
     float r = sqrt(max(0.0, 1 - y * y));
-    float phi = M_PI_2_F * u2;
+    float phi = M_PI_F * 2 * u2;
     float x = r * cos(phi);
     float z = r * sin(phi);
     
@@ -24,7 +24,7 @@ float3 uniformSampleCone(float u1, float u2, float3 axis, float angle) {
 float3 uniformSampleSphere(float u1, float u2) {
     float y = 1 - 2 * u1;
     float r = sqrt(max(0.0, 1 - y * y));
-    float phi = M_PI_2_F * u2;
+    float phi = M_PI_F * 2 * u2;
     float x = r * cos(phi);
     float z = r * sin(phi);
     return float3(x, y, z);

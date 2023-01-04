@@ -34,6 +34,18 @@ fileprivate class GUI: Script {
     }
 }
 
+fileprivate class ParticleRendererUpdate: Script {
+    var particleSystem: ParticleSystemData!
+    var gui: GUI!
+    var subMesh: SubMesh!
+    
+    override func onUpdate(_ deltaTime: Float) {
+        let maxNumber: Int = particleSystem.numberOfParticles[0]
+        subMesh.count = maxNumber
+        gui.maxNumber = Int32(maxNumber)
+    }
+}
+
 class ParticleSystemSolverApp: NSViewController {
     var canvas: Canvas!
     var engine: Engine!
@@ -50,7 +62,7 @@ class ParticleSystemSolverApp: NSViewController {
         let particleMesh = Mesh()
         particleMesh._vertexDescriptor = descriptor
         let maxNumber: Int = particleSystem.numberOfParticles[0]
-        _ = particleMesh.addSubMesh(0, maxNumber, .point)
+        let subMesh = particleMesh.addSubMesh(0, maxNumber, .point)
         particleMesh._setVertexBufferBinding(0, particleSystem.positions)
         let particleMtl = VolumeParticleEmitterMaterial(engine)
         particleMtl.pointRadius = 5
@@ -62,6 +74,11 @@ class ParticleSystemSolverApp: NSViewController {
         let renderer: MeshRenderer = particleEntity.addComponent()
         renderer.mesh = particleMesh
         renderer.setMaterial(particleMtl)
+        
+        let particleUpdate: ParticleRendererUpdate = rootEntity.addComponent()
+        particleUpdate.gui = gui
+        particleUpdate.particleSystem = particleSystem
+        particleUpdate.subMesh = subMesh
     }
     
     override func viewDidLoad() {
@@ -81,16 +98,15 @@ class ParticleSystemSolverApp: NSViewController {
                 
         let emitter = PointParticleEmitter(engine)
         emitter.origin = Vector3F()
-        emitter.direction = Vector3F(0, -1, 0)
-        emitter.speed = 2
-        emitter.spreadAngleInRadians = 30
-        emitter.maxNumberOfNewParticlesPerSecond = 10
-        // todo
-        emitter.resourceCache = scene.postprocessManager.postProcessPass.resourceCache!
+        emitter.direction = Vector3F(0, 1, 0)
+        emitter.speed = 0.4
+        emitter.spreadAngleInDegrees = 45
+        emitter.maxNumberOfNewParticlesPerSecond = 300
         
         let particleEntity = rootEntity.createChild()
         let particleSolver: ParticleSystemSolver = particleEntity.addComponent()
         particleSolver.emitter = emitter
+        particleSolver.gravity = Vector3F(0, -0.1, 0)
         createParticleRenderer(particleEntity, particleSolver.particleSystemData!, gui)
         
         if let commandBuffer = engine.commandQueue.makeCommandBuffer() {

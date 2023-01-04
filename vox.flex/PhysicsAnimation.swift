@@ -26,8 +26,8 @@ open class PhysicsAnimation: Script {
     }
     
     public override func onUpdate(_ timeIntervalInSeconds: Float) {
-        let scope = engine.createCaptureScope(name: "bitonic")
-        scope.begin()
+//        let scope = engine.createCaptureScope(name: "bitonic")
+//        scope.begin()
         if let commandBuffer = engine.commandQueue.makeCommandBuffer() {
             commandBuffer.label = "physics animation"
             if isUsingFixedSubTimeSteps {
@@ -60,7 +60,7 @@ open class PhysicsAnimation: Script {
             }
             commandBuffer.commit()
         }
-        scope.end()
+//        scope.end()
     }
     
     open func initialize(_ commandBuffer: MTLCommandBuffer) {}
