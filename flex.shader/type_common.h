@@ -37,6 +37,11 @@ struct PointParticleEmitterData {
     uint32_t maxNumberOfParticles;
 };
 
+struct ForceData {
+    vector_float3 gravity;
+    float mass;
+};
+
 struct SSFData {
     float p_n;
     float p_f;

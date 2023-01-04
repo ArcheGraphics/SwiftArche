@@ -6,13 +6,13 @@
 
 #include <metal_stdlib>
 using namespace metal;
+#include "../type_common.h"
 
-kernel void gravityForce(device float3* u_forces [[buffer(0)]],
-                         constant float& mass [[buffer(1)]],
-                         constant float3& gravity [[buffer(2)]],
-                         device uint& u_count [[buffer(3)]],
+kernel void gravityForce(device float3* u_force [[buffer(0)]],
+                         constant ForceData& u_forceData [[buffer(1)]],
+                         device uint& u_counter [[buffer(3)]],
                          uint3 tpig [[ thread_position_in_grid ]]) {
-    if (tpig.x < u_count) {
-        u_forces[tpig.x] = mass * gravity;
+    if (tpig.x < u_counter) {
+        u_force[tpig.x] = u_forceData.mass * u_forceData.gravity;
     }
 }

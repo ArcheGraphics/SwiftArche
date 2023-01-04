@@ -7,15 +7,15 @@
 #include <metal_stdlib>
 using namespace metal;
 
-kernel void semiImplicitEuler(device float3* u_positions [[buffer(0)]],
+kernel void semiImplicitEuler(device float3* u_position [[buffer(0)]],
                               device float3* u_velocity [[buffer(1)]],
-                              device float3* u_forces [[buffer(2)]],
+                              device float3* u_force [[buffer(2)]],
                               constant float& dt [[buffer(3)]],
                               constant float& mass [[buffer(4)]],
-                              device uint& u_count [[buffer(5)]],
+                              device uint& u_counter [[buffer(5)]],
                               uint3 tpig [[ thread_position_in_grid ]]) {
-    if (tpig.x < u_count) {
-        u_velocity[tpig.x] = u_velocity[tpig.x] + dt * u_forces[tpig.x] / mass;
-        u_positions[tpig.x] = u_positions[tpig.x] + dt * u_velocity[tpig.x];
+    if (tpig.x < u_counter) {
+        u_velocity[tpig.x] = u_velocity[tpig.x] + dt * u_force[tpig.x] / mass;
+        u_position[tpig.x] = u_position[tpig.x] + dt * u_velocity[tpig.x];
     }
 }

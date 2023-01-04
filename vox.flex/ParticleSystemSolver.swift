@@ -21,6 +21,7 @@ public final class ParticleSystemSolver: ParticleSystemSolverBase {
         }
         set {
             _radius = newValue
+            _particleSystemData?.radius = newValue
         }
     }
     
@@ -30,6 +31,23 @@ public final class ParticleSystemSolver: ParticleSystemSolverBase {
         }
         set {
             _mass = newValue
+            _particleSystemData?.mass = newValue
+        }
+    }
+    
+    public override var emitter: ParticleEmitter? {
+        get {
+            _emitter
+        }
+        set {
+            _emitter = newValue
+            if _particleSystemData == nil {
+                _particleSystemData = ParticleSystemData(engine, maxLength: ParticleSystemSolverBase.maxLength)
+                _particleSystemData?.mass = _mass
+                _particleSystemData?.radius = _radius
+            }
+            _emitter?.target = _particleSystemData
+            _emitter?.resourceCache = resourceCache
         }
     }
     
@@ -104,6 +122,7 @@ public final class ParticleSystemSolver: ParticleSystemSolverBase {
 
     public func accumulateExternalForces(_ commandBuffer: MTLCommandBuffer) {
         if let commandEncoder = commandBuffer.makeComputeCommandEncoder() {
+            _accumulateExternalForces.defaultShaderData.setData("u_forceData", ForceData(gravity: gravity, mass: mass))
             _accumulateExternalForces.compute(commandEncoder: commandEncoder, indirectBuffer: _indirectArgsBuffer.buffer,
                                               threadsPerThreadgroup: MTLSize(width: 512, height: 1, depth: 1), label: "accumulate external forces")
             commandEncoder.endEncoding()
@@ -111,7 +130,10 @@ public final class ParticleSystemSolver: ParticleSystemSolverBase {
     }
 
     public func timeIntegration(_ commandBuffer: MTLCommandBuffer, _ timeStepInSeconds: Float) {
+        var timeStepInSeconds = timeStepInSeconds
         if let commandEncoder = commandBuffer.makeComputeCommandEncoder() {
+            commandEncoder.setBytes(&timeStepInSeconds, length: MemoryLayout<Float>.stride, index: 3)
+            commandEncoder.setBytes(&mass, length: MemoryLayout<Float>.stride, index: 4)
             _timeIntegration.compute(commandEncoder: commandEncoder, indirectBuffer: _indirectArgsBuffer.buffer,
                                      threadsPerThreadgroup: MTLSize(width: 512, height: 1, depth: 1), label: "time integration")
             commandEncoder.endEncoding()
