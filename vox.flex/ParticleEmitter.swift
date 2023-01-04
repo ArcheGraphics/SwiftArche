@@ -34,7 +34,12 @@ open class ParticleEmitter : ComputePass {
         desc.pixelFormat = .rg32Float
         desc.usage = .shaderRead
         let texture = device.makeTexture(descriptor: desc)!
-        
+        updateRandomTexture(texture)
+        return texture
+    }
+    
+    func updateRandomTexture(_ texture: MTLTexture) {
+        let size = texture.width
         var buffer: [SIMD2<Float>] = []
         buffer.reserveCapacity(size)
         for _ in 0..<size {
@@ -42,6 +47,5 @@ open class ParticleEmitter : ComputePass {
         }
         texture.replace(region: MTLRegionMake1D(0, size), mipmapLevel: 0, withBytes: buffer,
                         bytesPerRow: MemoryLayout<SIMD2<Float>>.stride * size)
-        return texture
     }
 }

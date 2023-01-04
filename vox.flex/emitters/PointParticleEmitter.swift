@@ -20,6 +20,7 @@ public class PointParticleEmitter: ParticleEmitter {
     private var _firstFrameTimeInSeconds: Float = 0.0
     private var _numberOfEmittedParticles: Int = 0
     private var _maxNumberOfParticles: UInt32 = UInt32.max
+    private var _randomTex: MTLTexture!
     
     /// max number of new particles per second.
     public var maxNumberOfNewParticlesPerSecond: Int = 1
@@ -95,7 +96,8 @@ public class PointParticleEmitter: ParticleEmitter {
     public override init(_ engine: Engine) {
         super.init(engine)
         shader.append(ShaderPass(engine.library("flex.shader"), "pointEmitter"))
-        defaultShaderData.setImageView("u_randomTexture", "u_randomSampler", createRandomTexture(engine.device, 256))
+        _randomTex = createRandomTexture(engine.device, 256)
+        defaultShaderData.setImageView("u_randomTexture", "u_randomSampler", _randomTex)
     }
     
     public override func update(_ commandEncoder: MTLComputeCommandEncoder, currentTimeInSeconds: Float, timeIntervalInSeconds: Float) {
@@ -104,6 +106,7 @@ public class PointParticleEmitter: ParticleEmitter {
                 _firstFrameTimeInSeconds = currentTimeInSeconds;
             }
             
+            updateRandomTexture(_randomTex)
             let elapsedTimeInSeconds = currentTimeInSeconds - _firstFrameTimeInSeconds;
             
             var newMaxTotalNumberOfEmittedParticles = Int(ceil((elapsedTimeInSeconds + timeIntervalInSeconds) * Float(maxNumberOfNewParticlesPerSecond)))
