@@ -24,11 +24,11 @@ open class ParticleSystemSolverBase: PhysicsAnimation {
     var _particleSystemData: ParticleSystemData?
     
     private var _dragCoefficient: Float = 1e-4
-    private var _restitutionCoefficient: Float = 0
     private var _gravity = Vector3F(0, -9.8, 0)
 
     public var resourceCache: ResourceCache
-    
+    public var collider: ParticleCollider?
+
     /// the gravity.
     public var gravity: Vector3F {
         get {
@@ -46,16 +46,6 @@ open class ParticleSystemSolverBase: PhysicsAnimation {
         }
         set {
             _dragCoefficient = max(newValue, 0)
-        }
-    }
-    
-    /// The restitution coefficient.
-    public var restitutionCoefficient: Float {
-        get {
-            _restitutionCoefficient
-        }
-        set {
-            _restitutionCoefficient = simd_clamp(newValue, 0, 1)
         }
     }
     

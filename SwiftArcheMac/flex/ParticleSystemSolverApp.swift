@@ -29,6 +29,8 @@ fileprivate class GUI: Script {
 
         ImGuiNewFrame()
         ImGuiSliderInt("highlight", &highlightIndex, 0, maxNumber, nil, ImGuiSliderFlags())
+        ImGuiSeparator()
+        UIElement.frameRate()
         // Rendering
         ImGuiRender()
     }

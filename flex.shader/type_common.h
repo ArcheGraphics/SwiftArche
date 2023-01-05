@@ -37,6 +37,22 @@ struct PointParticleEmitterData {
     uint32_t maxNumberOfParticles;
 };
 
+struct ColliderData {
+    float radius;
+    float restitutionCoefficient;
+    float frictionCoefficient;
+    uint32_t count;
+};
+
+struct CapsuleColliderShapeData {
+    vector_float3 a;
+    float radius;
+    
+    vector_float3 b;
+    vector_float3 linearVelocity;
+    vector_float3 angularVelocity;
+};
+
 struct ForceData {
     vector_float3 gravity;
     float mass;

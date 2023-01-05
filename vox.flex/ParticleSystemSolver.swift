@@ -143,7 +143,15 @@ public final class ParticleSystemSolver: ParticleSystemSolverBase {
     }
     
     /// Resolves any collisions occured by the particles.
-    public func resolveCollision(_ commandBuffer: MTLCommandBuffer) {}
+    public func resolveCollision(_ commandBuffer: MTLCommandBuffer) {
+        if let collider = collider,
+           let commandEncoder = commandBuffer.makeComputeCommandEncoder() {
+            commandEncoder.label = "collision"
+            collider.update(commandEncoder: commandEncoder, indirectBuffer: _indirectArgsBuffer.buffer,
+                            threadsPerThreadgroup: MTLSize(width: 512, height: 1, depth: 1))
+            commandEncoder.endEncoding()
+        }
+    }
     
     public func updateCollider(_ commandBuffer: MTLCommandBuffer, _ timeStepInSeconds: Float) {}
     
