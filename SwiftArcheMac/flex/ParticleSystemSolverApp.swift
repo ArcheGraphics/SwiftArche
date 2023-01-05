@@ -105,6 +105,16 @@ class ParticleSystemSolverApp: NSViewController {
         emitter.spreadAngleInDegrees = 45
         emitter.maxNumberOfNewParticlesPerSecond = 300
         
+        let collider = ParticleCapsuleCollider(engine)
+        collider.capsuleData.append(CapsuleColliderShapeData(a: Vector3F(2, 0, 0), radius: 1, b: Vector3F(-2, 0, 0),
+                                                             linearVelocity: Vector3F(), angularVelocity: Vector3F()))
+        // raymarching render
+        let rayMarchignMaterial = RayMarchingMaterial(engine, "raymarching")
+        rayMarchignMaterial.capsuleColliderShapes = collider
+        let renderer: MeshRenderer = rootEntity.addComponent()
+        renderer.setMaterial(rayMarchignMaterial)
+        renderer.mesh = PrimitiveMesh.createQuadPlane(engine)
+        
         let particleEntity = rootEntity.createChild()
         let particleSolver: ParticleSystemSolver = particleEntity.addComponent()
         particleSolver.emitter = emitter
