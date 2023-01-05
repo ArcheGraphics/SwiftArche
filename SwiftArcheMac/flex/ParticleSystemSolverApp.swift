@@ -102,11 +102,11 @@ class ParticleSystemSolverApp: NSViewController {
         emitter.origin = Vector3F()
         emitter.direction = Vector3F(0, 1, 0)
         emitter.speed = 0.4
-        emitter.spreadAngleInDegrees = 45
+        emitter.spreadAngleInDegrees = 20
         emitter.maxNumberOfNewParticlesPerSecond = 300
         
         let collider = ParticleCapsuleCollider(engine)
-        collider.capsuleData.append(CapsuleColliderShapeData(a: Vector3F(0.2, 0, 0), radius: 0.1, b: Vector3F(-0.2, 0, 0),
+        collider.capsuleData.append(CapsuleColliderShapeData(a: Vector3F(1, -1, 0), radius: 0.5, b: Vector3F(-1, -1, 0),
                                                              linearVelocity: Vector3F(), angularVelocity: Vector3F()))
         // raymarching render
         let rayMarchignMaterial = RayMarchingMaterial(engine, "raymarching")
@@ -118,7 +118,8 @@ class ParticleSystemSolverApp: NSViewController {
         let particleEntity = rootEntity.createChild()
         let particleSolver: ParticleSystemSolver = particleEntity.addComponent()
         particleSolver.emitter = emitter
-        particleSolver.gravity = Vector3F(0, -0.1, 0)
+        particleSolver.collider = collider
+        particleSolver.gravity = Vector3F(0, -1, 0)
         createParticleRenderer(particleEntity, particleSolver.particleSystemData!, gui)
         
         if let commandBuffer = engine.commandQueue.makeCommandBuffer() {

@@ -34,7 +34,7 @@ ColliderQueryResult getClosestPoint(constant CapsuleColliderShapeData* u_capsule
         }
     }
     
-    result.normal = -normalize(minDirection);
+    result.normal = normalize(minDirection);
     result.point = position - result.normal * result.distance;
     
     CapsuleColliderShapeData data = u_capsules[minIndex];

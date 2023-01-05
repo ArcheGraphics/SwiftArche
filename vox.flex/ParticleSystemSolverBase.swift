@@ -20,6 +20,7 @@ import vox_render
 open class ParticleSystemSolverBase: PhysicsAnimation {
     public static var maxLength: UInt32 = 10000
     
+    var _collider: ParticleCollider?
     var _emitter: ParticleEmitter?
     var _particleSystemData: ParticleSystemData?
     
@@ -27,7 +28,6 @@ open class ParticleSystemSolverBase: PhysicsAnimation {
     private var _gravity = Vector3F(0, -9.8, 0)
 
     public var resourceCache: ResourceCache
-    public var collider: ParticleCollider?
 
     /// the gravity.
     public var gravity: Vector3F {
@@ -68,6 +68,21 @@ open class ParticleSystemSolverBase: PhysicsAnimation {
             }
             _emitter?.target = _particleSystemData
             _emitter?.resourceCache = resourceCache
+        }
+    }
+    
+    /// the collider.
+    public var collider: ParticleCollider? {
+        get {
+            _collider
+        }
+        set {
+            _collider = newValue
+            if _particleSystemData == nil {
+                _particleSystemData = ParticleSystemData(engine, maxLength: ParticleSystemSolverBase.maxLength)
+            }
+            _collider?.target = _particleSystemData
+            _collider?.resourceCache = resourceCache
         }
     }
     
