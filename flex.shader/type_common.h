@@ -44,6 +44,13 @@ struct ColliderData {
     uint32_t count;
 };
 
+struct RayMarchingData {
+    vector_float3 color;
+    uint32_t iteration;
+    vector_float3 direction;
+    float tol;
+};
+
 struct CapsuleColliderShapeData {
     vector_float3 a;
     float radius;
