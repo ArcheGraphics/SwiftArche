@@ -62,7 +62,7 @@
 		3E10764F2966B67100F751A5 /* ParticleCollider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E10764E2966B67100F751A5 /* ParticleCollider.swift */; };
 		3E1076512966B6A100F751A5 /* ParticleCapsuleCollider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E1076502966B6A100F751A5 /* ParticleCapsuleCollider.swift */; };
 		3E1076532966B96B00F751A5 /* capsule_collider_shape.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3E1076522966B96B00F751A5 /* capsule_collider_shape.metal */; };
-		3E1076552966CF7D00F751A5 /* ray_marching.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3E1076542966CF7D00F751A5 /* ray_marching.metal */; };
+		3E1076552966CF7D00F751A5 /* capsule_ray_marching.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3E1076542966CF7D00F751A5 /* capsule_ray_marching.metal */; };
 		3E1076572966D8CA00F751A5 /* RayMarchingMaterial.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E1076562966D8CA00F751A5 /* RayMarchingMaterial.swift */; };
 		3E43DC9B295BDDDC00732AC0 /* physics_helpers.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3E6B23B52946B3E5000AC29F /* physics_helpers.metal */; };
 		3E43DC9C295BDDDC00732AC0 /* sdf_shading.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3E6B23D529499B36000AC29F /* sdf_shading.metal */; };
@@ -649,9 +649,10 @@
 		3E10764E2966B67100F751A5 /* ParticleCollider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParticleCollider.swift; sourceTree = "<group>"; };
 		3E1076502966B6A100F751A5 /* ParticleCapsuleCollider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParticleCapsuleCollider.swift; sourceTree = "<group>"; };
 		3E1076522966B96B00F751A5 /* capsule_collider_shape.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = capsule_collider_shape.metal; sourceTree = "<group>"; };
-		3E1076542966CF7D00F751A5 /* ray_marching.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = ray_marching.metal; sourceTree = "<group>"; };
+		3E1076542966CF7D00F751A5 /* capsule_ray_marching.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = capsule_ray_marching.metal; sourceTree = "<group>"; };
 		3E1076562966D8CA00F751A5 /* RayMarchingMaterial.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RayMarchingMaterial.swift; sourceTree = "<group>"; };
 		3E1076582967D1B800F751A5 /* rigid_body_collider.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = rigid_body_collider.h; sourceTree = "<group>"; };
+		3E10765C2967DBD600F751A5 /* ray_marching.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ray_marching.h; sourceTree = "<group>"; };
 		3E6B235B2941BF88000AC29F /* BlendShapeWeightsAnimationCurveOwnerAssembler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlendShapeWeightsAnimationCurveOwnerAssembler.swift; sourceTree = "<group>"; };
 		3E6B235D294220BC000AC29F /* FaceMorphApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FaceMorphApp.swift; sourceTree = "<group>"; };
 		3E6B235F294224C1000AC29F /* FaceGUI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FaceGUI.swift; sourceTree = "<group>"; };
@@ -1361,6 +1362,15 @@
 			path = colliders;
 			sourceTree = "<group>";
 		};
+		3E10765B2967DBCD00F751A5 /* sdf */ = {
+			isa = PBXGroup;
+			children = (
+				3E10765C2967DBD600F751A5 /* ray_marching.h */,
+				3E1076542966CF7D00F751A5 /* capsule_ray_marching.metal */,
+			);
+			path = sdf;
+			sourceTree = "<group>";
+		};
 		3E6B23A92946B3CA000AC29F /* vox.flex */ = {
 			isa = PBXGroup;
 			children = (
@@ -1411,11 +1421,11 @@
 				3E10764C2966B57200F751A5 /* collider */,
 				049F4DAE295EDE0D00AB07EF /* time-integration */,
 				3E10764929654BB400F751A5 /* forces */,
+				3E10765B2967DBCD00F751A5 /* sdf */,
 				3E6B23BA2946B9FF000AC29F /* physics_helpers.h */,
 				3E6B23B52946B3E5000AC29F /* physics_helpers.metal */,
 				3E6B23D2294964B1000AC29F /* sdf_baker.metal */,
 				3E6B23D529499B36000AC29F /* sdf_shading.metal */,
-				3E1076542966CF7D00F751A5 /* ray_marching.metal */,
 				3EABF5E8294C3841009943C1 /* particle_shading.metal */,
 				3EABF5ED294CBCD4009943C1 /* ssf_depth_thick_shading.metal */,
 				3ED9BCDE294D5A1300876ABC /* ssf_kernel.metal */,
@@ -2856,7 +2866,7 @@
 				3E43DC9B295BDDDC00732AC0 /* physics_helpers.metal in Sources */,
 				3E10764B29654BC800F751A5 /* gravity_force.metal in Sources */,
 				3ED9BCEF29515C6800876ABC /* perlin_noise.metal in Sources */,
-				3E1076552966CF7D00F751A5 /* ray_marching.metal in Sources */,
+				3E1076552966CF7D00F751A5 /* capsule_ray_marching.metal in Sources */,
 				3ED9BCFB2952968700876ABC /* pre_bitonic_sort.metal in Sources */,
 				3E43DC9C295BDDDC00732AC0 /* sdf_shading.metal in Sources */,
 				3E43DCA4295BDDE900732AC0 /* hash_grid_visual.metal in Sources */,
