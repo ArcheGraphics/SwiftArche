@@ -7,8 +7,8 @@
 import Metal
 import vox_render
 
-/// emitter Material.
-public class VolumeParticleEmitterMaterial: BaseMaterial {
+/// particle point Material.
+public class ParticlePointMaterial: BaseMaterial {
     private static let highlightProperty = "hlIndex"
     private static let radiusProperty = "pointRadius"
     private static let scaleProperty = "pointScale"
@@ -22,7 +22,7 @@ public class VolumeParticleEmitterMaterial: BaseMaterial {
         }
         set {
             _pointScale = newValue
-            shaderData.setData(VolumeParticleEmitterMaterial.scaleProperty, _pointScale)
+            shaderData.setData(ParticlePointMaterial.scaleProperty, _pointScale)
         }
     }
     
@@ -32,7 +32,7 @@ public class VolumeParticleEmitterMaterial: BaseMaterial {
         }
         set {
             _pointRadius = newValue
-            shaderData.setData(VolumeParticleEmitterMaterial.radiusProperty, _pointRadius)
+            shaderData.setData(ParticlePointMaterial.radiusProperty, _pointRadius)
         }
     }
     
@@ -42,7 +42,7 @@ public class VolumeParticleEmitterMaterial: BaseMaterial {
         }
         set {
             _highlightIndex = newValue
-            shaderData.setData(VolumeParticleEmitterMaterial.highlightProperty, _highlightIndex)
+            shaderData.setData(ParticlePointMaterial.highlightProperty, _highlightIndex)
         }
     }
 
@@ -50,7 +50,7 @@ public class VolumeParticleEmitterMaterial: BaseMaterial {
         super.init(engine, name)
         shader.append(ShaderPass(engine.library("flex.shader"), "vertex_particle", "fragment_particle"))
 
-        shaderData.setData(VolumeParticleEmitterMaterial.scaleProperty, _pointScale)
-        shaderData.setData(VolumeParticleEmitterMaterial.highlightProperty, _highlightIndex)
+        shaderData.setData(ParticlePointMaterial.scaleProperty, _pointScale)
+        shaderData.setData(ParticlePointMaterial.highlightProperty, _highlightIndex)
     }
 }

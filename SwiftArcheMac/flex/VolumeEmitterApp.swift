@@ -13,7 +13,7 @@ import ImGui
 
 fileprivate class GUI: Script {
     var maxNumber: Int32 = 0
-    var particleMtl: VolumeParticleEmitterMaterial!
+    var particleMtl: ParticlePointMaterial!
     
     private var highlightIndex: Int32 {
         get {
@@ -52,7 +52,7 @@ class VolumeEmitterApp: NSViewController {
         let maxNumber: Int = particleSystem.numberOfParticles[0]
         _ = particleMesh.addSubMesh(0, maxNumber, .point)
         particleMesh._setVertexBufferBinding(0, particleSystem.positions)
-        let particleMtl = VolumeParticleEmitterMaterial(engine)
+        let particleMtl = ParticlePointMaterial(engine)
         particleMtl.pointRadius = 5
         particleMtl.pointScale = 10
         gui.particleMtl = particleMtl

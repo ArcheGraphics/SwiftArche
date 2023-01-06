@@ -4,6 +4,8 @@
 //  personal capacity and am not conveying any rights to any intellectual
 //  property of any third parties.
 
+#pragma once
+
 #include <metal_stdlib>
 using namespace metal;
 #include "../type_common.h"
@@ -16,44 +18,21 @@ struct ColliderQueryResult {
     float3 velocity;
 };
 
-ColliderQueryResult getClosestPoint(constant CapsuleColliderShapeData* u_capsules, uint count, float3 position) {
-    ColliderQueryResult result;
-    float3 minDirection;
-    uint minIndex;
+template <typename Callback>
+class RigidBodyCollider {
+public:
+    RigidBodyCollider(device float3* u_position,
+                      device float3* u_velocity,
+                      constant ColliderData& u_collider, Callback cb) :
+    u_position(u_position),
+    u_velocity(u_velocity),
+    u_collider(u_collider),
+    callback(cb) {}
     
-    for (uint i = 0; i < count; i++) {
-        CapsuleColliderShapeData data = u_capsules[i];
-        float3 pa = position - data.a, ba = data.b - data.a;
-        float h = clamp(dot(pa,ba) / dot(ba,ba), 0.0, 1.0);
-        float3 direction = pa - ba * h;
-        float distance = length(direction) - data.radius;
-        if (result.distance > distance) {
-            result.distance = distance;
-            minIndex = i;
-            minDirection = direction;
-        }
-    }
-    
-    result.normal = normalize(minDirection);
-    result.point = position - result.normal * result.distance;
-    
-    CapsuleColliderShapeData data = u_capsules[minIndex];
-    float3 r = position - (data.a + data.b) * 0.5;
-    result.velocity = data.linearVelocity + cross(data.angularVelocity, r);
-    
-    return result;
-}
-
-kernel void capsuleCollider(device float3* u_position [[buffer(0)]],
-                            device float3* u_velocity [[buffer(1)]],
-                            device uint& u_counter [[buffer(2)]],
-                            constant CapsuleColliderShapeData* u_capsules [[buffer(3)]],
-                            constant ColliderData& u_collider [[buffer(4)]],
-                            uint3 tpig [[ thread_position_in_grid ]],
-                            uint3 gridSize [[ threads_per_grid ]]) {
-    if (tpig.x < u_counter) {
-        auto newVelocity = u_velocity[tpig.x];
-        auto colliderPoint = getClosestPoint(u_capsules, u_collider.count, u_position[tpig.x]);
+    template <typename Index>
+    void operator()(Index idx) {
+        auto newVelocity = u_velocity[idx];
+        ColliderQueryResult colliderPoint = callback(u_position[idx]);
         if (colliderPoint.distance < u_collider.radius) {
             // Target point is the closest non-penetrating position from the
             // new position.
@@ -85,9 +64,15 @@ kernel void capsuleCollider(device float3* u_position [[buffer(0)]],
                 }
                 
                 // Reassemble the components
-                u_velocity[tpig.x] = relativeVelN + relativeVelT + colliderVelAtTargetPoint;
+                u_velocity[idx] = relativeVelN + relativeVelT + colliderVelAtTargetPoint;
             }
-            u_position[tpig.x] = targetPoint;
+            u_position[idx] = targetPoint;
         }
     }
-}
+    
+private:
+    device float3* u_position;
+    device float3* u_velocity;
+    constant ColliderData& u_collider;
+    Callback callback;
+};

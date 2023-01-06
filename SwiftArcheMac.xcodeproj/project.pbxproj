@@ -61,7 +61,7 @@
 		3E10764B29654BC800F751A5 /* gravity_force.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3E10764A29654BC800F751A5 /* gravity_force.metal */; };
 		3E10764F2966B67100F751A5 /* ParticleCollider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E10764E2966B67100F751A5 /* ParticleCollider.swift */; };
 		3E1076512966B6A100F751A5 /* ParticleCapsuleCollider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E1076502966B6A100F751A5 /* ParticleCapsuleCollider.swift */; };
-		3E1076532966B96B00F751A5 /* capsule_collider.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3E1076522966B96B00F751A5 /* capsule_collider.metal */; };
+		3E1076532966B96B00F751A5 /* capsule_collider_shape.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3E1076522966B96B00F751A5 /* capsule_collider_shape.metal */; };
 		3E1076552966CF7D00F751A5 /* ray_marching.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3E1076542966CF7D00F751A5 /* ray_marching.metal */; };
 		3E1076572966D8CA00F751A5 /* RayMarchingMaterial.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E1076562966D8CA00F751A5 /* RayMarchingMaterial.swift */; };
 		3E43DC9B295BDDDC00732AC0 /* physics_helpers.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3E6B23B52946B3E5000AC29F /* physics_helpers.metal */; };
@@ -104,7 +104,7 @@
 		3EABF5DA294B1E7F009943C1 /* Matrix3x3.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EABF5D6294B1E7F009943C1 /* Matrix3x3.swift */; };
 		3EABF5DC294B1EA7009943C1 /* Ray.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EABF5DB294B1EA7009943C1 /* Ray.swift */; };
 		3EABF5E6294C3716009943C1 /* VolumeEmitterApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EABF5E5294C3716009943C1 /* VolumeEmitterApp.swift */; };
-		3EABF5EB294C3B16009943C1 /* VolumeParticleEmitterMaterial.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EABF5EA294C3B16009943C1 /* VolumeParticleEmitterMaterial.swift */; };
+		3EABF5EB294C3B16009943C1 /* ParticlePointMaterial.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EABF5EA294C3B16009943C1 /* ParticlePointMaterial.swift */; };
 		3EB32B032932299A0019A4F3 /* Logging in Frameworks */ = {isa = PBXBuildFile; productRef = 3EB32B022932299A0019A4F3 /* Logging */; };
 		3EB32B7529322DB30019A4F3 /* PrimitiveApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EB32B7429322DB30019A4F3 /* PrimitiveApp.swift */; };
 		3EB32B7F29322E850019A4F3 /* libvox.math.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3EC037382932125F002187DC /* libvox.math.a */; };
@@ -648,9 +648,10 @@
 		3E10764A29654BC800F751A5 /* gravity_force.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = gravity_force.metal; sourceTree = "<group>"; };
 		3E10764E2966B67100F751A5 /* ParticleCollider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParticleCollider.swift; sourceTree = "<group>"; };
 		3E1076502966B6A100F751A5 /* ParticleCapsuleCollider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParticleCapsuleCollider.swift; sourceTree = "<group>"; };
-		3E1076522966B96B00F751A5 /* capsule_collider.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = capsule_collider.metal; sourceTree = "<group>"; };
+		3E1076522966B96B00F751A5 /* capsule_collider_shape.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = capsule_collider_shape.metal; sourceTree = "<group>"; };
 		3E1076542966CF7D00F751A5 /* ray_marching.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = ray_marching.metal; sourceTree = "<group>"; };
 		3E1076562966D8CA00F751A5 /* RayMarchingMaterial.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RayMarchingMaterial.swift; sourceTree = "<group>"; };
+		3E1076582967D1B800F751A5 /* rigid_body_collider.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = rigid_body_collider.h; sourceTree = "<group>"; };
 		3E6B235B2941BF88000AC29F /* BlendShapeWeightsAnimationCurveOwnerAssembler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlendShapeWeightsAnimationCurveOwnerAssembler.swift; sourceTree = "<group>"; };
 		3E6B235D294220BC000AC29F /* FaceMorphApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FaceMorphApp.swift; sourceTree = "<group>"; };
 		3E6B235F294224C1000AC29F /* FaceGUI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FaceGUI.swift; sourceTree = "<group>"; };
@@ -693,7 +694,7 @@
 		3EABF5E3294C3485009943C1 /* macro_name.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = macro_name.h; sourceTree = "<group>"; };
 		3EABF5E5294C3716009943C1 /* VolumeEmitterApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VolumeEmitterApp.swift; sourceTree = "<group>"; };
 		3EABF5E8294C3841009943C1 /* particle_shading.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = particle_shading.metal; sourceTree = "<group>"; };
-		3EABF5EA294C3B16009943C1 /* VolumeParticleEmitterMaterial.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VolumeParticleEmitterMaterial.swift; sourceTree = "<group>"; };
+		3EABF5EA294C3B16009943C1 /* ParticlePointMaterial.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParticlePointMaterial.swift; sourceTree = "<group>"; };
 		3EABF5ED294CBCD4009943C1 /* ssf_depth_thick_shading.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = ssf_depth_thick_shading.metal; sourceTree = "<group>"; };
 		3EB32B7429322DB30019A4F3 /* PrimitiveApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrimitiveApp.swift; sourceTree = "<group>"; };
 		3EB32B832932303A0019A4F3 /* libc++abi.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libc++abi.tbd"; path = "usr/lib/libc++abi.tbd"; sourceTree = SDKROOT; };
@@ -1346,7 +1347,8 @@
 		3E10764C2966B57200F751A5 /* collider */ = {
 			isa = PBXGroup;
 			children = (
-				3E1076522966B96B00F751A5 /* capsule_collider.metal */,
+				3E1076582967D1B800F751A5 /* rigid_body_collider.h */,
+				3E1076522966B96B00F751A5 /* capsule_collider_shape.metal */,
 			);
 			path = collider;
 			sourceTree = "<group>";
@@ -1451,7 +1453,7 @@
 			isa = PBXGroup;
 			children = (
 				3E6B23D929499E99000AC29F /* ImplicitTriangleMaterial.swift */,
-				3EABF5EA294C3B16009943C1 /* VolumeParticleEmitterMaterial.swift */,
+				3EABF5EA294C3B16009943C1 /* ParticlePointMaterial.swift */,
 				3ED9BCE2294D753900876ABC /* ScreenSpaceFluid.swift */,
 				3E1076562966D8CA00F751A5 /* RayMarchingMaterial.swift */,
 			);
@@ -2835,7 +2837,7 @@
 				3EABF5DC294B1EA7009943C1 /* Ray.swift in Sources */,
 				3EABF5D7294B1E7F009943C1 /* Matrix4x4.swift in Sources */,
 				049F4DA7295D2DFF00AB07EF /* SPHKernels.swift in Sources */,
-				3EABF5EB294C3B16009943C1 /* VolumeParticleEmitterMaterial.swift in Sources */,
+				3EABF5EB294C3B16009943C1 /* ParticlePointMaterial.swift in Sources */,
 				3EABF5D2294B1E11009943C1 /* Vector3.swift in Sources */,
 				3E1076512966B6A100F751A5 /* ParticleCapsuleCollider.swift in Sources */,
 				3E6B23DA29499E99000AC29F /* ImplicitTriangleMaterial.swift in Sources */,
@@ -2864,7 +2866,7 @@
 				3ED9BCEB29515B9D00876ABC /* noise_common.metal in Sources */,
 				3E107643296524CF00F751A5 /* samplers.metal in Sources */,
 				3E43DCA0295BDDDC00732AC0 /* ssf_shading.metal in Sources */,
-				3E1076532966B96B00F751A5 /* capsule_collider.metal in Sources */,
+				3E1076532966B96B00F751A5 /* capsule_collider_shape.metal in Sources */,
 				3E43DC9D295BDDDC00732AC0 /* sdf_baker.metal in Sources */,
 				3ED9BCFF2952A13F00876ABC /* step_bitonic_sort.metal in Sources */,
 				3ED9BCF22951614E00876ABC /* simplex_noise.metal in Sources */,
