@@ -7,7 +7,7 @@
 import Metal
 import vox_render
 
-open class SphSolverBase: ParticleSystemSolverBase {
+open class SphSolverBase: ParticleSystemSolver {
     static let kTimeStepLimitBySpeedFactor: Float = 0.4
     static let kTimeStepLimitByForceFactor: Float = 0.25
     

@@ -14,8 +14,7 @@ public class ParticleSystemData: ShaderData {
     private static let counterProperty = "u_counter"
     
     var _mass: Float = 1e-3
-    
-    private var _radius: Float = 1e-3
+    var _radius: Float = 1e-3
     private var _maxLength: UInt32 = 0
     private var _neighborSearcher: HashGrid?
     

@@ -21,6 +21,29 @@ public class SphSystemData: ParticleSystemData {
     /// SPH kernel radius in meters.
     private var _kernelRadius: Float = 0
     
+    /// the radius of the particles.
+    public override var radius: Float {
+        get {
+            _radius
+        }
+        set {
+            // Interpret it as setting target spacing
+            targetSpacing = newValue
+        }
+    }
+    
+    /// the mass of the particles.
+    public override var mass: Float {
+        get {
+            _mass
+        }
+        set {
+            let incRatio = newValue / mass
+            _targetDensity *= incRatio
+            _mass = max(newValue, 0)
+        }
+    }
+    
     /// the pressure array
     public var pressure: BufferView {
         get {
