@@ -7,7 +7,7 @@
 import Metal
 import vox_render
 
-public final class PCISphSolver: SphSolverBase {
+public final class PCISphSolver: WCSphSolver {
     static let kDefaultTimeStepLimitScale: Float = 5.0
     
     private var _maxDensityErrorRatio: Float = 0.01
@@ -91,4 +91,6 @@ public final class PCISphSolver: SphSolverBase {
     func computeBeta(_ timeStepInSeconds: Float) -> Float {
         return 2.0 * Math.square(of: sphSystemData!.mass * timeStepInSeconds / sphSystemData!.targetDensity)
     }
+    
+    override func accumulatePressureForce(_ commandBuffer: MTLCommandBuffer, _ timeStepInSeconds: Float) {}
 }

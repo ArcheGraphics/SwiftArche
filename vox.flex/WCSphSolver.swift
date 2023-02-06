@@ -22,7 +22,7 @@ import vox_render
 /// - see Adams and Wicke, Meshless approximation methods and applications in
 ///      physics based modeling and animation, Eurographics tutorials 2009.
 ///
-public final class WCSphSolver: SphSolverBase {
+open class WCSphSolver: SphSolverBase {
     // WCSPH solver properties
     private var _eosExponent: Float = 7.0
     
