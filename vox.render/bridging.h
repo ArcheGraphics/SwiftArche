@@ -19,6 +19,7 @@
 #include "../vox.physics/shape/CPxSphereGeometry.h"
 #include "../vox.physics/shape/CPxCapsuleGeometry.h"
 #include "../vox.physics/shape/CPxPlaneGeometry.h"
+#include "../vox.physics/shape/CPxMeshGeometry.h"
 #include "../vox.physics/joint/CJointBridge.h"
 #include "../vox.physics/characterkinematic/CCharacterBridge.h"
 

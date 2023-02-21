@@ -69,6 +69,11 @@ class PhysXPhysics {
                                            _ material: PhysXPhysicsMaterial) -> PhysXCapsuleColliderShape {
         PhysXCapsuleColliderShape(uniqueID, radius, height, material)
     }
+    
+    static func createMeshColliderShape(_ uniqueID: UInt32,
+                                        _ material: PhysXPhysicsMaterial) -> PhysXMeshColliderShape {
+        PhysXMeshColliderShape(uniqueID, material)
+    }
 
     //MARK: - Joint
 

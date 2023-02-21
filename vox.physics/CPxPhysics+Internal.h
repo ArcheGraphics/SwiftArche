@@ -11,10 +11,10 @@
 
 using namespace physx;
 
-@interface CPxGeometry ()
+@interface CPxPhysics ()
 
-@property(nonatomic) PxGeometry *c_geometry;
+@property(nonatomic, readonly) PxCooking *c_cooking;
 
-- (instancetype)initWithGeometry:(PxGeometry *)geometry;
+-(PxPhysicsInsertionCallback&)getPhysicsInsertionCallback;
 
 @end

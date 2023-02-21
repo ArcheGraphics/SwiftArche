@@ -5,6 +5,7 @@
 //  property of any third parties.
 
 #import "CPxPhysics.h"
+#import "CPxPhysics+Internal.h"
 #import "CPxMaterial+Internal.h"
 #import "CPxGeometry+Internal.h"
 #import "CPxShape+Internal.h"
@@ -40,6 +41,11 @@ using namespace physx;
     physx::PxFoundation *gFoundation = PxCreateFoundation(PX_PHYSICS_VERSION, gAllocator, gErrorCallback);
 
     _physics = PxCreatePhysics(PX_PHYSICS_VERSION, *gFoundation, PxTolerancesScale(), false, nullptr);
+    _c_cooking = PxCreateCooking(PX_PHYSICS_VERSION, *gFoundation, PxCookingParams(PxTolerancesScale()));
+}
+
+-(PxPhysicsInsertionCallback&)getPhysicsInsertionCallback {
+    return _physics->getPhysicsInsertionCallback();
 }
 
 - (bool)initExtensions {
