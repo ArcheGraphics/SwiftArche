@@ -27,7 +27,7 @@ class PhysXCapsuleColliderShape: PhysXColliderShape {
         _physxRotation = _axis!
 
         _pxGeometry = CPxCapsuleGeometry(radius: _radius, halfHeight: _halfHeight)
-        _initialize(material, uniqueID)
+        _initialize(material._pxMaterial, uniqueID)
         _setLocalPose()
     }
 

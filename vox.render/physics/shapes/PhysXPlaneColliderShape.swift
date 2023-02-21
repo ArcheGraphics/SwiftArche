@@ -18,7 +18,7 @@ class PhysXPlaneColliderShape: PhysXColliderShape {
         _axis = Quaternion(0, 0, PhysXColliderShape.halfSqrt, PhysXColliderShape.halfSqrt)
         _physxRotation = _axis!
         _pxGeometry = CPxPlaneGeometry()
-        _initialize(material, uniqueID)
+        _initialize(material._pxMaterial, uniqueID)
         _setLocalPose()
     }
 

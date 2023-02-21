@@ -24,7 +24,7 @@ class PhysXBoxColliderShape: PhysXColliderShape {
                 hy: _halfSize.y * _scale.y,
                 hz: _halfSize.z * _scale.z
         )
-        _initialize(material, uniqueID)
+        _initialize(material._pxMaterial, uniqueID)
         _setLocalPose()
     }
 

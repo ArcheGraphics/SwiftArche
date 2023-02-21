@@ -58,10 +58,9 @@ class PhysXMeshColliderApp: NSViewController {
         capsuleEntity.transform.rotationQuaternion = rotation
 
         let physicsCapsule = MeshColliderShape()
-        physicsCapsule.isConvex = true
         physicsCapsule.mesh = PrimitiveMesh.createCapsule(rootEntity.engine, radius: radius, height: height,
-                                                          radialSegments: 2, heightSegments: 1, noLongerAccessible: false)
-        let capsuleCollider: DynamicCollider = capsuleEntity.addComponent()
+                                                          radialSegments: 6, heightSegments: 1, noLongerAccessible: false)
+        let capsuleCollider: StaticCollider = capsuleEntity.addComponent()
         capsuleCollider.addShape(physicsCapsule)
 
         return capsuleEntity

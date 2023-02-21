@@ -22,7 +22,7 @@ class PhysXSphereColliderShape: PhysXColliderShape {
         super.init()
 
         _pxGeometry = CPxSphereGeometry(radius: _radius * _maxScale)
-        _initialize(material, uniqueID)
+        _initialize(material._pxMaterial, uniqueID)
         _setLocalPose()
     }
 

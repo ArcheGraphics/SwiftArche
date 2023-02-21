@@ -8,7 +8,7 @@ import vox_math
 
 /// Physical collider shape mesh.
 public class MeshColliderShape: ColliderShape {
-    private var _isConvex = true
+    private var _isConvex = false
     private var _mesh: ModelMesh?
     private var _cookingOptions: UInt8 = 0
 

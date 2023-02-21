@@ -17,42 +17,56 @@ class PhysXMeshColliderShape: PhysXColliderShape {
         super.init()
 
         _pxGeometry = CPxMeshGeometry(PhysXPhysics._pxPhysics)
-        _initialize(material, uniqueID)
+        _initialize(material._pxMaterial, uniqueID)
         _setLocalPose()
     }
 
     func createConvexMesh(_ points: inout [Vector3]) {
         (_pxGeometry as! CPxMeshGeometry).createMesh(PhysXPhysics._pxPhysics, points: &points, pointsCount: UInt32(points.count),
                                                      indices: nil, indicesCount: 0, isUint16: false, isConvex: true)
+        _initialize(_pxMaterial, _id)
+        _setLocalPose()
     }
 
     func createConvexMesh(_ points: inout [Vector3], _ indices: inout [UInt16]) {
         (_pxGeometry as! CPxMeshGeometry).createMesh(PhysXPhysics._pxPhysics, points: &points, pointsCount: UInt32(points.count),
                                                      indices: &indices, indicesCount: UInt32(indices.count), isUint16: true, isConvex: true)
+        _initialize(_pxMaterial, _id)
+        _setLocalPose()
     }
 
     func createConvexMesh(_ points: inout [Vector3], _ indices: inout [UInt32]) {
         (_pxGeometry as! CPxMeshGeometry).createMesh(PhysXPhysics._pxPhysics, points: &points, pointsCount: UInt32(points.count),
                                                      indices: &indices, indicesCount: UInt32(indices.count), isUint16: false, isConvex: true)
+        _initialize(_pxMaterial, _id)
+        _setLocalPose()
     }
 
     func createTriangleMesh(_ points: inout [Vector3]) {
         (_pxGeometry as! CPxMeshGeometry).createMesh(PhysXPhysics._pxPhysics, points: &points, pointsCount: UInt32(points.count),
                                                      indices: nil, indicesCount: 0, isUint16: false, isConvex: false)
+        _initialize(_pxMaterial, _id)
+        _setLocalPose()
     }
 
     func createTriangleMesh(_ points: inout [Vector3], _ indices: inout [UInt16]) {
         (_pxGeometry as! CPxMeshGeometry).createMesh(PhysXPhysics._pxPhysics, points: &points, pointsCount: UInt32(points.count),
                                                      indices: &indices, indicesCount: UInt32(indices.count), isUint16: true, isConvex: false)
+        _initialize(_pxMaterial, _id)
+        _setLocalPose()
     }
 
     func createTriangleMesh(_ points: inout [Vector3], _ indices: inout [UInt32]) {
         (_pxGeometry as! CPxMeshGeometry).createMesh(PhysXPhysics._pxPhysics, points: &points, pointsCount: UInt32(points.count),
                                                      indices: &indices, indicesCount: UInt32(indices.count), isUint16: false, isConvex: false)
+        _initialize(_pxMaterial, _id)
+        _setLocalPose()
     }
     
     func setCookParamter(_ param: UInt8) {
         (_pxGeometry as! CPxMeshGeometry).setCookParameter(PhysXPhysics._pxPhysics, value: param)
+        _initialize(_pxMaterial, _id)
+        _setLocalPose()
     }
 
     override func setWorldScale(_ scale: Vector3) {

@@ -26,7 +26,7 @@ using namespace physx;
 
 // MARK: - Initialization
 - (instancetype _Nonnull )initWith:(CPxPhysics *_Nonnull)physics {
-    isConvex = true;
+    isConvex = false;
     points = nullptr;
     indices = nullptr;
     isUint16 = false;
@@ -34,8 +34,8 @@ using namespace physx;
     scale = PxMeshScale();
     params = new PxCookingParams(PxTolerancesScale());
 
-    auto meshGeometry = new PxConvexMeshGeometry();
-    PxConvexMeshDesc desc;
+    auto meshGeometry = new PxTriangleMeshGeometry();
+    PxTriangleMeshDesc desc;
     desc.points.count = 3;
     desc.points.stride = sizeof(PxVec3);
     std::vector<PxVec3> pts(3);
@@ -43,8 +43,7 @@ using namespace physx;
     pts[1] = PxVec3(1,0,0);
     pts[2] = PxVec3(0,1,0);
     desc.points.data = pts.data();
-    desc.flags = PxConvexFlag::eCOMPUTE_CONVEX;
-    meshGeometry->convexMesh = physics.c_cooking->createConvexMesh(desc, [physics getPhysicsInsertionCallback]);
+    meshGeometry->triangleMesh = physics.c_cooking->createTriangleMesh(desc, [physics getPhysicsInsertionCallback]);
     self = [super initWithGeometry:meshGeometry];
     return self;
 }
@@ -119,17 +118,18 @@ using namespace physx;
 
     PxConvexMeshDesc desc;
     desc.points.count = pointsCount;
-    desc.points.stride = sizeof(simd_float3);
+    desc.points.stride = sizeof(PxVec3);
     desc.points.data = points;
 
     desc.indices.count = indicesCount;
     desc.indices.data = indices;
     if (isUint16) {
-        desc.indices.stride = sizeof(uint16);
+        desc.indices.stride = sizeof(uint16) * 3;
         desc.flags = PxConvexFlag::e16_BIT_INDICES;
         meshGeometry->convexMesh = physics.c_cooking->createConvexMesh(desc, [physics getPhysicsInsertionCallback]);
     } else {
-        desc.indices.stride = sizeof(uint32_t);
+        desc.indices.stride = sizeof(uint32_t) * 3;
+        desc.flags = PxConvexFlag::eCOMPUTE_CONVEX;
         meshGeometry->convexMesh = physics.c_cooking->createConvexMesh(desc, [physics getPhysicsInsertionCallback]);
     }
 }

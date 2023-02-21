@@ -88,12 +88,12 @@ class PhysXColliderShape {
         _pxShape.setLocalPose((_position * _scale).internalValue, rotation: _physxRotation.internalValue)
     }
 
-    func _initialize(_ material: PhysXPhysicsMaterial, _ id: UInt32) {
+    func _initialize(_ material: CPxMaterial, _ id: UInt32) {
         _id = id
-        _pxMaterial = material._pxMaterial
+        _pxMaterial = material
         _pxShape = PhysXPhysics._pxPhysics.createShape(
                 with: _pxGeometry,
-                material: material._pxMaterial,
+                material: material,
                 isExclusive: true,
                 shapeFlags: _shapeFlags
         )
