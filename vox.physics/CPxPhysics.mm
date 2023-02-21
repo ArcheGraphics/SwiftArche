@@ -41,10 +41,7 @@ using namespace physx;
     physx::PxFoundation *gFoundation = PxCreateFoundation(PX_PHYSICS_VERSION, gAllocator, gErrorCallback);
 
     _physics = PxCreatePhysics(PX_PHYSICS_VERSION, *gFoundation, PxTolerancesScale(), false, nullptr);
-}
-
-- (PxFoundation &)getFoundation {
-    return _physics->getFoundation();
+    _c_cooking = PxCreateCooking(PX_PHYSICS_VERSION, *gFoundation, PxCookingParams(PxTolerancesScale()));
 }
 
 - (PxPhysicsInsertionCallback &)getPhysicsInsertionCallback {

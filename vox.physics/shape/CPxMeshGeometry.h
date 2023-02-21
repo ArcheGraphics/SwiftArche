@@ -12,23 +12,11 @@
 
 @interface CPxMeshGeometry : CPxGeometry
 
-- (instancetype _Nonnull)initWithPhysics:(CPxPhysics *_Nonnull)physics;
-
-- (void)createConvexMesh:(CPxPhysics *_Nonnull)physics
-                  points:(NSArray *_Nonnull)points;
-
-- (void)createConvexMesh:(CPxPhysics *_Nonnull)physics
-                  points:(NSArray *_Nonnull)points
-                 indices:(NSArray *_Nonnull)indices
-                isUint16:(bool)isUint16;
-
-- (void)createTriangleMesh:(CPxPhysics *_Nonnull)physics
-                    points:(NSArray *_Nonnull)points;
-
-- (void)createTriangleMesh:(CPxPhysics *_Nonnull)physics
-                    points:(NSArray *_Nonnull)points
-                   indices:(NSArray *_Nonnull)indices
-                  isUint16:(bool)isUint16;
+-(void)createMesh:(CPxPhysics *_Nonnull)physics
+           points:(NSArray *_Nonnull)points
+          indices:(NSArray *_Nullable)indices
+         isUint16:(bool)isUint16
+         isConvex:(bool)isConvex;
 
 - (void)setScaleWith:(float)hx hy:(float)hy hz:(float)hz;
 

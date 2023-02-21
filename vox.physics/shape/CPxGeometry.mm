@@ -20,4 +20,8 @@
     return self;
 }
 
+- (void)dealloc {
+    delete _c_geometry;
+}
+
 @end

@@ -13,8 +13,8 @@ using namespace physx;
 
 @interface CPxPhysics ()
 
-- (PxPhysicsInsertionCallback &)getPhysicsInsertionCallback;
+@property(nonatomic, readonly) PxCooking *c_cooking;
 
-- (PxFoundation &)getFoundation;
+- (PxPhysicsInsertionCallback &)getPhysicsInsertionCallback;
 
 @end
