@@ -14,11 +14,17 @@ public struct Vector4 {
         get {
             elements.x
         }
+        set {
+            elements.x = newValue
+        }
     }
 
     public var y: Float {
         get {
             elements.y
+        }
+        set {
+            elements.y = newValue
         }
     }
 
@@ -26,11 +32,17 @@ public struct Vector4 {
         get {
             elements.z
         }
+        set {
+            elements.z = newValue
+        }
     }
 
     public var w: Float {
         get {
             elements.w
+        }
+        set {
+            elements.w = newValue
         }
     }
 

@@ -15,11 +15,17 @@ public struct Vector2 {
         get {
             elements.x
         }
+        set {
+            elements.x = newValue
+        }
     }
 
     public var y: Float {
         get {
             elements.y
+        }
+        set {
+            elements.y = newValue
         }
     }
 

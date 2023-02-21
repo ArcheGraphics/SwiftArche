@@ -7,7 +7,7 @@
 import Foundation
 
 /// The up axis of the collider shape.
-public enum ControllerCollisionFlag: Int {
+public enum ControllerCollisionFlag: UInt8 {
     /// Character is colliding to the sides.
     case Sides = 1
     /// Character has collision above.
