@@ -20,6 +20,28 @@ class PhysXMeshColliderShape: PhysXColliderShape {
         _initialize(material._pxMaterial, uniqueID)
         _setLocalPose()
     }
+    
+    var position: [Vector3] {
+        get {
+            var valueInternal = [simd_float3](repeating: simd_float3(), count: Int((_pxGeometry as! CPxMeshGeometry).positionCount()))
+            (_pxGeometry as! CPxMeshGeometry).getPosition(&valueInternal)
+            
+            var value: [Vector3] = []
+            value.reserveCapacity(valueInternal.count)
+            for v in valueInternal {
+                value.append(Vector3(v))
+            }
+            return value
+        }
+    }
+    
+    var wireframeIndices: [UInt32] {
+        get {
+            var value = [UInt32](repeating: 0, count: Int((_pxGeometry as! CPxMeshGeometry).indicesCount()))
+            (_pxGeometry as! CPxMeshGeometry).getWireframeIndices(&value)
+            return value
+        }
+    }
 
     func createConvexMesh(_ points: inout [Vector3]) {
         (_pxGeometry as! CPxMeshGeometry).createMesh(PhysXPhysics._pxPhysics, points: &points, pointsCount: UInt32(points.count),

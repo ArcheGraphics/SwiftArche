@@ -92,7 +92,7 @@ class PhysXMeshColliderApp: NSViewController {
             width: size.x,
             height: size.y,
             depth: size.z, noLongerAccessible: false
-    )
+        )
         let boxCollider: DynamicCollider = boxEntity.addComponent()
         boxCollider.addShape(physicsBox)
 

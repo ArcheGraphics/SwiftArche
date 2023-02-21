@@ -27,4 +27,12 @@
 - (void)setCookParameter:(CPxPhysics *_Nonnull)physics
                    value:(uint8_t)value;
 
+- (uint32_t)positionCount;
+
+- (void)getPosition:(simd_float3 *_Nonnull)points;
+
+- (uint32_t)indicesCount;
+
+- (void)getWireframeIndices:(uint32_t *_Nonnull)indices;
+
 @end

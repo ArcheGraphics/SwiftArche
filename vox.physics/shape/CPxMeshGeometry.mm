@@ -186,4 +186,111 @@ using namespace physx;
     }
 }
 
+// MARK: - Cooking Data
+- (uint32_t)positionCount {
+    if (super.c_geometry) {
+        if (isConvex) {
+            return static_cast<PxConvexMeshGeometry *>(super.c_geometry)->convexMesh->getNbVertices();
+        } else {
+            return static_cast<PxTriangleMeshGeometry *>(super.c_geometry)->triangleMesh->getNbVertices();
+        }
+    }
+    return 0;
+}
+
+- (void)getPosition:(simd_float3 *_Nonnull)points {
+    if (super.c_geometry) {
+        if (isConvex) {
+            auto mesh = static_cast<PxConvexMeshGeometry *>(super.c_geometry)->convexMesh;
+            auto vertices = mesh->getVertices();
+            auto count = mesh->getNbVertices();
+            for (int i = 0; i < count; i++) {
+                points[i] = simd_make_float3(vertices[i].x, vertices[i].y, vertices[i].z);
+            }
+        } else {
+            auto mesh = static_cast<PxTriangleMeshGeometry *>(super.c_geometry)->triangleMesh;
+            auto vertices = mesh->getVertices();
+            auto count = mesh->getNbVertices();
+            for (int i = 0; i < count; i++) {
+                points[i] = simd_make_float3(vertices[i].x, vertices[i].y, vertices[i].z);
+            }
+        }
+    }
+}
+
+- (uint32_t)indicesCount {
+    if (super.c_geometry) {
+        if (isConvex) {
+            auto mesh = static_cast<PxConvexMeshGeometry *>(super.c_geometry)->convexMesh;
+            auto count = mesh->getNbPolygons();
+            uint32_t total = 0;
+            for (int i = 0; i < count; i++) {
+                PxHullPolygon data;
+                mesh->getPolygonData(i, data);
+                total += 2 * data.mNbVerts;
+            }
+            return total;
+        } else {
+            auto mesh = static_cast<PxTriangleMeshGeometry *>(super.c_geometry)->triangleMesh;
+            auto count = mesh->getNbTriangles();
+            return count * 6;
+        }
+    }
+    return 0;
+}
+
+- (void)getWireframeIndices:(uint32_t *_Nonnull)indices {
+    if (super.c_geometry) {
+        uint32_t index = 0;
+        if (isConvex) {
+            auto mesh = static_cast<PxConvexMeshGeometry *>(super.c_geometry)->convexMesh;
+            auto count = mesh->getNbPolygons();
+            auto indexBuffer = mesh->getIndexBuffer();
+            for (int i = 0; i < count; i++) {
+                PxHullPolygon data;
+                mesh->getPolygonData(i, data);
+                for (int j = 0; j < data.mNbVerts; i++) {
+                    indices[index++] = indexBuffer[data.mIndexBase + j];
+                    if (j != data.mNbVerts - 1) {
+                        indices[index++] = indexBuffer[data.mIndexBase + j];
+                    } else {
+                        indices[index++] = indexBuffer[data.mIndexBase];
+                    }
+                }
+            }
+        } else {
+            auto mesh = static_cast<PxTriangleMeshGeometry *>(super.c_geometry)->triangleMesh;
+            auto count = mesh->getNbTriangles();
+            auto isUint16 = mesh->getTriangleMeshFlags().isSet(PxTriangleMeshFlag::Enum::e16_BIT_INDICES);
+            if (isUint16) {
+                auto indexBuffer = static_cast<const uint16_t*>(mesh->getTriangles());
+                for (int i = 0; i < count; i++) {
+                    uint16_t v0 = indexBuffer[i * 3];
+                    uint16_t v1 = indexBuffer[i * 3 + 1];
+                    uint16_t v2 = indexBuffer[i * 3 + 2];
+                    indices[index++] = v0;
+                    indices[index++] = v1;
+                    indices[index++] = v1;
+                    indices[index++] = v2;
+                    indices[index++] = v2;
+                    indices[index++] = v0;
+                }
+            } else {
+                auto indexBuffer = static_cast<const uint32_t*>(mesh->getTriangles());
+                for (int i = 0; i < count; i++) {
+                    uint16_t v0 = indexBuffer[i * 3];
+                    uint16_t v1 = indexBuffer[i * 3 + 1];
+                    uint16_t v2 = indexBuffer[i * 3 + 2];
+                    indices[index++] = v0;
+                    indices[index++] = v1;
+                    indices[index++] = v1;
+                    indices[index++] = v2;
+                    indices[index++] = v2;
+                    indices[index++] = v0;
+                }
+            }
+        }
+    }
+}
+
 @end
