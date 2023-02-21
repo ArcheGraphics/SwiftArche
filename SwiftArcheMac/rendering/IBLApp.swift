@@ -129,7 +129,7 @@ class IblApp: NSViewController {
 
         let mat = _materials[7]
 
-        let sphere = PrimitiveMesh.createSphere(engine, 0.5, 64)
+        let sphere = PrimitiveMesh.createSphere(engine, radius: 0.5, segments: 64)
         for i in 0..<7 {
             for j in 0..<7 {
                 let sphereEntity = rootEntity.createChild("SphereEntity\(i)\(j)")

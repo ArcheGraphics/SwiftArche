@@ -36,7 +36,7 @@ fileprivate class ShootScript: Script {
         mtl.metallic = 0.0
         let sphereEntity = rootEntity.createChild()
         let renderer: MeshRenderer = sphereEntity.addComponent()
-        renderer.mesh = PrimitiveMesh.createSphere(rootEntity.engine, radius)
+        renderer.mesh = PrimitiveMesh.createSphere(rootEntity.engine, radius: radius)
         renderer.setMaterial(mtl)
         sphereEntity.transform.position = position
         sphereEntity.transform.rotationQuaternion = rotation

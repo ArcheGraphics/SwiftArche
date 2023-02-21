@@ -69,7 +69,7 @@ class PbrApp: NSViewController {
         let directionLight: DirectLight = light.addComponent()
         directionLight.intensity = 0.3
 
-        let sphere = PrimitiveMesh.createSphere(engine, 0.5, 30)
+        let sphere = PrimitiveMesh.createSphere(engine, radius: 0.5, segments: 30)
         for i in 0..<7 {
             for j in 0..<7 {
                 let sphereEntity = rootEntity.createChild("SphereEntity\(i)\(j)")

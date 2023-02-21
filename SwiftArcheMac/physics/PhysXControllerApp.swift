@@ -72,102 +72,6 @@ class PhysXControllerApp: NSViewController {
     var engine: Engine!
     var iblBaker: IBLBaker!
     var rootEntity: Entity!
-
-    func addPlane(_ size: Vector3, _ position: Vector3, _ rotation: Quaternion) -> Entity {
-        let mtl = PBRMaterial(engine)
-        mtl.baseColor = Color(0.2179807202597362,
-                              0.2939682161541871,
-                              0.31177952549087604,
-                              1.0)
-        mtl.roughness = 0.0
-        mtl.metallic = 0.0
-        mtl.shader[0].setRenderFace(RenderFace.Double)
-        let planeEntity = rootEntity.createChild()
-        planeEntity.layer = Layer.Layer1
-
-        let renderer: MeshRenderer = planeEntity.addComponent()
-        renderer.mesh = PrimitiveMesh.createCuboid(engine, size.x, size.y, size.z)
-        renderer.setMaterial(mtl)
-        planeEntity.transform.position = position
-        planeEntity.transform.rotationQuaternion = rotation
-
-        let physicsPlane = PlaneColliderShape()
-        let planeCollider: StaticCollider = planeEntity.addComponent()
-        planeCollider.addShape(physicsPlane)
-
-        return planeEntity
-    }
-    
-    func addBox(_ size: Vector3, _ position: Vector3, _ rotation: Quaternion) -> Entity {
-        let mtl = PBRMaterial(engine)
-        mtl.baseColor = Color(Float.random(in: 0..<1), Float.random(in: 0..<1), Float.random(in: 0..<1), 1.0)
-        let boxEntity = rootEntity.createChild()
-        let renderer: MeshRenderer = boxEntity.addComponent()
-
-        renderer.mesh = PrimitiveMesh.createCuboid(engine, size.x, size.y, size.z)
-        renderer.setMaterial(mtl)
-        boxEntity.transform.position = position
-        boxEntity.transform.rotationQuaternion = rotation
-
-        let physicsBox = BoxColliderShape()
-        physicsBox.size = size
-        physicsBox.material.staticFriction = 1
-        physicsBox.material.dynamicFriction = 2
-        physicsBox.material.bounciness = 0.1
-        physicsBox.isTrigger = false
-
-        let boxCollider: DynamicCollider = boxEntity.addComponent()
-        boxCollider.addShape(physicsBox)
-
-        return boxEntity
-    }
-
-    func addSphere(_ radius: Float, _ position: Vector3, _ rotation: Quaternion, _ velocity: Vector3) -> Entity {
-        let mtl = PBRMaterial(engine)
-        mtl.baseColor = Color(Float.random(in: 0..<1), Float.random(in: 0..<1), Float.random(in: 0..<1), 1.0)
-        let sphereEntity = rootEntity.createChild()
-        let renderer: MeshRenderer = sphereEntity.addComponent()
-
-        renderer.mesh = PrimitiveMesh.createSphere(engine, radius)
-        renderer.setMaterial(mtl)
-        sphereEntity.transform.position = position
-        sphereEntity.transform.rotationQuaternion = rotation
-
-        let physicsSphere = SphereColliderShape()
-        physicsSphere.radius = radius
-        physicsSphere.material.staticFriction = 0.1
-        physicsSphere.material.dynamicFriction = 0.2
-        physicsSphere.material.bounciness = 1
-        physicsSphere.material.bounceCombine = PhysicsMaterialCombineMode.Minimum
-
-        let sphereCollider: DynamicCollider = sphereEntity.addComponent()
-        sphereCollider.addShape(physicsSphere)
-        sphereCollider.linearVelocity = velocity
-        sphereCollider.angularDamping = 0.5
-
-        return sphereEntity
-    }
-
-    func addCapsule(_ radius: Float, _ height: Float, _ position: Vector3, _ rotation: Quaternion) -> Entity {
-        let mtl = PBRMaterial(engine)
-        mtl.baseColor = Color(Float.random(in: 0..<1), Float.random(in: 0..<1), Float.random(in: 0..<1), 1.0)
-        let capsuleEntity = rootEntity.createChild()
-        let renderer: MeshRenderer = capsuleEntity.addComponent()
-
-        renderer.mesh = PrimitiveMesh.createCapsule(engine, radius, height)
-        renderer.setMaterial(mtl)
-        capsuleEntity.transform.position = position
-        capsuleEntity.transform.rotationQuaternion = rotation
-
-        let physicsCapsule = CapsuleColliderShape()
-        physicsCapsule.radius = radius
-        physicsCapsule.height = height
-
-        let capsuleCollider: DynamicCollider = capsuleEntity.addComponent()
-        capsuleCollider.addShape(physicsCapsule)
-
-        return capsuleEntity
-    }
     
     func addPlayer(_ radius: Float, _ height: Float, _ position: Vector3, _ rotation: Quaternion) -> Entity {
         let mtl = PBRMaterial(engine)
@@ -177,7 +81,7 @@ class PhysXControllerApp: NSViewController {
         let capsuleEntity = rootEntity.createChild()
         let renderer: MeshRenderer = capsuleEntity.addComponent()
 
-        renderer.mesh = PrimitiveMesh.createCapsule(engine, radius, height, 20)
+        renderer.mesh = PrimitiveMesh.createCapsule(engine, radius: radius, height: height, radialSegments: 20)
         renderer.setMaterial(mtl)
         capsuleEntity.transform.position = position
         capsuleEntity.transform.rotationQuaternion = rotation
@@ -190,6 +94,30 @@ class PhysXControllerApp: NSViewController {
         characterController.addShape(physicsCapsule)
 
         return capsuleEntity
+    }
+    
+    func initialize(_ rootEntity: Entity) {
+        var quat = Quaternion(0, 0, 0.3, 0.7)
+        _ = quat.normalize()
+        _ = addPlane(rootEntity, Vector3(30, 0.0, 30), Vector3(), Quaternion())
+        for i in 0..<8 {
+            for j in 0..<8 {
+                let random = Int(floor(Float.random(in: 0...3))) % 3
+                switch (random) {
+                case 0:
+                    _ = addBox(rootEntity, Vector3(1, 1, 1), Vector3(Float(-4 + i), floor(Float.random(in: 0...6)) + 1, Float(-4 + j)), quat)
+                    break
+                case 1:
+                    _ = addSphere(rootEntity, 0.5, Vector3(floor(Float.random(in: 0...16)) - 4, 5, floor(Float.random(in: 0...16)) - 4), quat)
+                    break
+                case 2:
+                    _ = addCapsule(rootEntity, 0.5, 2.0, Vector3(floor(Float.random(in: 0...16)) - 4, 5, floor(Float.random(in: 0...16)) - 4), quat)
+                    break
+                default:
+                    break
+                }
+            }
+        }
     }
     
     override func viewDidLoad() {
@@ -219,16 +147,7 @@ class PhysXControllerApp: NSViewController {
         let controller: ControllerScript = player.addComponent()
         controller.camera = cameraEntity
 
-        _ = addPlane(Vector3(30, 0.1, 30), Vector3(), Quaternion())
-        for i in 0..<5 {
-            let i = Float(i)
-            for j in 0..<5 {
-                let j = Float(j)
-                _ = addBox(Vector3(1, 1, 1),
-                        Vector3(-2.5 + i + 0.1 * i, floor(Float.random(in: 0..<1) * 6) + 1, -2.5 + j + 0.1 * j),
-                        Quaternion(0, 0, 0.3, 0.7))
-            }
-        }
+        initialize(rootEntity)
         
         engine.run()
     }

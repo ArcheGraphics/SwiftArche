@@ -12,7 +12,8 @@ public class PrimitiveMesh {
     /// Create Mesh with position in clipped space.
     /// - Parameter engine:
     /// - Returns: Mesh
-    public static func createQuadPlane(_ engine: Engine) -> ModelMesh {
+    public static func createQuadPlane(_ engine: Engine,
+                                       noLongerAccessible: Bool = true) -> ModelMesh {
         var positions: [Vector3] = []
         positions.append(Vector3(1, 1, 0))
         positions.append(Vector3(-1, -1, 0))
@@ -25,7 +26,7 @@ public class PrimitiveMesh {
         let mesh = ModelMesh(engine)
         mesh.setPositions(positions: positions)
         mesh.setIndices(indices: indices)
-        mesh.uploadData(true)
+        mesh.uploadData(noLongerAccessible)
         _ = mesh.addSubMesh(0, 6)
         mesh.bounds = BoundingBox(Vector3(-Float.greatestFiniteMagnitude, -Float.greatestFiniteMagnitude, -Float.greatestFiniteMagnitude),
                 Vector3(Float.greatestFiniteMagnitude, Float.greatestFiniteMagnitude, Float.greatestFiniteMagnitude))
@@ -40,9 +41,9 @@ public class PrimitiveMesh {
     ///   - noLongerAccessible: No longer access the vertices of the mesh after creation
     /// - Returns: Sphere model mesh
     public static func createSphere(_ engine: Engine,
-                                    _ radius: Float = 0.5,
-                                    _ segments: Int = 18,
-                                    _ noLongerAccessible: Bool = true) -> ModelMesh {
+                                    radius: Float = 0.5,
+                                    segments: Int = 18,
+                                    noLongerAccessible: Bool = true) -> ModelMesh {
         let mesh = ModelMesh(engine)
         let segments = max(2, segments)
 
@@ -118,10 +119,10 @@ public class PrimitiveMesh {
     ///   - noLongerAccessible: No longer access the vertices of the mesh after creation
     /// - Returns: Cuboid model mesh
     public static func createCuboid(_ engine: Engine,
-                                    _ width: Float = 1,
-                                    _ height: Float = 1,
-                                    _ depth: Float = 1,
-                                    _ noLongerAccessible: Bool = true) -> ModelMesh {
+                                    width: Float = 1,
+                                    height: Float = 1,
+                                    depth: Float = 1,
+                                    noLongerAccessible: Bool = true) -> ModelMesh {
         let mesh = ModelMesh(engine)
 
         let halfWidth: Float = width / 2
@@ -272,11 +273,11 @@ public class PrimitiveMesh {
     ///   - noLongerAccessible: No longer access the vertices of the mesh after creation
     /// - Returns: Plane model mesh
     public static func createPlane(_ engine: Engine,
-                                   _ width: Float = 1,
-                                   _ height: Float = 1,
-                                   _ horizontalSegments: Int = 1,
-                                   _ verticalSegments: Int = 1,
-                                   _ noLongerAccessible: Bool = true) -> ModelMesh {
+                                   width: Float = 1,
+                                   height: Float = 1,
+                                   horizontalSegments: Int = 1,
+                                   verticalSegments: Int = 1,
+                                   noLongerAccessible: Bool = true) -> ModelMesh {
         let mesh = ModelMesh(engine)
         let horizontalSegments = max(1, horizontalSegments)
         let verticalSegments = max(1, verticalSegments)
@@ -350,12 +351,12 @@ public class PrimitiveMesh {
     ///   - noLongerAccessible: No longer access the vertices of the mesh after creation
     /// - Returns: Cylinder model mesh
     public static func createCylinder(_ engine: Engine,
-                                      _ radiusTop: Float = 0.5,
-                                      _ radiusBottom: Float = 0.5,
-                                      _ height: Float = 2,
-                                      _ radialSegments: Int = 20,
-                                      _ heightSegments: Int = 1,
-                                      _ noLongerAccessible: Bool = true) -> ModelMesh {
+                                      radiusTop: Float = 0.5,
+                                      radiusBottom: Float = 0.5,
+                                      height: Float = 2,
+                                      radialSegments: Int = 20,
+                                      heightSegments: Int = 1,
+                                      noLongerAccessible: Bool = true) -> ModelMesh {
         let mesh = ModelMesh(engine)
 
         let radialCount = radialSegments + 1
@@ -518,12 +519,12 @@ public class PrimitiveMesh {
     ///   - noLongerAccessible: No longer access the vertices of the mesh after creation
     /// - Returns: Torus model mesh
     public static func createTorus(_ engine: Engine,
-                                   _ radius: Float = 0.5,
-                                   _ tubeRadius: Float = 0.1,
-                                   _ radialSegments: Int = 30,
-                                   _ tubularSegments: Int = 30,
-                                   _ arc: Float = 360,
-                                   _ noLongerAccessible: Bool = true) -> ModelMesh {
+                                   radius: Float = 0.5,
+                                   tubeRadius: Float = 0.1,
+                                   radialSegments: Int = 30,
+                                   tubularSegments: Int = 30,
+                                   arc: Float = 360,
+                                   noLongerAccessible: Bool = true) -> ModelMesh {
         let mesh = ModelMesh(engine)
 
         let vertexCount = (radialSegments + 1) * (tubularSegments + 1)
@@ -606,11 +607,11 @@ public class PrimitiveMesh {
     ///   - noLongerAccessible: No longer access the vertices of the mesh after creation
     /// - Returns: Cone model mesh
     public static func createCone(_ engine: Engine,
-                                  _ radius: Float = 0.5,
-                                  _ height: Float = 2,
-                                  _ radialSegments: Int = 20,
-                                  _ heightSegments: Int = 1,
-                                  _ noLongerAccessible: Bool = true) -> ModelMesh {
+                                  radius: Float = 0.5,
+                                  height: Float = 2,
+                                  radialSegments: Int = 20,
+                                  heightSegments: Int = 1,
+                                  noLongerAccessible: Bool = true) -> ModelMesh {
         let mesh = ModelMesh(engine)
 
         let radialCount = radialSegments + 1
@@ -737,11 +738,11 @@ public class PrimitiveMesh {
     ///   - noLongerAccessible: No longer access the vertices of the mesh after creation
     /// - Returns: Capsule model mesh
     public static func createCapsule(_ engine: Engine,
-                                     _ radius: Float = 0.5,
-                                     _ height: Float = 2,
-                                     _ radialSegments: Int = 6,
-                                     _ heightSegments: Int = 1,
-                                     _ noLongerAccessible: Bool = true) -> ModelMesh {
+                                     radius: Float = 0.5,
+                                     height: Float = 2,
+                                     radialSegments: Int = 6,
+                                     heightSegments: Int = 1,
+                                     noLongerAccessible: Bool = true) -> ModelMesh {
         let mesh = ModelMesh(engine)
 
         let radialSegments = max(2, radialSegments)

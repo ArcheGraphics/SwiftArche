@@ -12,6 +12,8 @@
 
 @interface CPxMeshGeometry : CPxGeometry
 
+- (instancetype _Nonnull )initWith:(CPxPhysics *_Nonnull)physics;
+
 -(void)createMesh:(CPxPhysics *_Nonnull)physics
            points:(NSArray *_Nonnull)points
           indices:(NSArray *_Nullable)indices

@@ -17,7 +17,7 @@ func addSphere(_ rootEntity: Entity, _ radius: Float,
     mtl.roughness = 0.5
     let sphereEntity = rootEntity.createChild()
     let renderer: MeshRenderer = sphereEntity.addComponent()
-    renderer.mesh = PrimitiveMesh.createSphere(rootEntity.engine, radius)
+    renderer.mesh = PrimitiveMesh.createSphere(rootEntity.engine, radius: radius)
     renderer.setMaterial(mtl)
     sphereEntity.transform.position = position
     sphereEntity.transform.rotationQuaternion = rotation
@@ -38,7 +38,7 @@ func addCapsule(_ rootEntity: Entity, _ radius: Float, _ height: Float,
     mtl.roughness = 0.5
     let capsuleEntity = rootEntity.createChild()
     let renderer: MeshRenderer = capsuleEntity.addComponent()
-    renderer.mesh = PrimitiveMesh.createCapsule(rootEntity.engine, radius, height, 20)
+    renderer.mesh = PrimitiveMesh.createCapsule(rootEntity.engine, radius: radius, height: height, radialSegments: 20)
     renderer.setMaterial(mtl)
     capsuleEntity.transform.position = position
     capsuleEntity.transform.rotationQuaternion = rotation
@@ -62,9 +62,9 @@ func addBox(_ rootEntity: Entity, _ size: Vector3,
     let renderer: MeshRenderer = boxEntity.addComponent()
     renderer.mesh = PrimitiveMesh.createCuboid(
             rootEntity.engine,
-            size.x,
-            size.y,
-            size.z
+            width: size.x,
+            height: size.y,
+            depth: size.z
     )
     renderer.setMaterial(mtl)
     boxEntity.transform.position = position
@@ -96,9 +96,9 @@ func addPlane(_ rootEntity: Entity, _ size: Vector3,
     let renderer: MeshRenderer = planeEntity.addComponent()
     renderer.mesh = PrimitiveMesh.createCuboid(
             rootEntity.engine,
-            size.x,
-            size.y,
-            size.z
+            width: size.x,
+            height: size.y,
+            depth: size.z
     )
     renderer.setMaterial(mtl)
     planeEntity.transform.position = position

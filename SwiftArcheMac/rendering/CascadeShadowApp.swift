@@ -223,7 +223,7 @@ class CascadeShadowApp: NSViewController {
         // Create plane
         let planeEntity = rootEntity.createChild("PlaneEntity")
         let planeRenderer: MeshRenderer = planeEntity.addComponent()
-        planeRenderer.mesh = PrimitiveMesh.createPlane(engine, 10, 400)
+        planeRenderer.mesh = PrimitiveMesh.createPlane(engine, width: 10, height: 400)
         gui.planeRenderer = planeRenderer
 
         let planeMaterial = PBRMaterial(engine)
@@ -238,7 +238,7 @@ class CascadeShadowApp: NSViewController {
         planeRenderer.receiveShadows = true
         
         // Create box
-        let boxMesh = PrimitiveMesh.createCuboid(engine, 2.0, 2.0, 2.0)
+        let boxMesh = PrimitiveMesh.createCuboid(engine, width: 2.0, height: 2.0, depth: 2.0)
         let boxMaterial = PBRMaterial(engine)
         boxMaterial.roughness = 0.2
         boxMaterial.metallic = 1

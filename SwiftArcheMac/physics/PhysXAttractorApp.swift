@@ -94,7 +94,7 @@ class PhysXAttractorApp: NSViewController {
 
         let sphereEntity = rootEntity.createChild()
         let renderer: MeshRenderer = sphereEntity.addComponent()
-        renderer.mesh = PrimitiveMesh.createSphere(rootEntity.engine, radius, 60)
+        renderer.mesh = PrimitiveMesh.createSphere(rootEntity.engine, radius: radius, segments: 60)
         renderer.setMaterial(mtl)
         sphereEntity.transform.position = position
         sphereEntity.transform.rotationQuaternion = rotation

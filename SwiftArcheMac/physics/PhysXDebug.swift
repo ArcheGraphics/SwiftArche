@@ -80,7 +80,7 @@ class PhysXDebugApp: NSViewController {
         boxMtl.baseColor = Color(0.6, 0.3, 0.3, 1.0)
         boxMtl.metallic = 0.0
         boxMtl.roughness = 0.5
-        boxRenderer.mesh = PrimitiveMesh.createCuboid(engine, cubeSize, cubeSize, cubeSize)
+        boxRenderer.mesh = PrimitiveMesh.createCuboid(engine, width: cubeSize, height: cubeSize, depth: cubeSize)
         boxRenderer.setMaterial(boxMtl)
 
         let physicsBox = BoxColliderShape()
@@ -103,7 +103,7 @@ class PhysXDebugApp: NSViewController {
         sphereMtl.baseColor = Color(Float.random(in: 0..<1), Float.random(in: 0..<1), Float.random(in: 0..<1), 1.0)
         sphereMtl.metallic = 0.0
         sphereMtl.roughness = 0.5
-        sphereRenderer.mesh = PrimitiveMesh.createSphere(engine, radius)
+        sphereRenderer.mesh = PrimitiveMesh.createSphere(engine, radius: radius)
         sphereRenderer.setMaterial(sphereMtl)
 
         let physicsSphere = SphereColliderShape()

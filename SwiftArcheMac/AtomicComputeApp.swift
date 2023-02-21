@@ -51,7 +51,7 @@ class AtomicComputeApp: NSViewController {
 
         let cubeEntity = rootEntity.createChild()
         let renderer: MeshRenderer = cubeEntity.addComponent()
-        renderer.mesh = PrimitiveMesh.createCuboid(engine, 0.1, 0.1, 0.1)
+        renderer.mesh = PrimitiveMesh.createCuboid(engine, width: 0.1, height: 0.1, depth: 0.1)
         let material = AtomicMaterial(engine)
         renderer.setMaterial(material)
 

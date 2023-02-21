@@ -16,7 +16,7 @@ class PhysXMeshColliderShape: PhysXColliderShape {
     init(_ uniqueID: UInt32, _ material: PhysXPhysicsMaterial) {
         super.init()
 
-        _pxGeometry = CPxMeshGeometry()
+        _pxGeometry = CPxMeshGeometry(PhysXPhysics._pxPhysics)
         _initialize(material, uniqueID)
         _setLocalPose()
     }

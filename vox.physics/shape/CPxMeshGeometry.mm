@@ -23,8 +23,7 @@ using namespace physx;
 }
 
 // MARK: - Initialization
-
-- (instancetype)init {
+- (instancetype _Nonnull )initWith:(CPxPhysics *_Nonnull)physics {
     isConvex = true;
     points = nullptr;
     indices = nullptr;
@@ -33,7 +32,18 @@ using namespace physx;
     scale = PxMeshScale();
     params = new PxCookingParams(PxTolerancesScale());
 
-    self = [super initWithGeometry:NULL];
+    auto meshGeometry = new PxConvexMeshGeometry();
+    PxConvexMeshDesc desc;
+    desc.points.count = 3;
+    desc.points.stride = sizeof(PxVec3);
+    std::vector<PxVec3> pts(3);
+    pts[0] = PxVec3(0,0,0);
+    pts[1] = PxVec3(1,0,0);
+    pts[2] = PxVec3(0,1,0);
+    desc.points.data = pts.data();
+    desc.flags = PxConvexFlag::eCOMPUTE_CONVEX;
+    meshGeometry->convexMesh = physics.c_cooking->createConvexMesh(desc, [physics getPhysicsInsertionCallback]);
+    self = [super initWithGeometry:meshGeometry];
     return self;
 }
 

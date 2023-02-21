@@ -48,7 +48,7 @@ fileprivate class TableGenerator: Script {
         let child = entity.createChild()
         child.transform.position = Vector3(0, 0, 0.125)
         let boxRenderer: MeshRenderer = child.addComponent()
-        boxRenderer.mesh = PrimitiveMesh.createCuboid(engine, 0.5, 0.4, 0.045)
+        boxRenderer.mesh = PrimitiveMesh.createCuboid(engine, width: 0.5, height: 0.4, depth: 0.045)
         boxRenderer.setMaterial(boxMaterial)
 
 
@@ -59,7 +59,7 @@ fileprivate class TableGenerator: Script {
         let child1 = entity.createChild()
         child1.transform.position = Vector3(-0.2, -0.15, -0.045)
         let boxRenderer1: MeshRenderer = child1.addComponent()
-        boxRenderer1.mesh = PrimitiveMesh.createCuboid(engine, 0.1, 0.1, 0.3)
+        boxRenderer1.mesh = PrimitiveMesh.createCuboid(engine, width: 0.1, height: 0.1, depth: 0.3)
         boxRenderer1.setMaterial(boxMaterial)
 
 
@@ -70,7 +70,7 @@ fileprivate class TableGenerator: Script {
         let child2 = entity.createChild()
         child2.transform.position = Vector3(0.2, -0.15, -0.045)
         let boxRenderer2: MeshRenderer = child2.addComponent()
-        boxRenderer2.mesh = PrimitiveMesh.createCuboid(engine, 0.1, 0.1, 0.3)
+        boxRenderer2.mesh = PrimitiveMesh.createCuboid(engine, width: 0.1, height: 0.1, depth: 0.3)
         boxRenderer2.setMaterial(boxMaterial)
 
 
@@ -81,7 +81,7 @@ fileprivate class TableGenerator: Script {
         let child3 = entity.createChild()
         child3.transform.position = Vector3(-0.2, 0.15, -0.045)
         let boxRenderer3: MeshRenderer = child3.addComponent()
-        boxRenderer3.mesh = PrimitiveMesh.createCuboid(engine, 0.1, 0.1, 0.3)
+        boxRenderer3.mesh = PrimitiveMesh.createCuboid(engine, width: 0.1, height: 0.1, depth: 0.3)
         boxRenderer3.setMaterial(boxMaterial)
 
 
@@ -92,7 +92,7 @@ fileprivate class TableGenerator: Script {
         let child4 = entity.createChild()
         child4.transform.position = Vector3(0.2, 0.15, -0.045)
         let boxRenderer4: MeshRenderer = child4.addComponent()
-        boxRenderer4.mesh = PrimitiveMesh.createCuboid(engine, 0.1, 0.1, 0.3)
+        boxRenderer4.mesh = PrimitiveMesh.createCuboid(engine, width: 0.1, height: 0.1, depth: 0.3)
         boxRenderer4.setMaterial(boxMaterial)
 
     }
@@ -117,7 +117,7 @@ class PhysXCompoundApp: NSViewController {
         let renderer: MeshRenderer = entity.addComponent()
         entity.transform.position = position
         entity.transform.rotationQuaternion = rotation
-        renderer.mesh = PrimitiveMesh.createPlane(engine, size.x, size.y)
+        renderer.mesh = PrimitiveMesh.createPlane(engine, width: size.x, height: size.y)
         renderer.setMaterial(material)
 
         let physicsPlane = PlaneColliderShape()

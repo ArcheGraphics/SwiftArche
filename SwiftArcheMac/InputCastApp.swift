@@ -36,7 +36,7 @@ class InputCastApp: NSViewController {
         let boxMtl = PBRMaterial(engine)
         let boxRenderer: MeshRenderer = boxEntity.addComponent()
         boxMtl.baseColor = Color(0.6, 0.3, 0.3, 1.0)
-        boxRenderer.mesh = PrimitiveMesh.createCuboid(engine, cubeSize, cubeSize, cubeSize)
+        boxRenderer.mesh = PrimitiveMesh.createCuboid(engine, width: cubeSize, height: cubeSize, depth: cubeSize)
         boxRenderer.setMaterial(boxMtl)
 
         let boxCollider: StaticCollider = boxEntity.addComponent()

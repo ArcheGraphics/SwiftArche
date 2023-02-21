@@ -42,7 +42,7 @@ class GltfViewerApp: NSViewController {
         let planeEntity = rootEntity.createChild()
         planeEntity.transform.position = Vector3(0, -1, 0)
         let shadowPlane: MeshRenderer = planeEntity.addComponent()
-        shadowPlane.mesh = PrimitiveMesh.createPlane(engine, 10, 10)
+        shadowPlane.mesh = PrimitiveMesh.createPlane(engine, width: 10, height: 10)
         let shadowMtl = PBRMaterial(engine)
         shadowMtl.baseColor = Color(0.6, 0.6, 0.6, 1.0)
         shadowMtl.roughness = 1

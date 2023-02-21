@@ -67,7 +67,7 @@ class IrradianceApp: NSViewController {
         sphereMaterial.roughness = 0
         sphereMaterial.metallic = 1
         let renderer: MeshRenderer = sphereEntity.addComponent()
-        renderer.mesh = PrimitiveMesh.createSphere(engine, 1, 64)
+        renderer.mesh = PrimitiveMesh.createSphere(engine, radius: 1, segments: 64)
         renderer.setMaterial(sphereMaterial)
 
         // Create planes
@@ -79,7 +79,7 @@ class IrradianceApp: NSViewController {
             bakerEntity.transform.rotation = Vector3(90, 0, 0)
             let bakerMaterial = BakerMaterial(engine)
             let bakerRenderer: MeshRenderer = bakerEntity.addComponent()
-            bakerRenderer.mesh = PrimitiveMesh.createPlane(engine, 2, 2)
+            bakerRenderer.mesh = PrimitiveMesh.createPlane(engine, width: 2, height: 2)
             bakerRenderer.setMaterial(bakerMaterial)
             planes.append(bakerEntity)
             planeMaterials.append(bakerMaterial)
