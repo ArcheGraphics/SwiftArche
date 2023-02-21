@@ -118,20 +118,10 @@ using namespace physx;
 
     PxConvexMeshDesc desc;
     desc.points.count = pointsCount;
-    desc.points.stride = sizeof(PxVec3);
+    desc.points.stride = sizeof(simd_float3);
     desc.points.data = points;
-
-    desc.indices.count = indicesCount;
-    desc.indices.data = indices;
-    if (isUint16) {
-        desc.indices.stride = sizeof(uint16);
-        desc.flags = PxConvexFlag::e16_BIT_INDICES;
-        meshGeometry->convexMesh = physics.c_cooking->createConvexMesh(desc, [physics getPhysicsInsertionCallback]);
-    } else {
-        desc.indices.stride = sizeof(uint32_t);
-        desc.flags = PxConvexFlag::eCOMPUTE_CONVEX;
-        meshGeometry->convexMesh = physics.c_cooking->createConvexMesh(desc, [physics getPhysicsInsertionCallback]);
-    }
+    desc.flags = PxConvexFlag::eCOMPUTE_CONVEX;
+    meshGeometry->convexMesh = physics.c_cooking->createConvexMesh(desc, [physics getPhysicsInsertionCallback]);
 }
 
 - (void)createTriangleMesh:(CPxPhysics *_Nonnull)physics

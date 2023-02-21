@@ -25,10 +25,10 @@ fileprivate class Raycast: Script {
 
             if let hit = engine.physicsManager.raycast(ray, Float.greatestFiniteMagnitude, Layer.Layer0) {
                 let mtl = PBRMaterial(engine)
-                mtl.baseColor = Color(Float.random(in: 0...1), Float.random(in: 0...1), Float.random(in: 0...1), 1.0)
+                mtl.baseColor = Color(Float.random(in: 0...1), Float.random(in: 0...1), Float.random(in: 0...1), 0.5)
                 mtl.metallic = 0.0
                 mtl.roughness = 0.5
-
+                mtl.isTransparent = true
                 let meshes: [MeshRenderer] = hit.entity!.getComponentsIncludeChildren()
                 for mesh in meshes {
                     mesh.setMaterial(mtl)
@@ -62,9 +62,10 @@ class PhysXMeshColliderApp: NSViewController {
     func addCapsuleMesh(_ rootEntity: Entity, _ radius: Float, _ height: Float,
                         _ position: Vector3, _ rotation: Quaternion) -> Entity {
         let mtl = PBRMaterial(rootEntity.engine)
-        mtl.baseColor = Color(Float.random(in: 0...1), Float.random(in: 0...1), Float.random(in: 0...1), 1.0)
+        mtl.baseColor = Color(Float.random(in: 0...1), Float.random(in: 0...1), Float.random(in: 0...1), 0.5)
         mtl.metallic = 0.0
         mtl.roughness = 0.5
+        mtl.isTransparent = true
         let capsuleEntity = rootEntity.createChild()
         let renderer: MeshRenderer = capsuleEntity.addComponent()
         renderer.mesh = PrimitiveMesh.createCapsule(rootEntity.engine, radius: radius, height: height,
@@ -77,7 +78,7 @@ class PhysXMeshColliderApp: NSViewController {
         physicsCapsule.isConvex = true
         physicsCapsule.mesh = PrimitiveMesh.createCapsule(rootEntity.engine, radius: radius, height: height,
                                                           radialSegments: 6, heightSegments: 1, noLongerAccessible: false)
-        let capsuleCollider: StaticCollider = capsuleEntity.addComponent()
+        let capsuleCollider: DynamicCollider = capsuleEntity.addComponent()
         capsuleCollider.addShape(physicsCapsule)
         
         createDebugWireframe(physicsCapsule, capsuleEntity)
@@ -88,9 +89,10 @@ class PhysXMeshColliderApp: NSViewController {
     func addBoxMesh(_ rootEntity: Entity, _ size: Vector3,
                 _ position: Vector3, _ rotation: Quaternion) -> Entity {
         let mtl = PBRMaterial(rootEntity.engine)
-        mtl.baseColor = Color(Float.random(in: 0...1), Float.random(in: 0...1), Float.random(in: 0...1), 1.0)
+        mtl.baseColor = Color(Float.random(in: 0...1), Float.random(in: 0...1), Float.random(in: 0...1), 0.5)
         mtl.metallic = 0.0
         mtl.roughness = 0.5
+        mtl.isTransparent = true
         let boxEntity = rootEntity.createChild()
         let renderer: MeshRenderer = boxEntity.addComponent()
         renderer.mesh = PrimitiveMesh.createCuboid(
@@ -113,6 +115,8 @@ class PhysXMeshColliderApp: NSViewController {
         )
         let boxCollider: DynamicCollider = boxEntity.addComponent()
         boxCollider.addShape(physicsBox)
+        
+        createDebugWireframe(physicsBox, boxEntity)
 
         return boxEntity
     }
@@ -165,9 +169,7 @@ class PhysXMeshColliderApp: NSViewController {
         let light = rootEntity.createChild("light")
         light.transform.position = Vector3(-0.3, 1, 0.4)
         light.transform.lookAt(targetPosition: Vector3())
-        let directLight: DirectLight = light.addComponent()
-        directLight.shadowType = .SoftLow
-        directLight.shadowStrength = 1
+        let _: DirectLight = light.addComponent()
         
         initialize(rootEntity)
 
