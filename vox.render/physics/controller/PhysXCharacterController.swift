@@ -49,7 +49,7 @@ class PhysXCharacterController: PhysXCollider {
         _shape = shape
         shape._controllers.add(self)
     }
-    
+
     override func removeShape(_ shape: PhysXColliderShape) {
         _destroyPXController()
         _shape = nil

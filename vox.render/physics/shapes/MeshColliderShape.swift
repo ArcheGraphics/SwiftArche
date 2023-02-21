@@ -10,7 +10,8 @@ import vox_math
 public class MeshColliderShape: ColliderShape {
     private var _isConvex = true
     private var _mesh: ModelMesh?
-    
+    private var _cookingOptions: UInt8 = 0
+
     public var isConvex: Bool {
         get {
             _isConvex
@@ -24,7 +25,7 @@ public class MeshColliderShape: ColliderShape {
             }
         }
     }
-    
+
     public var mesh: ModelMesh? {
         get {
             _mesh
@@ -36,15 +37,27 @@ public class MeshColliderShape: ColliderShape {
             }
         }
     }
-    
+
+    public var cookingOptions: UInt8 {
+        get {
+            _cookingOptions
+        }
+        set {
+            if _cookingOptions != newValue {
+                _cookingOptions = newValue
+                (_nativeShape as! PhysXMeshColliderShape).setCookParamter(newValue)
+            }
+        }
+    }
+
     public override init() {
         super.init()
         _nativeShape = PhysXPhysics.createMeshColliderShape(
-            _id,
-            _material._nativeMaterial
+                _id,
+                _material._nativeMaterial
         )
     }
-    
+
     private func _cook() {
         if let mesh = _mesh {
             let points = mesh.getPositions()!

@@ -12,23 +12,27 @@
 
 @interface CPxMeshGeometry : CPxGeometry
 
-- (void)createConvexMesh:(CPxPhysics* _Nonnull)physics
-                  points:(NSArray* _Nonnull)points;
+- (instancetype _Nonnull)initWithPhysics:(CPxPhysics *_Nonnull)physics;
 
-- (void)createConvexMesh:(CPxPhysics* _Nonnull)physics
-                  points:(NSArray*_Nonnull) points
-                 indices:(NSArray*_Nonnull) indices
-                isUint16: (bool) isUint16;
+- (void)createConvexMesh:(CPxPhysics *_Nonnull)physics
+                  points:(NSArray *_Nonnull)points;
 
-- (void)createTriangleMesh:(CPxPhysics* _Nonnull)physics
-                    points:(NSArray* _Nonnull)points;
+- (void)createConvexMesh:(CPxPhysics *_Nonnull)physics
+                  points:(NSArray *_Nonnull)points
+                 indices:(NSArray *_Nonnull)indices
+                isUint16:(bool)isUint16;
 
-- (void)createTriangleMesh:(CPxPhysics* _Nonnull)physics
-                    points:(NSArray*_Nonnull) points
-                   indices:(NSArray*_Nonnull) indices
-                  isUint16: (bool) isUint16;
+- (void)createTriangleMesh:(CPxPhysics *_Nonnull)physics
+                    points:(NSArray *_Nonnull)points;
+
+- (void)createTriangleMesh:(CPxPhysics *_Nonnull)physics
+                    points:(NSArray *_Nonnull)points
+                   indices:(NSArray *_Nonnull)indices
+                  isUint16:(bool)isUint16;
 
 - (void)setScaleWith:(float)hx hy:(float)hy hz:(float)hz;
 
+- (void)setCookParameter:(CPxPhysics *_Nonnull)physics
+                   value:(uint8_t)value;
 
 @end
