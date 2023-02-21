@@ -14,8 +14,10 @@ using namespace physx;
 
 @implementation CPxMeshGeometry {
     bool isConvex;
-    NSArray *points;
-    NSArray *indices;
+    void *points;
+    uint32_t pointsCount;
+    void *indices;
+    uint32_t indicesCount;
     bool isUint16;
 
     PxMeshScale scale;
@@ -54,143 +56,121 @@ using namespace physx;
 - (void)setCookParameter:(CPxPhysics *_Nonnull)physics
                    value:(uint8_t)value {
     params->meshPreprocessParams = PxMeshPreprocessingFlags(value);
-    [self createMesh:physics points:points indices:indices isUint16:isUint16 isConvex:isConvex];
+    [self createMesh:physics points:points pointsCount:pointsCount
+             indices:indices indicesCount:indicesCount isUint16:isUint16 isConvex:isConvex];
 }
 
 - (void)createMesh:(CPxPhysics *_Nonnull)physics
-            points:(NSArray *_Nonnull)points
-           indices:(NSArray *_Nullable)indices
+            points:(void *_Nonnull)points
+       pointsCount:(uint32_t)pointsCount
+           indices:(void *_Nullable)indices
+      indicesCount:(uint32_t)indicesCount
           isUint16:(bool)isUint16
           isConvex:(bool)isConvex {
     self->isConvex = isConvex;
     self->isUint16 = isUint16;
     self->indices = indices;
+    self->indicesCount = indicesCount;
     self->points = points;
+    self->pointsCount = pointsCount;
     physics.c_cooking->setParams(*params);
 
     if (isConvex) {
         if (indices == nullptr) {
-            [self createConvexMesh:physics points:points];
+            [self createConvexMesh:physics points:points pointsCount:pointsCount];
         } else {
-            [self createConvexMesh:physics points:points indices:indices isUint16:isUint16];
+            [self createConvexMesh:physics points:points pointsCount:pointsCount
+                           indices:indices indicesCount:indicesCount isUint16:isUint16];
         }
     } else {
         if (indices == nullptr) {
-            [self createTriangleMesh:physics points:points];
+            [self createTriangleMesh:physics points:points pointsCount:pointsCount];
         } else {
-            [self createTriangleMesh:physics points:points indices:indices isUint16:isUint16];
+            [self createTriangleMesh:physics points:points pointsCount:pointsCount
+                           indices:indices indicesCount:indicesCount isUint16:isUint16];
         }
     }
 }
 
 - (void)createConvexMesh:(CPxPhysics *_Nonnull)physics
-                  points:(NSArray *_Nonnull)points {
+                  points:(void *_Nonnull)points
+             pointsCount:(uint32_t)pointsCount {
     auto meshGeometry = new PxConvexMeshGeometry();
     super.c_geometry = meshGeometry;
     meshGeometry->scale = scale;
 
     PxConvexMeshDesc desc;
-    desc.points.count = static_cast<uint32_t>([points count]);
-    std::vector<PxVec3> pts(desc.points.count);
-    for (int i = 0; i < desc.points.count; i++) {
-        [[points objectAtIndex:i] getValue:&pts[i]];
-    }
-
+    desc.points.count = pointsCount;
     desc.points.stride = sizeof(simd_float3);
-    desc.points.data = pts.data();
+    desc.points.data = points;
     desc.flags = PxConvexFlag::eCOMPUTE_CONVEX;
     meshGeometry->convexMesh = physics.c_cooking->createConvexMesh(desc, [physics getPhysicsInsertionCallback]);
 }
 
 - (void)createConvexMesh:(CPxPhysics *_Nonnull)physics
-                  points:(NSArray *_Nonnull)points
-                 indices:(NSArray *_Nonnull)indices
+                  points:(void *_Nonnull)points
+             pointsCount:(uint32_t)pointsCount
+                 indices:(void *_Nullable)indices
+            indicesCount:(uint32_t)indicesCount
                 isUint16:(bool)isUint16 {
     auto meshGeometry = new PxConvexMeshGeometry();
     super.c_geometry = meshGeometry;
     meshGeometry->scale = scale;
 
     PxConvexMeshDesc desc;
-    desc.points.count = static_cast<uint32_t>([points count]);
-    std::vector<PxVec3> pts(desc.points.count);
-    for (int i = 0; i < desc.points.count; i++) {
-        [[points objectAtIndex:i] getValue:&pts[i]];
-    }
+    desc.points.count = pointsCount;
     desc.points.stride = sizeof(simd_float3);
-    desc.points.data = pts.data();
+    desc.points.data = points;
 
-    desc.indices.count = static_cast<uint32_t>([indices count]);
+    desc.indices.count = indicesCount;
+    desc.indices.data = indices;
     if (isUint16) {
-        std::vector<uint16_t> idx(desc.indices.count);
-        for (int i = 0; i < desc.indices.count; i++) {
-            [[indices objectAtIndex:i] getValue:&idx[i]];
-        }
         desc.indices.stride = sizeof(uint16);
-        desc.indices.data = idx.data();
         desc.flags = PxConvexFlag::e16_BIT_INDICES;
         meshGeometry->convexMesh = physics.c_cooking->createConvexMesh(desc, [physics getPhysicsInsertionCallback]);
     } else {
-        std::vector<uint32_t> idx(desc.indices.count);
-        for (int i = 0; i < desc.indices.count; i++) {
-            [[indices objectAtIndex:i] getValue:&idx[i]];
-        }
         desc.indices.stride = sizeof(uint32_t);
-        desc.indices.data = idx.data();
         meshGeometry->convexMesh = physics.c_cooking->createConvexMesh(desc, [physics getPhysicsInsertionCallback]);
     }
 }
 
 - (void)createTriangleMesh:(CPxPhysics *_Nonnull)physics
-                    points:(NSArray *_Nonnull)points {
+                    points:(void *_Nonnull)points
+               pointsCount:(uint32_t)pointsCount {
     auto meshGeometry = new PxTriangleMeshGeometry();
     super.c_geometry = meshGeometry;
     meshGeometry->scale = scale;
 
     PxTriangleMeshDesc desc;
-    desc.points.count = static_cast<uint32_t>([points count]);
-    std::vector<PxVec3> pts(desc.points.count);
-    for (int i = 0; i < desc.points.count; i++) {
-        [[points objectAtIndex:i] getValue:&pts[i]];
-    }
+    desc.points.count = pointsCount;
     desc.points.stride = sizeof(simd_float3);
-    desc.points.data = pts.data();
+    desc.points.data = points;
     meshGeometry->triangleMesh = physics.c_cooking->createTriangleMesh(desc, [physics getPhysicsInsertionCallback]);
 }
 
 - (void)createTriangleMesh:(CPxPhysics *_Nonnull)physics
-                    points:(NSArray *_Nonnull)points
-                   indices:(NSArray *_Nonnull)indices
+                    points:(void *_Nonnull)points
+               pointsCount:(uint32_t)pointsCount
+                   indices:(void *_Nullable)indices
+              indicesCount:(uint32_t)indicesCount
                   isUint16:(bool)isUint16 {
     auto meshGeometry = new PxTriangleMeshGeometry();
     super.c_geometry = meshGeometry;
     meshGeometry->scale = scale;
 
     PxTriangleMeshDesc desc;
-    desc.points.count = static_cast<uint32_t>([points count]);
-    std::vector<PxVec3> pts(desc.points.count);
-    for (int i = 0; i < desc.points.count; i++) {
-        [[points objectAtIndex:i] getValue:&pts[i]];
-    }
+    desc.points.count = pointsCount;
     desc.points.stride = sizeof(simd_float3);
-    desc.points.data = pts.data();
+    desc.points.data = points;
 
-    desc.triangles.count = static_cast<uint32_t>([indices count]);
+    desc.triangles.count = indicesCount;
+    desc.triangles.data = indices;
     if (isUint16) {
-        std::vector<uint16_t> idx(desc.triangles.count);
-        for (int i = 0; i < desc.triangles.count; i++) {
-            [[indices objectAtIndex:i] getValue:&idx[i]];
-        }
         desc.triangles.stride = sizeof(uint16) * 3;
-        desc.triangles.data = idx.data();
         desc.flags = PxMeshFlag::e16_BIT_INDICES;
         meshGeometry->triangleMesh = physics.c_cooking->createTriangleMesh(desc, [physics getPhysicsInsertionCallback]);
     } else {
-        std::vector<uint32_t> idx(desc.triangles.count);
-        for (int i = 0; i < desc.triangles.count; i++) {
-            [[indices objectAtIndex:i] getValue:&idx[i]];
-        }
         desc.triangles.stride = sizeof(uint32_t) * 3;
-        desc.triangles.data = idx.data();
         meshGeometry->triangleMesh = physics.c_cooking->createTriangleMesh(desc, [physics getPhysicsInsertionCallback]);
     }
 }

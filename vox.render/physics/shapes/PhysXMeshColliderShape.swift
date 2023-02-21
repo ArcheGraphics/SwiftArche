@@ -21,34 +21,34 @@ class PhysXMeshColliderShape: PhysXColliderShape {
         _setLocalPose()
     }
 
-    func createConvexMesh(_ points: [Vector3]) {
-        (_pxGeometry as! CPxMeshGeometry).createMesh(PhysXPhysics._pxPhysics, points: points,
-                                                     indices: nil, isUint16: false, isConvex: true)
+    func createConvexMesh(_ points: inout [Vector3]) {
+        (_pxGeometry as! CPxMeshGeometry).createMesh(PhysXPhysics._pxPhysics, points: &points, pointsCount: UInt32(points.count),
+                                                     indices: nil, indicesCount: 0, isUint16: false, isConvex: true)
     }
 
-    func createConvexMesh(_ points: [Vector3], _ indices: [UInt16]) {
-        (_pxGeometry as! CPxMeshGeometry).createMesh(PhysXPhysics._pxPhysics, points: points,
-                                                     indices: indices, isUint16: true, isConvex: true)
+    func createConvexMesh(_ points: inout [Vector3], _ indices: inout [UInt16]) {
+        (_pxGeometry as! CPxMeshGeometry).createMesh(PhysXPhysics._pxPhysics, points: &points, pointsCount: UInt32(points.count),
+                                                     indices: &indices, indicesCount: UInt32(indices.count), isUint16: true, isConvex: true)
     }
 
-    func createConvexMesh(_ points: [Vector3], _ indices: [UInt32]) {
-        (_pxGeometry as! CPxMeshGeometry).createMesh(PhysXPhysics._pxPhysics, points: points,
-                                                     indices: indices, isUint16: false, isConvex: true)
+    func createConvexMesh(_ points: inout [Vector3], _ indices: inout [UInt32]) {
+        (_pxGeometry as! CPxMeshGeometry).createMesh(PhysXPhysics._pxPhysics, points: &points, pointsCount: UInt32(points.count),
+                                                     indices: &indices, indicesCount: UInt32(indices.count), isUint16: false, isConvex: true)
     }
 
-    func createTriangleMesh(_ points: [Vector3]) {
-        (_pxGeometry as! CPxMeshGeometry).createMesh(PhysXPhysics._pxPhysics, points: points,
-                                                     indices: nil, isUint16: false, isConvex: false)
+    func createTriangleMesh(_ points: inout [Vector3]) {
+        (_pxGeometry as! CPxMeshGeometry).createMesh(PhysXPhysics._pxPhysics, points: &points, pointsCount: UInt32(points.count),
+                                                     indices: nil, indicesCount: 0, isUint16: false, isConvex: false)
     }
 
-    func createTriangleMesh(_ points: [Vector3], _ indices: [UInt16]) {
-        (_pxGeometry as! CPxMeshGeometry).createMesh(PhysXPhysics._pxPhysics, points: points,
-                                                     indices: indices, isUint16: true, isConvex: false)
+    func createTriangleMesh(_ points: inout [Vector3], _ indices: inout [UInt16]) {
+        (_pxGeometry as! CPxMeshGeometry).createMesh(PhysXPhysics._pxPhysics, points: &points, pointsCount: UInt32(points.count),
+                                                     indices: &indices, indicesCount: UInt32(indices.count), isUint16: true, isConvex: false)
     }
 
-    func createTriangleMesh(_ points: [Vector3], _ indices: [UInt32]) {
-        (_pxGeometry as! CPxMeshGeometry).createMesh(PhysXPhysics._pxPhysics, points: points,
-                                                     indices: indices, isUint16: false, isConvex: false)
+    func createTriangleMesh(_ points: inout [Vector3], _ indices: inout [UInt32]) {
+        (_pxGeometry as! CPxMeshGeometry).createMesh(PhysXPhysics._pxPhysics, points: &points, pointsCount: UInt32(points.count),
+                                                     indices: &indices, indicesCount: UInt32(indices.count), isUint16: false, isConvex: false)
     }
     
     func setCookParamter(_ param: UInt8) {

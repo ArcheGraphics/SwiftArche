@@ -51,16 +51,16 @@ class PhysXMeshColliderApp: NSViewController {
         mtl.roughness = 0.5
         let capsuleEntity = rootEntity.createChild()
         let renderer: MeshRenderer = capsuleEntity.addComponent()
-        let mesh = PrimitiveMesh.createCapsule(rootEntity.engine, radius: radius, height: height,
-                                                    radialSegments: 20, noLongerAccessible: false)
-        renderer.mesh = mesh
+        renderer.mesh = PrimitiveMesh.createCapsule(rootEntity.engine, radius: radius, height: height,
+                                                    radialSegments: 20)
         renderer.setMaterial(mtl)
         capsuleEntity.transform.position = position
         capsuleEntity.transform.rotationQuaternion = rotation
 
         let physicsCapsule = MeshColliderShape()
         physicsCapsule.isConvex = true
-        physicsCapsule.mesh = mesh
+        physicsCapsule.mesh = PrimitiveMesh.createCapsule(rootEntity.engine, radius: radius, height: height,
+                                                          radialSegments: 2, heightSegments: 1, noLongerAccessible: false)
         let capsuleCollider: DynamicCollider = capsuleEntity.addComponent()
         capsuleCollider.addShape(physicsCapsule)
 

@@ -15,8 +15,10 @@
 - (instancetype _Nonnull )initWith:(CPxPhysics *_Nonnull)physics;
 
 -(void)createMesh:(CPxPhysics *_Nonnull)physics
-           points:(NSArray *_Nonnull)points
-          indices:(NSArray *_Nullable)indices
+           points:(void *_Nonnull)points
+      pointsCount:(uint32_t)pointsCount
+          indices:(void *_Nullable)indices
+     indicesCount:(uint32_t)indicesCount
          isUint16:(bool)isUint16
          isConvex:(bool)isConvex;
 
