@@ -124,11 +124,11 @@ using namespace physx;
     desc.indices.count = indicesCount;
     desc.indices.data = indices;
     if (isUint16) {
-        desc.indices.stride = sizeof(uint16) * 3;
+        desc.indices.stride = sizeof(uint16);
         desc.flags = PxConvexFlag::e16_BIT_INDICES;
         meshGeometry->convexMesh = physics.c_cooking->createConvexMesh(desc, [physics getPhysicsInsertionCallback]);
     } else {
-        desc.indices.stride = sizeof(uint32_t) * 3;
+        desc.indices.stride = sizeof(uint32_t);
         desc.flags = PxConvexFlag::eCOMPUTE_CONVEX;
         meshGeometry->convexMesh = physics.c_cooking->createConvexMesh(desc, [physics getPhysicsInsertionCallback]);
     }
@@ -163,7 +163,7 @@ using namespace physx;
     desc.points.stride = sizeof(simd_float3);
     desc.points.data = points;
 
-    desc.triangles.count = indicesCount;
+    desc.triangles.count = indicesCount / 3;
     desc.triangles.data = indices;
     if (isUint16) {
         desc.triangles.stride = sizeof(uint16) * 3;

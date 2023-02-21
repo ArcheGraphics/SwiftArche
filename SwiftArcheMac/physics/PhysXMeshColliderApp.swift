@@ -58,6 +58,7 @@ class PhysXMeshColliderApp: NSViewController {
         capsuleEntity.transform.rotationQuaternion = rotation
 
         let physicsCapsule = MeshColliderShape()
+        physicsCapsule.isConvex = true
         physicsCapsule.mesh = PrimitiveMesh.createCapsule(rootEntity.engine, radius: radius, height: height,
                                                           radialSegments: 6, heightSegments: 1, noLongerAccessible: false)
         let capsuleCollider: StaticCollider = capsuleEntity.addComponent()
@@ -66,7 +67,7 @@ class PhysXMeshColliderApp: NSViewController {
         return capsuleEntity
     }
 
-    func addBox(_ rootEntity: Entity, _ size: Vector3,
+    func addBoxMesh(_ rootEntity: Entity, _ size: Vector3,
                 _ position: Vector3, _ rotation: Quaternion) -> Entity {
         let mtl = PBRMaterial(rootEntity.engine)
         mtl.baseColor = Color(Float.random(in: 0...1), Float.random(in: 0...1), Float.random(in: 0...1), 1.0)
@@ -78,15 +79,20 @@ class PhysXMeshColliderApp: NSViewController {
                 rootEntity.engine,
                 width: size.x,
                 height: size.y,
-                depth: size.z, noLongerAccessible: false
+                depth: size.z
         )
         renderer.setMaterial(mtl)
         boxEntity.transform.position = position
         boxEntity.transform.rotationQuaternion = rotation
 
-        let physicsBox = BoxColliderShape()
-        physicsBox.size = size
-        physicsBox.isTrigger = false
+        let physicsBox = MeshColliderShape()
+        physicsBox.isConvex = true
+        physicsBox.mesh = PrimitiveMesh.createCuboid(
+            rootEntity.engine,
+            width: size.x,
+            height: size.y,
+            depth: size.z, noLongerAccessible: false
+    )
         let boxCollider: DynamicCollider = boxEntity.addComponent()
         boxCollider.addShape(physicsBox)
 
@@ -101,9 +107,9 @@ class PhysXMeshColliderApp: NSViewController {
             for j in 0..<8 {
                 let random = Int(floor(Float.random(in: 0...3))) % 3
                 switch (random) {
-//                case 0:
-//                    _ = addBox(rootEntity, Vector3(1, 1, 1), Vector3(Float(-4 + i), floor(Float.random(in: 0...6)) + 1, Float(-4 + j)), quat)
-//                    break
+                case 0:
+                    _ = addBoxMesh(rootEntity, Vector3(1, 1, 1), Vector3(Float(-4 + i), floor(Float.random(in: 0...6)) + 1, Float(-4 + j)), quat)
+                    break
 //                case 1:
 //                    _ = addSphere(rootEntity, 0.5, Vector3(floor(Float.random(in: 0...16)) - 4, 5, floor(Float.random(in: 0...16)) - 4), quat)
 //                    break
