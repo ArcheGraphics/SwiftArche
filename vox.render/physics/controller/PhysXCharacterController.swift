@@ -42,15 +42,15 @@ class PhysXCharacterController: PhysXCollider {
         _pxController.setSlopeLimit(slopeLimit)
     }
 
-    func addShape(shape: PhysXColliderShape) {
+    override func addShape(_ shape: PhysXColliderShape) {
         if _pxManager != nil {
             _createPXController(_pxManager, shape)
         }
         _shape = shape
         shape._controllers.add(self)
     }
-
-    func removeShape(shape: PhysXColliderShape) {
+    
+    override func removeShape(_ shape: PhysXColliderShape) {
         _destroyPXController()
         _shape = nil
         shape._controllers.delete(self)

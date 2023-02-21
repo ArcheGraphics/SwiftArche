@@ -8,10 +8,10 @@ import vox_math
 
 /// The character controllers.
 public class CharacterController: Collider {
-    private var _stepOffset: Float = 0
+    private var _stepOffset: Float = 0.5
     private var _nonWalkableMode: ControllerNonWalkableMode = .PreventClimbing
     private var _upDirection = Vector3(0, 1, 0)
-    private var _slopeLimit: Float = 0
+    private var _slopeLimit: Float = 0.707
 
     /// The step offset for the controller.
     public var stepOffset: Float {
