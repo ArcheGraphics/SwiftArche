@@ -100,8 +100,8 @@ class PhysXControllerApp: NSViewController {
         var quat = Quaternion(0, 0, 0.3, 0.7)
         _ = quat.normalize()
         _ = addPlane(rootEntity, Vector3(30, 0.0, 30), Vector3(), Quaternion())
-        for i in 0..<8 {
-            for j in 0..<8 {
+        for i in 0..<4 {
+            for j in 0..<4 {
                 let random = Int(floor(Float.random(in: 0...3))) % 3
                 switch (random) {
                 case 0:
@@ -118,6 +118,7 @@ class PhysXControllerApp: NSViewController {
                 }
             }
         }
+        addDuckMesh(rootEntity)
     }
     
     override func viewDidLoad() {

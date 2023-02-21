@@ -78,6 +78,10 @@ class PhysXMeshColliderShape: PhysXColliderShape {
     }
 
     override func setWorldScale(_ scale: Vector3) {
+        _scale = scale
+        _setLocalPose()
+        
         (_pxGeometry as! CPxMeshGeometry).setScaleWith(scale.x, hy: scale.y, hz: scale.z)
+        _pxShape.setGeometry(_pxGeometry)
     }
 }

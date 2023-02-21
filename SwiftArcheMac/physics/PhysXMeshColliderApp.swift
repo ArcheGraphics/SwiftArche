@@ -43,22 +43,6 @@ class PhysXMeshColliderApp: NSViewController {
     var engine: Engine!
     var iblBaker: IBLBaker!
     
-    func createDebugWireframe(_ shape: MeshColliderShape, _ entity: Entity) {
-        let points = shape.colliderPoints
-        let indices = shape.colliderWireframeIndices
-        
-        let mesh = ModelMesh(engine)
-        mesh.setPositions(positions: points)
-        mesh.setIndices(indices: indices)
-        _ = mesh.addSubMesh(0, indices.count, .line)
-        mesh.uploadData(true)
-        
-        let mtl = UnlitMaterial(engine)
-        let renderer: MeshRenderer = entity.addComponent()
-        renderer.setMaterial(mtl)
-        renderer.mesh = mesh
-    }
-    
     func addCapsuleMesh(_ rootEntity: Entity, _ radius: Float, _ height: Float,
                         _ position: Vector3, _ rotation: Quaternion) -> Entity {
         let mtl = PBRMaterial(rootEntity.engine)
@@ -125,17 +109,14 @@ class PhysXMeshColliderApp: NSViewController {
         var quat = Quaternion(0, 0, 0.3, 0.7)
         _ = quat.normalize()
         _ = addPlane(rootEntity, Vector3(30, 0.0, 30), Vector3(), Quaternion())
-        for i in 0..<8 {
-            for j in 0..<8 {
-                let random = Int(floor(Float.random(in: 0...3))) % 3
+        for i in 0..<4 {
+            for j in 0..<4 {
+                let random = Int(floor(Float.random(in: 0...2))) % 2
                 switch (random) {
                 case 0:
                     _ = addBoxMesh(rootEntity, Vector3(1, 1, 1), Vector3(Float(-4 + i), floor(Float.random(in: 0...6)) + 1, Float(-4 + j)), quat)
                     break
-//                case 1:
-//                    _ = addSphere(rootEntity, 0.5, Vector3(floor(Float.random(in: 0...16)) - 4, 5, floor(Float.random(in: 0...16)) - 4), quat)
-//                    break
-                case 2:
+                case 1:
                     _ = addCapsuleMesh(rootEntity, 0.5, 2.0, Vector3(floor(Float.random(in: 0...16)) - 4, 5,
                                                                      floor(Float.random(in: 0...16)) - 4), quat)
                     break
@@ -144,6 +125,8 @@ class PhysXMeshColliderApp: NSViewController {
                 }
             }
         }
+        
+        addDuckMesh(rootEntity)
     }
 
     override func viewDidLoad() {
@@ -162,7 +145,8 @@ class PhysXMeshColliderApp: NSViewController {
         let cameraEntity = rootEntity.createChild()
         cameraEntity.transform.position = Vector3(15, 15, 15)
         cameraEntity.transform.lookAt(targetPosition: Vector3())
-        let _: Camera = cameraEntity.addComponent()
+        let camera: Camera = cameraEntity.addComponent()
+        camera.farClipPlane = 1000;
         let _: OrbitControl = cameraEntity.addComponent()
         let _: Raycast = cameraEntity.addComponent()
 
