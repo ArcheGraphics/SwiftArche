@@ -13,11 +13,17 @@
 using namespace physx;
 
 @implementation CPxMeshGeometry {
+    bool isConvex;
+    
+    PxMeshScale scale;
 }
 
 // MARK: - Initialization
 
 - (instancetype)init {
+    isConvex = true;
+    scale = PxMeshScale();
+
     self = [super initWithGeometry:NULL];
     return self;
 }
@@ -26,7 +32,9 @@ using namespace physx;
                   points:(NSArray*_Nonnull)points {
     auto meshGeometry = new PxConvexMeshGeometry();
     super.c_geometry = meshGeometry;
-    
+    isConvex = true;
+    meshGeometry->scale = scale;
+
     PxConvexMeshDesc desc;
     desc.points.count = static_cast<uint32_t>([points count]);
     std::vector<PxVec3> pts(desc.points.count);
@@ -46,7 +54,9 @@ using namespace physx;
                 isUint16: (bool) isUint16 {
     auto meshGeometry = new PxConvexMeshGeometry();
     super.c_geometry = meshGeometry;
-    
+    isConvex = true;
+    meshGeometry->scale = scale;
+
     PxConvexMeshDesc desc;
     desc.points.count = static_cast<uint32_t>([points count]);
     std::vector<PxVec3> pts(desc.points.count);
@@ -81,6 +91,8 @@ using namespace physx;
                     points:(NSArray* _Nonnull)points {
     auto meshGeometry = new PxTriangleMeshGeometry();
     super.c_geometry = meshGeometry;
+    isConvex = false;
+    meshGeometry->scale = scale;
     
     PxTriangleMeshDesc desc;
     desc.points.count = static_cast<uint32_t>([points count]);
@@ -99,7 +111,9 @@ using namespace physx;
                   isUint16: (bool) isUint16 {
     auto meshGeometry = new PxTriangleMeshGeometry();
     super.c_geometry = meshGeometry;
-    
+    isConvex = false;
+    meshGeometry->scale = scale;
+
     PxTriangleMeshDesc desc;
     desc.points.count = static_cast<uint32_t>([points count]);
     std::vector<PxVec3> pts(desc.points.count);
@@ -127,6 +141,17 @@ using namespace physx;
         desc.triangles.stride = sizeof(uint32_t) * 3;
         desc.triangles.data = idx.data();
         meshGeometry->triangleMesh = physics.c_cooking->createTriangleMesh(desc, [physics getPhysicsInsertionCallback]);
+    }
+}
+
+- (void)setScaleWith:(float)hx hy:(float)hy hz:(float)hz {
+    scale = PxMeshScale(PxVec3(hx, hy, hz));
+    if (super.c_geometry) {
+        if (isConvex) {
+            static_cast<PxConvexMeshGeometry*>(super.c_geometry)->scale = scale;
+        } else {
+            static_cast<PxTriangleMeshGeometry*>(super.c_geometry)->scale = scale;
+        }
     }
 }
 

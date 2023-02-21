@@ -28,4 +28,7 @@
                    indices:(NSArray*_Nonnull) indices
                   isUint16: (bool) isUint16;
 
+- (void)setScaleWith:(float)hx hy:(float)hy hz:(float)hz;
+
+
 @end

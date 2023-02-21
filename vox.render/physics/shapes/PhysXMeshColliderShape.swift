@@ -48,4 +48,8 @@ class PhysXMeshColliderShape: PhysXColliderShape {
         (_pxGeometry as! CPxMeshGeometry).createTriangleMesh(PhysXPhysics._pxPhysics, points: points,
                                                              indices: indices, isUint16: false)
     }
+    
+    override func setWorldScale(_ scale: Vector3) {
+        (_pxGeometry as! CPxMeshGeometry).setScaleWith(scale.x, hy: scale.y, hz: scale.z)
+    }
 }
