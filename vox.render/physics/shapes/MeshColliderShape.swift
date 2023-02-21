@@ -49,6 +49,18 @@ public class MeshColliderShape: ColliderShape {
             }
         }
     }
+    
+    public var colliderPoints: [Vector3] {
+        get {
+            (_nativeShape as! PhysXMeshColliderShape).position
+        }
+    }
+    
+    public var colliderWireframeIndices: [UInt32] {
+        get {
+            (_nativeShape as! PhysXMeshColliderShape).wireframeIndices
+        }
+    }
 
     public override init() {
         super.init()

@@ -43,6 +43,22 @@ class PhysXMeshColliderApp: NSViewController {
     var engine: Engine!
     var iblBaker: IBLBaker!
     
+    func createDebugWireframe(_ shape: MeshColliderShape, _ entity: Entity) {
+        let points = shape.colliderPoints
+        let indices = shape.colliderWireframeIndices
+        
+        let mesh = ModelMesh(engine)
+        mesh.setPositions(positions: points)
+        mesh.setIndices(indices: indices)
+        _ = mesh.addSubMesh(0, indices.count, .line)
+        mesh.uploadData(true)
+        
+        let mtl = UnlitMaterial(engine)
+        let renderer: MeshRenderer = entity.addComponent()
+        renderer.setMaterial(mtl)
+        renderer.mesh = mesh
+    }
+    
     func addCapsuleMesh(_ rootEntity: Entity, _ radius: Float, _ height: Float,
                         _ position: Vector3, _ rotation: Quaternion) -> Entity {
         let mtl = PBRMaterial(rootEntity.engine)
@@ -63,6 +79,8 @@ class PhysXMeshColliderApp: NSViewController {
                                                           radialSegments: 6, heightSegments: 1, noLongerAccessible: false)
         let capsuleCollider: StaticCollider = capsuleEntity.addComponent()
         capsuleCollider.addShape(physicsCapsule)
+        
+        createDebugWireframe(physicsCapsule, capsuleEntity)
 
         return capsuleEntity
     }

@@ -249,10 +249,10 @@ using namespace physx;
             for (int i = 0; i < count; i++) {
                 PxHullPolygon data;
                 mesh->getPolygonData(i, data);
-                for (int j = 0; j < data.mNbVerts; i++) {
+                for (int j = 0; j < data.mNbVerts; j++) {
                     indices[index++] = indexBuffer[data.mIndexBase + j];
                     if (j != data.mNbVerts - 1) {
-                        indices[index++] = indexBuffer[data.mIndexBase + j];
+                        indices[index++] = indexBuffer[data.mIndexBase + j + 1];
                     } else {
                         indices[index++] = indexBuffer[data.mIndexBase];
                     }
