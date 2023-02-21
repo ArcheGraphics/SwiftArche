@@ -50,20 +50,6 @@ class PhysXMeshColliderShape: PhysXColliderShape {
         _setLocalPose()
     }
 
-    func createConvexMesh(_ points: inout [Vector3], _ indices: inout [UInt16]) {
-        (_pxGeometry as! CPxMeshGeometry).createMesh(PhysXPhysics._pxPhysics, points: &points, pointsCount: UInt32(points.count),
-                                                     indices: &indices, indicesCount: UInt32(indices.count), isUint16: true, isConvex: true)
-        _initialize(_pxMaterial, _id)
-        _setLocalPose()
-    }
-
-    func createConvexMesh(_ points: inout [Vector3], _ indices: inout [UInt32]) {
-        (_pxGeometry as! CPxMeshGeometry).createMesh(PhysXPhysics._pxPhysics, points: &points, pointsCount: UInt32(points.count),
-                                                     indices: &indices, indicesCount: UInt32(indices.count), isUint16: false, isConvex: true)
-        _initialize(_pxMaterial, _id)
-        _setLocalPose()
-    }
-
     func createTriangleMesh(_ points: inout [Vector3]) {
         (_pxGeometry as! CPxMeshGeometry).createMesh(PhysXPhysics._pxPhysics, points: &points, pointsCount: UInt32(points.count),
                                                      indices: nil, indicesCount: 0, isUint16: false, isConvex: false)

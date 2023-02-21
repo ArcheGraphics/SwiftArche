@@ -73,23 +73,15 @@ public class MeshColliderShape: ColliderShape {
     private func _cook() {
         if let mesh = _mesh {
             var points = mesh.getPositions()!
-            let indices16: [UInt16]? = mesh.getIndices()
-            let indices32: [UInt32]? = mesh.getIndices()
-            if var indices = indices16 {
-                if isConvex {
-                    (_nativeShape as! PhysXMeshColliderShape).createConvexMesh(&points, &indices)
-                } else {
-                    (_nativeShape as! PhysXMeshColliderShape).createTriangleMesh(&points, &indices)
-                }
-            } else if var indices = indices32 {
-                if isConvex {
-                    (_nativeShape as! PhysXMeshColliderShape).createConvexMesh(&points, &indices)
-                } else {
-                    (_nativeShape as! PhysXMeshColliderShape).createTriangleMesh(&points, &indices)
-                }
+            if isConvex {
+                (_nativeShape as! PhysXMeshColliderShape).createConvexMesh(&points)
             } else {
-                if isConvex {
-                    (_nativeShape as! PhysXMeshColliderShape).createConvexMesh(&points)
+                let indices16: [UInt16]? = mesh.getIndices()
+                let indices32: [UInt32]? = mesh.getIndices()
+                if var indices = indices16 {
+                    (_nativeShape as! PhysXMeshColliderShape).createTriangleMesh(&points, &indices)
+                } else if var indices = indices32 {
+                    (_nativeShape as! PhysXMeshColliderShape).createTriangleMesh(&points, &indices)
                 } else {
                     (_nativeShape as! PhysXMeshColliderShape).createTriangleMesh(&points)
                 }

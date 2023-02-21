@@ -75,12 +75,7 @@ using namespace physx;
     physics.c_cooking->setParams(*params);
 
     if (isConvex) {
-        if (indices == nullptr) {
             [self createConvexMesh:physics points:points pointsCount:pointsCount];
-        } else {
-            [self createConvexMesh:physics points:points pointsCount:pointsCount
-                           indices:indices indicesCount:indicesCount isUint16:isUint16];
-        }
     } else {
         if (indices == nullptr) {
             [self createTriangleMesh:physics points:points pointsCount:pointsCount];
@@ -94,24 +89,6 @@ using namespace physx;
 - (void)createConvexMesh:(CPxPhysics *_Nonnull)physics
                   points:(void *_Nonnull)points
              pointsCount:(uint32_t)pointsCount {
-    auto meshGeometry = new PxConvexMeshGeometry();
-    super.c_geometry = meshGeometry;
-    meshGeometry->scale = scale;
-
-    PxConvexMeshDesc desc;
-    desc.points.count = pointsCount;
-    desc.points.stride = sizeof(simd_float3);
-    desc.points.data = points;
-    desc.flags = PxConvexFlag::eCOMPUTE_CONVEX;
-    meshGeometry->convexMesh = physics.c_cooking->createConvexMesh(desc, [physics getPhysicsInsertionCallback]);
-}
-
-- (void)createConvexMesh:(CPxPhysics *_Nonnull)physics
-                  points:(void *_Nonnull)points
-             pointsCount:(uint32_t)pointsCount
-                 indices:(void *_Nullable)indices
-            indicesCount:(uint32_t)indicesCount
-                isUint16:(bool)isUint16 {
     auto meshGeometry = new PxConvexMeshGeometry();
     super.c_geometry = meshGeometry;
     meshGeometry->scale = scale;
