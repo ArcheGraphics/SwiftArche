@@ -19,18 +19,19 @@
 
 - (bool)fetchResults:(bool)block;
 
-- (void)addActorWith:(CPxRigidActor *)actor;
+- (void)addActorWith:(CPxRigidActor *_Nonnull)actor;
 
-- (void)removeActorWith:(CPxRigidActor *)actor;
+- (void)removeActorWith:(CPxRigidActor *_Nonnull)actor;
 
 - (bool)raycastSingleWith:(simd_float3)origin
                   unitDir:(simd_float3)unitDir
                  distance:(float)distance
-              outPosition:(simd_float3 *)outPosition
-                outNormal:(simd_float3 *)outNormal
-              outDistance:(float *)outDistance
-                 outIndex:(uint32_t *)outIndex;
+              outPosition:(simd_float3 *_Nonnull)outPosition
+                outNormal:(simd_float3 *_Nonnull)outNormal
+              outDistance:(float *_Nonnull)outDistance
+                 outIndex:(uint32_t *_Nonnull)outIndex
+           filterCallback:(bool (^ _Nullable)(uint32_t obj1))filterCallback;
 
-- (CPxControllerManager *)createControllerManager;
+- (CPxControllerManager *_Nonnull)createControllerManager;
 
 @end

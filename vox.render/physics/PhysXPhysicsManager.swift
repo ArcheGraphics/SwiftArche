@@ -135,7 +135,8 @@ class PhysXPhysicsManager {
     }
 
     func raycast(_ ray: Ray, _ distance: Float,
-                 _ outHitResult: ((UInt32, Float, Vector3, Vector3) -> Void)?) -> Bool {
+                 _ onRaycast: @escaping (UInt32) -> Bool,
+                 _ outHitResult: ((UInt32, Float, Vector3, Vector3) -> Void)? = nil) -> Bool {
         var outIndex: UInt32 = 0
         var outDistance: Float = 0
 
@@ -148,7 +149,8 @@ class PhysXPhysicsManager {
                 outPosition: &outPosition,
                 outNormal: &outNormal,
                 outDistance: &outDistance,
-                outIndex: &outIndex
+                outIndex: &outIndex,
+                filterCallback: onRaycast
         )
 
         if (result && outHitResult != nil) {

@@ -16,11 +16,13 @@ public class ColliderShape {
     var _id: UInt32
     var _material: PhysicsMaterial
     private var _isTrigger: Bool = false
-    private var _isSceneQuery: Bool = true
-    private var _contactOffset: Float = 0
     private var _rotation: Vector3 = Vector3()
     private var _position: Vector3 = Vector3()
+    private var _contactOffset: Float = 0.02
 
+    /// Whether raycast can select it.
+    public var isSceneQuery: Bool = true
+    
     /// Collider owner of this shape.
     public var collider: Collider? {
         get {
@@ -76,17 +78,6 @@ public class ColliderShape {
         set {
             _position = newValue
             _nativeShape.setPosition(newValue)
-        }
-    }
-
-    /// Whether raycast can select it
-    public var isSceneQuery: Bool {
-        get {
-            _isSceneQuery
-        }
-        set {
-            _isSceneQuery = newValue
-            _nativeShape.setIsSceneQuery(newValue)
         }
     }
 

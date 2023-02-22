@@ -64,7 +64,7 @@ class PointerManager {
                         continue;
                     }
                     _ = camera.screenPointToRay(event.screenPoint(_engine.canvas), _ray)
-                    return _engine.physicsManager.raycast(_ray, Float.greatestFiniteMagnitude, camera.cullingMask)
+                    return _engine.physicsManager.raycast(_ray, distance: Float.greatestFiniteMagnitude, layerMask: camera.cullingMask)
                 }
             }
             return nil

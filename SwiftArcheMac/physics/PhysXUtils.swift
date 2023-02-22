@@ -106,6 +106,7 @@ func addPlane(_ rootEntity: Entity, _ size: Vector3,
 
     let physicsPlane = PlaneColliderShape()
     physicsPlane.position = Vector3(0, size.y, 0)
+    physicsPlane.isSceneQuery = false;
     let planeCollider: StaticCollider = planeEntity.addComponent()
     planeCollider.addShape(physicsPlane)
 

@@ -8,8 +8,32 @@
 #import "CPxScene+Internal.h"
 #import "CPxRigidActor+Internal.h"
 #import "characterkinematic/CPxControllerManager+Internal.h"
+#include <functional>
 
 using namespace physx;
+
+namespace {
+class CustomFilter: public PxQueryFilterCallback {
+public:
+    std::function<bool(uint32_t obj1)> filterCallback;
+    
+    CustomFilter(std::function<bool(uint32_t obj1)> filterCallback) : filterCallback(filterCallback) {}
+
+    PxQueryHitType::Enum preFilter(const PxFilterData& filterData, const PxShape* shape,
+                                   const PxRigidActor* actor, PxHitFlags& queryFlags) override {
+        auto index = shape->getQueryFilterData().word0;
+        if (filterCallback(index)) {
+          return PxQueryHitType::Enum::eBLOCK;
+        } else {
+          return PxQueryHitType::Enum::eNONE;
+        }
+    }
+    
+    PxQueryHitType::Enum postFilter(const PxFilterData& filterData, const PxQueryHit& hit) override {
+        return PxQueryHitType::Enum::eBLOCK;
+    }
+};
+}
 
 @implementation CPxScene {
     PxScene *_scene;
@@ -46,19 +70,21 @@ using namespace physx;
 - (bool)raycastSingleWith:(simd_float3)origin
                   unitDir:(simd_float3)unitDir
                  distance:(float)distance
-              outPosition:(simd_float3 *)outPosition
-                outNormal:(simd_float3 *)outNormal
-              outDistance:(float *)outDistance
-                 outIndex:(uint32_t *)outIndex {
+              outPosition:(simd_float3 *_Nonnull)outPosition
+                outNormal:(simd_float3 *_Nonnull)outNormal
+              outDistance:(float *_Nonnull)outDistance
+                 outIndex:(uint32_t *_Nonnull)outIndex
+           filterCallback:(bool (^ _Nullable)(uint32_t obj))filterCallback {
     PxRaycastHit hit = PxRaycastHit();
     PxSceneQueryFilterData filterData = PxSceneQueryFilterData();
-    filterData.flags = PxQueryFlags(PxQueryFlag::eSTATIC | PxQueryFlag::eDYNAMIC);
+    filterData.flags = PxQueryFlags(PxQueryFlag::eSTATIC | PxQueryFlag::eDYNAMIC | PxQueryFlag::ePREFILTER);
+    CustomFilter filterCall(filterCallback);
 
     bool result = PxSceneQueryExt::raycastSingle(*_scene,
             PxVec3(origin.x, origin.y, origin.z),
             PxVec3(unitDir.x, unitDir.y, unitDir.z),
             distance, PxHitFlags(PxHitFlag::eDEFAULT),
-            hit, filterData);
+            hit, filterData, &filterCall);
 
     if (result) {
         *outPosition = simd_make_float3(hit.position.x, hit.position.y, hit.position.z);
