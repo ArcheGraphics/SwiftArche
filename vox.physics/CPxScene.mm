@@ -9,6 +9,7 @@
 #import "CPxRigidActor+Internal.h"
 #import "characterkinematic/CPxControllerManager+Internal.h"
 #include <functional>
+#include <vector>
 
 using namespace physx;
 
@@ -33,7 +34,7 @@ public:
         return PxQueryHitType::Enum::eBLOCK;
     }
 };
-}
+} // namespace
 
 @implementation CPxScene {
     PxScene *_scene;
@@ -67,33 +68,76 @@ public:
     _scene->removeActor(*actor.c_actor);
 }
 
+//MARK: - Raycast
 - (bool)raycastSingleWith:(simd_float3)origin
                   unitDir:(simd_float3)unitDir
                  distance:(float)distance
-              outPosition:(simd_float3 *_Nonnull)outPosition
-                outNormal:(simd_float3 *_Nonnull)outNormal
-              outDistance:(float *_Nonnull)outDistance
-                 outIndex:(uint32_t *_Nonnull)outIndex
-           filterCallback:(bool (^ _Nullable)(uint32_t obj))filterCallback {
-    PxRaycastHit hit = PxRaycastHit();
+                      hit:(LocationHit *_Nonnull)hit
+           filterCallback:(bool (^ _Nullable)(uint32_t obj1))filterCallback {
+    PxRaycastHit pxHit = PxRaycastHit();
     PxSceneQueryFilterData filterData = PxSceneQueryFilterData();
     filterData.flags = PxQueryFlags(PxQueryFlag::eSTATIC | PxQueryFlag::eDYNAMIC | PxQueryFlag::ePREFILTER);
     CustomFilter filterCall(filterCallback);
 
     bool result = PxSceneQueryExt::raycastSingle(*_scene,
-            PxVec3(origin.x, origin.y, origin.z),
-            PxVec3(unitDir.x, unitDir.y, unitDir.z),
-            distance, PxHitFlags(PxHitFlag::eDEFAULT),
-            hit, filterData, &filterCall);
+                                                 PxVec3(origin.x, origin.y, origin.z),
+                                                 PxVec3(unitDir.x, unitDir.y, unitDir.z),
+                                                 distance, PxHitFlags(PxHitFlag::eDEFAULT),
+                                                 pxHit, filterData, &filterCall);
 
     if (result) {
-        *outPosition = simd_make_float3(hit.position.x, hit.position.y, hit.position.z);
-        *outNormal = simd_make_float3(hit.normal.x, hit.normal.y, hit.normal.z);
-        *outDistance = hit.distance;
-        *outIndex = hit.shape->getQueryFilterData().word0;
+        hit->position = simd_make_float3(pxHit.position.x, pxHit.position.y, pxHit.position.z);
+        hit->normal = simd_make_float3(pxHit.normal.x, pxHit.normal.y, pxHit.normal.z);
+        hit->distance = pxHit.distance;
+        hit->index = pxHit.shape->getQueryFilterData().word0;
     }
 
     return result;
+}
+
+- (int)raycastMultipleWith:(simd_float3)origin
+                   unitDir:(simd_float3)unitDir
+                  distance:(float)distance
+                       hit:(LocationHit *_Nonnull)hit
+                  hitCount:(uint32_t)hitCount
+            filterCallback:(bool (^ _Nullable)(uint32_t obj1))filterCallback {
+    PxSceneQueryFilterData filterData = PxSceneQueryFilterData();
+    filterData.flags = PxQueryFlags(PxQueryFlag::eSTATIC | PxQueryFlag::eDYNAMIC | PxQueryFlag::ePREFILTER);
+    CustomFilter filterCall(filterCallback);
+
+    std::vector<PxRaycastHit> pxHits(hitCount);
+    bool blockingHit;
+    int result = PxSceneQueryExt::raycastMultiple(*_scene,
+                                                  PxVec3(origin.x, origin.y, origin.z),
+                                                  PxVec3(unitDir.x, unitDir.y, unitDir.z),
+                                                  distance, PxHitFlags(PxHitFlag::eDEFAULT),
+                                                  pxHits.data(), hitCount, blockingHit, filterData, &filterCall);
+    if (blockingHit) {
+        if (result > -1) {
+            for (int i = 0; i < result; i++) {
+                auto& pxHit = pxHits[i];
+                LocationHit locHit;
+                locHit.index = pxHit.shape->getQueryFilterData().word0;
+                locHit.distance = pxHit.distance;
+                locHit.position = simd_make_float3(pxHit.position.x, pxHit.position.y, pxHit.position.z);
+                locHit.normal = simd_make_float3(pxHit.normal.x, pxHit.normal.y, pxHit.normal.z);
+                hit[i] = locHit;
+            }
+        } else {
+            for (int i = 0; i < hitCount; i++) {
+                auto& pxHit = pxHits[i];
+                LocationHit locHit;
+                locHit.index = pxHit.shape->getQueryFilterData().word0;
+                locHit.distance = pxHit.distance;
+                locHit.position = simd_make_float3(pxHit.position.x, pxHit.position.y, pxHit.position.z);
+                locHit.normal = simd_make_float3(pxHit.normal.x, pxHit.normal.y, pxHit.normal.z);
+                hit[i] = locHit;
+            }
+        }
+        return result;
+    } else {
+        return 0;
+    }
 }
 
 - (CPxControllerManager *)createControllerManager {

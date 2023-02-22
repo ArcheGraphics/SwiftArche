@@ -11,6 +11,13 @@
 #import "CPxRigidActor.h"
 #import "characterkinematic/CPxControllerManager.h"
 
+typedef struct {
+    simd_float3 position;
+    uint32_t index;
+    simd_float3 normal;
+    float distance;
+} LocationHit;
+
 @interface CPxScene : NSObject
 
 - (void)setGravity:(simd_float3)vec;
@@ -23,14 +30,19 @@
 
 - (void)removeActorWith:(CPxRigidActor *_Nonnull)actor;
 
+// MARK: - Raycast
 - (bool)raycastSingleWith:(simd_float3)origin
                   unitDir:(simd_float3)unitDir
                  distance:(float)distance
-              outPosition:(simd_float3 *_Nonnull)outPosition
-                outNormal:(simd_float3 *_Nonnull)outNormal
-              outDistance:(float *_Nonnull)outDistance
-                 outIndex:(uint32_t *_Nonnull)outIndex
+                      hit:(LocationHit *_Nonnull)hit
            filterCallback:(bool (^ _Nullable)(uint32_t obj1))filterCallback;
+
+- (int)raycastMultipleWith:(simd_float3)origin
+                   unitDir:(simd_float3)unitDir
+                  distance:(float)distance
+                       hit:(LocationHit *_Nonnull)hit
+                  hitCount:(uint32_t)hitCount
+                filterCallback:(bool (^ _Nullable)(uint32_t obj1))filterCallback;
 
 - (CPxControllerManager *_Nonnull)createControllerManager;
 

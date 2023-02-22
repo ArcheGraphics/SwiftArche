@@ -137,24 +137,17 @@ class PhysXPhysicsManager {
     func raycast(_ ray: Ray, _ distance: Float,
                  _ onRaycast: @escaping (UInt32) -> Bool,
                  _ outHitResult: ((UInt32, Float, Vector3, Vector3) -> Void)? = nil) -> Bool {
-        var outIndex: UInt32 = 0
-        var outDistance: Float = 0
-
-        var outPosition = SIMD3<Float>()
-        var outNormal = SIMD3<Float>()
+        var locHit = LocationHit()
         let result = _pxScene.raycastSingle(
                 with: ray.origin.internalValue,
                 unitDir: ray.direction.internalValue,
                 distance: distance,
-                outPosition: &outPosition,
-                outNormal: &outNormal,
-                outDistance: &outDistance,
-                outIndex: &outIndex,
+                hit: &locHit,
                 filterCallback: onRaycast
         )
 
         if (result && outHitResult != nil) {
-            outHitResult!(outIndex, outDistance, Vector3(outPosition), Vector3(outNormal))
+            outHitResult!(locHit.index, locHit.distance, Vector3(locHit.position), Vector3(locHit.normal))
         }
 
         return result
