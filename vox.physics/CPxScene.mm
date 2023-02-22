@@ -75,6 +75,21 @@ namespace {
 }
 
 //MARK: - Raycast
+- (bool)raycastAnyWith:(simd_float3)origin
+                  unitDir:(simd_float3)unitDir
+                 distance:(float)distance
+        filterCallback:(bool (^ _Nullable)(uint32_t obj1))filterCallback {
+    PxSceneQueryHit pxHit = PxSceneQueryHit();
+    PxSceneQueryFilterData filterData = PxSceneQueryFilterData();
+    filterData.flags = PxQueryFlags(PxQueryFlag::eSTATIC | PxQueryFlag::eDYNAMIC | PxQueryFlag::ePREFILTER);
+    CustomFilter filterCall(filterCallback);
+
+    return PxSceneQueryExt::raycastAny(*_scene,
+                                       PxVec3(origin.x, origin.y, origin.z),
+                                       PxVec3(unitDir.x, unitDir.y, unitDir.z),
+                                       distance, pxHit, filterData, &filterCall);
+}
+
 - (bool)raycastSingleWith:(simd_float3)origin
                   unitDir:(simd_float3)unitDir
                  distance:(float)distance
@@ -133,6 +148,23 @@ namespace {
 }
 
 //MARK: - Sweep
+- (bool)sweepAnyWith:(CPxShape *_Nonnull)shape
+                 origin:(simd_float3)origin
+                unitDir:(simd_float3)unitDir
+               distance:(float)distance
+         filterCallback:(bool (^ _Nullable)(uint32_t obj1))filterCallback {
+    PxSweepHit pxHit = PxSweepHit();
+    PxSceneQueryFilterData filterData = PxSceneQueryFilterData();
+    filterData.flags = PxQueryFlags(PxQueryFlag::eSTATIC | PxQueryFlag::eDYNAMIC | PxQueryFlag::ePREFILTER);
+    CustomFilter filterCall(filterCallback);
+
+    auto pose = [shape getLocalPose];
+    return PxSceneQueryExt::sweepAny(*_scene, [shape getGeometry].any(),
+            PxTransform(PxVec3(origin.x, origin.y, origin.z), pose.q),
+            PxVec3(unitDir.x, unitDir.y, unitDir.z),
+            distance, PxHitFlags(PxHitFlag::eDEFAULT), pxHit, filterData, &filterCall);
+}
+
 - (bool)sweepSingleWith:(CPxShape *_Nonnull)shape
                  origin:(simd_float3)origin
                 unitDir:(simd_float3)unitDir
@@ -194,6 +226,20 @@ namespace {
 }
 
 //MARK: - Overlap
+- (bool)overlapAnyWith:(CPxShape *_Nonnull)shape
+                 origin:(simd_float3)origin
+         filterCallback:(bool (^ _Nullable)(uint32_t obj1))filterCallback {
+    PxOverlapHit pxHit = PxOverlapHit();
+    PxSceneQueryFilterData filterData = PxSceneQueryFilterData();
+    filterData.flags = PxQueryFlags(PxQueryFlag::eSTATIC | PxQueryFlag::eDYNAMIC | PxQueryFlag::ePREFILTER);
+    CustomFilter filterCall(filterCallback);
+
+    auto pose = [shape getLocalPose];
+    return PxSceneQueryExt::overlapAny(*_scene, [shape getGeometry].any(),
+                                       PxTransform(PxVec3(origin.x, origin.y, origin.z), pose.q),
+                                       pxHit, filterData, &filterCall);
+}
+
 - (int)overlapMultipleWith:(CPxShape *_Nonnull)shape
                     origin:(simd_float3)origin
                        hit:(LocationHit *_Nonnull)hit

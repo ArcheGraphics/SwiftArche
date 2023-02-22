@@ -183,6 +183,13 @@ class PhysXPhysicsManager {
 }
 
 extension PhysXPhysicsManager {
+    func hasRaycast(_ ray: Ray, _ distance: Float,
+                    _ onRaycast: @escaping (UInt32) -> Bool) -> Bool {
+        _pxScene.raycastAny(with: ray.origin.internalValue,
+                            unitDir: ray.direction.internalValue,
+                            distance: distance, filterCallback: onRaycast)
+    }
+    
     func raycast(_ ray: Ray, _ distance: Float,
                  _ onRaycast: @escaping (UInt32) -> Bool,
                  _ outHitResult: ((LocationHit) -> Void)? = nil) -> Bool {
@@ -223,6 +230,14 @@ extension PhysXPhysicsManager {
         }
 
         return _queryPool[0..<Int(result)]
+    }
+    
+    func hasSweep(_ shape: PhysXColliderShape, _ ray: Ray, _ distance: Float,
+                  _ onRaycast: @escaping (UInt32) -> Bool) -> Bool {
+        _pxScene.sweepAny(with: shape._pxShape,
+                          origin: ray.origin.internalValue,
+                          unitDir: ray.direction.internalValue,
+                          distance: distance, filterCallback: onRaycast)
     }
 
     func sweep(_ shape: PhysXColliderShape, _ ray: Ray, _ distance: Float,
@@ -265,6 +280,11 @@ extension PhysXPhysicsManager {
         }
 
         return _queryPool[0..<Int(result)]
+    }
+    
+    func hasOverlap(_ shape: PhysXColliderShape, _ origin: Vector3,
+                    _ onRaycast: @escaping (UInt32) -> Bool) -> Bool {
+        _pxScene.overlapAny(with: shape._pxShape, origin: origin.internalValue, filterCallback: onRaycast)
     }
 
     func overlapAll(_ shape: PhysXColliderShape, _ origin: Vector3,

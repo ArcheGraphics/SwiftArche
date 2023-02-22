@@ -34,6 +34,11 @@ typedef struct {
 - (CPxControllerManager *_Nonnull)createControllerManager;
 
 // MARK: - Raycast
+- (bool)raycastAnyWith:(simd_float3)origin
+                  unitDir:(simd_float3)unitDir
+                 distance:(float)distance
+           filterCallback:(bool (^ _Nullable)(uint32_t obj1))filterCallback;
+
 - (bool)raycastSingleWith:(simd_float3)origin
                   unitDir:(simd_float3)unitDir
                  distance:(float)distance
@@ -48,6 +53,12 @@ typedef struct {
             filterCallback:(bool (^ _Nullable)(uint32_t obj1))filterCallback;
 
 // MARK: - Sweep
+- (bool)sweepAnyWith:(CPxShape *_Nonnull)shape
+                 origin:(simd_float3)origin
+                unitDir:(simd_float3)unitDir
+               distance:(float)distance
+      filterCallback:(bool (^ _Nullable)(uint32_t obj1))filterCallback;
+
 - (bool)sweepSingleWith:(CPxShape *_Nonnull)shape
                  origin:(simd_float3)origin
                 unitDir:(simd_float3)unitDir
@@ -64,6 +75,10 @@ typedef struct {
           filterCallback:(bool (^ _Nullable)(uint32_t obj1))filterCallback;
 
 //MARK: - Overlap
+- (bool)overlapAnyWith:(CPxShape *_Nonnull)shape
+                 origin:(simd_float3)origin
+        filterCallback:(bool (^ _Nullable)(uint32_t obj1))filterCallback;
+    
 - (int)overlapMultipleWith:(CPxShape *_Nonnull)shape
                     origin:(simd_float3)origin
                        hit:(LocationHit *_Nonnull)hit

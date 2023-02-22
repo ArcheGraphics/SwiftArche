@@ -185,7 +185,7 @@ extension PhysicsManager {
             let shape = self._physicalObjectsMap[obj]!
             return (shape.collider!.entity.layer.rawValue & layerMask.rawValue != 0) && shape.isSceneQuery
         }
-        return _nativePhysicsManager.raycast(ray, distance, onRaycast)
+        return _nativePhysicsManager.hasRaycast(ray, distance, onRaycast)
     }
 
     /// Casts a ray through the Scene and returns the first hit.
@@ -241,6 +241,15 @@ extension PhysicsManager {
 //MARK: - Sweep
 
 extension PhysicsManager {
+    public func sweep(_ shape: ColliderShape, ray: Ray, distance: Float = Float.greatestFiniteMagnitude,
+                      layerMask: Layer = Layer.Everything) -> Bool {
+        let onSweep = { (obj: UInt32) -> Bool in
+            let shape = self._physicalObjectsMap[obj]!
+            return (shape.collider!.entity.layer.rawValue & layerMask.rawValue != 0) && shape.isSceneQuery
+        }
+        return _nativePhysicsManager.hasSweep(shape._nativeShape, ray, distance, onSweep)
+    }
+    
     /// Casts a ray through the Scene and returns the first hit.
     /// - Parameters:
     ///   - ray: The ray
@@ -294,6 +303,15 @@ extension PhysicsManager {
 //MARK: - Overlap
 
 extension PhysicsManager {
+    public func overlap(_ shape: ColliderShape, rorigin: Vector3,
+                        layerMask: Layer = Layer.Everything) -> Bool {
+        let onOverlap = { (obj: UInt32) -> Bool in
+            let shape = self._physicalObjectsMap[obj]!
+            return (shape.collider!.entity.layer.rawValue & layerMask.rawValue != 0) && shape.isSceneQuery
+        }
+        return _nativePhysicsManager.hasOverlap(shape._nativeShape, rorigin, onOverlap)
+    }
+    
     public func overlapAll(_ shape: ColliderShape, origin: Vector3,
                            layerMask: Layer = Layer.Everything) -> [HitResult] {
         let onOverlap = { (obj: UInt32) -> Bool in
