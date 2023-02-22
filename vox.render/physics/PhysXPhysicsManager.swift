@@ -29,6 +29,7 @@ class PhysXPhysicsManager {
     private var _currentEvents: DisorderedArray<TriggerEvent> = DisorderedArray()
     private var _eventMap: [UInt32: [UInt32: TriggerEvent]] = [:]
     private var _eventPool: [TriggerEvent] = []
+    private var _queryPool: [LocationHit] = []
 
     init(_ onContactEnter: ((UInt32, UInt32) -> Void)?,
          _ onContactExit: ((UInt32, UInt32) -> Void)?,
@@ -42,6 +43,8 @@ class PhysXPhysicsManager {
         _onTriggerEnter = onTriggerEnter
         _onTriggerExit = onTriggerExit
         _onTriggerStay = onTriggerStay
+
+        _queryPool = [LocationHit](repeating: LocationHit(), count: 8)
 
         _pxScene = PhysXPhysics._pxPhysics.createScene(
                 {
@@ -134,25 +137,6 @@ class PhysXPhysicsManager {
         _fireEvent()
     }
 
-    func raycast(_ ray: Ray, _ distance: Float,
-                 _ onRaycast: @escaping (UInt32) -> Bool,
-                 _ outHitResult: ((UInt32, Float, Vector3, Vector3) -> Void)? = nil) -> Bool {
-        var locHit = LocationHit()
-        let result = _pxScene.raycastSingle(
-                with: ray.origin.internalValue,
-                unitDir: ray.direction.internalValue,
-                distance: distance,
-                hit: &locHit,
-                filterCallback: onRaycast
-        )
-
-        if (result && outHitResult != nil) {
-            outHitResult!(locHit.index, locHit.distance, Vector3(locHit.position), Vector3(locHit.normal))
-        }
-
-        return result
-    }
-
     func _getControllerManager() -> CPxControllerManager {
         if (_pxControllerManager == nil) {
             _pxControllerManager = _pxScene.createControllerManager()
@@ -195,6 +179,111 @@ class PhysXPhysicsManager {
                 _eventPool.append(event)
             }
         }
+    }
+}
+
+extension PhysXPhysicsManager {
+    func raycast(_ ray: Ray, _ distance: Float,
+                 _ onRaycast: @escaping (UInt32) -> Bool,
+                 _ outHitResult: ((LocationHit) -> Void)? = nil) -> Bool {
+        var locHit = LocationHit()
+        let result = _pxScene.raycastSingle(
+                with: ray.origin.internalValue,
+                unitDir: ray.direction.internalValue,
+                distance: distance,
+                hit: &locHit,
+                filterCallback: onRaycast
+        )
+
+        if (result && outHitResult != nil) {
+            outHitResult!(locHit)
+        }
+
+        return result
+    }
+
+    func raycastAll(_ ray: Ray, _ distance: Float,
+                    _ onRaycast: @escaping (UInt32) -> Bool) -> ArraySlice<LocationHit> {
+        var result = _pxScene.raycastMultiple(with: ray.origin.internalValue,
+                unitDir: ray.direction.internalValue,
+                distance: distance, hit: &_queryPool,
+                hitCount: UInt32(_queryPool.count),
+                filterCallback: onRaycast)
+        if (result == -1) {
+            while (result == -1) {
+                _queryPool = [LocationHit](repeating: LocationHit(), count: 2 * _queryPool.count)
+                result = _pxScene.raycastMultiple(with: ray.origin.internalValue,
+                        unitDir: ray.direction.internalValue,
+                        distance: distance, hit: &_queryPool,
+                        hitCount: UInt32(_queryPool.count),
+                        filterCallback: onRaycast)
+            }
+        } else if (result == 0) {
+            return []
+        }
+
+        return _queryPool[0..<Int(result)]
+    }
+
+    func sweep(_ shape: PhysXColliderShape, _ ray: Ray, _ distance: Float,
+               _ onRaycast: @escaping (UInt32) -> Bool,
+               _ outHitResult: ((LocationHit) -> Void)? = nil) -> Bool {
+        var locHit = LocationHit()
+        let result = _pxScene.sweepSingle(with: shape._pxShape,
+                origin: ray.origin.internalValue,
+                unitDir: ray.direction.internalValue,
+                distance: distance, hit: &locHit,
+                filterCallback: onRaycast)
+
+        if (result && outHitResult != nil) {
+            outHitResult!(locHit)
+        }
+
+        return result
+    }
+
+    func sweepAll(_ shape: PhysXColliderShape, _ ray: Ray, _ distance: Float,
+                  _ onRaycast: @escaping (UInt32) -> Bool) -> ArraySlice<LocationHit> {
+        var result = _pxScene.sweepMultiple(with: shape._pxShape,
+                origin: ray.origin.internalValue,
+                unitDir: ray.direction.internalValue,
+                distance: distance, hit: &_queryPool,
+                hitCount: UInt32(_queryPool.count),
+                filterCallback: onRaycast)
+        if (result == -1) {
+            while (result == -1) {
+                _queryPool = [LocationHit](repeating: LocationHit(), count: 2 * _queryPool.count)
+                result = _pxScene.sweepMultiple(with: shape._pxShape,
+                        origin: ray.origin.internalValue,
+                        unitDir: ray.direction.internalValue,
+                        distance: distance, hit: &_queryPool,
+                        hitCount: UInt32(_queryPool.count),
+                        filterCallback: onRaycast)
+            }
+        } else if (result == 0) {
+            return []
+        }
+
+        return _queryPool[0..<Int(result)]
+    }
+
+    func overlapAll(_ shape: PhysXColliderShape, _ origin: Vector3,
+                    _ onRaycast: @escaping (UInt32) -> Bool) -> ArraySlice<LocationHit> {
+        var result = _pxScene.overlapMultiple(with: shape._pxShape, origin: origin.internalValue,
+                hit: &_queryPool, hitCount: UInt32(_queryPool.count),
+                filterCallback: onRaycast)
+        if (result == -1) {
+            while (result == -1) {
+                _queryPool = [LocationHit](repeating: LocationHit(), count: 2 * _queryPool.count)
+                result = _pxScene.overlapMultiple(with: shape._pxShape, origin: origin.internalValue,
+                        hit: &_queryPool, hitCount: UInt32(_queryPool.count),
+                        filterCallback: onRaycast)
+            }
+        } else if (result == 0) {
+            return []
+        }
+
+        return _queryPool[0..<Int(result)]
     }
 }
 

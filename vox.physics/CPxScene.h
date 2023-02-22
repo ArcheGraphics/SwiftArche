@@ -10,6 +10,7 @@
 #import <simd/simd.h>
 #import "CPxRigidActor.h"
 #import "characterkinematic/CPxControllerManager.h"
+#import "CPxShape.h"
 
 typedef struct {
     simd_float3 position;
@@ -30,6 +31,8 @@ typedef struct {
 
 - (void)removeActorWith:(CPxRigidActor *_Nonnull)actor;
 
+- (CPxControllerManager *_Nonnull)createControllerManager;
+
 // MARK: - Raycast
 - (bool)raycastSingleWith:(simd_float3)origin
                   unitDir:(simd_float3)unitDir
@@ -42,8 +45,29 @@ typedef struct {
                   distance:(float)distance
                        hit:(LocationHit *_Nonnull)hit
                   hitCount:(uint32_t)hitCount
-                filterCallback:(bool (^ _Nullable)(uint32_t obj1))filterCallback;
+            filterCallback:(bool (^ _Nullable)(uint32_t obj1))filterCallback;
 
-- (CPxControllerManager *_Nonnull)createControllerManager;
+// MARK: - Sweep
+- (bool)sweepSingleWith:(CPxShape *_Nonnull)shape
+                 origin:(simd_float3)origin
+                unitDir:(simd_float3)unitDir
+               distance:(float)distance
+                    hit:(LocationHit *_Nonnull)hit
+         filterCallback:(bool (^ _Nullable)(uint32_t obj1))filterCallback;
+
+- (int)sweepMultipleWith:(CPxShape *_Nonnull)shape
+                  origin:(simd_float3)origin
+                 unitDir:(simd_float3)unitDir
+                distance:(float)distance
+                     hit:(LocationHit *_Nonnull)hit
+                hitCount:(uint32_t)hitCount
+          filterCallback:(bool (^ _Nullable)(uint32_t obj1))filterCallback;
+
+//MARK: - Overlap
+- (int)overlapMultipleWith:(CPxShape *_Nonnull)shape
+                    origin:(simd_float3)origin
+                       hit:(LocationHit *_Nonnull)hit
+                  hitCount:(uint32_t)hitCount
+            filterCallback:(bool (^ _Nullable)(uint32_t obj1))filterCallback;
 
 @end

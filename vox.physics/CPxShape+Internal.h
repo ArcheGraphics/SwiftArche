@@ -17,4 +17,8 @@ using namespace physx;
 
 - (instancetype)initWithShape:(PxShape *)shape;
 
+- (PxGeometryHolder)getGeometry;
+
+- (PxTransform)getLocalPose;
+
 @end

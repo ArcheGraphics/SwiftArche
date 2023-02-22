@@ -73,4 +73,12 @@
     return -1;
 }
 
+- (PxGeometryHolder)getGeometry {
+    return _c_shape->getGeometry();
+}
+
+- (PxTransform)getLocalPose {
+    return _c_shape->getLocalPose();
+}
+
 @end
