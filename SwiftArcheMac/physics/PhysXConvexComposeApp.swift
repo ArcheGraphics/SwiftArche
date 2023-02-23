@@ -45,25 +45,59 @@ class PhysXConvexComposeApp: NSViewController {
     var convexCompose: ConvexCompose!
     
     func initialize(_ rootEntity: Entity) {
-        var quat = Quaternion(0, 0, 0.3, 0.7)
-        _ = quat.normalize()
-        _ = addPlane(rootEntity, Vector3(30, 0.0, 30), Vector3(), Quaternion())
+//        _ = addPlane(rootEntity, Vector3(30, 0.0, 30), Vector3(), Quaternion())
         
-        let assetURL = Bundle.main.url(forResource: "Duck", withExtension: "glb", subdirectory: "glTF-Sample-Models/2.0/Duck/glTF-Binary")!
-        GLTFLoader.parse(rootEntity.engine, assetURL, { resource in
+        let assetURL = Bundle.main.url(forResource: "bunny", withExtension: "glb", subdirectory: "assets")!
+        GLTFLoader.parse(rootEntity.engine, assetURL, { [self] resource in
             let entity = resource.defaultSceneRoot!
             rootEntity.addChild(entity)
             
-            self.convexCompose.compute(for: resource.meshes![0][0])
-            var convexs = self.convexCompose.convexHulls
+            if let materials = resource.materials {
+                for mtl in materials {
+                    (mtl as! PBRMaterial).baseColor = Color(1,1,1,0.5)
+                    (mtl as! PBRMaterial).isTransparent = true
+                }
+            }
             
-            let colliderShape = MeshColliderShape()
-            colliderShape.isConvex = true
-            colliderShape.cookConvexHull(&convexs[0])
-            let collider: StaticCollider = entity.addComponent()
-            collider.addShape(colliderShape)
+            convexCompose.maxConvexHulls = 10
+            convexCompose.resolution = 100_000
+            convexCompose.compute(for: resource.meshes![0][0])
+            var convexs = convexCompose.convexHulls
             
-            createDebugWireframe(colliderShape, entity)
+            // debugger
+            for var convex in convexs {
+                var indices: [UInt32] = []
+                indices.reserveCapacity(convex.triangles.count * 3)
+                var position: [Vector3] = []
+                position = convex.points.map({ v in
+                    Vector3(v)
+                })
+                convex.triangles.forEach { v in
+                    indices.append(v.x)
+                    indices.append(v.y)
+                    indices.append(v.z)
+                }
+                let mesh = ModelMesh(engine)
+                mesh.setPositions(positions: position)
+                mesh.setIndices(indices: indices)
+                _ = mesh.addSubMesh(0, indices.count, .triangle)
+                mesh.uploadData(true)
+                
+                let mtl = UnlitMaterial(engine)
+                mtl.baseColor = Color(Float.random(in: 0..<1), Float.random(in: 0..<1), Float.random(in: 0..<1), 1)
+                let child = entity.createChild()
+                let renderer: MeshRenderer = child.addComponent()
+                renderer.mesh = mesh
+                renderer.setMaterial(mtl)
+                
+                let colliderShape = MeshColliderShape()
+                colliderShape.isConvex = true
+                colliderShape.cookConvexHull(&convex)
+                let collider: StaticCollider = entity.addComponent()
+                collider.addShape(colliderShape)
+                
+                createDebugWireframe(colliderShape, entity)
+            }
         }, true)
     }
 
@@ -82,12 +116,11 @@ class PhysXConvexComposeApp: NSViewController {
         let rootEntity = scene.createRootEntity()
 
         let cameraEntity = rootEntity.createChild()
-        cameraEntity.transform.position = Vector3(15, 15, 15)
+        cameraEntity.transform.position = Vector3(2, 2, 2)
         cameraEntity.transform.lookAt(targetPosition: Vector3())
-        let camera: Camera = cameraEntity.addComponent()
-        camera.farClipPlane = 1000;
+        let _: Camera = cameraEntity.addComponent()
         let _: OrbitControl = cameraEntity.addComponent()
-        let _: Raycast = cameraEntity.addComponent()
+//        let _: Raycast = cameraEntity.addComponent()
 
         let light = rootEntity.createChild("light")
         light.transform.position = Vector3(-0.3, 1, 0.4)

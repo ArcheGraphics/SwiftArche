@@ -26,7 +26,8 @@
                   points:(simd_float3 *_Nonnull)points
              pointsCount:(uint32_t)pointsCount
                triangles:(simd_uint3 *_Nullable)triangles
-           triangleCount:(uint32_t)triangleCount;
+           triangleCount:(uint32_t)triangleCount
+                  center: (simd_float3) center;
 
 - (void)setScaleWith:(float)hx hy:(float)hy hz:(float)hz;
 

@@ -41,9 +41,10 @@ enum VHACD_FillMode {
 
 -(uint32_t) triangleCountAtIndex:(uint32_t)index;
 
--(void) getPointAndTriangleAtIndex:(uint32_t)index
-                             points:(simd_float3 *_Nonnull)points
-                           indices:(simd_uint3 *_Nullable)indices;
+-(void) getHullInfoAtIndex:(uint32_t)index
+                    points:(simd_float3 *_Nonnull)points
+                   indices:(simd_uint3 *_Nullable)indices
+                    center:(simd_float3 *_Nonnull)center;
 
 //MARK: - Paramter
 /// The maximum number of convex hulls to produce

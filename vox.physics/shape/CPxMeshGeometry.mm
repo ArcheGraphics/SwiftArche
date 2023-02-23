@@ -25,8 +25,7 @@ using namespace physx;
 }
 
 namespace {
-    // returns D
-    float computePlane(const simd_float3& A, const simd_float3& B, const simd_float3& C, float* n) {
+    void computePlane(const simd_float3& center, const simd_float3& A, const simd_float3& B, const simd_float3& C, float* n) {
         float vx = (B[0] - C[0]);
         float vy = (B[1] - C[1]);
         float vz = (B[2] - C[2]);
@@ -51,14 +50,17 @@ namespace {
         float y = vw_y * mag;
         float z = vw_z * mag;
 
-
-        float D = 0.0f - ((x * A[0]) + (y * A[1]) + (z * A[2]));
-
         n[0] = x;
         n[1] = y;
         n[2] = z;
-
-        return D;
+        n[3] = 0.0f - ((x * A[0]) + (y * A[1]) + (z * A[2]));
+        
+        if (x * (center[0] - A[0]) + y * (center[1] - A[1]) + z * (center[2] - A[2]) > 0) {
+            n[0] *= -1;
+            n[1] *= -1;
+            n[2] *= -1;
+            n[3] *= -1;
+        }
     }
 }
 
@@ -128,7 +130,8 @@ namespace {
                   points:(simd_float3 *_Nonnull)points
              pointsCount:(uint32_t)pointsCount
                 triangles:(simd_uint3 *_Nullable)triangles
-            triangleCount:(uint32_t)triangleCount {
+            triangleCount:(uint32_t)triangleCount
+                  center: (simd_float3) center {
     self->isConvex = true;
     self->isUint16 = false;
     physics.c_cooking->setParams(*params);
@@ -150,13 +153,13 @@ namespace {
         simd_float3 p1 = points[triangles[i].x];
         simd_float3 p2 = points[triangles[i].y];
         simd_float3 p3 = points[triangles[i].z];
-        
+
         PxHullPolygon hull;
-        hull.mPlane[3] = computePlane(p1, p2, p3, hull.mPlane);
+        computePlane(center, p1, p2, p3, hull.mPlane);
         hull.mNbVerts = 3;
         hull.mIndexBase = i * 3;
         hulls.emplace_back(hull);
-        
+
         indices.push_back(triangles[i].x);
         indices.push_back(triangles[i].y);
         indices.push_back(triangles[i].z);
@@ -164,10 +167,12 @@ namespace {
     desc.polygons.count = triangleCount;
     desc.polygons.stride = sizeof(PxHullPolygon);
     desc.polygons.data = hulls.data();
-    
+
     desc.indices.count = static_cast<uint32_t>(indices.size());
     desc.indices.stride = sizeof(uint32_t);
     desc.indices.data = indices.data();
+    
+//    desc.flags = PxConvexFlag::eDISABLE_MESH_VALIDATION;
     
     meshGeometry->convexMesh = physics.c_cooking->createConvexMesh(desc, [physics getPhysicsInsertionCallback]);
 }

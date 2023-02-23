@@ -82,7 +82,8 @@ class PhysXMeshColliderShape: PhysXColliderShape {
                                                            points: &convexHull.points,
                                                            pointsCount: UInt32(convexHull.points.count),
                                                            triangles: &convexHull.triangles,
-                                                           triangleCount: UInt32(convexHull.triangles.count))
+                                                           triangleCount: UInt32(convexHull.triangles.count),
+                                                           center: convexHull.ceneter)
         _initialize(_pxMaterial, _id)
         _setLocalPose()
     }

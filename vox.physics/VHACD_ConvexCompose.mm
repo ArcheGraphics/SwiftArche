@@ -201,7 +201,7 @@ namespace {
         solver->Release();
     }
     solver = p.m_asyncACD ? VHACD::CreateVHACD_ASYNC() : VHACD::CreateVHACD();
-    solver->Compute(points, pointsCount, indices, indicesCount,p);
+    solver->Compute(points, pointsCount, indices, indicesCount / 3, p);
     while (!solver->IsReady()) {
         std::this_thread::sleep_for(std::chrono::nanoseconds(10000)); // s
     }
@@ -234,9 +234,10 @@ namespace {
     }
 }
 
--(void) getPointAndTriangleAtIndex:(uint32_t)index
-                             points:(simd_float3 *_Nonnull)points
-                           indices:(simd_uint3 *_Nullable)indices {
+-(void) getHullInfoAtIndex:(uint32_t)index
+                    points:(simd_float3 *_Nonnull)points
+                   indices:(simd_uint3 *_Nullable)indices
+                    center:(simd_float3 *_Nonnull)center {
     if (solver) {
         solver->GetConvexHull(index, ch);
         for (int i = 0; i < ch.m_points.size(); i++) {
@@ -247,6 +248,7 @@ namespace {
             auto triangle = ch.m_triangles[i];
             indices[i] = simd_make_uint3(triangle.mI0, triangle.mI1, triangle.mI2);
         }
+        center[0] = simd_make_float3(ch.m_center.GetX(), ch.m_center.GetY(), ch.m_center.GetZ());
     }
 }
 

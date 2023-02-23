@@ -9,6 +9,7 @@ import vox_math
 public struct ConvexHull {
     public var points: [SIMD3<Float>]
     public var triangles: [SIMD3<UInt32>]
+    public var ceneter: SIMD3<Float>
 }
 
 public class ConvexCompose {
@@ -153,8 +154,9 @@ public class ConvexCompose {
             for i in 0..<hullCount {
                 var points = [SIMD3<Float>](repeating: SIMD3<Float>(), count: Int(vhacd.pointCount(at: i)))
                 var triangles = [SIMD3<UInt32>](repeating: SIMD3<UInt32>(), count: Int(vhacd.triangleCount(at: i)))
-                vhacd.getPointAndTriangle(at: i, points: &points, indices: &triangles)
-                _convexHulls.append(ConvexHull(points: points, triangles: triangles))
+                var center = SIMD3<Float>()
+                vhacd.getHullInfo(at: i, points: &points, indices: &triangles, center: &center)
+                _convexHulls.append(ConvexHull(points: points, triangles: triangles, ceneter: center))
             }
         }
     }
