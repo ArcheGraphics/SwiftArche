@@ -30,4 +30,41 @@ enum VHACD_FillMode {
 
 @interface VHACD_ConvexCompose : NSObject
 
+-(void)computeWithPoints:(float *_Nonnull)points
+             pointsCount:(uint32_t)pointsCount
+                 indices:(uint32_t *_Nullable)indices
+            indicesCount:(uint32_t)indicesCount;
+
+-(uint32_t) hullCount;
+
+-(uint32_t) pointCountAtIndex:(uint32_t)index;
+
+-(uint32_t) triangleCountAtIndex:(uint32_t)index;
+
+-(void) getPointAndTriangleAtIndex:(uint32_t)index
+                             points:(simd_float3 *_Nonnull)points
+                           indices:(simd_uint3 *_Nullable)indices;
+
+//MARK: - Paramter
+/// The maximum number of convex hulls to produce
+@property(nonatomic) uint32_t maxConvexHulls;
+/// The voxel resolution to use
+@property(nonatomic) uint32_t resolution;
+/// if the voxels are within 1% of the volume of the hull, we consider this a close enough approximation
+@property(nonatomic) double minimumVolumePercentErrorAllowed;
+/// The maximum recursion depth
+@property(nonatomic) uint32_t maxRecursionDepth;
+/// Whether or not to shrinkwrap the voxel positions to the source mesh on output
+@property(nonatomic) bool shrinkWrap;
+/// How to fill the interior of the voxelized mesh
+@property(nonatomic) enum VHACD_FillMode fillMode;
+/// The maximum number of vertices allowed in any output convex hull
+@property(nonatomic) uint32_t maxNumVerticesPerCH;
+/// Whether or not to run asynchronously, taking advantage of additional cores
+@property(nonatomic) bool asyncACD;
+/// Once a voxel patch has an edge length of less than 4 on all 3 sides, we don't keep recursing
+@property(nonatomic) uint32_t minEdgeLength;
+/// Whether or not to attempt to split planes along the best location. Experimental feature. False by default.
+@property(nonatomic) bool findBestPlane;
+
 @end

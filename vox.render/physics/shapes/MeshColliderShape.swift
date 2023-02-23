@@ -69,6 +69,10 @@ public class MeshColliderShape: ColliderShape {
                 _material._nativeMaterial
         )
     }
+    
+    public func setConvexHull(_ convexHulls: [ConvexHull]) {
+        (_nativeShape as! PhysXMeshColliderShape).setConvexHull(convexHulls)
+    }
 
     private func _cook() {
         if let mesh = _mesh {

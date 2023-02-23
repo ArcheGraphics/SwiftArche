@@ -76,6 +76,10 @@ class PhysXMeshColliderShape: PhysXColliderShape {
         _initialize(_pxMaterial, _id)
         _setLocalPose()
     }
+    
+    func setConvexHull(_ convexHulls: [ConvexHull]) {
+        // todo
+    }
 
     override func setWorldScale(_ scale: Vector3) {
         _scale = scale
