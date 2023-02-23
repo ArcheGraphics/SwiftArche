@@ -303,13 +303,13 @@ extension PhysicsManager {
 //MARK: - Overlap
 
 extension PhysicsManager {
-    public func overlap(_ shape: ColliderShape, rorigin: Vector3,
+    public func overlap(_ shape: ColliderShape, origin: Vector3,
                         layerMask: Layer = Layer.Everything) -> Bool {
         let onOverlap = { (obj: UInt32) -> Bool in
             let shape = self._physicalObjectsMap[obj]!
             return (shape.collider!.entity.layer.rawValue & layerMask.rawValue != 0) && shape.isSceneQuery
         }
-        return _nativePhysicsManager.hasOverlap(shape._nativeShape, rorigin, onOverlap)
+        return _nativePhysicsManager.hasOverlap(shape._nativeShape, origin, onOverlap)
     }
     
     public func overlapAll(_ shape: ColliderShape, origin: Vector3,

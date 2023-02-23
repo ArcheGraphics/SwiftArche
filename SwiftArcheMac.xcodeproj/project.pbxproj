@@ -64,6 +64,8 @@
 		3E1076532966B96B00F751A5 /* capsule_collider_shape.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3E1076522966B96B00F751A5 /* capsule_collider_shape.metal */; };
 		3E1076552966CF7D00F751A5 /* capsule_ray_marching.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3E1076542966CF7D00F751A5 /* capsule_ray_marching.metal */; };
 		3E1076572966D8CA00F751A5 /* RayMarchingMaterial.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E1076562966D8CA00F751A5 /* RayMarchingMaterial.swift */; };
+		3E1F129329A762FC00F1002E /* VHACD_ConvexCompose.mm in Sources */ = {isa = PBXBuildFile; fileRef = 3E1F129229A762FC00F1002E /* VHACD_ConvexCompose.mm */; };
+		3E1F129529A7641200F1002E /* ConvexCompose.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E1F129429A7641200F1002E /* ConvexCompose.swift */; };
 		3E43DC9B295BDDDC00732AC0 /* physics_helpers.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3E6B23B52946B3E5000AC29F /* physics_helpers.metal */; };
 		3E43DC9C295BDDDC00732AC0 /* sdf_shading.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3E6B23D529499B36000AC29F /* sdf_shading.metal */; };
 		3E43DC9D295BDDDC00732AC0 /* sdf_baker.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3E6B23D2294964B1000AC29F /* sdf_baker.metal */; };
@@ -659,6 +661,10 @@
 		3E1076562966D8CA00F751A5 /* RayMarchingMaterial.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RayMarchingMaterial.swift; sourceTree = "<group>"; };
 		3E1076582967D1B800F751A5 /* rigid_body_collider.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = rigid_body_collider.h; sourceTree = "<group>"; };
 		3E10765C2967DBD600F751A5 /* ray_marching.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ray_marching.h; sourceTree = "<group>"; };
+		3E1F129029A7618600F1002E /* bridging.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = bridging.h; sourceTree = "<group>"; };
+		3E1F129129A762F000F1002E /* VHACD_ConvexCompose.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VHACD_ConvexCompose.h; sourceTree = "<group>"; };
+		3E1F129229A762FC00F1002E /* VHACD_ConvexCompose.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = VHACD_ConvexCompose.mm; sourceTree = "<group>"; };
+		3E1F129429A7641200F1002E /* ConvexCompose.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConvexCompose.swift; sourceTree = "<group>"; };
 		3E6B235B2941BF88000AC29F /* BlendShapeWeightsAnimationCurveOwnerAssembler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlendShapeWeightsAnimationCurveOwnerAssembler.swift; sourceTree = "<group>"; };
 		3E6B235D294220BC000AC29F /* FaceMorphApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FaceMorphApp.swift; sourceTree = "<group>"; };
 		3E6B235F294224C1000AC29F /* FaceGUI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FaceGUI.swift; sourceTree = "<group>"; };
@@ -1629,6 +1635,7 @@
 		3EC0376B293213A0002187DC /* vox.physics */ = {
 			isa = PBXGroup;
 			children = (
+				3E1F129029A7618600F1002E /* bridging.h */,
 				3EC0377F293213D5002187DC /* CPxConstraint.h */,
 				3EC03783293213D5002187DC /* CPxConstraint.mm */,
 				3EC03784293213D5002187DC /* CPxConstraint+Internal.h */,
@@ -1656,6 +1663,8 @@
 				3EC03775293213BF002187DC /* shape */,
 				3EC03774293213B8002187DC /* joint */,
 				3EC03773293213B1002187DC /* characterkinematic */,
+				3E1F129129A762F000F1002E /* VHACD_ConvexCompose.h */,
+				3E1F129229A762FC00F1002E /* VHACD_ConvexCompose.mm */,
 			);
 			path = vox.physics;
 			sourceTree = "<group>";
@@ -2224,6 +2233,7 @@
 				3EC038C12932183D002187DC /* PhysXSphereColliderShape.swift */,
 				3EACA08A29A46CE300F08BB2 /* MeshColliderShape.swift */,
 				3EACA08829A4604600F08BB2 /* PhysXMeshColliderShape.swift */,
+				3E1F129429A7641200F1002E /* ConvexCompose.swift */,
 			);
 			path = shapes;
 			sourceTree = "<group>";
@@ -3018,6 +3028,7 @@
 				3EC03827293213F9002187DC /* CPxBoxController.mm in Sources */,
 				3EC03828293213F9002187DC /* CPxBoxControllerDesc.mm in Sources */,
 				3EC037FC293213EE002187DC /* CPxBoxGeometry.mm in Sources */,
+				3E1F129329A762FC00F1002E /* VHACD_ConvexCompose.mm in Sources */,
 				3EC03801293213EE002187DC /* CPxCapsuleGeometry.mm in Sources */,
 				3EC037E7293213E6002187DC /* CPxJointAngularLimitPair.mm in Sources */,
 				3EC037EA293213E6002187DC /* CPxPrismaticJoint.mm in Sources */,
@@ -3099,6 +3110,7 @@
 				3EC0394F293218AA002187DC /* RenderFace.swift in Sources */,
 				3EC0398C293218CB002187DC /* BaseMaterial.swift in Sources */,
 				3EC039182932186A002187DC /* Validator.swift in Sources */,
+				3E1F129529A7641200F1002E /* ConvexCompose.swift in Sources */,
 				3EC0391B2932186B002187DC /* MeshParser.swift in Sources */,
 				3EC0392A29321885002187DC /* SkySubpass.swift in Sources */,
 				3EC039BF293218FB002187DC /* Animator.swift in Sources */,
@@ -3856,6 +3868,7 @@
 					./third_party/physx/physx/source/physxgpu/include,
 					./third_party/physx/physx/../pxshared/include,
 					./third_party/physx/physx/source/foundation/include,
+					./third_party/vhacd/include,
 				);
 			};
 			name = Debug;
@@ -3896,6 +3909,7 @@
 					./third_party/physx/physx/source/physxgpu/include,
 					./third_party/physx/physx/../pxshared/include,
 					./third_party/physx/physx/source/foundation/include,
+					./third_party/vhacd/include,
 				);
 			};
 			name = Release;

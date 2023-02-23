@@ -10,3 +10,6 @@
 [submodule "third_party/bvh"]
 	path = third_party/bvh
 	url = https://github.com/madmann91/bvh.git
+[submodule "third_party/vhacd"]
+	path = third_party/vhacd
+	url = https://github.com/kmammou/v-hacd.git

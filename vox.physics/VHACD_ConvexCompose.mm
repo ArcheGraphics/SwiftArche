@@ -4,12 +4,13 @@
 //  personal capacity and am not conveying any rights to any intellectual
 //  property of any third parties.
 
-#pragma once
+#import "VHACD_ConvexCompose.h"
 
-#include "../vox.shader/macro_name.h"
-#include "../vox.shader/type_common.h"
+#define ENABLE_VHACD_IMPLEMENTATION 1
+#define VHACD_DISABLE_THREADING 0
+#include <VHACD.h>
 
-#include "../vox.physics/bridging.h"
+@implementation VHACD_ConvexCompose {
+}
 
-#include "loader/GLTFAsset.h"
-#include "loader/HDRLoader.h"
+@end

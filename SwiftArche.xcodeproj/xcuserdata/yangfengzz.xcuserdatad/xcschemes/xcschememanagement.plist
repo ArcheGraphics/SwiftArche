@@ -12,7 +12,7 @@
 		<key>app.shader.xcscheme_^#shared#^_</key>
 		<dict>
 			<key>orderHint</key>
-			<integer>8</integer>
+			<integer>6</integer>
 		</dict>
 		<key>test.math.xcscheme</key>
 		<dict>
@@ -47,7 +47,7 @@
 		<key>vox.toolkit.xcscheme_^#shared#^_</key>
 		<dict>
 			<key>orderHint</key>
-			<integer>6</integer>
+			<integer>8</integer>
 		</dict>
 	</dict>
 </dict>

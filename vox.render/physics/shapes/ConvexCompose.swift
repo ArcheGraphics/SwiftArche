@@ -4,12 +4,8 @@
 //  personal capacity and am not conveying any rights to any intellectual
 //  property of any third parties.
 
-#pragma once
+import vox_math
 
-#include "../vox.shader/macro_name.h"
-#include "../vox.shader/type_common.h"
-
-#include "../vox.physics/bridging.h"
-
-#include "loader/GLTFAsset.h"
-#include "loader/HDRLoader.h"
+public class ConvexCompose {
+    let a = SURFACE_ONLY
+}
