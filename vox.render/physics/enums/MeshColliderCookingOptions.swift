@@ -6,7 +6,7 @@
 
 import Foundation
 
-enum MeshColliderCookingOptions: UInt8 {
+public enum MeshColliderCookingOptions: UInt8 {
     // Toggle the removal of equal vertices.
     case WeldColocatedVertices = 1
     // Toggle cleaning of the mesh.

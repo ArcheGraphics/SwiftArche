@@ -45,22 +45,23 @@ class PhysXConvexComposeApp: NSViewController {
     var convexCompose: ConvexCompose!
     
     func initialize(_ rootEntity: Entity) {
-//        _ = addPlane(rootEntity, Vector3(30, 0.0, 30), Vector3(), Quaternion())
-        
         let assetURL = Bundle.main.url(forResource: "bunny", withExtension: "glb", subdirectory: "assets")!
         GLTFLoader.parse(rootEntity.engine, assetURL, { [self] resource in
             let entity = resource.defaultSceneRoot!
             rootEntity.addChild(entity)
             
-            if let materials = resource.materials {
-                for mtl in materials {
-                    (mtl as! PBRMaterial).baseColor = Color(1,1,1,0.5)
-                    (mtl as! PBRMaterial).isTransparent = true
+            let renderers: [MeshRenderer] = entity.getComponentsIncludeChildren()
+            for renderer in renderers {
+                for mtl in renderer.getMaterials() {
+                    if let mtl = mtl {
+                        (mtl as! PBRMaterial).baseColor = Color(1,1,1,0.2)
+                        (mtl as! PBRMaterial).isTransparent = true
+                    }
                 }
             }
             
             convexCompose.maxConvexHulls = 10
-            convexCompose.resolution = 100_000
+            convexCompose.resolution = 40_00 // most costly
             convexCompose.compute(for: resource.meshes![0][0])
             var convexs = convexCompose.convexHulls
             
@@ -120,7 +121,6 @@ class PhysXConvexComposeApp: NSViewController {
         cameraEntity.transform.lookAt(targetPosition: Vector3())
         let _: Camera = cameraEntity.addComponent()
         let _: OrbitControl = cameraEntity.addComponent()
-//        let _: Raycast = cameraEntity.addComponent()
 
         let light = rootEntity.createChild("light")
         light.transform.position = Vector3(-0.3, 1, 0.4)

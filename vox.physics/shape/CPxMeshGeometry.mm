@@ -172,7 +172,7 @@ namespace {
     desc.indices.stride = sizeof(uint32_t);
     desc.indices.data = indices.data();
     
-//    desc.flags = PxConvexFlag::eDISABLE_MESH_VALIDATION;
+    desc.flags = PxConvexFlag::eDISABLE_MESH_VALIDATION;
     
     meshGeometry->convexMesh = physics.c_cooking->createConvexMesh(desc, [physics getPhysicsInsertionCallback]);
 }
