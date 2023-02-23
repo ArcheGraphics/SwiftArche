@@ -9,46 +9,19 @@ import vox_render
 import vox_math
 import vox_toolkit
 
-fileprivate class Raycast: Script {
-    var camera: Camera!
-    var ray = Ray()
-
-    override func onAwake() {
-        camera = entity.getComponent()
-    }
-
-    override func onUpdate(_ deltaTime: Float) {
-        let inputManager = engine.inputManager
-        let pointers = inputManager.pointers
-        if (!pointers.isEmpty && inputManager.isPointerTrigger(.leftMouseDown)) {
-            _ = camera.screenPointToRay(pointers[0].screenPoint(engine.canvas), ray)
-
-            if let hit = engine.physicsManager.raycast(ray, distance: Float.greatestFiniteMagnitude, layerMask: Layer.Layer0) {
-                let mtl = PBRMaterial(engine)
-                mtl.baseColor = Color(Float.random(in: 0...1), Float.random(in: 0...1), Float.random(in: 0...1), 0.5)
-                mtl.metallic = 0.0
-                mtl.roughness = 0.5
-                mtl.isTransparent = true
-                let meshes: [MeshRenderer] = hit.entity!.getComponentsIncludeChildren()
-                for mesh in meshes {
-                    mesh.setMaterial(mtl)
-                }
-            }
-        }
-    }
-}
-
-class PhysXConvexComposeApp: NSViewController {
-    var canvas: Canvas!
-    var engine: Engine!
-    var iblBaker: IBLBaker!
-    var convexCompose: ConvexCompose!
+fileprivate class CupPrefab: Script {
+    var convexs: [ConvexHull] = []
+    var mesh: ModelMesh!
+    var isLoaded: Bool = false
+    var height: Float = 3
+    var scale: Float = 2
     
-    func initialize(_ rootEntity: Entity) {
-        let assetURL = Bundle.main.url(forResource: "bunny", withExtension: "glb", subdirectory: "assets")!
-        GLTFLoader.parse(rootEntity.engine, assetURL, { [self] resource in
+    required init(_ entity: Entity) {
+        super.init(entity)
+        let assetURL = Bundle.main.url(forResource: "cup", withExtension: "glb", subdirectory: "assets")!
+        GLTFLoader.parse(entity.engine, assetURL, { [self] resource in
             let entity = resource.defaultSceneRoot!
-            rootEntity.addChild(entity)
+            mesh = resource.meshes![0][0]
             
             let renderers: [MeshRenderer] = entity.getComponentsIncludeChildren()
             for renderer in renderers {
@@ -60,12 +33,18 @@ class PhysXConvexComposeApp: NSViewController {
                 }
             }
             
-            convexCompose.maxConvexHulls = 10
+            let convexCompose = ConvexCompose()
+            convexCompose.maxConvexHulls = 20
             convexCompose.resolution = 40_00 // most costly
             convexCompose.compute(for: resource.meshes![0][0])
-            let convexs = convexCompose.convexHulls
-            
-            // debugger
+            convexs = convexCompose.convexHulls
+            isLoaded = true
+        }, true)
+    }
+    
+    func visualDebug() {
+        if isLoaded {
+            let collider: StaticCollider = entity.addComponent()
             for var convex in convexs {
                 var indices: [UInt32] = []
                 indices.reserveCapacity(convex.triangles.count * 3)
@@ -94,20 +73,61 @@ class PhysXConvexComposeApp: NSViewController {
                 let colliderShape = MeshColliderShape()
                 colliderShape.isConvex = true
                 colliderShape.cookConvexHull(&convex)
-                let collider: StaticCollider = entity.addComponent()
                 collider.addShape(colliderShape)
                 
                 createDebugWireframe(colliderShape, entity)
             }
-        }, true)
+        }
     }
+    
+    func createPrefab() {
+        if isLoaded {
+            let child = entity.createChild()
+            child.transform.rotation = Vector3(90, 0, 0)
+            height += 1
+            child.transform.position = Vector3(0, height, 0)
+            scale -= 0.25
+            child.transform.scale = Vector3(scale, scale, scale)
+            
+            let mtl = PBRMaterial(engine)
+            mtl.baseColor = Color(Float.random(in: 0..<1), Float.random(in: 0..<1), Float.random(in: 0..<1), 1)
+            mtl.roughness = 0.5
+            mtl.metallic = 0.5
+            let renderer: MeshRenderer = child.addComponent()
+            renderer.mesh = mesh
+            renderer.setMaterial(mtl)
+            
+            let collider: DynamicCollider = child.addComponent()
+            for var convex in convexs {
+                let colliderShape = MeshColliderShape()
+                colliderShape.isConvex = true
+                colliderShape.cookConvexHull(&convex)
+                collider.addShape(colliderShape)
+            }
+        }
+    }
+    
+    override func onUpdate(_ deltaTime: Float) {
+        let inputManager = engine.inputManager
+        let pointers = inputManager.pointers
+        if (!pointers.isEmpty && inputManager.isPointerTrigger(.rightMouseDown)) {
+            createPrefab()
+//            visualDebug()
+        }
+    }
+}
+
+class PhysXConcaveDynamicApp: NSViewController {
+    var canvas: Canvas!
+    var engine: Engine!
+    var iblBaker: IBLBaker!
+    fileprivate var prefab: CupPrefab!
 
     override func viewDidLoad() {
         super.viewDidLoad()
         canvas = Canvas(with: view)
         engine = Engine(canvas: canvas)
         iblBaker = IBLBaker(engine)
-        convexCompose = ConvexCompose()
         
         let scene = engine.sceneManager.activeScene!
         scene.shadowDistance = 50
@@ -115,20 +135,21 @@ class PhysXConvexComposeApp: NSViewController {
         iblBaker.bake(scene, with: hdr, size: 256, level: 3)
 
         let rootEntity = scene.createRootEntity()
+        prefab = rootEntity.addComponent()
 
         let cameraEntity = rootEntity.createChild()
-        cameraEntity.transform.position = Vector3(2, 2, 2)
+        cameraEntity.transform.position = Vector3(10, 10, 10)
         cameraEntity.transform.lookAt(targetPosition: Vector3())
         let _: Camera = cameraEntity.addComponent()
         let _: OrbitControl = cameraEntity.addComponent()
-
+        
         let light = rootEntity.createChild("light")
         light.transform.position = Vector3(-0.3, 1, 0.4)
         light.transform.lookAt(targetPosition: Vector3())
         let _: DirectLight = light.addComponent()
         
-        initialize(rootEntity)
-
+        _ = addPlane(rootEntity, Vector3(30, 0.0, 30), Vector3(), Quaternion())
+                
         engine.run()
     }
 }
