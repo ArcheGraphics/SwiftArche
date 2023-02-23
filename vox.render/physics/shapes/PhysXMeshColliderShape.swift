@@ -77,8 +77,14 @@ class PhysXMeshColliderShape: PhysXColliderShape {
         _setLocalPose()
     }
     
-    func setConvexHull(_ convexHulls: [ConvexHull]) {
-        // todo
+    func cookConvexHull(_ convexHull: inout ConvexHull) {
+        (_pxGeometry as! CPxMeshGeometry).createConvexMesh(PhysXPhysics._pxPhysics,
+                                                           points: &convexHull.points,
+                                                           pointsCount: UInt32(convexHull.points.count),
+                                                           triangles: &convexHull.triangles,
+                                                           triangleCount: UInt32(convexHull.triangles.count))
+        _initialize(_pxMaterial, _id)
+        _setLocalPose()
     }
 
     override func setWorldScale(_ scale: Vector3) {

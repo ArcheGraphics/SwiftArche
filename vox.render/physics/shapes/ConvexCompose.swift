@@ -123,7 +123,7 @@ public class ConvexCompose {
     public func compute(for mesh: ModelMesh) {
         _convexHulls = []
         
-        var points = mesh.getPositions()!
+        let points = mesh.getPositions()!
         var floatArray: [Float] = []
         floatArray.reserveCapacity(points.count * 3)
         points.forEach { v in

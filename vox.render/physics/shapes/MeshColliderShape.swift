@@ -70,8 +70,9 @@ public class MeshColliderShape: ColliderShape {
         )
     }
     
-    public func setConvexHull(_ convexHulls: [ConvexHull]) {
-        (_nativeShape as! PhysXMeshColliderShape).setConvexHull(convexHulls)
+    /// special API should not change cookingOptions after call
+    public func cookConvexHull(_ convexHull: inout ConvexHull) {
+        (_nativeShape as! PhysXMeshColliderShape).cookConvexHull(&convexHull)
     }
 
     private func _cook() {

@@ -24,6 +24,44 @@ using namespace physx;
     PxCookingParams *params;
 }
 
+namespace {
+    // returns D
+    float computePlane(const simd_float3& A, const simd_float3& B, const simd_float3& C, float* n) {
+        float vx = (B[0] - C[0]);
+        float vy = (B[1] - C[1]);
+        float vz = (B[2] - C[2]);
+
+        float wx = (A[0] - B[0]);
+        float wy = (A[1] - B[1]);
+        float wz = (A[2] - B[2]);
+
+        float vw_x = vy * wz - vz * wy;
+        float vw_y = vz * wx - vx * wz;
+        float vw_z = vx * wy - vy * wx;
+
+        float mag = (float)sqrt((vw_x * vw_x) + (vw_y * vw_y) + (vw_z * vw_z));
+
+        if (mag < 0.000001f) {
+            mag = 0;
+        } else {
+            mag = 1.0f / mag;
+        }
+
+        float x = vw_x * mag;
+        float y = vw_y * mag;
+        float z = vw_z * mag;
+
+
+        float D = 0.0f - ((x * A[0]) + (y * A[1]) + (z * A[2]));
+
+        n[0] = x;
+        n[1] = y;
+        n[2] = z;
+
+        return D;
+    }
+}
+
 // MARK: - Initialization
 - (instancetype _Nonnull )initWith:(CPxPhysics *_Nonnull)physics {
     isConvex = false;
@@ -84,6 +122,54 @@ using namespace physx;
                            indices:indices indicesCount:indicesCount isUint16:isUint16];
         }
     }
+}
+
+- (void)createConvexMesh:(CPxPhysics *_Nonnull)physics
+                  points:(simd_float3 *_Nonnull)points
+             pointsCount:(uint32_t)pointsCount
+                triangles:(simd_uint3 *_Nullable)triangles
+            triangleCount:(uint32_t)triangleCount {
+    self->isConvex = true;
+    self->isUint16 = false;
+    physics.c_cooking->setParams(*params);
+    
+    auto meshGeometry = new PxConvexMeshGeometry();
+    super.c_geometry = meshGeometry;
+    meshGeometry->scale = scale;
+
+    PxConvexMeshDesc desc;
+    desc.points.count = pointsCount;
+    desc.points.stride = sizeof(simd_float3);
+    desc.points.data = points;
+    
+    std::vector<uint32_t> indices;
+    indices.reserve(triangleCount * 3);
+    std::vector<PxHullPolygon> hulls;
+    hulls.reserve(triangleCount);
+    for (int i = 0; i < triangleCount; i++) {
+        simd_float3 p1 = points[triangles[i].x];
+        simd_float3 p2 = points[triangles[i].y];
+        simd_float3 p3 = points[triangles[i].z];
+        
+        PxHullPolygon hull;
+        hull.mPlane[3] = computePlane(p1, p2, p3, hull.mPlane);
+        hull.mNbVerts = 3;
+        hull.mIndexBase = i * 3;
+        hulls.emplace_back(hull);
+        
+        indices.push_back(triangles[i].x);
+        indices.push_back(triangles[i].y);
+        indices.push_back(triangles[i].z);
+    }
+    desc.polygons.count = triangleCount;
+    desc.polygons.stride = sizeof(PxHullPolygon);
+    desc.polygons.data = hulls.data();
+    
+    desc.indices.count = static_cast<uint32_t>(indices.size());
+    desc.indices.stride = sizeof(uint32_t);
+    desc.indices.data = indices.data();
+    
+    meshGeometry->convexMesh = physics.c_cooking->createConvexMesh(desc, [physics getPhysicsInsertionCallback]);
 }
 
 - (void)createConvexMesh:(CPxPhysics *_Nonnull)physics
