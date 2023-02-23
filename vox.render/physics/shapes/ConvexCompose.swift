@@ -120,6 +120,8 @@ public class ConvexCompose {
         }
     }
     
+    public init() {}
+    
     public func compute(for mesh: ModelMesh) {
         _convexHulls = []
         
