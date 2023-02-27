@@ -169,12 +169,7 @@ enum CPxRigidBodyFlag {
 /// Returns the mass-normalized kinetic energy below which an actor may go to sleep.
 - (float)getSleepThreshold;
 
-/// Raises or clears a particular rigid dynamic lock flag.
-/// @param flag The PxRigidDynamicLockBody flag to raise(set) or clear.
-/// @param value The new boolean value for the flag.
-- (void)setRigidDynamicLockFlag:(enum CPxRigidDynamicLockFlag)flag value:(bool)value;
-
-- (void)setRigidDynamicLockFlags:(int)flags;
+- (void)setRigidDynamicLockFlags:(uint32_t)flags;
 
 /// Sets the wake counter for the actor.
 /// @param wakeCounterValue Wake counter value.
@@ -203,5 +198,7 @@ enum CPxRigidBodyFlag {
 
 /// Get target pose of a kinematically controlled dynamic actor.
 - (bool)getKinematicTarget:(simd_float3 *)position rotation:(simd_quatf *)rotation;
+
+- (void)setUseGravity:(bool)value;
 
 @end

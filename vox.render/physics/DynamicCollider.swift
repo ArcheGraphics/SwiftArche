@@ -9,18 +9,20 @@ import vox_math
 /// A dynamic collider can act with self-defined movement or physical force.
 public class DynamicCollider: Collider {
     private var _linearDamping: Float = 0
-    private var _angularDamping: Float = 0
+    private var _angularDamping: Float = 0.05
     private var _linearVelocity = Vector3()
     private var _angularVelocity = Vector3()
-    private var _mass: Float = 0
+    private var _mass: Float = 1.0
     private var _centerOfMass = Vector3()
-    private var _inertiaTensor = Vector3()
-    private var _maxAngularVelocity: Float = 0
-    private var _maxDepenetrationVelocity: Float = 0
-    private var _sleepThreshold: Float = 0
-    private var _solverIterations: Int = 0
+    private var _inertiaTensor = Vector3(1, 1, 1)
+    private var _maxAngularVelocity: Float = 100
+    private var _maxDepenetrationVelocity: Float = 1000
+    private var _solverIterations: Int = 4
     private var _isKinematic: Bool = false
+    private var _constraints: DynamicColliderConstraints = []
     private var _collisionDetectionMode: CollisionDetectionMode = .Discrete
+    private var _sleepThreshold: Float = 5e-3
+    private var _useGravity: Bool = true
 
     /// The linear damping of the dynamic collider.
     public var linearDamping: Float {
@@ -28,8 +30,10 @@ public class DynamicCollider: Collider {
             _linearDamping
         }
         set {
-            _linearDamping = newValue
-            (_nativeCollider as! PhysXDynamicCollider).setLinearDamping(newValue)
+            if _linearDamping != newValue {
+                _linearDamping = newValue
+                (_nativeCollider as! PhysXDynamicCollider).setLinearDamping(newValue)
+            }
         }
     }
 
@@ -39,8 +43,10 @@ public class DynamicCollider: Collider {
             _angularDamping
         }
         set {
-            _angularDamping = newValue
-            (_nativeCollider as! PhysXDynamicCollider).setAngularDamping(newValue)
+            if _angularDamping == newValue {
+                _angularDamping = newValue
+                (_nativeCollider as! PhysXDynamicCollider).setAngularDamping(newValue)
+            }
         }
     }
 
@@ -72,8 +78,10 @@ public class DynamicCollider: Collider {
             _mass
         }
         set {
-            _mass = newValue
-            (_nativeCollider as! PhysXDynamicCollider).setMass(newValue)
+            if _mass == newValue {
+                _mass = newValue
+                (_nativeCollider as! PhysXDynamicCollider).setMass(newValue)
+            }
         }
     }
 
@@ -105,8 +113,10 @@ public class DynamicCollider: Collider {
             _maxAngularVelocity
         }
         set {
-            _maxAngularVelocity = newValue
-            (_nativeCollider as! PhysXDynamicCollider).setMaxAngularVelocity(newValue)
+            if _maxAngularVelocity == newValue {
+                _maxAngularVelocity = newValue
+                (_nativeCollider as! PhysXDynamicCollider).setMaxAngularVelocity(newValue)
+            }
         }
     }
 
@@ -116,8 +126,10 @@ public class DynamicCollider: Collider {
             _maxDepenetrationVelocity
         }
         set {
-            _maxDepenetrationVelocity = newValue
-            (_nativeCollider as! PhysXDynamicCollider).setMaxDepenetrationVelocity(newValue)
+            if _maxDepenetrationVelocity == newValue {
+                _maxDepenetrationVelocity = newValue
+                (_nativeCollider as! PhysXDynamicCollider).setMaxDepenetrationVelocity(newValue)
+            }
         }
     }
 
@@ -127,8 +139,10 @@ public class DynamicCollider: Collider {
             _sleepThreshold
         }
         set {
-            _sleepThreshold = newValue
-            (_nativeCollider as! PhysXDynamicCollider).setSleepThreshold(newValue)
+            if _sleepThreshold == newValue {
+                _sleepThreshold = newValue
+                (_nativeCollider as! PhysXDynamicCollider).setSleepThreshold(newValue)
+            }
         }
     }
 
@@ -138,8 +152,10 @@ public class DynamicCollider: Collider {
             _solverIterations
         }
         set {
-            _solverIterations = newValue
-            (_nativeCollider as! PhysXDynamicCollider).setSolverIterations(newValue)
+            if _solverIterations == newValue {
+                _solverIterations = newValue
+                (_nativeCollider as! PhysXDynamicCollider).setSolverIterations(newValue)
+            }
         }
     }
 
@@ -149,8 +165,10 @@ public class DynamicCollider: Collider {
             _isKinematic
         }
         set {
-            _isKinematic = newValue
-            (_nativeCollider as! PhysXDynamicCollider).setIsKinematic(newValue)
+            if _isKinematic == newValue {
+                _isKinematic = newValue
+                (_nativeCollider as! PhysXDynamicCollider).setIsKinematic(newValue)
+            }
         }
     }
 
@@ -162,6 +180,29 @@ public class DynamicCollider: Collider {
         set {
             _collisionDetectionMode = newValue
             (_nativeCollider as! PhysXDynamicCollider).setCollisionDetectionMode(newValue.rawValue)
+        }
+    }
+
+    /// The particular rigid dynamic lock flag.
+    public var constraints: DynamicColliderConstraints {
+        get {
+            _constraints
+        }
+        set {
+            if (_constraints != newValue) {
+                _constraints = newValue
+                (_nativeCollider as! PhysXDynamicCollider).setConstraints(newValue)
+            }
+        }
+    }
+
+    public var useGravity: Bool {
+        get {
+            _useGravity
+        }
+        set {
+            _useGravity = newValue
+            (_nativeCollider as! PhysXDynamicCollider).setUseGravity(newValue)
         }
     }
 

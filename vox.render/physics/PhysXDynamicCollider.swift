@@ -19,25 +19,25 @@ public enum CollisionDetectionMode: Int {
 }
 
 /// Use these flags to constrain motion of dynamic collider.
-public enum DynamicColliderConstraints {
+public struct DynamicColliderConstraints: OptionSet {
+    public let rawValue: UInt32
+
+    public init(rawValue: UInt32) {
+        self.rawValue = rawValue
+    }
+
     /// Freeze motion along the X-axis.
-    case FreezePositionX
+    public static let FreezePositionX = DynamicColliderConstraints(rawValue: 1 << 0)
     /// Freeze motion along the Y-axis.
-    case FreezePositionY
+    public static let FreezePositionY = DynamicColliderConstraints(rawValue: 1 << 1)
     /// Freeze motion along the Z-axis.
-    case FreezePositionZ
+    public static let FreezePositionZ = DynamicColliderConstraints(rawValue: 1 << 2)
     /// Freeze rotation along the X-axis.
-    case FreezeRotationX
+    public static let FreezeRotationX = DynamicColliderConstraints(rawValue: 1 << 3)
     /// Freeze rotation along the Y-axis.
-    case FreezeRotationY
+    public static let FreezeRotationY = DynamicColliderConstraints(rawValue: 1 << 4)
     /// Freeze rotation along the Z-axis.
-    case FreezeRotationZ
-    /// Freeze motion along all axes.
-    case FreezePosition
-    /// Freeze rotation along all axes.
-    case FreezeRotation
-    /// Freeze rotation and motion along all axes.
-    case FreezeAll
+    public static let FreezeRotationZ = DynamicColliderConstraints(rawValue: 1 << 5)
 }
 
 /// A dynamic collider can act with self-defined movement or physical force
@@ -123,8 +123,12 @@ class PhysXDynamicCollider: PhysXCollider {
         }
     }
 
-    func setConstraints(flags: Int32) {
-        (_pxActor as! CPxRigidDynamic).setRigidDynamicLockFlags(flags)
+    func setUseGravity(_ value: Bool) {
+        (_pxActor as! CPxRigidDynamic).setUseGravity(value)
+    }
+
+    func setConstraints(_ flags: DynamicColliderConstraints) {
+        (_pxActor as! CPxRigidDynamic).setRigidDynamicLockFlags(flags.rawValue)
     }
 
     func addForce(_ force: Vector3) {
@@ -161,46 +165,5 @@ class PhysXDynamicCollider: PhysXCollider {
 
     func wakeUp() {
         (_pxActor as! CPxRigidDynamic).wakeUp()
-    }
-
-    private func setConstraints(_ flag: DynamicColliderConstraints, _ value: Bool) {
-        switch (flag) {
-        case DynamicColliderConstraints.FreezePositionX:
-            (_pxActor as! CPxRigidDynamic).setRigidDynamicLockFlag(eLOCK_LINEAR_X, value: value)
-            break
-        case DynamicColliderConstraints.FreezePositionY:
-            (_pxActor as! CPxRigidDynamic).setRigidDynamicLockFlag(eLOCK_LINEAR_Y, value: value)
-            break
-        case DynamicColliderConstraints.FreezePositionZ:
-            (_pxActor as! CPxRigidDynamic).setRigidDynamicLockFlag(eLOCK_LINEAR_Y, value: value)
-            break
-        case DynamicColliderConstraints.FreezeRotationX:
-            (_pxActor as! CPxRigidDynamic).setRigidDynamicLockFlag(eLOCK_ANGULAR_X, value: value)
-            break
-        case DynamicColliderConstraints.FreezeRotationY:
-            (_pxActor as! CPxRigidDynamic).setRigidDynamicLockFlag(eLOCK_ANGULAR_Y, value: value)
-            break
-        case DynamicColliderConstraints.FreezeRotationZ:
-            (_pxActor as! CPxRigidDynamic).setRigidDynamicLockFlag(eLOCK_ANGULAR_Z, value: value)
-            break
-        case DynamicColliderConstraints.FreezeAll:
-            (_pxActor as! CPxRigidDynamic).setRigidDynamicLockFlag(eLOCK_LINEAR_X, value: value)
-            (_pxActor as! CPxRigidDynamic).setRigidDynamicLockFlag(eLOCK_LINEAR_Y, value: value)
-            (_pxActor as! CPxRigidDynamic).setRigidDynamicLockFlag(eLOCK_LINEAR_Y, value: value)
-            (_pxActor as! CPxRigidDynamic).setRigidDynamicLockFlag(eLOCK_ANGULAR_X, value: value)
-            (_pxActor as! CPxRigidDynamic).setRigidDynamicLockFlag(eLOCK_ANGULAR_Y, value: value)
-            (_pxActor as! CPxRigidDynamic).setRigidDynamicLockFlag(eLOCK_ANGULAR_Z, value: value)
-            break
-        case DynamicColliderConstraints.FreezePosition:
-            (_pxActor as! CPxRigidDynamic).setRigidDynamicLockFlag(eLOCK_LINEAR_X, value: value)
-            (_pxActor as! CPxRigidDynamic).setRigidDynamicLockFlag(eLOCK_LINEAR_Y, value: value)
-            (_pxActor as! CPxRigidDynamic).setRigidDynamicLockFlag(eLOCK_LINEAR_Y, value: value)
-            break
-        case DynamicColliderConstraints.FreezeRotation:
-            (_pxActor as! CPxRigidDynamic).setRigidDynamicLockFlag(eLOCK_ANGULAR_X, value: value)
-            (_pxActor as! CPxRigidDynamic).setRigidDynamicLockFlag(eLOCK_ANGULAR_Y, value: value)
-            (_pxActor as! CPxRigidDynamic).setRigidDynamicLockFlag(eLOCK_ANGULAR_Z, value: value)
-            break
-        }
     }
 }

@@ -165,11 +165,7 @@
     return static_cast<PxRigidDynamic *>(super.c_actor)->getSleepThreshold();
 }
 
-- (void)setRigidDynamicLockFlag:(enum CPxRigidDynamicLockFlag)flag value:(bool)value {
-    static_cast<PxRigidDynamic *>(super.c_actor)->setRigidDynamicLockFlag(PxRigidDynamicLockFlag::Enum(flag), value);
-}
-
-- (void)setRigidDynamicLockFlags:(int)flags {
+- (void)setRigidDynamicLockFlags:(uint32_t)flags {
     static_cast<PxRigidDynamic *>(super.c_actor)->setRigidDynamicLockFlags(PxRigidDynamicLockFlags(flags));
 }
 
@@ -214,5 +210,9 @@
     return result;
 }
 
+
+- (void)setUseGravity:(bool)value {
+    super.c_actor->setActorFlag(PxActorFlag::Enum::eDISABLE_GRAVITY, value);
+}
 
 @end
