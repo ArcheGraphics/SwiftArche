@@ -70,6 +70,9 @@
 		3E1F129929A7A49900F1002E /* PhysXConcaveDynamicApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E1F129829A7A49900F1002E /* PhysXConcaveDynamicApp.swift */; };
 		3E1F129D29AC3C1C00F1002E /* SmoothPosition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E1F129C29AC3C1C00F1002E /* SmoothPosition.swift */; };
 		3E1F129F29AC41C700F1002E /* SmoothRotation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E1F129E29AC41C700F1002E /* SmoothRotation.swift */; };
+		3E1F12A229AC48AE00F1002E /* Mover.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E1F12A129AC48AE00F1002E /* Mover.swift */; };
+		3E1F12A629AC4EA100F1002E /* VectorMath.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E1F12A529AC4EA100F1002E /* VectorMath.swift */; };
+		3E1F12A929AC593C00F1002E /* Sensor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E1F12A329AC48C100F1002E /* Sensor.swift */; };
 		3E43DC9B295BDDDC00732AC0 /* physics_helpers.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3E6B23B52946B3E5000AC29F /* physics_helpers.metal */; };
 		3E43DC9C295BDDDC00732AC0 /* sdf_shading.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3E6B23D529499B36000AC29F /* sdf_shading.metal */; };
 		3E43DC9D295BDDDC00732AC0 /* sdf_baker.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3E6B23D2294964B1000AC29F /* sdf_baker.metal */; };
@@ -673,6 +676,9 @@
 		3E1F129829A7A49900F1002E /* PhysXConcaveDynamicApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhysXConcaveDynamicApp.swift; sourceTree = "<group>"; };
 		3E1F129C29AC3C1C00F1002E /* SmoothPosition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SmoothPosition.swift; sourceTree = "<group>"; };
 		3E1F129E29AC41C700F1002E /* SmoothRotation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SmoothRotation.swift; sourceTree = "<group>"; };
+		3E1F12A129AC48AE00F1002E /* Mover.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Mover.swift; sourceTree = "<group>"; };
+		3E1F12A329AC48C100F1002E /* Sensor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sensor.swift; sourceTree = "<group>"; };
+		3E1F12A529AC4EA100F1002E /* VectorMath.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VectorMath.swift; sourceTree = "<group>"; };
 		3E6B235B2941BF88000AC29F /* BlendShapeWeightsAnimationCurveOwnerAssembler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlendShapeWeightsAnimationCurveOwnerAssembler.swift; sourceTree = "<group>"; };
 		3E6B235D294220BC000AC29F /* FaceMorphApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FaceMorphApp.swift; sourceTree = "<group>"; };
 		3E6B235F294224C1000AC29F /* FaceGUI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FaceGUI.swift; sourceTree = "<group>"; };
@@ -1403,6 +1409,7 @@
 		3E1F129A29AC3BCB00F1002E /* kinematic-character-controller */ = {
 			isa = PBXGroup;
 			children = (
+				3E1F12A029AC48A000F1002E /* Core */,
 				3E1F129B29AC3C1000F1002E /* SmoothPosition */,
 			);
 			path = "kinematic-character-controller";
@@ -1415,6 +1422,15 @@
 				3E1F129E29AC41C700F1002E /* SmoothRotation.swift */,
 			);
 			path = SmoothPosition;
+			sourceTree = "<group>";
+		};
+		3E1F12A029AC48A000F1002E /* Core */ = {
+			isa = PBXGroup;
+			children = (
+				3E1F12A129AC48AE00F1002E /* Mover.swift */,
+				3E1F12A329AC48C100F1002E /* Sensor.swift */,
+			);
+			path = Core;
 			sourceTree = "<group>";
 		};
 		3E6B23A92946B3CA000AC29F /* vox.flex */ = {
@@ -1634,6 +1650,7 @@
 				3EC03751293212BC002187DC /* Vector2.swift */,
 				3EC03756293212BC002187DC /* Vector3.swift */,
 				3EC0374D293212BB002187DC /* Vector4.swift */,
+				3E1F12A529AC4EA100F1002E /* VectorMath.swift */,
 				3EC0374F293212BB002187DC /* Matrix3x3.swift */,
 				3EC03752293212BC002187DC /* Matrix4x4.swift */,
 				3EC0374C293212BB002187DC /* Quaternion.swift */,
@@ -2845,6 +2862,7 @@
 				040F1DBE2933705D008BDC8D /* ControlPointer.swift in Sources */,
 				040F1DCE2933AB71008BDC8D /* FreeControl.swift in Sources */,
 				040F1DD02933AC19008BDC8D /* ControlFreeKeyboard.swift in Sources */,
+				3E1F12A229AC48AE00F1002E /* Mover.swift in Sources */,
 				3E1F129D29AC3C1C00F1002E /* SmoothPosition.swift in Sources */,
 				040F1DB529336F48008BDC8D /* ControlHandlerType.swift in Sources */,
 				040F1DB029336AAE008BDC8D /* Spherical.swift in Sources */,
@@ -2852,6 +2870,7 @@
 				3E1F129F29AC41C700F1002E /* SmoothRotation.swift in Sources */,
 				040F1DB829336F86008BDC8D /* IControlInput.swift in Sources */,
 				040F1DCC2933AAF0008BDC8D /* ControlFreePointer.swift in Sources */,
+				3E1F12A929AC593C00F1002E /* Sensor.swift in Sources */,
 				43D8C8847DCDFE5DABA15585 /* WireframePrimitive.swift in Sources */,
 				43D8CB27974E2712F873405E /* WireframeManager.swift in Sources */,
 				43D8C57503BAADE4FE366B56 /* GridMaterial.swift in Sources */,
@@ -3019,6 +3038,7 @@
 				3EC03761293212BC002187DC /* Matrix4x4.swift in Sources */,
 				3EC03764293212BC002187DC /* CollisionUtil.swift in Sources */,
 				3EC03762293212BC002187DC /* Color.swift in Sources */,
+				3E1F12A629AC4EA100F1002E /* VectorMath.swift in Sources */,
 				3EC03747293212B3002187DC /* FrustumFace.swift in Sources */,
 				3EC03758293212BC002187DC /* Ray.swift in Sources */,
 				3EC0375D293212BC002187DC /* MathUtil.swift in Sources */,
