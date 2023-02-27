@@ -14,11 +14,17 @@ public struct Quaternion {
         get {
             elements.imag.x
         }
+        set {
+            elements.imag.x = newValue
+        }
     }
 
     public var y: Float {
         get {
             elements.imag.y
+        }
+        set {
+            elements.imag.y = newValue
         }
     }
 
@@ -26,11 +32,17 @@ public struct Quaternion {
         get {
             elements.imag.z
         }
+        set {
+            elements.imag.z = newValue
+        }
     }
 
     public var w: Float {
         get {
             elements.real
+        }
+        set {
+            elements.real = newValue
         }
     }
 
@@ -322,6 +334,16 @@ extension Quaternion {
                 y * bw - x * bz,
                 z * bw + w * bz,
                 w * bw - z * bz)
+    }
+    
+    /// Returns the angle in degrees between two rotations a and b.
+    public static func angle(_ a: Quaternion, _ b: Quaternion) -> Float {
+        let num = min(abs(Quaternion.dot(left: a, right: b)), 1)
+        return Quaternion.isEqualUsingDot(num) ? 0.0 : (acos(num) * 2.0 * 57.295780181884766)
+    }
+    
+    private static func isEqualUsingDot(_ dot: Float) -> Bool {
+        dot > 0.9999989867210388
     }
 }
 

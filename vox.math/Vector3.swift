@@ -334,6 +334,56 @@ extension Vector3 {
                 iy * qw - iw * qy - iz * qx + ix * qz,
                 iz * qw - iw * qz - ix * qy + iy * qx)
     }
+
+    public static func SmoothDamp(current: Vector3, target: Vector3, currentVelocity: inout Vector3,
+                                  smoothTime: Float, deltaTime: Float,
+                                  maxSpeed: Float = Float.greatestFiniteMagnitude) -> Vector3 {
+        var target = target
+        let smoothTime: Float = Swift.max(0.0001, smoothTime)
+        let num1: Float = 2 / smoothTime
+        let num2: Float = num1 * deltaTime
+        let num3: Float = (1.0 / (1.0 + num2 + 0.47999998927116394 * num2 * num2 + 0.23499999940395355 * num2 * num2 * num2))
+        var num4: Float = current.x - target.x
+        var num5: Float = current.y - target.y
+        var num6: Float = current.z - target.z
+        let vector3 = target
+        let num7 = maxSpeed * smoothTime
+        let num8 = num7 * num7
+        let d = (num4 * num4 + num5 * num5 + num6 * num6)
+        if (d > num8) {
+            let num9 = sqrt(d)
+            num4 = num4 / num9 * num7
+            num5 = num5 / num9 * num7
+            num6 = num6 / num9 * num7
+        }
+        target.x = current.x - num4
+        target.y = current.y - num5
+        target.z = current.z - num6
+        let num10 = (currentVelocity.x + num1 * num4) * deltaTime
+        let num11 = (currentVelocity.y + num1 * num5) * deltaTime
+        let num12 = (currentVelocity.z + num1 * num6) * deltaTime
+        currentVelocity.x = (currentVelocity.x - num1 * num10) * num3
+        currentVelocity.y = (currentVelocity.y - num1 * num11) * num3
+        currentVelocity.z = (currentVelocity.z - num1 * num12) * num3
+        var x = target.x + (num4 + num10) * num3
+        var y = target.y + (num5 + num11) * num3
+        var z = target.z + (num6 + num12) * num3
+        let num13 = vector3.x - current.x
+        let num14 = vector3.y - current.y
+        let num15 = vector3.z - current.z
+        let num16 = x - vector3.x
+        let num17 = y - vector3.y
+        let num18 = z - vector3.z
+        if (num13 * num16 + num14 * num17 + num15 * num18 > 0.0) {
+            x = vector3.x
+            y = vector3.y
+            z = vector3.z
+            currentVelocity.x = (x - vector3.x) / deltaTime
+            currentVelocity.y = (y - vector3.y) / deltaTime
+            currentVelocity.z = (z - vector3.z) / deltaTime
+        }
+        return Vector3(x, y, z)
+    }
 }
 
 //MARK:- Class Method
