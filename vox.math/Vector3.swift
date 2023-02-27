@@ -384,7 +384,7 @@ extension Vector3 {
         }
         return Vector3(x, y, z)
     }
-    
+
     /// Calculates the angle between vectors from and.
     /// - Parameters:
     ///   - from: The vector from which the angular difference is measured.
@@ -393,6 +393,26 @@ extension Vector3 {
     public static func angle(from: Vector3, to: Vector3) -> Float {
         let num = sqrt(from.lengthSquared() * to.lengthSquared())
         return num < 1.0000000036274937E-15 ? 0.0 : acos(simd_clamp(Vector3.dot(left: from, right: to) / num, -1, 1)) * 57.29578
+    }
+
+    /// Calculate a position between the points specified by current and target, moving no farther than the distance specified by maxDistanceDelta.
+    /// - Parameters:
+    ///   - current: The position to move from.
+    ///   - target: The position to move towards.
+    ///   - maxDistanceDelta: Distance to move current per call.
+    /// - Returns: The new position
+    public static func moveTowards(current: Vector3, target: Vector3, maxDistanceDelta: Float) -> Vector3 {
+        let num1 = target.x - current.x
+        let num2 = target.y - current.y
+        let num3 = target.z - current.z
+        let d = num1 * num1 + num2 * num2 + num3 * num3
+        if (d == 0.0 || maxDistanceDelta >= 0.0 && d <= maxDistanceDelta * maxDistanceDelta) {
+            return target
+        }
+        let num4 = sqrt(d)
+        return Vector3(current.x + num1 / num4 * maxDistanceDelta,
+                current.y + num2 / num4 * maxDistanceDelta,
+                current.z + num3 / num4 * maxDistanceDelta)
     }
 }
 
@@ -465,10 +485,17 @@ extension Vector3 {
     /// Converts this vector into a unit vector.
     /// - Returns: This vector
     public mutating func normalize() -> Vector3 {
-        if simd_length(elements) > Float.leastNonzeroMagnitude {
+        if simd_length_squared(elements) > Float.leastNonzeroMagnitude {
             elements = simd_normalize(elements)
         }
         return self
+    }
+
+    public func normalized() -> Vector3 {
+        if simd_length_squared(elements) > Float.leastNonzeroMagnitude {
+            return Vector3(simd_normalize(elements))
+        }
+        return Vector3(1, 0, 0)
     }
 
     /// Scale this vector by the given value.

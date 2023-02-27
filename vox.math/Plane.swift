@@ -24,16 +24,29 @@ public struct Plane {
             _distance
         }
     }
+    
+    /// Creates a plane.
+    public init(_ inNormal: Vector3, _ inPoint: Vector3) {
+        _normal = inNormal.normalized()
+        _distance = -Vector3.dot(left: _normal, right: inPoint);
+    }
 
     /// Constructor of Plane.
     /// - Parameters:
     ///   - normal: The normal vector
     ///   - distance: The distance of the plane along its normal to the origin
-    public init(_ normal: Vector3? = nil, _ distance: Float = 0) {
-        if normal != nil {
-            _normal = normal!
-        }
+    public init(_ normal: Vector3 = Vector3(), _ distance: Float = 0) {
+        _normal = normal.normalized()
         _distance = distance
+    }
+    
+    /// Sets a plane using a point that lies within it along with a normal to orient it.
+    /// - Parameters:
+    ///   - inNormal: The plane's normal vector.
+    ///   - inPoint: A point that lies on the plane.
+    public mutating func setNormalAndPosition(_ inNormal: Vector3, _ inPoint: Vector3) {
+        _normal = Vector3.normalize(left: inNormal)
+        _distance = -Vector3.dot(left: inNormal, right: inPoint)
     }
 }
 

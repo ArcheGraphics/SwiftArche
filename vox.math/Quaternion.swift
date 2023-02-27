@@ -335,15 +335,31 @@ extension Quaternion {
                 z * bw + w * bz,
                 w * bw - z * bz)
     }
-    
+
     /// Returns the angle in degrees between two rotations a and b.
     public static func angle(_ a: Quaternion, _ b: Quaternion) -> Float {
         let num = min(abs(Quaternion.dot(left: a, right: b)), 1)
         return Quaternion.isEqualUsingDot(num) ? 0.0 : (acos(num) * 2.0 * 57.295780181884766)
     }
-    
+
     private static func isEqualUsingDot(_ dot: Float) -> Bool {
         dot > 0.9999989867210388
+    }
+
+
+    /// Creates a rotation which rotates from fromDirection to toDirection.
+    /// - Parameters:
+    ///   - from: the vector to start from
+    ///   - to: the vector to rotate to
+    /// - Returns: a rotation about an axis normal to the two vectors which takes one to the other via the shortest path
+    public static func shortestRotation(from: Vector3, target: Vector3) -> Quaternion {
+        let d = Vector3.dot(left: from, right: target)
+        let cross = Vector3.cross(left: from, right: target)
+
+        var q = d > -1 ? Quaternion(cross.x, cross.y, cross.z, 1 + d) : abs(from.x) < 0.1 ? Quaternion(0.0, from.z, -from.y, 0.0)
+                : Quaternion(from.y, -from.x, 0.0, 0.0)
+
+        return q.normalize()
     }
 }
 

@@ -127,16 +127,14 @@ public class PhysicsManager {
                     var joints: [Joint] = shape1!.collider!.entity.getComponents()
                     for i in 0..<joints.count {
                         if joints[i].name == name {
-                            // MARK: - TODO Destroy
-                            joints[i].enabled = false
+                            joints[i].destroy()
                         }
                     }
 
                     joints = shape2!.collider!.entity.getComponents()
                     for i in 0..<joints.count {
                         if joints[i].name == name {
-                            // MARK: - TODO Destroy
-                            joints[i].enabled = false
+                            joints[i].destroy()
                         }
                     }
                 }

@@ -21,6 +21,10 @@ open class Component: EngineObject {
 
     /// Destroy this instance.
     deinit {
+        destroy()
+    }
+    
+    func destroy() {
         _entity._removeComponent(self)
         if (_entity.isActiveInHierarchy) {
             if _enabled {
