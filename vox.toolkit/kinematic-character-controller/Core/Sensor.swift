@@ -170,7 +170,7 @@ public class Sensor {
             CastRay(engine, _worldOrigin, _worldDirection)
             break
         case CastType.Spherecast:
-            CastSphere(_worldOrigin, _worldDirection)
+            CastSphere(engine, _worldOrigin, _worldDirection)
             break
         case CastType.RaycastArray:
             CastRayArray(engine, _worldOrigin, _worldDirection)
@@ -248,7 +248,31 @@ public class Sensor {
     }
 
     //Cast a sphere into '_direction' from '_origin'
-    private func CastSphere(_ _origin: Vector3, _ _direction: Vector3) {
+    private func CastSphere(_ engine: Engine, _ _origin: Vector3, _ _direction: Vector3) {
+        let shape = SphereColliderShape()
+        shape.radius = sphereCastRadius
+        let _hit: HitResult? = engine.physicsManager.sweep(shape, ray: Ray(origin: _origin, direction: _direction),
+                distance: castLength - sphereCastRadius, layerMask: layermask)
+
+        if let _hit = _hit {
+            hitPosition = _hit.point
+            hitNormal = _hit.normal
+            hitColliders.append(_hit.entity!)
+            hitTransforms.append(_hit.entity!.transform)
+
+            hitDistance = _hit.distance
+
+            hitDistance += sphereCastRadius
+
+            //Calculate real distance
+            if (calculateRealDistance) {
+                hitDistance = VectorMath.extractDotVector(_origin - hitPosition, direction: _direction).length()
+            }
+
+            //Calculate real surface normal by casting an additional raycast
+            if (calculateRealSurfaceNormal) {
+            }
+        }
     }
 
     //Calculate a direction in world coordinates based on the local axes of this gameobject's transform component
@@ -272,5 +296,58 @@ public class Sensor {
         case CastDirection.Down:
             return -tr.worldUp
         }
+    }
+}
+
+//MARK: - Getters
+extension Sensor {
+    //Returns whether the sensor has hit something
+    public var HasDetectedHit: Bool {
+        hasDetectedHit
+    }
+
+    //Returns how far the raycast reached before hitting a collider
+    public var GetDistance: Float {
+        hitDistance
+    }
+
+    //Returns the surface normal of the collider the raycast has hit
+    public var GetNormal: Vector3 {
+        hitNormal
+    }
+
+    //Returns the position in world coordinates where the raycast has hit a collider
+    public var GetPosition: Vector3 {
+        hitPosition
+    }
+
+    //Returns a reference to the collider that was hit by the raycast
+    public var GetCollider: Entity {
+        hitColliders[0]
+    }
+
+    //Returns a reference to the transform component attached to the collider that was hit by the raycast
+    public var GetTransform: Transform {
+        hitTransforms[0]
+    }
+}
+
+//MARK: - Setter
+extension Sensor {
+    //Set the position for the raycast to start from
+    //The input vector '_origin' is converted to local coordinates
+    public func SetCastOrigin(_ _origin: Vector3) {
+        origin = Vector3.transformCoordinate(v: _origin, m: tr.worldMatrix.invert())
+    }
+
+    //Set which axis of this gameobject's transform will be used as the direction for the raycast
+    public func SetCastDirection(_ _direction: CastDirection) {
+        castDirection = _direction
+    }
+
+    //Recalculate start positions for the raycast array
+    public func RecalibrateRaycastArrayPositions() {
+        raycastArrayStartPositions = Sensor.GetRaycastStartPositions(sensorRows: ArrayRows, sensorRayCount: arrayRayCount,
+                offsetRows: offsetArrayRows, sensorRadius: sphereCastRadius)
     }
 }
