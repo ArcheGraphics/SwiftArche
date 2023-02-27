@@ -53,7 +53,7 @@ func addCapsule(_ rootEntity: Entity, _ radius: Float, _ height: Float,
 }
 
 func addBox(_ rootEntity: Entity, _ size: Vector3,
-            _ position: Vector3, _ rotation: Quaternion) -> Entity {
+            _ position: Vector3, _ rotation: Quaternion, isDynamic: Bool = true) -> Entity {
     let mtl = PBRMaterial(rootEntity.engine)
     mtl.baseColor = Color(Float.random(in: 0...1), Float.random(in: 0...1), Float.random(in: 0...1), 1.0)
     mtl.metallic = 0.0
@@ -73,8 +73,13 @@ func addBox(_ rootEntity: Entity, _ size: Vector3,
     let physicsBox = BoxColliderShape()
     physicsBox.size = size
     physicsBox.isTrigger = false
-    let boxCollider: DynamicCollider = boxEntity.addComponent()
-    boxCollider.addShape(physicsBox)
+    if isDynamic {
+        let boxCollider: DynamicCollider = boxEntity.addComponent()
+        boxCollider.addShape(physicsBox)
+    } else {
+        let boxCollider: StaticCollider = boxEntity.addComponent()
+        boxCollider.addShape(physicsBox)
+    }
 
     return boxEntity
 }

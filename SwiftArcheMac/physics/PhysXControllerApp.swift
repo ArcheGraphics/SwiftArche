@@ -67,6 +67,21 @@ class ControllerScript: Script {
     }
 }
 
+class MovableBox : Script {
+    var boxEntity: Entity
+    var time: Float = 0
+    
+    required init(_ entity: Entity) {
+        boxEntity = addBox(entity, Vector3(5, 2, 5), Vector3(0, 0, 0), Quaternion(), isDynamic: false)
+        super.init(entity)
+    }
+
+    override func onUpdate(_ deltaTime: Float) {
+        time += deltaTime
+        boxEntity.transform.position.y = sin(time) * 3 + 3
+    }
+}
+
 class PhysXControllerApp: NSViewController {
     var canvas: Canvas!
     var engine: Engine!
@@ -118,6 +133,7 @@ class PhysXControllerApp: NSViewController {
                 }
             }
         }
+        let _: MovableBox = rootEntity.addComponent()
         addDuckMesh(rootEntity)
     }
     
