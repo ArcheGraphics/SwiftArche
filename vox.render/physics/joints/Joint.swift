@@ -8,11 +8,14 @@ import vox_math
 
 ///  A base class providing common functionality for joints.
 public class Joint: Component {
+    private static var _idGenerator: UInt32 = 0
+
     var _connectedCollider = JointCollider()
     var _collider = JointCollider()
     var _nativeJoint: PhysXJoint!
     private var _force: Float = 0
     private var _torque: Float = 0
+    private var _name: String
 
     /// The connected collider.
     public var connectedCollider: Collider? {
@@ -117,7 +120,14 @@ public class Joint: Component {
         }
     }
 
+    var name: String {
+        _name
+    }
+
     required init(_ entity: Entity) {
+        _name = "joint\(Joint._idGenerator)"
+        Joint._idGenerator += 1
+
         _connectedCollider.localPosition = Vector3()
         super.init(entity)
     }

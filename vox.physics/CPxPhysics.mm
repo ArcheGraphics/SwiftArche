@@ -17,6 +17,7 @@
 #import "PxPhysicsAPI.h"
 #import "extensions/PxExtensionsAPI.h"
 #include <functional>
+#include <vector>
 
 using namespace physx;
 
@@ -81,33 +82,89 @@ using namespace physx;
                             rotation.vector.z, rotation.vector.w)))];
 }
 
-- (CPxScene *)createSceneWith:(void (^ _Nullable)(uint32_t obj1, uint32_t obj2))onContactEnter
-                onContactExit:(void (^ _Nullable)(uint32_t obj1, uint32_t obj2))onContactExit
-                onContactStay:(void (^ _Nullable)(uint32_t obj1, uint32_t obj2))onContactStay
+- (CPxScene *)createSceneWith:(void (^ _Nullable)(uint32_t obj1, uint32_t obj2, void *ptr, uint32_t count))onContactEnter
+                onContactExit:(void (^ _Nullable)(uint32_t obj1, uint32_t obj2, void *ptr, uint32_t count))onContactExit
+                onContactStay:(void (^ _Nullable)(uint32_t obj1, uint32_t obj2, void *ptr, uint32_t count))onContactStay
                onTriggerEnter:(void (^ _Nullable)(uint32_t obj1, uint32_t obj2))onTriggerEnter
                 onTriggerExit:(void (^ _Nullable)(uint32_t obj1, uint32_t obj2))onTriggerExit
-                onTriggerStay:(void (^ _Nullable)(uint32_t obj1, uint32_t obj2))onTriggerStay {
+                 onJointBreak:(void (^ _Nullable)(uint32_t obj1, uint32_t obj2, NSString *name))onJointBreak {
     class PxSimulationEventCallbackWrapper : public PxSimulationEventCallback {
     public:
-        std::function<void(uint32_t obj1, uint32_t obj2)> onContactEnter;
-        std::function<void(uint32_t obj1, uint32_t obj2)> onContactExit;
-        std::function<void(uint32_t obj1, uint32_t obj2)> onContactStay;
+        std::function<void(uint32_t obj1, uint32_t obj2, void *ptr, uint32_t count)> onContactEnter;
+        std::function<void(uint32_t obj1, uint32_t obj2, void *ptr, uint32_t count)> onContactExit;
+        std::function<void(uint32_t obj1, uint32_t obj2, void *ptr, uint32_t count)> onContactStay;
+        std::vector<ContactInfo> userBuffer;
 
         std::function<void(uint32_t obj1, uint32_t obj2)> onTriggerEnter;
         std::function<void(uint32_t obj1, uint32_t obj2)> onTriggerExit;
-        std::function<void(uint32_t obj1, uint32_t obj2)> onTriggerStay;
 
-        PxSimulationEventCallbackWrapper(std::function<void(uint32_t obj1, uint32_t obj2)> onContactEnter,
-                std::function<void(uint32_t obj1, uint32_t obj2)> onContactExit,
-                std::function<void(uint32_t obj1, uint32_t obj2)> onContactStay,
+        std::function<void(uint32_t obj1, uint32_t obj2, NSString *name)> onJointBreak;
+
+        PxSimulationEventCallbackWrapper(std::function<void(uint32_t obj1, uint32_t obj2, void *ptr, uint32_t count)> onContactEnter,
+                std::function<void(uint32_t obj1, uint32_t obj2, void *ptr, uint32_t count)> onContactExit,
+                std::function<void(uint32_t obj1, uint32_t obj2, void *ptr, uint32_t count)> onContactStay,
                 std::function<void(uint32_t obj1, uint32_t obj2)> onTriggerEnter,
                 std::function<void(uint32_t obj1, uint32_t obj2)> onTriggerExit,
-                std::function<void(uint32_t obj1, uint32_t obj2)> onTriggerStay) :
+                std::function<void(uint32_t obj1, uint32_t obj2, NSString *name)> onJointBreak) :
                 onContactEnter(onContactEnter), onContactExit(onContactExit), onContactStay(onContactStay),
-                onTriggerEnter(onTriggerEnter), onTriggerExit(onTriggerExit), onTriggerStay(onTriggerStay) {
+                onTriggerEnter(onTriggerEnter), onTriggerExit(onTriggerExit), onJointBreak(onJointBreak) {
         }
 
-        void onConstraintBreak(PxConstraintInfo *, PxU32) override {
+        PX_INLINE PxU32 extractContacts(std::vector<ContactInfo> &userBuffer, const PxContactPair &pair) const {
+            PxU32 nbContacts = 0;
+
+            if (pair.contactCount && userBuffer.size()) {
+                PxContactStreamIterator iter(pair.contactPatches, pair.contactPoints,
+                        pair.getInternalFaceIndices(), pair.patchCount, pair.contactCount);
+
+                const PxReal *impulses = pair.contactImpulses;
+                const PxU32 hasImpulses = (pair.flags & PxContactPairFlag::eINTERNAL_HAS_IMPULSES);
+
+                while (iter.hasNextPatch()) {
+                    iter.nextPatch();
+                    while (iter.hasNextContact()) {
+                        iter.nextContact();
+                        ContactInfo &dst = userBuffer[nbContacts];
+                        auto point = iter.getContactPoint();
+                        dst.position = simd_make_float3(point.x, point.y, point.z);
+                        dst.separation = iter.getSeparation();
+                        auto normal = iter.getContactNormal();
+                        dst.normal = simd_make_float3(normal.x, normal.y, normal.z);
+
+                        if (hasImpulses) {
+                            const PxReal impulse = impulses[nbContacts];
+                            dst.impulse = dst.normal * impulse;
+                        } else
+                            dst.impulse = simd_float3();
+                        ++nbContacts;
+                        if (nbContacts == userBuffer.size())
+                            return nbContacts;
+                    }
+                }
+            }
+
+            return nbContacts;
+        }
+
+        void onConstraintBreak(PxConstraintInfo *constraints, PxU32 count) override {
+            PxRigidActor *actor0{nullptr};
+            PxRigidActor *actor1{nullptr};
+            std::vector<PxShape *> shapes(1);
+            for (PxU32 i = 0; i < count; i++) {
+                PxJoint *joint = reinterpret_cast<PxJoint *>(constraints[i].externalReference);
+                joint->getActors(actor0, actor1);
+                uint32_t index0 = -1;
+                if (actor0 != nullptr) {
+                    actor0->getShapes(shapes.data(), 1);
+                    index0 = shapes[0]->getQueryFilterData().word0;
+                }
+                uint32_t index1 = -1;
+                if (actor1 != nullptr) {
+                    actor1->getShapes(shapes.data(), 1);
+                    index1 = shapes[0]->getQueryFilterData().word0;
+                }
+                onJointBreak(index0, index1, [[NSString alloc] initWithUTF8String:joint->getName()]);
+            }
         }
 
         void onWake(PxActor **, PxU32) override {
@@ -119,16 +176,21 @@ using namespace physx;
         void onContact(const PxContactPairHeader &, const PxContactPair *pairs, PxU32 nbPairs) override {
             for (PxU32 i = 0; i < nbPairs; i++) {
                 const PxContactPair &cp = pairs[i];
+                userBuffer.resize(cp.contactCount);
+                extractContacts(userBuffer, cp);
 
                 if (cp.events & (PxPairFlag::eNOTIFY_TOUCH_FOUND | PxPairFlag::eNOTIFY_TOUCH_CCD)) {
-                    onContactEnter(cp.shapes[0]->getQueryFilterData().word0, cp.shapes[1]->getQueryFilterData().word0);
+                    onContactEnter(cp.shapes[0]->getQueryFilterData().word0, cp.shapes[1]->getQueryFilterData().word0,
+                            userBuffer.data(), static_cast<uint32_t>(userBuffer.size()));
                 } else if (cp.events & PxPairFlag::eNOTIFY_TOUCH_LOST) {
                     if (!cp.flags.isSet(PxContactPairFlag::Enum::eREMOVED_SHAPE_0) &&
                             !cp.flags.isSet(PxContactPairFlag::Enum::eREMOVED_SHAPE_1)) {
-                        onContactExit(cp.shapes[0]->getQueryFilterData().word0, cp.shapes[1]->getQueryFilterData().word0);
+                        onContactExit(cp.shapes[0]->getQueryFilterData().word0, cp.shapes[1]->getQueryFilterData().word0,
+                                userBuffer.data(), static_cast<uint32_t>(userBuffer.size()));
                     }
                 } else if (cp.events & PxPairFlag::eNOTIFY_TOUCH_PERSISTS) {
-                    onContactStay(cp.shapes[0]->getQueryFilterData().word0, cp.shapes[1]->getQueryFilterData().word0);
+                    onContactStay(cp.shapes[0]->getQueryFilterData().word0, cp.shapes[1]->getQueryFilterData().word0,
+                            userBuffer.data(), static_cast<uint32_t>(userBuffer.size()));
                 }
             }
         }
@@ -154,7 +216,7 @@ using namespace physx;
 
     PxSimulationEventCallbackWrapper *simulationEventCallback =
             new PxSimulationEventCallbackWrapper(onContactEnter, onContactExit, onContactStay,
-                    onTriggerEnter, onTriggerExit, onTriggerStay);
+                    onTriggerEnter, onTriggerExit, onJointBreak);
 
     PxSceneDesc sceneDesc(_physics->getTolerancesScale());
     sceneDesc.gravity = PxVec3(0.0f, -9.81f, 0.0f);

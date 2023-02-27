@@ -99,6 +99,10 @@
     return _c_joint->getInvInertiaScale1();
 }
 
+- (void)setName:(NSString *)name {
+    _c_joint->setName([name cStringUsingEncoding:NSUTF8StringEncoding]);
+}
+
 - (CPxConstraint *)getConstraint {
     return [[CPxConstraint alloc] initWithConstraint:_c_joint->getConstraint()];
 }

@@ -84,5 +84,6 @@ public class SpringJoint: Joint {
         _collider.localPosition = Vector3()
         _collider.collider = entity.getComponent()
         _nativeJoint = PhysXPhysics.createSpringJoint(_collider.collider!._nativeCollider)
+        _nativeJoint.setName(name)
     }
 }

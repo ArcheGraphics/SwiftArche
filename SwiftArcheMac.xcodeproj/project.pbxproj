@@ -73,6 +73,8 @@
 		3E1F12A229AC48AE00F1002E /* Mover.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E1F12A129AC48AE00F1002E /* Mover.swift */; };
 		3E1F12A629AC4EA100F1002E /* VectorMath.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E1F12A529AC4EA100F1002E /* VectorMath.swift */; };
 		3E1F12A929AC593C00F1002E /* Sensor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E1F12A329AC48C100F1002E /* Sensor.swift */; };
+		3E1F12AD29AC879E00F1002E /* Collision.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E1F12AC29AC879E00F1002E /* Collision.swift */; };
+		3E1F12AE29AC883100F1002E /* CeilingDetector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E1F12AA29AC778A00F1002E /* CeilingDetector.swift */; };
 		3E43DC9B295BDDDC00732AC0 /* physics_helpers.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3E6B23B52946B3E5000AC29F /* physics_helpers.metal */; };
 		3E43DC9C295BDDDC00732AC0 /* sdf_shading.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3E6B23D529499B36000AC29F /* sdf_shading.metal */; };
 		3E43DC9D295BDDDC00732AC0 /* sdf_baker.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3E6B23D2294964B1000AC29F /* sdf_baker.metal */; };
@@ -679,6 +681,8 @@
 		3E1F12A129AC48AE00F1002E /* Mover.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Mover.swift; sourceTree = "<group>"; };
 		3E1F12A329AC48C100F1002E /* Sensor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sensor.swift; sourceTree = "<group>"; };
 		3E1F12A529AC4EA100F1002E /* VectorMath.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VectorMath.swift; sourceTree = "<group>"; };
+		3E1F12AA29AC778A00F1002E /* CeilingDetector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CeilingDetector.swift; sourceTree = "<group>"; };
+		3E1F12AC29AC879E00F1002E /* Collision.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Collision.swift; sourceTree = "<group>"; };
 		3E6B235B2941BF88000AC29F /* BlendShapeWeightsAnimationCurveOwnerAssembler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlendShapeWeightsAnimationCurveOwnerAssembler.swift; sourceTree = "<group>"; };
 		3E6B235D294220BC000AC29F /* FaceMorphApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FaceMorphApp.swift; sourceTree = "<group>"; };
 		3E6B235F294224C1000AC29F /* FaceGUI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FaceGUI.swift; sourceTree = "<group>"; };
@@ -1429,6 +1433,7 @@
 			children = (
 				3E1F12A129AC48AE00F1002E /* Mover.swift */,
 				3E1F12A329AC48C100F1002E /* Sensor.swift */,
+				3E1F12AA29AC778A00F1002E /* CeilingDetector.swift */,
 			);
 			path = Core;
 			sourceTree = "<group>";
@@ -2068,6 +2073,7 @@
 				3EC038A429321835002187DC /* PhysXStaticCollider.swift */,
 				3EC038A829321835002187DC /* DynamicCollider.swift */,
 				3EC038A929321835002187DC /* PhysXDynamicCollider.swift */,
+				3E1F12AC29AC879E00F1002E /* Collision.swift */,
 				3EC038A629321835002187DC /* HitResult.swift */,
 				3EC038A229321834002187DC /* PhysicsManager.swift */,
 				3EC038AC29321835002187DC /* PhysXPhysicsManager.swift */,
@@ -2860,6 +2866,7 @@
 				040F1DC82933A172008BDC8D /* ControlKeyboard.swift in Sources */,
 				040F1DCA2933A3BE008BDC8D /* ControlWheel.swift in Sources */,
 				040F1DBE2933705D008BDC8D /* ControlPointer.swift in Sources */,
+				3E1F12AE29AC883100F1002E /* CeilingDetector.swift in Sources */,
 				040F1DCE2933AB71008BDC8D /* FreeControl.swift in Sources */,
 				040F1DD02933AC19008BDC8D /* ControlFreeKeyboard.swift in Sources */,
 				3E1F12A229AC48AE00F1002E /* Mover.swift in Sources */,
@@ -3270,6 +3277,7 @@
 				3EC0392429321872002187DC /* KHR_texture_transform.swift in Sources */,
 				3EC039E829321918002187DC /* AnimationProperty.swift in Sources */,
 				3EC039E529321918002187DC /* InterpolationType.swift in Sources */,
+				3E1F12AD29AC879E00F1002E /* Collision.swift in Sources */,
 				3EC0389629321826002187DC /* SceneManager.swift in Sources */,
 				3EC038C42932183D002187DC /* PhysXBoxColliderShape.swift in Sources */,
 				3EC03A052932192D002187DC /* BackgroundTextureFillMode.swift in Sources */,

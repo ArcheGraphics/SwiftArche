@@ -52,6 +52,8 @@ enum CPxJointActorIndex {
 
 - (float)getInvInertiaScale1;
 
+- (void)setName:(NSString *_Nonnull)name;
+
 - (CPxConstraint *_Nonnull)getConstraint;
 
 

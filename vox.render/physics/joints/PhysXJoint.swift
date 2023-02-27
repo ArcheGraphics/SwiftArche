@@ -48,6 +48,10 @@ class PhysXJoint {
         _pxJoint.setBreakForce(_breakForce, _breakTorque)
     }
 
+    func setName(_ name: String) {
+        _pxJoint.setName(name)
+    }
+
     /// Set the joint local pose for an actor.
     /// - Parameters:
     ///   - actor: 0 for the first actor, 1 for the second actor.

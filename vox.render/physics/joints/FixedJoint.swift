@@ -11,5 +11,6 @@ public class FixedJoint: Joint {
     override func _onAwake() {
         _collider.collider = entity.getComponent()
         _nativeJoint = PhysXPhysics.createFixedJoint(_collider.collider!._nativeCollider)
+        _nativeJoint.setName(name)
     }
 }

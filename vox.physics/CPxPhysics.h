@@ -22,6 +22,13 @@
 #import "joint/CPxPrismaticJoint.h"
 #import "joint/CPxD6Joint.h"
 
+struct ContactInfo {
+    simd_float3 position;
+    simd_float3 normal;
+    float separation;
+    simd_float3 impulse;
+};
+
 @interface CPxPhysics : NSObject
 - (bool)initExtensions;
 
@@ -38,12 +45,12 @@
 
 - (CPxRigidDynamic *_Nonnull)createRigidDynamicWithPosition:(simd_float3)position rotation:(simd_quatf)rotation;
 
-- (CPxScene *_Nonnull)createSceneWith:(void (^ _Nullable)(uint32_t obj1, uint32_t obj2))onContactEnter
-                        onContactExit:(void (^ _Nullable)(uint32_t obj1, uint32_t obj2))onContactExit
-                        onContactStay:(void (^ _Nullable)(uint32_t obj1, uint32_t obj2))onContactStay
+- (CPxScene *_Nonnull)createSceneWith:(void (^ _Nullable)(uint32_t obj1, uint32_t obj2, void *_Nonnull ptr, uint32_t count))onContactEnter
+                        onContactExit:(void (^ _Nullable)(uint32_t obj1, uint32_t obj2, void *_Nonnull ptr, uint32_t count))onContactExit
+                        onContactStay:(void (^ _Nullable)(uint32_t obj1, uint32_t obj2, void *_Nonnull ptr, uint32_t count))onContactStay
                        onTriggerEnter:(void (^ _Nullable)(uint32_t obj1, uint32_t obj2))onTriggerEnter
                         onTriggerExit:(void (^ _Nullable)(uint32_t obj1, uint32_t obj2))onTriggerExit
-                        onTriggerStay:(void (^ _Nullable)(uint32_t obj1, uint32_t obj2))onTriggerStay;
+                         onJointBreak:(void (^ _Nullable)(uint32_t obj1, uint32_t obj2, NSString *_Nonnull name))onJointBreak;
 
 //MARK: - Joint
 - (CPxFixedJoint *_Nonnull)createFixedJoint:(CPxRigidActor *_Nullable)actor0 :(simd_float3)position0 :(simd_quatf)rotation0

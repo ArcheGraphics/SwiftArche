@@ -19,45 +19,54 @@ class PhysXPhysicsManager {
     var _pxControllerManager: CPxControllerManager?
     private var _pxScene: CPxScene!
 
-    private var _onContactEnter: ((UInt32, UInt32) -> Void)!
-    private var _onContactExit: ((UInt32, UInt32) -> Void)!
-    private var _onContactStay: ((UInt32, UInt32) -> Void)!
+    private var _onContactEnter: ((UInt32, UInt32, [ContactInfo]) -> Void)!
+    private var _onContactExit: ((UInt32, UInt32, [ContactInfo]) -> Void)!
+    private var _onContactStay: ((UInt32, UInt32, [ContactInfo]) -> Void)!
     private var _onTriggerEnter: ((UInt32, UInt32) -> Void)!
     private var _onTriggerExit: ((UInt32, UInt32) -> Void)!
     private var _onTriggerStay: ((UInt32, UInt32) -> Void)!
+    private var _onJointBreak: ((UInt32, UInt32, String) -> Void)?
 
     private var _currentEvents: DisorderedArray<TriggerEvent> = DisorderedArray()
     private var _eventMap: [UInt32: [UInt32: TriggerEvent]] = [:]
     private var _eventPool: [TriggerEvent] = []
     private var _queryPool: [LocationHit] = []
 
-    init(_ onContactEnter: ((UInt32, UInt32) -> Void)?,
-         _ onContactExit: ((UInt32, UInt32) -> Void)?,
-         _ onContactStay: ((UInt32, UInt32) -> Void)?,
+    init(_ onContactEnter: ((UInt32, UInt32, [ContactInfo]) -> Void)?,
+         _ onContactExit: ((UInt32, UInt32, [ContactInfo]) -> Void)?,
+         _ onContactStay: ((UInt32, UInt32, [ContactInfo]) -> Void)?,
          _ onTriggerEnter: ((UInt32, UInt32) -> Void)?,
          _ onTriggerExit: ((UInt32, UInt32) -> Void)?,
-         _ onTriggerStay: ((UInt32, UInt32) -> Void)?) {
+         _ onTriggerStay: ((UInt32, UInt32) -> Void)?,
+         _ onJointBreak: ((UInt32, UInt32, String) -> Void)?) {
         _onContactEnter = onContactEnter
         _onContactExit = onContactExit
         _onContactStay = onContactStay
         _onTriggerEnter = onTriggerEnter
         _onTriggerExit = onTriggerExit
         _onTriggerStay = onTriggerStay
+        _onJointBreak = onJointBreak
 
         _queryPool = [LocationHit](repeating: LocationHit(), count: 8)
 
         _pxScene = PhysXPhysics._pxPhysics.createScene(
                 {
-                    [self] (index1: UInt32, index2: UInt32) in
-                    _onContactEnter(index1, index2)
+                    [self] (index1: UInt32, index2: UInt32, ptr: UnsafeMutableRawPointer, count: UInt32) in
+                    let contactPtr = ptr.bindMemory(to: ContactInfo.self, capacity: Int(count))
+                    let contactBuffer = UnsafeBufferPointer(start: contactPtr, count: Int(count))
+                    _onContactEnter(index1, index2, Array(contactBuffer))
                 },
                 onContactExit: {
-                    [self] (index1: UInt32, index2: UInt32) in
-                    _onContactExit(index1, index2)
+                    [self] (index1: UInt32, index2: UInt32, ptr: UnsafeMutableRawPointer, count: UInt32) in
+                    let contactPtr = ptr.bindMemory(to: ContactInfo.self, capacity: Int(count))
+                    let contactBuffer = UnsafeBufferPointer(start: contactPtr, count: Int(count))
+                    _onContactExit(index1, index2, Array(contactBuffer))
                 },
                 onContactStay: {
-                    [self] (index1: UInt32, index2: UInt32) in
-                    _onContactStay(index1, index2)
+                    [self] (index1: UInt32, index2: UInt32, ptr: UnsafeMutableRawPointer, count: UInt32) in
+                    let contactPtr = ptr.bindMemory(to: ContactInfo.self, capacity: Int(count))
+                    let contactBuffer = UnsafeBufferPointer(start: contactPtr, count: Int(count))
+                    _onContactStay(index1, index2, Array(contactBuffer))
                 },
                 onTriggerEnter: {
                     [self] (index1: UInt32, index2: UInt32) in
@@ -186,10 +195,10 @@ extension PhysXPhysicsManager {
     func hasRaycast(_ ray: Ray, _ distance: Float,
                     _ onRaycast: @escaping (UInt32) -> Bool) -> Bool {
         _pxScene.raycastAny(with: ray.origin.internalValue,
-                            unitDir: ray.direction.internalValue,
-                            distance: distance, filterCallback: onRaycast)
+                unitDir: ray.direction.internalValue,
+                distance: distance, filterCallback: onRaycast)
     }
-    
+
     func raycast(_ ray: Ray, _ distance: Float,
                  _ onRaycast: @escaping (UInt32) -> Bool,
                  _ outHitResult: ((LocationHit) -> Void)? = nil) -> Bool {
@@ -231,13 +240,13 @@ extension PhysXPhysicsManager {
 
         return _queryPool[0..<Int(result)]
     }
-    
+
     func hasSweep(_ shape: PhysXColliderShape, _ ray: Ray, _ distance: Float,
                   _ onRaycast: @escaping (UInt32) -> Bool) -> Bool {
         _pxScene.sweepAny(with: shape._pxShape,
-                          origin: ray.origin.internalValue,
-                          unitDir: ray.direction.internalValue,
-                          distance: distance, filterCallback: onRaycast)
+                origin: ray.origin.internalValue,
+                unitDir: ray.direction.internalValue,
+                distance: distance, filterCallback: onRaycast)
     }
 
     func sweep(_ shape: PhysXColliderShape, _ ray: Ray, _ distance: Float,
@@ -281,7 +290,7 @@ extension PhysXPhysicsManager {
 
         return _queryPool[0..<Int(result)]
     }
-    
+
     func hasOverlap(_ shape: PhysXColliderShape, _ origin: Vector3,
                     _ onRaycast: @escaping (UInt32) -> Bool) -> Bool {
         _pxScene.overlapAny(with: shape._pxShape, origin: origin.internalValue, filterCallback: onRaycast)

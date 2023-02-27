@@ -124,5 +124,6 @@ public class HingeJoint: Joint {
         _collider.localPosition = Vector3()
         _collider.collider = entity.getComponent()
         _nativeJoint = PhysXPhysics.createHingeJoint(_collider.collider!._nativeCollider)
+        _nativeJoint.setName(name)
     }
 }

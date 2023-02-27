@@ -36,9 +36,48 @@ public class PhysicsManager {
         _engine = engine
         PhysXPhysics.initialization()
         _nativePhysicsManager = PhysXPhysics.createPhysicsManager(
-                { (obj1: UInt32, obj2: UInt32) in },
-                { (obj1: UInt32, obj2: UInt32) in },
-                { (obj1: UInt32, obj2: UInt32) in },
+                { (obj1: UInt32, obj2: UInt32, info: [ContactInfo]) in
+                    let shape1 = self._physicalObjectsMap[obj1]
+                    let shape2 = self._physicalObjectsMap[obj2]
+
+                    var scripts = shape1!.collider!.entity._scripts
+                    for i in 0..<scripts.count {
+                        scripts.get(i)!.onCollisionEnter(Collision(shape: shape2!, contacts: info))
+                    }
+
+                    scripts = shape2!.collider!.entity._scripts
+                    for i in 0..<scripts.count {
+                        scripts.get(i)!.onCollisionEnter(Collision(shape: shape1!, contacts: info))
+                    }
+                },
+                { (obj1: UInt32, obj2: UInt32, info: [ContactInfo]) in
+                    let shape1 = self._physicalObjectsMap[obj1]
+                    let shape2 = self._physicalObjectsMap[obj2]
+
+                    var scripts = shape1!.collider!.entity._scripts
+                    for i in 0..<scripts.count {
+                        scripts.get(i)!.onCollisionExit(Collision(shape: shape2!, contacts: info))
+                    }
+
+                    scripts = shape2!.collider!.entity._scripts
+                    for i in 0..<scripts.count {
+                        scripts.get(i)!.onCollisionExit(Collision(shape: shape1!, contacts: info))
+                    }
+                },
+                { (obj1: UInt32, obj2: UInt32, info: [ContactInfo]) in
+                    let shape1 = self._physicalObjectsMap[obj1]
+                    let shape2 = self._physicalObjectsMap[obj2]
+
+                    var scripts = shape1!.collider!.entity._scripts
+                    for i in 0..<scripts.count {
+                        scripts.get(i)!.onCollisionStay(Collision(shape: shape2!, contacts: info))
+                    }
+
+                    scripts = shape2!.collider!.entity._scripts
+                    for i in 0..<scripts.count {
+                        scripts.get(i)!.onCollisionStay(Collision(shape: shape1!, contacts: info))
+                    }
+                },
                 { (obj1: UInt32, obj2: UInt32) in
                     let shape1 = self._physicalObjectsMap[obj1]
                     let shape2 = self._physicalObjectsMap[obj2]
@@ -79,6 +118,26 @@ public class PhysicsManager {
                     scripts = shape2!.collider!.entity._scripts
                     for i in 0..<scripts.count {
                         scripts.get(i)!.onTriggerStay(shape1!)
+                    }
+                },
+                { (obj1: UInt32, obj2: UInt32, name: String) in
+                    let shape1 = self._physicalObjectsMap[obj1]
+                    let shape2 = self._physicalObjectsMap[obj2]
+
+                    var joints: [Joint] = shape1!.collider!.entity.getComponents()
+                    for i in 0..<joints.count {
+                        if joints[i].name == name {
+                            // MARK: - TODO Destroy
+                            joints[i].enabled = false
+                        }
+                    }
+
+                    joints = shape2!.collider!.entity.getComponents()
+                    for i in 0..<joints.count {
+                        if joints[i].name == name {
+                            // MARK: - TODO Destroy
+                            joints[i].enabled = false
+                        }
                     }
                 }
         )
@@ -249,7 +308,7 @@ extension PhysicsManager {
         }
         return _nativePhysicsManager.hasSweep(shape._nativeShape, ray, distance, onSweep)
     }
-    
+
     /// Casts a ray through the Scene and returns the first hit.
     /// - Parameters:
     ///   - ray: The ray
@@ -311,7 +370,7 @@ extension PhysicsManager {
         }
         return _nativePhysicsManager.hasOverlap(shape._nativeShape, origin, onOverlap)
     }
-    
+
     public func overlapAll(_ shape: ColliderShape, origin: Vector3,
                            layerMask: Layer = Layer.Everything) -> [HitResult] {
         let onOverlap = { (obj: UInt32) -> Bool in

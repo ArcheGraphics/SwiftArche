@@ -384,6 +384,16 @@ extension Vector3 {
         }
         return Vector3(x, y, z)
     }
+    
+    /// Calculates the angle between vectors from and.
+    /// - Parameters:
+    ///   - from: The vector from which the angular difference is measured.
+    ///   - to: The vector to which the angular difference is measured.
+    /// - Returns: The angle in degrees between the two vectors.
+    public static func angle(from: Vector3, to: Vector3) -> Float {
+        let num = sqrt(from.lengthSquared() * to.lengthSquared())
+        return num < 1.0000000036274937E-15 ? 0.0 : acos(simd_clamp(Vector3.dot(left: from, right: to) / num, -1, 1)) * 57.29578
+    }
 }
 
 //MARK:- Class Method

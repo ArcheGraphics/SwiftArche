@@ -16,14 +16,15 @@ class PhysXPhysics {
         _pxPhysics.initExtensions()
     }
 
-    static func createPhysicsManager(_ onContactEnter: ((UInt32, UInt32) -> Void)?,
-                                     _ onContactExit: ((UInt32, UInt32) -> Void)?,
-                                     _ onContactStay: ((UInt32, UInt32) -> Void)?,
+    static func createPhysicsManager(_ onContactEnter: ((UInt32, UInt32, [ContactInfo]) -> Void)?,
+                                     _ onContactExit: ((UInt32, UInt32, [ContactInfo]) -> Void)?,
+                                     _ onContactStay: ((UInt32, UInt32, [ContactInfo]) -> Void)?,
                                      _ onTriggerEnter: ((UInt32, UInt32) -> Void)?,
                                      _ onTriggerExit: ((UInt32, UInt32) -> Void)?,
-                                     _ onTriggerStay: ((UInt32, UInt32) -> Void)?) -> PhysXPhysicsManager {
+                                     _ onTriggerStay: ((UInt32, UInt32) -> Void)?,
+                                     _ onJointBreak: ((UInt32, UInt32, String) -> Void)?) -> PhysXPhysicsManager {
         PhysXPhysicsManager(onContactEnter, onContactExit, onContactStay,
-                onTriggerEnter, onTriggerExit, onTriggerStay)
+                onTriggerEnter, onTriggerExit, onTriggerStay, onJointBreak)
     }
 
     static func createDynamicCollider(_ position: Vector3, _ rotation: Quaternion) -> PhysXDynamicCollider {
