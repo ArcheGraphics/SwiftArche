@@ -851,7 +851,25 @@ extension KinematicCharacterMotor {
             characterToBodyMassRatio: Float,
             velocityChangeOnCharacter: inout Vector3,
             velocityChangeOnBody: inout Vector3) {
-        // MARK: - TODO
+        velocityChangeOnCharacter = Vector3()
+        velocityChangeOnBody = Vector3()
+
+        let bodyToCharacterMassRatio = 1 - characterToBodyMassRatio
+        let characterVelocityMagnitudeOnHitNormal = Vector3.dot(left: characterVelocity, right: hitNormal)
+        let bodyVelocityMagnitudeOnHitNormal = Vector3.dot(left: bodyVelocity, right: hitNormal)
+
+        // if character velocity was going against the obstruction, restore the portion of the velocity that got projected during the movement phase
+        if (characterVelocityMagnitudeOnHitNormal < 0) {
+            let restoredCharacterVelocity = hitNormal * characterVelocityMagnitudeOnHitNormal
+            velocityChangeOnCharacter += restoredCharacterVelocity
+        }
+
+        // solve impulse velocities on both bodies, but only if the body velocity would be giving resistance to the character in any way
+        if (bodyVelocityMagnitudeOnHitNormal > characterVelocityMagnitudeOnHitNormal) {
+            let relativeImpactVelocity = hitNormal * (bodyVelocityMagnitudeOnHitNormal - characterVelocityMagnitudeOnHitNormal)
+            velocityChangeOnCharacter += relativeImpactVelocity * bodyToCharacterMassRatio
+            velocityChangeOnBody += -relativeImpactVelocity * characterToBodyMassRatio
+        }
     }
 
     /// Determines if the input collider is valid for collision processing
@@ -901,30 +919,297 @@ extension KinematicCharacterMotor {
     /// Determines if the motor is considered stable on a given hit
     public func EvaluateHitStability(hitCollider: Collider, hitNormal: Vector3, hitPoint: Vector3, atCharacterPosition: Vector3,
                                      atCharacterRotation: Quaternion, withCharacterVelocity: Vector3, stabilityReport: inout HitStabilityReport) {
-        // MARK: - TODO
+        if (!_solveGrounding) {
+            stabilityReport.IsStable = false
+            return
+        }
+
+        let atCharacterUp = Vector3.transformByQuat(v: _cachedWorldUp, quaternion: atCharacterRotation)
+        let innerHitDirection = Vector3.projectOnPlane(vector: hitNormal, planeNormal: atCharacterUp).normalized()
+
+        stabilityReport.IsStable = IsStableOnNormal(hitNormal)
+
+        stabilityReport.FoundInnerNormal = false
+        stabilityReport.FoundOuterNormal = false
+        stabilityReport.InnerNormal = hitNormal
+        stabilityReport.OuterNormal = hitNormal
+
+        // Ledge handling
+        if (LedgeAndDenivelationHandling) {
+            var ledgeCheckHeight = KinematicCharacterMotor.MinDistanceForLedge
+            if (StepHandling != StepHandlingMethod.None) {
+                ledgeCheckHeight = MaxStepHeight
+            }
+
+            var isStableLedgeInner = false
+            var isStableLedgeOuter = false
+
+            var innerLedgeHit = HitResult()
+            if (CharacterCollisionsRaycast(
+                    position: hitPoint + (atCharacterUp * KinematicCharacterMotor.SecondaryProbesVertical) + (innerHitDirection * KinematicCharacterMotor.SecondaryProbesHorizontal),
+                    direction: -atCharacterUp,
+                    distance: ledgeCheckHeight + KinematicCharacterMotor.SecondaryProbesVertical,
+                    closestHit: &innerLedgeHit,
+                    hits: _internalCharacterHits) > 0) {
+                let innerLedgeNormal = innerLedgeHit.normal
+                stabilityReport.InnerNormal = innerLedgeNormal
+                stabilityReport.FoundInnerNormal = true
+                isStableLedgeInner = IsStableOnNormal(innerLedgeNormal)
+            }
+
+            var outerLedgeHit = HitResult()
+            if (CharacterCollisionsRaycast(
+                    position: hitPoint + (atCharacterUp * KinematicCharacterMotor.SecondaryProbesVertical)
+                            + (-innerHitDirection * KinematicCharacterMotor.SecondaryProbesHorizontal),
+                    direction: -atCharacterUp,
+                    distance: ledgeCheckHeight + KinematicCharacterMotor.SecondaryProbesVertical,
+                    closestHit: &outerLedgeHit,
+                    hits: _internalCharacterHits) > 0) {
+                let outerLedgeNormal = outerLedgeHit.normal
+                stabilityReport.OuterNormal = outerLedgeNormal
+                stabilityReport.FoundOuterNormal = true
+                isStableLedgeOuter = IsStableOnNormal(outerLedgeNormal)
+            }
+
+            stabilityReport.LedgeDetected = (isStableLedgeInner != isStableLedgeOuter)
+            if (stabilityReport.LedgeDetected) {
+                stabilityReport.IsOnEmptySideOfLedge = isStableLedgeOuter && !isStableLedgeInner
+                stabilityReport.LedgeGroundNormal = isStableLedgeOuter ? stabilityReport.OuterNormal : stabilityReport.InnerNormal
+                stabilityReport.LedgeRightDirection = Vector3.cross(left: hitNormal, right: stabilityReport.LedgeGroundNormal).normalized()
+                stabilityReport.LedgeFacingDirection = Vector3.projectOnPlane(vector: Vector3.cross(left: stabilityReport.LedgeGroundNormal, right: stabilityReport.LedgeRightDirection), planeNormal: CharacterUp).normalized()
+                stabilityReport.DistanceFromLedge =
+                        Vector3.projectOnPlane(vector: (hitPoint - (atCharacterPosition + Vector3.transformByQuat(v: _characterTransformToCapsuleBottom,
+                                quaternion: atCharacterRotation))),
+                                planeNormal: atCharacterUp).length()
+                stabilityReport.IsMovingTowardsEmptySideOfLedge = Vector3.dot(left: withCharacterVelocity.normalized(),
+                        right: stabilityReport.LedgeFacingDirection) > 0
+            }
+
+            if (stabilityReport.IsStable) {
+                stabilityReport.IsStable = IsStableWithSpecialCases(stabilityReport: &stabilityReport, velocity: withCharacterVelocity)
+            }
+        }
+
+        // Step handling
+        if (StepHandling != StepHandlingMethod.None && !stabilityReport.IsStable) {
+            // Stepping not supported on dynamic rigidbodies
+            let hitRigidbody = hitCollider as? DynamicCollider
+            if (!(hitRigidbody != nil && !hitRigidbody!.isKinematic)) {
+                DetectSteps(characterPosition: atCharacterPosition, characterRotation: atCharacterRotation,
+                        hitPoint: hitPoint, innerHitDirection: innerHitDirection, stabilityReport: &stabilityReport)
+
+                if (stabilityReport.ValidStepDetected) {
+                    stabilityReport.IsStable = true
+                }
+            }
+        }
+
+        CharacterController!.ProcessHitStabilityReport(hitCollider: hitCollider, hitNormal: hitNormal, hitPoint: hitPoint,
+                atCharacterPosition: atCharacterPosition, atCharacterRotation: atCharacterRotation,
+                hitStabilityReport: &stabilityReport)
     }
 
     private func DetectSteps(characterPosition: Vector3, characterRotation: Quaternion, hitPoint: Vector3,
                              innerHitDirection: Vector3, stabilityReport: inout HitStabilityReport) {
-        // MARK: - TODO
+        var nbStepHits = 0
+        var tmpCollider: Collider? = nil
+        var outerStepHit = HitResult()
+        let characterUp: Vector3 = Vector3.transformByQuat(v: _cachedWorldUp, quaternion: characterRotation)
+        let verticalCharToHit: Vector3 = Vector3.project(vector: (hitPoint - characterPosition), onNormal: characterUp)
+        let horizontalCharToHitDirection: Vector3 = Vector3.projectOnPlane(vector: (hitPoint - characterPosition), planeNormal: characterUp).normalized()
+        var stepCheckStartPos: Vector3 = (hitPoint - verticalCharToHit) + (characterUp * MaxStepHeight)
+                + (horizontalCharToHitDirection * KinematicCharacterMotor.CollisionOffset * 3.0)
+
+        // Do outer step check with capsule cast on hit point
+        nbStepHits = CharacterCollisionsSweep(
+                position: stepCheckStartPos,
+                rotation: characterRotation,
+                direction: -characterUp,
+                distance: MaxStepHeight + KinematicCharacterMotor.CollisionOffset,
+                closestHit: &outerStepHit,
+                hits: _internalCharacterHits,
+                inflate: 0,
+                acceptOnlyStableGroundLayer: true)
+
+        // Check for overlaps and obstructions at the hit position
+        if (CheckStepValidity(nbStepHits: nbStepHits, characterPosition: characterPosition, characterRotation: characterRotation,
+                innerHitDirection: innerHitDirection, stepCheckStartPos: stepCheckStartPos, hitCollider: &tmpCollider)) {
+            stabilityReport.ValidStepDetected = true
+            stabilityReport.SteppedCollider = tmpCollider!
+        }
+
+        if (StepHandling == StepHandlingMethod.Extra && !stabilityReport.ValidStepDetected) {
+            // Do min reach step check with capsule cast on hit point
+            stepCheckStartPos = characterPosition + (characterUp * MaxStepHeight) + (-innerHitDirection * MinRequiredStepDepth)
+            nbStepHits = CharacterCollisionsSweep(
+                    position: stepCheckStartPos,
+                    rotation: characterRotation,
+                    direction: -characterUp,
+                    distance: MaxStepHeight - KinematicCharacterMotor.CollisionOffset,
+                    closestHit: &outerStepHit,
+                    hits: _internalCharacterHits,
+                    inflate: 0,
+                    acceptOnlyStableGroundLayer: true)
+
+            // Check for overlaps and obstructions at the hit position
+            if (CheckStepValidity(nbStepHits: nbStepHits, characterPosition: characterPosition, characterRotation: characterRotation,
+                    innerHitDirection: innerHitDirection, stepCheckStartPos: stepCheckStartPos, hitCollider: &tmpCollider)) {
+                stabilityReport.ValidStepDetected = true
+                stabilityReport.SteppedCollider = tmpCollider!
+            }
+        }
     }
 
     private func CheckStepValidity(nbStepHits: Int, characterPosition: Vector3, characterRotation: Quaternion,
-                                   innerHitDirection: Vector3, stepCheckStartPos: Vector3, hitCollider: inout Collider) -> Bool {
-        // MARK: - TODO
-        false
+                                   innerHitDirection: Vector3, stepCheckStartPos: Vector3, hitCollider: inout Collider?) -> Bool {
+        hitCollider = nil
+        let characterUp = Vector3.transformByQuat(v: Vector3.up, quaternion: characterRotation)
+
+        // Find the farthest valid hit for stepping
+        var foundValidStepPosition = false
+        var nbStepHits = nbStepHits
+        while (nbStepHits > 0 && !foundValidStepPosition) {
+            // Get farthest hit among the remaining hits
+            var farthestHit = HitResult()
+            var farthestDistance: Float = 0
+            var farthestIndex: Int = 0
+            for i in 0..<nbStepHits {
+                let hitDistance = _internalCharacterHits[i].distance
+                if (hitDistance > farthestDistance) {
+                    farthestDistance = hitDistance
+                    farthestHit = _internalCharacterHits[i]
+                    farthestIndex = i
+                }
+            }
+
+            let characterPositionAtHit = stepCheckStartPos + (-characterUp * (farthestHit.distance - KinematicCharacterMotor.CollisionOffset))
+
+            let atStepOverlaps = CharacterCollisionsOverlap(position: characterPositionAtHit, rotation: characterRotation,
+                    overlappedColliders: _internalProbedColliders)
+            if (atStepOverlaps <= 0) {
+                // Check for outer hit slope normal stability at the step position
+                var outerSlopeHit = HitResult()
+                if (CharacterCollisionsRaycast(
+                        position: farthestHit.point + (characterUp * KinematicCharacterMotor.SecondaryProbesVertical)
+                                + (-innerHitDirection * KinematicCharacterMotor.SecondaryProbesHorizontal),
+                        direction: -characterUp,
+                        distance: MaxStepHeight + KinematicCharacterMotor.SecondaryProbesVertical,
+                        closestHit: &outerSlopeHit,
+                        hits: _internalCharacterHits,
+                        acceptOnlyStableGroundLayer: true) > 0) {
+                    if (IsStableOnNormal(outerSlopeHit.normal)) {
+                        var tmpUpObstructionHit = HitResult()
+                        // Cast upward to detect any obstructions to moving there
+                        if (CharacterCollisionsSweep(
+                                position: characterPosition, // position
+                                rotation: characterRotation, // rotation
+                                direction: characterUp, // direction
+                                distance: MaxStepHeight - farthestHit.distance, // distance
+                                closestHit: &tmpUpObstructionHit, // closest hit
+                                hits: _internalCharacterHits) // all hits
+                                <= 0) {
+                            // Do inner step check...
+                            var innerStepValid = false
+                            var innerStepHit = HitResult()
+
+                            if (AllowSteppingWithoutStableGrounding) {
+                                innerStepValid = true
+                            } else {
+                                // At the capsule center at the step height
+                                if (CharacterCollisionsRaycast(
+                                        position: characterPosition + Vector3.project(vector: (characterPositionAtHit - characterPosition), onNormal: characterUp),
+                                        direction: -characterUp,
+                                        distance: MaxStepHeight,
+                                        closestHit: &innerStepHit,
+                                        hits: _internalCharacterHits,
+                                        acceptOnlyStableGroundLayer: true) > 0) {
+                                    if (IsStableOnNormal(innerStepHit.normal)) {
+                                        innerStepValid = true
+                                    }
+                                }
+                            }
+
+                            if (!innerStepValid) {
+                                // At inner step of the step point
+                                if (CharacterCollisionsRaycast(
+                                        position: farthestHit.point + (innerHitDirection * KinematicCharacterMotor.SecondaryProbesHorizontal),
+                                        direction: -characterUp,
+                                        distance: MaxStepHeight,
+                                        closestHit: &innerStepHit,
+                                        hits: _internalCharacterHits,
+                                        acceptOnlyStableGroundLayer: true) > 0) {
+                                    if (IsStableOnNormal(innerStepHit.normal)) {
+                                        innerStepValid = true
+                                    }
+                                }
+                            }
+
+                            // Final validation of step
+                            if (innerStepValid) {
+                                hitCollider = farthestHit.collider
+                                foundValidStepPosition = true
+                                return true
+                            }
+                        }
+                    }
+                }
+            }
+
+            // Discard hit if not valid step
+            if (!foundValidStepPosition) {
+                nbStepHits -= 1
+                if (farthestIndex < nbStepHits) {
+                    _internalCharacterHits[farthestIndex] = _internalCharacterHits[nbStepHits]
+                }
+            }
+        }
+
+        return false
     }
 
     /// Get true linear velocity (taking into account rotational velocity) on a given point of a rigidbody
     public func GetVelocityFromRigidbodyMovement(interactiveRigidbody: DynamicCollider, atPoint: Vector3, deltaTime: Float,
                                                  linearVelocity: inout Vector3, angularVelocity: inout Vector3) {
-        // MARK: - TODO
+        if (deltaTime > 0) {
+            linearVelocity = interactiveRigidbody.linearVelocity
+            angularVelocity = interactiveRigidbody.angularVelocity
+            if (interactiveRigidbody.isKinematic) {
+                let physicsMover: PhysicsMover? = interactiveRigidbody.entity.getComponent()
+                if let physicsMover = physicsMover {
+                    linearVelocity = physicsMover.Velocity
+                    angularVelocity = physicsMover.AngularVelocity
+                }
+            }
+
+            if angularVelocity != Vector3.zero {
+                let centerOfRotation = Vector3.transformCoordinate(v: interactiveRigidbody.centerOfMass,
+                        m: interactiveRigidbody.entity.transform.worldMatrix)
+                let centerOfRotationToPoint = atPoint - centerOfRotation
+                let euler = angularVelocity * MathUtil.radToDegreeFactor * deltaTime
+                let rotationFromInteractiveRigidbody = Quaternion.rotationEuler(x: euler.x, y: euler.y, z: euler.z)
+                let finalPointPosition = centerOfRotation + Vector3.transformByQuat(v: centerOfRotationToPoint, quaternion: rotationFromInteractiveRigidbody)
+                linearVelocity += (finalPointPosition - atPoint) / deltaTime
+            }
+        } else {
+            linearVelocity = Vector3()
+            angularVelocity = Vector3()
+            return
+        }
     }
 
     /// Determines if a collider has an attached interactive rigidbody
     private func GetInteractiveRigidbody(onCollider: Collider) -> DynamicCollider? {
-        // MARK: - TODO
-        nil
+        let colliderAttachedRigidbody = onCollider as? DynamicCollider
+        if let colliderAttachedRigidbody = colliderAttachedRigidbody {
+            if let _: PhysicsMover = colliderAttachedRigidbody.entity.getComponent() {
+                return colliderAttachedRigidbody
+            }
+
+            if (!colliderAttachedRigidbody.isKinematic) {
+                return colliderAttachedRigidbody
+            }
+        }
+        return nil
     }
 
     /// Calculates the velocity required to move the character to the target position over a specific deltaTime.
@@ -965,7 +1250,7 @@ extension KinematicCharacterMotor {
     ///   - inflate: inflate
     ///   - acceptOnlyStableGroundLayer: acceptOnlyStableGroundLayer
     /// - Returns: Returns number of overlaps
-    public func CharacterCollisionsOverlap(position: Vector3, rotation: Quaternion, overlappedColliders: [Collider],
+    public func CharacterCollisionsOverlap(position: Vector3, rotation: Quaternion, overlappedColliders: [Collider?],
                                            inflate: Float = 0, acceptOnlyStableGroundLayer: Bool = false) -> Int {
         var queryLayers = CollidableLayers
         if (acceptOnlyStableGroundLayer) {
@@ -982,6 +1267,7 @@ extension KinematicCharacterMotor {
         var nbHits = 0
         let shape = CapsuleColliderShape()
         shape.radius = (Capsule!.shapes[0] as! CapsuleColliderShape).radius + inflate
+        // todo
         var overlappedColliders = engine.physicsManager.overlapAll(shape, origin: (bottom + top) * 0.5, layerMask: queryLayers)
 
         // Filter out invalid colliders
@@ -1007,7 +1293,7 @@ extension KinematicCharacterMotor {
     ///   - triggerInteraction: triggerInteraction
     ///   - inflate: inflate
     /// - Returns: Returns number of overlaps
-    public func CharacterOverlap(position: Vector3, rotation: Quaternion, overlappedColliders: [Collider],
+    public func CharacterOverlap(position: Vector3, rotation: Quaternion, overlappedColliders: [Collider?],
                                  layers: Layer, inflate: Float = 0) -> Int {
         var bottom = position + Vector3.transformByQuat(v: _characterTransformToCapsuleBottomHemi, quaternion: rotation)
         var top = position + Vector3.transformByQuat(v: _characterTransformToCapsuleTopHemi, quaternion: rotation)
@@ -1019,6 +1305,7 @@ extension KinematicCharacterMotor {
         var nbHits = 0
         let shape = CapsuleColliderShape()
         shape.radius = (Capsule!.shapes[0] as! CapsuleColliderShape).radius + inflate
+        // todo
         var overlappedColliders = engine.physicsManager.overlapAll(shape, origin: (bottom + top) * 0.5, layerMask: layers)
 
         // Filter out the character capsule itself

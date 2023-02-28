@@ -70,6 +70,9 @@ public struct Vector3 {
 }
 
 //MARK:- Static Methods
+extension Vector3 : Equatable {
+    
+}
 
 extension Vector3 {
     /// Determines the sum of two vectors.
