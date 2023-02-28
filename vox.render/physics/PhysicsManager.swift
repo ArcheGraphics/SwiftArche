@@ -260,7 +260,9 @@ extension PhysicsManager {
         }
         var hitResult = HitResult()
         let result = _nativePhysicsManager.raycast(ray, distance, onRaycast, { [self](info) in
-            hitResult.entity = _physicalObjectsMap[info.index]!._collider!.entity
+            hitResult.colliderShape = _physicalObjectsMap[info.index]
+            hitResult.collider = hitResult.colliderShape!._collider
+            hitResult.entity = hitResult.collider!.entity
             hitResult.distance = info.distance
             hitResult.normal = Vector3(info.normal)
             hitResult.point = Vector3(info.position)
@@ -322,7 +324,9 @@ extension PhysicsManager {
         }
         var hitResult = HitResult()
         let result = _nativePhysicsManager.sweep(shape._nativeShape, ray, distance, onSweep, { [self](info) in
-            hitResult.entity = _physicalObjectsMap[info.index]!._collider!.entity
+            hitResult.colliderShape = _physicalObjectsMap[info.index]
+            hitResult.collider = hitResult.colliderShape!.collider
+            hitResult.entity = hitResult.collider!.entity
             hitResult.distance = info.distance
             hitResult.normal = Vector3(info.normal)
             hitResult.point = Vector3(info.position)
@@ -370,22 +374,17 @@ extension PhysicsManager {
     }
 
     public func overlapAll(_ shape: ColliderShape, origin: Vector3,
-                           layerMask: Layer = Layer.Everything) -> [HitResult] {
+                           layerMask: Layer = Layer.Everything) -> [ColliderShape] {
         let onOverlap = { (obj: UInt32) -> Bool in
             let shape = self._physicalObjectsMap[obj]!
             return (shape.collider!.entity.layer.rawValue & layerMask.rawValue != 0) && shape.isSceneQuery
         }
         let result = _nativePhysicsManager.overlapAll(shape._nativeShape, origin, onOverlap)
 
-        var hitResults: [HitResult] = []
+        var hitResults: [ColliderShape] = []
         hitResults.reserveCapacity(result.count)
         for info in result {
-            var hit = HitResult()
-            hit.entity = _physicalObjectsMap[info.index]!._collider!.entity
-            hit.distance = info.distance
-            hit.normal = Vector3(info.normal)
-            hit.point = Vector3(info.position)
-            hitResults.append(hit)
+            hitResults.append(_physicalObjectsMap[info.index]!)
         }
         return hitResults
     }

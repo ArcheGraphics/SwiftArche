@@ -953,7 +953,10 @@ extension KinematicCharacterMotor {
             vector.z = 0
         }
     }
+}
 
+// MARK: - Scene Query
+extension KinematicCharacterMotor {
     /// Detect if the character capsule is overlapping with anything collidable
     /// - Parameters:
     ///   - position: position
@@ -964,8 +967,35 @@ extension KinematicCharacterMotor {
     /// - Returns: Returns number of overlaps
     public func CharacterCollisionsOverlap(position: Vector3, rotation: Quaternion, overlappedColliders: [Collider],
                                            inflate: Float = 0, acceptOnlyStableGroundLayer: Bool = false) -> Int {
-        // MARK: - TODO
-        0
+        var queryLayers = CollidableLayers
+        if (acceptOnlyStableGroundLayer) {
+            queryLayers = [CollidableLayers, StableGroundLayers]
+        }
+
+        var bottom = position + Vector3.transformByQuat(v: _characterTransformToCapsuleBottomHemi, quaternion: rotation)
+        var top = position + Vector3.transformByQuat(v: _characterTransformToCapsuleTopHemi, quaternion: rotation)
+        if (inflate != 0) {
+            bottom += Vector3.transformByQuat(v: Vector3.down, quaternion: rotation) * inflate
+            top += Vector3.transformByQuat(v: Vector3.up, quaternion: rotation) * inflate
+        }
+
+        var nbHits = 0
+        let shape = CapsuleColliderShape()
+        shape.radius = (Capsule!.shapes[0] as! CapsuleColliderShape).radius + inflate
+        var overlappedColliders = engine.physicsManager.overlapAll(shape, origin: (bottom + top) * 0.5, layerMask: queryLayers)
+
+        // Filter out invalid colliders
+        nbHits = overlappedColliders.count
+        for i in stride(from: overlappedColliders.count - 1, to: 0, by: -1) {
+            if (!CheckIfColliderValidForCollisions(overlappedColliders[i].collider!)) {
+                nbHits -= 1
+                if (i < nbHits) {
+                    overlappedColliders[i] = overlappedColliders[nbHits]
+                }
+            }
+        }
+
+        return nbHits
     }
 
     /// Detect if the character capsule is overlapping with anything
@@ -979,8 +1009,30 @@ extension KinematicCharacterMotor {
     /// - Returns: Returns number of overlaps
     public func CharacterOverlap(position: Vector3, rotation: Quaternion, overlappedColliders: [Collider],
                                  layers: Layer, inflate: Float = 0) -> Int {
-        // MARK: - TODO
-        0
+        var bottom = position + Vector3.transformByQuat(v: _characterTransformToCapsuleBottomHemi, quaternion: rotation)
+        var top = position + Vector3.transformByQuat(v: _characterTransformToCapsuleTopHemi, quaternion: rotation)
+        if (inflate != 0) {
+            bottom += Vector3.transformByQuat(v: Vector3.down, quaternion: rotation) * inflate
+            top += Vector3.transformByQuat(v: Vector3.up, quaternion: rotation) * inflate
+        }
+
+        var nbHits = 0
+        let shape = CapsuleColliderShape()
+        shape.radius = (Capsule!.shapes[0] as! CapsuleColliderShape).radius + inflate
+        var overlappedColliders = engine.physicsManager.overlapAll(shape, origin: (bottom + top) * 0.5, layerMask: layers)
+
+        // Filter out the character capsule itself
+        nbHits = overlappedColliders.count
+        for i in stride(from: overlappedColliders.count - 1, to: 0, by: -1) {
+            if (overlappedColliders[i].collider === Capsule) {
+                nbHits -= 1
+                if (i < nbHits) {
+                    overlappedColliders[i] = overlappedColliders[nbHits]
+                }
+            }
+        }
+
+        return nbHits
     }
 
     /// Sweeps the capsule's volume to detect collision hits
@@ -997,8 +1049,53 @@ extension KinematicCharacterMotor {
     public func CharacterCollisionsSweep(position: Vector3, rotation: Quaternion, direction: Vector3, distance: Float,
                                          closestHit: inout HitResult, hits: [HitResult], inflate: Float = 0,
                                          acceptOnlyStableGroundLayer: Bool = false) -> Int {
-        // MARK: - TODO
-        0
+        var queryLayers = CollidableLayers
+        if (acceptOnlyStableGroundLayer) {
+            queryLayers = [CollidableLayers, StableGroundLayers]
+        }
+
+        var bottom = position + Vector3.transformByQuat(v: _characterTransformToCapsuleBottomHemi, quaternion: rotation)
+                - (direction * KinematicCharacterMotor.SweepProbingBackstepDistance)
+        var top = position + Vector3.transformByQuat(v: _characterTransformToCapsuleTopHemi, quaternion: rotation)
+                - (direction * KinematicCharacterMotor.SweepProbingBackstepDistance)
+        if (inflate != 0) {
+            bottom += Vector3.transformByQuat(v: Vector3.down, quaternion: rotation) * inflate
+            top += Vector3.transformByQuat(v: Vector3.up, quaternion: rotation) * inflate
+        }
+
+        // Capsule cast
+        var nbHits = 0
+        let shape = CapsuleColliderShape()
+        shape.radius = (Capsule!.shapes[0] as! CapsuleColliderShape).radius + inflate
+        var hits = engine.physicsManager.sweepAll(shape, ray: Ray(origin: (bottom + top) * 0.5, direction: direction),
+                distance: distance + KinematicCharacterMotor.SweepProbingBackstepDistance, layerMask: queryLayers)
+
+        // Hits filter
+        closestHit = HitResult()
+        var closestDistance = Float.infinity
+        nbHits = hits.count
+        for i in stride(from: hits.count - 1, to: 0, by: -1) {
+            hits[i].distance -= KinematicCharacterMotor.SweepProbingBackstepDistance
+
+            let hit = hits[i]
+            let hitDistance = hit.distance
+
+            // Filter out the invalid hits
+            if (hitDistance <= 0 || !CheckIfColliderValidForCollisions(hit.collider!)) {
+                nbHits -= 1
+                if (i < nbHits) {
+                    hits[i] = hits[nbHits]
+                }
+            } else {
+                // Remember closest valid hit
+                if (hitDistance < closestDistance) {
+                    closestHit = hit
+                    closestDistance = hitDistance
+                }
+            }
+        }
+
+        return nbHits
     }
 
     /// Sweeps the capsule's volume to detect hits
@@ -1014,8 +1111,44 @@ extension KinematicCharacterMotor {
     /// - Returns: Returns the number of hits
     public func CharacterSweep(position: Vector3, rotation: Quaternion, direction: Vector3, distance: Float,
                                closestHit: inout HitResult, hits: [HitResult], layers: Layer, inflate: Float = 0) -> Int {
-        // MARK: - TODO
-        0
+        closestHit = HitResult()
+
+        var bottom = position + Vector3.transformByQuat(v: _characterTransformToCapsuleBottomHemi, quaternion: rotation)
+        var top = position + Vector3.transformByQuat(v: _characterTransformToCapsuleTopHemi, quaternion: rotation)
+        if (inflate != 0) {
+            bottom += Vector3.transformByQuat(v: Vector3.down, quaternion: rotation) * inflate
+            top += Vector3.transformByQuat(v: Vector3.up, quaternion: rotation) * inflate
+        }
+
+        // Capsule cast
+        var nbHits = 0
+        let shape = CapsuleColliderShape()
+        shape.radius = (Capsule!.shapes[0] as! CapsuleColliderShape).radius + inflate
+        var hits = engine.physicsManager.sweepAll(shape, ray: Ray(origin: (bottom + top) * 0.5, direction: direction), distance: distance, layerMask: layers)
+
+        // Hits filter
+        var closestDistance = Float.infinity
+        nbHits = hits.count
+        for i in stride(from: hits.count - 1, to: 0, by: -1) {
+            let hit = hits[i]
+
+            // Filter out the character capsule
+            if (hit.distance <= 0 || hit.collider == Capsule) {
+                nbHits -= 1
+                if (i < nbHits) {
+                    hits[i] = hits[nbHits]
+                }
+            } else {
+                // Remember closest valid hit
+                let hitDistance = hit.distance
+                if (hitDistance < closestDistance) {
+                    closestHit = hit
+                    closestDistance = hitDistance
+                }
+            }
+        }
+
+        return nbHits
     }
 
     /// Casts the character volume in the character's downward direction to detect ground
@@ -1028,8 +1161,37 @@ extension KinematicCharacterMotor {
     /// - Returns: Returns the number of hits
     private func CharacterGroundSweep(position: Vector3, rotation: Quaternion, direction: Vector3,
                                       distance: Float, closestHit: inout HitResult) -> Bool {
-        // MARK: - TODO
-        false
+        closestHit = HitResult()
+
+        // Capsule cast
+        let capsule = CapsuleColliderShape()
+        capsule.radius = (Capsule!.shapes[0] as! CapsuleColliderShape).radius
+        capsule.rotation = rotation.toEuler()
+        capsule.position = -direction * KinematicCharacterMotor.GroundProbingBackstepDistance // todo
+        let _internalCharacterHits = engine.physicsManager.sweepAll(capsule, ray: Ray(origin: position, direction: direction),
+                distance: distance + KinematicCharacterMotor.GroundProbingBackstepDistance,
+                layerMask: [CollidableLayers, StableGroundLayers])
+
+        // Hits filter
+        var foundValidHit = false
+        var closestDistance = Float.infinity
+        for i in 0..<_internalCharacterHits.count {
+            let hit = _internalCharacterHits[i]
+            let hitDistance = hit.distance
+
+            // Find the closest valid hit
+            if (hitDistance > 0 && CheckIfColliderValidForCollisions(hit.collider!)) {
+                if (hitDistance < closestDistance) {
+                    closestHit = hit
+                    closestHit.distance -= KinematicCharacterMotor.GroundProbingBackstepDistance
+                    closestDistance = hitDistance
+
+                    foundValidHit = true
+                }
+            }
+        }
+
+        return foundValidHit
     }
 
     /// Raycasts to detect collision hits
@@ -1043,7 +1205,38 @@ extension KinematicCharacterMotor {
     /// - Returns: Returns the number of hits
     public func CharacterCollisionsRaycast(position: Vector3, direction: Vector3, distance: Float,
                                            closestHit: inout HitResult, hits: [HitResult], acceptOnlyStableGroundLayer: Bool = false) -> Int {
-        // MARK: - TODO
-        0
+        var queryLayers = CollidableLayers
+        if (acceptOnlyStableGroundLayer) {
+            queryLayers = [CollidableLayers, StableGroundLayers]
+        }
+
+        // Raycast
+        var nbHits = 0
+        var hits = engine.physicsManager.raycastAll(Ray(origin: position, direction: direction), distance: distance, layerMask: queryLayers)
+
+        // Hits filter
+        closestHit = HitResult()
+        var closestDistance = Float.infinity
+        nbHits = hits.count
+        for i in stride(from: hits.count - 1, to: 0, by: -1) {
+            let hit = hits[i]
+            let hitDistance = hit.distance
+
+            // Filter out the invalid hits
+            if (hitDistance <= 0 || !CheckIfColliderValidForCollisions(hit.collider!)) {
+                nbHits -= 1
+                if (i < nbHits) {
+                    hits[i] = hits[nbHits]
+                }
+            } else {
+                // Remember closest valid hit
+                if (hitDistance < closestDistance) {
+                    closestHit = hit
+                    closestDistance = hitDistance
+                }
+            }
+        }
+
+        return nbHits
     }
 }
