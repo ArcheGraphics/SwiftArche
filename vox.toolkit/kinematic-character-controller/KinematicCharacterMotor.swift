@@ -195,7 +195,7 @@ public class KinematicCharacterMotor: Script {
     /// How the character interacts with non-kinematic rigidbodies.
     /// \"Kinematic\" mode means the character pushes the rigidbodies with infinite force (as a kinematic body would).
     /// \"SimulatedDynamic\" pushes the rigidbodies with a simulated mass value.
-    public var RigidbodyInteractionType: RigidbodyInteractionType = .None
+    public var rigidbodyInteractionType: RigidbodyInteractionType = .None
 
     public var SimulatedCharacterMass: Float = 1
 
@@ -627,6 +627,7 @@ extension KinematicCharacterMotor {
     /// - Ground probing
     /// - Handle detecting potential interactable rigidbodies
     public func UpdatePhase1(deltaTime: Float) {
+        // MARK: - TODO
     }
 
     /// Update phase 2 is meant to be called after physics movers have simulated their goal positions/rotations.
@@ -638,6 +639,7 @@ extension KinematicCharacterMotor {
     /// - Solving Velocity
     /// - Applying planar constraint
     public func UpdatePhase2(deltaTime: Float) {
+        // MARK: - TODO
     }
 
     /// Determines if motor can be considered stable on given slope normal
@@ -687,64 +689,7 @@ extension KinematicCharacterMotor {
             probingDistance = KinematicCharacterMotor.MinimumGroundProbingDistance
         }
 
-//        var groundSweepsMade = 0
-//        var groundSweepHit = HitResult()
-//        var groundSweepingIsOver = false
-//        var groundSweepPosition = probingPosition
-//        var groundSweepDirection = (atRotation * -_cachedWorldUp)
-//        var groundProbeDistanceRemaining = probingDistance
-//        while (groundProbeDistanceRemaining > 0 && (groundSweepsMade <= KinematicCharacterMotor.MaxGroundingSweepIterations) && !groundSweepingIsOver) {
-//            // Sweep for ground detection
-//            if (CharacterGroundSweep(
-//                    groundSweepPosition, // position
-//                    atRotation, // rotation
-//                    groundSweepDirection, // direction
-//                    groundProbeDistanceRemaining, // distance
-//                    &groundSweepHit)) // hit
-//            {
-//                var targetPosition = groundSweepPosition + (groundSweepDirection * groundSweepHit.distance)
-//                var groundHitStabilityReport = HitStabilityReport()
-//                EvaluateHitStability(groundSweepHit.collider, groundSweepHit.normal, groundSweepHit.point, targetPosition, _transientRotation, BaseVelocity, ref groundHitStabilityReport)
-//
-//                groundingReport.FoundAnyGround = true
-//                groundingReport.GroundNormal = groundSweepHit.normal
-//                groundingReport.InnerGroundNormal = groundHitStabilityReport.InnerNormal
-//                groundingReport.OuterGroundNormal = groundHitStabilityReport.OuterNormal
-//                groundingReport.GroundCollider = groundSweepHit.collider
-//                groundingReport.GroundPoint = groundSweepHit.point
-//                groundingReport.SnappingPrevented = false
-//
-//                // Found stable ground
-//                if (groundHitStabilityReport.IsStable) {
-//                    // Find all scenarios where ground snapping should be canceled
-//                    groundingReport.SnappingPrevented = !IsStableWithSpecialCases(&groundHitStabilityReport, BaseVelocity)
-//
-//                    groundingReport.IsStableOnGround = true
-//
-//                    // Ground snapping
-//                    if (!groundingReport.SnappingPrevented) {
-//                        probingPosition = groundSweepPosition + (groundSweepDirection * (groundSweepHit.distance - KinematicCharacterMotor.CollisionOffset))
-//                    }
-//
-//                    CharacterController.OnGroundHit(groundSweepHit.collider, groundSweepHit.normal, groundSweepHit.point, &groundHitStabilityReport)
-//                    groundSweepingIsOver = true
-//                } else {
-//                    // Calculate movement from this iteration and advance position
-//                    let sweepMovement = (groundSweepDirection * groundSweepHit.distance) + ((atRotation * _cachedWorldUp) * max(CollisionOffset, groundSweepHit.distance))
-//                    groundSweepPosition = groundSweepPosition + sweepMovement
-//
-//                    // Set remaining distance
-//                    groundProbeDistanceRemaining = min(GroundProbeReboundDistance, Mathf.Max(groundProbeDistanceRemaining - sweepMovement.length(), 0))
-//
-//                    // Reorient direction
-//                    groundSweepDirection = Vector3.ProjectOnPlane(groundSweepDirection, groundSweepHit.normal).normalized
-//                }
-//            } else {
-//                groundSweepingIsOver = true
-//            }
-//
-//            groundSweepsMade += 1
-//        }
+        // MARK: - TODO
     }
 
     /// Forces the character to unground itself on its next grounding update
@@ -762,5 +707,343 @@ extension KinematicCharacterMotor {
     public func GetDirectionTangentToSurface(direction: Vector3, surfaceNormal: Vector3) -> Vector3 {
         let directionRight = Vector3.cross(left: direction, right: _characterUp)
         return Vector3.cross(left: surfaceNormal, right: directionRight).normalized()
+    }
+
+    /// Moves the character's position by given movement while taking into account all physics simulation, step-handling and
+    /// velocity projection rules that affect the character motor
+    /// - Returns: Returns false if movement could not be solved until the end
+    private func InternalCharacterMove(transientVelocity: inout Vector3, deltaTime: Float) -> Bool {
+        // MARK: - TODO
+        false
+    }
+
+    /// Gets the effective normal for movement obstruction depending on current grounding status
+    private func GetObstructionNormal(hitNormal: Vector3, stableOnHit: Bool) -> Vector3 {
+        // Find hit/obstruction/offset normal
+        var obstructionNormal = hitNormal
+        if (GroundingStatus.IsStableOnGround && !MustUnground() && !stableOnHit) {
+            let obstructionLeftAlongGround = Vector3.cross(left: GroundingStatus.GroundNormal, right: obstructionNormal).normalized()
+            obstructionNormal = Vector3.cross(left: obstructionLeftAlongGround, right: _characterUp).normalized()
+        }
+
+        // Catch cases where cross product between parallel normals returned 0
+        if (obstructionNormal.lengthSquared() == 0) {
+            obstructionNormal = hitNormal
+        }
+
+        return obstructionNormal
+    }
+
+    /// Remembers a rigidbody hit for processing later
+    private func StoreRigidbodyHit(hitRigidbody: DynamicCollider, hitVelocity: Vector3,
+                                   hitPoint: Vector3, obstructionNormal: Vector3, hitStabilityReport: HitStabilityReport) {
+        if (_rigidbodyProjectionHitCount < _internalRigidbodyProjectionHits.count) {
+            if let _: KinematicCharacterMotor = hitRigidbody.entity.getComponent() {
+                var rph = RigidbodyProjectionHit()
+                rph.Rigidbody = hitRigidbody
+                rph.HitPoint = hitPoint
+                rph.EffectiveHitNormal = obstructionNormal
+                rph.HitVelocity = hitVelocity
+                rph.StableOnHit = hitStabilityReport.IsStable
+
+                _internalRigidbodyProjectionHits[_rigidbodyProjectionHitCount] = rph
+                _rigidbodyProjectionHitCount += 1
+            }
+        }
+    }
+
+    public func SetTransientPosition(_ newPos: Vector3) {
+        _transientPosition = newPos
+    }
+
+    /// Processes movement projection upon detecting a hit
+    private func InternalHandleVelocityProjection(stableOnHit: Bool, hitNormal: Vector3, obstructionNormal: Vector3, originalDirection: Vector3,
+                                                  sweepState: inout MovementSweepState, previousHitIsStable: Bool, previousVelocity: Vector3, previousObstructionNormal: Vector3,
+                                                  transientVelocity: inout Vector3, remainingMovementMagnitude: inout Float, remainingMovementDirection: inout Vector3) {
+        // MARK: - TODO
+    }
+
+    private func EvaluateCrease(currentCharacterVelocity: Vector3,
+                                previousCharacterVelocity: Vector3,
+                                currentHitNormal: Vector3,
+                                previousHitNormal: Vector3,
+                                currentHitIsStable: Bool,
+                                previousHitIsStable: Bool,
+                                characterIsStable: Bool,
+                                isValidCrease: inout Bool,
+                                creaseDirection: inout Vector3) {
+        isValidCrease = false
+        creaseDirection = Vector3()
+
+        if (!characterIsStable || !currentHitIsStable || !previousHitIsStable) {
+            var tmpBlockingCreaseDirection = Vector3.cross(left: currentHitNormal, right: previousHitNormal).normalized()
+            let dotPlanes = Vector3.dot(left: currentHitNormal, right: previousHitNormal)
+            var isVelocityConstrainedByCrease = false
+
+            // Avoid calculations if the two planes are the same
+            if (dotPlanes < 0.999) {
+                // TODO: can this whole part be made simpler? (with 2d projections, etc)
+                let normalAOnCreasePlane = Vector3.projectOnPlane(vector: currentHitNormal, planeNormal: tmpBlockingCreaseDirection).normalized()
+                let normalBOnCreasePlane = Vector3.projectOnPlane(vector: previousHitNormal, planeNormal: tmpBlockingCreaseDirection).normalized()
+                let dotPlanesOnCreasePlane = Vector3.dot(left: normalAOnCreasePlane, right: normalBOnCreasePlane)
+
+                let enteringVelocityDirectionOnCreasePlane = Vector3.projectOnPlane(vector: previousCharacterVelocity, planeNormal: tmpBlockingCreaseDirection).normalized()
+
+                if (dotPlanesOnCreasePlane <= (Vector3.dot(left: -enteringVelocityDirectionOnCreasePlane, right: normalAOnCreasePlane) + 0.001) &&
+                        dotPlanesOnCreasePlane <= (Vector3.dot(left: -enteringVelocityDirectionOnCreasePlane, right: normalBOnCreasePlane) + 0.001)) {
+                    isVelocityConstrainedByCrease = true
+                }
+            }
+
+            if (isVelocityConstrainedByCrease) {
+                // Flip crease direction to make it representative of the real direction our velocity would be projected to
+                if (Vector3.dot(left: tmpBlockingCreaseDirection, right: currentCharacterVelocity) < 0) {
+                    tmpBlockingCreaseDirection = -tmpBlockingCreaseDirection
+                }
+
+                isValidCrease = true
+                creaseDirection = tmpBlockingCreaseDirection
+            }
+        }
+    }
+
+    /// Allows you to override the way velocity is projected on an obstruction
+    public func HandleVelocityProjection(velocity: inout Vector3, obstructionNormal: Vector3, stableOnHit: Bool) {
+        if (GroundingStatus.IsStableOnGround && !MustUnground()) {
+            // On stable slopes, simply reorient the movement without any loss
+            if (stableOnHit) {
+                velocity = GetDirectionTangentToSurface(direction: velocity, surfaceNormal: obstructionNormal) * velocity.length()
+            }
+            // On blocking hits, project the movement on the obstruction while following the grounding plane
+            else {
+                let obstructionRightAlongGround = Vector3.cross(left: obstructionNormal, right: GroundingStatus.GroundNormal).normalized()
+                let obstructionUpAlongGround = Vector3.cross(left: obstructionRightAlongGround, right: obstructionNormal).normalized()
+                velocity = GetDirectionTangentToSurface(direction: velocity, surfaceNormal: obstructionUpAlongGround) * velocity.length()
+                velocity = Vector3.projectOnPlane(vector: velocity, planeNormal: obstructionNormal)
+            }
+        } else {
+            if (stableOnHit) {
+                // Handle stable landing
+                velocity = Vector3.projectOnPlane(vector: velocity, planeNormal: CharacterUp)
+                velocity = GetDirectionTangentToSurface(direction: velocity, surfaceNormal: obstructionNormal) * velocity.length()
+            }
+            // Handle generic obstruction
+            else {
+                velocity = Vector3.projectOnPlane(vector: velocity, planeNormal: obstructionNormal)
+            }
+        }
+    }
+
+    /// Allows you to override the way hit rigidbodies are pushed / interacted with.
+    /// ProcessedVelocity is what must be modified if this interaction affects the character's velocity.
+    public func HandleSimulatedRigidbodyInteraction(processedVelocity: inout Vector3, hit: RigidbodyProjectionHit, deltaTime: Float) {
+    }
+
+    /// Takes into account rigidbody hits for adding to the velocity
+    private func ProcessVelocityForRigidbodyHits(processedVelocity: inout Vector3, deltaTime: Float) {
+        // MARK: - TODO
+    }
+
+    public func ComputeCollisionResolutionForHitBody(
+            hitNormal: Vector3,
+            characterVelocity: Vector3,
+            bodyVelocity: Vector3,
+            characterToBodyMassRatio: Float,
+            velocityChangeOnCharacter: inout Vector3,
+            velocityChangeOnBody: inout Vector3) {
+        // MARK: - TODO
+    }
+
+    /// Determines if the input collider is valid for collision processing
+    /// - Parameter coll: coll
+    /// - Returns: Returns true if the collider is valid
+    private func CheckIfColliderValidForCollisions(_ coll: Collider) -> Bool {
+        // Ignore self
+        if (coll == Capsule) {
+            return false
+        }
+
+        if (!InternalIsColliderValidForCollisions(coll)) {
+            return false
+        }
+
+        return true
+    }
+
+    /// Determines if the input collider is valid for collision processing
+    private func InternalIsColliderValidForCollisions(_ coll: Collider) -> Bool {
+        if let colliderAttachedRigidbody = coll as? DynamicCollider {
+            let isRigidbodyKinematic = colliderAttachedRigidbody.isKinematic
+
+            // If movement is made from AttachedRigidbody, ignore the AttachedRigidbody
+            if (_isMovingFromAttachedRigidbody && (!isRigidbodyKinematic || colliderAttachedRigidbody == _attachedRigidbody)) {
+                return false
+            }
+
+            // don't collide with dynamic rigidbodies if our RigidbodyInteractionType is kinematic
+            if (rigidbodyInteractionType == RigidbodyInteractionType.Kinematic && !isRigidbodyKinematic) {
+                // wake up rigidbody
+                colliderAttachedRigidbody.wakeUp()
+
+                return false
+            }
+        }
+
+        // Custom checks
+        let colliderValid = CharacterController!.IsColliderValidForCollisions(coll)
+        if (!colliderValid) {
+            return false
+        }
+
+        return true
+    }
+
+    /// Determines if the motor is considered stable on a given hit
+    public func EvaluateHitStability(hitCollider: Collider, hitNormal: Vector3, hitPoint: Vector3, atCharacterPosition: Vector3,
+                                     atCharacterRotation: Quaternion, withCharacterVelocity: Vector3, stabilityReport: inout HitStabilityReport) {
+        // MARK: - TODO
+    }
+
+    private func DetectSteps(characterPosition: Vector3, characterRotation: Quaternion, hitPoint: Vector3,
+                             innerHitDirection: Vector3, stabilityReport: inout HitStabilityReport) {
+        // MARK: - TODO
+    }
+
+    private func CheckStepValidity(nbStepHits: Int, characterPosition: Vector3, characterRotation: Quaternion,
+                                   innerHitDirection: Vector3, stepCheckStartPos: Vector3, hitCollider: inout Collider) -> Bool {
+        // MARK: - TODO
+        false
+    }
+
+    /// Get true linear velocity (taking into account rotational velocity) on a given point of a rigidbody
+    public func GetVelocityFromRigidbodyMovement(interactiveRigidbody: DynamicCollider, atPoint: Vector3, deltaTime: Float,
+                                                 linearVelocity: inout Vector3, angularVelocity: inout Vector3) {
+        // MARK: - TODO
+    }
+
+    /// Determines if a collider has an attached interactive rigidbody
+    private func GetInteractiveRigidbody(onCollider: Collider) -> DynamicCollider? {
+        // MARK: - TODO
+        nil
+    }
+
+    /// Calculates the velocity required to move the character to the target position over a specific deltaTime.
+    /// Useful for when you wish to work with positions rather than velocities in the UpdateVelocity callback
+    public func GetVelocityForMovePosition(fromPosition: Vector3, toPosition: Vector3, deltaTime: Float) -> Vector3 {
+        return GetVelocityFromMovement(movement: toPosition - fromPosition, deltaTime: deltaTime)
+    }
+
+    public func GetVelocityFromMovement(movement: Vector3, deltaTime: Float) -> Vector3 {
+        if (deltaTime <= 0) {
+            return Vector3.zero
+        }
+
+        return movement / deltaTime
+    }
+
+    /// Trims a vector to make it restricted against a plane
+    private func RestrictVectorToPlane(vector: inout Vector3, toPlane: Vector3) {
+        if (vector.x > 0.0) != (toPlane.x > 0.0) {
+            vector.x = 0
+        }
+        if (vector.y > 0) != (toPlane.y > 0) {
+            vector.y = 0
+        }
+        if (vector.z > 0) != (toPlane.z > 0) {
+            vector.z = 0
+        }
+    }
+
+    /// Detect if the character capsule is overlapping with anything collidable
+    /// - Parameters:
+    ///   - position: position
+    ///   - rotation: rotation
+    ///   - overlappedColliders: overlappedColliders
+    ///   - inflate: inflate
+    ///   - acceptOnlyStableGroundLayer: acceptOnlyStableGroundLayer
+    /// - Returns: Returns number of overlaps
+    public func CharacterCollisionsOverlap(position: Vector3, rotation: Quaternion, overlappedColliders: [Collider],
+                                           inflate: Float = 0, acceptOnlyStableGroundLayer: Bool = false) -> Int {
+        // MARK: - TODO
+        0
+    }
+
+    /// Detect if the character capsule is overlapping with anything
+    /// - Parameters:
+    ///   - position: position
+    ///   - rotation: rotation
+    ///   - overlappedColliders: overlappedColliders
+    ///   - layers: layers
+    ///   - triggerInteraction: triggerInteraction
+    ///   - inflate: inflate
+    /// - Returns: Returns number of overlaps
+    public func CharacterOverlap(position: Vector3, rotation: Quaternion, overlappedColliders: [Collider],
+                                 layers: Layer, inflate: Float = 0) -> Int {
+        // MARK: - TODO
+        0
+    }
+
+    /// Sweeps the capsule's volume to detect collision hits
+    /// - Parameters:
+    ///   - position: position
+    ///   - rotation: rotation
+    ///   - direction: direction
+    ///   - distance: distance
+    ///   - closestHit: closestHit
+    ///   - hits: hits
+    ///   - inflate: inflate
+    ///   - acceptOnlyStableGroundLayer: acceptOnlyStableGroundLayer
+    /// - Returns: Returns the number of hits
+    public func CharacterCollisionsSweep(position: Vector3, rotation: Quaternion, direction: Vector3, distance: Float,
+                                         closestHit: inout HitResult, hits: [HitResult], inflate: Float = 0,
+                                         acceptOnlyStableGroundLayer: Bool = false) -> Int {
+        // MARK: - TODO
+        0
+    }
+
+    /// Sweeps the capsule's volume to detect hits
+    /// - Parameters:
+    ///   - position: position
+    ///   - rotation: rotation
+    ///   - direction: direction
+    ///   - distance: distance
+    ///   - closestHit: closestHit
+    ///   - hits: hits
+    ///   - layers: layers
+    ///   - inflate: inflate
+    /// - Returns: Returns the number of hits
+    public func CharacterSweep(position: Vector3, rotation: Quaternion, direction: Vector3, distance: Float,
+                               closestHit: inout HitResult, hits: [HitResult], layers: Layer, inflate: Float = 0) -> Int {
+        // MARK: - TODO
+        0
+    }
+
+    /// Casts the character volume in the character's downward direction to detect ground
+    /// - Parameters:
+    ///   - position: position
+    ///   - rotation: rotation
+    ///   - direction: direction
+    ///   - distance: distance
+    ///   - closestHit: closestHit
+    /// - Returns: Returns the number of hits
+    private func CharacterGroundSweep(position: Vector3, rotation: Quaternion, direction: Vector3,
+                                      distance: Float, closestHit: inout HitResult) -> Bool {
+        // MARK: - TODO
+        false
+    }
+
+    /// Raycasts to detect collision hits
+    /// - Parameters:
+    ///   - position: position
+    ///   - direction: direction
+    ///   - distance: distance
+    ///   - closestHit: closestHit
+    ///   - hits: hits
+    ///   - acceptOnlyStableGroundLayer: acceptOnlyStableGroundLayer
+    /// - Returns: Returns the number of hits
+    public func CharacterCollisionsRaycast(position: Vector3, direction: Vector3, distance: Float,
+                                           closestHit: inout HitResult, hits: [HitResult], acceptOnlyStableGroundLayer: Bool = false) -> Int {
+        // MARK: - TODO
+        0
     }
 }

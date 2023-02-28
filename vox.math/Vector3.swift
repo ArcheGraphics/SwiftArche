@@ -433,6 +433,20 @@ extension Vector3 {
         let num2 = simd_dot(vector.elements, onNormal.elements)
         return Vector3(onNormal.x * num2 / num1, onNormal.y * num2 / num1, onNormal.z * num2 / num1)
     }
+
+    /// Projects a vector onto a plane defined by a normal orthogonal to the plane.
+    /// - Parameters:
+    ///   - vector: The direction from the vector towards the plane.
+    ///   - planeNormal: The location of the vector above the plane.
+    /// - Returns: The location of the vector on the plane.
+    public static func projectOnPlane(vector: Vector3, planeNormal: Vector3) -> Vector3 {
+        let num1 = simd_dot(planeNormal.elements, planeNormal.elements)
+        if (num1 < Float.leastNonzeroMagnitude) {
+            return vector
+        }
+        let num2 = simd_dot(vector.elements, planeNormal.elements)
+        return Vector3(vector.x - planeNormal.x * num2 / num1, vector.y - planeNormal.y * num2 / num1, vector.z - planeNormal.z * num2 / num1)
+    }
 }
 
 //MARK:- Class Method

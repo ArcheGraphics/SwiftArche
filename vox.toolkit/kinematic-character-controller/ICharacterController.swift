@@ -19,7 +19,7 @@ public protocol ICharacterController {
     /// This is called after the motor has finished everything in its update
     func AfterCharacterUpdate(deltaTime: Float)
     /// This is called after when the motor wants to know if the collider can be collided with (or if we just go through it)
-    func IsColliderValidForCollisions(coll: Collider) -> Bool
+    func IsColliderValidForCollisions(_ coll: Collider) -> Bool
     /// This is called when the motor's ground probing detects a ground hit
     func OnGroundHit(hitCollider: Collider, hitNormal: Vector3, hitPoint: Vector3,
                      hitStabilityReport: inout HitStabilityReport)
