@@ -16,7 +16,7 @@ public struct Vector3 {
     public static let right = Vector3(1, 0.0, 0.0)
     public static let forward = Vector3(0.0, 0.0, 1)
     public static let back = Vector3(0.0, 0.0, -1)
-    
+
     /// An array containing the elements of the vector
     var elements: SIMD3<Float>
 
@@ -422,6 +422,16 @@ extension Vector3 {
         return Vector3(current.x + num1 / num4 * maxDistanceDelta,
                 current.y + num2 / num4 * maxDistanceDelta,
                 current.z + num3 / num4 * maxDistanceDelta)
+    }
+
+    /// Projects a vector onto another vector.
+    public static func project(vector: Vector3, onNormal: Vector3) -> Vector3 {
+        let num1 = simd_dot(onNormal.elements, onNormal.elements)
+        if (num1 < Float.leastNonzeroMagnitude) {
+            return Vector3.zero
+        }
+        let num2 = simd_dot(vector.elements, onNormal.elements)
+        return Vector3(onNormal.x * num2 / num1, onNormal.y * num2 / num1, onNormal.z * num2 / num1)
     }
 }
 

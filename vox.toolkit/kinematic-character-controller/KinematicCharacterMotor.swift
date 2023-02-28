@@ -140,7 +140,7 @@ public class KinematicCharacterMotor: Script {
     private var CapsuleYOffset: Float = 1
 
     /// Physics material of the character's capsule
-    private var CapsulePhysicsMaterial: PhysicsMaterial?
+    private var CapsulePhysicsMaterial = PhysicsMaterial()
 
     //MARK: - Grounding settings
 
@@ -242,12 +242,12 @@ public class KinematicCharacterMotor: Script {
 
     /// The Transform of the character motor
 
-    public var Transform: Transform? {
+    public var Transform: Transform {
         get {
             return _transform
         }
     }
-    private var _transform: Transform?
+    private var _transform: Transform!
 
     /// The character's goal position in its movement calculations (always up-to-date during the character update phase)
     public var TransientPosition: Vector3 {
@@ -454,4 +454,313 @@ public class KinematicCharacterMotor: Script {
     public static let CorrelationForVerticalObstruction: Float = 0.01
     public static let ExtraSteppingForwardDistance: Float = 0.01
     public static let ExtraStepHeightPadding: Float = 0.01
+
+    public override func onEnable() {
+        KinematicCharacterSystem.instance.RegisterCharacterMotor(self)
+    }
+
+    public override func onDisable() {
+        KinematicCharacterSystem.instance.UnregisterCharacterMotor(self)
+    }
+
+    public override func onAwake() {
+        _transform = entity.transform
+        ValidateData()
+
+        _transientPosition = _transform.position
+        TransientRotation = _transform.rotationQuaternion
+
+        // Build CollidableLayers mask
+        CollidableLayers = []
+//        for i in 0..<32 {
+//            if (!Physics.GetIgnoreLayerCollision(entity.layer, i)) {
+//                CollidableLayers |= (1 << i)
+//            }
+//        }
+
+        SetCapsuleDimensions(radius: CapsuleRadius, height: CapsuleHeight, yOffset: CapsuleYOffset)
+    }
+}
+
+extension KinematicCharacterMotor {
+    /// Handle validating all required values
+    public func ValidateData() {
+        Capsule = entity.getComponent()
+        CapsuleRadius = simd_clamp(CapsuleRadius, 0, CapsuleHeight * 0.5)
+        if let Capsule = Capsule {
+            let shape = Capsule.shapes[0] as! CapsuleColliderShape
+            shape.upAxis = .Y
+            shape.material = CapsulePhysicsMaterial
+        }
+        SetCapsuleDimensions(radius: CapsuleRadius, height: CapsuleHeight, yOffset: CapsuleYOffset)
+
+        MaxStepHeight = simd_clamp(MaxStepHeight, 0, Float.infinity)
+        MinRequiredStepDepth = simd_clamp(MinRequiredStepDepth, 0, CapsuleRadius)
+        MaxStableDistanceFromLedge = simd_clamp(MaxStableDistanceFromLedge, 0, CapsuleRadius)
+
+        entity.transform.scale = Vector3.one
+    }
+
+    /// Sets whether or not the capsule collider will detect collisions
+    public func SetCapsuleCollisionsActivation(_ collisionsActive: Bool) {
+        Capsule!.shapes[0].isTrigger = !collisionsActive
+    }
+
+    /// Sets whether or not the motor will solve collisions when moving (or moved onto)
+    public func SetMovementCollisionsSolvingActivation(_ movementCollisionsSolvingActive: Bool) {
+        _solveMovementCollisions = movementCollisionsSolvingActive
+    }
+
+    /// Sets whether or not grounding will be evaluated for all hits
+    public func SetGroundSolvingActivation(_ stabilitySolvingActive: Bool) {
+        _solveGrounding = stabilitySolvingActive
+    }
+
+    /// Sets the character's position directly
+    public func SetPosition(_ position: Vector3, bypassInterpolation: Bool = true) {
+        _transform.position = position
+        _initialSimulationPosition = position
+        _transientPosition = position
+
+        if (bypassInterpolation) {
+            InitialTickPosition = position
+        }
+    }
+
+    /// Sets the character's rotation directly
+    public func SetRotation(_ rotation: Quaternion, bypassInterpolation: Bool = true) {
+        _transform.rotationQuaternion = rotation
+        _initialSimulationRotation = rotation
+        TransientRotation = rotation
+
+        if (bypassInterpolation) {
+            InitialTickRotation = rotation
+        }
+    }
+
+    /// Sets the character's position and rotation directly
+    public func SetPositionAndRotation(_ position: Vector3, _ rotation: Quaternion, bypassInterpolation: Bool = true) {
+        _transform.position = position
+        _transform.rotationQuaternion = rotation
+        _initialSimulationPosition = position
+        _initialSimulationRotation = rotation
+        _transientPosition = position
+        TransientRotation = rotation
+
+        if (bypassInterpolation) {
+            InitialTickPosition = position
+            InitialTickRotation = rotation
+        }
+    }
+
+    /// Moves the character position, taking all movement collision solving int account. The actual move is done the next time the motor updates are called
+    public func MoveCharacter(to: Vector3) {
+        _movePositionDirty = true
+        _movePositionTarget = to
+    }
+
+    /// Moves the character rotation. The actual move is done the next time the motor updates are called
+    public func RotateCharacter(to: Quaternion) {
+        _moveRotationDirty = true
+        _moveRotationTarget = to
+    }
+
+    /// Returns all the state information of the motor that is pertinent for simulation
+    public func GetState() -> KinematicCharacterMotorState {
+        var state = KinematicCharacterMotorState()
+
+        state.Position = _transientPosition
+        state.Rotation = _transientRotation
+
+        state.BaseVelocity = BaseVelocity
+        state.AttachedRigidbodyVelocity = _attachedRigidbodyVelocity
+
+        state.MustUnground = _mustUnground
+        state.MustUngroundTime = _mustUngroundTimeCounter
+        state.LastMovementIterationFoundAnyGround = LastMovementIterationFoundAnyGround
+        state.GroundingStatus.CopyFrom(groundingReport: GroundingStatus)
+        state.AttachedRigidbody = _attachedRigidbody
+
+        return state
+    }
+
+    /// Applies a motor state instantly
+    public func ApplyState(_ state: KinematicCharacterMotorState, bypassInterpolation: Bool = true) {
+        SetPositionAndRotation(state.Position, state.Rotation, bypassInterpolation: bypassInterpolation)
+
+        BaseVelocity = state.BaseVelocity
+        _attachedRigidbodyVelocity = state.AttachedRigidbodyVelocity
+
+        _mustUnground = state.MustUnground
+        _mustUngroundTimeCounter = state.MustUngroundTime
+        LastMovementIterationFoundAnyGround = state.LastMovementIterationFoundAnyGround
+        GroundingStatus.CopyFrom(transientGroundingReport: state.GroundingStatus)
+        _attachedRigidbody = state.AttachedRigidbody
+    }
+
+    /// Resizes capsule. ALso caches importand capsule size data
+    public func SetCapsuleDimensions(radius: Float, height: Float, yOffset: Float) {
+        let height = max(height, (radius * 2) + 0.01) // Safety to prevent invalid capsule geometries
+
+        CapsuleRadius = radius
+        CapsuleHeight = height
+        CapsuleYOffset = yOffset
+
+        if let CapsuleShape = Capsule!.shapes[0] as? CapsuleColliderShape {
+            CapsuleShape.radius = CapsuleRadius
+            CapsuleShape.height = simd_clamp(CapsuleHeight, CapsuleRadius * 2, CapsuleHeight)
+            CapsuleShape.position = Vector3(0, CapsuleYOffset, 0)
+
+            _characterTransformToCapsuleCenter = CapsuleShape.position
+            _characterTransformToCapsuleBottom = CapsuleShape.position + (-_cachedWorldUp * (CapsuleShape.height * 0.5))
+            _characterTransformToCapsuleTop = CapsuleShape.position + (_cachedWorldUp * (CapsuleShape.height * 0.5))
+            _characterTransformToCapsuleBottomHemi = CapsuleShape.position + (-_cachedWorldUp * (CapsuleShape.height * 0.5)) + (_cachedWorldUp * CapsuleShape.radius)
+            _characterTransformToCapsuleTopHemi = CapsuleShape.position + (_cachedWorldUp * (CapsuleShape.height * 0.5)) + (-_cachedWorldUp * CapsuleShape.radius)
+        }
+    }
+
+    /// Update phase 1 is meant to be called after physics movers have calculated their velocities, but
+    /// before they have simulated their goal positions/rotations. It is responsible for:
+    /// - Initializing all values for update
+    /// - Handling MovePosition calls
+    /// - Solving initial collision overlaps
+    /// - Ground probing
+    /// - Handle detecting potential interactable rigidbodies
+    public func UpdatePhase1(deltaTime: Float) {
+    }
+
+    /// Update phase 2 is meant to be called after physics movers have simulated their goal positions/rotations.
+    /// At the end of this, the TransientPosition/Rotation values will be up-to-date with where the motor should be at the end of its move.
+    /// It is responsible for:
+    /// - Solving Rotation
+    /// - Handle MoveRotation calls
+    /// - Solving potential attached rigidbody overlaps
+    /// - Solving Velocity
+    /// - Applying planar constraint
+    public func UpdatePhase2(deltaTime: Float) {
+    }
+
+    /// Determines if motor can be considered stable on given slope normal
+    private func IsStableOnNormal(_ normal: Vector3) -> Bool {
+        return Vector3.angle(from: _characterUp, to: normal) <= MaxStableSlopeAngle
+    }
+
+    /// Determines if motor can be considered stable on given slope normal
+    private func IsStableWithSpecialCases(stabilityReport: inout HitStabilityReport, velocity: Vector3) -> Bool {
+        if (LedgeAndDenivelationHandling) {
+            if (stabilityReport.LedgeDetected) {
+                if (stabilityReport.IsMovingTowardsEmptySideOfLedge) {
+                    // Max snap vel
+                    let velocityOnLedgeNormal = Vector3.project(vector: velocity, onNormal: stabilityReport.LedgeFacingDirection)
+                    if (velocityOnLedgeNormal.length() >= MaxVelocityForLedgeSnap) {
+                        return false
+                    }
+                }
+
+                // Distance from ledge
+                if (stabilityReport.IsOnEmptySideOfLedge && stabilityReport.DistanceFromLedge > MaxStableDistanceFromLedge) {
+                    return false
+                }
+            }
+
+            // "Launching" off of slopes of a certain denivelation angle
+            if (LastGroundingStatus.FoundAnyGround && stabilityReport.InnerNormal.lengthSquared() != 0 && stabilityReport.OuterNormal.lengthSquared() != 0) {
+                var denivelationAngle = Vector3.angle(from: stabilityReport.InnerNormal, to: stabilityReport.OuterNormal)
+                if (denivelationAngle > MaxStableDenivelationAngle) {
+                    return false
+                } else {
+                    denivelationAngle = Vector3.angle(from: LastGroundingStatus.InnerGroundNormal, to: stabilityReport.OuterNormal)
+                    if (denivelationAngle > MaxStableDenivelationAngle) {
+                        return false
+                    }
+                }
+            }
+        }
+
+        return true
+    }
+
+    /// Probes for valid ground and midifies the input transientPosition if ground snapping occurs
+    public func ProbeGround(probingPosition: Vector3, atRotation: Quaternion, probingDistance: Float, groundingReport: inout CharacterGroundingReport) {
+        var probingDistance = probingDistance
+        if (probingDistance < KinematicCharacterMotor.MinimumGroundProbingDistance) {
+            probingDistance = KinematicCharacterMotor.MinimumGroundProbingDistance
+        }
+
+//        var groundSweepsMade = 0
+//        var groundSweepHit = HitResult()
+//        var groundSweepingIsOver = false
+//        var groundSweepPosition = probingPosition
+//        var groundSweepDirection = (atRotation * -_cachedWorldUp)
+//        var groundProbeDistanceRemaining = probingDistance
+//        while (groundProbeDistanceRemaining > 0 && (groundSweepsMade <= KinematicCharacterMotor.MaxGroundingSweepIterations) && !groundSweepingIsOver) {
+//            // Sweep for ground detection
+//            if (CharacterGroundSweep(
+//                    groundSweepPosition, // position
+//                    atRotation, // rotation
+//                    groundSweepDirection, // direction
+//                    groundProbeDistanceRemaining, // distance
+//                    &groundSweepHit)) // hit
+//            {
+//                var targetPosition = groundSweepPosition + (groundSweepDirection * groundSweepHit.distance)
+//                var groundHitStabilityReport = HitStabilityReport()
+//                EvaluateHitStability(groundSweepHit.collider, groundSweepHit.normal, groundSweepHit.point, targetPosition, _transientRotation, BaseVelocity, ref groundHitStabilityReport)
+//
+//                groundingReport.FoundAnyGround = true
+//                groundingReport.GroundNormal = groundSweepHit.normal
+//                groundingReport.InnerGroundNormal = groundHitStabilityReport.InnerNormal
+//                groundingReport.OuterGroundNormal = groundHitStabilityReport.OuterNormal
+//                groundingReport.GroundCollider = groundSweepHit.collider
+//                groundingReport.GroundPoint = groundSweepHit.point
+//                groundingReport.SnappingPrevented = false
+//
+//                // Found stable ground
+//                if (groundHitStabilityReport.IsStable) {
+//                    // Find all scenarios where ground snapping should be canceled
+//                    groundingReport.SnappingPrevented = !IsStableWithSpecialCases(&groundHitStabilityReport, BaseVelocity)
+//
+//                    groundingReport.IsStableOnGround = true
+//
+//                    // Ground snapping
+//                    if (!groundingReport.SnappingPrevented) {
+//                        probingPosition = groundSweepPosition + (groundSweepDirection * (groundSweepHit.distance - KinematicCharacterMotor.CollisionOffset))
+//                    }
+//
+//                    CharacterController.OnGroundHit(groundSweepHit.collider, groundSweepHit.normal, groundSweepHit.point, &groundHitStabilityReport)
+//                    groundSweepingIsOver = true
+//                } else {
+//                    // Calculate movement from this iteration and advance position
+//                    let sweepMovement = (groundSweepDirection * groundSweepHit.distance) + ((atRotation * _cachedWorldUp) * max(CollisionOffset, groundSweepHit.distance))
+//                    groundSweepPosition = groundSweepPosition + sweepMovement
+//
+//                    // Set remaining distance
+//                    groundProbeDistanceRemaining = min(GroundProbeReboundDistance, Mathf.Max(groundProbeDistanceRemaining - sweepMovement.length(), 0))
+//
+//                    // Reorient direction
+//                    groundSweepDirection = Vector3.ProjectOnPlane(groundSweepDirection, groundSweepHit.normal).normalized
+//                }
+//            } else {
+//                groundSweepingIsOver = true
+//            }
+//
+//            groundSweepsMade += 1
+//        }
+    }
+
+    /// Forces the character to unground itself on its next grounding update
+    public func ForceUnground(time: Float = 0.1) {
+        _mustUnground = true
+        _mustUngroundTimeCounter = time
+    }
+
+    public func MustUnground() -> Bool {
+        return _mustUnground || _mustUngroundTimeCounter > 0
+    }
+
+    /// Returns the direction adjusted to be tangent to a specified surface normal relatively to the character's up direction.
+    /// Useful for reorienting a direction on a slope without any lateral deviation in trajectory
+    public func GetDirectionTangentToSurface(direction: Vector3, surfaceNormal: Vector3) -> Vector3 {
+        let directionRight = Vector3.cross(left: direction, right: _characterUp)
+        return Vector3.cross(left: surfaceNormal, right: directionRight).normalized()
+    }
 }

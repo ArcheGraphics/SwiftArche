@@ -79,7 +79,7 @@ public class PhysicsMover: Script {
     }
 
     /// The mover's Transform
-    public var Transform: Transform? {
+    public var Transform: Transform! {
         get {
             nil
         }

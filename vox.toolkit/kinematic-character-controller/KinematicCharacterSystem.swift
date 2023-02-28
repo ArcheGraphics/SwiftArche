@@ -107,50 +107,43 @@ public class KinematicCharacterSystem: Script {
             motor.InitialTickPosition = motor.TransientPosition
             motor.InitialTickRotation = motor.TransientRotation
 
-            motor.Transform?.position = motor.TransientPosition
-            motor.Transform?.rotationQuaternion = motor.TransientRotation
+            motor.Transform.position = motor.TransientPosition
+            motor.Transform.rotationQuaternion = motor.TransientRotation
         }
 
         for mover in PhysicsMovers {
             mover.InitialTickPosition = mover.TransientPosition
             mover.InitialTickRotation = mover.TransientRotation
 
-            mover.Transform?.position = mover.TransientPosition
-            mover.Transform?.rotationQuaternion = mover.TransientRotation
+            mover.Transform.position = mover.TransientPosition
+            mover.Transform.rotationQuaternion = mover.TransientRotation
         }
     }
 
     /// Ticks characters and/or movers
     public func Simulate(deltaTime: Float, motors: [KinematicCharacterMotor], movers: [PhysicsMover]) {
-        let characterMotorsCount = motors.count
-        let physicsMoversCount = movers.count
-
         // Update PhysicsMover velocities
-        for i in 0..<physicsMoversCount {
-            movers[i].VelocityUpdate(deltaTime: deltaTime)
+        for mover in PhysicsMovers {
+            mover.VelocityUpdate(deltaTime: deltaTime)
         }
 
         // Character controller update phase 1
-        for i in 0..<characterMotorsCount {
-            // motors[i].UpdatePhase1(deltaTime)
+        for motor in CharacterMotors {
+            motor.UpdatePhase1(deltaTime: deltaTime)
         }
 
         // Simulate PhysicsMover displacement
-        for i in 0..<physicsMoversCount {
-            let mover = movers[i]
-
-            mover.Transform?.position = mover.TransientPosition
-            mover.Transform?.rotationQuaternion = mover.TransientRotation
+        for mover in PhysicsMovers {
+            mover.Transform.position = mover.TransientPosition
+            mover.Transform.rotationQuaternion = mover.TransientRotation
         }
 
         // Character controller update phase 2 and move
-        for i in 0..<characterMotorsCount {
-            let motor = motors[i]
+        for motor in CharacterMotors {
+            motor.UpdatePhase2(deltaTime: deltaTime)
 
-            // motor.UpdatePhase2(deltaTime)
-
-            motor.Transform?.position = motor.TransientPosition
-            motor.Transform?.rotationQuaternion = motor.TransientRotation
+            motor.Transform.position = motor.TransientPosition
+            motor.Transform.rotationQuaternion = motor.TransientRotation
         }
     }
 
@@ -161,20 +154,20 @@ public class KinematicCharacterSystem: Script {
 
         // Return interpolated roots to their initial poses
         for motor in CharacterMotors {
-            motor.Transform?.position = motor.InitialTickPosition
-            motor.Transform?.rotationQuaternion = motor.InitialTickRotation
+            motor.Transform.position = motor.InitialTickPosition
+            motor.Transform.rotationQuaternion = motor.InitialTickRotation
         }
 
         for mover in PhysicsMovers {
             if (mover.MoveWithPhysics) {
-                mover.Transform?.position = mover.InitialTickPosition
-                mover.Transform?.rotationQuaternion = mover.InitialTickRotation
+                mover.Transform.position = mover.InitialTickPosition
+                mover.Transform.rotationQuaternion = mover.InitialTickRotation
 
                 mover.Rigidbody?.movePosition(mover.TransientPosition)
                 mover.Rigidbody?.moveRotation(mover.TransientRotation)
             } else {
-                mover.Transform?.position = mover.TransientPosition
-                mover.Transform?.rotationQuaternion = mover.TransientRotation
+                mover.Transform.position = mover.TransientPosition
+                mover.Transform.rotationQuaternion = mover.TransientRotation
             }
         }
     }
@@ -186,21 +179,21 @@ public class KinematicCharacterSystem: Script {
 
         // Handle characters interpolation
         for motor in CharacterMotors {
-            motor.Transform?.position = Vector3.lerp(left: motor.InitialTickPosition,
+            motor.Transform.position = Vector3.lerp(left: motor.InitialTickPosition,
                     right: motor.TransientPosition, t: interpolationFactor)
-            motor.Transform?.rotationQuaternion = Quaternion.slerp(start: motor.InitialTickRotation,
+            motor.Transform.rotationQuaternion = Quaternion.slerp(start: motor.InitialTickRotation,
                     end: motor.TransientRotation, t: interpolationFactor)
         }
 
         // Handle PhysicsMovers interpolation
         for mover in PhysicsMovers {
-            mover.Transform?.position = Vector3.lerp(left: mover.InitialTickPosition,
+            mover.Transform.position = Vector3.lerp(left: mover.InitialTickPosition,
                     right: mover.TransientPosition, t: interpolationFactor)
-            mover.Transform?.rotationQuaternion = Quaternion.slerp(start: mover.InitialTickRotation,
+            mover.Transform.rotationQuaternion = Quaternion.slerp(start: mover.InitialTickRotation,
                     end: mover.TransientRotation, t: interpolationFactor)
 
-            let newPos = mover.Transform?.position ?? Vector3()
-            let newRot = mover.Transform?.rotationQuaternion ?? Quaternion()
+            let newPos = mover.Transform.position
+            let newRot = mover.Transform.rotationQuaternion
             mover.PositionDeltaFromInterpolation = newPos - mover.LatestInterpolationPosition
             mover.RotationDeltaFromInterpolation = Quaternion.invert(a: mover.LatestInterpolationRotation) * newRot
             mover.LatestInterpolationPosition = newPos
