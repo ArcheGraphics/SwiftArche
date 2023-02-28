@@ -25,6 +25,13 @@ public class Time {
             _deltaTime
         }
     }
+    
+    /// The time at the beginning of this frame
+    public var time: Float {
+        get {
+            Float(_lastTickTime.timeIntervalSince1970)
+        }
+    }
 
     /// Scaled delta time.
     public var timeScale: Float

@@ -133,23 +133,87 @@ public class PhysicsMover: Script {
             Rigidbody.maxAngularVelocity = Float.infinity
             Rigidbody.maxDepenetrationVelocity = Float.infinity
             Rigidbody.isKinematic = true
-            // Rigidbody.interpolation = RigidbodyInterpolation.None
         }
+    }
+    
+    public override func onEnable() {
+        KinematicCharacterSystem.instance.RegisterPhysicsMover(self)
+    }
+    
+    public override func onDisable() {
+        KinematicCharacterSystem.instance.UnregisterPhysicsMover(self)
     }
 
     public override func onAwake() {
         Transform = entity.transform
         ValidateData()
 
-        if let Rigidbody = Rigidbody,
-           let Transform = Transform {
-            // TransientPosition = Rigidbody.position
-            // TransientRotation = Rigidbody.rotation
-            // InitialSimulationPosition = Rigidbody.position
-            // InitialSimulationRotation = Rigidbody.rotation
+        if let Transform = Transform {
+            TransientPosition = Transform.position
+            TransientRotation = Transform.rotationQuaternion
+            InitialSimulationPosition = Transform.position
+            InitialSimulationRotation = Transform.rotationQuaternion
             LatestInterpolationPosition = Transform.position
             LatestInterpolationRotation = Transform.rotationQuaternion
         }
     }
 
+    /// Sets the mover's position directly
+    public func SetPosition(_ position: Vector3) {
+        Transform?.position = position
+        InitialSimulationPosition = position
+        TransientPosition = position
+    }
+
+    /// Sets the mover's rotation directly
+    public func SetRotation(_ rotation: Quaternion) {
+        Transform?.rotationQuaternion = rotation
+        InitialSimulationRotation = rotation
+        TransientRotation = rotation
+    }
+
+    /// Sets the mover's position and rotation directly
+    public func SetPositionAndRotation(_ position: Vector3, _ rotation: Quaternion) {
+        Transform?.rotationQuaternion = rotation
+        Transform?.position = position
+        InitialSimulationPosition = position
+        InitialSimulationRotation = rotation
+        TransientPosition = position
+        TransientRotation = rotation
+    }
+
+    /// Returns all the state information of the mover that is pertinent for simulation
+    public func GetState() -> PhysicsMoverState {
+        var state = PhysicsMoverState()
+
+        state.Position = TransientPosition
+        state.Rotation = TransientRotation
+        state.Velocity = Velocity
+        state.AngularVelocity = AngularVelocity
+
+        return state
+    }
+
+    /// Applies a mover state instantly
+    public func ApplyState(_ state: PhysicsMoverState) {
+        SetPositionAndRotation(state.Position, state.Rotation)
+        Velocity = state.Velocity
+        AngularVelocity = state.AngularVelocity
+    }
+
+    /// Caches velocity values based on deltatime and target position/rotations
+    public func VelocityUpdate(deltaTime: Float) {
+        InitialSimulationPosition = TransientPosition
+        InitialSimulationRotation = TransientRotation
+
+        MoverController?.UpdateMovement(goalPosition: &_internalTransientPosition,
+                goalRotation: &_internalTransientRotation, deltaTime: deltaTime)
+
+        if (deltaTime > 0) {
+            Velocity = (TransientPosition - InitialSimulationPosition) / deltaTime
+
+            let rotationFromCurrentToGoal = TransientRotation * (Quaternion.invert(a: InitialSimulationRotation))
+            AngularVelocity = (rotationFromCurrentToGoal.toEuler() * MathUtil.degreeToRadFactor) / deltaTime
+        }
+    }
 }
