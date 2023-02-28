@@ -8,6 +8,15 @@ import simd
 
 /// Describes a 3D-vector.
 public struct Vector3 {
+    public static let zero = Vector3(0.0, 0.0, 0.0)
+    public static let one = Vector3(1, 1, 1)
+    public static let up = Vector3(0.0, 1, 0.0)
+    public static let down = Vector3(0.0, -1, 0.0)
+    public static let left = Vector3(-1, 0.0, 0.0)
+    public static let right = Vector3(1, 0.0, 0.0)
+    public static let forward = Vector3(0.0, 0.0, 1)
+    public static let back = Vector3(0.0, 0.0, -1)
+    
     /// An array containing the elements of the vector
     var elements: SIMD3<Float>
 

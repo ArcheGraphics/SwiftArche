@@ -70,7 +70,9 @@
 		3E1F129929A7A49900F1002E /* PhysXConcaveDynamicApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E1F129829A7A49900F1002E /* PhysXConcaveDynamicApp.swift */; };
 		3E1F12AD29AC879E00F1002E /* Collision.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E1F12AC29AC879E00F1002E /* Collision.swift */; };
 		3E1F12BE29ADB83200F1002E /* ICharacterController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E1F12BD29ADB83200F1002E /* ICharacterController.swift */; };
-		3E1F12C029ADB8E200F1002E /* KinematicCharacterMotor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E1F12BF29ADB8E200F1002E /* KinematicCharacterMotor.swift */; };
+		3E37FCDA29ADC4AC0050169C /* PhysicsMover.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E37FCD929ADC4AC0050169C /* PhysicsMover.swift */; };
+		3E37FCDB29ADC4B60050169C /* KinematicCharacterMotor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E1F12BF29ADB8E200F1002E /* KinematicCharacterMotor.swift */; };
+		3E37FCDD29ADC5B70050169C /* IMoverController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E37FCDC29ADC5B70050169C /* IMoverController.swift */; };
 		3E43DC9B295BDDDC00732AC0 /* physics_helpers.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3E6B23B52946B3E5000AC29F /* physics_helpers.metal */; };
 		3E43DC9C295BDDDC00732AC0 /* sdf_shading.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3E6B23D529499B36000AC29F /* sdf_shading.metal */; };
 		3E43DC9D295BDDDC00732AC0 /* sdf_baker.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3E6B23D2294964B1000AC29F /* sdf_baker.metal */; };
@@ -675,6 +677,8 @@
 		3E1F12AC29AC879E00F1002E /* Collision.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Collision.swift; sourceTree = "<group>"; };
 		3E1F12BD29ADB83200F1002E /* ICharacterController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ICharacterController.swift; sourceTree = "<group>"; };
 		3E1F12BF29ADB8E200F1002E /* KinematicCharacterMotor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KinematicCharacterMotor.swift; sourceTree = "<group>"; };
+		3E37FCD929ADC4AC0050169C /* PhysicsMover.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhysicsMover.swift; sourceTree = "<group>"; };
+		3E37FCDC29ADC5B70050169C /* IMoverController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IMoverController.swift; sourceTree = "<group>"; };
 		3E6B235B2941BF88000AC29F /* BlendShapeWeightsAnimationCurveOwnerAssembler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlendShapeWeightsAnimationCurveOwnerAssembler.swift; sourceTree = "<group>"; };
 		3E6B235D294220BC000AC29F /* FaceMorphApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FaceMorphApp.swift; sourceTree = "<group>"; };
 		3E6B235F294224C1000AC29F /* FaceGUI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FaceGUI.swift; sourceTree = "<group>"; };
@@ -1407,6 +1411,8 @@
 			children = (
 				3E1F12BD29ADB83200F1002E /* ICharacterController.swift */,
 				3E1F12BF29ADB8E200F1002E /* KinematicCharacterMotor.swift */,
+				3E37FCDC29ADC5B70050169C /* IMoverController.swift */,
+				3E37FCD929ADC4AC0050169C /* PhysicsMover.swift */,
 			);
 			path = "kinematic-character-controller";
 			sourceTree = "<group>";
@@ -2835,6 +2841,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3E37FCDB29ADC4B60050169C /* KinematicCharacterMotor.swift in Sources */,
 				040F1DC82933A172008BDC8D /* ControlKeyboard.swift in Sources */,
 				040F1DCA2933A3BE008BDC8D /* ControlWheel.swift in Sources */,
 				040F1DBE2933705D008BDC8D /* ControlPointer.swift in Sources */,
@@ -2843,10 +2850,11 @@
 				040F1DB529336F48008BDC8D /* ControlHandlerType.swift in Sources */,
 				040F1DB029336AAE008BDC8D /* Spherical.swift in Sources */,
 				040F1DBB29336FBF008BDC8D /* OrbitControl.swift in Sources */,
+				3E37FCDD29ADC5B70050169C /* IMoverController.swift in Sources */,
 				040F1DB829336F86008BDC8D /* IControlInput.swift in Sources */,
+				3E37FCDA29ADC4AC0050169C /* PhysicsMover.swift in Sources */,
 				040F1DCC2933AAF0008BDC8D /* ControlFreePointer.swift in Sources */,
 				3E1F12BE29ADB83200F1002E /* ICharacterController.swift in Sources */,
-				3E1F12C029ADB8E200F1002E /* KinematicCharacterMotor.swift in Sources */,
 				43D8C8847DCDFE5DABA15585 /* WireframePrimitive.swift in Sources */,
 				43D8CB27974E2712F873405E /* WireframeManager.swift in Sources */,
 				43D8C57503BAADE4FE366B56 /* GridMaterial.swift in Sources */,
