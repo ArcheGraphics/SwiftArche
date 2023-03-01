@@ -44,7 +44,7 @@
 
 - (simd_float3)getAngularVelocity {
     PxVec3 vel = static_cast<PxRigidDynamic *>(super.c_actor)->getAngularVelocity();
-    return simd_make_float3(vel.x, vel.y, vel.z);
+    return transform(vel);
 }
 
 - (void)setLinearVelocity:(simd_float3)linVel {
@@ -53,7 +53,7 @@
 
 - (simd_float3)getLinearVelocity {
     PxVec3 vel = static_cast<PxRigidDynamic *>(super.c_actor)->getLinearVelocity();
-    return simd_make_float3(vel.x, vel.y, vel.z);
+    return transform(vel);
 }
 
 - (void)setMaxAngularVelocity:(float)maxAngVel {
@@ -87,8 +87,8 @@
 
 - (void)getCMassLocalPose:(simd_float3 *)position rotation:(simd_quatf *)rotation {
     PxTransform pose = static_cast<PxRigidDynamic *>(super.c_actor)->getCMassLocalPose();
-    *position = simd_make_float3(pose.p.x, pose.p.y, pose.p.z);
-    *rotation = simd_quaternion(pose.q.x, pose.q.y, pose.q.z, pose.q.w);
+    *position = transform(pose.p);
+    *rotation = transform(pose.q);
 }
 
 - (void)setMassSpaceInertiaTensor:(simd_float3)m {
@@ -143,12 +143,12 @@
 
 - (simd_float3)getVelocityAtPos:(simd_float3)pos {
     PxVec3 vel = PxRigidBodyExt::getVelocityAtPos(*static_cast<PxRigidDynamic *>(super.c_actor), transform(pos));
-    return simd_make_float3(vel.x, vel.y, vel.z);
+    return transform(vel);
 }
 
 - (simd_float3)getLocalVelocityAtLocalPos:(simd_float3)pos {
     PxVec3 vel = PxRigidBodyExt::getLocalVelocityAtLocalPos(*static_cast<PxRigidDynamic *>(super.c_actor), transform(pos));
-    return simd_make_float3(vel.x, vel.y, vel.z);
+    return transform(vel);
 }
 
 //MARK: - Sleeping
@@ -201,8 +201,8 @@
     PxTransform pose;
     bool result = static_cast<PxRigidDynamic *>(super.c_actor)->getKinematicTarget(pose);
     if (result) {
-        *position = simd_make_float3(pose.p.x, pose.p.y, pose.p.z);
-        *rotation = simd_quaternion(pose.q.x, pose.q.y, pose.q.z, pose.q.w);
+        *position = transform(pose.p);
+        *rotation = transform(pose.q);
     }
     return result;
 }

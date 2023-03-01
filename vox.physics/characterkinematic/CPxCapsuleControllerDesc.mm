@@ -51,15 +51,15 @@
 
 //MARK: - ControllerDesc
 - (simd_float3)position {
-    return simd_make_float3(_c_desc.position.x, _c_desc.position.y, _c_desc.position.z);
+    return transform(_c_desc.position);
 }
 
 - (void)setPosition:(simd_float3)position {
-    _c_desc.position = PxExtendedVec3(position.x, position.y, position.z);
+    _c_desc.position = transformExtended(position);
 }
 
 - (simd_float3)upDirection {
-    return simd_make_float3(_c_desc.upDirection.x, _c_desc.upDirection.y, _c_desc.upDirection.z);
+    return transform(_c_desc.upDirection);
 }
 
 - (void)setUpDirection:(simd_float3)upDirection {

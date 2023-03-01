@@ -40,8 +40,8 @@
 
 - (void)getGlobalPose:(simd_float3 *)position rotation:(simd_quatf *)rotation {
     PxTransform pose = _c_actor->getGlobalPose();
-    *position = simd_make_float3(pose.p.x, pose.p.y, pose.p.z);
-    *rotation = simd_quaternion(pose.q.x, pose.q.y, pose.q.z, pose.q.w);
+    *position = transform(pose.p);
+    *rotation = transform(pose.q);
 }
 
 - (uint16_t)getGroup {

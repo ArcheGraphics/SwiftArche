@@ -90,8 +90,8 @@
 
 - (void)getDrivePosition:(simd_float3 *)position rotation:(simd_quatf *)rotation {
     PxTransform pose = static_cast<PxD6Joint *>(super.c_joint)->getDrivePosition();
-    *position = simd_make_float3(pose.p.x, pose.p.y, pose.p.z);
-    *rotation = simd_quaternion(pose.q.x, pose.q.y, pose.q.z, pose.q.w);
+    *position = transform(pose.p);
+    *rotation = transform(pose.q);
 }
 
 - (void)setDriveVelocity:(simd_float3)linear :(simd_float3)angular {
@@ -102,8 +102,8 @@
     PxVec3 plinear;
     PxVec3 panguler;
     static_cast<PxD6Joint *>(super.c_joint)->getDriveVelocity(plinear, panguler);
-    *linear = simd_make_float3(plinear.x, plinear.y, plinear.z);
-    *angular = simd_make_float3(panguler.x, panguler.y, panguler.z);
+    *linear = transform(plinear);
+    *angular = transform(panguler);
 }
 
 - (void)setProjectionLinearTolerance:(float)tolerance {

@@ -8,6 +8,7 @@
 #import "CPxGeometry+Internal.h"
 #import "CPxPhysics+Internal.h"
 #import "PxPhysicsAPI.h"
+#include "CPXHelper.h"
 #include <vector>
 
 using namespace physx;
@@ -263,14 +264,14 @@ namespace {
             auto vertices = mesh->getVertices();
             auto count = mesh->getNbVertices();
             for (int i = 0; i < count; i++) {
-                points[i] = simd_make_float3(vertices[i].x, vertices[i].y, vertices[i].z);
+                points[i] = transform(vertices[i]);
             }
         } else {
             auto mesh = static_cast<PxTriangleMeshGeometry *>(super.c_geometry)->triangleMesh;
             auto vertices = mesh->getVertices();
             auto count = mesh->getNbVertices();
             for (int i = 0; i < count; i++) {
-                points[i] = simd_make_float3(vertices[i].x, vertices[i].y, vertices[i].z);
+                points[i] = transform(vertices[i]);
             }
         }
     }

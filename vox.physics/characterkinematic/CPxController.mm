@@ -36,21 +36,19 @@
 }
 
 - (bool)setPosition:(simd_float3)position {
-    return _c_controller->setPosition(PxExtendedVec3(position.x, position.y, position.z));
+    return _c_controller->setPosition(transformExtended(position));
 }
 
 - (simd_float3)getPosition {
-    PxExtendedVec3 pos = _c_controller->getPosition();
-    return simd_make_float3(pos.x, pos.y, pos.z);
+    return transform(_c_controller->getPosition());
 }
 
 - (void)setFootPosition:(simd_float3)position {
-    _c_controller->setFootPosition(PxExtendedVec3(position.x, position.y, position.z));
+    _c_controller->setFootPosition(transformExtended(position));
 }
 
 - (simd_float3)getFootPosition {
-    PxExtendedVec3 pos = _c_controller->getFootPosition();
-    return simd_make_float3(pos.x, pos.y, pos.z);
+    return transform(_c_controller->getFootPosition());
 }
 
 - (CPxRigidDynamic *_Nonnull)getActor {
@@ -82,8 +80,7 @@
 }
 
 - (simd_float3)getUpDirection {
-    PxVec3 pos = _c_controller->getUpDirection();
-    return simd_make_float3(pos.x, pos.y, pos.z);
+    return transform(_c_controller->getUpDirection());
 }
 
 - (void)setUpDirection:(simd_float3)up {

@@ -88,8 +88,8 @@ namespace {
             [shape getGeometry].any(), transform(position, rotation),
             distance, PxHitFlags(PxHitFlag::eDEFAULT), 1, &pxHit);
     if (result > 0) {
-        hit->position = simd_make_float3(pxHit.position.x, pxHit.position.y, pxHit.position.z);
-        hit->normal = simd_make_float3(pxHit.normal.x, pxHit.normal.y, pxHit.normal.z);
+        hit->position = transform(pxHit.position);
+        hit->normal = transform(pxHit.normal);
         hit->distance = pxHit.distance;
         hit->index = pxHit.shape->getQueryFilterData().word3;
     }
@@ -126,8 +126,8 @@ namespace {
             pxHit, filterData, &filterCall);
 
     if (result) {
-        hit->position = simd_make_float3(pxHit.position.x, pxHit.position.y, pxHit.position.z);
-        hit->normal = simd_make_float3(pxHit.normal.x, pxHit.normal.y, pxHit.normal.z);
+        hit->position = transform(pxHit.position);
+        hit->normal = transform(pxHit.normal);
         hit->distance = pxHit.distance;
         hit->index = pxHit.shape->getQueryFilterData().word3;
     }
@@ -157,8 +157,8 @@ namespace {
             LocationHit locHit;
             locHit.index = pxHit.shape->getQueryFilterData().word3;
             locHit.distance = pxHit.distance;
-            locHit.position = simd_make_float3(pxHit.position.x, pxHit.position.y, pxHit.position.z);
-            locHit.normal = simd_make_float3(pxHit.normal.x, pxHit.normal.y, pxHit.normal.z);
+            locHit.position = transform(pxHit.position);
+            locHit.normal = transform(pxHit.normal);
             hit[i] = locHit;
         }
     }
@@ -180,8 +180,8 @@ namespace {
             [shape0 getGeometry].any(), transform(position0, rotation0),
             [shape1 getGeometry].any(), transform(position1, rotation1), pxHit);
     if (result) {
-        hit->position = simd_make_float3(pxHit.position.x, pxHit.position.y, pxHit.position.z);
-        hit->normal = simd_make_float3(pxHit.normal.x, pxHit.normal.y, pxHit.normal.z);
+        hit->position = transform(pxHit.position);
+        hit->normal = transform(pxHit.normal);
         hit->distance = pxHit.distance;
         hit->index = pxHit.shape->getQueryFilterData().word3;
     }
@@ -218,12 +218,12 @@ namespace {
 
     bool result = PxSceneQueryExt::sweepSingle(*_scene, [shape getGeometry].any(),
             transform(origin, rotation),
-            transform(unitDir.x),
+            transform(unitDir),
             distance, PxHitFlags(PxHitFlag::eDEFAULT), pxHit, filterData, &filterCall);
 
     if (result) {
-        hit->position = simd_make_float3(pxHit.position.x, pxHit.position.y, pxHit.position.z);
-        hit->normal = simd_make_float3(pxHit.normal.x, pxHit.normal.y, pxHit.normal.z);
+        hit->position = transform(pxHit.position);
+        hit->normal = transform(pxHit.normal);
         hit->distance = pxHit.distance;
         hit->index = pxHit.shape->getQueryFilterData().word3;
     }
@@ -255,8 +255,8 @@ namespace {
             LocationHit locHit;
             locHit.index = pxHit.shape->getQueryFilterData().word3;
             locHit.distance = pxHit.distance;
-            locHit.position = simd_make_float3(pxHit.position.x, pxHit.position.y, pxHit.position.z);
-            locHit.normal = simd_make_float3(pxHit.normal.x, pxHit.normal.y, pxHit.normal.z);
+            locHit.position = transform(pxHit.position);
+            locHit.normal = transform(pxHit.normal);
             hit[i] = locHit;
         }
     }
@@ -324,7 +324,7 @@ namespace {
     PxVec3 dir;
     auto result = PxGeometryQuery::computePenetration(dir, *depth, [shape0 getGeometry].any(), transform(position0, rotation0),
             [shape1 getGeometry].any(), transform(position1, rotation1));
-    *direction = simd_make_float3(dir.x, dir.y, dir.z);
+    *direction = transform(dir);
     return result;
 }
 
@@ -338,7 +338,7 @@ namespace {
             [shape getGeometry].any(), transform(position, rotation),
             &pt);
     if (result > 0) {
-        *closest = simd_make_float3(pt.x, pt.y, pt.z);
+        *closest = transform(pt);
     }
     return result;
 }

@@ -15,10 +15,26 @@ inline PxVec3 transform(simd_float3 position) {
     return PxVec3(position.x, position.y, position.z);
 }
 
+inline PxExtendedVec3 transformExtended(simd_float3 position) {
+    return PxExtendedVec3(position.x, position.y, position.z);
+}
+
 inline PxQuat transform(simd_quatf rotation) {
     return PxQuat(rotation.vector.x, rotation.vector.y, rotation.vector.z, rotation.vector.w);
 }
 
 inline PxTransform transform(simd_float3 position, simd_quatf rotation) {
     return PxTransform(transform(position), transform(rotation));
+}
+
+inline simd_float3 transform(PxVec3 position) {
+    return simd_make_float3(position.x, position.y, position.z);
+}
+
+inline simd_float3 transform(PxExtendedVec3 position) {
+    return simd_make_float3(position.x, position.y, position.z);
+}
+
+inline simd_quatf transform(PxQuat rotation) {
+    return simd_quaternion(rotation.x, rotation.y, rotation.z, rotation.w);
 }

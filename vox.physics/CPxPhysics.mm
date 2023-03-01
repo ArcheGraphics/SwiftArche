@@ -121,10 +121,10 @@ using namespace physx;
                         iter.nextContact();
                         ContactInfo &dst = userBuffer[nbContacts];
                         auto point = iter.getContactPoint();
-                        dst.position = simd_make_float3(point.x, point.y, point.z);
+                        dst.position = transform(point);
                         dst.separation = iter.getSeparation();
                         auto normal = iter.getContactNormal();
-                        dst.normal = simd_make_float3(normal.x, normal.y, normal.z);
+                        dst.normal = transform(normal);
 
                         if (hasImpulses) {
                             const PxReal impulse = impulses[nbContacts];

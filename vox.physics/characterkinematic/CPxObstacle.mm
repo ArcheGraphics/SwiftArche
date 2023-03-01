@@ -31,15 +31,15 @@
 }
 
 - (simd_float3)mPos {
-    return simd_make_float3(_c_obstacle.mPos.x, _c_obstacle.mPos.y, _c_obstacle.mPos.z);
+    return transform(_c_obstacle.mPos);
 }
 
 - (void)setMPos:(simd_float3)mPos {
-    _c_obstacle.mPos = PxExtendedVec3(mPos.x, mPos.y, mPos.z);
+    _c_obstacle.mPos = transformExtended(mPos);
 }
 
 - (simd_quatf)mRot {
-    return simd_quaternion(_c_obstacle.mRot.x, _c_obstacle.mRot.y, _c_obstacle.mRot.z, _c_obstacle.mRot.w);
+    return transform(_c_obstacle.mRot);
 }
 
 - (void)setMRot:(simd_quatf)mRot {
@@ -47,7 +47,7 @@
 }
 
 - (simd_float3)mHalfExtents {
-    return simd_make_float3(_c_obstacle.mHalfExtents.x, _c_obstacle.mHalfExtents.y, _c_obstacle.mHalfExtents.z);
+    return transform(_c_obstacle.mHalfExtents);
 }
 
 - (void)setMHalfExtents:(simd_float3)mHalfExtents {
@@ -71,15 +71,15 @@
 }
 
 - (simd_float3)mPos {
-    return simd_make_float3(_c_obstacle.mPos.x, _c_obstacle.mPos.y, _c_obstacle.mPos.z);
+    return transform(_c_obstacle.mPos);
 }
 
 - (void)setMPos:(simd_float3)mPos {
-    _c_obstacle.mPos = PxExtendedVec3(mPos.x, mPos.y, mPos.z);
+    _c_obstacle.mPos = transformExtended(mPos);
 }
 
 - (simd_quatf)mRot {
-    return simd_quaternion(_c_obstacle.mRot.x, _c_obstacle.mRot.y, _c_obstacle.mRot.z, _c_obstacle.mRot.w);
+    return transform(_c_obstacle.mRot);
 }
 
 - (void)setMRot:(simd_quatf)mRot {

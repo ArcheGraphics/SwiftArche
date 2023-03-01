@@ -1,0 +1,21 @@
+<component name="InspectionProjectProfileManager">
+  <profile version="1.0">
+    <option name="myName" value="Project Default" />
+    <inspection_tool class="OCUnusedClass" enabled="false" level="WARNING" enabled_by_default="false" />
+    <inspection_tool class="OCUnusedConcept" enabled="false" level="WARNING" enabled_by_default="false" />
+    <inspection_tool class="OCUnusedGlobalDeclaration" enabled="false" level="WARNING" enabled_by_default="false" />
+    <inspection_tool class="OCUnusedInstanceVariable" enabled="false" level="WARNING" enabled_by_default="false" />
+    <inspection_tool class="OCUnusedMacro" enabled="false" level="WARNING" enabled_by_default="false" />
+    <inspection_tool class="OCUnusedMethod" enabled="false" level="WARNING" enabled_by_default="false" />
+    <inspection_tool class="OCUnusedProperty" enabled="false" level="WARNING" enabled_by_default="false" />
+    <inspection_tool class="OCUnusedStruct" enabled="false" level="WARNING" enabled_by_default="false" />
+    <inspection_tool class="OCUnusedTemplateParameter" enabled="false" level="WARNING" enabled_by_default="false" />
+    <inspection_tool class="OCUnusedTypeAlias" enabled="false" level="WARNING" enabled_by_default="false" />
+    <inspection_tool class="UnusedExpressionResult" enabled="false" level="WARNING" enabled_by_default="false" />
+    <inspection_tool class="UnusedImportStatement" enabled="false" level="WARNING" enabled_by_default="false" />
+    <inspection_tool class="UnusedLocalVariable" enabled="false" level="WARNING" enabled_by_default="false" />
+    <inspection_tool class="UnusedLocalization" enabled="false" level="WARNING" enabled_by_default="false" />
+    <inspection_tool class="UnusedParameter" enabled="false" level="WARNING" enabled_by_default="false" />
+    <inspection_tool class="UnusedValue" enabled="false" level="WARNING" enabled_by_default="false" />
+  </profile>
+</component>

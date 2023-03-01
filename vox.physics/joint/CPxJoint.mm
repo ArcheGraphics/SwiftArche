@@ -34,24 +34,22 @@
 
 - (void)getLocalPose:(CPxJointActorIndex)actor :(simd_float3 *)position rotation:(simd_quatf *)rotation {
     PxTransform pose = _c_joint->getLocalPose(PxJointActorIndex::Enum(actor));
-    *position = simd_make_float3(pose.p.x, pose.p.y, pose.p.z);
-    *rotation = simd_quaternion(pose.q.x, pose.q.y, pose.q.z, pose.q.w);
+    *position = transform(pose.p);
+    *rotation = transform(pose.q);
 }
 
 - (void)getRelativeTransform:(simd_float3 *)position rotation:(simd_quatf *)rotation {
     PxTransform pose = _c_joint->getRelativeTransform();
-    *position = simd_make_float3(pose.p.x, pose.p.y, pose.p.z);
-    *rotation = simd_quaternion(pose.q.x, pose.q.y, pose.q.z, pose.q.w);
+    *position = transform(pose.p);
+    *rotation = transform(pose.q);
 }
 
 - (simd_float3)getRelativeLinearVelocity {
-    PxVec3 vel = _c_joint->getRelativeLinearVelocity();
-    return simd_make_float3(vel.x, vel.y, vel.z);
+    return transform(_c_joint->getRelativeLinearVelocity());
 }
 
 - (simd_float3)getRelativeAngularVelocity {
-    PxVec3 vel = _c_joint->getRelativeAngularVelocity();
-    return simd_make_float3(vel.x, vel.y, vel.z);
+    return transform(_c_joint->getRelativeAngularVelocity());
 }
 
 - (void)setBreakForce:(float)force :(float)torque {

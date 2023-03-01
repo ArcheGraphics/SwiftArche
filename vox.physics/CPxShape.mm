@@ -56,21 +56,19 @@
     switch (index) {
         case 0:
             return _c_shape->getQueryFilterData().word0;
-            break;
 
         case 1:
             return _c_shape->getQueryFilterData().word1;
-            break;
 
         case 2:
             return _c_shape->getQueryFilterData().word2;
-            break;
 
         case 3:
             return _c_shape->getQueryFilterData().word3;
-            break;
+
+        default:
+            return -1;
     }
-    return -1;
 }
 
 - (PxGeometryHolder)getGeometry {
