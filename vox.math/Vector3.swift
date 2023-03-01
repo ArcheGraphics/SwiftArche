@@ -70,8 +70,8 @@ public struct Vector3 {
 }
 
 //MARK: - Static Methods
-extension Vector3 : Equatable {
-    
+extension Vector3: Equatable {
+
 }
 
 extension Vector3 {
@@ -449,6 +449,19 @@ extension Vector3 {
         }
         let num2 = simd_dot(vector.elements, planeNormal.elements)
         return Vector3(vector.x - planeNormal.x * num2 / num1, vector.y - planeNormal.y * num2 / num1, vector.z - planeNormal.z * num2 / num1)
+    }
+
+    /// Returns a copy of vector with its magnitude clamped to maxLength.
+    public static func clampMagnitude(vector: Vector3, maxLength: Float) -> Vector3 {
+        let sqrMagnitude = vector.lengthSquared()
+        if (sqrMagnitude <= maxLength * maxLength) {
+            return vector
+        }
+        let num1 = sqrt(sqrMagnitude)
+        let num2 = vector.x / num1
+        let num3 = vector.y / num1
+        let num4 = vector.z / num1
+        return Vector3(num2 * maxLength, num3 * maxLength, num4 * maxLength)
     }
 }
 
