@@ -151,12 +151,12 @@ using namespace physx;
                 uint32_t index0 = -1;
                 if (actor0 != nullptr) {
                     actor0->getShapes(shapes.data(), 1);
-                    index0 = shapes[0]->getQueryFilterData().word0;
+                    index0 = shapes[0]->getQueryFilterData().word3;
                 }
                 uint32_t index1 = -1;
                 if (actor1 != nullptr) {
                     actor1->getShapes(shapes.data(), 1);
-                    index1 = shapes[0]->getQueryFilterData().word0;
+                    index1 = shapes[0]->getQueryFilterData().word3;
                 }
                 onJointBreak(index0, index1, [[NSString alloc] initWithUTF8String:joint->getName()]);
             }
@@ -175,16 +175,16 @@ using namespace physx;
                 extractContacts(userBuffer, cp);
 
                 if (cp.events & (PxPairFlag::eNOTIFY_TOUCH_FOUND | PxPairFlag::eNOTIFY_TOUCH_CCD)) {
-                    onContactEnter(cp.shapes[0]->getQueryFilterData().word0, cp.shapes[1]->getQueryFilterData().word0,
+                    onContactEnter(cp.shapes[0]->getQueryFilterData().word3, cp.shapes[1]->getQueryFilterData().word3,
                             userBuffer.data(), static_cast<uint32_t>(userBuffer.size()));
                 } else if (cp.events & PxPairFlag::eNOTIFY_TOUCH_LOST) {
                     if (!cp.flags.isSet(PxContactPairFlag::Enum::eREMOVED_SHAPE_0) &&
                             !cp.flags.isSet(PxContactPairFlag::Enum::eREMOVED_SHAPE_1)) {
-                        onContactExit(cp.shapes[0]->getQueryFilterData().word0, cp.shapes[1]->getQueryFilterData().word0,
+                        onContactExit(cp.shapes[0]->getQueryFilterData().word3, cp.shapes[1]->getQueryFilterData().word3,
                                 userBuffer.data(), static_cast<uint32_t>(userBuffer.size()));
                     }
                 } else if (cp.events & PxPairFlag::eNOTIFY_TOUCH_PERSISTS) {
-                    onContactStay(cp.shapes[0]->getQueryFilterData().word0, cp.shapes[1]->getQueryFilterData().word0,
+                    onContactStay(cp.shapes[0]->getQueryFilterData().word3, cp.shapes[1]->getQueryFilterData().word3,
                             userBuffer.data(), static_cast<uint32_t>(userBuffer.size()));
                 }
             }
@@ -195,11 +195,11 @@ using namespace physx;
                 const PxTriggerPair &tp = pairs[i];
 
                 if (tp.status & PxPairFlag::eNOTIFY_TOUCH_FOUND) {
-                    onTriggerEnter(tp.triggerShape->getQueryFilterData().word0, tp.otherShape->getQueryFilterData().word0);
+                    onTriggerEnter(tp.triggerShape->getQueryFilterData().word3, tp.otherShape->getQueryFilterData().word3);
                 } else if (tp.status & PxPairFlag::eNOTIFY_TOUCH_LOST) {
                     if (!tp.flags.isSet(PxTriggerPairFlag::Enum::eREMOVED_SHAPE_OTHER) &&
                             !tp.flags.isSet(PxTriggerPairFlag::Enum::eREMOVED_SHAPE_TRIGGER)) {
-                        onTriggerExit(tp.triggerShape->getQueryFilterData().word0, tp.otherShape->getQueryFilterData().word0);
+                        onTriggerExit(tp.triggerShape->getQueryFilterData().word3, tp.otherShape->getQueryFilterData().word3);
                     }
                 }
             }

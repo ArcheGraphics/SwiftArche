@@ -25,7 +25,7 @@ namespace {
 
         PxQueryHitType::Enum preFilter(const PxFilterData &filterData, const PxShape *shape,
                 const PxRigidActor *actor, PxHitFlags &queryFlags) override {
-            auto index = shape->getQueryFilterData().word0;
+            auto index = shape->getQueryFilterData().word3;
             if (filterCallback(index)) {
                 return PxQueryHitType::Enum::eBLOCK;
             } else {
@@ -92,7 +92,7 @@ namespace {
         hit->position = simd_make_float3(pxHit.position.x, pxHit.position.y, pxHit.position.z);
         hit->normal = simd_make_float3(pxHit.normal.x, pxHit.normal.y, pxHit.normal.z);
         hit->distance = pxHit.distance;
-        hit->index = pxHit.shape->getQueryFilterData().word0;
+        hit->index = pxHit.shape->getQueryFilterData().word3;
     }
     return result > 0;
 }
@@ -132,7 +132,7 @@ namespace {
         hit->position = simd_make_float3(pxHit.position.x, pxHit.position.y, pxHit.position.z);
         hit->normal = simd_make_float3(pxHit.normal.x, pxHit.normal.y, pxHit.normal.z);
         hit->distance = pxHit.distance;
-        hit->index = pxHit.shape->getQueryFilterData().word0;
+        hit->index = pxHit.shape->getQueryFilterData().word3;
     }
 
     return result;
@@ -159,7 +159,7 @@ namespace {
         for (int i = 0; i < result; i++) {
             auto &pxHit = pxHits[i];
             LocationHit locHit;
-            locHit.index = pxHit.shape->getQueryFilterData().word0;
+            locHit.index = pxHit.shape->getQueryFilterData().word3;
             locHit.distance = pxHit.distance;
             locHit.position = simd_make_float3(pxHit.position.x, pxHit.position.y, pxHit.position.z);
             locHit.normal = simd_make_float3(pxHit.normal.x, pxHit.normal.y, pxHit.normal.z);
@@ -187,7 +187,7 @@ namespace {
         hit->position = simd_make_float3(pxHit.position.x, pxHit.position.y, pxHit.position.z);
         hit->normal = simd_make_float3(pxHit.normal.x, pxHit.normal.y, pxHit.normal.z);
         hit->distance = pxHit.distance;
-        hit->index = pxHit.shape->getQueryFilterData().word0;
+        hit->index = pxHit.shape->getQueryFilterData().word3;
     }
     return result;
 }
@@ -229,7 +229,7 @@ namespace {
         hit->position = simd_make_float3(pxHit.position.x, pxHit.position.y, pxHit.position.z);
         hit->normal = simd_make_float3(pxHit.normal.x, pxHit.normal.y, pxHit.normal.z);
         hit->distance = pxHit.distance;
-        hit->index = pxHit.shape->getQueryFilterData().word0;
+        hit->index = pxHit.shape->getQueryFilterData().word3;
     }
 
     return result;
@@ -257,7 +257,7 @@ namespace {
         for (int i = 0; i < result; i++) {
             auto &pxHit = pxHits[i];
             LocationHit locHit;
-            locHit.index = pxHit.shape->getQueryFilterData().word0;
+            locHit.index = pxHit.shape->getQueryFilterData().word3;
             locHit.distance = pxHit.distance;
             locHit.position = simd_make_float3(pxHit.position.x, pxHit.position.y, pxHit.position.z);
             locHit.normal = simd_make_float3(pxHit.normal.x, pxHit.normal.y, pxHit.normal.z);
@@ -309,7 +309,7 @@ namespace {
         for (int i = 0; i < result; i++) {
             auto &pxHit = pxHits[i];
             LocationHit locHit;
-            locHit.index = pxHit.shape->getQueryFilterData().word0;
+            locHit.index = pxHit.shape->getQueryFilterData().word3;
             hit[i] = locHit;
         }
     }
