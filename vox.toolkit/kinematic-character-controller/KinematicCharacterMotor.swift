@@ -627,7 +627,204 @@ extension KinematicCharacterMotor {
     /// - Ground probing
     /// - Handle detecting potential interactable rigidbodies
     public func UpdatePhase1(deltaTime: Float) {
-        // MARK: - TODO
+        // NaN propagation safety stop
+        if (BaseVelocity.x.isNaN || BaseVelocity.y.isNaN || BaseVelocity.z.isNaN) {
+            BaseVelocity = Vector3.zero
+        }
+        if (_attachedRigidbodyVelocity.x.isNaN || _attachedRigidbodyVelocity.y.isNaN || _attachedRigidbodyVelocity.z.isNaN) {
+            _attachedRigidbodyVelocity = Vector3.zero
+        }
+
+        _rigidbodiesPushedThisMove = []
+
+        // Before update
+        CharacterController!.BeforeCharacterUpdate(deltaTime: deltaTime)
+
+        _transientPosition = _transform.position
+        TransientRotation = _transform.rotationQuaternion
+        _initialSimulationPosition = _transientPosition
+        _initialSimulationRotation = _transientRotation
+        _rigidbodyProjectionHitCount = 0
+        _overlapsCount = 0
+        _lastSolvedOverlapNormalDirty = false
+
+        // MARK: - Handle Move Position
+        if (_movePositionDirty) {
+            if (_solveMovementCollisions) {
+                var tmpVelocity = GetVelocityFromMovement(movement: _movePositionTarget - _transientPosition, deltaTime: deltaTime)
+                if (InternalCharacterMove(transientVelocity: &tmpVelocity, deltaTime: deltaTime)) {
+                    if (InteractiveRigidbodyHandling) {
+                        ProcessVelocityForRigidbodyHits(processedVelocity: &tmpVelocity, deltaTime: deltaTime)
+                    }
+                }
+            } else {
+                _transientPosition = _movePositionTarget
+            }
+
+            _movePositionDirty = false
+        }
+
+        LastGroundingStatus.CopyFrom(groundingReport: GroundingStatus)
+        GroundingStatus = CharacterGroundingReport()
+        GroundingStatus.GroundNormal = _characterUp
+
+        if (_solveMovementCollisions) {
+            // MARK: - Resolve initial overlaps
+            var resolutionDirection = _cachedWorldUp
+            var resolutionDistance: Float = 0
+            var iterationsMade = 0
+            var overlapSolved = false
+            while (iterationsMade < MaxDecollisionIterations && !overlapSolved) {
+                let nbOverlaps = CharacterCollisionsOverlap(position: _transientPosition, rotation: _transientRotation, overlappedColliders: _internalProbedColliders)
+
+                if (nbOverlaps > 0) {
+                    // Solve overlaps that aren't against dynamic rigidbodies or physics movers
+                    for i in 0..<nbOverlaps {
+                        if (GetInteractiveRigidbody(onCollider: _internalProbedColliders[i]!) == nil) {
+                            // Process overlap
+                            let overlappedTransform: Transform? = _internalProbedColliders[i]!.entity.getComponent()
+                            if engine.physicsManager.computePenetration(shape0: Capsule!.shapes[0],
+                                                                        position0: _transientPosition,
+                                                                        rotation0: _transientRotation,
+                                                                        shape1: _internalProbedColliders[i]!.shapes[0],
+                                                                        position1: overlappedTransform!.position,
+                                                                        rotation1: overlappedTransform!.rotationQuaternion,
+                                                                        direction: &resolutionDirection,
+                                                                        depth: &resolutionDistance) {
+                                // Resolve along obstruction direction
+                                var mockReport = HitStabilityReport()
+                                mockReport.IsStable = IsStableOnNormal(resolutionDirection)
+                                resolutionDirection = GetObstructionNormal(hitNormal: resolutionDirection, stableOnHit: mockReport.IsStable)
+
+                                // Solve overlap
+                                let resolutionMovement = resolutionDirection * (resolutionDistance + KinematicCharacterMotor.CollisionOffset)
+                                _transientPosition += resolutionMovement
+
+                                // Remember overlaps
+                                if (_overlapsCount < _overlaps.count) {
+                                    _overlaps[_overlapsCount] = OverlapResult(Normal: resolutionDirection, Collider: _internalProbedColliders[i])
+                                    _overlapsCount += 1
+                                }
+
+                                break
+                            }
+                        }
+                    }
+                } else {
+                    overlapSolved = true
+                }
+
+                iterationsMade += 1
+            }
+        }
+
+        // MARK: -  Ground Probing and Snapping
+        // Handle ungrounding
+        if (_solveGrounding) {
+            if (MustUnground()) {
+                _transientPosition += _characterUp * (KinematicCharacterMotor.MinimumGroundProbingDistance * 1.5)
+            } else {
+                // Choose the appropriate ground probing distance
+                var selectedGroundProbingDistance = KinematicCharacterMotor.MinimumGroundProbingDistance
+                if (!LastGroundingStatus.SnappingPrevented && (LastGroundingStatus.IsStableOnGround || LastMovementIterationFoundAnyGround)) {
+                    if (StepHandling != StepHandlingMethod.None) {
+                        selectedGroundProbingDistance = max(CapsuleRadius, MaxStepHeight)
+                    } else {
+                        selectedGroundProbingDistance = CapsuleRadius
+                    }
+
+                    selectedGroundProbingDistance += GroundDetectionExtraDistance
+                }
+
+                ProbeGround(probingPosition: &_transientPosition, atRotation: _transientRotation,
+                            probingDistance: selectedGroundProbingDistance, groundingReport: &GroundingStatus)
+
+                if (!LastGroundingStatus.IsStableOnGround && GroundingStatus.IsStableOnGround) {
+                    // Handle stable landing
+                    BaseVelocity = Vector3.projectOnPlane(vector: BaseVelocity, planeNormal: CharacterUp)
+                    BaseVelocity = GetDirectionTangentToSurface(direction: BaseVelocity, surfaceNormal: GroundingStatus.GroundNormal) * BaseVelocity.length()
+                }
+            }
+        }
+
+        LastMovementIterationFoundAnyGround = false
+
+        if (_mustUngroundTimeCounter > 0)
+        {
+            _mustUngroundTimeCounter -= deltaTime
+        }
+        _mustUnground = false
+
+        if (_solveGrounding) {
+            CharacterController!.PostGroundingUpdate(deltaTime: deltaTime)
+        }
+
+        if (InteractiveRigidbodyHandling) {
+            // MARK: - Interactive Rigidbody Handling
+            _lastAttachedRigidbody = _attachedRigidbody
+            if let AttachedRigidbodyOverride = AttachedRigidbodyOverride {
+                _attachedRigidbody = AttachedRigidbodyOverride
+            } else {
+                // Detect interactive rigidbodies from grounding
+                if GroundingStatus.IsStableOnGround,
+                   let GroundCollider = GroundingStatus.GroundCollider {
+                    if let interactiveRigidbody = GetInteractiveRigidbody(onCollider: GroundCollider) {
+                        _attachedRigidbody = interactiveRigidbody
+                    }
+                } else {
+                    _attachedRigidbody = nil
+                }
+            }
+
+            var tmpVelocityFromCurrentAttachedRigidbody = Vector3.zero
+            var tmpAngularVelocityFromCurrentAttachedRigidbody = Vector3.zero
+            if let _attachedRigidbody = _attachedRigidbody {
+                GetVelocityFromRigidbodyMovement(interactiveRigidbody: _attachedRigidbody, atPoint: _transientPosition,
+                                                 deltaTime: deltaTime, linearVelocity: &tmpVelocityFromCurrentAttachedRigidbody,
+                                                 angularVelocity: &tmpAngularVelocityFromCurrentAttachedRigidbody)
+            }
+
+            // Conserve momentum when de-stabilized from an attached rigidbody
+            if (PreserveAttachedRigidbodyMomentum && _lastAttachedRigidbody != nil && _attachedRigidbody != _lastAttachedRigidbody) {
+                BaseVelocity += _attachedRigidbodyVelocity
+                BaseVelocity -= tmpVelocityFromCurrentAttachedRigidbody
+            }
+
+            // Process additionnal Velocity from attached rigidbody
+            _attachedRigidbodyVelocity = _cachedZeroVector
+            if let _ = _attachedRigidbody {
+                _attachedRigidbodyVelocity = tmpVelocityFromCurrentAttachedRigidbody
+
+                // Rotation from attached rigidbody
+                let euler = tmpAngularVelocityFromCurrentAttachedRigidbody * MathUtil.radToDegreeFactor * deltaTime
+                let newForward = Vector3.projectOnPlane(vector: Vector3.transformByQuat(v: _characterForward, quaternion:
+                                                                                            Quaternion.rotationEuler(x: euler.x, y: euler.y, z: euler.z)),
+                                                        planeNormal: _characterUp).normalized()
+                TransientRotation = Matrix.lookAt(eye: Vector3(), target: newForward, up: _characterUp).getRotation()
+            }
+
+            // Cancel out horizontal velocity upon landing on an attached rigidbody
+            if (GroundingStatus.GroundCollider != nil &&
+                    GroundingStatus.GroundCollider == _attachedRigidbody &&
+                    _attachedRigidbody != nil &&
+                    _lastAttachedRigidbody == nil) {
+                BaseVelocity -= Vector3.projectOnPlane(vector: _attachedRigidbodyVelocity, planeNormal: _characterUp)
+            }
+
+            // Movement from Attached Rigidbody
+            if (_attachedRigidbodyVelocity.lengthSquared() > 0) {
+                _isMovingFromAttachedRigidbody = true
+
+                if (_solveMovementCollisions) {
+                    // Perform the move from rgdbdy velocity
+                    _ = InternalCharacterMove(transientVelocity: &_attachedRigidbodyVelocity, deltaTime: deltaTime)
+                } else {
+                    _transientPosition += _attachedRigidbodyVelocity * deltaTime
+                }
+
+                _isMovingFromAttachedRigidbody = false
+            }
+        }
     }
 
     /// Update phase 2 is meant to be called after physics movers have simulated their goal positions/rotations.
@@ -639,7 +836,146 @@ extension KinematicCharacterMotor {
     /// - Solving Velocity
     /// - Applying planar constraint
     public func UpdatePhase2(deltaTime: Float) {
-        // MARK: - TODO
+        // Handle rotation
+        CharacterController!.UpdateRotation(currentRotation: &_transientRotation, deltaTime: deltaTime)
+        TransientRotation = _transientRotation
+
+        // Handle move rotation
+        if (_moveRotationDirty) {
+            TransientRotation = _moveRotationTarget
+            _moveRotationDirty = false
+        }
+
+        if (_solveMovementCollisions && InteractiveRigidbodyHandling) {
+            if (InteractiveRigidbodyHandling) {
+                // MARK: - Solve potential attached rigidbody overlap
+                if let _attachedRigidbody = _attachedRigidbody {
+                    let upwardsOffset = (Capsule!.shapes[0] as! CapsuleColliderShape).radius
+
+                    var closestHit = HitResult()
+                    if (CharacterGroundSweep(
+                            position: _transientPosition + (_characterUp * upwardsOffset),
+                            rotation: _transientRotation,
+                            direction: -_characterUp,
+                            distance: upwardsOffset,
+                            closestHit: &closestHit)) {
+                        if (closestHit.collider == _attachedRigidbody && IsStableOnNormal(closestHit.normal)) {
+                            let distanceMovedUp = (upwardsOffset - closestHit.distance)
+                            _transientPosition = _transientPosition + (_characterUp * distanceMovedUp) + (_characterUp * KinematicCharacterMotor.CollisionOffset)
+                        }
+                    }
+                }
+            }
+
+            if (InteractiveRigidbodyHandling) {
+                // MARK: -Resolve overlaps that could've been caused by rotation or physics movers simulation pushing the character
+                var resolutionDirection = _cachedWorldUp
+                var resolutionDistance: Float = 0
+                var iterationsMade = 0
+                var overlapSolved = false
+                while (iterationsMade < MaxDecollisionIterations && !overlapSolved) {
+                    let nbOverlaps = CharacterCollisionsOverlap(position: _transientPosition, rotation: _transientRotation,
+                            overlappedColliders: _internalProbedColliders)
+                    if (nbOverlaps > 0) {
+                        for i in 0..<nbOverlaps {
+                            // Process overlap
+                            let overlappedTransform: Transform? = _internalProbedColliders[i]!.entity.getComponent()
+                            if (engine.physicsManager.computePenetration(shape0: Capsule!.shapes[0] as! CapsuleColliderShape,
+                                    position0: _transientPosition,
+                                    rotation0: _transientRotation,
+                                    shape1: _internalProbedColliders[i]!.shapes[0],
+                                    position1: overlappedTransform!.position,
+                                    rotation1: overlappedTransform!.rotationQuaternion,
+                                    direction: &resolutionDirection,
+                                    depth: &resolutionDistance)) {
+                                // Resolve along obstruction direction
+                                var mockReport = HitStabilityReport()
+                                mockReport.IsStable = IsStableOnNormal(resolutionDirection)
+                                resolutionDirection = GetObstructionNormal(hitNormal: resolutionDirection, stableOnHit: mockReport.IsStable)
+
+                                // Solve overlap
+                                let resolutionMovement = resolutionDirection * (resolutionDistance + KinematicCharacterMotor.CollisionOffset)
+                                _transientPosition += resolutionMovement
+
+                                // If interactiveRigidbody, register as rigidbody hit for velocity
+                                if (InteractiveRigidbodyHandling) {
+                                    let probedRigidbody = GetInteractiveRigidbody(onCollider: _internalProbedColliders[i]!)
+                                    if (probedRigidbody != nil) {
+                                        var tmpReport = HitStabilityReport()
+                                        tmpReport.IsStable = IsStableOnNormal(resolutionDirection)
+                                        if (tmpReport.IsStable) {
+                                            LastMovementIterationFoundAnyGround = tmpReport.IsStable
+                                        }
+                                        if (probedRigidbody != _attachedRigidbody) {
+                                            let estimatedCollisionPoint = _transientPosition
+                                            StoreRigidbodyHit(
+                                                    hitRigidbody: probedRigidbody!,
+                                                    hitVelocity: Velocity,
+                                                    hitPoint: estimatedCollisionPoint,
+                                                    obstructionNormal: resolutionDirection,
+                                                    hitStabilityReport: tmpReport)
+                                        }
+                                    }
+                                }
+
+                                // Remember overlaps
+                                if (_overlapsCount < _overlaps.count) {
+                                    _overlaps[_overlapsCount] = OverlapResult(Normal: resolutionDirection, Collider: _internalProbedColliders[i])
+                                    _overlapsCount += 1
+                                }
+
+                                break
+                            }
+                        }
+                    } else {
+                        overlapSolved = true
+                    }
+
+                    iterationsMade += 1
+                }
+            }
+        }
+
+        // Handle velocity
+        CharacterController!.UpdateVelocity(currentVelocity: &BaseVelocity, deltaTime: deltaTime)
+
+        //this.CharacterController.UpdateVelocity(ref BaseVelocity, deltaTime)
+        if (BaseVelocity.length() < KinematicCharacterMotor.MinVelocityMagnitude) {
+            BaseVelocity = Vector3.zero
+        }
+
+        // MARK: - Calculate Character movement from base velocity
+        // Perform the move from base velocity
+        if (BaseVelocity.lengthSquared() > 0) {
+            if (_solveMovementCollisions) {
+                _ = InternalCharacterMove(transientVelocity: &BaseVelocity, deltaTime: deltaTime)
+            } else {
+                _transientPosition += BaseVelocity * deltaTime
+            }
+        }
+
+        // Process rigidbody hits/overlaps to affect velocity
+        if (InteractiveRigidbodyHandling) {
+            ProcessVelocityForRigidbodyHits(processedVelocity: &BaseVelocity, deltaTime: deltaTime)
+        }
+
+        // Handle planar constraint
+        if (HasPlanarConstraint) {
+            _transientPosition = _initialSimulationPosition + Vector3.projectOnPlane(vector: _transientPosition - _initialSimulationPosition,
+                    planeNormal: PlanarConstraintAxis.normalized())
+        }
+
+        // Discrete collision detection
+        if (DiscreteCollisionEvents) {
+            let nbOverlaps = CharacterCollisionsOverlap(position: _transientPosition, rotation: _transientRotation,
+                    overlappedColliders: _internalProbedColliders,
+                    inflate: KinematicCharacterMotor.CollisionOffset * 2)
+            for i in 0..<nbOverlaps {
+                CharacterController!.OnDiscreteCollisionDetected(hitCollider: _internalProbedColliders[i]!)
+            }
+        }
+
+        CharacterController!.AfterCharacterUpdate(deltaTime: deltaTime)
     }
 
     /// Determines if motor can be considered stable on given slope normal
@@ -683,13 +1019,78 @@ extension KinematicCharacterMotor {
     }
 
     /// Probes for valid ground and midifies the input transientPosition if ground snapping occurs
-    public func ProbeGround(probingPosition: Vector3, atRotation: Quaternion, probingDistance: Float, groundingReport: inout CharacterGroundingReport) {
+    public func ProbeGround(probingPosition: inout Vector3, atRotation: Quaternion, probingDistance: Float, groundingReport: inout CharacterGroundingReport) {
         var probingDistance = probingDistance
         if (probingDistance < KinematicCharacterMotor.MinimumGroundProbingDistance) {
             probingDistance = KinematicCharacterMotor.MinimumGroundProbingDistance
         }
 
-        // MARK: - TODO
+        var groundSweepsMade = 0
+        var groundSweepHit = HitResult()
+        var groundSweepingIsOver = false
+        var groundSweepPosition = probingPosition
+        var groundSweepDirection = Vector3.transformByQuat(v: -_cachedWorldUp, quaternion: atRotation)
+        var groundProbeDistanceRemaining = probingDistance
+        while (groundProbeDistanceRemaining > 0 && (groundSweepsMade <= KinematicCharacterMotor.MaxGroundingSweepIterations) && !groundSweepingIsOver) {
+            // Sweep for ground detection
+            if (CharacterGroundSweep(
+                    position: groundSweepPosition,
+                    rotation: atRotation,
+                    direction: groundSweepDirection,
+                    distance: groundProbeDistanceRemaining,
+                    closestHit: &groundSweepHit)) {
+                let targetPosition = groundSweepPosition + (groundSweepDirection * groundSweepHit.distance)
+                var groundHitStabilityReport = HitStabilityReport()
+                EvaluateHitStability(hitCollider: groundSweepHit.collider!,
+                        hitNormal: groundSweepHit.normal,
+                        hitPoint: groundSweepHit.point,
+                        atCharacterPosition: targetPosition,
+                        atCharacterRotation: _transientRotation,
+                        withCharacterVelocity: BaseVelocity,
+                        stabilityReport: &groundHitStabilityReport)
+
+                groundingReport.FoundAnyGround = true
+                groundingReport.GroundNormal = groundSweepHit.normal
+                groundingReport.InnerGroundNormal = groundHitStabilityReport.InnerNormal
+                groundingReport.OuterGroundNormal = groundHitStabilityReport.OuterNormal
+                groundingReport.GroundCollider = groundSweepHit.collider
+                groundingReport.GroundPoint = groundSweepHit.point
+                groundingReport.SnappingPrevented = false
+
+                // Found stable ground
+                if (groundHitStabilityReport.IsStable) {
+                    // Find all scenarios where ground snapping should be canceled
+                    groundingReport.SnappingPrevented = !IsStableWithSpecialCases(stabilityReport: &groundHitStabilityReport, velocity: BaseVelocity)
+
+                    groundingReport.IsStableOnGround = true
+
+                    // Ground snapping
+                    if (!groundingReport.SnappingPrevented) {
+                        probingPosition = groundSweepPosition + (groundSweepDirection * (groundSweepHit.distance - KinematicCharacterMotor.CollisionOffset))
+                    }
+
+                    CharacterController!.OnGroundHit(hitCollider: groundSweepHit.collider!, hitNormal: groundSweepHit.normal,
+                            hitPoint: groundSweepHit.point, hitStabilityReport: &groundHitStabilityReport)
+                    groundSweepingIsOver = true
+                } else {
+                    // Calculate movement from this iteration and advance position
+                    let sweepMovement = (groundSweepDirection * groundSweepHit.distance)
+                            + (Vector3.transformByQuat(v: _cachedWorldUp, quaternion: atRotation) * max(KinematicCharacterMotor.CollisionOffset, groundSweepHit.distance))
+                    groundSweepPosition = groundSweepPosition + sweepMovement
+
+                    // Set remaining distance
+                    groundProbeDistanceRemaining = min(KinematicCharacterMotor.GroundProbeReboundDistance,
+                            max(groundProbeDistanceRemaining - sweepMovement.length(), 0))
+
+                    // Reorient direction
+                    groundSweepDirection = Vector3.projectOnPlane(vector: groundSweepDirection, planeNormal: groundSweepHit.normal).normalized()
+                }
+            } else {
+                groundSweepingIsOver = true
+            }
+
+            groundSweepsMade += 1
+        }
     }
 
     /// Forces the character to unground itself on its next grounding update
@@ -789,12 +1190,12 @@ extension KinematicCharacterMotor {
                         var resolutionDirection = Vector3()
                         var resolutionDistance: Float = 0
                         if (engine.physicsManager.computePenetration(shape0: Capsule!.shapes[0],
-                                                                     position0: tmpMovedPosition,
-                                                                     rotation0: _transientRotation,
-                                                                     shape1: tmpCollider!.shapes[0],
-                                                                     position1: tmpCollider!.entity.transform.position,
-                                                                     rotation1: tmpCollider!.entity.transform.rotationQuaternion,
-                                                                     direction: &resolutionDirection, depth: &resolutionDistance)) {
+                                position0: tmpMovedPosition,
+                                rotation0: _transientRotation,
+                                shape1: tmpCollider!.shapes[0],
+                                position1: tmpCollider!.entity.transform.position,
+                                rotation1: tmpCollider!.entity.transform.rotationQuaternion,
+                                direction: &resolutionDirection, depth: &resolutionDistance)) {
                             let dotProduct = Vector3.dot(left: remainingMovementDirection, right: resolutionDirection)
                             if (dotProduct < 0 && dotProduct < mostObstructingOverlapNormalDotProduct) {
                                 mostObstructingOverlapNormalDotProduct = dotProduct
@@ -1699,8 +2100,8 @@ extension KinematicCharacterMotor {
         let shape = CapsuleColliderShape()
         shape.radius = (Capsule!.shapes[0] as! CapsuleColliderShape).radius + inflate
         var hits = engine.physicsManager.sweepAll(shape: shape, position: (bottom + top) * 0.5, rotation: Quaternion(),
-                                                  dir: direction, distance: distance + KinematicCharacterMotor.SweepProbingBackstepDistance,
-                                                  layerMask: queryLayers)
+                dir: direction, distance: distance + KinematicCharacterMotor.SweepProbingBackstepDistance,
+                layerMask: queryLayers)
 
         // Hits filter
         closestHit = HitResult()
@@ -1757,7 +2158,7 @@ extension KinematicCharacterMotor {
         let shape = CapsuleColliderShape()
         shape.radius = (Capsule!.shapes[0] as! CapsuleColliderShape).radius + inflate
         var hits = engine.physicsManager.sweepAll(shape: shape, position: (bottom + top) * 0.5, rotation: Quaternion(),
-                                                  dir: direction, distance: distance, layerMask: layers)
+                dir: direction, distance: distance, layerMask: layers)
 
         // Hits filter
         var closestDistance = Float.infinity
@@ -1802,8 +2203,8 @@ extension KinematicCharacterMotor {
         capsule.rotation = rotation.toEuler()
         capsule.position = -direction * KinematicCharacterMotor.GroundProbingBackstepDistance // todo
         let _internalCharacterHits = engine.physicsManager.sweepAll(shape: capsule, position: position, rotation: Quaternion(),
-                                                                    dir: direction, distance: distance + KinematicCharacterMotor.GroundProbingBackstepDistance,
-                                                                    layerMask: [CollidableLayers, StableGroundLayers])
+                dir: direction, distance: distance + KinematicCharacterMotor.GroundProbingBackstepDistance,
+                layerMask: [CollidableLayers, StableGroundLayers])
 
         // Hits filter
         var foundValidHit = false
