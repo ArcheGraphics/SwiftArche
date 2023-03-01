@@ -84,6 +84,8 @@
 		3E37FCF729AF36150050169C /* Teleporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E37FCF629AF36150050169C /* Teleporter.swift */; };
 		3E37FCFB29AF399B0050169C /* MyCharacterController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E37FCFA29AF399B0050169C /* MyCharacterController.swift */; };
 		3E37FCFD29AF3A160050169C /* MyPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E37FCFC29AF3A160050169C /* MyPlayer.swift */; };
+		3E37FD0329AF743E0050169C /* ActionResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E37FD0229AF743E0050169C /* ActionResult.swift */; };
+		3E37FD0529AF9CA00050169C /* AutoUnwrapSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E37FD0429AF9CA00050169C /* AutoUnwrapSettings.swift */; };
 		3E43DC9B295BDDDC00732AC0 /* physics_helpers.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3E6B23B52946B3E5000AC29F /* physics_helpers.metal */; };
 		3E43DC9C295BDDDC00732AC0 /* sdf_shading.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3E6B23D529499B36000AC29F /* sdf_shading.metal */; };
 		3E43DC9D295BDDDC00732AC0 /* sdf_baker.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3E6B23D2294964B1000AC29F /* sdf_baker.metal */; };
@@ -702,6 +704,8 @@
 		3E37FCF629AF36150050169C /* Teleporter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Teleporter.swift; sourceTree = "<group>"; };
 		3E37FCFA29AF399B0050169C /* MyCharacterController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyCharacterController.swift; sourceTree = "<group>"; };
 		3E37FCFC29AF3A160050169C /* MyPlayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyPlayer.swift; sourceTree = "<group>"; };
+		3E37FD0229AF743E0050169C /* ActionResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActionResult.swift; sourceTree = "<group>"; };
+		3E37FD0429AF9CA00050169C /* AutoUnwrapSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AutoUnwrapSettings.swift; sourceTree = "<group>"; };
 		3E6B235B2941BF88000AC29F /* BlendShapeWeightsAnimationCurveOwnerAssembler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlendShapeWeightsAnimationCurveOwnerAssembler.swift; sourceTree = "<group>"; };
 		3E6B235D294220BC000AC29F /* FaceMorphApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FaceMorphApp.swift; sourceTree = "<group>"; };
 		3E6B235F294224C1000AC29F /* FaceGUI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FaceGUI.swift; sourceTree = "<group>"; };
@@ -1227,6 +1231,7 @@
 		040F1DA429336A56008BDC8D /* vox.toolkit */ = {
 			isa = PBXGroup;
 			children = (
+				3E37FCFE29AF738F0050169C /* architecture */,
 				3E1F129A29AC3BCB00F1002E /* kinematic-character-controller */,
 				3EC92A4E2936F71D00423396 /* bridging.h */,
 				3EC92A412936334600423396 /* custom-material */,
@@ -1480,6 +1485,31 @@
 				3E37FCFC29AF3A160050169C /* MyPlayer.swift */,
 			);
 			path = "1- Player Camera Character Setup";
+			sourceTree = "<group>";
+		};
+		3E37FCFE29AF738F0050169C /* architecture */ = {
+			isa = PBXGroup;
+			children = (
+				3E37FCFF29AF741F0050169C /* runtime */,
+			);
+			path = architecture;
+			sourceTree = "<group>";
+		};
+		3E37FCFF29AF741F0050169C /* runtime */ = {
+			isa = PBXGroup;
+			children = (
+				3E37FD0029AF74250050169C /* core */,
+			);
+			path = runtime;
+			sourceTree = "<group>";
+		};
+		3E37FD0029AF74250050169C /* core */ = {
+			isa = PBXGroup;
+			children = (
+				3E37FD0229AF743E0050169C /* ActionResult.swift */,
+				3E37FD0429AF9CA00050169C /* AutoUnwrapSettings.swift */,
+			);
+			path = core;
 			sourceTree = "<group>";
 		};
 		3E6B23A92946B3CA000AC29F /* vox.flex */ = {
@@ -2910,11 +2940,13 @@
 			files = (
 				3E37FCDB29ADC4B60050169C /* KinematicCharacterMotor.swift in Sources */,
 				040F1DC82933A172008BDC8D /* ControlKeyboard.swift in Sources */,
+				3E37FD0529AF9CA00050169C /* AutoUnwrapSettings.swift in Sources */,
 				3E37FCE129ADCC410050169C /* KCCSettings.swift in Sources */,
 				040F1DCA2933A3BE008BDC8D /* ControlWheel.swift in Sources */,
 				040F1DBE2933705D008BDC8D /* ControlPointer.swift in Sources */,
 				040F1DCE2933AB71008BDC8D /* FreeControl.swift in Sources */,
 				040F1DD02933AC19008BDC8D /* ControlFreeKeyboard.swift in Sources */,
+				3E37FD0329AF743E0050169C /* ActionResult.swift in Sources */,
 				040F1DB529336F48008BDC8D /* ControlHandlerType.swift in Sources */,
 				040F1DB029336AAE008BDC8D /* Spherical.swift in Sources */,
 				040F1DBB29336FBF008BDC8D /* OrbitControl.swift in Sources */,
