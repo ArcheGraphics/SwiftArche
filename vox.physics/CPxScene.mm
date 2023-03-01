@@ -9,6 +9,7 @@
 #import "CPxShape+Internal.h"
 #import "CPxRigidActor+Internal.h"
 #import "characterkinematic/CPxControllerManager+Internal.h"
+#include "CPXHelper.h"
 #include <functional>
 #include <vector>
 
@@ -78,12 +79,14 @@ namespace {
 - (bool)raycastSpecificWith:(simd_float3)origin
                     unitDir:(simd_float3)unitDir
                       shape:(CPxShape *_Nonnull)shape
+                   position:(simd_float3)position
+                   rotation:(simd_quatf)rotation
                    distance:(float)distance
                         hit:(LocationHit *_Nonnull)hit {
     PxRaycastHit pxHit = PxRaycastHit();
     auto result = PxGeometryQuery::raycast(PxVec3(origin.x, origin.y, origin.z),
             PxVec3(unitDir.x, unitDir.y, unitDir.z),
-            [shape getGeometry].any(), [shape getLocalPose],
+            [shape getGeometry].any(), transform(position, rotation),
             distance, PxHitFlags(PxHitFlag::eDEFAULT), 1, &pxHit);
     if (result > 0) {
         hit->position = simd_make_float3(pxHit.position.x, pxHit.position.y, pxHit.position.z);
@@ -170,12 +173,16 @@ namespace {
 - (bool)sweepSpecificWith:(simd_float3)unitDir
                  distance:(float)distance
                    shape0:(CPxShape *_Nonnull)shape0
+                position0:(simd_float3)position0
+                rotation0:(simd_quatf)rotation0
                    shape1:(CPxShape *_Nonnull)shape1
+                position1:(simd_float3)position1
+                rotation1:(simd_quatf)rotation1
                       hit:(LocationHit *_Nonnull)hit {
     PxSweepHit pxHit = PxSweepHit();
     auto result = PxGeometryQuery::sweep(PxVec3(unitDir.x, unitDir.y, unitDir.z), distance,
-            [shape0 getGeometry].any(), [shape0 getLocalPose],
-            [shape1 getGeometry].any(), [shape1 getLocalPose], pxHit);
+            [shape0 getGeometry].any(), transform(position0, rotation0),
+            [shape1 getGeometry].any(), transform(position1, rotation1), pxHit);
     if (result) {
         hit->position = simd_make_float3(pxHit.position.x, pxHit.position.y, pxHit.position.z);
         hit->normal = simd_make_float3(pxHit.normal.x, pxHit.normal.y, pxHit.normal.z);
@@ -187,6 +194,7 @@ namespace {
 
 - (bool)sweepAnyWith:(CPxShape *_Nonnull)shape
               origin:(simd_float3)origin
+            rotation:(simd_quatf)rotation
              unitDir:(simd_float3)unitDir
             distance:(float)distance
       filterCallback:(bool (^ _Nullable)(uint32_t obj1))filterCallback {
@@ -195,15 +203,14 @@ namespace {
     filterData.flags = PxQueryFlags(PxQueryFlag::eSTATIC | PxQueryFlag::eDYNAMIC | PxQueryFlag::ePREFILTER);
     CustomFilter filterCall(filterCallback);
 
-    auto pose = [shape getLocalPose];
-    return PxSceneQueryExt::sweepAny(*_scene, [shape getGeometry].any(),
-            PxTransform(PxVec3(origin.x, origin.y, origin.z), pose.q),
+    return PxSceneQueryExt::sweepAny(*_scene, [shape getGeometry].any(), transform(origin, rotation),
             PxVec3(unitDir.x, unitDir.y, unitDir.z),
             distance, PxHitFlags(PxHitFlag::eDEFAULT), pxHit, filterData, &filterCall);
 }
 
 - (bool)sweepSingleWith:(CPxShape *_Nonnull)shape
                  origin:(simd_float3)origin
+               rotation:(simd_quatf)rotation
                 unitDir:(simd_float3)unitDir
                distance:(float)distance
                     hit:(LocationHit *_Nonnull)hit
@@ -213,9 +220,8 @@ namespace {
     filterData.flags = PxQueryFlags(PxQueryFlag::eSTATIC | PxQueryFlag::eDYNAMIC | PxQueryFlag::ePREFILTER);
     CustomFilter filterCall(filterCallback);
 
-    auto pose = [shape getLocalPose];
     bool result = PxSceneQueryExt::sweepSingle(*_scene, [shape getGeometry].any(),
-            PxTransform(PxVec3(origin.x, origin.y, origin.z), pose.q),
+            transform(origin, rotation),
             PxVec3(unitDir.x, unitDir.y, unitDir.z),
             distance, PxHitFlags(PxHitFlag::eDEFAULT), pxHit, filterData, &filterCall);
 
@@ -231,6 +237,7 @@ namespace {
 
 - (int)sweepMultipleWith:(CPxShape *_Nonnull)shape
                   origin:(simd_float3)origin
+                rotation:(simd_quatf)rotation
                  unitDir:(simd_float3)unitDir
                 distance:(float)distance
                      hit:(LocationHit *_Nonnull)hit
@@ -240,11 +247,9 @@ namespace {
     filterData.flags = PxQueryFlags(PxQueryFlag::eSTATIC | PxQueryFlag::eDYNAMIC | PxQueryFlag::ePREFILTER);
     CustomFilter filterCall(filterCallback);
 
-    auto pose = [shape getLocalPose];
     std::vector<PxSweepHit> pxHits(hitCount);
     bool blockingHit;
-    int result = PxSceneQueryExt::sweepMultiple(*_scene, [shape getGeometry].any(),
-            PxTransform(PxVec3(origin.x, origin.y, origin.z), pose.q),
+    int result = PxSceneQueryExt::sweepMultiple(*_scene, [shape getGeometry].any(), transform(origin, rotation),
             PxVec3(unitDir.x, unitDir.y, unitDir.z),
             distance, PxHitFlags(PxHitFlag::eDEFAULT),
             pxHits.data(), hitCount, blockingHit, filterData, &filterCall);
@@ -264,27 +269,31 @@ namespace {
 
 //MARK: - Overlap
 - (bool)overlapSpecificWith:(CPxShape *_Nonnull)shape0
-                     shape1:(CPxShape *_Nonnull)shape1 {
-    return PxGeometryQuery::overlap([shape0 getGeometry].any(), [shape0 getLocalPose],
-            [shape1 getGeometry].any(), [shape1 getLocalPose]);
+                  position0:(simd_float3)position0
+                  rotation0:(simd_quatf)rotation0
+                     shape1:(CPxShape *_Nonnull)shape1
+                  position1:(simd_float3)position1
+                  rotation1:(simd_quatf)rotation1 {
+    return PxGeometryQuery::overlap([shape0 getGeometry].any(), transform(position0, rotation0),
+            [shape1 getGeometry].any(), transform(position1, rotation1));
 }
 
 - (bool)overlapAnyWith:(CPxShape *_Nonnull)shape
                 origin:(simd_float3)origin
+              rotation:(simd_quatf)rotation
         filterCallback:(bool (^ _Nullable)(uint32_t obj1))filterCallback {
     PxOverlapHit pxHit = PxOverlapHit();
     PxSceneQueryFilterData filterData = PxSceneQueryFilterData();
     filterData.flags = PxQueryFlags(PxQueryFlag::eSTATIC | PxQueryFlag::eDYNAMIC | PxQueryFlag::ePREFILTER);
     CustomFilter filterCall(filterCallback);
 
-    auto pose = [shape getLocalPose];
-    return PxSceneQueryExt::overlapAny(*_scene, [shape getGeometry].any(),
-            PxTransform(PxVec3(origin.x, origin.y, origin.z), pose.q),
+    return PxSceneQueryExt::overlapAny(*_scene, [shape getGeometry].any(), transform(origin, rotation),
             pxHit, filterData, &filterCall);
 }
 
 - (int)overlapMultipleWith:(CPxShape *_Nonnull)shape
                     origin:(simd_float3)origin
+                  rotation:(simd_quatf)rotation
                        hit:(LocationHit *_Nonnull)hit
                   hitCount:(uint32_t)hitCount
             filterCallback:(bool (^ _Nullable)(uint32_t obj1))filterCallback {
@@ -292,10 +301,8 @@ namespace {
     filterData.flags = PxQueryFlags(PxQueryFlag::eSTATIC | PxQueryFlag::eDYNAMIC | PxQueryFlag::ePREFILTER);
     CustomFilter filterCall(filterCallback);
 
-    auto pose = [shape getLocalPose];
     std::vector<PxOverlapHit> pxHits(hitCount);
-    int result = PxSceneQueryExt::overlapMultiple(*_scene, [shape getGeometry].any(),
-            PxTransform(PxVec3(origin.x, origin.y, origin.z), pose.q),
+    int result = PxSceneQueryExt::overlapMultiple(*_scene, [shape getGeometry].any(), transform(origin, rotation),
             pxHits.data(), hitCount, filterData, &filterCall);
 
     if (result > 0) {
@@ -313,23 +320,29 @@ namespace {
 - (bool)computePenetration:(simd_float3 *_Nonnull)direction
                      depth:(float *_Nonnull)depth
                     shape0:(CPxShape *_Nonnull)shape0
-                    shape1:(CPxShape *_Nonnull)shape1 {
+                 position0:(simd_float3)position0
+                 rotation0:(simd_quatf)rotation0
+                    shape1:(CPxShape *_Nonnull)shape1
+                 position1:(simd_float3)position1
+                 rotation1:(simd_quatf)rotation1 {
     PxVec3 dir;
-    auto result = PxGeometryQuery::computePenetration(dir, *depth, [shape0 getGeometry].any(), [shape1 getLocalPose],
-            [shape1 getGeometry].any(), [shape1 getLocalPose]);
+    auto result = PxGeometryQuery::computePenetration(dir, *depth, [shape0 getGeometry].any(), transform(position0, rotation0),
+            [shape1 getGeometry].any(), transform(position1, rotation1));
     *direction = simd_make_float3(dir.x, dir.y, dir.z);
     return result;
 }
 
 - (float)closestPoint:(simd_float3)point
                 shape:(CPxShape *_Nonnull)shape
-               cloest:(simd_float3 *_Nonnull)cloest {
+             position:(simd_float3)position
+             rotation:(simd_quatf)rotation
+               closest:(simd_float3 *_Nonnull)closest {
     PxVec3 pt;
     auto result = PxGeometryQuery::pointDistance(PxVec3(point.x, point.y, point.z),
-            [shape getGeometry].any(), [shape getLocalPose],
+            [shape getGeometry].any(), transform(position, rotation),
             &pt);
     if (result > 0) {
-        *cloest = simd_make_float3(pt.x, pt.y, pt.z);
+        *closest = simd_make_float3(pt.x, pt.y, pt.z);
     }
     return result;
 }

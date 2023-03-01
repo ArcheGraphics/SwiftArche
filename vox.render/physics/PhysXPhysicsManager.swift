@@ -194,11 +194,12 @@ class PhysXPhysicsManager {
 //MARK: - Raycast
 extension PhysXPhysicsManager {
     func raycastSpecific(_ ray: Ray, _ distance: Float,
-                         _ shape: PhysXColliderShape,
+                         _ shape: PhysXColliderShape, _ position: Vector3, _ rotation: Quaternion,
                          _ outHitResult: ((LocationHit) -> Void)? = nil) -> Bool {
         var locHit = LocationHit()
         let result = _pxScene.raycastSpecific(with: ray.origin.internalValue, unitDir: ray.direction.internalValue,
-                shape: shape._pxShape, distance: distance, hit: &locHit)
+                shape: shape._pxShape, position: position.internalValue, rotation: rotation.internalValue,
+                distance: distance, hit: &locHit)
         if (result && outHitResult != nil) {
             outHitResult!(locHit)
         }
@@ -260,11 +261,17 @@ extension PhysXPhysicsManager {
 extension PhysXPhysicsManager {
     func sweepSpecific(_ dir: Vector3, _ distance: Float,
                        _ shape0: PhysXColliderShape,
+                       _ position0: Vector3,
+                       _ rotation0: Quaternion,
                        _ shape1: PhysXColliderShape,
+                       _ position1: Vector3,
+                       _ rotation1: Quaternion,
                        _ outHitResult: ((LocationHit) -> Void)? = nil) -> Bool {
         var locHit = LocationHit()
         let result = _pxScene.sweepSpecific(with: dir.internalValue, distance: distance,
-                shape0: shape0._pxShape, shape1: shape1._pxShape, hit: &locHit)
+                shape0: shape0._pxShape, position0: position0.internalValue, rotation0: rotation0.internalValue,
+                shape1: shape1._pxShape, position1: position1.internalValue, rotation1: rotation1.internalValue,
+                hit: &locHit)
 
         if (result && outHitResult != nil) {
             outHitResult!(locHit)
@@ -273,21 +280,24 @@ extension PhysXPhysicsManager {
         return result
     }
 
-    func hasSweep(_ shape: PhysXColliderShape, _ ray: Ray, _ distance: Float,
-                  _ onRaycast: @escaping (UInt32) -> Bool) -> Bool {
+    func hasSweep(_ shape: PhysXColliderShape, _ position: Vector3, _ rotation: Quaternion,
+                  _ direction: Vector3, _ distance: Float, _ onRaycast: @escaping (UInt32) -> Bool) -> Bool {
         _pxScene.sweepAny(with: shape._pxShape,
-                origin: ray.origin.internalValue,
-                unitDir: ray.direction.internalValue,
+                origin: position.internalValue,
+                rotation: rotation.internalValue,
+                unitDir: direction.internalValue,
                 distance: distance, filterCallback: onRaycast)
     }
 
-    func sweep(_ shape: PhysXColliderShape, _ ray: Ray, _ distance: Float,
+    func sweep(_ shape: PhysXColliderShape, _ position: Vector3, _ rotation: Quaternion,
+               _ direction: Vector3, _ distance: Float,
                _ onRaycast: @escaping (UInt32) -> Bool,
                _ outHitResult: ((LocationHit) -> Void)? = nil) -> Bool {
         var locHit = LocationHit()
         let result = _pxScene.sweepSingle(with: shape._pxShape,
-                origin: ray.origin.internalValue,
-                unitDir: ray.direction.internalValue,
+                origin: position.internalValue,
+                rotation: rotation.internalValue,
+                unitDir: direction.internalValue,
                 distance: distance, hit: &locHit,
                 filterCallback: onRaycast)
 
@@ -298,11 +308,13 @@ extension PhysXPhysicsManager {
         return result
     }
 
-    func sweepAll(_ shape: PhysXColliderShape, _ ray: Ray, _ distance: Float,
+    func sweepAll(_ shape: PhysXColliderShape, _ position: Vector3, _ rotation: Quaternion,
+                  _ direction: Vector3, _ distance: Float,
                   _ onRaycast: @escaping (UInt32) -> Bool) -> ArraySlice<LocationHit> {
         var result = _pxScene.sweepMultiple(with: shape._pxShape,
-                origin: ray.origin.internalValue,
-                unitDir: ray.direction.internalValue,
+                origin: position.internalValue,
+                rotation: rotation.internalValue,
+                unitDir: direction.internalValue,
                 distance: distance, hit: &_queryPool,
                 hitCount: UInt32(_queryPool.count),
                 filterCallback: onRaycast)
@@ -310,8 +322,9 @@ extension PhysXPhysicsManager {
             while (result == -1) {
                 _queryPool = [LocationHit](repeating: LocationHit(), count: 2 * _queryPool.count)
                 result = _pxScene.sweepMultiple(with: shape._pxShape,
-                        origin: ray.origin.internalValue,
-                        unitDir: ray.direction.internalValue,
+                        origin: position.internalValue,
+                        rotation: rotation.internalValue,
+                        unitDir: direction.internalValue,
                         distance: distance, hit: &_queryPool,
                         hitCount: UInt32(_queryPool.count),
                         filterCallback: onRaycast)
@@ -327,24 +340,30 @@ extension PhysXPhysicsManager {
 // MARK: - Overlap
 extension PhysXPhysicsManager {
     func overlapSpecific(_ shape0: PhysXColliderShape,
-                         _ shape1: PhysXColliderShape) -> Bool {
-        _pxScene.overlapSpecific(with: shape0._pxShape, shape1: shape1._pxShape)
+                         _ position0: Vector3,
+                         _ rotation0: Quaternion,
+                         _ shape1: PhysXColliderShape,
+                         _ position1: Vector3,
+                         _ rotation1: Quaternion) -> Bool {
+        _pxScene.overlapSpecific(with: shape0._pxShape, position0: position0.internalValue, rotation0: rotation0.internalValue,
+                shape1: shape1._pxShape, position1: position1.internalValue, rotation1: rotation1.internalValue)
     }
 
-    func hasOverlap(_ shape: PhysXColliderShape, _ origin: Vector3,
+    func hasOverlap(_ shape: PhysXColliderShape, _ origin: Vector3, _ rotation: Quaternion,
                     _ onRaycast: @escaping (UInt32) -> Bool) -> Bool {
-        _pxScene.overlapAny(with: shape._pxShape, origin: origin.internalValue, filterCallback: onRaycast)
+        _pxScene.overlapAny(with: shape._pxShape, origin: origin.internalValue,
+                rotation: rotation.internalValue, filterCallback: onRaycast)
     }
 
-    func overlapAll(_ shape: PhysXColliderShape, _ origin: Vector3,
+    func overlapAll(_ shape: PhysXColliderShape, _ origin: Vector3, _ rotation: Quaternion,
                     _ onRaycast: @escaping (UInt32) -> Bool) -> ArraySlice<LocationHit> {
-        var result = _pxScene.overlapMultiple(with: shape._pxShape, origin: origin.internalValue,
+        var result = _pxScene.overlapMultiple(with: shape._pxShape, origin: origin.internalValue, rotation: rotation.internalValue,
                 hit: &_queryPool, hitCount: UInt32(_queryPool.count),
                 filterCallback: onRaycast)
         if (result == -1) {
             while (result == -1) {
                 _queryPool = [LocationHit](repeating: LocationHit(), count: 2 * _queryPool.count)
-                result = _pxScene.overlapMultiple(with: shape._pxShape, origin: origin.internalValue,
+                result = _pxScene.overlapMultiple(with: shape._pxShape, origin: origin.internalValue, rotation: rotation.internalValue,
                         hit: &_queryPool, hitCount: UInt32(_queryPool.count),
                         filterCallback: onRaycast)
             }
@@ -359,16 +378,20 @@ extension PhysXPhysicsManager {
 // MARK: - Other Query
 extension PhysXPhysicsManager {
     func computePenetration(_ direction: inout Vector3, _ depth: inout Float,
-                            _ shape0: PhysXColliderShape, _ shape1: PhysXColliderShape) -> Bool {
+                            _ shape0: PhysXColliderShape, _ position0: Vector3, _ rotation0: Quaternion,
+                            _ shape1: PhysXColliderShape, _ position1: Vector3, _ rotation1: Quaternion) -> Bool {
         var value = SIMD3<Float>()
-        let result = _pxScene.computePenetration(&value, depth: &depth, shape0: shape0._pxShape, shape1: shape1._pxShape)
+        let result = _pxScene.computePenetration(&value, depth: &depth,
+                shape0: shape0._pxShape, position0: position0.internalValue, rotation0: rotation0.internalValue,
+                shape1: shape1._pxShape, position1: position1.internalValue, rotation1: rotation1.internalValue)
         direction = Vector3(value)
         return result
     }
 
-    func closestPoint(_ point: Vector3, _ shape: PhysXColliderShape, _ cloest: inout Vector3) -> Float {
+    func closestPoint(_ point: Vector3, _ shape: PhysXColliderShape, _ position: Vector3, _ rotation: Quaternion, _ cloest: inout Vector3) -> Float {
         var value = SIMD3<Float>()
-        let result = _pxScene.closestPoint(point.internalValue, shape: shape._pxShape, cloest: &value)
+        let result = _pxScene.closestPoint(point.internalValue, shape: shape._pxShape,
+                position: position.internalValue, rotation: rotation.internalValue, closest: &value)
         cloest = Vector3(value)
         return result
     }

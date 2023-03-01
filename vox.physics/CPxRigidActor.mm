@@ -7,6 +7,7 @@
 #import "CPxRigidActor.h"
 #import "CPxRigidActor+Internal.h"
 #import "CPxShape+Internal.h"
+#include "CPXHelper.h"
 
 @implementation CPxRigidActor {
 }
@@ -34,9 +35,7 @@
 }
 
 - (void)setGlobalPose:(simd_float3)position rotation:(simd_quatf)rotation {
-    _c_actor->setGlobalPose(PxTransform(PxVec3(position.x, position.y, position.z),
-            PxQuat(rotation.vector.x, rotation.vector.y,
-                    rotation.vector.z, rotation.vector.w)));
+    _c_actor->setGlobalPose(transform(position, rotation));
 }
 
 - (void)getGlobalPose:(simd_float3 *)position rotation:(simd_quatf *)rotation {

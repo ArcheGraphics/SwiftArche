@@ -683,6 +683,7 @@
 		3E37FCDC29ADC5B70050169C /* IMoverController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IMoverController.swift; sourceTree = "<group>"; };
 		3E37FCDE29ADCC030050169C /* KinematicCharacterSystem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KinematicCharacterSystem.swift; sourceTree = "<group>"; };
 		3E37FCE029ADCC410050169C /* KCCSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KCCSettings.swift; sourceTree = "<group>"; };
+		3E37FCE529AEE9A70050169C /* CPXHelper.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CPXHelper.h; sourceTree = "<group>"; };
 		3E6B235B2941BF88000AC29F /* BlendShapeWeightsAnimationCurveOwnerAssembler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlendShapeWeightsAnimationCurveOwnerAssembler.swift; sourceTree = "<group>"; };
 		3E6B235D294220BC000AC29F /* FaceMorphApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FaceMorphApp.swift; sourceTree = "<group>"; };
 		3E6B235F294224C1000AC29F /* FaceGUI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FaceGUI.swift; sourceTree = "<group>"; };
@@ -1668,6 +1669,7 @@
 			isa = PBXGroup;
 			children = (
 				3E1F129029A7618600F1002E /* bridging.h */,
+				3E37FCE529AEE9A70050169C /* CPXHelper.h */,
 				3EC0377F293213D5002187DC /* CPxConstraint.h */,
 				3EC03783293213D5002187DC /* CPxConstraint.mm */,
 				3EC03784293213D5002187DC /* CPxConstraint+Internal.h */,

@@ -7,6 +7,7 @@
 #import "CPxRigidDynamic.h"
 #import "CPxRigidDynamic+Internal.h"
 #import "CPxRigidActor+Internal.h"
+#include "CPXHelper.h"
 
 @implementation CPxRigidDynamic {
 }
@@ -81,9 +82,7 @@
 }
 
 - (void)setCMassLocalPose:(simd_float3)position rotation:(simd_quatf)rotation {
-    static_cast<PxRigidDynamic *>(super.c_actor)->setCMassLocalPose(
-            PxTransform(PxVec3(position.x, position.y, position.z),
-                    PxQuat(rotation.vector.x, rotation.vector.y, rotation.vector.z, rotation.vector.w)));
+    static_cast<PxRigidDynamic *>(super.c_actor)->setCMassLocalPose(transform(position, rotation));
 }
 
 - (void)getCMassLocalPose:(simd_float3 *)position rotation:(simd_quatf *)rotation {
@@ -195,9 +194,7 @@
 
 //MARK: - Kinematic Actors
 - (void)setKinematicTarget:(simd_float3)position rotation:(simd_quatf)rotation {
-    static_cast<PxRigidDynamic *>(super.c_actor)->setKinematicTarget(
-            PxTransform(PxVec3(position.x, position.y, position.z),
-                    PxQuat(rotation.vector.x, rotation.vector.y, rotation.vector.z, rotation.vector.w)));
+    static_cast<PxRigidDynamic *>(super.c_actor)->setKinematicTarget(transform(position, rotation));
 }
 
 - (bool)getKinematicTarget:(simd_float3 *)position rotation:(simd_quatf *)rotation {

@@ -37,6 +37,8 @@ typedef struct {
 - (bool)raycastSpecificWith:(simd_float3)origin
                     unitDir:(simd_float3)unitDir
                       shape:(CPxShape *_Nonnull)shape
+                   position:(simd_float3)position
+                   rotation:(simd_quatf)rotation
                    distance:(float)distance
                         hit:(LocationHit *_Nonnull)hit;
 
@@ -62,17 +64,23 @@ typedef struct {
 - (bool)sweepSpecificWith:(simd_float3)unitDir
                  distance:(float)distance
                    shape0:(CPxShape *_Nonnull)shape0
+                position0:(simd_float3)position0
+                rotation0:(simd_quatf)rotation0
                    shape1:(CPxShape *_Nonnull)shape1
+                position1:(simd_float3)position1
+                rotation1:(simd_quatf)rotation1
                       hit:(LocationHit *_Nonnull)hit;
 
 - (bool)sweepAnyWith:(CPxShape *_Nonnull)shape
               origin:(simd_float3)origin
+            rotation:(simd_quatf)rotation
              unitDir:(simd_float3)unitDir
             distance:(float)distance
       filterCallback:(bool (^ _Nullable)(uint32_t obj1))filterCallback;
 
 - (bool)sweepSingleWith:(CPxShape *_Nonnull)shape
                  origin:(simd_float3)origin
+               rotation:(simd_quatf)rotation
                 unitDir:(simd_float3)unitDir
                distance:(float)distance
                     hit:(LocationHit *_Nonnull)hit
@@ -80,6 +88,7 @@ typedef struct {
 
 - (int)sweepMultipleWith:(CPxShape *_Nonnull)shape
                   origin:(simd_float3)origin
+                rotation:(simd_quatf)rotation
                  unitDir:(simd_float3)unitDir
                 distance:(float)distance
                      hit:(LocationHit *_Nonnull)hit
@@ -88,14 +97,20 @@ typedef struct {
 
 //MARK: - Overlap
 - (bool)overlapSpecificWith:(CPxShape *_Nonnull)shape0
-                     shape1:(CPxShape *_Nonnull)shape1;
+                  position0:(simd_float3)position0
+                  rotation0:(simd_quatf)rotation0
+                     shape1:(CPxShape *_Nonnull)shape1
+                  position1:(simd_float3)position1
+                  rotation1:(simd_quatf)rotation1;
 
 - (bool)overlapAnyWith:(CPxShape *_Nonnull)shape
                 origin:(simd_float3)origin
+              rotation:(simd_quatf)rotation
         filterCallback:(bool (^ _Nullable)(uint32_t obj1))filterCallback;
 
 - (int)overlapMultipleWith:(CPxShape *_Nonnull)shape
                     origin:(simd_float3)origin
+                  rotation:(simd_quatf)rotation
                        hit:(LocationHit *_Nonnull)hit
                   hitCount:(uint32_t)hitCount
             filterCallback:(bool (^ _Nullable)(uint32_t obj1))filterCallback;
@@ -104,10 +119,16 @@ typedef struct {
 - (bool)computePenetration:(simd_float3 *_Nonnull)direction
                      depth:(float *_Nonnull)depth
                     shape0:(CPxShape *_Nonnull)shape0
-                    shape1:(CPxShape *_Nonnull)shape1;
+                 position0:(simd_float3)position0
+                 rotation0:(simd_quatf)rotation0
+                    shape1:(CPxShape *_Nonnull)shape1
+                 position1:(simd_float3)position1
+                 rotation1:(simd_quatf)rotation1;
 
 - (float)closestPoint:(simd_float3)point
                 shape:(CPxShape *_Nonnull)shape
-               cloest:(simd_float3 *_Nonnull)cloest;
+             position:(simd_float3)position
+             rotation:(simd_quatf)rotation
+              closest:(simd_float3 *_Nonnull)closest;
 
 @end

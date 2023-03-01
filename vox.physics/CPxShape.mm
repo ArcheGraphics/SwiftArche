@@ -9,6 +9,7 @@
 #import "CPxGeometry+Internal.h"
 #import "CPxMaterial+Internal.h"
 #include <vector>
+#include "CPXHelper.h"
 
 @implementation CPxShape {
 }
@@ -38,8 +39,7 @@
 }
 
 - (void)setLocalPose:(simd_float3)position rotation:(simd_quatf)rotation {
-    _c_shape->setLocalPose(PxTransform(PxVec3(position.x, position.y, position.z),
-            PxQuat(rotation.vector.x, rotation.vector.y, rotation.vector.z, rotation.vector.w)));
+    _c_shape->setLocalPose(transform(position, rotation));
 }
 
 - (void)setMaterial:(CPxMaterial *)material {

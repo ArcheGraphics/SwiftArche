@@ -12,6 +12,7 @@
 #import "CPxJointLinearLimitPair+Internal.h"
 #import "CPxJointAngularLimitPair+Internal.h"
 #import "CPxJointLimitPyramid+Internal.h"
+#include "CPXHelper.h"
 
 @implementation CPxD6Joint
 
@@ -84,9 +85,7 @@
 }
 
 - (void)setDrivePosition:(simd_float3)position rotation:(simd_quatf)rotation {
-    static_cast<PxD6Joint *>(super.c_joint)->setDrivePosition(PxTransform(PxVec3(position.x, position.y, position.z),
-            PxQuat(rotation.vector.x, rotation.vector.y,
-                    rotation.vector.z, rotation.vector.w)));
+    static_cast<PxD6Joint *>(super.c_joint)->setDrivePosition(transform(position, rotation));
 }
 
 - (void)getDrivePosition:(simd_float3 *)position rotation:(simd_quatf *)rotation {

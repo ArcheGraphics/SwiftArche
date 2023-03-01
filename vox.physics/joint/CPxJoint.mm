@@ -8,6 +8,7 @@
 #import "CPxJoint+Internal.h"
 #import "../CPxConstraint+Internal.h"
 #import "../CPxRigidActor+Internal.h"
+#include "CPXHelper.h"
 
 @implementation CPxJoint
 
@@ -28,9 +29,7 @@
 }
 
 - (void)setLocalPose:(CPxJointActorIndex)actor :(simd_float3)position rotation:(simd_quatf)rotation {
-    _c_joint->setLocalPose(PxJointActorIndex::Enum(actor), PxTransform(PxVec3(position.x, position.y, position.z),
-            PxQuat(rotation.vector.x, rotation.vector.y,
-                    rotation.vector.z, rotation.vector.w)));
+    _c_joint->setLocalPose(PxJointActorIndex::Enum(actor), transform(position, rotation));
 }
 
 - (void)getLocalPose:(CPxJointActorIndex)actor :(simd_float3 *)position rotation:(simd_quatf *)rotation {

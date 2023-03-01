@@ -16,6 +16,7 @@
 #import "joint/CPxJoint+Internal.h"
 #import "PxPhysicsAPI.h"
 #import "extensions/PxExtensionsAPI.h"
+#include "CPXHelper.h"
 #include <functional>
 #include <vector>
 
@@ -69,17 +70,11 @@ using namespace physx;
 
 - (CPxRigidStatic *)createRigidStaticWithPosition:(simd_float3)position
                                          rotation:(simd_quatf)rotation {
-    return [[CPxRigidStatic alloc]
-            initWithStaticActor:_physics->createRigidStatic(PxTransform(PxVec3(position.x, position.y, position.z),
-                    PxQuat(rotation.vector.x, rotation.vector.y,
-                            rotation.vector.z, rotation.vector.w)))];
+    return [[CPxRigidStatic alloc] initWithStaticActor:_physics->createRigidStatic(transform(position, rotation))];
 }
 
 - (CPxRigidDynamic *)createRigidDynamicWithPosition:(simd_float3)position rotation:(simd_quatf)rotation {
-    return [[CPxRigidDynamic alloc]
-            initWithDynamicActor:_physics->createRigidDynamic(PxTransform(PxVec3(position.x, position.y, position.z),
-                    PxQuat(rotation.vector.x, rotation.vector.y,
-                            rotation.vector.z, rotation.vector.w)))];
+    return [[CPxRigidDynamic alloc] initWithDynamicActor:_physics->createRigidDynamic(transform(position, rotation))];
 }
 
 - (CPxScene *)createSceneWith:(void (^ _Nullable)(uint32_t obj1, uint32_t obj2, void *ptr, uint32_t count))onContactEnter
@@ -234,67 +229,43 @@ using namespace physx;
 - (CPxFixedJoint *_Nonnull)createFixedJoint:(CPxRigidActor *_Nullable)actor0 :(simd_float3)position0 :(simd_quatf)rotation0
         :(CPxRigidActor *_Nullable)actor1 :(simd_float3)position1 :(simd_quatf)rotation1 {
     return [[CPxFixedJoint alloc] initWithJoint:
-            PxFixedJointCreate(*_physics, actor0.c_actor, PxTransform(PxVec3(position0.x, position0.y, position0.z),
-                            PxQuat(rotation0.vector.x, rotation0.vector.y,
-                                    rotation0.vector.z, rotation0.vector.w)),
-                    actor1.c_actor, PxTransform(PxVec3(position0.x, position0.y, position0.z),
-                            PxQuat(rotation0.vector.x, rotation0.vector.y,
-                                    rotation0.vector.z, rotation0.vector.w)))];
+            PxFixedJointCreate(*_physics, actor0.c_actor, transform(position0, rotation0),
+                    actor1.c_actor, transform(position1, rotation1))];
 }
 
 - (CPxRevoluteJoint *_Nonnull)createRevoluteJoint:(CPxRigidActor *_Nullable)actor0 :(simd_float3)position0 :(simd_quatf)rotation0
         :(CPxRigidActor *_Nullable)actor1 :(simd_float3)position1 :(simd_quatf)rotation1 {
     return [[CPxRevoluteJoint alloc] initWithJoint:
-            PxRevoluteJointCreate(*_physics, actor0.c_actor, PxTransform(PxVec3(position0.x, position0.y, position0.z),
-                            PxQuat(rotation0.vector.x, rotation0.vector.y,
-                                    rotation0.vector.z, rotation0.vector.w)),
-                    actor1.c_actor, PxTransform(PxVec3(position0.x, position0.y, position0.z),
-                            PxQuat(rotation0.vector.x, rotation0.vector.y,
-                                    rotation0.vector.z, rotation0.vector.w)))];
+            PxRevoluteJointCreate(*_physics, actor0.c_actor, transform(position0, rotation0),
+                    actor1.c_actor, transform(position1, rotation1))];
 }
 
 - (CPxSphericalJoint *_Nonnull)createSphericalJoint:(CPxRigidActor *_Nullable)actor0 :(simd_float3)position0 :(simd_quatf)rotation0
         :(CPxRigidActor *_Nullable)actor1 :(simd_float3)position1 :(simd_quatf)rotation1 {
     return [[CPxSphericalJoint alloc] initWithJoint:
-            PxSphericalJointCreate(*_physics, actor0.c_actor, PxTransform(PxVec3(position0.x, position0.y, position0.z),
-                            PxQuat(rotation0.vector.x, rotation0.vector.y,
-                                    rotation0.vector.z, rotation0.vector.w)),
-                    actor1.c_actor, PxTransform(PxVec3(position0.x, position0.y, position0.z),
-                            PxQuat(rotation0.vector.x, rotation0.vector.y,
-                                    rotation0.vector.z, rotation0.vector.w)))];
+            PxSphericalJointCreate(*_physics, actor0.c_actor, transform(position0, rotation0),
+                    actor1.c_actor, transform(position1, rotation1))];
 }
 
 - (CPxDistanceJoint *_Nonnull)createDistanceJoint:(CPxRigidActor *_Nullable)actor0 :(simd_float3)position0 :(simd_quatf)rotation0
         :(CPxRigidActor *_Nullable)actor1 :(simd_float3)position1 :(simd_quatf)rotation1 {
     return [[CPxDistanceJoint alloc] initWithJoint:
-            PxDistanceJointCreate(*_physics, actor0.c_actor, PxTransform(PxVec3(position0.x, position0.y, position0.z),
-                            PxQuat(rotation0.vector.x, rotation0.vector.y,
-                                    rotation0.vector.z, rotation0.vector.w)),
-                    actor1.c_actor, PxTransform(PxVec3(position0.x, position0.y, position0.z),
-                            PxQuat(rotation0.vector.x, rotation0.vector.y,
-                                    rotation0.vector.z, rotation0.vector.w)))];
+            PxDistanceJointCreate(*_physics, actor0.c_actor, transform(position0, rotation0),
+                    actor1.c_actor, transform(position1, rotation1))];
 }
 
 - (CPxPrismaticJoint *_Nonnull)createPrismaticJoint:(CPxRigidActor *_Nullable)actor0 :(simd_float3)position0 :(simd_quatf)rotation0
         :(CPxRigidActor *_Nullable)actor1 :(simd_float3)position1 :(simd_quatf)rotation1 {
     return [[CPxPrismaticJoint alloc] initWithJoint:
-            PxPrismaticJointCreate(*_physics, actor0.c_actor, PxTransform(PxVec3(position0.x, position0.y, position0.z),
-                            PxQuat(rotation0.vector.x, rotation0.vector.y,
-                                    rotation0.vector.z, rotation0.vector.w)),
-                    actor1.c_actor, PxTransform(PxVec3(position0.x, position0.y, position0.z),
-                            PxQuat(rotation0.vector.x, rotation0.vector.y,
-                                    rotation0.vector.z, rotation0.vector.w)))];
+            PxPrismaticJointCreate(*_physics, actor0.c_actor, transform(position0, rotation0),
+                    actor1.c_actor, transform(position1, rotation1))];
 }
 
 - (CPxD6Joint *)createD6Joint:(CPxRigidActor *)actor0 :(simd_float3)position0 :(simd_quatf)rotation0
         :(CPxRigidActor *)actor1 :(simd_float3)position1 :(simd_quatf)rotation1 {
     return [[CPxD6Joint alloc] initWithJoint:
-            PxD6JointCreate(*_physics, actor0.c_actor, PxTransform(PxVec3(position0.x, position0.y, position0.z),
-                            PxQuat(rotation0.vector.x, rotation0.vector.y,
-                                    rotation0.vector.z, rotation0.vector.w)),
-                    actor1.c_actor, PxTransform(PxVec3(position0.x, position0.y, position0.z),
-                            PxQuat(rotation0.vector.x, rotation0.vector.y,
-                                    rotation0.vector.z, rotation0.vector.w)))];
+            PxD6JointCreate(*_physics, actor0.c_actor, transform(position0, rotation0),
+                    actor1.c_actor, transform(position1, rotation1))];
 }
 
 @end

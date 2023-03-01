@@ -725,7 +725,7 @@ extension KinematicCharacterMotor {
         var wasCompleted = true
         var remainingMovementDirection = transientVelocity.normalized()
         var remainingMovementMagnitude = transientVelocity.length() * deltaTime
-        var originalVelocityDirection = remainingMovementDirection
+        let originalVelocityDirection = remainingMovementDirection
         var sweepsMade = 0
         var hitSomethingThisSweepIteration = true
         var tmpMovedPosition = _transientPosition
@@ -736,11 +736,11 @@ extension KinematicCharacterMotor {
 
         // Project movement against current overlaps before doing the sweeps
         for i in 0..<_overlapsCount {
-            var overlapNormal = _overlaps[i].Normal
+            let overlapNormal = _overlaps[i].Normal
             if (Vector3.dot(left: remainingMovementDirection, right: overlapNormal) < 0) {
-                var stableOnHit = IsStableOnNormal(overlapNormal) && !MustUnground()
-                var velocityBeforeProjection = transientVelocity
-                var obstructionNormal = GetObstructionNormal(hitNormal: overlapNormal, stableOnHit: stableOnHit)
+                let stableOnHit = IsStableOnNormal(overlapNormal) && !MustUnground()
+                let velocityBeforeProjection = transientVelocity
+                let obstructionNormal = GetObstructionNormal(hitNormal: overlapNormal, stableOnHit: stableOnHit)
 
                 InternalHandleVelocityProjection(
                         stableOnHit: stableOnHit,
@@ -788,15 +788,13 @@ extension KinematicCharacterMotor {
 
                         var resolutionDirection = Vector3()
                         var resolutionDistance: Float = 0
-                        if (Physics.ComputePenetration(
-                                Capsule,
-                                tmpMovedPosition,
-                                _transientRotation,
-                                tmpCollider,
-                                tmpCollider.transform.position,
-                                tmpCollider.transform.rotation,
-                                &resolutionDirection,
-                                &resolutionDistance)) {
+                        if (engine.physicsManager.computePenetration(shape0: Capsule!.shapes[0],
+                                                                     position0: tmpMovedPosition,
+                                                                     rotation0: _transientRotation,
+                                                                     shape1: tmpCollider!.shapes[0],
+                                                                     position1: tmpCollider!.entity.transform.position,
+                                                                     rotation1: tmpCollider!.entity.transform.rotationQuaternion,
+                                                                     direction: &resolutionDirection, depth: &resolutionDistance)) {
                             let dotProduct = Vector3.dot(left: remainingMovementDirection, right: resolutionDirection)
                             if (dotProduct < 0 && dotProduct < mostObstructingOverlapNormalDotProduct) {
                                 mostObstructingOverlapNormalDotProduct = dotProduct
@@ -831,7 +829,7 @@ extension KinematicCharacterMotor {
 
             if (foundClosestHit) {
                 // Calculate movement from this iteration
-                var sweepMovement = (remainingMovementDirection * (max(0, closestSweepHitDistance - KinematicCharacterMotor.CollisionOffset)))
+                let sweepMovement = (remainingMovementDirection * (max(0, closestSweepHitDistance - KinematicCharacterMotor.CollisionOffset)))
                 tmpMovedPosition += sweepMovement
                 remainingMovementMagnitude -= sweepMovement.length()
 
@@ -842,10 +840,10 @@ extension KinematicCharacterMotor {
                 // Handle stepping up steps points higher than bottom capsule radius
                 var foundValidStepHit = false
                 if (_solveGrounding && StepHandling != StepHandlingMethod.None && moveHitStabilityReport.ValidStepDetected) {
-                    var obstructionCorrelation = abs(Vector3.dot(left: closestSweepHitNormal, right: _characterUp))
+                    let obstructionCorrelation = abs(Vector3.dot(left: closestSweepHitNormal, right: _characterUp))
                     if (obstructionCorrelation <= KinematicCharacterMotor.CorrelationForVerticalObstruction) {
-                        var stepForwardDirection = Vector3.projectOnPlane(vector: -closestSweepHitNormal, planeNormal: _characterUp).normalized()
-                        var stepCastStartPoint = (tmpMovedPosition + (stepForwardDirection * KinematicCharacterMotor.SteppingForwardDistance)) +
+                        let stepForwardDirection = Vector3.projectOnPlane(vector: -closestSweepHitNormal, planeNormal: _characterUp).normalized()
+                        let stepCastStartPoint = (tmpMovedPosition + (stepForwardDirection * KinematicCharacterMotor.SteppingForwardDistance)) +
                                 (_characterUp * MaxStepHeight)
 
                         var closestStepHit = HitResult()
@@ -990,7 +988,7 @@ extension KinematicCharacterMotor {
             return
         }
 
-        var velocityBeforeProjection = transientVelocity
+        let velocityBeforeProjection = transientVelocity
 
         if (stableOnHit) {
             LastMovementIterationFoundAnyGround = true
@@ -1131,11 +1129,11 @@ extension KinematicCharacterMotor {
                     // Remember we hit this rigidbody
                     _rigidbodiesPushedThisMove.append(bodyHit.Rigidbody)
 
-                    var characterMass = SimulatedCharacterMass
-                    var characterVelocity = bodyHit.HitVelocity
+                    let characterMass = SimulatedCharacterMass
+                    let characterVelocity = bodyHit.HitVelocity
 
                     let hitCharacterMotor: KinematicCharacterMotor? = Rigidbody.entity.getComponent()
-                    var hitBodyIsDynamic = !Rigidbody.isKinematic
+                    let hitBodyIsDynamic = !Rigidbody.isKinematic
                     var hitBodyMassAtPoint = Rigidbody.mass // todo
                     var hitBodyVelocity = Rigidbody.linearVelocity
                     if let hitCharacterMotor = hitCharacterMotor {
@@ -1614,7 +1612,7 @@ extension KinematicCharacterMotor {
         let shape = CapsuleColliderShape()
         shape.radius = (Capsule!.shapes[0] as! CapsuleColliderShape).radius + inflate
         // todo
-        var overlappedColliders = engine.physicsManager.overlapAll(shape, origin: (bottom + top) * 0.5, layerMask: queryLayers)
+        var overlappedColliders = engine.physicsManager.overlapAll(shape: shape, origin: (bottom + top) * 0.5, rotation: Quaternion(), layerMask: queryLayers)
 
         // Filter out invalid colliders
         nbHits = overlappedColliders.count
@@ -1652,7 +1650,7 @@ extension KinematicCharacterMotor {
         let shape = CapsuleColliderShape()
         shape.radius = (Capsule!.shapes[0] as! CapsuleColliderShape).radius + inflate
         // todo
-        var overlappedColliders = engine.physicsManager.overlapAll(shape, origin: (bottom + top) * 0.5, layerMask: layers)
+        var overlappedColliders = engine.physicsManager.overlapAll(shape: shape, origin: (bottom + top) * 0.5, rotation: Quaternion(), layerMask: layers)
 
         // Filter out the character capsule itself
         nbHits = overlappedColliders.count
@@ -1700,8 +1698,9 @@ extension KinematicCharacterMotor {
         var nbHits = 0
         let shape = CapsuleColliderShape()
         shape.radius = (Capsule!.shapes[0] as! CapsuleColliderShape).radius + inflate
-        var hits = engine.physicsManager.sweepAll(shape, ray: Ray(origin: (bottom + top) * 0.5, direction: direction),
-                distance: distance + KinematicCharacterMotor.SweepProbingBackstepDistance, layerMask: queryLayers)
+        var hits = engine.physicsManager.sweepAll(shape: shape, position: (bottom + top) * 0.5, rotation: Quaternion(),
+                                                  dir: direction, distance: distance + KinematicCharacterMotor.SweepProbingBackstepDistance,
+                                                  layerMask: queryLayers)
 
         // Hits filter
         closestHit = HitResult()
@@ -1757,7 +1756,8 @@ extension KinematicCharacterMotor {
         var nbHits = 0
         let shape = CapsuleColliderShape()
         shape.radius = (Capsule!.shapes[0] as! CapsuleColliderShape).radius + inflate
-        var hits = engine.physicsManager.sweepAll(shape, ray: Ray(origin: (bottom + top) * 0.5, direction: direction), distance: distance, layerMask: layers)
+        var hits = engine.physicsManager.sweepAll(shape: shape, position: (bottom + top) * 0.5, rotation: Quaternion(),
+                                                  dir: direction, distance: distance, layerMask: layers)
 
         // Hits filter
         var closestDistance = Float.infinity
@@ -1801,9 +1801,9 @@ extension KinematicCharacterMotor {
         capsule.radius = (Capsule!.shapes[0] as! CapsuleColliderShape).radius
         capsule.rotation = rotation.toEuler()
         capsule.position = -direction * KinematicCharacterMotor.GroundProbingBackstepDistance // todo
-        let _internalCharacterHits = engine.physicsManager.sweepAll(capsule, ray: Ray(origin: position, direction: direction),
-                distance: distance + KinematicCharacterMotor.GroundProbingBackstepDistance,
-                layerMask: [CollidableLayers, StableGroundLayers])
+        let _internalCharacterHits = engine.physicsManager.sweepAll(shape: capsule, position: position, rotation: Quaternion(),
+                                                                    dir: direction, distance: distance + KinematicCharacterMotor.GroundProbingBackstepDistance,
+                                                                    layerMask: [CollidableLayers, StableGroundLayers])
 
         // Hits filter
         var foundValidHit = false

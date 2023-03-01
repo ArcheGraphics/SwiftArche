@@ -236,9 +236,10 @@ extension PhysicsManager {
     ///   - distance: The max distance the ray should check
     ///   - outHitResult: If true is returned, outHitResult will contain more detailed collision information
     /// - Returns: Returns true if the ray intersects with a Collider, otherwise false.
-    public func raycastSpecific(shape: ColliderShape, with ray: Ray, distance: Float = Float.greatestFiniteMagnitude) -> HitResult? {
+    public func raycastSpecific(shape: ColliderShape, position: Vector3, rotation: Quaternion,
+                                with ray: Ray, distance: Float = Float.greatestFiniteMagnitude) -> HitResult? {
         var hitResult = HitResult()
-        let result = _nativePhysicsManager.raycastSpecific(ray, distance, shape._nativeShape) { [self](info) in
+        let result = _nativePhysicsManager.raycastSpecific(ray, distance, shape._nativeShape, position, rotation) { [self](info) in
             hitResult.colliderShape = _physicalObjectsMap[info.index]
             hitResult.collider = hitResult.colliderShape!._collider
             hitResult.entity = hitResult.collider!.entity
@@ -331,10 +332,12 @@ extension PhysicsManager {
     ///   - layerMask: Layer mask that is used to selectively ignore Colliders when casting
     ///   - outHitResult: If true is returned, outHitResult will contain more detailed collision information
     /// - Returns: Returns true if the ray intersects with a Collider, otherwise false.
-    public func sweepSpecific(_ shape: ColliderShape, dir: Vector3, distance: Float = Float.greatestFiniteMagnitude,
-                              target: ColliderShape) -> HitResult? {
+    public func sweepSpecific(shape: ColliderShape, position: Vector3, rotation: Quaternion,
+                              dir: Vector3, distance: Float = Float.greatestFiniteMagnitude,
+                              target: ColliderShape, targetPosition: Vector3, targetRotation: Quaternion) -> HitResult? {
         var hitResult = HitResult()
-        let result = _nativePhysicsManager.sweepSpecific(dir, distance, shape._nativeShape, target._nativeShape, { [self](info) in
+        let result = _nativePhysicsManager.sweepSpecific(dir, distance, shape._nativeShape, position, rotation,
+                target._nativeShape, targetPosition, targetRotation, { [self](info) in
             hitResult.colliderShape = _physicalObjectsMap[info.index]
             hitResult.collider = hitResult.colliderShape!.collider
             hitResult.entity = hitResult.collider!.entity
@@ -350,13 +353,14 @@ extension PhysicsManager {
         }
     }
 
-    public func sweep(_ shape: ColliderShape, ray: Ray, distance: Float = Float.greatestFiniteMagnitude,
+    public func sweep(shape: ColliderShape, position: Vector3, rotation: Quaternion,
+                      dir: Vector3, distance: Float = Float.greatestFiniteMagnitude,
                       layerMask: Layer = Layer.Everything) -> Bool {
         let onSweep = { (obj: UInt32) -> Bool in
             let shape = self._physicalObjectsMap[obj]!
             return (shape.collider!.entity.layer.rawValue & layerMask.rawValue != 0) && shape.isSceneQuery
         }
-        return _nativePhysicsManager.hasSweep(shape._nativeShape, ray, distance, onSweep)
+        return _nativePhysicsManager.hasSweep(shape._nativeShape, position, rotation, dir, distance, onSweep)
     }
 
     /// Casts a ray through the Scene and returns the first hit.
@@ -366,14 +370,16 @@ extension PhysicsManager {
     ///   - layerMask: Layer mask that is used to selectively ignore Colliders when casting
     ///   - outHitResult: If true is returned, outHitResult will contain more detailed collision information
     /// - Returns: Returns true if the ray intersects with a Collider, otherwise false.
-    public func sweep(_ shape: ColliderShape, ray: Ray, distance: Float = Float.greatestFiniteMagnitude,
+    public func sweep(shape: ColliderShape, position: Vector3, rotation: Quaternion,
+                      dir: Vector3, distance: Float = Float.greatestFiniteMagnitude,
                       layerMask: Layer = Layer.Everything) -> HitResult? {
         let onSweep = { (obj: UInt32) -> Bool in
             let shape = self._physicalObjectsMap[obj]!
             return (shape.collider!.entity.layer.rawValue & layerMask.rawValue != 0) && shape.isSceneQuery
         }
         var hitResult = HitResult()
-        let result = _nativePhysicsManager.sweep(shape._nativeShape, ray, distance, onSweep, { [self](info) in
+        let result = _nativePhysicsManager.sweep(shape._nativeShape, position, rotation,
+                dir, distance, onSweep, { [self](info) in
             hitResult.colliderShape = _physicalObjectsMap[info.index]
             hitResult.collider = hitResult.colliderShape!.collider
             hitResult.entity = hitResult.collider!.entity
@@ -389,13 +395,14 @@ extension PhysicsManager {
         }
     }
 
-    public func sweepAll(_ shape: ColliderShape, ray: Ray, distance: Float = Float.greatestFiniteMagnitude,
+    public func sweepAll(shape: ColliderShape, position: Vector3, rotation: Quaternion,
+                         dir: Vector3, distance: Float = Float.greatestFiniteMagnitude,
                          layerMask: Layer = Layer.Everything) -> [HitResult] {
         let onSweep = { (obj: UInt32) -> Bool in
             let shape = self._physicalObjectsMap[obj]!
             return (shape.collider!.entity.layer.rawValue & layerMask.rawValue != 0) && shape.isSceneQuery
         }
-        let result = _nativePhysicsManager.sweepAll(shape._nativeShape, ray, distance, onSweep)
+        let result = _nativePhysicsManager.sweepAll(shape._nativeShape, position, rotation, dir, distance, onSweep)
 
         var hitResults: [HitResult] = []
         hitResults.reserveCapacity(result.count)
@@ -414,27 +421,28 @@ extension PhysicsManager {
 //MARK: - Overlap
 
 extension PhysicsManager {
-    public func overlapSpecific(_ shape: ColliderShape,
-                                target: ColliderShape) -> Bool {
-        _nativePhysicsManager.overlapSpecific(shape._nativeShape, target._nativeShape)
+    public func overlapSpecific(shape: ColliderShape, position: Vector3, rotation: Quaternion,
+                                target: ColliderShape, targetPosition: Vector3, targetRotation: Quaternion) -> Bool {
+        _nativePhysicsManager.overlapSpecific(shape._nativeShape, position, rotation,
+                target._nativeShape, targetPosition, targetRotation)
     }
 
-    public func overlap(_ shape: ColliderShape, origin: Vector3,
+    public func overlap(shape: ColliderShape, origin: Vector3, rotation: Quaternion,
                         layerMask: Layer = Layer.Everything) -> Bool {
         let onOverlap = { (obj: UInt32) -> Bool in
             let shape = self._physicalObjectsMap[obj]!
             return (shape.collider!.entity.layer.rawValue & layerMask.rawValue != 0) && shape.isSceneQuery
         }
-        return _nativePhysicsManager.hasOverlap(shape._nativeShape, origin, onOverlap)
+        return _nativePhysicsManager.hasOverlap(shape._nativeShape, origin, rotation, onOverlap)
     }
 
-    public func overlapAll(_ shape: ColliderShape, origin: Vector3,
+    public func overlapAll(shape: ColliderShape, origin: Vector3, rotation: Quaternion,
                            layerMask: Layer = Layer.Everything) -> [ColliderShape] {
         let onOverlap = { (obj: UInt32) -> Bool in
             let shape = self._physicalObjectsMap[obj]!
             return (shape.collider!.entity.layer.rawValue & layerMask.rawValue != 0) && shape.isSceneQuery
         }
-        let result = _nativePhysicsManager.overlapAll(shape._nativeShape, origin, onOverlap)
+        let result = _nativePhysicsManager.overlapAll(shape._nativeShape, origin, rotation, onOverlap)
 
         var hitResults: [ColliderShape] = []
         hitResults.reserveCapacity(result.count)
@@ -448,12 +456,15 @@ extension PhysicsManager {
 //MARK: - Other Query
 
 extension PhysicsManager {
-    func computePenetration(_ direction: inout Vector3, _ depth: inout Float,
-                            _ shape0: PhysXColliderShape, _ shape1: PhysXColliderShape) -> Bool {
-        _nativePhysicsManager.computePenetration(&direction, &depth, shape0, shape1)
+    public func computePenetration(shape0: ColliderShape, position0: Vector3, rotation0: Quaternion,
+                                   shape1: ColliderShape, position1: Vector3, rotation1: Quaternion,
+                                   direction: inout Vector3, depth: inout Float) -> Bool {
+        _nativePhysicsManager.computePenetration(&direction, &depth, shape0._nativeShape, position0, rotation0,
+                shape1._nativeShape, position1, rotation1)
     }
 
-    func closestPoint(_ point: Vector3, _ shape: PhysXColliderShape, _ cloest: inout Vector3) -> Float {
-        _nativePhysicsManager.closestPoint(point, shape, &cloest)
+    public func closestPoint(point: Vector3, shape: ColliderShape, position: Vector3, rotation: Quaternion,
+                             cloest: inout Vector3) -> Float {
+        _nativePhysicsManager.closestPoint(point, shape._nativeShape, position, rotation, &cloest)
     }
 }
