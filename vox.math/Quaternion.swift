@@ -205,6 +205,10 @@ extension Quaternion {
     public static func rotationEuler(x: Float, y: Float, z: Float) -> Quaternion {
         Quaternion.rotationYawPitchRoll(yaw: y, pitch: x, roll: z)
     }
+    
+    public static func euler(_ e: Vector3) -> Quaternion {
+        Quaternion.rotationYawPitchRoll(yaw: e.y, pitch: e.x, roll: e.z)
+    }
 
     /// Calculate a quaternion from the specified 3x3 matrix.
     /// - Parameters:

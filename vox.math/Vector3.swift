@@ -122,6 +122,10 @@ extension Vector3 {
     public static func *(left: Vector3, s: Float) -> Vector3 {
         Vector3(left.elements * s)
     }
+    
+    public static func *(s: Float, right: Vector3) -> Vector3 {
+        Vector3(right.elements * s)
+    }
 
     public static func *=(left: inout Vector3, right: Float) {
         left.elements *= right

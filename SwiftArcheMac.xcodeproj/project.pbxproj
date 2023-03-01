@@ -78,6 +78,10 @@
 		3E37FCEA29AF22990050169C /* ExampleCharacterCamera.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E37FCE929AF22990050169C /* ExampleCharacterCamera.swift */; };
 		3E37FCED29AF28C20050169C /* ExampleCharacterController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E37FCEC29AF28C20050169C /* ExampleCharacterController.swift */; };
 		3E37FCEF29AF312C0050169C /* ExamplePlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E37FCEE29AF312C0050169C /* ExamplePlayer.swift */; };
+		3E37FCF129AF33260050169C /* ExampleAIController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E37FCF029AF33260050169C /* ExampleAIController.swift */; };
+		3E37FCF329AF34180050169C /* ExampleMovingPlatform.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E37FCF229AF34180050169C /* ExampleMovingPlatform.swift */; };
+		3E37FCF529AF35C20050169C /* PlanetManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E37FCF429AF35C20050169C /* PlanetManager.swift */; };
+		3E37FCF729AF36150050169C /* Teleporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E37FCF629AF36150050169C /* Teleporter.swift */; };
 		3E43DC9B295BDDDC00732AC0 /* physics_helpers.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3E6B23B52946B3E5000AC29F /* physics_helpers.metal */; };
 		3E43DC9C295BDDDC00732AC0 /* sdf_shading.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3E6B23D529499B36000AC29F /* sdf_shading.metal */; };
 		3E43DC9D295BDDDC00732AC0 /* sdf_baker.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3E6B23D2294964B1000AC29F /* sdf_baker.metal */; };
@@ -690,6 +694,10 @@
 		3E37FCE929AF22990050169C /* ExampleCharacterCamera.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExampleCharacterCamera.swift; sourceTree = "<group>"; };
 		3E37FCEC29AF28C20050169C /* ExampleCharacterController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExampleCharacterController.swift; sourceTree = "<group>"; };
 		3E37FCEE29AF312C0050169C /* ExamplePlayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExamplePlayer.swift; sourceTree = "<group>"; };
+		3E37FCF029AF33260050169C /* ExampleAIController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExampleAIController.swift; sourceTree = "<group>"; };
+		3E37FCF229AF34180050169C /* ExampleMovingPlatform.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExampleMovingPlatform.swift; sourceTree = "<group>"; };
+		3E37FCF429AF35C20050169C /* PlanetManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanetManager.swift; sourceTree = "<group>"; };
+		3E37FCF629AF36150050169C /* Teleporter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Teleporter.swift; sourceTree = "<group>"; };
 		3E6B235B2941BF88000AC29F /* BlendShapeWeightsAnimationCurveOwnerAssembler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlendShapeWeightsAnimationCurveOwnerAssembler.swift; sourceTree = "<group>"; };
 		3E6B235D294220BC000AC29F /* FaceMorphApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FaceMorphApp.swift; sourceTree = "<group>"; };
 		3E6B235F294224C1000AC29F /* FaceGUI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FaceGUI.swift; sourceTree = "<group>"; };
@@ -1453,6 +1461,10 @@
 		3E37FCE829AF22650050169C /* scene */ = {
 			isa = PBXGroup;
 			children = (
+				3E37FCF029AF33260050169C /* ExampleAIController.swift */,
+				3E37FCF229AF34180050169C /* ExampleMovingPlatform.swift */,
+				3E37FCF429AF35C20050169C /* PlanetManager.swift */,
+				3E37FCF629AF36150050169C /* Teleporter.swift */,
 			);
 			path = scene;
 			sourceTree = "<group>";
@@ -3023,13 +3035,17 @@
 				3E6B23DC2949B32C000AC29F /* ImplicitTriangleApp.swift in Sources */,
 				3E37FCEA29AF22990050169C /* ExampleCharacterCamera.swift in Sources */,
 				43D8C033021F4B86E95953E6 /* IBLApp.swift in Sources */,
+				3E37FCF729AF36150050169C /* Teleporter.swift in Sources */,
 				3E1F129929A7A49900F1002E /* PhysXConcaveDynamicApp.swift in Sources */,
 				43D8C40438F0527739C7D662 /* AtomicComputeApp.swift in Sources */,
+				3E37FCF329AF34180050169C /* ExampleMovingPlatform.swift in Sources */,
 				3E10764629653F0300F751A5 /* PointEmitterApp.swift in Sources */,
 				040F1DF3293781B0008BDC8D /* RenderingUtils.swift in Sources */,
+				3E37FCF129AF33260050169C /* ExampleAIController.swift in Sources */,
 				43D8CF515E4D90196E7E806B /* PhysXCollisionDetectionApp.swift in Sources */,
 				3EABF5E6294C3716009943C1 /* VolumeEmitterApp.swift in Sources */,
 				43D8C808C0FA018090454567 /* PhysXAttractorApp.swift in Sources */,
+				3E37FCF529AF35C20050169C /* PlanetManager.swift in Sources */,
 				3E6B2360294224C1000AC29F /* FaceGUI.swift in Sources */,
 				43D8CC13B0B39DD99DEE0DC4 /* PhysXCompoundApp.swift in Sources */,
 				43D8C1413D08147985256B8A /* PhysXJointBasicApp.swift in Sources */,
