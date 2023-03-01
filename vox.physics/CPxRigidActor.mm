@@ -44,5 +44,12 @@
     *rotation = simd_quaternion(pose.q.x, pose.q.y, pose.q.z, pose.q.w);
 }
 
+- (uint16_t)getGroup {
+    return PxGetGroup(*_c_actor);
+}
+
+- (void)setGroup:(const uint16_t)collisionGroup {
+    PxSetGroup(*_c_actor, collisionGroup);
+}
 
 @end

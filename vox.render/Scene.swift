@@ -332,7 +332,7 @@ public class Scene: EngineObject {
     }
 }
 
-//MARK:- Internal Members
+//MARK: - Internal Members
 
 extension Scene {
     internal func _attachRenderCamera(_ camera: Camera) {
@@ -400,7 +400,7 @@ extension Scene {
     }
 }
 
-//MARK:- Private Members
+//MARK: - Private Members
 
 extension Scene {
     private func _addToRootEntityList(index: Int?, rootEntity: Entity) {

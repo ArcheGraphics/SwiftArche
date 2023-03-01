@@ -9,12 +9,28 @@ import vox_math
 
 /// Entity, be used as components container.
 public final class Entity: EngineObject {
+    private var _layer: Layer = .Layer0
+    
     /// The name of entity.
     public var name: String
-    /// The layer the entity belongs to.
-    public var layer: Layer = .Layer0
     /// Transform component.
     public var transform: Transform!
+    
+    /// The layer the entity belongs to.
+    public var layer: Layer {
+        get {
+            _layer
+        }
+        set {
+            if _layer != newValue {
+                _layer = newValue
+                let colliders: [Collider] = getComponents()
+                for col in colliders {
+                    col.setGroup(UInt16(_layer.rawValue.nonzeroBitCount))
+                }
+            }
+        }
+    }
 
     internal var _isActiveInHierarchy: Bool = false
     internal var _components: [Component] = []
@@ -333,7 +349,7 @@ public final class Entity: EngineObject {
     }
 }
 
-//MARK:- Internal Methods
+//MARK: - Internal Methods
 
 extension Entity {
     internal func _removeComponent(_ component: Component) {
@@ -386,7 +402,7 @@ extension Entity {
     }
 }
 
-//MARK:- Private Methods
+//MARK: - Private Methods
 
 extension Entity {
     private func _addToChildrenList(_ index: Int?, _ child: Entity) {
@@ -513,7 +529,7 @@ extension Entity {
     }
 }
 
-//MARK:- Static Methods
+//MARK: - Static Methods
 
 extension Entity {
     internal static func _findChildByName(_ root: [Entity], _ name: String) -> [Entity] {
@@ -536,8 +552,7 @@ extension Entity {
     }
 }
 
-//MARK:- Depreciation
-
+//MARK: - Depreciation
 extension Entity {
     func getInvModelMatrix() -> Matrix {
         if (_inverseWorldMatFlag.flag) {

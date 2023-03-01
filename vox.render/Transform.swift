@@ -26,7 +26,7 @@ public class Transform: Component {
     var _updateFlagManager: UpdateFlagManager = UpdateFlagManager()
 }
 
-//MARK:- Get/Set Property
+//MARK: - Get/Set Property
 
 extension Transform {
     /// Get the forward direction in world space.
@@ -277,7 +277,7 @@ extension Transform {
     }
 }
 
-//MARK:- Public Methods
+//MARK: - Public Methods
 
 extension Transform {
     /// Translate along the passed Vector3.
@@ -378,7 +378,7 @@ extension Transform {
     }
 }
 
-//MARK:- Private Methods
+//MARK: - Private Methods
 
 extension Transform {
     internal func _parentChange() {
@@ -554,7 +554,7 @@ extension Transform {
     }
 }
 
-//MARK:- Dirty flag of transform.
+//MARK: - Dirty flag of transform.
 
 enum TransformModifyFlags: Int {
     case LocalEuler = 0x1

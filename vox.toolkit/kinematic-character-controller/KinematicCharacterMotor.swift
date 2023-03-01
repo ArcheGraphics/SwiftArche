@@ -472,11 +472,11 @@ public class KinematicCharacterMotor: Script {
 
         // Build CollidableLayers mask
         CollidableLayers = []
-//        for i in 0..<32 {
-//            if (!Physics.GetIgnoreLayerCollision(entity.layer, i)) {
-//                CollidableLayers |= (1 << i)
-//            }
-//        }
+        for i: UInt16 in 0..<32 {
+            if (!engine.physicsManager.getIgnoreLayerCollision(group1: UInt16(entity.layer.rawValue.nonzeroBitCount), group2: i)) {
+                CollidableLayers.insert(Layer(rawValue: 1 << i))
+            }
+        }
 
         SetCapsuleDimensions(radius: CapsuleRadius, height: CapsuleHeight, yOffset: CapsuleYOffset)
     }
@@ -684,13 +684,13 @@ extension KinematicCharacterMotor {
                             // Process overlap
                             let overlappedTransform: Transform? = _internalProbedColliders[i]!.entity.getComponent()
                             if engine.physicsManager.computePenetration(shape0: Capsule!.shapes[0],
-                                                                        position0: _transientPosition,
-                                                                        rotation0: _transientRotation,
-                                                                        shape1: _internalProbedColliders[i]!.shapes[0],
-                                                                        position1: overlappedTransform!.position,
-                                                                        rotation1: overlappedTransform!.rotationQuaternion,
-                                                                        direction: &resolutionDirection,
-                                                                        depth: &resolutionDistance) {
+                                    position0: _transientPosition,
+                                    rotation0: _transientRotation,
+                                    shape1: _internalProbedColliders[i]!.shapes[0],
+                                    position1: overlappedTransform!.position,
+                                    rotation1: overlappedTransform!.rotationQuaternion,
+                                    direction: &resolutionDirection,
+                                    depth: &resolutionDistance) {
                                 // Resolve along obstruction direction
                                 var mockReport = HitStabilityReport()
                                 mockReport.IsStable = IsStableOnNormal(resolutionDirection)
@@ -737,7 +737,7 @@ extension KinematicCharacterMotor {
                 }
 
                 ProbeGround(probingPosition: &_transientPosition, atRotation: _transientRotation,
-                            probingDistance: selectedGroundProbingDistance, groundingReport: &GroundingStatus)
+                        probingDistance: selectedGroundProbingDistance, groundingReport: &GroundingStatus)
 
                 if (!LastGroundingStatus.IsStableOnGround && GroundingStatus.IsStableOnGround) {
                     // Handle stable landing
@@ -749,8 +749,7 @@ extension KinematicCharacterMotor {
 
         LastMovementIterationFoundAnyGround = false
 
-        if (_mustUngroundTimeCounter > 0)
-        {
+        if (_mustUngroundTimeCounter > 0) {
             _mustUngroundTimeCounter -= deltaTime
         }
         _mustUnground = false
@@ -780,8 +779,8 @@ extension KinematicCharacterMotor {
             var tmpAngularVelocityFromCurrentAttachedRigidbody = Vector3.zero
             if let _attachedRigidbody = _attachedRigidbody {
                 GetVelocityFromRigidbodyMovement(interactiveRigidbody: _attachedRigidbody, atPoint: _transientPosition,
-                                                 deltaTime: deltaTime, linearVelocity: &tmpVelocityFromCurrentAttachedRigidbody,
-                                                 angularVelocity: &tmpAngularVelocityFromCurrentAttachedRigidbody)
+                        deltaTime: deltaTime, linearVelocity: &tmpVelocityFromCurrentAttachedRigidbody,
+                        angularVelocity: &tmpAngularVelocityFromCurrentAttachedRigidbody)
             }
 
             // Conserve momentum when de-stabilized from an attached rigidbody
@@ -790,7 +789,7 @@ extension KinematicCharacterMotor {
                 BaseVelocity -= tmpVelocityFromCurrentAttachedRigidbody
             }
 
-            // Process additionnal Velocity from attached rigidbody
+            // Process additional Velocity from attached rigidbody
             _attachedRigidbodyVelocity = _cachedZeroVector
             if let _ = _attachedRigidbody {
                 _attachedRigidbodyVelocity = tmpVelocityFromCurrentAttachedRigidbody
@@ -798,8 +797,8 @@ extension KinematicCharacterMotor {
                 // Rotation from attached rigidbody
                 let euler = tmpAngularVelocityFromCurrentAttachedRigidbody * MathUtil.radToDegreeFactor * deltaTime
                 let newForward = Vector3.projectOnPlane(vector: Vector3.transformByQuat(v: _characterForward, quaternion:
-                                                                                            Quaternion.rotationEuler(x: euler.x, y: euler.y, z: euler.z)),
-                                                        planeNormal: _characterUp).normalized()
+                Quaternion.rotationEuler(x: euler.x, y: euler.y, z: euler.z)),
+                        planeNormal: _characterUp).normalized()
                 TransientRotation = Matrix.lookAt(eye: Vector3(), target: newForward, up: _characterUp).getRotation()
             }
 
@@ -816,7 +815,7 @@ extension KinematicCharacterMotor {
                 _isMovingFromAttachedRigidbody = true
 
                 if (_solveMovementCollisions) {
-                    // Perform the move from rgdbdy velocity
+                    // Perform the move from rigidbody velocity
                     _ = InternalCharacterMove(transientVelocity: &_attachedRigidbodyVelocity, deltaTime: deltaTime)
                 } else {
                     _transientPosition += _attachedRigidbodyVelocity * deltaTime
@@ -1202,7 +1201,9 @@ extension KinematicCharacterMotor {
 
                                 closestSweepHitNormal = resolutionDirection
                                 closestSweepHitCollider = tmpCollider
-                                closestSweepHitPoint = tmpMovedPosition + Vector3.transformByQuat(v: CharacterTransformToCapsuleCenter, quaternion: _transientRotation) + (resolutionDirection * resolutionDistance)
+                                closestSweepHitPoint = tmpMovedPosition + Vector3.transformByQuat(v: CharacterTransformToCapsuleCenter,
+                                        quaternion: _transientRotation)
+                                        + (resolutionDirection * resolutionDistance)
 
                                 foundClosestHit = true
                             }
@@ -1236,7 +1237,9 @@ extension KinematicCharacterMotor {
 
                 // Evaluate if hit is stable
                 var moveHitStabilityReport = HitStabilityReport()
-                EvaluateHitStability(hitCollider: closestSweepHitCollider!, hitNormal: closestSweepHitNormal, hitPoint: closestSweepHitPoint, atCharacterPosition: tmpMovedPosition, atCharacterRotation: _transientRotation, withCharacterVelocity: transientVelocity, stabilityReport: &moveHitStabilityReport)
+                EvaluateHitStability(hitCollider: closestSweepHitCollider!, hitNormal: closestSweepHitNormal, hitPoint: closestSweepHitPoint,
+                        atCharacterPosition: tmpMovedPosition, atCharacterRotation: _transientRotation,
+                        withCharacterVelocity: transientVelocity, stabilityReport: &moveHitStabilityReport)
 
                 // Handle stepping up steps points higher than bottom capsule radius
                 var foundValidStepHit = false
@@ -1281,7 +1284,8 @@ extension KinematicCharacterMotor {
                     let obstructionNormal = GetObstructionNormal(hitNormal: closestSweepHitNormal, stableOnHit: moveHitStabilityReport.IsStable)
 
                     // Movement hit callback
-                    CharacterController!.OnMovementHit(hitCollider: closestSweepHitCollider!, hitNormal: closestSweepHitNormal, hitPoint: closestSweepHitPoint, hitStabilityReport: &moveHitStabilityReport)
+                    CharacterController!.OnMovementHit(hitCollider: closestSweepHitCollider!, hitNormal: closestSweepHitNormal,
+                            hitPoint: closestSweepHitPoint, hitStabilityReport: &moveHitStabilityReport)
 
                     // Handle remembering rigidbody hits
                     if InteractiveRigidbodyHandling,
@@ -1721,7 +1725,9 @@ extension KinematicCharacterMotor {
                 stabilityReport.IsOnEmptySideOfLedge = isStableLedgeOuter && !isStableLedgeInner
                 stabilityReport.LedgeGroundNormal = isStableLedgeOuter ? stabilityReport.OuterNormal : stabilityReport.InnerNormal
                 stabilityReport.LedgeRightDirection = Vector3.cross(left: hitNormal, right: stabilityReport.LedgeGroundNormal).normalized()
-                stabilityReport.LedgeFacingDirection = Vector3.projectOnPlane(vector: Vector3.cross(left: stabilityReport.LedgeGroundNormal, right: stabilityReport.LedgeRightDirection), planeNormal: CharacterUp).normalized()
+                stabilityReport.LedgeFacingDirection = Vector3.projectOnPlane(vector: Vector3.cross(left: stabilityReport.LedgeGroundNormal,
+                        right: stabilityReport.LedgeRightDirection),
+                        planeNormal: CharacterUp).normalized()
                 stabilityReport.DistanceFromLedge =
                         Vector3.projectOnPlane(vector: (hitPoint - (atCharacterPosition + Vector3.transformByQuat(v: _characterTransformToCapsuleBottom,
                                 quaternion: atCharacterRotation))),

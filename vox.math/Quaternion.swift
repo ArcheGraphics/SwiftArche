@@ -86,7 +86,7 @@ public struct Quaternion {
     }
 }
 
-//MARK:- Static Methods
+//MARK: - Static Methods
 
 extension Quaternion {
     /// Determines the sum of two vectors.

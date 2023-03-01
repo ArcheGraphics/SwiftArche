@@ -131,4 +131,14 @@ typedef struct {
              rotation:(simd_quatf)rotation
               closest:(simd_float3 *_Nonnull)closest;
 
+// MARK: - Collider Filter
+/// Determines if collision detection is performed between a pair of groups
+- (bool)getGroupCollisionFlag:(const uint16_t)group1
+                       group2:(const uint16_t)group2;
+
+/// Specifies if collision should be performed by a pair of groups
+- (void)setGroupCollisionFlag:(const uint16_t)group1
+                       group2:(const uint16_t)group2
+                       enable:(const bool)enable;
+
 @end

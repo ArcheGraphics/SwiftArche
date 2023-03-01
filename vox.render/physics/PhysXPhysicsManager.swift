@@ -397,6 +397,25 @@ extension PhysXPhysicsManager {
     }
 }
 
+// MARK: - Collider Filter
+extension PhysXPhysicsManager {
+    func getIgnoreLayerCollision(group1: UInt16, group2: UInt16) -> Bool {
+        _pxScene.getGroupCollisionFlag(group1, group2: group2)
+    }
+
+    func ignoreLayerCollision(group1: UInt16, group2: UInt16, enable: Bool) {
+        _pxScene.setGroupCollisionFlag(group1, group2: group2, enable: enable)
+    }
+
+    func getIgnoreCollision(group1: PhysXCollider, group2: PhysXCollider) -> Bool {
+        _pxScene.getGroupCollisionFlag(group1.getGroup(), group2: group2.getGroup())
+    }
+
+    func ignoreCollision(group1: PhysXCollider, group2: PhysXCollider, enable: Bool) {
+        _pxScene.setGroupCollisionFlag(group1.getGroup(), group2: group2.getGroup(), enable: enable)
+    }
+}
+
 /// Physics state
 enum TriggerEventState {
     case Enter

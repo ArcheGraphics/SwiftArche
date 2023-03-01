@@ -78,7 +78,7 @@ public struct Vector4 {
     }
 }
 
-//MARK:- Static Methods
+//MARK: - Static Methods
 
 extension Vector4 {
     /// Determines the sum of two vectors.
@@ -245,7 +245,7 @@ extension Vector4 {
     }
 }
 
-//MARK:- Static Method: Transformation
+//MARK: - Static Method: Transformation
 
 extension Vector4 {
     /// Performs a transformation using the given 4x4 matrix.
@@ -286,7 +286,7 @@ extension Vector4 {
     }
 }
 
-//MARK:- Class Method
+//MARK: - Class Method
 
 extension Vector4 {
     /// Set the value of this vector.

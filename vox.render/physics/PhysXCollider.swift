@@ -30,4 +30,12 @@ class PhysXCollider {
         outPosition = Vector3(position)
         outRotation = Quaternion(rotation)
     }
+
+    func getGroup() -> UInt16 {
+        _pxActor.getGroup()
+    }
+
+    func setGroup(_ collisionGroup: UInt16) {
+        _pxActor.setGroup(collisionGroup)
+    }
 }

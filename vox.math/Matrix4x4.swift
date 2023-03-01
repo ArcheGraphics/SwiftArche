@@ -48,7 +48,7 @@ public struct Matrix {
     }
 }
 
-//MARK:- Static Methods
+//MARK: - Static Methods
 
 extension Matrix {
     /// Determines the product of two matrices.
@@ -393,7 +393,7 @@ extension Matrix {
     }
 }
 
-//MARK:- Class Method
+//MARK: - Class Method
 
 extension Matrix {
     /// Set the value of this matrix, and return this matrix.

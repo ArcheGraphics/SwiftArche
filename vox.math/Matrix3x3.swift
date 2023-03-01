@@ -43,7 +43,7 @@ public struct Matrix3x3 {
     }
 }
 
-//MARK:- Static Methods
+//MARK: - Static Methods
 
 extension Matrix3x3 {
     /// Determines the sum of two vectors.
@@ -275,7 +275,7 @@ extension Matrix3x3 {
     }
 }
 
-//MARK:- Class Method
+//MARK: - Class Method
 
 extension Matrix3x3 {
     /// Set the value of this matrix, and return this matrix.

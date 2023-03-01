@@ -19,4 +19,10 @@
 
 - (void)getGlobalPose:(simd_float3 *)position rotation:(simd_quatf *)rotation;
 
+/// Retrieves the value set with PxSetGroup()
+- (uint16_t)getGroup;
+
+/// Sets which collision group this actor is part of
+- (void)setGroup:(const uint16_t)collisionGroup;
+
 @end

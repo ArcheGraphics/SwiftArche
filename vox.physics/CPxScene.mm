@@ -336,7 +336,7 @@ namespace {
                 shape:(CPxShape *_Nonnull)shape
              position:(simd_float3)position
              rotation:(simd_quatf)rotation
-               closest:(simd_float3 *_Nonnull)closest {
+              closest:(simd_float3 *_Nonnull)closest {
     PxVec3 pt;
     auto result = PxGeometryQuery::pointDistance(PxVec3(point.x, point.y, point.z),
             [shape getGeometry].any(), transform(position, rotation),
@@ -345,6 +345,18 @@ namespace {
         *closest = simd_make_float3(pt.x, pt.y, pt.z);
     }
     return result;
+}
+
+// MARK: - Collider Filter
+- (bool)getGroupCollisionFlag:(const uint16_t)group1
+                       group2:(const uint16_t)group2 {
+    return PxGetGroupCollisionFlag(group1, group2);
+}
+
+- (void)setGroupCollisionFlag:(const uint16_t)group1
+                       group2:(const uint16_t)group2
+                       enable:(const bool)enable {
+    PxSetGroupCollisionFlag(group1, group2, enable);
 }
 
 @end

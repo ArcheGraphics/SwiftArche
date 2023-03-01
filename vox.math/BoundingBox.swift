@@ -39,7 +39,7 @@ public struct BoundingBox {
     }
 }
 
-//MARK:- Static Methods
+//MARK: - Static Methods
 
 extension BoundingBox {
     /// Calculate a bounding box from the center point and the extent of the bounding box.

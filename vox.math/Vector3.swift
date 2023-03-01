@@ -69,7 +69,7 @@ public struct Vector3 {
     }
 }
 
-//MARK:- Static Methods
+//MARK: - Static Methods
 extension Vector3 : Equatable {
     
 }
@@ -245,7 +245,7 @@ extension Vector3 {
     }
 }
 
-//MARK:- Static Method: Transformation
+//MARK: - Static Method: Transformation
 
 extension Vector3 {
     /// Performs a normal transformation using the given 4x4 matrix.
@@ -452,7 +452,7 @@ extension Vector3 {
     }
 }
 
-//MARK:- Class Method
+//MARK: - Class Method
 
 extension Vector3 {
     /// Set the value of this vector.

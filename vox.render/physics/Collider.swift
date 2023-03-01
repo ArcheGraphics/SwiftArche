@@ -65,6 +65,9 @@ public class Collider: Component {
         _shapes = []
     }
 
+    func setGroup(_ collisionGroup: UInt16) {
+        _nativeCollider.setGroup(collisionGroup)
+    }
 
     func _onUpdate() {
         if (_updateFlag.flag) {

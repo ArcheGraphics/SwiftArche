@@ -464,7 +464,26 @@ extension PhysicsManager {
     }
 
     public func closestPoint(point: Vector3, shape: ColliderShape, position: Vector3, rotation: Quaternion,
-                             cloest: inout Vector3) -> Float {
-        _nativePhysicsManager.closestPoint(point, shape._nativeShape, position, rotation, &cloest)
+                             closest: inout Vector3) -> Float {
+        _nativePhysicsManager.closestPoint(point, shape._nativeShape, position, rotation, &closest)
+    }
+}
+
+// MARK: - Collider Filter
+extension PhysicsManager {
+    public func getIgnoreLayerCollision(group1: UInt16, group2: UInt16) -> Bool {
+        _nativePhysicsManager.getIgnoreLayerCollision(group1: group1, group2: group2)
+    }
+
+    public func ignoreLayerCollision(group1: UInt16, group2: UInt16, enable: Bool) {
+        _nativePhysicsManager.ignoreLayerCollision(group1: group1, group2: group2, enable: enable)
+    }
+
+    public func getIgnoreCollision(group1: Collider, group2: Collider) -> Bool {
+        _nativePhysicsManager.getIgnoreCollision(group1: group1._nativeCollider, group2: group2._nativeCollider)
+    }
+
+    public func ignoreCollision(group1: Collider, group2: Collider, enable: Bool) {
+        _nativePhysicsManager.ignoreCollision(group1: group1._nativeCollider, group2: group2._nativeCollider, enable: enable)
     }
 }
