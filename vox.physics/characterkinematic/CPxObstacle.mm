@@ -6,6 +6,7 @@
 
 #import "CPxObstacle.h"
 #import "CPxObstacle+Internal.h"
+#include "CPXHelper.h"
 
 @implementation CPxObstacle
 
@@ -42,7 +43,7 @@
 }
 
 - (void)setMRot:(simd_quatf)mRot {
-    _c_obstacle.mRot = PxQuat(mRot.vector.x, mRot.vector.y, mRot.vector.z, mRot.vector.w);
+    _c_obstacle.mRot = transform(mRot);
 }
 
 - (simd_float3)mHalfExtents {
@@ -50,7 +51,7 @@
 }
 
 - (void)setMHalfExtents:(simd_float3)mHalfExtents {
-    _c_obstacle.mHalfExtents = PxVec3(mHalfExtents.x, mHalfExtents.y, mHalfExtents.z);
+    _c_obstacle.mHalfExtents = transform(mHalfExtents);
 }
 
 @end
@@ -82,7 +83,7 @@
 }
 
 - (void)setMRot:(simd_quatf)mRot {
-    _c_obstacle.mRot = PxQuat(mRot.vector.x, mRot.vector.y, mRot.vector.z, mRot.vector.w);
+    _c_obstacle.mRot = transform(mRot);
 }
 
 - (float)mRadius {

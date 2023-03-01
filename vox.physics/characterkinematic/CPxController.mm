@@ -7,6 +7,7 @@
 #import "CPxController.h"
 #import "CPxController+Internal.h"
 #import "../CPxRigidDynamic+Internal.h"
+#include "CPXHelper.h"
 
 @implementation CPxController
 
@@ -27,7 +28,7 @@
 }
 
 - (uint8_t)move:(simd_float3)disp :(float)minDist :(float)elapsedTime {
-    return _c_controller->move(PxVec3(disp.x, disp.y, disp.z), minDist, elapsedTime, PxControllerFilters());
+    return _c_controller->move(transform(disp), minDist, elapsedTime, PxControllerFilters());
 }
 
 - (bool)isSetControllerCollisionFlag:(uint8_t)flags :(enum CPxControllerCollisionFlag)flag {
@@ -86,7 +87,7 @@
 }
 
 - (void)setUpDirection:(simd_float3)up {
-    _c_controller->setUpDirection(PxVec3(up.x, up.y, up.z));
+    _c_controller->setUpDirection(transform(up));
 }
 
 - (float)getSlopeLimit {

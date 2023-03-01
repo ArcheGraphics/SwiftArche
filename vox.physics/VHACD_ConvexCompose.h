@@ -23,25 +23,25 @@
 */
 enum VHACD_FillMode {
     FLOOD_FILL, // This is the default behavior, after the voxelization step it uses a flood fill to determine 'inside'
-                // from 'outside'. However, meshes with holes can fail and create hollow results.
+    // from 'outside'. However, meshes with holes can fail and create hollow results.
     SURFACE_ONLY, // Only consider the 'surface', will create 'skins' with hollow centers.
     RAYCAST_FILL, // Uses raycasting to determine inside from outside.
 };
 
 @interface VHACD_ConvexCompose : NSObject
 
--(void)computeWithPoints:(float *_Nonnull)points
-             pointsCount:(uint32_t)pointsCount
-                 indices:(uint32_t *_Nullable)indices
-            indicesCount:(uint32_t)indicesCount;
+- (void)computeWithPoints:(float *_Nonnull)points
+              pointsCount:(uint32_t)pointsCount
+                  indices:(uint32_t *_Nullable)indices
+             indicesCount:(uint32_t)indicesCount;
 
--(uint32_t) hullCount;
+- (uint32_t)hullCount;
 
--(uint32_t) pointCountAtIndex:(uint32_t)index;
+- (uint32_t)pointCountAtIndex:(uint32_t)index;
 
--(uint32_t) triangleCountAtIndex:(uint32_t)index;
+- (uint32_t)triangleCountAtIndex:(uint32_t)index;
 
--(void) getHullInfoAtIndex:(uint32_t)index
+- (void)getHullInfoAtIndex:(uint32_t)index
                     points:(simd_float3 *_Nonnull)points
                    indices:(simd_uint3 *_Nullable)indices
                     center:(simd_float3 *_Nonnull)center;

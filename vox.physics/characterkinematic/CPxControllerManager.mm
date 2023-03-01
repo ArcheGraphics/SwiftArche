@@ -14,6 +14,7 @@
 #import "CPxBoxControllerDesc+Internal.h"
 #import "CPxCapsuleControllerDesc.h"
 #import "CPxCapsuleControllerDesc+Internal.h"
+#include "CPXHelper.h"
 
 using namespace physx;
 
@@ -83,7 +84,7 @@ using namespace physx;
 }
 
 - (void)shiftOrigin:(simd_float3)shift {
-    _c_manager->shiftOrigin(PxVec3(shift.x, shift.y, shift.z));
+    _c_manager->shiftOrigin(transform(shift));
 }
 
 @end

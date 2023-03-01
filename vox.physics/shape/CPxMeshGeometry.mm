@@ -25,7 +25,7 @@ using namespace physx;
 }
 
 namespace {
-    void computePlane(const simd_float3& center, const simd_float3& A, const simd_float3& B, const simd_float3& C, float* n) {
+    void computePlane(const simd_float3 &center, const simd_float3 &A, const simd_float3 &B, const simd_float3 &C, float *n) {
         float vx = (B[0] - C[0]);
         float vy = (B[1] - C[1]);
         float vz = (B[2] - C[2]);
@@ -38,7 +38,7 @@ namespace {
         float vw_y = vz * wx - vx * wz;
         float vw_z = vx * wy - vy * wx;
 
-        float mag = (float)sqrt((vw_x * vw_x) + (vw_y * vw_y) + (vw_z * vw_z));
+        float mag = (float) sqrt((vw_x * vw_x) + (vw_y * vw_y) + (vw_z * vw_z));
 
         if (mag < 0.000001f) {
             mag = 0;
@@ -54,7 +54,7 @@ namespace {
         n[1] = y;
         n[2] = z;
         n[3] = 0.0f - ((x * A[0]) + (y * A[1]) + (z * A[2]));
-        
+
         if (x * (center[0] - A[0]) + y * (center[1] - A[1]) + z * (center[2] - A[2]) > 0) {
             n[0] *= -1;
             n[1] *= -1;
@@ -65,7 +65,7 @@ namespace {
 }
 
 // MARK: - Initialization
-- (instancetype _Nonnull )initWith:(CPxPhysics *_Nonnull)physics {
+- (instancetype _Nonnull)initWith:(CPxPhysics *_Nonnull)physics {
     isConvex = false;
     points = nullptr;
     indices = nullptr;
@@ -79,9 +79,9 @@ namespace {
     desc.points.count = 3;
     desc.points.stride = sizeof(PxVec3);
     std::vector<PxVec3> pts(3);
-    pts[0] = PxVec3(0,0,0);
-    pts[1] = PxVec3(1,0,0);
-    pts[2] = PxVec3(0,1,0);
+    pts[0] = PxVec3(0, 0, 0);
+    pts[1] = PxVec3(1, 0, 0);
+    pts[2] = PxVec3(0, 1, 0);
     desc.points.data = pts.data();
     meshGeometry->triangleMesh = physics.c_cooking->createTriangleMesh(desc, [physics getPhysicsInsertionCallback]);
     self = [super initWithGeometry:meshGeometry];
@@ -115,13 +115,13 @@ namespace {
     physics.c_cooking->setParams(*params);
 
     if (isConvex) {
-            [self createConvexMesh:physics points:points pointsCount:pointsCount];
+        [self createConvexMesh:physics points:points pointsCount:pointsCount];
     } else {
         if (indices == nullptr) {
             [self createTriangleMesh:physics points:points pointsCount:pointsCount];
         } else {
             [self createTriangleMesh:physics points:points pointsCount:pointsCount
-                           indices:indices indicesCount:indicesCount isUint16:isUint16];
+                             indices:indices indicesCount:indicesCount isUint16:isUint16];
         }
     }
 }
@@ -129,13 +129,13 @@ namespace {
 - (void)createConvexMesh:(CPxPhysics *_Nonnull)physics
                   points:(simd_float3 *_Nonnull)points
              pointsCount:(uint32_t)pointsCount
-                triangles:(simd_uint3 *_Nullable)triangles
-            triangleCount:(uint32_t)triangleCount
-                  center: (simd_float3) center {
+               triangles:(simd_uint3 *_Nullable)triangles
+           triangleCount:(uint32_t)triangleCount
+                  center:(simd_float3)center {
     self->isConvex = true;
     self->isUint16 = false;
     physics.c_cooking->setParams(*params);
-    
+
     auto meshGeometry = new PxConvexMeshGeometry();
     super.c_geometry = meshGeometry;
     meshGeometry->scale = scale;
@@ -144,7 +144,7 @@ namespace {
     desc.points.count = pointsCount;
     desc.points.stride = sizeof(simd_float3);
     desc.points.data = points;
-    
+
     std::vector<uint32_t> indices;
     indices.reserve(triangleCount * 3);
     std::vector<PxHullPolygon> hulls;
@@ -171,9 +171,9 @@ namespace {
     desc.indices.count = static_cast<uint32_t>(indices.size());
     desc.indices.stride = sizeof(uint32_t);
     desc.indices.data = indices.data();
-    
+
     desc.flags = PxConvexFlag::eDISABLE_MESH_VALIDATION;
-    
+
     meshGeometry->convexMesh = physics.c_cooking->createConvexMesh(desc, [physics getPhysicsInsertionCallback]);
 }
 
@@ -321,7 +321,7 @@ namespace {
             auto count = mesh->getNbTriangles();
             auto isUint16 = mesh->getTriangleMeshFlags().isSet(PxTriangleMeshFlag::Enum::e16_BIT_INDICES);
             if (isUint16) {
-                auto indexBuffer = static_cast<const uint16_t*>(mesh->getTriangles());
+                auto indexBuffer = static_cast<const uint16_t *>(mesh->getTriangles());
                 for (int i = 0; i < count; i++) {
                     uint16_t v0 = indexBuffer[i * 3];
                     uint16_t v1 = indexBuffer[i * 3 + 1];
@@ -334,7 +334,7 @@ namespace {
                     indices[index++] = v0;
                 }
             } else {
-                auto indexBuffer = static_cast<const uint32_t*>(mesh->getTriangles());
+                auto indexBuffer = static_cast<const uint32_t *>(mesh->getTriangles());
                 for (int i = 0; i < count; i++) {
                     uint16_t v0 = indexBuffer[i * 3];
                     uint16_t v1 = indexBuffer[i * 3 + 1];

@@ -95,7 +95,7 @@
 }
 
 - (void)setDriveVelocity:(simd_float3)linear :(simd_float3)angular {
-    static_cast<PxD6Joint *>(super.c_joint)->setDriveVelocity(PxVec3(linear.x, linear.y, linear.z), PxVec3(angular.x, angular.y, angular.z));
+    static_cast<PxD6Joint *>(super.c_joint)->setDriveVelocity(transform(linear), transform(angular));
 }
 
 - (void)getDriveVelocity:(simd_float3 *)linear :(simd_float3 *)angular {

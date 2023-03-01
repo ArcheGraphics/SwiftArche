@@ -39,7 +39,7 @@
 
 //MARK: - Velocity
 - (void)setAngularVelocity:(simd_float3)angVel {
-    static_cast<PxRigidDynamic *>(super.c_actor)->setAngularVelocity(PxVec3(angVel.x, angVel.y, angVel.z));
+    static_cast<PxRigidDynamic *>(super.c_actor)->setAngularVelocity(transform(angVel));
 }
 
 - (simd_float3)getAngularVelocity {
@@ -48,7 +48,7 @@
 }
 
 - (void)setLinearVelocity:(simd_float3)linVel {
-    static_cast<PxRigidDynamic *>(super.c_actor)->setLinearVelocity(PxVec3(linVel.x, linVel.y, linVel.z));
+    static_cast<PxRigidDynamic *>(super.c_actor)->setLinearVelocity(transform(linVel));
 }
 
 - (simd_float3)getLinearVelocity {
@@ -92,7 +92,7 @@
 }
 
 - (void)setMassSpaceInertiaTensor:(simd_float3)m {
-    static_cast<PxRigidDynamic *>(super.c_actor)->setMassSpaceInertiaTensor(PxVec3(m.x, m.y, m.z));
+    static_cast<PxRigidDynamic *>(super.c_actor)->setMassSpaceInertiaTensor(transform(m));
 }
 
 - (void)setMassAndUpdateInertia:(float)mass {
@@ -101,11 +101,11 @@
 
 //MARK: - Forces
 - (void)addForce:(simd_float3)force {
-    static_cast<PxRigidDynamic *>(super.c_actor)->addForce(PxVec3(force.x, force.y, force.z));
+    static_cast<PxRigidDynamic *>(super.c_actor)->addForce(transform(force));
 }
 
 - (void)addTorque:(simd_float3)torque {
-    static_cast<PxRigidDynamic *>(super.c_actor)->addTorque(PxVec3(torque.x, torque.y, torque.z));
+    static_cast<PxRigidDynamic *>(super.c_actor)->addTorque(transform(torque));
 }
 
 - (void)setRigidBodyFlag:(enum CPxRigidBodyFlag)flag value:(bool)value {
@@ -122,32 +122,32 @@
 
 //MARK: - Extension
 - (void)addForceAtPosWith:(simd_float3)force pos:(simd_float3)pos mode:(enum CPxForceMode)mode {
-    PxRigidBodyExt::addForceAtPos(*static_cast<PxRigidDynamic *>(super.c_actor), PxVec3(force.x, force.y, force.z),
-            PxVec3(pos.x, pos.y, pos.z), PxForceMode::Enum(mode));
+    PxRigidBodyExt::addForceAtPos(*static_cast<PxRigidDynamic *>(super.c_actor), transform(force),
+            transform(pos), PxForceMode::Enum(mode));
 }
 
 - (void)addForceAtLocalPosWith:(simd_float3)force pos:(simd_float3)pos mode:(enum CPxForceMode)mode {
-    PxRigidBodyExt::addForceAtLocalPos(*static_cast<PxRigidDynamic *>(super.c_actor), PxVec3(force.x, force.y, force.z),
-            PxVec3(pos.x, pos.y, pos.z), PxForceMode::Enum(mode));
+    PxRigidBodyExt::addForceAtLocalPos(*static_cast<PxRigidDynamic *>(super.c_actor), transform(force),
+            transform(pos), PxForceMode::Enum(mode));
 }
 
 - (void)addLocalForceAtPosWith:(simd_float3)force pos:(simd_float3)pos mode:(enum CPxForceMode)mode {
-    PxRigidBodyExt::addLocalForceAtPos(*static_cast<PxRigidDynamic *>(super.c_actor), PxVec3(force.x, force.y, force.z),
-            PxVec3(pos.x, pos.y, pos.z), PxForceMode::Enum(mode));
+    PxRigidBodyExt::addLocalForceAtPos(*static_cast<PxRigidDynamic *>(super.c_actor), transform(force),
+            transform(pos), PxForceMode::Enum(mode));
 }
 
 - (void)addLocalForceAtLocalPosWith:(simd_float3)force pos:(simd_float3)pos mode:(enum CPxForceMode)mode {
-    PxRigidBodyExt::addLocalForceAtLocalPos(*static_cast<PxRigidDynamic *>(super.c_actor), PxVec3(force.x, force.y, force.z),
-            PxVec3(pos.x, pos.y, pos.z), PxForceMode::Enum(mode));
+    PxRigidBodyExt::addLocalForceAtLocalPos(*static_cast<PxRigidDynamic *>(super.c_actor), transform(force),
+            transform(pos), PxForceMode::Enum(mode));
 }
 
 - (simd_float3)getVelocityAtPos:(simd_float3)pos {
-    PxVec3 vel = PxRigidBodyExt::getVelocityAtPos(*static_cast<PxRigidDynamic *>(super.c_actor), PxVec3(pos.x, pos.y, pos.z));
+    PxVec3 vel = PxRigidBodyExt::getVelocityAtPos(*static_cast<PxRigidDynamic *>(super.c_actor), transform(pos));
     return simd_make_float3(vel.x, vel.y, vel.z);
 }
 
 - (simd_float3)getLocalVelocityAtLocalPos:(simd_float3)pos {
-    PxVec3 vel = PxRigidBodyExt::getLocalVelocityAtLocalPos(*static_cast<PxRigidDynamic *>(super.c_actor), PxVec3(pos.x, pos.y, pos.z));
+    PxVec3 vel = PxRigidBodyExt::getLocalVelocityAtLocalPos(*static_cast<PxRigidDynamic *>(super.c_actor), transform(pos));
     return simd_make_float3(vel.x, vel.y, vel.z);
 }
 

@@ -12,6 +12,7 @@
 #import "../CPxShape+Internal.h"
 #import "../CPxRigidActor+Internal.h"
 #import "../CPxMaterial+Internal.h"
+#include "../CPXHelper.h"
 #include <functional>
 
 @implementation CPxBoxControllerDesc
@@ -62,7 +63,7 @@
 }
 
 - (void)setUpDirection:(simd_float3)upDirection {
-    _c_desc.upDirection = PxVec3(upDirection.x, upDirection.y, upDirection.z);
+    _c_desc.upDirection = transform(upDirection);
 }
 
 - (float)slopeLimit {

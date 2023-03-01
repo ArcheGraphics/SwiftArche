@@ -11,7 +11,14 @@
 
 using namespace physx;
 
+inline PxVec3 transform(simd_float3 position) {
+    return PxVec3(position.x, position.y, position.z);
+}
+
+inline PxQuat transform(simd_quatf rotation) {
+    return PxQuat(rotation.vector.x, rotation.vector.y, rotation.vector.z, rotation.vector.w);
+}
+
 inline PxTransform transform(simd_float3 position, simd_quatf rotation) {
-    return PxTransform(PxVec3(position.x, position.y, position.z),
-            PxQuat(rotation.vector.x, rotation.vector.y, rotation.vector.z, rotation.vector.w));
+    return PxTransform(transform(position), transform(rotation));
 }

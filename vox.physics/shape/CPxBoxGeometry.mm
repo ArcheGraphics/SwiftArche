@@ -7,6 +7,7 @@
 #import "CPxBoxGeometry.h"
 #import "CPxGeometry+Internal.h"
 #import "PxPhysicsAPI.h"
+#include "CPXHelper.h"
 
 using namespace physx;
 
@@ -21,7 +22,7 @@ using namespace physx;
 }
 
 - (void)setHalfExtents:(simd_float3)halfExtents {
-    static_cast<PxBoxGeometry *>(super.c_geometry)->halfExtents = PxVec3(halfExtents.x, halfExtents.y, halfExtents.z);
+    static_cast<PxBoxGeometry *>(super.c_geometry)->halfExtents = transform(halfExtents);
 }
 
 - (simd_float3)halfExtents {

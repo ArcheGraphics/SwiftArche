@@ -52,7 +52,7 @@ namespace {
 }
 
 - (void)setGravity:(simd_float3)vec {
-    _scene->setGravity(PxVec3(vec.x, vec.y, vec.z));
+    _scene->setGravity(transform(vec));
 }
 
 - (void)simulate:(float)elapsedTime {
@@ -84,8 +84,7 @@ namespace {
                    distance:(float)distance
                         hit:(LocationHit *_Nonnull)hit {
     PxRaycastHit pxHit = PxRaycastHit();
-    auto result = PxGeometryQuery::raycast(PxVec3(origin.x, origin.y, origin.z),
-            PxVec3(unitDir.x, unitDir.y, unitDir.z),
+    auto result = PxGeometryQuery::raycast(transform(origin), transform(unitDir),
             [shape getGeometry].any(), transform(position, rotation),
             distance, PxHitFlags(PxHitFlag::eDEFAULT), 1, &pxHit);
     if (result > 0) {
@@ -107,8 +106,7 @@ namespace {
     CustomFilter filterCall(filterCallback);
 
     return PxSceneQueryExt::raycastAny(*_scene,
-            PxVec3(origin.x, origin.y, origin.z),
-            PxVec3(unitDir.x, unitDir.y, unitDir.z),
+            transform(origin), transform(unitDir),
             distance, pxHit, filterData, &filterCall);
 }
 
@@ -123,8 +121,7 @@ namespace {
     CustomFilter filterCall(filterCallback);
 
     bool result = PxSceneQueryExt::raycastSingle(*_scene,
-            PxVec3(origin.x, origin.y, origin.z),
-            PxVec3(unitDir.x, unitDir.y, unitDir.z),
+            transform(origin), transform(unitDir),
             distance, PxHitFlags(PxHitFlag::eDEFAULT),
             pxHit, filterData, &filterCall);
 
@@ -151,8 +148,7 @@ namespace {
     std::vector<PxRaycastHit> pxHits(hitCount);
     bool blockingHit;
     int result = PxSceneQueryExt::raycastMultiple(*_scene,
-            PxVec3(origin.x, origin.y, origin.z),
-            PxVec3(unitDir.x, unitDir.y, unitDir.z),
+            transform(origin), transform(unitDir),
             distance, PxHitFlags(PxHitFlag::eDEFAULT),
             pxHits.data(), hitCount, blockingHit, filterData, &filterCall);
     if (result > 0) {
@@ -180,7 +176,7 @@ namespace {
                 rotation1:(simd_quatf)rotation1
                       hit:(LocationHit *_Nonnull)hit {
     PxSweepHit pxHit = PxSweepHit();
-    auto result = PxGeometryQuery::sweep(PxVec3(unitDir.x, unitDir.y, unitDir.z), distance,
+    auto result = PxGeometryQuery::sweep(transform(unitDir), distance,
             [shape0 getGeometry].any(), transform(position0, rotation0),
             [shape1 getGeometry].any(), transform(position1, rotation1), pxHit);
     if (result) {
@@ -204,7 +200,7 @@ namespace {
     CustomFilter filterCall(filterCallback);
 
     return PxSceneQueryExt::sweepAny(*_scene, [shape getGeometry].any(), transform(origin, rotation),
-            PxVec3(unitDir.x, unitDir.y, unitDir.z),
+            transform(unitDir),
             distance, PxHitFlags(PxHitFlag::eDEFAULT), pxHit, filterData, &filterCall);
 }
 
@@ -222,7 +218,7 @@ namespace {
 
     bool result = PxSceneQueryExt::sweepSingle(*_scene, [shape getGeometry].any(),
             transform(origin, rotation),
-            PxVec3(unitDir.x, unitDir.y, unitDir.z),
+            transform(unitDir.x),
             distance, PxHitFlags(PxHitFlag::eDEFAULT), pxHit, filterData, &filterCall);
 
     if (result) {
@@ -250,7 +246,7 @@ namespace {
     std::vector<PxSweepHit> pxHits(hitCount);
     bool blockingHit;
     int result = PxSceneQueryExt::sweepMultiple(*_scene, [shape getGeometry].any(), transform(origin, rotation),
-            PxVec3(unitDir.x, unitDir.y, unitDir.z),
+            transform(unitDir),
             distance, PxHitFlags(PxHitFlag::eDEFAULT),
             pxHits.data(), hitCount, blockingHit, filterData, &filterCall);
     if (result > 0) {
@@ -338,7 +334,7 @@ namespace {
              rotation:(simd_quatf)rotation
               closest:(simd_float3 *_Nonnull)closest {
     PxVec3 pt;
-    auto result = PxGeometryQuery::pointDistance(PxVec3(point.x, point.y, point.z),
+    auto result = PxGeometryQuery::pointDistance(transform(point),
             [shape getGeometry].any(), transform(position, rotation),
             &pt);
     if (result > 0) {

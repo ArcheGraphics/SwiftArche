@@ -193,10 +193,10 @@ namespace {
 }
 
 // MARK: - Compute
--(void)computeWithPoints:(float *_Nonnull)points
-             pointsCount:(uint32_t)pointsCount
-                 indices:(uint32_t *_Nullable)indices
-            indicesCount:(uint32_t)indicesCount {
+- (void)computeWithPoints:(float *_Nonnull)points
+              pointsCount:(uint32_t)pointsCount
+                  indices:(uint32_t *_Nullable)indices
+             indicesCount:(uint32_t)indicesCount {
     if (solver) {
         solver->Release();
     }
@@ -208,7 +208,7 @@ namespace {
     logging.flushMessages();
 }
 
--(uint32_t) hullCount {
+- (uint32_t)hullCount {
     if (solver) {
         return solver->GetNConvexHulls();
     } else {
@@ -216,7 +216,7 @@ namespace {
     }
 }
 
--(uint32_t) pointCountAtIndex:(uint32_t)index {
+- (uint32_t)pointCountAtIndex:(uint32_t)index {
     if (solver) {
         solver->GetConvexHull(index, ch);
         return static_cast<uint32_t>(ch.m_points.size());
@@ -225,7 +225,7 @@ namespace {
     }
 }
 
--(uint32_t) triangleCountAtIndex:(uint32_t)index {
+- (uint32_t)triangleCountAtIndex:(uint32_t)index {
     if (solver) {
         solver->GetConvexHull(index, ch);
         return static_cast<uint32_t>(ch.m_triangles.size());
@@ -234,7 +234,7 @@ namespace {
     }
 }
 
--(void) getHullInfoAtIndex:(uint32_t)index
+- (void)getHullInfoAtIndex:(uint32_t)index
                     points:(simd_float3 *_Nonnull)points
                    indices:(simd_uint3 *_Nullable)indices
                     center:(simd_float3 *_Nonnull)center {
