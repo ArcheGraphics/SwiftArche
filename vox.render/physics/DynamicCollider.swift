@@ -228,8 +228,8 @@ public class DynamicCollider: Collider {
     }
 
     /// Applies force at position. As a result this will apply a torque and force on the object.
-    public func applyForceAtPosition(_ force: Vector3, _ pos: Vector3) {
-        (_nativeCollider as! PhysXDynamicCollider).addForceAtPosition(force, pos)
+    public func applyForceAtPosition(_ force: Vector3, _ pos: Vector3, mode: CPxForceMode = eFORCE) {
+        (_nativeCollider as! PhysXDynamicCollider).addForceAtPosition(force, pos, mode)
     }
 
     /// Moves the kinematic collider towards position.

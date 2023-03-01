@@ -139,8 +139,8 @@ class PhysXDynamicCollider: PhysXCollider {
         (_pxActor as! CPxRigidDynamic).addTorque(torque.internalValue)
     }
 
-    func addForceAtPosition(_ force: Vector3, _ pos: Vector3) {
-        (_pxActor as! CPxRigidDynamic).addForceAtPos(with: force.internalValue, pos: pos.internalValue, mode: eFORCE)
+    func addForceAtPosition(_ force: Vector3, _ pos: Vector3, _ mode: CPxForceMode) {
+        (_pxActor as! CPxRigidDynamic).addForceAtPos(with: force.internalValue, pos: pos.internalValue, mode: mode)
     }
 
     func movePosition(_ value: Vector3) {

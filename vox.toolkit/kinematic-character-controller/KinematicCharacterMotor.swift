@@ -102,7 +102,7 @@ public struct HitStabilityReport {
     public var OuterNormal = Vector3()
 
     public var ValidStepDetected: Bool = false
-    public var SteppedCollider: Collider
+    public var SteppedCollider: Collider?
 
     public var LedgeDetected: Bool = false
     public var IsOnEmptySideOfLedge: Bool = false
@@ -713,8 +713,234 @@ extension KinematicCharacterMotor {
     /// velocity projection rules that affect the character motor
     /// - Returns: Returns false if movement could not be solved until the end
     private func InternalCharacterMove(transientVelocity: inout Vector3, deltaTime: Float) -> Bool {
-        // MARK: - TODO
-        false
+        if (deltaTime <= 0) {
+            return false
+        }
+
+        // Planar constraint
+        if (HasPlanarConstraint) {
+            transientVelocity = Vector3.projectOnPlane(vector: transientVelocity, planeNormal: PlanarConstraintAxis.normalized())
+        }
+
+        var wasCompleted = true
+        var remainingMovementDirection = transientVelocity.normalized()
+        var remainingMovementMagnitude = transientVelocity.length() * deltaTime
+        var originalVelocityDirection = remainingMovementDirection
+        var sweepsMade = 0
+        var hitSomethingThisSweepIteration = true
+        var tmpMovedPosition = _transientPosition
+        var previousHitIsStable = false
+        var previousVelocity = _cachedZeroVector
+        var previousObstructionNormal = _cachedZeroVector
+        var sweepState = MovementSweepState.Initial
+
+        // Project movement against current overlaps before doing the sweeps
+        for i in 0..<_overlapsCount {
+            var overlapNormal = _overlaps[i].Normal
+            if (Vector3.dot(left: remainingMovementDirection, right: overlapNormal) < 0) {
+                var stableOnHit = IsStableOnNormal(overlapNormal) && !MustUnground()
+                var velocityBeforeProjection = transientVelocity
+                var obstructionNormal = GetObstructionNormal(hitNormal: overlapNormal, stableOnHit: stableOnHit)
+
+                InternalHandleVelocityProjection(
+                        stableOnHit: stableOnHit,
+                        hitNormal: overlapNormal,
+                        obstructionNormal: obstructionNormal,
+                        originalDirection: originalVelocityDirection,
+                        sweepState: &sweepState,
+                        previousHitIsStable: previousHitIsStable,
+                        previousVelocity: previousVelocity,
+                        previousObstructionNormal: previousObstructionNormal,
+                        transientVelocity: &transientVelocity,
+                        remainingMovementMagnitude: &remainingMovementMagnitude,
+                        remainingMovementDirection: &remainingMovementDirection)
+
+                previousHitIsStable = stableOnHit
+                previousVelocity = velocityBeforeProjection
+                previousObstructionNormal = obstructionNormal
+            }
+        }
+
+        // Sweep the desired movement to detect collisions
+        while (remainingMovementMagnitude > 0 &&
+                (sweepsMade <= MaxMovementIterations) &&
+                hitSomethingThisSweepIteration) {
+            var foundClosestHit = false
+            var closestSweepHitPoint = Vector3()
+            var closestSweepHitNormal = Vector3()
+            var closestSweepHitDistance: Float = 0
+            var closestSweepHitCollider: Collider? = nil
+
+            if (CheckMovementInitialOverlaps) {
+                let numOverlaps = CharacterCollisionsOverlap(
+                        position: tmpMovedPosition,
+                        rotation: _transientRotation,
+                        overlappedColliders: _internalProbedColliders,
+                        inflate: 0,
+                        acceptOnlyStableGroundLayer: false)
+                if (numOverlaps > 0) {
+                    closestSweepHitDistance = 0
+
+                    var mostObstructingOverlapNormalDotProduct: Float = 2
+
+                    for i in 0..<numOverlaps {
+                        let tmpCollider = _internalProbedColliders[i]
+
+                        var resolutionDirection = Vector3()
+                        var resolutionDistance: Float = 0
+                        if (Physics.ComputePenetration(
+                                Capsule,
+                                tmpMovedPosition,
+                                _transientRotation,
+                                tmpCollider,
+                                tmpCollider.transform.position,
+                                tmpCollider.transform.rotation,
+                                &resolutionDirection,
+                                &resolutionDistance)) {
+                            let dotProduct = Vector3.dot(left: remainingMovementDirection, right: resolutionDirection)
+                            if (dotProduct < 0 && dotProduct < mostObstructingOverlapNormalDotProduct) {
+                                mostObstructingOverlapNormalDotProduct = dotProduct
+
+                                closestSweepHitNormal = resolutionDirection
+                                closestSweepHitCollider = tmpCollider
+                                closestSweepHitPoint = tmpMovedPosition + Vector3.transformByQuat(v: CharacterTransformToCapsuleCenter, quaternion: _transientRotation) + (resolutionDirection * resolutionDistance)
+
+                                foundClosestHit = true
+                            }
+                        }
+                    }
+                }
+            }
+
+            var closestSweepHit = HitResult()
+            if (!foundClosestHit && CharacterCollisionsSweep(
+                    position: tmpMovedPosition, // position
+                    rotation: _transientRotation, // rotation
+                    direction: remainingMovementDirection, // direction
+                    distance: remainingMovementMagnitude + KinematicCharacterMotor.CollisionOffset, // distance
+                    closestHit: &closestSweepHit, // closest hit
+                    hits: _internalCharacterHits) // all hits
+                    > 0) {
+                closestSweepHitNormal = closestSweepHit.normal
+                closestSweepHitDistance = closestSweepHit.distance
+                closestSweepHitCollider = closestSweepHit.collider
+                closestSweepHitPoint = closestSweepHit.point
+
+                foundClosestHit = true
+            }
+
+            if (foundClosestHit) {
+                // Calculate movement from this iteration
+                var sweepMovement = (remainingMovementDirection * (max(0, closestSweepHitDistance - KinematicCharacterMotor.CollisionOffset)))
+                tmpMovedPosition += sweepMovement
+                remainingMovementMagnitude -= sweepMovement.length()
+
+                // Evaluate if hit is stable
+                var moveHitStabilityReport = HitStabilityReport()
+                EvaluateHitStability(hitCollider: closestSweepHitCollider!, hitNormal: closestSweepHitNormal, hitPoint: closestSweepHitPoint, atCharacterPosition: tmpMovedPosition, atCharacterRotation: _transientRotation, withCharacterVelocity: transientVelocity, stabilityReport: &moveHitStabilityReport)
+
+                // Handle stepping up steps points higher than bottom capsule radius
+                var foundValidStepHit = false
+                if (_solveGrounding && StepHandling != StepHandlingMethod.None && moveHitStabilityReport.ValidStepDetected) {
+                    var obstructionCorrelation = abs(Vector3.dot(left: closestSweepHitNormal, right: _characterUp))
+                    if (obstructionCorrelation <= KinematicCharacterMotor.CorrelationForVerticalObstruction) {
+                        var stepForwardDirection = Vector3.projectOnPlane(vector: -closestSweepHitNormal, planeNormal: _characterUp).normalized()
+                        var stepCastStartPoint = (tmpMovedPosition + (stepForwardDirection * KinematicCharacterMotor.SteppingForwardDistance)) +
+                                (_characterUp * MaxStepHeight)
+
+                        var closestStepHit = HitResult()
+                        // Cast downward from the top of the stepping height
+                        let nbStepHits = CharacterCollisionsSweep(
+                                position: stepCastStartPoint, // position
+                                rotation: _transientRotation, // rotation
+                                direction: -_characterUp, // direction
+                                distance: MaxStepHeight, // distance
+                                closestHit: &closestStepHit, // closest hit
+                                hits: _internalCharacterHits,
+                                inflate: 0,
+                                acceptOnlyStableGroundLayer: true) // all hits
+
+                        // Check for hit corresponding to stepped collider
+                        for i in 0..<nbStepHits {
+                            if (_internalCharacterHits[i].collider == moveHitStabilityReport.SteppedCollider) {
+                                let endStepPosition = stepCastStartPoint + (-_characterUp * (_internalCharacterHits[i].distance - KinematicCharacterMotor.CollisionOffset))
+                                tmpMovedPosition = endStepPosition
+                                foundValidStepHit = true
+
+                                // Project velocity on ground normal at step
+                                transientVelocity = Vector3.projectOnPlane(vector: transientVelocity, planeNormal: CharacterUp)
+                                remainingMovementDirection = transientVelocity.normalized()
+
+                                break
+                            }
+                        }
+                    }
+                }
+
+                // Handle movement solving
+                if (!foundValidStepHit) {
+                    let obstructionNormal = GetObstructionNormal(hitNormal: closestSweepHitNormal, stableOnHit: moveHitStabilityReport.IsStable)
+
+                    // Movement hit callback
+                    CharacterController!.OnMovementHit(hitCollider: closestSweepHitCollider!, hitNormal: closestSweepHitNormal, hitPoint: closestSweepHitPoint, hitStabilityReport: &moveHitStabilityReport)
+
+                    // Handle remembering rigidbody hits
+                    if InteractiveRigidbodyHandling,
+                       let attachedRigidbody = closestSweepHitCollider as? DynamicCollider {
+                        StoreRigidbodyHit(
+                                hitRigidbody: attachedRigidbody,
+                                hitVelocity: transientVelocity,
+                                hitPoint: closestSweepHitPoint,
+                                obstructionNormal: obstructionNormal,
+                                hitStabilityReport: moveHitStabilityReport)
+                    }
+
+                    let stableOnHit = moveHitStabilityReport.IsStable && !MustUnground()
+                    let velocityBeforeProj = transientVelocity
+
+                    // Project velocity for next iteration
+                    InternalHandleVelocityProjection(
+                            stableOnHit: stableOnHit,
+                            hitNormal: closestSweepHitNormal,
+                            obstructionNormal: obstructionNormal,
+                            originalDirection: originalVelocityDirection,
+                            sweepState: &sweepState,
+                            previousHitIsStable: previousHitIsStable,
+                            previousVelocity: previousVelocity,
+                            previousObstructionNormal: previousObstructionNormal,
+                            transientVelocity: &transientVelocity,
+                            remainingMovementMagnitude: &remainingMovementMagnitude,
+                            remainingMovementDirection: &remainingMovementDirection)
+
+                    previousHitIsStable = stableOnHit
+                    previousVelocity = velocityBeforeProj
+                    previousObstructionNormal = obstructionNormal
+                }
+            }
+            // If we hit nothing...
+            else {
+                hitSomethingThisSweepIteration = false
+            }
+
+            // Safety for exceeding max sweeps allowed
+            sweepsMade += 1
+            if (sweepsMade > MaxMovementIterations) {
+                if (KillRemainingMovementWhenExceedMaxMovementIterations) {
+                    remainingMovementMagnitude = 0
+                }
+
+                if (KillVelocityWhenExceedMaxMovementIterations) {
+                    transientVelocity = Vector3.zero
+                }
+                wasCompleted = false
+            }
+        }
+
+        // Move position for the remainder of the movement
+        tmpMovedPosition += (remainingMovementDirection * remainingMovementMagnitude)
+        _transientPosition = tmpMovedPosition
+
+        return wasCompleted
     }
 
     /// Gets the effective normal for movement obstruction depending on current grounding status
@@ -760,7 +986,62 @@ extension KinematicCharacterMotor {
     private func InternalHandleVelocityProjection(stableOnHit: Bool, hitNormal: Vector3, obstructionNormal: Vector3, originalDirection: Vector3,
                                                   sweepState: inout MovementSweepState, previousHitIsStable: Bool, previousVelocity: Vector3, previousObstructionNormal: Vector3,
                                                   transientVelocity: inout Vector3, remainingMovementMagnitude: inout Float, remainingMovementDirection: inout Vector3) {
-        // MARK: - TODO
+        if (transientVelocity.lengthSquared() <= 0) {
+            return
+        }
+
+        var velocityBeforeProjection = transientVelocity
+
+        if (stableOnHit) {
+            LastMovementIterationFoundAnyGround = true
+            HandleVelocityProjection(velocity: &transientVelocity, obstructionNormal: obstructionNormal, stableOnHit: stableOnHit)
+        } else {
+            // Handle projection
+            if (sweepState == MovementSweepState.Initial) {
+                HandleVelocityProjection(velocity: &transientVelocity, obstructionNormal: obstructionNormal, stableOnHit: stableOnHit)
+                sweepState = MovementSweepState.AfterFirstHit
+            }
+            // Blocking crease handling
+            else if (sweepState == MovementSweepState.AfterFirstHit) {
+                var foundCrease = false
+                var creaseDirection = Vector3()
+                EvaluateCrease(
+                        currentCharacterVelocity: transientVelocity,
+                        previousCharacterVelocity: previousVelocity,
+                        currentHitNormal: obstructionNormal,
+                        previousHitNormal: previousObstructionNormal,
+                        currentHitIsStable: stableOnHit,
+                        previousHitIsStable: previousHitIsStable,
+                        characterIsStable: GroundingStatus.IsStableOnGround && !MustUnground(),
+                        isValidCrease: &foundCrease,
+                        creaseDirection: &creaseDirection)
+
+                if (foundCrease) {
+                    if (GroundingStatus.IsStableOnGround && !MustUnground()) {
+                        transientVelocity = Vector3.zero
+                        sweepState = MovementSweepState.FoundBlockingCorner
+                    } else {
+                        transientVelocity = Vector3.project(vector: transientVelocity, onNormal: creaseDirection)
+                        sweepState = MovementSweepState.FoundBlockingCrease
+                    }
+                } else {
+                    HandleVelocityProjection(velocity: &transientVelocity, obstructionNormal: obstructionNormal, stableOnHit: stableOnHit)
+                }
+            }
+            // Blocking corner handling
+            else if (sweepState == MovementSweepState.FoundBlockingCrease) {
+                transientVelocity = Vector3.zero
+                sweepState = MovementSweepState.FoundBlockingCorner
+            }
+        }
+
+        if (HasPlanarConstraint) {
+            transientVelocity = Vector3.projectOnPlane(vector: transientVelocity, planeNormal: PlanarConstraintAxis.normalized())
+        }
+
+        let newVelocityFactor = transientVelocity.length() / velocityBeforeProjection.length()
+        remainingMovementMagnitude *= newVelocityFactor
+        remainingMovementDirection = transientVelocity.normalized()
     }
 
     private func EvaluateCrease(currentCharacterVelocity: Vector3,
@@ -841,7 +1122,72 @@ extension KinematicCharacterMotor {
 
     /// Takes into account rigidbody hits for adding to the velocity
     private func ProcessVelocityForRigidbodyHits(processedVelocity: inout Vector3, deltaTime: Float) {
-        // MARK: - TODO
+        for i in 0..<_rigidbodyProjectionHitCount {
+            let bodyHit = _internalRigidbodyProjectionHits[i]
+
+            if let Rigidbody = bodyHit.Rigidbody,
+               !_rigidbodiesPushedThisMove.contains(Rigidbody) {
+                if (_internalRigidbodyProjectionHits[i].Rigidbody != _attachedRigidbody) {
+                    // Remember we hit this rigidbody
+                    _rigidbodiesPushedThisMove.append(bodyHit.Rigidbody)
+
+                    var characterMass = SimulatedCharacterMass
+                    var characterVelocity = bodyHit.HitVelocity
+
+                    let hitCharacterMotor: KinematicCharacterMotor? = Rigidbody.entity.getComponent()
+                    var hitBodyIsDynamic = !Rigidbody.isKinematic
+                    var hitBodyMassAtPoint = Rigidbody.mass // todo
+                    var hitBodyVelocity = Rigidbody.linearVelocity
+                    if let hitCharacterMotor = hitCharacterMotor {
+                        hitBodyMassAtPoint = hitCharacterMotor.SimulatedCharacterMass // todo
+                        hitBodyVelocity = hitCharacterMotor.BaseVelocity
+                    } else if (!hitBodyIsDynamic) {
+                        if let physicsMover: PhysicsMover = Rigidbody.entity.getComponent() {
+                            hitBodyVelocity = physicsMover.Velocity
+                        }
+                    }
+
+                    // Calculate the ratio of the total mass that the character mass represents
+                    var characterToBodyMassRatio: Float = 1
+                    if (characterMass + hitBodyMassAtPoint > 0) {
+                        characterToBodyMassRatio = characterMass / (characterMass + hitBodyMassAtPoint)
+                    } else {
+                        characterToBodyMassRatio = 0.5
+                    }
+
+                    // Hitting a non-dynamic body
+                    if (!hitBodyIsDynamic) {
+                        characterToBodyMassRatio = 0
+                    }
+                    // Emulate kinematic body interaction
+                    else if (rigidbodyInteractionType == RigidbodyInteractionType.Kinematic && hitCharacterMotor == nil) {
+                        characterToBodyMassRatio = 1
+                    }
+
+                    var velocityChangeOnCharacter = Vector3()
+                    var velocityChangeOnBody = Vector3()
+                    ComputeCollisionResolutionForHitBody(
+                            hitNormal: bodyHit.EffectiveHitNormal,
+                            characterVelocity: characterVelocity,
+                            bodyVelocity: hitBodyVelocity,
+                            characterToBodyMassRatio: characterToBodyMassRatio,
+                            velocityChangeOnCharacter: &velocityChangeOnCharacter,
+                            velocityChangeOnBody: &velocityChangeOnBody)
+
+                    processedVelocity += velocityChangeOnCharacter
+
+                    if let hitCharacterMotor = hitCharacterMotor {
+                        hitCharacterMotor.BaseVelocity += velocityChangeOnCharacter
+                    } else if (hitBodyIsDynamic) {
+                        Rigidbody.applyForceAtPosition(velocityChangeOnBody, bodyHit.HitPoint, mode: eVELOCITY_CHANGE)
+                    }
+
+                    if (rigidbodyInteractionType == RigidbodyInteractionType.SimulatedDynamic) {
+                        HandleSimulatedRigidbodyInteraction(processedVelocity: &processedVelocity, hit: bodyHit, deltaTime: deltaTime)
+                    }
+                }
+            }
+        }
     }
 
     public func ComputeCollisionResolutionForHitBody(
