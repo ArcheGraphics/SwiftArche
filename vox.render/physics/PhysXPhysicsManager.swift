@@ -191,7 +191,21 @@ class PhysXPhysicsManager {
     }
 }
 
+//MARK: - Raycast
 extension PhysXPhysicsManager {
+    func raycastSpecific(_ ray: Ray, _ distance: Float,
+                         _ shape: PhysXColliderShape,
+                         _ outHitResult: ((LocationHit) -> Void)? = nil) -> Bool {
+        var locHit = LocationHit()
+        let result = _pxScene.raycastSpecific(with: ray.origin.internalValue, unitDir: ray.direction.internalValue,
+                shape: shape._pxShape, distance: distance, hit: &locHit)
+        if (result && outHitResult != nil) {
+            outHitResult!(locHit)
+        }
+
+        return result
+    }
+
     func hasRaycast(_ ray: Ray, _ distance: Float,
                     _ onRaycast: @escaping (UInt32) -> Bool) -> Bool {
         _pxScene.raycastAny(with: ray.origin.internalValue,
@@ -239,6 +253,24 @@ extension PhysXPhysicsManager {
         }
 
         return _queryPool[0..<Int(result)]
+    }
+}
+
+//MARK: - Sweep
+extension PhysXPhysicsManager {
+    func sweepSpecific(_ dir: Vector3, _ distance: Float,
+                       _ shape0: PhysXColliderShape,
+                       _ shape1: PhysXColliderShape,
+                       _ outHitResult: ((LocationHit) -> Void)? = nil) -> Bool {
+        var locHit = LocationHit()
+        let result = _pxScene.sweepSpecific(with: dir.internalValue, distance: distance,
+                shape0: shape0._pxShape, shape1: shape1._pxShape, hit: &locHit)
+
+        if (result && outHitResult != nil) {
+            outHitResult!(locHit)
+        }
+
+        return result
     }
 
     func hasSweep(_ shape: PhysXColliderShape, _ ray: Ray, _ distance: Float,
@@ -290,6 +322,14 @@ extension PhysXPhysicsManager {
 
         return _queryPool[0..<Int(result)]
     }
+}
+
+// MARK: - Overlap
+extension PhysXPhysicsManager {
+    func overlapSpecific(_ shape0: PhysXColliderShape,
+                         _ shape1: PhysXColliderShape) -> Bool {
+        _pxScene.overlapSpecific(with: shape0._pxShape, shape1: shape1._pxShape)
+    }
 
     func hasOverlap(_ shape: PhysXColliderShape, _ origin: Vector3,
                     _ onRaycast: @escaping (UInt32) -> Bool) -> Bool {
@@ -313,6 +353,24 @@ extension PhysXPhysicsManager {
         }
 
         return _queryPool[0..<Int(result)]
+    }
+}
+
+// MARK: - Other Query
+extension PhysXPhysicsManager {
+    func computePenetration(_ direction: inout Vector3, _ depth: inout Float,
+                            _ shape0: PhysXColliderShape, _ shape1: PhysXColliderShape) -> Bool {
+        var value = SIMD3<Float>()
+        let result = _pxScene.computePenetration(&value, depth: &depth, shape0: shape0._pxShape, shape1: shape1._pxShape)
+        direction = Vector3(value)
+        return result
+    }
+
+    func closestPoint(_ point: Vector3, _ shape: PhysXColliderShape, _ cloest: inout Vector3) -> Float {
+        var value = SIMD3<Float>()
+        let result = _pxScene.closestPoint(point.internalValue, shape: shape._pxShape, cloest: &value)
+        cloest = Vector3(value)
+        return result
     }
 }
 
