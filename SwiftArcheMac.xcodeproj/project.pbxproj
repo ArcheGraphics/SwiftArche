@@ -82,6 +82,8 @@
 		3E37FCF329AF34180050169C /* ExampleMovingPlatform.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E37FCF229AF34180050169C /* ExampleMovingPlatform.swift */; };
 		3E37FCF529AF35C20050169C /* PlanetManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E37FCF429AF35C20050169C /* PlanetManager.swift */; };
 		3E37FCF729AF36150050169C /* Teleporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E37FCF629AF36150050169C /* Teleporter.swift */; };
+		3E37FCFB29AF399B0050169C /* MyCharacterController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E37FCFA29AF399B0050169C /* MyCharacterController.swift */; };
+		3E37FCFD29AF3A160050169C /* MyPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E37FCFC29AF3A160050169C /* MyPlayer.swift */; };
 		3E43DC9B295BDDDC00732AC0 /* physics_helpers.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3E6B23B52946B3E5000AC29F /* physics_helpers.metal */; };
 		3E43DC9C295BDDDC00732AC0 /* sdf_shading.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3E6B23D529499B36000AC29F /* sdf_shading.metal */; };
 		3E43DC9D295BDDDC00732AC0 /* sdf_baker.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3E6B23D2294964B1000AC29F /* sdf_baker.metal */; };
@@ -698,6 +700,8 @@
 		3E37FCF229AF34180050169C /* ExampleMovingPlatform.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExampleMovingPlatform.swift; sourceTree = "<group>"; };
 		3E37FCF429AF35C20050169C /* PlanetManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanetManager.swift; sourceTree = "<group>"; };
 		3E37FCF629AF36150050169C /* Teleporter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Teleporter.swift; sourceTree = "<group>"; };
+		3E37FCFA29AF399B0050169C /* MyCharacterController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyCharacterController.swift; sourceTree = "<group>"; };
+		3E37FCFC29AF3A160050169C /* MyPlayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyPlayer.swift; sourceTree = "<group>"; };
 		3E6B235B2941BF88000AC29F /* BlendShapeWeightsAnimationCurveOwnerAssembler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlendShapeWeightsAnimationCurveOwnerAssembler.swift; sourceTree = "<group>"; };
 		3E6B235D294220BC000AC29F /* FaceMorphApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FaceMorphApp.swift; sourceTree = "<group>"; };
 		3E6B235F294224C1000AC29F /* FaceGUI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FaceGUI.swift; sourceTree = "<group>"; };
@@ -1472,6 +1476,8 @@
 		3E37FCEB29AF22CC0050169C /* 1- Player Camera Character Setup */ = {
 			isa = PBXGroup;
 			children = (
+				3E37FCFA29AF399B0050169C /* MyCharacterController.swift */,
+				3E37FCFC29AF3A160050169C /* MyPlayer.swift */,
 			);
 			path = "1- Player Camera Character Setup";
 			sourceTree = "<group>";
@@ -3057,6 +3063,8 @@
 				3E1F129729A78B3300F1002E /* PhysXConvexComposeApp.swift in Sources */,
 				3E6D2F11293F1AAB00B63F73 /* GLTFLoaderUtils.swift in Sources */,
 				E63B19C92479C2BE78B928A9 /* CascadeShadowApp.swift in Sources */,
+				3E37FCFB29AF399B0050169C /* MyCharacterController.swift in Sources */,
+				3E37FCFD29AF3A160050169C /* MyPlayer.swift in Sources */,
 				43D8CA0AB31B8C46122C1EAB /* IBLBaker.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
