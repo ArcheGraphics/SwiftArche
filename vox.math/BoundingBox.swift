@@ -200,3 +200,5 @@ extension BoundingBox {
         return self
     }
 }
+
+public typealias Bounds = BoundingBox
