@@ -453,22 +453,3 @@ extension Vector2 {
         Vector2()
     }
 }
-
-extension Vector3 {
-    /// Component-wise division.
-    internal static func DivideBy(o: Vector3) -> Vector3 {
-        Vector3()
-    }
-
-    internal func Abs() -> Vector3 {
-        return Vector3(MathUtil.abs(x), MathUtil.abs(y), MathUtil.abs(z))
-    }
-
-    internal func Sign() -> Vector3 {
-        return Vector3(MathUtil.sign(x), MathUtil.sign(y), MathUtil.sign(z))
-    }
-
-    internal func Sum() -> Float {
-        return MathUtil.abs(x) + MathUtil.abs(y) + MathUtil.abs(z)
-    }
-}

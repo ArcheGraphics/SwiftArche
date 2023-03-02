@@ -109,6 +109,14 @@ extension Vector3 {
     public static func *(left: Vector3, right: Vector3) -> Vector3 {
         Vector3(left.elements * right.elements)
     }
+    
+    public static func *(left: Vector3, right: Quaternion) -> Vector3 {
+        Vector3.transformByQuat(v: left, quaternion: right)
+    }
+    
+    public static func *(left: Quaternion, right: Vector3) -> Vector3 {
+        Vector3.transformByQuat(v: right, quaternion: left)
+    }
 
     public static func *=(left: inout Vector3, right: Vector3) {
         left.elements *= right.elements
@@ -167,6 +175,18 @@ extension Vector3 {
 }
 
 extension Vector3 {
+    public func abs() -> Vector3 {
+        return Vector3(MathUtil.abs(x), MathUtil.abs(y), MathUtil.abs(z))
+    }
+
+    public func sign() -> Vector3 {
+        return Vector3(MathUtil.sign(x), MathUtil.sign(y), MathUtil.sign(z))
+    }
+
+    public func sum() -> Float {
+        return MathUtil.abs(x) + MathUtil.abs(y) + MathUtil.abs(z)
+    }
+    
     /// Determines the dot product of two vectors.
     /// - Parameters:
     ///   - left: The first vector to dot

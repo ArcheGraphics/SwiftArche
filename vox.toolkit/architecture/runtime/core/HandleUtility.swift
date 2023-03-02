@@ -27,7 +27,7 @@ public class HandleUtility {
     /// Find a triangle intersected by InRay on InMesh.  InRay is in world space.
     /// Returns the index in mesh.faces of the hit face, or -1.  Optionally can ignore backfaces.
     internal static func FaceRaycast(worldRay: Ray, mesh: ProBuilderMesh,
-                                     hit: inout HitResult, ignore: Set<Face>? = nil) -> Bool {
+                                     hit: inout RaycastHit, ignore: Set<Face>? = nil) -> Bool {
         FaceRaycast(worldRay: worldRay, mesh: mesh, hit: &hit, distance: Float.infinity,
                 cullingMode: CullingMode.Back, ignore: ignore)
     }
@@ -41,7 +41,7 @@ public class HandleUtility {
     ///   - cullingMode: Optional collection of faces to ignore when raycasting.
     ///   - ignore: Optional collection of faces to ignore when raycasting.
     /// - Returns: True if the ray intersects with the mesh, false if not.
-    internal static func FaceRaycast(worldRay: Ray, mesh: ProBuilderMesh, hit: inout HitResult, distance: Float,
+    internal static func FaceRaycast(worldRay: Ray, mesh: ProBuilderMesh, hit: inout RaycastHit, distance: Float,
                                      cullingMode: CullingMode, ignore: Set<Face>? = nil) -> Bool {
         false
     }
@@ -62,7 +62,7 @@ public class HandleUtility {
     internal static func FaceRaycast(
             InWorldRay: Ray,
             mesh: ProBuilderMesh,
-            hits: inout [HitResult],
+            hits: inout [RaycastHit],
             cullingMode: CullingMode,
             ignore: Set<Face>? = nil) -> Bool {
         false
@@ -70,13 +70,13 @@ public class HandleUtility {
 
     /// Find the nearest triangle intersected by InWorldRay on this mesh.
     internal static func MeshRaycast(InWorldRay: Ray, gameObject: Entity,
-                                     hit: inout HitResult, distance: Float = Float.infinity) -> Float {
+                                     hit: inout RaycastHit, distance: Float = Float.infinity) -> Float {
         0
     }
 
     /// Cast a ray (in model space) against a mesh.
     internal static func MeshRaycast(InRay: Ray, mesh: [Vector3], triangles: [Int],
-                                     hit: inout HitResult, distance: Float = Float.infinity) -> Float {
+                                     hit: inout RaycastHit, distance: Float = Float.infinity) -> Float {
         0
     }
 
