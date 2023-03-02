@@ -8,20 +8,56 @@ import Foundation
 
 /// Axis Aligned Bound Box (AABB).
 public struct BoundingBox {
-    /// The minimum point of the box.
-    var _min: Vector3 = Vector3()
-    /// The maximum point of the box.
-    var _max: Vector3 = Vector3()
+    private var m_Center = Vector3()
+    private var m_Extents = Vector3()
 
-    public var min: Vector3 {
+    /// The center of the bounding box.
+    public var center: Vector3 {
         get {
-            _min
+            m_Center
+        }
+        set {
+            m_Center = newValue
         }
     }
 
+    /// The total size of the box. This is always twice as large as the extents.
+    public var size: Vector3 {
+        get {
+            m_Extents * 2
+        }
+        set {
+            m_Extents = newValue * 0.5
+        }
+    }
+
+    /// The extents of the Bounding Box. This is always half of the size of the Bounds.
+    public var extents: Vector3 {
+        get {
+            m_Extents
+        }
+        set {
+            m_Extents = newValue
+        }
+    }
+
+    /// The minimal point of the box. This is always equal to center-extents.
+    public var min: Vector3 {
+        get {
+            center - extents
+        }
+        set {
+            setMinMax(newValue, max)
+        }
+    }
+
+    /// The maximal point of the box. This is always equal to center+extents.
     public var max: Vector3 {
         get {
-            _max
+            center + extents
+        }
+        set {
+            setMinMax(min, newValue)
         }
     }
 
@@ -30,12 +66,18 @@ public struct BoundingBox {
     ///   - min: The minimum point of the box
     ///   - max: The maximum point of the box
     public init(_ min: Vector3? = nil, _ max: Vector3? = nil) {
-        if min != nil {
-            _min = min!
+        if let min {
+            self.min = min
         }
-        if max != nil {
-            _max = max!
+        if let max {
+            self.max = max
         }
+    }
+    
+    /// Sets the bounds to the min and max value of the box.
+    public mutating func setMinMax(_ min: Vector3, _ max: Vector3) {
+      extents = (max - min) * 0.5
+      center = min + extents;
     }
 }
 
@@ -63,8 +105,8 @@ extension BoundingBox {
         var out = BoundingBox(Vector3(Float.greatestFiniteMagnitude, Float.greatestFiniteMagnitude, Float.greatestFiniteMagnitude),
                 Vector3(-Float.greatestFiniteMagnitude, -Float.greatestFiniteMagnitude, -Float.greatestFiniteMagnitude))
         for i in 0..<points.count {
-            out._min = Vector3.min(left: out._min, right: points[i])
-            out._max = Vector3.max(left: out._max, right: points[i])
+            out.min = Vector3.min(left: out.min, right: points[i])
+            out.max = Vector3.max(left: out.max, right: points[i])
         }
         return out
     }
