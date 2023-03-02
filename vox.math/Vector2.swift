@@ -8,6 +8,15 @@ import simd
 
 /// Describes a 2D-vector.
 public struct Vector2 {
+    public static let zero = Vector2(0.0, 0.0)
+    public static let one = Vector2(1, 1)
+    public static let up = Vector2(0.0, 1)
+    public static let down = Vector2(0.0, -1)
+    public static let left = Vector2(-1, 0.0)
+    public static let right = Vector2(1, 0.0)
+    public static let positiveInfinity = Vector2(Float.infinity, Float.infinity)
+    public static let negativeInfinity = Vector2(-Float.infinity, -Float.infinity)
+
     /// An array containing the elements of the vector
     var elements: SIMD2<Float>
 
