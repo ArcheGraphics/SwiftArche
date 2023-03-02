@@ -18,7 +18,7 @@ public final class Vertex {
     lazy var m_UV2 = Vector2()
     lazy var m_UV3 = Vector4()
     lazy var m_UV4 = Vector4()
-    lazy var m_Attributes: Attributes = Position
+    lazy var m_Attributes: MeshArrays = []
 
     /// The position in model space.
     public var position: Vector3 {
@@ -108,7 +108,7 @@ public final class Vertex {
         }
     }
 
-    internal var attributes: Attributes {
+    internal var attributes: MeshArrays {
         get {
             m_Attributes
         }
@@ -117,79 +117,79 @@ public final class Vertex {
     /// Find if a vertex attribute has been set.
     /// - Parameter attribute: The attribute or attributes to test for.
     /// - Returns: True if this vertex has the specified attributes set, false if they are default values.
-    public func HasArrays(attribute: Attributes) -> Bool {
+    public func HasArrays(attribute: MeshArrays) -> Bool {
         return (m_Attributes.rawValue & attribute.rawValue) == attribute.rawValue
     }
 
     var hasPosition: Bool {
         get {
-            return (m_Attributes.rawValue & Position.rawValue) == Position.rawValue
+            m_Attributes.contains(MeshArrays.Position)
         }
         set {
-            m_Attributes = Attributes(newValue ? (m_Attributes.rawValue | Position.rawValue) : (m_Attributes.rawValue & ~(Position.rawValue)))
+            m_Attributes = newValue ? [m_Attributes, MeshArrays.Position] : m_Attributes.subtracting(MeshArrays.Position)
         }
     }
 
     var hasColor: Bool {
         get {
-            return (m_Attributes.rawValue & Color_0.rawValue) == Color_0.rawValue
+            m_Attributes.contains(MeshArrays.Color)
         }
         set {
-            m_Attributes = Attributes(newValue ? (m_Attributes.rawValue | Color_0.rawValue) : (m_Attributes.rawValue & ~(Color_0.rawValue)))
+            m_Attributes = newValue ? [m_Attributes, MeshArrays.Color] : m_Attributes.subtracting(MeshArrays.Color)
         }
     }
 
     var hasNormal: Bool {
         get {
-            return (m_Attributes.rawValue & Normal.rawValue) == Normal.rawValue
+            m_Attributes.contains(MeshArrays.Normal)
         }
         set {
-            m_Attributes = Attributes(newValue ? (m_Attributes.rawValue | Normal.rawValue) : (m_Attributes.rawValue & ~(Normal.rawValue)))
+            m_Attributes = newValue ? [m_Attributes, MeshArrays.Normal] : m_Attributes.subtracting(MeshArrays.Normal)
         }
     }
 
     var hasTangent: Bool {
         get {
-            return (m_Attributes.rawValue & Tangent.rawValue) == Tangent.rawValue
+            m_Attributes.contains(MeshArrays.Tangent)
         }
         set {
-            m_Attributes = Attributes(newValue ? (m_Attributes.rawValue | Tangent.rawValue) : (m_Attributes.rawValue & ~(Tangent.rawValue)))
+            m_Attributes = newValue ? [m_Attributes, MeshArrays.Tangent] : m_Attributes.subtracting(MeshArrays.Tangent)
         }
     }
 
     var hasUV0: Bool {
         get {
-            return (m_Attributes.rawValue & UV_0.rawValue) == UV_0.rawValue
+            m_Attributes.contains(MeshArrays.Texture0)
         }
         set {
-            m_Attributes = Attributes(newValue ? (m_Attributes.rawValue | UV_1.rawValue) : (m_Attributes.rawValue & ~(UV_1.rawValue)))
+            m_Attributes = newValue ? [m_Attributes, MeshArrays.Texture0] : m_Attributes.subtracting(MeshArrays.Texture0)
         }
     }
 
     var hasUV2: Bool {
         get {
-            return (m_Attributes.rawValue & UV_1.rawValue) == UV_1.rawValue
+            m_Attributes.contains(MeshArrays.Texture1)
         }
         set {
-            m_Attributes = Attributes(newValue ? (m_Attributes.rawValue | UV_1.rawValue) : (m_Attributes.rawValue & ~(UV_1.rawValue)))
+            m_Attributes = newValue ? [m_Attributes, MeshArrays.Texture1] : m_Attributes.subtracting(MeshArrays.Texture1)
         }
     }
 
     var hasUV3: Bool {
         get {
-            return (m_Attributes.rawValue & UV_2.rawValue) == UV_2.rawValue
+            m_Attributes.contains(MeshArrays.Texture2)
         }
         set {
-            m_Attributes = Attributes(newValue ? (m_Attributes.rawValue | UV_2.rawValue) : (m_Attributes.rawValue & ~(UV_2.rawValue)))
+            m_Attributes = newValue ? [m_Attributes, MeshArrays.Texture2] : m_Attributes.subtracting(MeshArrays.Texture2)
         }
     }
 
     var hasUV4: Bool {
         get {
-            return (m_Attributes.rawValue & UV_3.rawValue) == UV_3.rawValue
+            m_Attributes.contains(MeshArrays.Texture3)
         }
         set {
-            m_Attributes = Attributes(newValue ? (m_Attributes.rawValue | UV_3.rawValue) : (m_Attributes.rawValue & ~(UV_3.rawValue)))
+            m_Attributes = newValue ? [m_Attributes, MeshArrays.Texture3] : m_Attributes.subtracting(MeshArrays.Texture3)
         }
     }
 

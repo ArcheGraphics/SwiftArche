@@ -98,6 +98,9 @@
 		3E37FD1929B062C70050169C /* WingedEdge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E37FD1829B062C70050169C /* WingedEdge.swift */; };
 		3E37FD1B29B069B50050169C /* FaceRebuildData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E37FD1A29B069B50050169C /* FaceRebuildData.swift */; };
 		3E37FD1D29B069F50050169C /* Vertex.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E37FD1C29B069F50050169C /* Vertex.swift */; };
+		3E37FD1F29B079250050169C /* HandleConstraint2D.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E37FD1E29B079250050169C /* HandleConstraint2D.swift */; };
+		3E37FD2129B07A7B0050169C /* HandleOrientation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E37FD2029B07A7B0050169C /* HandleOrientation.swift */; };
+		3E37FD2329B07C2E0050169C /* ProBuilderEnum.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E37FD2229B07C2E0050169C /* ProBuilderEnum.swift */; };
 		3E43DC9B295BDDDC00732AC0 /* physics_helpers.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3E6B23B52946B3E5000AC29F /* physics_helpers.metal */; };
 		3E43DC9C295BDDDC00732AC0 /* sdf_shading.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3E6B23D529499B36000AC29F /* sdf_shading.metal */; };
 		3E43DC9D295BDDDC00732AC0 /* sdf_baker.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3E6B23D2294964B1000AC29F /* sdf_baker.metal */; };
@@ -731,6 +734,9 @@
 		3E37FD1829B062C70050169C /* WingedEdge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WingedEdge.swift; sourceTree = "<group>"; };
 		3E37FD1A29B069B50050169C /* FaceRebuildData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FaceRebuildData.swift; sourceTree = "<group>"; };
 		3E37FD1C29B069F50050169C /* Vertex.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Vertex.swift; sourceTree = "<group>"; };
+		3E37FD1E29B079250050169C /* HandleConstraint2D.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HandleConstraint2D.swift; sourceTree = "<group>"; };
+		3E37FD2029B07A7B0050169C /* HandleOrientation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HandleOrientation.swift; sourceTree = "<group>"; };
+		3E37FD2229B07C2E0050169C /* ProBuilderEnum.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProBuilderEnum.swift; sourceTree = "<group>"; };
 		3E6B235B2941BF88000AC29F /* BlendShapeWeightsAnimationCurveOwnerAssembler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlendShapeWeightsAnimationCurveOwnerAssembler.swift; sourceTree = "<group>"; };
 		3E6B235D294220BC000AC29F /* FaceMorphApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FaceMorphApp.swift; sourceTree = "<group>"; };
 		3E6B235F294224C1000AC29F /* FaceGUI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FaceGUI.swift; sourceTree = "<group>"; };
@@ -1544,8 +1550,11 @@
 				3E37FD0C29B0394A0050169C /* Clipping.swift */,
 				3E37FD0E29B03D180050169C /* ColorUtility.swift */,
 				3E37FD1229B04F030050169C /* ProBuilderMesh.swift */,
+				3E37FD2229B07C2E0050169C /* ProBuilderEnum.swift */,
 				3E37FD1629B061840050169C /* Smoothing.swift */,
 				3E37FD1829B062C70050169C /* WingedEdge.swift */,
+				3E37FD1E29B079250050169C /* HandleConstraint2D.swift */,
+				3E37FD2029B07A7B0050169C /* HandleOrientation.swift */,
 			);
 			path = core;
 			sourceTree = "<group>";
@@ -2987,6 +2996,7 @@
 				040F1DCE2933AB71008BDC8D /* FreeControl.swift in Sources */,
 				3E37FD0729B0212C0050169C /* BezierPoint.swift in Sources */,
 				3E37FD0929B023A60050169C /* Edge.swift in Sources */,
+				3E37FD2129B07A7B0050169C /* HandleOrientation.swift in Sources */,
 				040F1DD02933AC19008BDC8D /* ControlFreeKeyboard.swift in Sources */,
 				3E37FD1129B0499D0050169C /* EdgeLookup.swift in Sources */,
 				3E37FD0329AF743E0050169C /* ActionResult.swift in Sources */,
@@ -3010,6 +3020,8 @@
 				43D8C57503BAADE4FE366B56 /* GridMaterial.swift in Sources */,
 				43D8C96F57FDDC6923756F57 /* GridControl.swift in Sources */,
 				3E37FD1929B062C70050169C /* WingedEdge.swift in Sources */,
+				3E37FD2329B07C2E0050169C /* ProBuilderEnum.swift in Sources */,
+				3E37FD1F29B079250050169C /* HandleConstraint2D.swift in Sources */,
 				43D8CFBD79ADA533E11655ED /* Bounds2D.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
