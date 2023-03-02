@@ -91,6 +91,11 @@
 		3E37FD0B29B027C30050169C /* Rect.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E37FD0A29B027C30050169C /* Rect.swift */; };
 		3E37FD0D29B0394A0050169C /* Clipping.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E37FD0C29B0394A0050169C /* Clipping.swift */; };
 		3E37FD0F29B03D180050169C /* ColorUtility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E37FD0E29B03D180050169C /* ColorUtility.swift */; };
+		3E37FD1129B0499D0050169C /* EdgeLookup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E37FD1029B0499D0050169C /* EdgeLookup.swift */; };
+		3E37FD1329B04F030050169C /* ProBuilderMesh.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E37FD1229B04F030050169C /* ProBuilderMesh.swift */; };
+		3E37FD1529B04FF80050169C /* Face.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E37FD1429B04FF80050169C /* Face.swift */; };
+		3E37FD1729B061840050169C /* Smoothing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E37FD1629B061840050169C /* Smoothing.swift */; };
+		3E37FD1929B062C70050169C /* WingedEdge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E37FD1829B062C70050169C /* WingedEdge.swift */; };
 		3E43DC9B295BDDDC00732AC0 /* physics_helpers.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3E6B23B52946B3E5000AC29F /* physics_helpers.metal */; };
 		3E43DC9C295BDDDC00732AC0 /* sdf_shading.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3E6B23D529499B36000AC29F /* sdf_shading.metal */; };
 		3E43DC9D295BDDDC00732AC0 /* sdf_baker.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3E6B23D2294964B1000AC29F /* sdf_baker.metal */; };
@@ -717,6 +722,11 @@
 		3E37FD0A29B027C30050169C /* Rect.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Rect.swift; sourceTree = "<group>"; };
 		3E37FD0C29B0394A0050169C /* Clipping.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Clipping.swift; sourceTree = "<group>"; };
 		3E37FD0E29B03D180050169C /* ColorUtility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorUtility.swift; sourceTree = "<group>"; };
+		3E37FD1029B0499D0050169C /* EdgeLookup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EdgeLookup.swift; sourceTree = "<group>"; };
+		3E37FD1229B04F030050169C /* ProBuilderMesh.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProBuilderMesh.swift; sourceTree = "<group>"; };
+		3E37FD1429B04FF80050169C /* Face.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Face.swift; sourceTree = "<group>"; };
+		3E37FD1629B061840050169C /* Smoothing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Smoothing.swift; sourceTree = "<group>"; };
+		3E37FD1829B062C70050169C /* WingedEdge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WingedEdge.swift; sourceTree = "<group>"; };
 		3E6B235B2941BF88000AC29F /* BlendShapeWeightsAnimationCurveOwnerAssembler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlendShapeWeightsAnimationCurveOwnerAssembler.swift; sourceTree = "<group>"; };
 		3E6B235D294220BC000AC29F /* FaceMorphApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FaceMorphApp.swift; sourceTree = "<group>"; };
 		3E6B235F294224C1000AC29F /* FaceGUI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FaceGUI.swift; sourceTree = "<group>"; };
@@ -1523,8 +1533,13 @@
 				3E37FD0629B0212C0050169C /* BezierPoint.swift */,
 				43D8CA210E6FA1B8350D1A97 /* Bounds2D.swift */,
 				3E37FD0829B023A60050169C /* Edge.swift */,
+				3E37FD1029B0499D0050169C /* EdgeLookup.swift */,
+				3E37FD1429B04FF80050169C /* Face.swift */,
 				3E37FD0C29B0394A0050169C /* Clipping.swift */,
 				3E37FD0E29B03D180050169C /* ColorUtility.swift */,
+				3E37FD1229B04F030050169C /* ProBuilderMesh.swift */,
+				3E37FD1629B061840050169C /* Smoothing.swift */,
+				3E37FD1829B062C70050169C /* WingedEdge.swift */,
 			);
 			path = core;
 			sourceTree = "<group>";
@@ -2960,12 +2975,14 @@
 				040F1DC82933A172008BDC8D /* ControlKeyboard.swift in Sources */,
 				3E37FD0529AF9CA00050169C /* AutoUnwrapSettings.swift in Sources */,
 				3E37FCE129ADCC410050169C /* KCCSettings.swift in Sources */,
+				3E37FD1729B061840050169C /* Smoothing.swift in Sources */,
 				040F1DCA2933A3BE008BDC8D /* ControlWheel.swift in Sources */,
 				040F1DBE2933705D008BDC8D /* ControlPointer.swift in Sources */,
 				040F1DCE2933AB71008BDC8D /* FreeControl.swift in Sources */,
 				3E37FD0729B0212C0050169C /* BezierPoint.swift in Sources */,
 				3E37FD0929B023A60050169C /* Edge.swift in Sources */,
 				040F1DD02933AC19008BDC8D /* ControlFreeKeyboard.swift in Sources */,
+				3E37FD1129B0499D0050169C /* EdgeLookup.swift in Sources */,
 				3E37FD0329AF743E0050169C /* ActionResult.swift in Sources */,
 				040F1DB529336F48008BDC8D /* ControlHandlerType.swift in Sources */,
 				040F1DB029336AAE008BDC8D /* Spherical.swift in Sources */,
@@ -2977,11 +2994,14 @@
 				3E37FCDF29ADCC030050169C /* KinematicCharacterSystem.swift in Sources */,
 				3E37FD0D29B0394A0050169C /* Clipping.swift in Sources */,
 				3E37FD0F29B03D180050169C /* ColorUtility.swift in Sources */,
+				3E37FD1529B04FF80050169C /* Face.swift in Sources */,
 				3E1F12BE29ADB83200F1002E /* ICharacterController.swift in Sources */,
+				3E37FD1329B04F030050169C /* ProBuilderMesh.swift in Sources */,
 				43D8C8847DCDFE5DABA15585 /* WireframePrimitive.swift in Sources */,
 				43D8CB27974E2712F873405E /* WireframeManager.swift in Sources */,
 				43D8C57503BAADE4FE366B56 /* GridMaterial.swift in Sources */,
 				43D8C96F57FDDC6923756F57 /* GridControl.swift in Sources */,
+				3E37FD1929B062C70050169C /* WingedEdge.swift in Sources */,
 				43D8CFBD79ADA533E11655ED /* Bounds2D.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
