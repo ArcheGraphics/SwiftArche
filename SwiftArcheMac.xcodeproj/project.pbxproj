@@ -89,6 +89,8 @@
 		3E37FD0729B0212C0050169C /* BezierPoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E37FD0629B0212C0050169C /* BezierPoint.swift */; };
 		3E37FD0929B023A60050169C /* Edge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E37FD0829B023A60050169C /* Edge.swift */; };
 		3E37FD0B29B027C30050169C /* Rect.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E37FD0A29B027C30050169C /* Rect.swift */; };
+		3E37FD0D29B0394A0050169C /* Clipping.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E37FD0C29B0394A0050169C /* Clipping.swift */; };
+		3E37FD0F29B03D180050169C /* ColorUtility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E37FD0E29B03D180050169C /* ColorUtility.swift */; };
 		3E43DC9B295BDDDC00732AC0 /* physics_helpers.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3E6B23B52946B3E5000AC29F /* physics_helpers.metal */; };
 		3E43DC9C295BDDDC00732AC0 /* sdf_shading.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3E6B23D529499B36000AC29F /* sdf_shading.metal */; };
 		3E43DC9D295BDDDC00732AC0 /* sdf_baker.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3E6B23D2294964B1000AC29F /* sdf_baker.metal */; };
@@ -713,6 +715,8 @@
 		3E37FD0629B0212C0050169C /* BezierPoint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BezierPoint.swift; sourceTree = "<group>"; };
 		3E37FD0829B023A60050169C /* Edge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Edge.swift; sourceTree = "<group>"; };
 		3E37FD0A29B027C30050169C /* Rect.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Rect.swift; sourceTree = "<group>"; };
+		3E37FD0C29B0394A0050169C /* Clipping.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Clipping.swift; sourceTree = "<group>"; };
+		3E37FD0E29B03D180050169C /* ColorUtility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorUtility.swift; sourceTree = "<group>"; };
 		3E6B235B2941BF88000AC29F /* BlendShapeWeightsAnimationCurveOwnerAssembler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlendShapeWeightsAnimationCurveOwnerAssembler.swift; sourceTree = "<group>"; };
 		3E6B235D294220BC000AC29F /* FaceMorphApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FaceMorphApp.swift; sourceTree = "<group>"; };
 		3E6B235F294224C1000AC29F /* FaceGUI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FaceGUI.swift; sourceTree = "<group>"; };
@@ -1519,6 +1523,8 @@
 				3E37FD0629B0212C0050169C /* BezierPoint.swift */,
 				43D8CA210E6FA1B8350D1A97 /* Bounds2D.swift */,
 				3E37FD0829B023A60050169C /* Edge.swift */,
+				3E37FD0C29B0394A0050169C /* Clipping.swift */,
+				3E37FD0E29B03D180050169C /* ColorUtility.swift */,
 			);
 			path = core;
 			sourceTree = "<group>";
@@ -2969,6 +2975,8 @@
 				3E37FCDA29ADC4AC0050169C /* PhysicsMover.swift in Sources */,
 				040F1DCC2933AAF0008BDC8D /* ControlFreePointer.swift in Sources */,
 				3E37FCDF29ADCC030050169C /* KinematicCharacterSystem.swift in Sources */,
+				3E37FD0D29B0394A0050169C /* Clipping.swift in Sources */,
+				3E37FD0F29B03D180050169C /* ColorUtility.swift in Sources */,
 				3E1F12BE29ADB83200F1002E /* ICharacterController.swift in Sources */,
 				43D8C8847DCDFE5DABA15585 /* WireframePrimitive.swift in Sources */,
 				43D8CB27974E2712F873405E /* WireframeManager.swift in Sources */,
