@@ -25,7 +25,7 @@ fileprivate class Attractor: Script {
     private var collider: DynamicCollider!
 
     override func onAwake() {
-        collider = entity.getComponent()
+        collider = entity.getComponent(DynamicCollider.self)
     }
 
     override func onPhysicsUpdate() {
@@ -43,7 +43,7 @@ fileprivate class Interaction: Script {
     var camera: Camera!
 
     override func onAwake() {
-        camera = entity.getComponent()
+        camera = entity.getComponent(Camera.self)
     }
 
     override func onUpdate(_ deltaTime: Float) {
@@ -77,7 +77,7 @@ class PhysXAttractorApp: NSViewController {
         planeEntity.transform.rotationQuaternion = rotation
 
         let physicsPlane = PlaneColliderShape()
-        let planeCollider: StaticCollider = planeEntity.addComponent()
+        let planeCollider = planeEntity.addComponent(StaticCollider.self)
         planeCollider.addShape(physicsPlane)
 
         return planeEntity
@@ -93,7 +93,7 @@ class PhysXAttractorApp: NSViewController {
         mtl.metallic = 0.4;
 
         let sphereEntity = rootEntity.createChild()
-        let renderer: MeshRenderer = sphereEntity.addComponent()
+        let renderer = sphereEntity.addComponent(MeshRenderer.self)
         renderer.mesh = PrimitiveMesh.createSphere(rootEntity.engine, radius: radius, segments: 60)
         renderer.setMaterial(mtl)
         sphereEntity.transform.position = position
@@ -101,11 +101,11 @@ class PhysXAttractorApp: NSViewController {
 
         let physicsSphere = SphereColliderShape()
         physicsSphere.radius = radius
-        let sphereCollider: DynamicCollider = sphereEntity.addComponent()
+        let sphereCollider = sphereEntity.addComponent(DynamicCollider.self)
         sphereCollider.addShape(physicsSphere)
         sphereCollider.linearDamping = 0.95
         sphereCollider.angularDamping = 0.2
-        let _: Attractor = sphereEntity.addComponent()
+        sphereEntity.addComponent(Attractor.self)
         return sphereEntity
     }
 
@@ -153,11 +153,11 @@ class PhysXAttractorApp: NSViewController {
         iblBaker.bake(scene, with: hdr, size: 256, level: 3)
 
         let rootEntity = scene.createRootEntity()
-        let _: GUI = rootEntity.addComponent()
+        rootEntity.addComponent(GUI.self)
 
         // init camera
         let cameraEntity = rootEntity.createChild("camera")
-        let camera: Camera = cameraEntity.addComponent()
+        let camera = cameraEntity.addComponent(Camera.self)
         cameraEntity.transform.position = Vector3(0, 0, -15)
         cameraEntity.transform.lookAt(targetPosition: Vector3())
 
@@ -165,11 +165,11 @@ class PhysXAttractorApp: NSViewController {
         light.transform.position = Vector3(5, 0, -10)
         light.transform.lookAt(targetPosition: Vector3(0, 0, 0))
         light.transform.lookAt(targetPosition: Vector3())
-        let directLight: DirectLight = light.addComponent()
+        let directLight = light.addComponent(DirectLight.self)
         directLight.shadowType = ShadowType.SoftLow
 
         let attractorEntity = rootEntity.createChild()
-        let interaction: Interaction = attractorEntity.addComponent()
+        let interaction = attractorEntity.addComponent(Interaction.self)
         interaction.camera = camera
         // let mtl = PBRMaterial(engine)
         // mtl.baseColor = Color(1, 1, 1, 1.0)
@@ -179,7 +179,7 @@ class PhysXAttractorApp: NSViewController {
 
         let attractorSphere = SphereColliderShape()
         attractorSphere.radius = 2
-        let attractorCollider: DynamicCollider = attractorEntity.addComponent()
+        let attractorCollider = attractorEntity.addComponent(DynamicCollider.self)
         attractorCollider.isKinematic = true
         attractorCollider.addShape(attractorSphere)
 

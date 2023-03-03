@@ -82,7 +82,7 @@ public class SpringJoint: Joint {
 
     override func _onAwake() {
         _collider.localPosition = Vector3()
-        _collider.collider = entity.getComponent()
+        _collider.collider = entity.getComponent(Collider.self)
         _nativeJoint = PhysXPhysics.createSpringJoint(_collider.collider!._nativeCollider)
         _nativeJoint.setName(name)
     }

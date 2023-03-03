@@ -171,7 +171,7 @@ class LoaderGUI: Script {
                     currentAnimationItem = -1
                     
                     entity.addChild(resource.defaultSceneRoot)
-                    let renderers: [Renderer] = resource.defaultSceneRoot.getComponentsIncludeChildren()
+                    let renderers = resource.defaultSceneRoot.getComponentsIncludeChildren(Renderer.self)
                     var bounds = BoundingBox()
                     for renderer in renderers {
                         bounds = BoundingBox.merge(box1: bounds, box2: renderer.bounds)
@@ -180,7 +180,7 @@ class LoaderGUI: Script {
                     resource.defaultSceneRoot.transform.worldPosition = Vector3()
                     resource.defaultSceneRoot.transform.scale *= scale
                     
-                    animator = resource.defaultSceneRoot!.getComponent()
+                    animator = resource.defaultSceneRoot!.getComponent(Animator.self)
                     if let animation = resource.animations {
                         animationName = animation.map { clip in
                             return clip.name

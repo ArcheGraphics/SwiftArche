@@ -244,7 +244,7 @@ public class ScreenSpaceFluid: Script {
     }
     
     required init(_ entity: Entity) {
-        camera = entity.getComponent()!
+        camera = entity.getComponent(Camera.self)!
         thickMtl = ThickMaterial(entity.engine, "ssf-thick")
         depthMtl = DepthMaterial(entity.engine, "ssf-depth")
         depthThickPassDesc = MTLRenderPassDescriptor();
@@ -262,7 +262,7 @@ public class ScreenSpaceFluid: Script {
         restoreNormalPass.shader.append(ShaderPass(entity.engine.library("flex.shader"), "ssf_restoreNormal"))
 
         material = ScreenSpaceFluidMaterial(entity.engine, "ssf")
-        renderer = entity.addComponent()
+        renderer = entity.addComponent(MeshRenderer.self)
         renderer.setMaterial(material)
         renderer.mesh = PrimitiveMesh.createQuadPlane(entity.engine)
         

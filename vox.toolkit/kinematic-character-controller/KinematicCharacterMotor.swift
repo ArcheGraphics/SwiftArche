@@ -485,7 +485,7 @@ public class KinematicCharacterMotor: Script {
 extension KinematicCharacterMotor {
     /// Handle validating all required values
     public func ValidateData() {
-        Capsule = entity.getComponent()
+        Capsule = entity.getComponent(DynamicCollider.self)
         CapsuleRadius = simd_clamp(CapsuleRadius, 0, CapsuleHeight * 0.5)
         if let Capsule = Capsule {
             let shape = Capsule.shapes[0] as! CapsuleColliderShape
@@ -682,7 +682,7 @@ extension KinematicCharacterMotor {
                     for i in 0..<nbOverlaps {
                         if (GetInteractiveRigidbody(onCollider: _internalProbedColliders[i]!) == nil) {
                             // Process overlap
-                            let overlappedTransform: Transform? = _internalProbedColliders[i]!.entity.getComponent()
+                            let overlappedTransform = _internalProbedColliders[i]!.entity.getComponent(vox_render.Transform.self)
                             if engine.physicsManager.computePenetration(shape0: Capsule!.shapes[0],
                                     position0: _transientPosition,
                                     rotation0: _transientRotation,
@@ -878,7 +878,7 @@ extension KinematicCharacterMotor {
                     if (nbOverlaps > 0) {
                         for i in 0..<nbOverlaps {
                             // Process overlap
-                            let overlappedTransform: Transform? = _internalProbedColliders[i]!.entity.getComponent()
+                            let overlappedTransform = _internalProbedColliders[i]!.entity.getComponent(vox_render.Transform.self)
                             if (engine.physicsManager.computePenetration(shape0: Capsule!.shapes[0] as! CapsuleColliderShape,
                                     position0: _transientPosition,
                                     rotation0: _transientRotation,
@@ -1367,7 +1367,7 @@ extension KinematicCharacterMotor {
     private func StoreRigidbodyHit(hitRigidbody: DynamicCollider, hitVelocity: Vector3,
                                    hitPoint: Vector3, obstructionNormal: Vector3, hitStabilityReport: HitStabilityReport) {
         if (_rigidbodyProjectionHitCount < _internalRigidbodyProjectionHits.count) {
-            if let _: KinematicCharacterMotor = hitRigidbody.entity.getComponent() {
+            if hitRigidbody.entity.getComponent(KinematicCharacterMotor.self) != nil {
                 var rph = RigidbodyProjectionHit()
                 rph.Rigidbody = hitRigidbody
                 rph.HitPoint = hitPoint
@@ -1537,7 +1537,7 @@ extension KinematicCharacterMotor {
                     let characterMass = SimulatedCharacterMass
                     let characterVelocity = bodyHit.HitVelocity
 
-                    let hitCharacterMotor: KinematicCharacterMotor? = Rigidbody.entity.getComponent()
+                    let hitCharacterMotor = Rigidbody.entity.getComponent(KinematicCharacterMotor.self)
                     let hitBodyIsDynamic = !Rigidbody.isKinematic
                     var hitBodyMassAtPoint = Rigidbody.mass // todo
                     var hitBodyVelocity = Rigidbody.linearVelocity
@@ -1545,7 +1545,7 @@ extension KinematicCharacterMotor {
                         hitBodyMassAtPoint = hitCharacterMotor.SimulatedCharacterMass // todo
                         hitBodyVelocity = hitCharacterMotor.BaseVelocity
                     } else if (!hitBodyIsDynamic) {
-                        if let physicsMover: PhysicsMover = Rigidbody.entity.getComponent() {
+                        if let physicsMover = Rigidbody.entity.getComponent(PhysicsMover.self) {
                             hitBodyVelocity = physicsMover.Velocity
                         }
                     }
@@ -1925,8 +1925,7 @@ extension KinematicCharacterMotor {
             linearVelocity = interactiveRigidbody.linearVelocity
             angularVelocity = interactiveRigidbody.angularVelocity
             if (interactiveRigidbody.isKinematic) {
-                let physicsMover: PhysicsMover? = interactiveRigidbody.entity.getComponent()
-                if let physicsMover = physicsMover {
+                if let physicsMover = interactiveRigidbody.entity.getComponent(PhysicsMover.self) {
                     linearVelocity = physicsMover.Velocity
                     angularVelocity = physicsMover.AngularVelocity
                 }
@@ -1952,7 +1951,7 @@ extension KinematicCharacterMotor {
     private func GetInteractiveRigidbody(onCollider: Collider) -> DynamicCollider? {
         let colliderAttachedRigidbody = onCollider as? DynamicCollider
         if let colliderAttachedRigidbody = colliderAttachedRigidbody {
-            if let _: PhysicsMover = colliderAttachedRigidbody.entity.getComponent() {
+            if colliderAttachedRigidbody.entity.getComponent(PhysicsMover.self) != nil {
                 return colliderAttachedRigidbody
             }
 

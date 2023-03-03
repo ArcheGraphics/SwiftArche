@@ -84,7 +84,7 @@ class SkyboxApp: NSViewController {
         let scene = engine.sceneManager.activeScene!
         scene.postprocessManager.autoExposure = true
         let rootEntity = scene.createRootEntity()
-         let _: GUI = rootEntity.addComponent()
+        rootEntity.addComponent(GUI.self)
 
         let skyMaterial = SkyBoxMaterial(engine)
         // method1: load cubemap
@@ -111,16 +111,16 @@ class SkyboxApp: NSViewController {
         let cameraEntity = rootEntity.createChild()
         cameraEntity.transform.position = Vector3(1, 1, 1)
         cameraEntity.transform.lookAt(targetPosition: Vector3())
-        let _: Camera = cameraEntity.addComponent()
-        let _: OrbitControl = cameraEntity.addComponent()
+        cameraEntity.addComponent(Camera.self)
+        cameraEntity.addComponent(OrbitControl.self)
 
         let light = rootEntity.createChild("light")
         light.transform.position = Vector3(1, 3, 0)
         light.transform.lookAt(targetPosition: Vector3())
-        let _: DirectLight = light.addComponent()
+        light.addComponent(DirectLight.self)
 
         let cubeEntity = rootEntity.createChild()
-        let renderer: MeshRenderer = cubeEntity.addComponent()
+        let renderer = cubeEntity.addComponent(MeshRenderer.self)
         renderer.mesh = PrimitiveMesh.createCuboid(engine, width: 0.1, height: 0.1, depth: 0.1)
         let material = UnlitMaterial(engine)
         material.baseColor = Color(0.4, 0.0, 0.0)

@@ -14,7 +14,7 @@ fileprivate class Raycast: Script {
     var ray = Ray()
 
     override func onAwake() {
-        camera = entity.getComponent()
+        camera = entity.getComponent(Camera.self)
     }
 
     override func onUpdate(_ deltaTime: Float) {
@@ -29,7 +29,7 @@ fileprivate class Raycast: Script {
                 mtl.metallic = 0.0
                 mtl.roughness = 0.5
                 mtl.isTransparent = true
-                let meshes: [MeshRenderer] = hit.entity!.getComponentsIncludeChildren()
+                let meshes = hit.entity!.getComponentsIncludeChildren(MeshRenderer.self)
                 for mesh in meshes {
                     mesh.setMaterial(mtl)
                 }
@@ -50,7 +50,7 @@ class PhysXConvexComposeApp: NSViewController {
             let entity = resource.defaultSceneRoot!
             rootEntity.addChild(entity)
             
-            let renderers: [MeshRenderer] = entity.getComponentsIncludeChildren()
+            let renderers = entity.getComponentsIncludeChildren(MeshRenderer.self)
             for renderer in renderers {
                 for mtl in renderer.getMaterials() {
                     if let mtl = mtl {
@@ -87,14 +87,14 @@ class PhysXConvexComposeApp: NSViewController {
                 let mtl = UnlitMaterial(engine)
                 mtl.baseColor = Color(Float.random(in: 0..<1), Float.random(in: 0..<1), Float.random(in: 0..<1), 1)
                 let child = entity.createChild()
-                let renderer: MeshRenderer = child.addComponent()
+                let renderer = child.addComponent(MeshRenderer.self)
                 renderer.mesh = mesh
                 renderer.setMaterial(mtl)
                 
                 let colliderShape = MeshColliderShape()
                 colliderShape.isConvex = true
                 colliderShape.cookConvexHull(&convex)
-                let collider: StaticCollider = entity.addComponent()
+                let collider = entity.addComponent(StaticCollider.self)
                 collider.addShape(colliderShape)
                 
                 createDebugWireframe(colliderShape, entity)
@@ -119,13 +119,13 @@ class PhysXConvexComposeApp: NSViewController {
         let cameraEntity = rootEntity.createChild()
         cameraEntity.transform.position = Vector3(2, 2, 2)
         cameraEntity.transform.lookAt(targetPosition: Vector3())
-        let _: Camera = cameraEntity.addComponent()
-        let _: OrbitControl = cameraEntity.addComponent()
+        cameraEntity.addComponent(Camera.self)
+        cameraEntity.addComponent(OrbitControl.self)
 
         let light = rootEntity.createChild("light")
         light.transform.position = Vector3(-0.3, 1, 0.4)
         light.transform.lookAt(targetPosition: Vector3())
-        let _: DirectLight = light.addComponent()
+        light.addComponent(DirectLight.self)
         
         initialize(rootEntity)
 

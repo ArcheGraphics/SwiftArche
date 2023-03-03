@@ -19,7 +19,7 @@ public class Teleporter: Script {
         if (!isBeingTeleportedTo) {
 
             if let TeleportTo = TeleportTo,
-               let cc: ExampleCharacterController = other.collider!.entity.getComponent() {
+               let cc = other.collider!.entity.getComponent(ExampleCharacterController.self) {
                 cc.Motor!.SetPositionAndRotation(TeleportTo.entity.transform.position, TeleportTo.entity.transform.rotationQuaternion)
 
                 if let OnCharacterTeleport = OnCharacterTeleport {

@@ -12,7 +12,7 @@ public final class BlendShapeWeightsAnimationCurveOwnerAssembler<Calculator: IAn
     private var _targetValue: [Float] = []
 
     public override func initialize(owner: AnimationCurveOwner<[Float], Calculator>) {
-        _renderers = owner.target.getComponents()
+        _renderers = owner.target.getComponents(SkinnedMeshRenderer.self)
     }
 
     public override func getTargetValue() -> [Float]? {

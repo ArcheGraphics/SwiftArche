@@ -57,8 +57,8 @@ class IrradianceApp: NSViewController {
         let cameraEntity = rootEntity.createChild()
         cameraEntity.transform.position = Vector3(0, 0, -10)
         cameraEntity.transform.lookAt(targetPosition: Vector3())
-        let _: Camera = cameraEntity.addComponent()
-        let _: OrbitControl = cameraEntity.addComponent()
+        cameraEntity.addComponent(Camera.self)
+        cameraEntity.addComponent(OrbitControl.self)
 
         // Create Sphere
         let sphereEntity = rootEntity.createChild("box")
@@ -66,7 +66,7 @@ class IrradianceApp: NSViewController {
         let sphereMaterial = PBRMaterial(engine)
         sphereMaterial.roughness = 0
         sphereMaterial.metallic = 1
-        let renderer: MeshRenderer = sphereEntity.addComponent()
+        let renderer = sphereEntity.addComponent(MeshRenderer.self)
         renderer.mesh = PrimitiveMesh.createSphere(engine, radius: 1, segments: 64)
         renderer.setMaterial(sphereMaterial)
 
@@ -78,7 +78,7 @@ class IrradianceApp: NSViewController {
             let bakerEntity = rootEntity.createChild("IBL Baker Entity")
             bakerEntity.transform.rotation = Vector3(90, 0, 0)
             let bakerMaterial = BakerMaterial(engine)
-            let bakerRenderer: MeshRenderer = bakerEntity.addComponent()
+            let bakerRenderer = bakerEntity.addComponent(MeshRenderer.self)
             bakerRenderer.mesh = PrimitiveMesh.createPlane(engine, width: 2, height: 2)
             bakerRenderer.setMaterial(bakerMaterial)
             planes.append(bakerEntity)

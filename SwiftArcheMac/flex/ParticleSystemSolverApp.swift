@@ -73,11 +73,11 @@ class ParticleSystemSolverApp: NSViewController {
         gui.maxNumber = Int32(maxNumber)
         
         let particleEntity = rootEntity.createChild()
-        let renderer: MeshRenderer = particleEntity.addComponent()
+        let renderer = particleEntity.addComponent(MeshRenderer.self)
         renderer.mesh = particleMesh
         renderer.setMaterial(particleMtl)
         
-        let particleUpdate: ParticleRendererUpdate = rootEntity.addComponent()
+        let particleUpdate = rootEntity.addComponent(ParticleRendererUpdate.self)
         particleUpdate.gui = gui
         particleUpdate.particleSystem = particleSystem
         particleUpdate.subMesh = subMesh
@@ -90,13 +90,13 @@ class ParticleSystemSolverApp: NSViewController {
         
         let scene = engine.sceneManager.activeScene!
         let rootEntity = scene.createRootEntity()
-        let gui: GUI = rootEntity.addComponent()
+        let gui = rootEntity.addComponent(GUI.self)
 
         let cameraEntity = rootEntity.createChild()
         cameraEntity.transform.position = Vector3(1, 1, 1)
         cameraEntity.transform.lookAt(targetPosition: Vector3())
-        let _: Camera = cameraEntity.addComponent()
-        let _: OrbitControl = cameraEntity.addComponent()
+        cameraEntity.addComponent(Camera.self)
+        cameraEntity.addComponent(OrbitControl.self)
                 
         let emitter = PointParticleEmitter(engine)
         emitter.origin = Vector3F()
@@ -111,12 +111,12 @@ class ParticleSystemSolverApp: NSViewController {
         // raymarching render
         let rayMarchignMaterial = RayMarchingMaterial(engine, "raymarching")
         rayMarchignMaterial.capsuleColliderShapes = collider
-        let renderer: MeshRenderer = rootEntity.addComponent()
+        let renderer = rootEntity.addComponent(MeshRenderer.self)
         renderer.setMaterial(rayMarchignMaterial)
         renderer.mesh = PrimitiveMesh.createQuadPlane(engine)
         
         let particleEntity = rootEntity.createChild()
-        let particleSolver: ParticleSystemSolver = particleEntity.addComponent()
+        let particleSolver = particleEntity.addComponent(ParticleSystemSolver.self)
         particleSolver.emitter = emitter
         particleSolver.collider = collider
         particleSolver.gravity = Vector3F(0, -1, 0)

@@ -78,13 +78,13 @@ class ScreenSpaceFluidApp: NSViewController {
         let scene = engine.sceneManager.activeScene!
         loadHDR(scene)
         let rootEntity = scene.createRootEntity()
-        let gui: GUI = rootEntity.addComponent()
+        let gui = rootEntity.addComponent(GUI.self)
 
         let cameraEntity = rootEntity.createChild()
         cameraEntity.transform.position = Vector3(2, 2, 2)
         cameraEntity.transform.lookAt(targetPosition: Vector3())
-        let _: Camera = cameraEntity.addComponent()
-        let _: OrbitControl = cameraEntity.addComponent()
+        cameraEntity.addComponent(Camera.self)
+        cameraEntity.addComponent(OrbitControl.self)
         
         let particleSystem = ParticleSystemData(engine, maxLength: 10000)
         
@@ -105,7 +105,7 @@ class ScreenSpaceFluidApp: NSViewController {
             commandBuffer.waitUntilCompleted()
         }
         
-        let ssf: ScreenSpaceFluid = cameraEntity.addComponent()
+        let ssf = cameraEntity.addComponent(ScreenSpaceFluid.self)
         ssf.particleSystem = particleSystem
         gui.ssf = ssf
         

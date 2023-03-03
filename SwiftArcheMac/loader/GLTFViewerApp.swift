@@ -30,18 +30,18 @@ class GltfViewerApp: NSViewController {
         let cameraEntity = rootEntity.createChild()
         cameraEntity.transform.position = Vector3(3, 2, 3)
         cameraEntity.transform.lookAt(targetPosition: Vector3())
-        let camera: Camera = cameraEntity.addComponent()
-        let _: OrbitControl = cameraEntity.addComponent()
+        let camera = cameraEntity.addComponent(Camera.self)
+        cameraEntity.addComponent(OrbitControl.self)
 
         let light = rootEntity.createChild("light")
         light.transform.position = Vector3(0.1, 5, 0.1)
         light.transform.lookAt(targetPosition: Vector3())
-        let directLight: DirectLight = light.addComponent()
+        let directLight = light.addComponent(DirectLight.self)
         directLight.shadowType = .SoftLow
         
         let planeEntity = rootEntity.createChild()
         planeEntity.transform.position = Vector3(0, -1, 0)
-        let shadowPlane: MeshRenderer = planeEntity.addComponent()
+        let shadowPlane = planeEntity.addComponent(MeshRenderer.self)
         shadowPlane.mesh = PrimitiveMesh.createPlane(engine, width: 10, height: 10)
         let shadowMtl = PBRMaterial(engine)
         shadowMtl.baseColor = Color(0.6, 0.6, 0.6, 1.0)
@@ -52,7 +52,7 @@ class GltfViewerApp: NSViewController {
         shadowPlane.castShadows = false
         
         let gltfRoot = rootEntity.createChild()
-        let gui: LoaderGUI = gltfRoot.addComponent()
+        let gui = gltfRoot.addComponent(LoaderGUI.self)
         gui.loaderItem = 8
         gui.camera = camera
         engine.run()

@@ -14,7 +14,7 @@ fileprivate class Raycast: Script {
     var ray = Ray()
 
     override func onAwake() {
-        camera = entity.getComponent()
+        camera = entity.getComponent(Camera.self)
     }
 
     override func onUpdate(_ deltaTime: Float) {
@@ -29,7 +29,7 @@ fileprivate class Raycast: Script {
                 mtl.metallic = 0.0
                 mtl.roughness = 0.5
                 mtl.isTransparent = true
-                let meshes: [MeshRenderer] = hit.entity!.getComponentsIncludeChildren()
+                let meshes = hit.entity!.getComponentsIncludeChildren(MeshRenderer.self)
                 for mesh in meshes {
                     mesh.setMaterial(mtl)
                 }
@@ -51,7 +51,7 @@ class PhysXMeshColliderApp: NSViewController {
         mtl.roughness = 0.5
         mtl.isTransparent = true
         let capsuleEntity = rootEntity.createChild()
-        let renderer: MeshRenderer = capsuleEntity.addComponent()
+        let renderer = capsuleEntity.addComponent(MeshRenderer.self)
         renderer.mesh = PrimitiveMesh.createCapsule(rootEntity.engine, radius: radius, height: height,
                                                     radialSegments: 20)
         renderer.setMaterial(mtl)
@@ -62,7 +62,7 @@ class PhysXMeshColliderApp: NSViewController {
         physicsCapsule.isConvex = true
         physicsCapsule.mesh = PrimitiveMesh.createCapsule(rootEntity.engine, radius: radius, height: height,
                                                           radialSegments: 6, heightSegments: 1, noLongerAccessible: false)
-        let capsuleCollider: DynamicCollider = capsuleEntity.addComponent()
+        let capsuleCollider = capsuleEntity.addComponent(DynamicCollider.self)
         capsuleCollider.addShape(physicsCapsule)
         
         createDebugWireframe(physicsCapsule, capsuleEntity)
@@ -78,7 +78,7 @@ class PhysXMeshColliderApp: NSViewController {
         mtl.roughness = 0.5
         mtl.isTransparent = true
         let boxEntity = rootEntity.createChild()
-        let renderer: MeshRenderer = boxEntity.addComponent()
+        let renderer = boxEntity.addComponent(MeshRenderer.self)
         renderer.mesh = PrimitiveMesh.createCuboid(
                 rootEntity.engine,
                 width: size.x,
@@ -97,7 +97,7 @@ class PhysXMeshColliderApp: NSViewController {
             height: size.y,
             depth: size.z, noLongerAccessible: false
         )
-        let boxCollider: DynamicCollider = boxEntity.addComponent()
+        let boxCollider = boxEntity.addComponent(DynamicCollider.self)
         boxCollider.addShape(physicsBox)
         
         createDebugWireframe(physicsBox, boxEntity)
@@ -145,15 +145,15 @@ class PhysXMeshColliderApp: NSViewController {
         let cameraEntity = rootEntity.createChild()
         cameraEntity.transform.position = Vector3(15, 15, 15)
         cameraEntity.transform.lookAt(targetPosition: Vector3())
-        let camera: Camera = cameraEntity.addComponent()
+        let camera = cameraEntity.addComponent(Camera.self)
         camera.farClipPlane = 1000;
-        let _: OrbitControl = cameraEntity.addComponent()
-        let _: Raycast = cameraEntity.addComponent()
+        cameraEntity.addComponent(OrbitControl.self)
+        cameraEntity.addComponent(Raycast.self)
 
         let light = rootEntity.createChild("light")
         light.transform.position = Vector3(-0.3, 1, 0.4)
         light.transform.lookAt(targetPosition: Vector3())
-        let _: DirectLight = light.addComponent()
+        light.addComponent(DirectLight.self)
         
         initialize(rootEntity)
 

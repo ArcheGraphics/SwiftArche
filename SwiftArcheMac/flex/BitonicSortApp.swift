@@ -25,7 +25,7 @@ class BitonicSortApp: NSViewController {
         let cameraEntity = rootEntity.createChild()
         cameraEntity.transform.position = Vector3(5, 5, 5)
         cameraEntity.transform.lookAt(targetPosition: Vector3())
-        let _: Camera = cameraEntity.addComponent()
+        cameraEntity.addComponent(Camera.self)
         
         let count: UInt = 10000
         var sortArray: [SIMD2<Float>] = []

@@ -122,7 +122,7 @@ public class HingeJoint: Joint {
 
     override func _onAwake() {
         _collider.localPosition = Vector3()
-        _collider.collider = entity.getComponent()
+        _collider.collider = entity.getComponent(Collider.self)
         _nativeJoint = PhysXPhysics.createHingeJoint(_collider.collider!._nativeCollider)
         _nativeJoint.setName(name)
     }

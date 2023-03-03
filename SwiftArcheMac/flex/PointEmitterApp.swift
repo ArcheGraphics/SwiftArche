@@ -59,7 +59,7 @@ class PointEmitterApp: NSViewController {
         gui.maxNumber = Int32(maxNumber)
         
         let particleEntity = rootEntity.createChild()
-        let renderer: MeshRenderer = particleEntity.addComponent()
+        let renderer = particleEntity.addComponent(MeshRenderer.self)
         renderer.mesh = particleMesh
         renderer.setMaterial(particleMtl)
     }
@@ -71,13 +71,13 @@ class PointEmitterApp: NSViewController {
         
         let scene = engine.sceneManager.activeScene!
         let rootEntity = scene.createRootEntity()
-        let gui: GUI = rootEntity.addComponent()
+        let gui = rootEntity.addComponent(GUI.self)
 
         let cameraEntity = rootEntity.createChild()
         cameraEntity.transform.position = Vector3(1, 1, 1)
         cameraEntity.transform.lookAt(targetPosition: Vector3())
-        let _: Camera = cameraEntity.addComponent()
-        let _: OrbitControl = cameraEntity.addComponent()
+        cameraEntity.addComponent(Camera.self)
+        cameraEntity.addComponent(OrbitControl.self)
         
         let particleSystem = ParticleSystemData(engine, maxLength: 10000)
         

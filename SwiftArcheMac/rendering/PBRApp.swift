@@ -56,8 +56,8 @@ class PbrApp: NSViewController {
         let cameraEntity = rootEntity.createChild()
         cameraEntity.transform.position = Vector3(0, 0, 10)
         cameraEntity.transform.lookAt(targetPosition: Vector3())
-        let _: Camera = cameraEntity.addComponent()
-        let _: OrbitControl = cameraEntity.addComponent()
+        cameraEntity.addComponent(Camera.self)
+        cameraEntity.addComponent(OrbitControl.self)
 
         let materialIndex = 0
         let mat = _materials[materialIndex]
@@ -66,7 +66,7 @@ class PbrApp: NSViewController {
         let light = rootEntity.createChild("light")
         light.transform.position = Vector3(3, 3, 3)
         light.transform.lookAt(targetPosition: Vector3(0, 0, 0))
-        let directionLight: DirectLight = light.addComponent()
+        let directionLight = light.addComponent(DirectLight.self)
         directionLight.intensity = 0.3
 
         let sphere = PrimitiveMesh.createSphere(engine, radius: 0.5, segments: 30)
@@ -79,7 +79,7 @@ class PbrApp: NSViewController {
                 sphereMtl.metallic = simd_clamp(Float(i) / Float(7 - 1), 0, 1.0)
                 sphereMtl.roughness = simd_clamp(Float(j) / Float(7 - 1), 0, 1.0)
 
-                let sphereRenderer: MeshRenderer = sphereEntity.addComponent()
+                let sphereRenderer = sphereEntity.addComponent(MeshRenderer.self)
                 sphereRenderer.mesh = sphere
                 sphereRenderer.setMaterial(sphereMtl)
             }

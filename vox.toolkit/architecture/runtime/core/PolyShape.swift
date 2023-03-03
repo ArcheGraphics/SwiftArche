@@ -66,7 +66,7 @@ public final class PolyShape: Script {
     internal var mesh: ProBuilderMesh? {
         get {
             if (m_Mesh == nil) {
-                m_Mesh = entity.getComponent()
+                m_Mesh = entity.getComponent(ProBuilderMesh.self)
             }
 
             return m_Mesh

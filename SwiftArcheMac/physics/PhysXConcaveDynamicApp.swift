@@ -23,7 +23,7 @@ fileprivate class CupPrefab: Script {
             let entity = resource.defaultSceneRoot!
             mesh = resource.meshes![0][0]
             
-            let renderers: [MeshRenderer] = entity.getComponentsIncludeChildren()
+            let renderers = entity.getComponentsIncludeChildren(MeshRenderer.self)
             for renderer in renderers {
                 for mtl in renderer.getMaterials() {
                     if let mtl = mtl {
@@ -44,7 +44,7 @@ fileprivate class CupPrefab: Script {
     
     func visualDebug() {
         if isLoaded {
-            let collider: StaticCollider = entity.addComponent()
+            let collider = entity.addComponent(StaticCollider.self)
             for var convex in convexs {
                 var indices: [UInt32] = []
                 indices.reserveCapacity(convex.triangles.count * 3)
@@ -66,7 +66,7 @@ fileprivate class CupPrefab: Script {
                 let mtl = UnlitMaterial(engine)
                 mtl.baseColor = Color(Float.random(in: 0..<1), Float.random(in: 0..<1), Float.random(in: 0..<1), 1)
                 let child = entity.createChild()
-                let renderer: MeshRenderer = child.addComponent()
+                let renderer = child.addComponent(MeshRenderer.self)
                 renderer.mesh = mesh
                 renderer.setMaterial(mtl)
                 
@@ -93,11 +93,11 @@ fileprivate class CupPrefab: Script {
             mtl.baseColor = Color(Float.random(in: 0..<1), Float.random(in: 0..<1), Float.random(in: 0..<1), 1)
             mtl.roughness = 0.5
             mtl.metallic = 0.5
-            let renderer: MeshRenderer = child.addComponent()
+            let renderer = child.addComponent(MeshRenderer.self)
             renderer.mesh = mesh
             renderer.setMaterial(mtl)
             
-            let collider: DynamicCollider = child.addComponent()
+            let collider = child.addComponent(DynamicCollider.self)
             for var convex in convexs {
                 let colliderShape = MeshColliderShape()
                 colliderShape.isConvex = true
@@ -135,18 +135,18 @@ class PhysXConcaveDynamicApp: NSViewController {
         iblBaker.bake(scene, with: hdr, size: 256, level: 3)
 
         let rootEntity = scene.createRootEntity()
-        prefab = rootEntity.addComponent()
+        prefab = rootEntity.addComponent(CupPrefab.self)
 
         let cameraEntity = rootEntity.createChild()
         cameraEntity.transform.position = Vector3(10, 10, 10)
         cameraEntity.transform.lookAt(targetPosition: Vector3())
-        let _: Camera = cameraEntity.addComponent()
-        let _: OrbitControl = cameraEntity.addComponent()
+        cameraEntity.addComponent(Camera.self)
+        cameraEntity.addComponent(OrbitControl.self)
         
         let light = rootEntity.createChild("light")
         light.transform.position = Vector3(-0.3, 1, 0.4)
         light.transform.lookAt(targetPosition: Vector3())
-        let _: DirectLight = light.addComponent()
+        light.addComponent(DirectLight.self)
         
         _ = addPlane(rootEntity, Vector3(30, 0.0, 30), Vector3(), Quaternion())
                 

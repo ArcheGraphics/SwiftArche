@@ -29,22 +29,22 @@ class FaceMorphApp: NSViewController {
         let cameraEntity = rootEntity.createChild()
         cameraEntity.transform.position = Vector3(0, 1, 6)
         cameraEntity.transform.lookAt(targetPosition: Vector3())
-        let _: Camera = cameraEntity.addComponent()
-        let control: OrbitControl = cameraEntity.addComponent()
+        cameraEntity.addComponent(Camera.self)
+        let control = cameraEntity.addComponent(OrbitControl.self)
         control.target = Vector3(0, 1, 0)
         
         let light = rootEntity.createChild("light")
         light.transform.position = Vector3(0.1, 5, 0.1)
         light.transform.lookAt(targetPosition: Vector3())
-        let _: DirectLight = light.addComponent()
+        light.addComponent(DirectLight.self)
 
         let gltfRoot = rootEntity.createChild()
         let assetURL = Bundle.main.url(forResource: "arkit52", withExtension: "glb", subdirectory: "assets")!
         GLTFLoader.parse(engine, assetURL) { [] resource in
-            let faceGUI: FaceGUI = gltfRoot.addComponent()
+            let faceGUI = gltfRoot.addComponent(FaceGUI.self)
             gltfRoot.addChild(resource.defaultSceneRoot)
             
-            let skinRenderers: [SkinnedMeshRenderer] = gltfRoot.getComponentsIncludeChildren()
+            let skinRenderers = gltfRoot.getComponentsIncludeChildren(SkinnedMeshRenderer.self)
             for renderer in skinRenderers {
                 if !renderer.blendShapeWeights.isEmpty {
                     faceGUI.morphRenderer = renderer

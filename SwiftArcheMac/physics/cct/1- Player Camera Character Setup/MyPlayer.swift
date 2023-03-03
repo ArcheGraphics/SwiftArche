@@ -20,7 +20,7 @@ class MyPlayer: Script {
             // Tell camera to follow transform
             OrbitCamera.SetFollowTransform(CameraFollowPoint!);
             // Ignore the character's collider(s) for camera obstruction checks
-            OrbitCamera.IgnoredColliders = Character!.entity.getComponentsIncludeChildren()
+            OrbitCamera.IgnoredColliders = Character!.entity.getComponentsIncludeChildren(Collider.self)
         }
     }
 }

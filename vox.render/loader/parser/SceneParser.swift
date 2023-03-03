@@ -48,7 +48,7 @@ class SceneParser: Parser {
     }
 
     private func _createCamera(_ context: GLTFResource, _ cameraSchema: GLTFCamera, _ entity: Entity) {
-        let camera: Camera = entity.addComponent()
+        let camera = entity.addComponent(Camera.self)
         camera.farClipPlane = cameraSchema.zFar
         camera.nearClipPlane = cameraSchema.zNear
 
@@ -83,7 +83,7 @@ class SceneParser: Parser {
 
             if (skin != nil || blendShapeWeights != nil) {
                 context.hasSkinned = true
-                let skinRenderer: SkinnedMeshRenderer = entity.addComponent()
+                let skinRenderer = entity.addComponent(SkinnedMeshRenderer.self)
                 skinRenderer.mesh = mesh
                 if let skin = skin {
                     skinRenderer.skin = glTFResource.skins![skin.index]
@@ -95,7 +95,7 @@ class SceneParser: Parser {
                 }
                 renderer = skinRenderer
             } else {
-                renderer = entity.addComponent()
+                renderer = entity.addComponent(MeshRenderer.self)
                 renderer.mesh = mesh
             }
 
@@ -113,7 +113,7 @@ class SceneParser: Parser {
         }
 
         let defaultSceneRoot = context.glTFResource.defaultSceneRoot!
-        let animator: Animator = defaultSceneRoot.addComponent()
+        let animator = defaultSceneRoot.addComponent(Animator.self)
         let animatorController = AnimatorController()
         let layer = AnimatorControllerLayer("layer")
         let animatorStateMachine = AnimatorStateMachine()

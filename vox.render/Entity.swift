@@ -24,7 +24,7 @@ public final class Entity: EngineObject {
         set {
             if _layer != newValue {
                 _layer = newValue
-                let colliders: [Collider] = getComponents()
+                let colliders = getComponents(Collider.self)
                 for col in colliders {
                     col.setGroup(UInt16(_layer.rawValue.nonzeroBitCount))
                 }
@@ -52,7 +52,7 @@ public final class Entity: EngineObject {
         self.name = name
         super.init(engine)
 
-        transform = addComponent()
+        transform = addComponent(Transform.self)
         _inverseWorldMatFlag = transform.registerWorldChangeFlag()
     }
 
@@ -150,7 +150,8 @@ public final class Entity: EngineObject {
 
     /// Add component based on the component type.
     /// - Returns: The component which has been added.
-    public func addComponent<T: Component>() -> T {
+    @discardableResult
+    public func addComponent<T: Component>(_ type: T.Type) -> T {
         //todo ComponentsDependencies._addCheck(this, type)
         let component = T(self)
         _components.append(component)
@@ -162,7 +163,7 @@ public final class Entity: EngineObject {
 
     /// Get component which match the type.
     /// - Returns: The first component which match type.
-    public func getComponent<T: Component>() -> T? {
+    public func getComponent<T: Component>(_ type: T.Type) -> T? {
         for i in 0..<_components.count {
             let component = _components[i]
             if (component is T) {
@@ -175,7 +176,7 @@ public final class Entity: EngineObject {
     /// Get components which match the type.
     /// - Parameter results: The components which match type.
     /// - Returns: The components which match type.
-    public func getComponents<T: Component>() -> [T] {
+    public func getComponents<T: Component>(_ type: T.Type) -> [T] {
         var results: [T] = []
         for i in 0..<_components.count {
             let component = _components[i]
@@ -189,7 +190,7 @@ public final class Entity: EngineObject {
     /// Get the components which match the type of the entity and it's children.
     /// - Parameter results: The components collection.
     /// - Returns:  The components collection which match the type.
-    public func getComponentsIncludeChildren<T: Component>() -> [T] {
+    public func getComponentsIncludeChildren<T: Component>(_ type: T.Type) -> [T] {
         var results: [T] = []
         _getComponentsInChildren(&results)
         return results

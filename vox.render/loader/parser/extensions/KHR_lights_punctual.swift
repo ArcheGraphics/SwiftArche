@@ -11,16 +11,15 @@ class KHR_lights_punctual {
         let light: Light
         switch schema.type {
         case .directional:
-            let l: DirectLight = entity.addComponent()
-            light = l
+            light = entity.addComponent(DirectLight.self)
             break
         case .point:
-            let l: PointLight = entity.addComponent()
+            let l = entity.addComponent(PointLight.self)
             l.distance = schema.range
             light = l
             break
         case .spot:
-            let l: SpotLight = entity.addComponent()
+            let l = entity.addComponent(SpotLight.self)
             l.distance = schema.range
             l.angle = schema.innerConeAngle
             l.penumbra = schema.outerConeAngle - schema.innerConeAngle

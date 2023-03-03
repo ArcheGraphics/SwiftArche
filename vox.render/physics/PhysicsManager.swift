@@ -124,14 +124,14 @@ public class PhysicsManager {
                     let shape1 = self._physicalObjectsMap[obj1]
                     let shape2 = self._physicalObjectsMap[obj2]
 
-                    var joints: [Joint] = shape1!.collider!.entity.getComponents()
+                    var joints = shape1!.collider!.entity.getComponents(Joint.self)
                     for i in 0..<joints.count {
                         if joints[i].name == name {
                             joints[i].destroy()
                         }
                     }
 
-                    joints = shape2!.collider!.entity.getComponents()
+                    joints = shape2!.collider!.entity.getComponents(Joint.self)
                     for i in 0..<joints.count {
                         if joints[i].name == name {
                             joints[i].destroy()

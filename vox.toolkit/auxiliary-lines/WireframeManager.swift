@@ -57,50 +57,45 @@ public class WireframeManager: Script {
     ///   - includeChildren: Whether include child entity(default is true)
     public func addEntityWireframe(with entity: Entity, includeChildren: Bool = true) {
         if (includeChildren) {
-            let cameras: [Camera] = entity.getComponentsIncludeChildren()
+            let cameras = entity.getComponentsIncludeChildren(Camera.self)
             for camera in cameras {
                 addCameraWireframe(with: camera)
             }
 
-            let spotLights: [SpotLight] = entity.getComponentsIncludeChildren()
+            let spotLights = entity.getComponentsIncludeChildren(SpotLight.self)
             for spotLight in spotLights {
                 addSpotLightWireframe(with: spotLight)
             }
 
-            let directLights: [DirectLight] = entity.getComponentsIncludeChildren()
+            let directLights = entity.getComponentsIncludeChildren(DirectLight.self)
             for directLight in directLights {
                 addDirectLightWireframe(with: directLight)
             }
 
-            let pointLights: [PointLight] = entity.getComponentsIncludeChildren()
+            let pointLights = entity.getComponentsIncludeChildren(PointLight.self)
             for pointLight in pointLights {
                 addPointLightWireframe(with: pointLight)
             }
 
-            let colliders: [Collider] = entity.getComponentsIncludeChildren()
+            let colliders = entity.getComponentsIncludeChildren(Collider.self)
             for collider in colliders {
                 addCollideWireframe(with: collider)
             }
         } else {
-            let camera: Camera? = entity.getComponent()
-            if camera != nil {
-                addCameraWireframe(with: camera!)
+            if let camera = entity.getComponent(Camera.self) {
+                addCameraWireframe(with: camera)
             }
-            let spotLight: SpotLight? = entity.getComponent()
-            if spotLight != nil {
-                addSpotLightWireframe(with: spotLight!)
+            if let spotLight = entity.getComponent(SpotLight.self) {
+                addSpotLightWireframe(with: spotLight)
             }
-            let directLight: DirectLight? = entity.getComponent()
-            if directLight != nil {
-                addDirectLightWireframe(with: directLight!)
+            if let directLight = entity.getComponent(DirectLight.self) {
+                addDirectLightWireframe(with: directLight)
             }
-            let pointLight: PointLight? = entity.getComponent()
-            if pointLight != nil {
-                addPointLightWireframe(with: pointLight!)
+            if let pointLight = entity.getComponent(PointLight.self) {
+                addPointLightWireframe(with: pointLight)
             }
-            let collider: Collider? = entity.getComponent()
-            if collider != nil {
-                addCollideWireframe(with: collider!)
+            if let collider = entity.getComponent(Collider.self) {
+                addCollideWireframe(with: collider)
             }
         }
     }
@@ -358,7 +353,7 @@ public class WireframeManager: Script {
     public override func onAwake() {
         let mesh = ModelMesh(engine)
         let material = UnlitMaterial(engine)
-        let renderer: MeshRenderer = entity.addComponent()
+        let renderer = entity.addComponent(MeshRenderer.self)
 
         _ = mesh.addSubMesh(0, _indicesCount, MTLPrimitiveType.line)
         renderer.mesh = mesh

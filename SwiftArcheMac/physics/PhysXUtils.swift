@@ -16,7 +16,7 @@ func addSphere(_ rootEntity: Entity, _ radius: Float,
     mtl.metallic = 0.0
     mtl.roughness = 0.5
     let sphereEntity = rootEntity.createChild()
-    let renderer: MeshRenderer = sphereEntity.addComponent()
+    let renderer = sphereEntity.addComponent(MeshRenderer.self)
     renderer.mesh = PrimitiveMesh.createSphere(rootEntity.engine, radius: radius)
     renderer.setMaterial(mtl)
     sphereEntity.transform.position = position
@@ -24,7 +24,7 @@ func addSphere(_ rootEntity: Entity, _ radius: Float,
 
     let physicsSphere = SphereColliderShape()
     physicsSphere.radius = radius
-    let sphereCollider: DynamicCollider = sphereEntity.addComponent()
+    let sphereCollider = sphereEntity.addComponent(DynamicCollider.self)
     sphereCollider.addShape(physicsSphere)
 
     return sphereEntity
@@ -37,7 +37,7 @@ func addCapsule(_ rootEntity: Entity, _ radius: Float, _ height: Float,
     mtl.metallic = 0.0
     mtl.roughness = 0.5
     let capsuleEntity = rootEntity.createChild()
-    let renderer: MeshRenderer = capsuleEntity.addComponent()
+    let renderer = capsuleEntity.addComponent(MeshRenderer.self)
     renderer.mesh = PrimitiveMesh.createCapsule(rootEntity.engine, radius: radius, height: height, radialSegments: 20)
     renderer.setMaterial(mtl)
     capsuleEntity.transform.position = position
@@ -46,7 +46,7 @@ func addCapsule(_ rootEntity: Entity, _ radius: Float, _ height: Float,
     let physicsCapsule = CapsuleColliderShape()
     physicsCapsule.radius = radius
     physicsCapsule.height = height
-    let capsuleCollider: DynamicCollider = capsuleEntity.addComponent()
+    let capsuleCollider = capsuleEntity.addComponent(DynamicCollider.self)
     capsuleCollider.addShape(physicsCapsule)
 
     return capsuleEntity
@@ -59,7 +59,7 @@ func addBox(_ rootEntity: Entity, _ size: Vector3,
     mtl.metallic = 0.0
     mtl.roughness = 0.5
     let boxEntity = rootEntity.createChild()
-    let renderer: MeshRenderer = boxEntity.addComponent()
+    let renderer = boxEntity.addComponent(MeshRenderer.self)
     renderer.mesh = PrimitiveMesh.createCuboid(
             rootEntity.engine,
             width: size.x,
@@ -74,10 +74,10 @@ func addBox(_ rootEntity: Entity, _ size: Vector3,
     physicsBox.size = size
     physicsBox.isTrigger = false
     if isDynamic {
-        let boxCollider: DynamicCollider = boxEntity.addComponent()
+        let boxCollider = boxEntity.addComponent(DynamicCollider.self)
         boxCollider.addShape(physicsBox)
     } else {
-        let boxCollider: StaticCollider = boxEntity.addComponent()
+        let boxCollider = boxEntity.addComponent(StaticCollider.self)
         boxCollider.addShape(physicsBox)
     }
 
@@ -98,7 +98,7 @@ func addPlane(_ rootEntity: Entity, _ size: Vector3,
     let planeEntity = rootEntity.createChild()
     planeEntity.layer = Layer.Layer1
 
-    let renderer: MeshRenderer = planeEntity.addComponent()
+    let renderer = planeEntity.addComponent(MeshRenderer.self)
     renderer.mesh = PrimitiveMesh.createCuboid(
             rootEntity.engine,
             width: size.x,
@@ -112,7 +112,7 @@ func addPlane(_ rootEntity: Entity, _ size: Vector3,
     let physicsPlane = PlaneColliderShape()
     physicsPlane.position = Vector3(0, size.y, 0)
     physicsPlane.isSceneQuery = false;
-    let planeCollider: StaticCollider = planeEntity.addComponent()
+    let planeCollider = planeEntity.addComponent(StaticCollider.self)
     planeCollider.addShape(physicsPlane)
 
     return planeEntity
@@ -129,7 +129,7 @@ func createDebugWireframe(_ shape: MeshColliderShape, _ entity: Entity) {
     mesh.uploadData(true)
     
     let mtl = UnlitMaterial(entity.engine)
-    let renderer: MeshRenderer = entity.addComponent()
+    let renderer = entity.addComponent(MeshRenderer.self)
     renderer.setMaterial(mtl)
     renderer.mesh = mesh
 }
@@ -143,7 +143,7 @@ func addDuckMesh(_ rootEntity: Entity) {
         let colliderShape = MeshColliderShape()
 //        colliderShape.isConvex = true
         colliderShape.mesh = resource.meshes![0][0]
-        let collider: StaticCollider = entity.addComponent()
+        let collider = entity.addComponent(StaticCollider.self)
         collider.addShape(colliderShape)
         
         createDebugWireframe(colliderShape, entity)

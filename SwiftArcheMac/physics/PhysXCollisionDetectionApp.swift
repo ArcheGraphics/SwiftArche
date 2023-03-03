@@ -13,7 +13,7 @@ fileprivate class CollisionScript: Script {
     private var sphereRenderer: MeshRenderer!
 
     override func onAwake() {
-        sphereRenderer = entity.getComponent()
+        sphereRenderer = entity.getComponent(MeshRenderer.self)
     }
 
     override func onTriggerEnter(_ other: ColliderShape) {
@@ -63,20 +63,20 @@ class PhysXCollisionDetectionApp: NSViewController {
         let cameraEntity = rootEntity.createChild()
         cameraEntity.transform.position = Vector3(10, 10, 10)
         cameraEntity.transform.lookAt(targetPosition: Vector3())
-        let _: Camera = cameraEntity.addComponent()
-        let _: OrbitControl = cameraEntity.addComponent()
+        cameraEntity.addComponent(Camera.self)
+        cameraEntity.addComponent(OrbitControl.self)
 
         let light = rootEntity.createChild("light")
         light.transform.position = Vector3(1, 3, 0)
         light.transform.lookAt(targetPosition: Vector3())
-        let _: DirectLight = light.addComponent()
+        light.addComponent(DirectLight.self)
 
         // create box test entity
         let cubeSize: Float = 2.0
         let boxEntity = rootEntity.createChild("BoxEntity")
 
         let boxMtl = PBRMaterial(engine)
-        let boxRenderer: MeshRenderer = boxEntity.addComponent()
+        let boxRenderer = boxEntity.addComponent(MeshRenderer.self)
         boxMtl.baseColor = Color(0.6, 0.3, 0.3, 1.0)
         boxMtl.metallic = 0.0
         boxMtl.roughness = 0.5
@@ -90,7 +90,7 @@ class PhysXCollisionDetectionApp: NSViewController {
         physicsBox.material.bounciness = 1
         physicsBox.isTrigger = true
 
-        let boxCollider: StaticCollider = boxEntity.addComponent()
+        let boxCollider = boxEntity.addComponent(StaticCollider.self)
         boxCollider.addShape(physicsBox)
 
         // create sphere test entity
@@ -99,7 +99,7 @@ class PhysXCollisionDetectionApp: NSViewController {
         sphereEntity.transform.position = Vector3(-2, 0, 0)
 
         let sphereMtl = PBRMaterial(engine)
-        let sphereRenderer: MeshRenderer = sphereEntity.addComponent()
+        let sphereRenderer = sphereEntity.addComponent(MeshRenderer.self)
         sphereMtl.baseColor = Color(Float.random(in: 0..<1), Float.random(in: 0..<1), Float.random(in: 0..<1), 1.0)
         sphereMtl.metallic = 0.0
         sphereMtl.roughness = 0.5
@@ -113,12 +113,12 @@ class PhysXCollisionDetectionApp: NSViewController {
         physicsSphere.material.bounciness = 1
         // sphereEntity.transform.setScale(3,3,3)
 
-        let sphereCollider: DynamicCollider = sphereEntity.addComponent()
+        let sphereCollider = sphereEntity.addComponent(DynamicCollider.self)
         sphereCollider.isKinematic = true
         sphereCollider.addShape(physicsSphere)
 
-        let _: CollisionScript = sphereEntity.addComponent()
-        let _: MoveScript = sphereEntity.addComponent()
+        sphereEntity.addComponent(CollisionScript.self)
+        sphereEntity.addComponent(MoveScript.self)
 
         engine.run()
     }

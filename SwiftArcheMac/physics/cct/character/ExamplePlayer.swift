@@ -22,7 +22,7 @@ public class ExamplePlayer: Script {
            let Motor = Character.Motor {
             // Handle rotating the camera along with physics movers
             if (CharacterCamera.RotateWithPhysicsMover && Motor.AttachedRigidbody != nil) {
-                let mover: PhysicsMover? = Motor.AttachedRigidbody!.entity.getComponent()
+                let mover = Motor.AttachedRigidbody!.entity.getComponent(PhysicsMover.self)
                 CharacterCamera.PlanarDirection = Vector3.transformByQuat(v: CharacterCamera.PlanarDirection,
                         quaternion: mover!.RotationDeltaFromInterpolation)
                 CharacterCamera.PlanarDirection = Vector3.projectOnPlane(vector: CharacterCamera.PlanarDirection,

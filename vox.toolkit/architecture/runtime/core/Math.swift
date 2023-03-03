@@ -9,6 +9,9 @@ import vox_math
 
 /// A collection of math functions that are useful when working with 3d meshes.
 public class Math {
+    /// Pi / 2.
+    public let phi = 1.618033988749895
+    
     /// Epsilon to use when comparing vertex positions for equality.
     static let k_FltCompareEpsilon: Float = 0.0001
 

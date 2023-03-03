@@ -120,12 +120,12 @@ class IblApp: NSViewController {
         // loadPCGSky(scene)
 
         let rootEntity = scene.createRootEntity()
-        let _: GUI = rootEntity.addComponent()
+        rootEntity.addComponent(GUI.self)
         let cameraEntity = rootEntity.createChild()
         cameraEntity.transform.position = Vector3(0, 0, -10)
         cameraEntity.transform.lookAt(targetPosition: Vector3())
-        let _: Camera = cameraEntity.addComponent()
-        let _: OrbitControl = cameraEntity.addComponent()
+        cameraEntity.addComponent(Camera.self)
+        cameraEntity.addComponent(OrbitControl.self)
 
         let mat = _materials[7]
 
@@ -139,7 +139,7 @@ class IblApp: NSViewController {
                 sphereMtl.metallic = simd_clamp(Float(i) / Float(7 - 1), 0, 1.0)
                 sphereMtl.roughness = simd_clamp(Float(j) / Float(7 - 1), 0, 1.0)
 
-                let sphereRenderer: MeshRenderer = sphereEntity.addComponent()
+                let sphereRenderer = sphereEntity.addComponent(MeshRenderer.self)
                 sphereRenderer.mesh = sphere
                 sphereRenderer.setMaterial(sphereMtl)
             }

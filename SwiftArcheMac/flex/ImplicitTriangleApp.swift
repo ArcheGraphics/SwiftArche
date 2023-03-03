@@ -24,7 +24,7 @@ class ImplicitTriangleApp: NSViewController {
         _ = mesh.addSubMesh(0, 6, .triangleStrip)
         
         let sdfEntity = rootEntity.createChild()
-        let sdfRenderer: MeshRenderer = sdfEntity.addComponent()
+        let sdfRenderer = sdfEntity.addComponent(MeshRenderer.self)
         sdfRenderer.setMaterial(sdfMtl)
         sdfRenderer.mesh = mesh
     }
@@ -40,8 +40,8 @@ class ImplicitTriangleApp: NSViewController {
         let cameraEntity = rootEntity.createChild()
         cameraEntity.transform.position = Vector3(5, 5, 5)
         cameraEntity.transform.lookAt(targetPosition: Vector3())
-        let _: Camera = cameraEntity.addComponent()
-        let _: OrbitControl = cameraEntity.addComponent()
+        cameraEntity.addComponent(Camera.self)
+        cameraEntity.addComponent(OrbitControl.self)
         
         let assetURL = Bundle.main.url(forResource: "dragon", withExtension: "obj", subdirectory: "assets")!
         let triangleMesh = TriangleMesh(device: engine.device)!

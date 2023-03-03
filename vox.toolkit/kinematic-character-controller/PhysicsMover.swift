@@ -127,7 +127,7 @@ public class PhysicsMover: Script {
 
     /// Handle validating all required values
     public func ValidateData() {
-        Rigidbody = entity.getComponent()
+        Rigidbody = entity.getComponent(DynamicCollider.self)
         if let Rigidbody = Rigidbody {
             Rigidbody.centerOfMass = Vector3.zero
             Rigidbody.maxAngularVelocity = Float.infinity

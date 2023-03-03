@@ -33,7 +33,7 @@ fileprivate class TableGenerator: Script {
                 Float.random(in: 0..<360)
         )
         entity.transform.scale = Vector3(3, 3, 3)
-        let boxCollider: DynamicCollider = entity.addComponent()
+        let boxCollider = entity.addComponent(DynamicCollider.self)
         boxCollider.mass = 10.0
 
         let boxMaterial = PBRMaterial(engine)
@@ -47,7 +47,7 @@ fileprivate class TableGenerator: Script {
         boxCollider.addShape(physicsBox)
         let child = entity.createChild()
         child.transform.position = Vector3(0, 0, 0.125)
-        let boxRenderer: MeshRenderer = child.addComponent()
+        let boxRenderer = child.addComponent(MeshRenderer.self)
         boxRenderer.mesh = PrimitiveMesh.createCuboid(engine, width: 0.5, height: 0.4, depth: 0.045)
         boxRenderer.setMaterial(boxMaterial)
 
@@ -58,7 +58,7 @@ fileprivate class TableGenerator: Script {
         boxCollider.addShape(physicsBox1)
         let child1 = entity.createChild()
         child1.transform.position = Vector3(-0.2, -0.15, -0.045)
-        let boxRenderer1: MeshRenderer = child1.addComponent()
+        let boxRenderer1 = child1.addComponent(MeshRenderer.self)
         boxRenderer1.mesh = PrimitiveMesh.createCuboid(engine, width: 0.1, height: 0.1, depth: 0.3)
         boxRenderer1.setMaterial(boxMaterial)
 
@@ -69,7 +69,7 @@ fileprivate class TableGenerator: Script {
         boxCollider.addShape(physicsBox2)
         let child2 = entity.createChild()
         child2.transform.position = Vector3(0.2, -0.15, -0.045)
-        let boxRenderer2: MeshRenderer = child2.addComponent()
+        let boxRenderer2 = child2.addComponent(MeshRenderer.self)
         boxRenderer2.mesh = PrimitiveMesh.createCuboid(engine, width: 0.1, height: 0.1, depth: 0.3)
         boxRenderer2.setMaterial(boxMaterial)
 
@@ -80,7 +80,7 @@ fileprivate class TableGenerator: Script {
         boxCollider.addShape(physicsBox3)
         let child3 = entity.createChild()
         child3.transform.position = Vector3(-0.2, 0.15, -0.045)
-        let boxRenderer3: MeshRenderer = child3.addComponent()
+        let boxRenderer3 = child3.addComponent(MeshRenderer.self)
         boxRenderer3.mesh = PrimitiveMesh.createCuboid(engine, width: 0.1, height: 0.1, depth: 0.3)
         boxRenderer3.setMaterial(boxMaterial)
 
@@ -91,7 +91,7 @@ fileprivate class TableGenerator: Script {
         boxCollider.addShape(physicsBox4)
         let child4 = entity.createChild()
         child4.transform.position = Vector3(0.2, 0.15, -0.045)
-        let boxRenderer4: MeshRenderer = child4.addComponent()
+        let boxRenderer4 = child4.addComponent(MeshRenderer.self)
         boxRenderer4.mesh = PrimitiveMesh.createCuboid(engine, width: 0.1, height: 0.1, depth: 0.3)
         boxRenderer4.setMaterial(boxMaterial)
 
@@ -114,14 +114,14 @@ class PhysXCompoundApp: NSViewController {
         material.metallic = 0.0
 
         let entity = rootEntity.createChild()
-        let renderer: MeshRenderer = entity.addComponent()
+        let renderer = entity.addComponent(MeshRenderer.self)
         entity.transform.position = position
         entity.transform.rotationQuaternion = rotation
         renderer.mesh = PrimitiveMesh.createPlane(engine, width: size.x, height: size.y)
         renderer.setMaterial(material)
 
         let physicsPlane = PlaneColliderShape()
-        let planeCollider: StaticCollider = entity.addComponent()
+        let planeCollider = entity.addComponent(StaticCollider.self)
         planeCollider.addShape(physicsPlane)
 
         return entity
@@ -142,17 +142,17 @@ class PhysXCompoundApp: NSViewController {
         let cameraEntity = rootEntity.createChild()
         cameraEntity.transform.position = Vector3(15, 15, 15)
         cameraEntity.transform.lookAt(targetPosition: Vector3())
-        let _: Camera = cameraEntity.addComponent()
-        let _: OrbitControl = cameraEntity.addComponent()
+        cameraEntity.addComponent(Camera.self)
+        cameraEntity.addComponent(OrbitControl.self)
 
         let light = rootEntity.createChild("light")
         light.transform.position = Vector3(-0.3, 1, 0.4)
         light.transform.lookAt(targetPosition: Vector3())
-        let directLight: DirectLight = light.addComponent()
+        let directLight = light.addComponent(DirectLight.self)
         directLight.shadowType = .SoftLow
 
         _ = addPlane(rootEntity, Vector2(30, 30), Vector3(), Quaternion())
-        let _: TableGenerator = rootEntity.addComponent()
+        rootEntity.addComponent(TableGenerator.self)
 
         engine.run()
     }

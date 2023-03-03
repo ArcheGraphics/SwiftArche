@@ -16,7 +16,7 @@ class ControllerScript: Script {
     var _fallAccumulateTime: Float = 0
     
     required init(_ entity: Entity) {
-        character = entity.getComponent()
+        character = entity.getComponent(CharacterController.self)
         super.init(entity)
     }
     
@@ -94,7 +94,7 @@ class PhysXControllerApp: NSViewController {
         mtl.roughness = 0.0
         mtl.metallic = 0.0
         let capsuleEntity = rootEntity.createChild()
-        let renderer: MeshRenderer = capsuleEntity.addComponent()
+        let renderer = capsuleEntity.addComponent(MeshRenderer.self)
 
         renderer.mesh = PrimitiveMesh.createCapsule(engine, radius: radius, height: height, radialSegments: 20)
         renderer.setMaterial(mtl)
@@ -105,7 +105,7 @@ class PhysXControllerApp: NSViewController {
         physicsCapsule.radius = radius
         physicsCapsule.height = height
 
-        let characterController: CharacterController = capsuleEntity.addComponent()
+        let characterController = capsuleEntity.addComponent(CharacterController.self)
         characterController.addShape(physicsCapsule)
 
         return capsuleEntity
@@ -133,7 +133,7 @@ class PhysXControllerApp: NSViewController {
                 }
             }
         }
-        let _: MovableBox = rootEntity.addComponent()
+        rootEntity.addComponent(MovableBox.self)
         addDuckMesh(rootEntity)
     }
     
@@ -151,17 +151,17 @@ class PhysXControllerApp: NSViewController {
         let cameraEntity = rootEntity.createChild()
         cameraEntity.transform.position = Vector3(20, 20, 20)
         cameraEntity.transform.lookAt(targetPosition: Vector3())
-        let _: Camera = cameraEntity.addComponent()
-        let _: OrbitControl = cameraEntity.addComponent()
+        cameraEntity.addComponent(Camera.self)
+        cameraEntity.addComponent(OrbitControl.self)
         
         let light = rootEntity.createChild("light")
         light.transform.position = Vector3(1, 3, 0)
         light.transform.lookAt(targetPosition: Vector3())
-        let directLight: DirectLight = light.addComponent()
+        let directLight = light.addComponent(DirectLight.self)
         directLight.shadowType = ShadowType.SoftLow
 
         let player = addPlayer(1, 3, Vector3(0, 6.5, 0), Quaternion())
-        let controller: ControllerScript = player.addComponent()
+        let controller = player.addComponent(ControllerScript.self)
         controller.camera = cameraEntity
 
         initialize(rootEntity)

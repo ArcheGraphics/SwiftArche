@@ -16,7 +16,7 @@ fileprivate class ShootScript: Script {
     var camera: Camera!
 
     override func onAwake() {
-        camera = entity.getComponent()
+        camera = entity.getComponent(Camera.self)
     }
 
     override func onUpdate(_ deltaTime: Float) {
@@ -35,7 +35,7 @@ fileprivate class ShootScript: Script {
         mtl.roughness = 0.5
         mtl.metallic = 0.0
         let sphereEntity = rootEntity.createChild()
-        let renderer: MeshRenderer = sphereEntity.addComponent()
+        let renderer = sphereEntity.addComponent(MeshRenderer.self)
         renderer.mesh = PrimitiveMesh.createSphere(rootEntity.engine, radius: radius)
         renderer.setMaterial(mtl)
         sphereEntity.transform.position = position
@@ -43,7 +43,7 @@ fileprivate class ShootScript: Script {
 
         let physicsSphere = SphereColliderShape()
         physicsSphere.radius = radius
-        let sphereCollider: DynamicCollider = sphereEntity.addComponent()
+        let sphereCollider = sphereEntity.addComponent(DynamicCollider.self)
         sphereCollider.addShape(physicsSphere)
         sphereCollider.linearVelocity = velocity
         sphereCollider.angularDamping = 0.5
@@ -70,8 +70,8 @@ class PhysXJointBasicApp: NSViewController {
             transform(position, rotation, &localPosition, &localQuaternion)
             let currentEntity = addBox(rootEntity, Vector3(2.0, 2.0, 0.5), localPosition, localQuaternion)
 
-            let currentCollider: DynamicCollider? = currentEntity.getComponent()
-            let fixedJoint: FixedJoint = currentEntity.addComponent()
+            let currentCollider = currentEntity.getComponent(DynamicCollider.self)
+            let fixedJoint = currentEntity.addComponent(FixedJoint.self)
             if (prevCollider != nil) {
                 fixedJoint.connectedAnchor = currentEntity.transform.worldPosition - prevCollider!.entity.transform.worldPosition
                 fixedJoint.connectedCollider = prevCollider
@@ -84,7 +84,7 @@ class PhysXJointBasicApp: NSViewController {
 
     func createSpring(_ rootEntity: Entity, _ position: Vector3, _ rotation: Quaternion) {
         let currentEntity = addBox(rootEntity, Vector3(2, 2, 1), position, rotation)
-        let springJoint: SpringJoint = currentEntity.addComponent()
+        let springJoint = currentEntity.addComponent(SpringJoint.self)
         springJoint.connectedAnchor = position
         springJoint.swingOffset = Vector3(0, 1, 0)
         springJoint.maxDistance = 2
@@ -94,7 +94,7 @@ class PhysXJointBasicApp: NSViewController {
 
     func createHinge(_ rootEntity: Entity, _ position: Vector3, _ rotation: Quaternion) {
         let currentEntity = addBox(rootEntity, Vector3(4.0, 4.0, 0.5), position, rotation)
-        let hingeJoint: HingeJoint = currentEntity.addComponent()
+        let hingeJoint = currentEntity.addComponent(HingeJoint.self)
         hingeJoint.connectedAnchor = position
         hingeJoint.swingOffset = Vector3(0, 1, 0)
         hingeJoint.axis = Vector3(0, 1, 0)
@@ -114,13 +114,13 @@ class PhysXJointBasicApp: NSViewController {
         let cameraEntity = rootEntity.createChild()
         cameraEntity.transform.position = Vector3(3, 1, 22)
         cameraEntity.transform.lookAt(targetPosition: Vector3(3, 1, 0))
-        let _: Camera = cameraEntity.addComponent()
-        let _: ShootScript = cameraEntity.addComponent();
+        cameraEntity.addComponent(Camera.self)
+        cameraEntity.addComponent(ShootScript.self)
 
         let light = rootEntity.createChild("light")
         light.transform.position = Vector3(-10, 10, 10)
         light.transform.lookAt(targetPosition: Vector3())
-        let directLight: DirectLight = light.addComponent()
+        let directLight = light.addComponent(DirectLight.self)
         directLight.shadowType = .SoftLow
 
         createChain(rootEntity, Vector3(8.0, 10.0, 0.0), Quaternion(), 10, 2.0)

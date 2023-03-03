@@ -203,26 +203,26 @@ class CascadeShadowApp: NSViewController {
         iblBaker.bake(scene, with: hdr, size: 256, level: 3)
         
         let rootEntity = scene.createRootEntity()
-        let gui: GUI = rootEntity.addComponent()
+        let gui = rootEntity.addComponent(GUI.self)
         let cameraEntity = rootEntity.createChild()
         cameraEntity.transform.position = Vector3(0, 10, 50)
         cameraEntity.transform.lookAt(targetPosition: Vector3())
-        let camera: Camera = cameraEntity.addComponent()
+        let camera = cameraEntity.addComponent(Camera.self)
         camera.farClipPlane = 1000
-        let _: OrbitControl = cameraEntity.addComponent()
+        cameraEntity.addComponent(OrbitControl.self)
 
         let light = rootEntity.createChild("light")
         light.transform.position = Vector3(10, 10, 0)
         light.transform.lookAt(targetPosition: Vector3())
-        let directLight: DirectLight = light.addComponent()
-        gui.rotation = light.addComponent()
+        let directLight = light.addComponent(DirectLight.self)
+        gui.rotation = light.addComponent(Rotation.self)
         directLight.shadowStrength = 1.0
         directLight.shadowType = ShadowType.SoftLow
         gui.directLight = directLight
 
         // Create plane
         let planeEntity = rootEntity.createChild("PlaneEntity")
-        let planeRenderer: MeshRenderer = planeEntity.addComponent()
+        let planeRenderer = planeEntity.addComponent(MeshRenderer.self)
         planeRenderer.mesh = PrimitiveMesh.createPlane(engine, width: 10, height: 400)
         gui.planeRenderer = planeRenderer
 
@@ -247,7 +247,7 @@ class CascadeShadowApp: NSViewController {
             let boxEntity = rootEntity.createChild("BoxEntity")
             boxEntity.transform.position = Vector3(0, 2, Float(i * 10) - 200)
 
-            let boxRenderer: MeshRenderer = boxEntity.addComponent()
+            let boxRenderer = boxEntity.addComponent(MeshRenderer.self)
             boxRenderer.mesh = boxMesh
             boxRenderer.setMaterial(boxMaterial)
             gui.boxRenderers.append(boxRenderer)

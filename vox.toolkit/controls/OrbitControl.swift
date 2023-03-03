@@ -153,7 +153,7 @@ public class OrbitControl : Script {
     }
     
     public override func onAwake() {
-        camera = entity.getComponent()
+        camera = entity.getComponent(Camera.self)
         cameraTransform = entity.transform
         _spherical.setYAxis(_up)
         _atTheBack = false

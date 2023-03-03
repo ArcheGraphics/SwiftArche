@@ -40,7 +40,7 @@ public class GridControl: Script {
     }
 
     public override func onAwake() {
-        let gridRenderer: MeshRenderer! = entity.addComponent()
+        let gridRenderer = entity.addComponent(MeshRenderer.self)
         gridRenderer.mesh = PrimitiveMesh.createQuadPlane(engine)
         _material = GridMaterial(engine)
         gridRenderer.setMaterial(_material)

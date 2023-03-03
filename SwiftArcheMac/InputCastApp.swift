@@ -13,7 +13,7 @@ class ClickScript: Script {
     private var material: PBRMaterial!
 
     override func onStart() {
-        let renderer: MeshRenderer = entity.getComponent()!
+        let renderer = entity.getComponent(MeshRenderer.self)!
         material = (renderer.getMaterial() as! PBRMaterial)
     }
 
@@ -34,12 +34,12 @@ class InputCastApp: NSViewController {
         boxEntity.transform.position = Vector3(x, y, z)
 
         let boxMtl = PBRMaterial(engine)
-        let boxRenderer: MeshRenderer = boxEntity.addComponent()
+        let boxRenderer = boxEntity.addComponent(MeshRenderer.self)
         boxMtl.baseColor = Color(0.6, 0.3, 0.3, 1.0)
         boxRenderer.mesh = PrimitiveMesh.createCuboid(engine, width: cubeSize, height: cubeSize, depth: cubeSize)
         boxRenderer.setMaterial(boxMtl)
 
-        let boxCollider: StaticCollider = boxEntity.addComponent()
+        let boxCollider = boxEntity.addComponent(StaticCollider.self)
         let boxColliderShape = BoxColliderShape()
         boxColliderShape.size = Vector3(cubeSize, cubeSize, cubeSize)
         boxCollider.addShape(boxColliderShape)
@@ -60,14 +60,14 @@ class InputCastApp: NSViewController {
         let cameraEntity = rootEntity.createChild()
         cameraEntity.transform.position = Vector3(5, 5, 5)
         cameraEntity.transform.lookAt(targetPosition: Vector3())
-        let _: Camera = cameraEntity.addComponent()
+        cameraEntity.addComponent(Camera.self)
 
         let light = rootEntity.createChild("light")
         light.transform.position = Vector3(1, 3, 0)
         light.transform.lookAt(targetPosition: Vector3())
-        let _: DirectLight = light.addComponent()
+        light.addComponent(DirectLight.self)
 
-        let _: ClickScript = createBox(rootEntity, 0, 0, 0).addComponent()
+        _ = createBox(rootEntity, 0, 0, 0).addComponent(ClickScript.self)
 
         engine.run()
     }

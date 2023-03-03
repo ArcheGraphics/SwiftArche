@@ -33,7 +33,7 @@ fileprivate class Raycast: Script {
     var ray = Ray()
 
     override func onAwake() {
-        camera = entity.getComponent()
+        camera = entity.getComponent(Camera.self)
     }
 
     override func onUpdate(_ deltaTime: Float) {
@@ -48,7 +48,7 @@ fileprivate class Raycast: Script {
                 mtl.metallic = 0.0
                 mtl.roughness = 0.5
 
-                let meshes: [MeshRenderer] = hit.entity!.getComponentsIncludeChildren()
+                let meshes = hit.entity!.getComponentsIncludeChildren(MeshRenderer.self)
                 for mesh in meshes {
                     mesh.setMaterial(mtl)
                 }
@@ -98,19 +98,19 @@ class PhysXRaycastApp: NSViewController {
         iblBaker.bake(scene, with: hdr, size: 256, level: 3)
 
         let rootEntity = scene.createRootEntity()
-        let _: GeometryGenerator = rootEntity.addComponent()
+        rootEntity.addComponent(GeometryGenerator.self)
 
         let cameraEntity = rootEntity.createChild()
         cameraEntity.transform.position = Vector3(15, 15, 15)
         cameraEntity.transform.lookAt(targetPosition: Vector3())
-        let _: Camera = cameraEntity.addComponent()
-        let _: OrbitControl = cameraEntity.addComponent()
-        let _: Raycast = cameraEntity.addComponent()
+        cameraEntity.addComponent(Camera.self)
+        cameraEntity.addComponent(OrbitControl.self)
+        cameraEntity.addComponent(Raycast.self)
 
         let light = rootEntity.createChild("light")
         light.transform.position = Vector3(-0.3, 1, 0.4)
         light.transform.lookAt(targetPosition: Vector3())
-        let directLight: DirectLight = light.addComponent()
+        let directLight = light.addComponent(DirectLight.self)
         directLight.shadowType = .SoftLow
         directLight.shadowStrength = 1
         
