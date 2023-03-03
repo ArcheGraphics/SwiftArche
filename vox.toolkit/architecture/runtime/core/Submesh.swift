@@ -52,12 +52,11 @@ public final class Submesh {
     ///   - indexes: The triangles or quads.
     public init<T: Sequence<Int>>(submeshIndex: Int, topology: MTLPrimitiveType, indexes: T) {
     }
-
-    /// <summary>
+    
     /// Create new Submesh from a mesh, submesh index, and material.
-    /// </summary>
-    /// <param name="mesh">The source mesh.</param>
-    /// <param name="subMeshIndex">Which submesh to read from.</param>
+    /// - Parameters:
+    ///   - mesh: The source mesh.
+    ///   - subMeshIndex: Which submesh to read from.
     public init(mesh: Mesh, subMeshIndex: Int) {
     }
 

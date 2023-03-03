@@ -232,7 +232,7 @@ public struct RefreshMask: OptionSet {
     /// Bounds will be recalculated.
     public static let Bounds = RefreshMask(rawValue: 0x16)
     /// Refresh all optional mesh attributes.
-    public static let All = [UV, Colors, Normals, Tangents, Collisions, Bounds]
+    public static let All: RefreshMask = [UV, Colors, Normals, Tangents, Collisions, Bounds]
 }
 
 /// Describes the different methods of face extrusion.
