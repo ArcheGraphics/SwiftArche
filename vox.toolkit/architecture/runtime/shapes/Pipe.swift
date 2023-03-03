@@ -7,16 +7,24 @@
 import vox_render
 import vox_math
 
-public protocol Shape {
-    func UpdateBounds(mesh: ProBuilderMesh, size: Vector3, rotation: Quaternion, bounds: Bounds) -> Bounds
+public class Pipe: Shape {
+    var m_Thickness: Float = 0.25
 
-    func RebuildMesh(_ mesh: ProBuilderMesh, size: Vector3, rotation: Quaternion) -> Bounds
+    var m_NumberOfSides = 6
 
-    func CopyShape(_ shape: Shape);
-}
+    var m_HeightCuts = 0
 
-extension Shape {
+    var m_Smooth = true
+
+    public func CopyShape(_ shape: Shape) {
+
+    }
+
     public func UpdateBounds(mesh: ProBuilderMesh, size: Vector3, rotation: Quaternion, bounds: Bounds) -> Bounds {
-        mesh.mesh!.bounds
+        Bounds()
+    }
+
+    public func RebuildMesh(_ mesh: ProBuilderMesh, size: Vector3, rotation: Quaternion) -> Bounds {
+        Bounds()
     }
 }
