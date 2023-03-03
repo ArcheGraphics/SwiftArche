@@ -147,6 +147,23 @@
 		3E37FDC329B1E4A30050169C /* Stairs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E37FDC229B1E4A30050169C /* Stairs.swift */; };
 		3E37FDC529B1E52A0050169C /* Torus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E37FDC429B1E52A0050169C /* Torus.swift */; };
 		3E37FDC829B1E5C60050169C /* ProBuilderShape.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E37FDC729B1E5C60050169C /* ProBuilderShape.swift */; };
+		3E37FDCA29B1E79B0050169C /* AppendElements.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E37FDC929B1E79B0050169C /* AppendElements.swift */; };
+		3E37FDCC29B1EBD90050169C /* Bevel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E37FDCB29B1EBD90050169C /* Bevel.swift */; };
+		3E37FDCE29B1ECBF0050169C /* CombineMeshes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E37FDCD29B1ECBF0050169C /* CombineMeshes.swift */; };
+		3E37FDD029B1EE5C0050169C /* ConnectElements.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E37FDCF29B1EE5C0050169C /* ConnectElements.swift */; };
+		3E37FDD229B227650050169C /* DeleteElements.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E37FDD129B227650050169C /* DeleteElements.swift */; };
+		3E37FDD429B228540050169C /* ElementSelection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E37FDD329B228540050169C /* ElementSelection.swift */; };
+		3E37FDD629B22BF70050169C /* ExtrudeElements.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E37FDD529B22BF70050169C /* ExtrudeElements.swift */; };
+		3E37FDD829B22DA30050169C /* InternalMeshUtility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E37FDD729B22DA30050169C /* InternalMeshUtility.swift */; };
+		3E37FDDA29B22E3B0050169C /* MergeElements.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E37FDD929B22E3B0050169C /* MergeElements.swift */; };
+		3E37FDDC29B22F120050169C /* MeshTransform.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E37FDDB29B22F120050169C /* MeshTransform.swift */; };
+		3E37FDDE29B22FAC0050169C /* MeshValidation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E37FDDD29B22FAC0050169C /* MeshValidation.swift */; };
+		3E37FDE029B232250050169C /* QuadUtility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E37FDDF29B232250050169C /* QuadUtility.swift */; };
+		3E37FDE229B232B30050169C /* Subdivision.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E37FDE129B232B30050169C /* Subdivision.swift */; };
+		3E37FDE429B233250050169C /* SurfaceTopology.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E37FDE329B233250050169C /* SurfaceTopology.swift */; };
+		3E37FDE629B236990050169C /* Triangulation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E37FDE529B236990050169C /* Triangulation.swift */; };
+		3E37FDE829B238040050169C /* VertexEditing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E37FDE729B238040050169C /* VertexEditing.swift */; };
+		3E37FDEB29B239510050169C /* UVEditing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E37FDEA29B239510050169C /* UVEditing.swift */; };
 		3E43DC9B295BDDDC00732AC0 /* physics_helpers.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3E6B23B52946B3E5000AC29F /* physics_helpers.metal */; };
 		3E43DC9C295BDDDC00732AC0 /* sdf_shading.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3E6B23D529499B36000AC29F /* sdf_shading.metal */; };
 		3E43DC9D295BDDDC00732AC0 /* sdf_baker.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3E6B23D2294964B1000AC29F /* sdf_baker.metal */; };
@@ -830,6 +847,23 @@
 		3E37FDC229B1E4A30050169C /* Stairs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Stairs.swift; sourceTree = "<group>"; };
 		3E37FDC429B1E52A0050169C /* Torus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Torus.swift; sourceTree = "<group>"; };
 		3E37FDC729B1E5C60050169C /* ProBuilderShape.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProBuilderShape.swift; sourceTree = "<group>"; };
+		3E37FDC929B1E79B0050169C /* AppendElements.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppendElements.swift; sourceTree = "<group>"; };
+		3E37FDCB29B1EBD90050169C /* Bevel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Bevel.swift; sourceTree = "<group>"; };
+		3E37FDCD29B1ECBF0050169C /* CombineMeshes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CombineMeshes.swift; sourceTree = "<group>"; };
+		3E37FDCF29B1EE5C0050169C /* ConnectElements.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConnectElements.swift; sourceTree = "<group>"; };
+		3E37FDD129B227650050169C /* DeleteElements.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeleteElements.swift; sourceTree = "<group>"; };
+		3E37FDD329B228540050169C /* ElementSelection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ElementSelection.swift; sourceTree = "<group>"; };
+		3E37FDD529B22BF70050169C /* ExtrudeElements.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExtrudeElements.swift; sourceTree = "<group>"; };
+		3E37FDD729B22DA30050169C /* InternalMeshUtility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InternalMeshUtility.swift; sourceTree = "<group>"; };
+		3E37FDD929B22E3B0050169C /* MergeElements.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MergeElements.swift; sourceTree = "<group>"; };
+		3E37FDDB29B22F120050169C /* MeshTransform.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeshTransform.swift; sourceTree = "<group>"; };
+		3E37FDDD29B22FAC0050169C /* MeshValidation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeshValidation.swift; sourceTree = "<group>"; };
+		3E37FDDF29B232250050169C /* QuadUtility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuadUtility.swift; sourceTree = "<group>"; };
+		3E37FDE129B232B30050169C /* Subdivision.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Subdivision.swift; sourceTree = "<group>"; };
+		3E37FDE329B233250050169C /* SurfaceTopology.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SurfaceTopology.swift; sourceTree = "<group>"; };
+		3E37FDE529B236990050169C /* Triangulation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Triangulation.swift; sourceTree = "<group>"; };
+		3E37FDE729B238040050169C /* VertexEditing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VertexEditing.swift; sourceTree = "<group>"; };
+		3E37FDEA29B239510050169C /* UVEditing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UVEditing.swift; sourceTree = "<group>"; };
 		3E6B235B2941BF88000AC29F /* BlendShapeWeightsAnimationCurveOwnerAssembler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlendShapeWeightsAnimationCurveOwnerAssembler.swift; sourceTree = "<group>"; };
 		3E6B235D294220BC000AC29F /* FaceMorphApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FaceMorphApp.swift; sourceTree = "<group>"; };
 		3E6B235F294224C1000AC29F /* FaceGUI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FaceGUI.swift; sourceTree = "<group>"; };
@@ -1623,9 +1657,9 @@
 		3E37FCFF29AF741F0050169C /* runtime */ = {
 			isa = PBXGroup;
 			children = (
-				3E37FDAD29B1DDBB0050169C /* mesh-ops */,
-				3E37FD5229B191CE0050169C /* shapes */,
 				3E37FD0029AF74250050169C /* core */,
+				3E37FD5229B191CE0050169C /* shapes */,
+				3E37FDAD29B1DDBB0050169C /* mesh-ops */,
 			);
 			path = runtime;
 			sourceTree = "<group>";
@@ -1739,6 +1773,23 @@
 		3E37FDAD29B1DDBB0050169C /* mesh-ops */ = {
 			isa = PBXGroup;
 			children = (
+				3E37FDC929B1E79B0050169C /* AppendElements.swift */,
+				3E37FDCB29B1EBD90050169C /* Bevel.swift */,
+				3E37FDCD29B1ECBF0050169C /* CombineMeshes.swift */,
+				3E37FDCF29B1EE5C0050169C /* ConnectElements.swift */,
+				3E37FDD129B227650050169C /* DeleteElements.swift */,
+				3E37FDD329B228540050169C /* ElementSelection.swift */,
+				3E37FDD529B22BF70050169C /* ExtrudeElements.swift */,
+				3E37FDD729B22DA30050169C /* InternalMeshUtility.swift */,
+				3E37FDD929B22E3B0050169C /* MergeElements.swift */,
+				3E37FDDB29B22F120050169C /* MeshTransform.swift */,
+				3E37FDDD29B22FAC0050169C /* MeshValidation.swift */,
+				3E37FDDF29B232250050169C /* QuadUtility.swift */,
+				3E37FDE129B232B30050169C /* Subdivision.swift */,
+				3E37FDE329B233250050169C /* SurfaceTopology.swift */,
+				3E37FDE529B236990050169C /* Triangulation.swift */,
+				3E37FDE729B238040050169C /* VertexEditing.swift */,
+				3E37FDEA29B239510050169C /* UVEditing.swift */,
 			);
 			path = "mesh-ops";
 			sourceTree = "<group>";
@@ -3194,14 +3245,17 @@
 				3E37FCDB29ADC4B60050169C /* KinematicCharacterMotor.swift in Sources */,
 				3E37FD8829B1C0270050169C /* SceneSelection.swift in Sources */,
 				040F1DC82933A172008BDC8D /* ControlKeyboard.swift in Sources */,
+				3E37FDE229B232B30050169C /* Subdivision.swift in Sources */,
 				3E37FD9B29B1C4260050169C /* Submesh.swift in Sources */,
 				3E37FD0529AF9CA00050169C /* AutoUnwrapSettings.swift in Sources */,
 				3E37FCE129ADCC410050169C /* KCCSettings.swift in Sources */,
 				3E37FD1729B061840050169C /* Smoothing.swift in Sources */,
+				3E37FDCC29B1EBD90050169C /* Bevel.swift in Sources */,
 				3E37FDBF29B1E3FC0050169C /* Sphere.swift in Sources */,
 				3E37FD8F29B1C0270050169C /* PolyShape.swift in Sources */,
 				3E37FDBD29B1E3D30050169C /* Prism.swift in Sources */,
 				3E37FD9529B1C13F0050169C /* ColorUtility.swift in Sources */,
+				3E37FDEB29B239510050169C /* UVEditing.swift in Sources */,
 				3E37FD4129B0D0620050169C /* VectorMask.swift in Sources */,
 				3E37FDA529B1C8DB0050169C /* UvUnwrapping.swift in Sources */,
 				3E37FDC129B1E4870050169C /* Sprite.swift in Sources */,
@@ -3210,14 +3264,18 @@
 				3E37FD8729B1C0270050169C /* Projection.swift in Sources */,
 				3E37FD8629B1C0270050169C /* ProBuilderSnapping.swift in Sources */,
 				040F1DCE2933AB71008BDC8D /* FreeControl.swift in Sources */,
+				3E37FDDE29B22FAC0050169C /* MeshValidation.swift in Sources */,
 				3E37FD0729B0212C0050169C /* BezierPoint.swift in Sources */,
 				3E37FDB929B1E36D0050169C /* Pipe.swift in Sources */,
 				3E37FDA329B1C7EA0050169C /* UnwrapParameters.swift in Sources */,
 				3E37FD2D29B091620050169C /* IntVec4.swift in Sources */,
+				3E37FDD429B228540050169C /* ElementSelection.swift in Sources */,
 				3E37FD9129B1C0270050169C /* ShapeFactory.swift in Sources */,
 				3E37FD0929B023A60050169C /* Edge.swift in Sources */,
+				3E37FDDA29B22E3B0050169C /* MergeElements.swift in Sources */,
 				3E37FD2929B08FBD0050169C /* VectorHash.swift in Sources */,
 				3E37FD2129B07A7B0050169C /* HandleOrientation.swift in Sources */,
+				3E37FDD029B1EE5C0050169C /* ConnectElements.swift in Sources */,
 				040F1DD02933AC19008BDC8D /* ControlFreeKeyboard.swift in Sources */,
 				3E37FDC829B1E5C60050169C /* ProBuilderShape.swift in Sources */,
 				3E37FD9229B1C0270050169C /* SelectionPicker.swift in Sources */,
@@ -3231,11 +3289,14 @@
 				040F1DB529336F48008BDC8D /* ControlHandlerType.swift in Sources */,
 				3E37FD9D29B1C5C30050169C /* Transform2D.swift in Sources */,
 				3E37FD8B29B1C0270050169C /* SelectionPickerRenderer.swift in Sources */,
+				3E37FDD229B227650050169C /* DeleteElements.swift in Sources */,
 				040F1DB029336AAE008BDC8D /* Spherical.swift in Sources */,
 				3E37FD1B29B069B50050169C /* FaceRebuildData.swift in Sources */,
 				040F1DBB29336FBF008BDC8D /* OrbitControl.swift in Sources */,
 				3E37FDAA29B1CB970050169C /* VertexPositioning.swift in Sources */,
+				3E37FDD629B22BF70050169C /* ExtrudeElements.swift in Sources */,
 				3E37FD1D29B069F50050169C /* Vertex.swift in Sources */,
+				3E37FDE029B232250050169C /* QuadUtility.swift in Sources */,
 				3E37FCDD29ADC5B70050169C /* IMoverController.swift in Sources */,
 				040F1DB829336F86008BDC8D /* IControlInput.swift in Sources */,
 				3E37FCDA29ADC4AC0050169C /* PhysicsMover.swift in Sources */,
@@ -3243,6 +3304,8 @@
 				3E37FD8E29B1C0270050169C /* ProBuilderEnum.swift in Sources */,
 				3E37FDAF29B1DDCD0050169C /* Arch.swift in Sources */,
 				3E37FCDF29ADCC030050169C /* KinematicCharacterSystem.swift in Sources */,
+				3E37FDD829B22DA30050169C /* InternalMeshUtility.swift in Sources */,
+				3E37FDCA29B1E79B0050169C /* AppendElements.swift in Sources */,
 				3E37FD8C29B1C0270050169C /* Normals.swift in Sources */,
 				3E37FD9029B1C0270050169C /* SelectionModifierBehavior.swift in Sources */,
 				3E37FD2729B087CF0050169C /* IntVec2.swift in Sources */,
@@ -3253,6 +3316,7 @@
 				3E37FD9929B1C2BC0050169C /* Spline.swift in Sources */,
 				3E37FDB129B1E21F0050169C /* Cone.swift in Sources */,
 				3E37FD8929B1C0270050169C /* Normal.swift in Sources */,
+				3E37FDDC29B22F120050169C /* MeshTransform.swift in Sources */,
 				3E37FDA129B1C6E70050169C /* Triangle.swift in Sources */,
 				3E1F12BE29ADB83200F1002E /* ICharacterController.swift in Sources */,
 				43D8C8847DCDFE5DABA15585 /* WireframePrimitive.swift in Sources */,
@@ -3264,13 +3328,17 @@
 				3E37FD1929B062C70050169C /* WingedEdge.swift in Sources */,
 				3E37FD8A29B1C0270050169C /* Math.swift in Sources */,
 				3E37FD8429B1C0270050169C /* MeshUtility.swift in Sources */,
+				3E37FDE829B238040050169C /* VertexEditing.swift in Sources */,
+				3E37FDE429B233250050169C /* SurfaceTopology.swift in Sources */,
 				3E37FD5429B191DE0050169C /* Shape.swift in Sources */,
 				3E37FD1F29B079250050169C /* HandleConstraint2D.swift in Sources */,
+				3E37FDCE29B1ECBF0050169C /* CombineMeshes.swift in Sources */,
 				3E37FDB329B1E2860050169C /* Cube.swift in Sources */,
 				3E37FD8129B1C0270050169C /* SelectPathFaces.swift in Sources */,
 				3E37FDC329B1E4A30050169C /* Stairs.swift in Sources */,
 				3E37FDC529B1E52A0050169C /* Torus.swift in Sources */,
 				43D8CFBD79ADA533E11655ED /* Bounds2D.swift in Sources */,
+				3E37FDE629B236990050169C /* Triangulation.swift in Sources */,
 				3E37FD2B29B0911B0050169C /* IntVec3.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
