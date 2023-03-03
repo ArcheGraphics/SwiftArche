@@ -111,7 +111,7 @@ public class ShapeGenerator {
     /// - Returns: A new GameObject with the ProBuilderMesh initialized to the primitve shape.
     public static func CreateShape(_ shape: ShapeType, engine: Engine, pivotType: PivotLocation = PivotLocation.Center) -> ProBuilderMesh {
         let entity = Entity(engine)
-        return entity.addComponent()
+        return entity.addComponent(ProBuilderMesh.self)
     }
 
     /// Create a set of stairs.
@@ -123,7 +123,7 @@ public class ShapeGenerator {
     /// - Returns: A new GameObject with a reference to the ProBuilderMesh component.
     public static func GenerateStair(engine: Engine,pivotType: PivotLocation, size: Vector3, steps: Int, buildSides: Bool) -> ProBuilderMesh {
         let entity = Entity(engine)
-        return entity.addComponent()
+        return entity.addComponent(ProBuilderMesh.self)
     }
 
     /// Create a set of curved stairs.
@@ -139,7 +139,7 @@ public class ShapeGenerator {
     public static func GenerateCurvedStair(engine: Engine,pivotType: PivotLocation, stairWidth: Float, height: Float, innerRadius: Float,
                                            circumference: Float, steps: Int, buildSides: Bool) -> ProBuilderMesh {
         let entity = Entity(engine)
-        return entity.addComponent()
+        return entity.addComponent(ProBuilderMesh.self)
     }
 
     /// Creates a stair set with the given parameters.
@@ -156,7 +156,7 @@ public class ShapeGenerator {
     internal static func GenerateStair(engine: Engine,pivotType: PivotLocation, steps: Int, width: Float, height: Float, depth: Float,
                                        sidesGoToFloor: Bool, generateBack: Bool, platformsOnly: Bool) -> ProBuilderMesh {
         let entity = Entity(engine)
-        return entity.addComponent()
+        return entity.addComponent(ProBuilderMesh.self)
     }
 
     /// Create a new cube with the specified size. Size is baked (ie, not applied as a scale value in the transform).
@@ -166,7 +166,7 @@ public class ShapeGenerator {
     /// - Returns: A new GameObject with a reference to the ProBuilderMesh component.
     public static func GenerateCube(engine: Engine,pivotType: PivotLocation, size: Vector3) -> ProBuilderMesh {
         let entity = Entity(engine)
-        return entity.addComponent()
+        return entity.addComponent(ProBuilderMesh.self)
     }
 
     /// Creates a cylinder pb_Object with the supplied parameters.
@@ -181,7 +181,7 @@ public class ShapeGenerator {
     public static func GenerateCylinder(engine: Engine,pivotType: PivotLocation, axisDivisions: Int,
                                         radius: Float, height: Float, heightCuts: Int, smoothing: Int = -1) -> ProBuilderMesh {
         let entity = Entity(engine)
-        return entity.addComponent()
+        return entity.addComponent(ProBuilderMesh.self)
     }
 
     /// Create a new prism primitive.
@@ -191,7 +191,7 @@ public class ShapeGenerator {
     /// - Returns: A new GameObject with a reference to the ProBuilderMesh component.
     public static func GeneratePrism(engine: Engine,pivotType: PivotLocation, size: Vector3) -> ProBuilderMesh {
         let entity = Entity(engine)
-        return entity.addComponent()
+        return entity.addComponent(ProBuilderMesh.self)
     }
 
     /// Create a door shape suitable for placement in a wall structure.
@@ -206,7 +206,7 @@ public class ShapeGenerator {
     public static func GenerateDoor(engine: Engine,pivotType: PivotLocation, totalWidth: Float, totalHeight: Float,
                                     ledgeHeight: Float, legWidth: Float, depth: Float) -> ProBuilderMesh {
         let entity = Entity(engine)
-        return entity.addComponent()
+        return entity.addComponent(ProBuilderMesh.self)
     }
 
     /// Create a new plane shape.
@@ -221,7 +221,7 @@ public class ShapeGenerator {
     public static func GeneratePlane(engine: Engine,pivotType: PivotLocation, width: Float, height: Float,
                                      widthCuts: Int, heightCuts: Int, axis: Axis) -> ProBuilderMesh {
         let entity = Entity(engine)
-        return entity.addComponent()
+        return entity.addComponent(ProBuilderMesh.self)
     }
 
     /// Create a new pipe shape.
@@ -236,7 +236,7 @@ public class ShapeGenerator {
     public static func GeneratePipe(engine: Engine,pivotType: PivotLocation, radius: Float, height: Float,
                                     thickness: Float, subdivAxis: Int, subdivHeight: Int) -> ProBuilderMesh {
         let entity = Entity(engine)
-        return entity.addComponent()
+        return entity.addComponent(ProBuilderMesh.self)
     }
 
     /// Create a new cone shape.
@@ -249,7 +249,7 @@ public class ShapeGenerator {
     public static func GenerateCone(engine: Engine,pivotType: PivotLocation,
                                     radius: Float, height: Float, subdivAxis: Int) -> ProBuilderMesh {
         let entity = Entity(engine)
-        return entity.addComponent()
+        return entity.addComponent(ProBuilderMesh.self)
     }
 
     /// Create a new arch shape.
@@ -270,7 +270,7 @@ public class ShapeGenerator {
                                     radialCuts: Int, insideFaces: Bool, outsideFaces: Bool,
                                     frontFaces: Bool, backFaces: Bool, endCaps: Bool) -> ProBuilderMesh {
         let entity = Entity(engine)
-        return entity.addComponent()
+        return entity.addComponent(ProBuilderMesh.self)
     }
 
     /// Create a new icosphere shape.
@@ -286,7 +286,7 @@ public class ShapeGenerator {
     public static func GenerateIcosahedron(engine: Engine,pivotType: PivotLocation, radius: Float, subdivisions: Int,
                                            weldVertices: Bool = true, manualUvs: Bool = true) -> ProBuilderMesh {
         let entity = Entity(engine)
-        return entity.addComponent()
+        return entity.addComponent(ProBuilderMesh.self)
     }
 
     // Subdivides a set of vertices (wound as individual triangles) on an icosphere.
@@ -319,7 +319,7 @@ public class ShapeGenerator {
                                      innerRadius: Float, outerRadius: Float, smooth: Bool,
                                      horizontalCircumference: Float, verticalCircumference: Float, manualUvs: Bool = false) -> ProBuilderMesh {
         let entity = Entity(engine)
-        return entity.addComponent()
+        return entity.addComponent(ProBuilderMesh.self)
     }
 
 }

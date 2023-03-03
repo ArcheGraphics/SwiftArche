@@ -318,7 +318,8 @@ class ColorUtility {
     }
 
     /// http://en.wikipedia.org/wiki/List_of_colors:_A%E2%80%93F
-    static let ColorNameLookup: [String: CIELabColor] = [
+    static let ColorNameLookup: [String: CIELabColor] = [:
+        /*
         "Acid Green": CIELabFromRGB(69, 75, 10, 100),
         "Aero": CIELabFromRGB(49, 73, 91, 100),
         "Aero Blue": CIELabFromRGB(79, 100, 90, 100),
@@ -1485,5 +1486,6 @@ class ColorUtility {
         "Zaffre": CIELabFromRGB(0, 8, 66, 100),
         "Zinnwaldite Brown": CIELabFromRGB(17, 9, 3, 100),
         "Zomp": CIELabFromRGB(22, 65, 56, 100)
+         */
     ]
 }
