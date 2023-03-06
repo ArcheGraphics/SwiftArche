@@ -11,6 +11,8 @@ class PhysXCharacterController: PhysXCollider {
     var _pxController: CPxController!
     var _pxManager: PhysXPhysicsManager!
     var _shape: PhysXColliderShape!
+    var _behaviorCallback: ((UInt32)->UInt8)!
+    var _hitReport: ((UInt32, Vector3, Float, Vector3, Vector3) -> Void)!
 
     func move(_ disp: Vector3, _ minDist: Float, _ elapsedTime: Float) -> UInt8 {
         _pxController.move(disp.internalValue, minDist, elapsedTime)
@@ -41,6 +43,14 @@ class PhysXCharacterController: PhysXCollider {
     func setSlopeLimit(_ slopeLimit: Float) {
         _pxController.setSlopeLimit(slopeLimit)
     }
+    
+    func setBehaviorCallback(_ script: @escaping (UInt32)->UInt8) {
+        _behaviorCallback = script
+    }
+    
+    func setHitReport(_ script: @escaping (UInt32, Vector3, Float, Vector3, Vector3) -> Void) {
+        _hitReport = script
+    }
 
     override func addShape(_ shape: PhysXColliderShape) {
         if _pxManager != nil {
@@ -63,6 +73,13 @@ class PhysXCharacterController: PhysXCollider {
             desc.halfSideExtent = (shape as! PhysXBoxColliderShape)._halfSize.y
             desc.halfForwardExtent = (shape as! PhysXBoxColliderShape)._halfSize.z
             desc.material = shape._pxMaterial
+            desc.setControllerBehaviorCallback { [self] id in
+                _behaviorCallback(id)
+            }
+            desc.setUserControllerHitReport { [self] id, dir, length, normal, point in
+                _hitReport(id, Vector3(dir), length, Vector3(normal), Vector3(point))
+            }
+            
             _pxController = pxManager._getControllerManager().createController(desc)
         } else if (shape is PhysXCapsuleColliderShape) {
             let desc = CPxCapsuleControllerDesc()
@@ -70,12 +87,19 @@ class PhysXCharacterController: PhysXCollider {
             desc.height = (shape as! PhysXCapsuleColliderShape)._halfHeight * 2
             desc.climbingMode = CPxCapsuleClimbingMode(1) // constraint mode
             desc.material = shape._pxMaterial
+            desc.setControllerBehaviorCallback { [self] id in
+                _behaviorCallback(id)
+            }
+            desc.setUserControllerHitReport { [self] id, dir, length, normal, point in
+                _hitReport(id, Vector3(dir), length, Vector3(normal), Vector3(point))
+            }
+            
             _pxController = pxManager._getControllerManager().createController(desc)
         } else {
             fatalError("unsupported shape type")
         }
 
-        _pxController.setQueryFilterData(shape._id, w1: 0, w2: 0, w3: 0)
+        _pxController.setQueryFilterData(0, w1: 0, w2: 0, w3: shape._id)
     }
 
     func _destroyPXController() {

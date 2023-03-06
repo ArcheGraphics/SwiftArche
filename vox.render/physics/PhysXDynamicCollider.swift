@@ -126,6 +126,10 @@ class PhysXDynamicCollider: PhysXCollider {
     func setUseGravity(_ value: Bool) {
         (_pxActor as! CPxRigidDynamic).setUseGravity(value)
     }
+    
+    func setDensity(_ value: Float) {
+        (_pxActor as! CPxRigidDynamic).setDensity(value)
+    }
 
     func setConstraints(_ flags: DynamicColliderConstraints) {
         (_pxActor as! CPxRigidDynamic).setRigidDynamicLockFlags(flags.rawValue)

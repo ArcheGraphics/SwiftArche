@@ -201,4 +201,6 @@ enum CPxRigidBodyFlag {
 
 - (void)setUseGravity:(bool)value;
 
+- (void)setDensity:(float)value;
+
 @end

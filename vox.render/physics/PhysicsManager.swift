@@ -169,6 +169,10 @@ public class PhysicsManager {
         _physicalObjectsMap.removeValue(forKey: colliderShape.id)
         _nativePhysicsManager.removeColliderShape(colliderShape._nativeShape)
     }
+    
+    func _getColliderShape(_ id: UInt32) -> ColliderShape? {
+        _physicalObjectsMap[id]
+    }
 
     /// Add collider into the manager.
     /// - Parameter collider: StaticCollider or DynamicCollider.

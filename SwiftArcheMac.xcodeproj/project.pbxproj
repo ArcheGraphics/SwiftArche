@@ -64,6 +64,8 @@
 		3E1076532966B96B00F751A5 /* capsule_collider_shape.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3E1076522966B96B00F751A5 /* capsule_collider_shape.metal */; };
 		3E1076552966CF7D00F751A5 /* capsule_ray_marching.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3E1076542966CF7D00F751A5 /* capsule_ray_marching.metal */; };
 		3E1076572966D8CA00F751A5 /* RayMarchingMaterial.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E1076562966D8CA00F751A5 /* RayMarchingMaterial.swift */; };
+		3E1412F929B5969C00099BF1 /* ControllerBehavior.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E1412F829B5969C00099BF1 /* ControllerBehavior.swift */; };
+		3E1412FB29B5A6BD00099BF1 /* ControllerColliderHit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E1412FA29B5A6BD00099BF1 /* ControllerColliderHit.swift */; };
 		3E1F129329A762FC00F1002E /* VHACD_ConvexCompose.mm in Sources */ = {isa = PBXBuildFile; fileRef = 3E1F129229A762FC00F1002E /* VHACD_ConvexCompose.mm */; };
 		3E1F129529A7641200F1002E /* ConvexCompose.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E1F129429A7641200F1002E /* ConvexCompose.swift */; };
 		3E1F129729A78B3300F1002E /* PhysXConvexComposeApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E1F129629A78B3300F1002E /* PhysXConvexComposeApp.swift */; };
@@ -84,86 +86,11 @@
 		3E37FCF729AF36150050169C /* Teleporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E37FCF629AF36150050169C /* Teleporter.swift */; };
 		3E37FCFB29AF399B0050169C /* MyCharacterController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E37FCFA29AF399B0050169C /* MyCharacterController.swift */; };
 		3E37FCFD29AF3A160050169C /* MyPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E37FCFC29AF3A160050169C /* MyPlayer.swift */; };
-		3E37FD0329AF743E0050169C /* ActionResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E37FD0229AF743E0050169C /* ActionResult.swift */; };
-		3E37FD0529AF9CA00050169C /* AutoUnwrapSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E37FD0429AF9CA00050169C /* AutoUnwrapSettings.swift */; };
-		3E37FD0729B0212C0050169C /* BezierPoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E37FD0629B0212C0050169C /* BezierPoint.swift */; };
-		3E37FD0929B023A60050169C /* Edge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E37FD0829B023A60050169C /* Edge.swift */; };
 		3E37FD0B29B027C30050169C /* Rect.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E37FD0A29B027C30050169C /* Rect.swift */; };
-		3E37FD0D29B0394A0050169C /* Clipping.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E37FD0C29B0394A0050169C /* Clipping.swift */; };
-		3E37FD1129B0499D0050169C /* EdgeLookup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E37FD1029B0499D0050169C /* EdgeLookup.swift */; };
-		3E37FD1529B04FF80050169C /* Face.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E37FD1429B04FF80050169C /* Face.swift */; };
-		3E37FD1729B061840050169C /* Smoothing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E37FD1629B061840050169C /* Smoothing.swift */; };
-		3E37FD1929B062C70050169C /* WingedEdge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E37FD1829B062C70050169C /* WingedEdge.swift */; };
-		3E37FD1B29B069B50050169C /* FaceRebuildData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E37FD1A29B069B50050169C /* FaceRebuildData.swift */; };
-		3E37FD1D29B069F50050169C /* Vertex.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E37FD1C29B069F50050169C /* Vertex.swift */; };
 		3E37FD1F29B079250050169C /* HandleConstraint2D.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E37FD1E29B079250050169C /* HandleConstraint2D.swift */; };
 		3E37FD2129B07A7B0050169C /* HandleOrientation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E37FD2029B07A7B0050169C /* HandleOrientation.swift */; };
-		3E37FD2729B087CF0050169C /* IntVec2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E37FD2629B087CF0050169C /* IntVec2.swift */; };
-		3E37FD2929B08FBD0050169C /* VectorHash.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E37FD2829B08FBD0050169C /* VectorHash.swift */; };
-		3E37FD2B29B0911B0050169C /* IntVec3.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E37FD2A29B0911B0050169C /* IntVec3.swift */; };
-		3E37FD2D29B091620050169C /* IntVec4.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E37FD2C29B091620050169C /* IntVec4.swift */; };
-		3E37FD4129B0D0620050169C /* VectorMask.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E37FD4029B0D0620050169C /* VectorMask.swift */; };
 		3E37FD4B29B0DD4D0050169C /* Color32.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E37FD4A29B0DD4D0050169C /* Color32.swift */; };
-		3E37FD5429B191DE0050169C /* Shape.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E37FD5329B191DE0050169C /* Shape.swift */; };
-		3E37FD8029B1C0270050169C /* ProBuilderMesh.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E37FD1229B04F030050169C /* ProBuilderMesh.swift */; };
-		3E37FD8129B1C0270050169C /* SelectPathFaces.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E37FD4E29B0E4750050169C /* SelectPathFaces.swift */; };
 		3E37FD8229B1C0270050169C /* RaycastHit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E37FD3C29B0AC610050169C /* RaycastHit.swift */; };
-		3E37FD8429B1C0270050169C /* MeshUtility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E37FD3629B0A74F0050169C /* MeshUtility.swift */; };
-		3E37FD8529B1C0270050169C /* PivotPoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E37FD3829B0AA510050169C /* PivotPoint.swift */; };
-		3E37FD8629B1C0270050169C /* ProBuilderSnapping.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E37FD3E29B0CF8A0050169C /* ProBuilderSnapping.swift */; };
-		3E37FD8729B1C0270050169C /* Projection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E37FD4229B0D5EA0050169C /* Projection.swift */; };
-		3E37FD8829B1C0270050169C /* SceneSelection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E37FD4C29B0E09C0050169C /* SceneSelection.swift */; };
-		3E37FD8929B1C0270050169C /* Normal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E37FD3029B097260050169C /* Normal.swift */; };
-		3E37FD8A29B1C0270050169C /* Math.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E37FD2E29B0922C0050169C /* Math.swift */; };
-		3E37FD8B29B1C0270050169C /* SelectionPickerRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E37FD4829B0D8F00050169C /* SelectionPickerRenderer.swift */; };
-		3E37FD8C29B1C0270050169C /* Normals.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E37FD3229B0A02E0050169C /* Normals.swift */; };
-		3E37FD8D29B1C0270050169C /* MeshHandles.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E37FD3429B0A5E60050169C /* MeshHandles.swift */; };
-		3E37FD8E29B1C0270050169C /* ProBuilderEnum.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E37FD2229B07C2E0050169C /* ProBuilderEnum.swift */; };
-		3E37FD8F29B1C0270050169C /* PolyShape.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E37FD3A29B0AAD00050169C /* PolyShape.swift */; };
-		3E37FD9029B1C0270050169C /* SelectionModifierBehavior.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E37FD4429B0D7BC0050169C /* SelectionModifierBehavior.swift */; };
-		3E37FD9129B1C0270050169C /* ShapeFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E37FD5029B0E5810050169C /* ShapeFactory.swift */; };
-		3E37FD9229B1C0270050169C /* SelectionPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E37FD4629B0D7ED0050169C /* SelectionPicker.swift */; };
-		3E37FD9429B1C0E70050169C /* ShapeGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E37FD5529B192EC0050169C /* ShapeGenerator.swift */; };
-		3E37FD9529B1C13F0050169C /* ColorUtility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E37FD0E29B03D180050169C /* ColorUtility.swift */; };
-		3E37FD9729B1C1B10050169C /* SharedVertex.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E37FD9629B1C1B10050169C /* SharedVertex.swift */; };
-		3E37FD9929B1C2BC0050169C /* Spline.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E37FD9829B1C2BC0050169C /* Spline.swift */; };
-		3E37FD9B29B1C4260050169C /* Submesh.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E37FD9A29B1C4260050169C /* Submesh.swift */; };
-		3E37FD9D29B1C5C30050169C /* Transform2D.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E37FD9C29B1C5C30050169C /* Transform2D.swift */; };
-		3E37FD9F29B1C6310050169C /* TransformUtility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E37FD9E29B1C6310050169C /* TransformUtility.swift */; };
-		3E37FDA129B1C6E70050169C /* Triangle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E37FDA029B1C6E70050169C /* Triangle.swift */; };
-		3E37FDA329B1C7EA0050169C /* UnwrapParameters.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E37FDA229B1C7EA0050169C /* UnwrapParameters.swift */; };
-		3E37FDA529B1C8DB0050169C /* UvUnwrapping.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E37FDA429B1C8DB0050169C /* UvUnwrapping.swift */; };
-		3E37FDAA29B1CB970050169C /* VertexPositioning.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E37FDA929B1CB970050169C /* VertexPositioning.swift */; };
-		3E37FDAF29B1DDCD0050169C /* Arch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E37FDAE29B1DDCD0050169C /* Arch.swift */; };
-		3E37FDB129B1E21F0050169C /* Cone.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E37FDB029B1E21F0050169C /* Cone.swift */; };
-		3E37FDB329B1E2860050169C /* Cube.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E37FDB229B1E2860050169C /* Cube.swift */; };
-		3E37FDB529B1E3070050169C /* Cylinder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E37FDB429B1E3070050169C /* Cylinder.swift */; };
-		3E37FDB729B1E32E0050169C /* Door.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E37FDB629B1E32E0050169C /* Door.swift */; };
-		3E37FDB929B1E36D0050169C /* Pipe.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E37FDB829B1E36D0050169C /* Pipe.swift */; };
-		3E37FDBB29B1E3B20050169C /* Plane.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E37FDBA29B1E3B20050169C /* Plane.swift */; };
-		3E37FDBD29B1E3D30050169C /* Prism.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E37FDBC29B1E3D30050169C /* Prism.swift */; };
-		3E37FDBF29B1E3FC0050169C /* Sphere.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E37FDBE29B1E3FC0050169C /* Sphere.swift */; };
-		3E37FDC129B1E4870050169C /* Sprite.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E37FDC029B1E4870050169C /* Sprite.swift */; };
-		3E37FDC329B1E4A30050169C /* Stairs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E37FDC229B1E4A30050169C /* Stairs.swift */; };
-		3E37FDC529B1E52A0050169C /* Torus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E37FDC429B1E52A0050169C /* Torus.swift */; };
-		3E37FDC829B1E5C60050169C /* ProBuilderShape.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E37FDC729B1E5C60050169C /* ProBuilderShape.swift */; };
-		3E37FDCA29B1E79B0050169C /* AppendElements.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E37FDC929B1E79B0050169C /* AppendElements.swift */; };
-		3E37FDCC29B1EBD90050169C /* Bevel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E37FDCB29B1EBD90050169C /* Bevel.swift */; };
-		3E37FDCE29B1ECBF0050169C /* CombineMeshes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E37FDCD29B1ECBF0050169C /* CombineMeshes.swift */; };
-		3E37FDD029B1EE5C0050169C /* ConnectElements.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E37FDCF29B1EE5C0050169C /* ConnectElements.swift */; };
-		3E37FDD229B227650050169C /* DeleteElements.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E37FDD129B227650050169C /* DeleteElements.swift */; };
-		3E37FDD429B228540050169C /* ElementSelection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E37FDD329B228540050169C /* ElementSelection.swift */; };
-		3E37FDD629B22BF70050169C /* ExtrudeElements.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E37FDD529B22BF70050169C /* ExtrudeElements.swift */; };
-		3E37FDD829B22DA30050169C /* InternalMeshUtility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E37FDD729B22DA30050169C /* InternalMeshUtility.swift */; };
-		3E37FDDA29B22E3B0050169C /* MergeElements.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E37FDD929B22E3B0050169C /* MergeElements.swift */; };
-		3E37FDDC29B22F120050169C /* MeshTransform.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E37FDDB29B22F120050169C /* MeshTransform.swift */; };
-		3E37FDDE29B22FAC0050169C /* MeshValidation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E37FDDD29B22FAC0050169C /* MeshValidation.swift */; };
-		3E37FDE029B232250050169C /* QuadUtility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E37FDDF29B232250050169C /* QuadUtility.swift */; };
-		3E37FDE229B232B30050169C /* Subdivision.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E37FDE129B232B30050169C /* Subdivision.swift */; };
-		3E37FDE429B233250050169C /* SurfaceTopology.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E37FDE329B233250050169C /* SurfaceTopology.swift */; };
-		3E37FDE629B236990050169C /* Triangulation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E37FDE529B236990050169C /* Triangulation.swift */; };
-		3E37FDE829B238040050169C /* VertexEditing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E37FDE729B238040050169C /* VertexEditing.swift */; };
-		3E37FDEB29B239510050169C /* UVEditing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E37FDEA29B239510050169C /* UVEditing.swift */; };
 		3E43DC9B295BDDDC00732AC0 /* physics_helpers.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3E6B23B52946B3E5000AC29F /* physics_helpers.metal */; };
 		3E43DC9C295BDDDC00732AC0 /* sdf_shading.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3E6B23D529499B36000AC29F /* sdf_shading.metal */; };
 		3E43DC9D295BDDDC00732AC0 /* sdf_baker.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3E6B23D2294964B1000AC29F /* sdf_baker.metal */; };
@@ -401,7 +328,6 @@
 		3EC038F02932184C002187DC /* ColliderShapeUpAxis.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EC038EB2932184C002187DC /* ColliderShapeUpAxis.swift */; };
 		3EC038F12932184C002187DC /* ControllerNonWalkableMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EC038EC2932184C002187DC /* ControllerNonWalkableMode.swift */; };
 		3EC038F22932184C002187DC /* HingeJointFlag.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EC038ED2932184C002187DC /* HingeJointFlag.swift */; };
-		3EC038F32932184C002187DC /* ControllerCollisionFlag.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EC038EE2932184C002187DC /* ControllerCollisionFlag.swift */; };
 		3EC038F629321853002187DC /* CharacterController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EC038F429321853002187DC /* CharacterController.swift */; };
 		3EC038F729321853002187DC /* PhysXCharacterController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EC038F529321853002187DC /* PhysXCharacterController.swift */; };
 		3EC0390129321862002187DC /* GLTFAssetReader.h in Headers */ = {isa = PBXBuildFile; fileRef = 3EC038F829321862002187DC /* GLTFAssetReader.h */; };
@@ -577,7 +503,6 @@
 		43D8CC8E6EC814867725CBD1 /* PhysXDebug.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8CCD2428D0365772246E7 /* PhysXDebug.swift */; };
 		43D8CE4CE0A0E392D06A3B25 /* PhysXUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8CF2C4FC2C2529FFE5E7F /* PhysXUtils.swift */; };
 		43D8CF515E4D90196E7E806B /* PhysXCollisionDetectionApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8C0A4A7B56D737C3F4FE2 /* PhysXCollisionDetectionApp.swift */; };
-		43D8CFBD79ADA533E11655ED /* Bounds2D.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8CA210E6FA1B8350D1A97 /* Bounds2D.swift */; };
 		E63B19C92479C2BE78B928A9 /* CascadeShadowApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = E63B17CA98EEF9BD19C003ED /* CascadeShadowApp.swift */; };
 		E63B1AB88F741EC4FFD734F6 /* InputCastApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = E63B1700C137922B042BB8C2 /* InputCastApp.swift */; };
 /* End PBXBuildFile section */
@@ -760,6 +685,8 @@
 		3E1076562966D8CA00F751A5 /* RayMarchingMaterial.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RayMarchingMaterial.swift; sourceTree = "<group>"; };
 		3E1076582967D1B800F751A5 /* rigid_body_collider.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = rigid_body_collider.h; sourceTree = "<group>"; };
 		3E10765C2967DBD600F751A5 /* ray_marching.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ray_marching.h; sourceTree = "<group>"; };
+		3E1412F829B5969C00099BF1 /* ControllerBehavior.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ControllerBehavior.swift; sourceTree = "<group>"; };
+		3E1412FA29B5A6BD00099BF1 /* ControllerColliderHit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ControllerColliderHit.swift; sourceTree = "<group>"; };
 		3E1F129029A7618600F1002E /* bridging.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = bridging.h; sourceTree = "<group>"; };
 		3E1F129129A762F000F1002E /* VHACD_ConvexCompose.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VHACD_ConvexCompose.h; sourceTree = "<group>"; };
 		3E1F129229A762FC00F1002E /* VHACD_ConvexCompose.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = VHACD_ConvexCompose.mm; sourceTree = "<group>"; };
@@ -1121,7 +1048,6 @@
 		3EC038EB2932184C002187DC /* ColliderShapeUpAxis.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ColliderShapeUpAxis.swift; sourceTree = "<group>"; };
 		3EC038EC2932184C002187DC /* ControllerNonWalkableMode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ControllerNonWalkableMode.swift; sourceTree = "<group>"; };
 		3EC038ED2932184C002187DC /* HingeJointFlag.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HingeJointFlag.swift; sourceTree = "<group>"; };
-		3EC038EE2932184C002187DC /* ControllerCollisionFlag.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ControllerCollisionFlag.swift; sourceTree = "<group>"; };
 		3EC038F429321853002187DC /* CharacterController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CharacterController.swift; sourceTree = "<group>"; };
 		3EC038F529321853002187DC /* PhysXCharacterController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhysXCharacterController.swift; sourceTree = "<group>"; };
 		3EC038F829321862002187DC /* GLTFAssetReader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GLTFAssetReader.h; sourceTree = "<group>"; };
@@ -2098,6 +2024,11 @@
 			isa = PBXGroup;
 			children = (
 				3EC03805293213F7002187DC /* CCharacterBridge.h */,
+				3EC03810293213F8002187DC /* CPxController.h */,
+				3EC0380A293213F7002187DC /* CPxController.mm */,
+				3EC03814293213F8002187DC /* CPxController+Internal.h */,
+				3EC03809293213F7002187DC /* CPxControllerDesc.h */,
+				3EC03815293213F8002187DC /* CPxControllerDesc.mm */,
 				3EC03817293213F9002187DC /* CPxBoxController.h */,
 				3EC03811293213F8002187DC /* CPxBoxController.mm */,
 				3EC0380B293213F7002187DC /* CPxBoxControllerDesc.h */,
@@ -2108,11 +2039,6 @@
 				3EC03804293213F7002187DC /* CPxCapsuleControllerDesc.h */,
 				3EC03813293213F8002187DC /* CPxCapsuleControllerDesc.mm */,
 				3EC03808293213F7002187DC /* CPxCapsuleControllerDesc+Internal.h */,
-				3EC03810293213F8002187DC /* CPxController.h */,
-				3EC0380A293213F7002187DC /* CPxController.mm */,
-				3EC03814293213F8002187DC /* CPxController+Internal.h */,
-				3EC03809293213F7002187DC /* CPxControllerDesc.h */,
-				3EC03815293213F8002187DC /* CPxControllerDesc.mm */,
 				3EC03818293213F9002187DC /* CPxControllerManager.h */,
 				3EC03819293213F9002187DC /* CPxControllerManager.mm */,
 				3EC0380C293213F8002187DC /* CPxControllerManager+Internal.h */,
@@ -2604,6 +2530,8 @@
 		3EC0387F293217DC002187DC /* controller */ = {
 			isa = PBXGroup;
 			children = (
+				3E1412FA29B5A6BD00099BF1 /* ControllerColliderHit.swift */,
+				3E1412F829B5969C00099BF1 /* ControllerBehavior.swift */,
 				3EC038F429321853002187DC /* CharacterController.swift */,
 				3EC038F529321853002187DC /* PhysXCharacterController.swift */,
 			);
@@ -2614,7 +2542,6 @@
 			isa = PBXGroup;
 			children = (
 				3EC038EB2932184C002187DC /* ColliderShapeUpAxis.swift */,
-				3EC038EE2932184C002187DC /* ControllerCollisionFlag.swift */,
 				3EC038EC2932184C002187DC /* ControllerNonWalkableMode.swift */,
 				3EC038ED2932184C002187DC /* HingeJointFlag.swift */,
 				3EC038EA2932184C002187DC /* PhysicsMaterialCombineMode.swift */,
@@ -3241,105 +3168,29 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				3E37FD8D29B1C0270050169C /* MeshHandles.swift in Sources */,
 				3E37FCDB29ADC4B60050169C /* KinematicCharacterMotor.swift in Sources */,
-				3E37FD8829B1C0270050169C /* SceneSelection.swift in Sources */,
 				040F1DC82933A172008BDC8D /* ControlKeyboard.swift in Sources */,
-				3E37FDE229B232B30050169C /* Subdivision.swift in Sources */,
-				3E37FD9B29B1C4260050169C /* Submesh.swift in Sources */,
-				3E37FD0529AF9CA00050169C /* AutoUnwrapSettings.swift in Sources */,
 				3E37FCE129ADCC410050169C /* KCCSettings.swift in Sources */,
-				3E37FD1729B061840050169C /* Smoothing.swift in Sources */,
-				3E37FDCC29B1EBD90050169C /* Bevel.swift in Sources */,
-				3E37FDBF29B1E3FC0050169C /* Sphere.swift in Sources */,
-				3E37FD8F29B1C0270050169C /* PolyShape.swift in Sources */,
-				3E37FDBD29B1E3D30050169C /* Prism.swift in Sources */,
-				3E37FD9529B1C13F0050169C /* ColorUtility.swift in Sources */,
-				3E37FDEB29B239510050169C /* UVEditing.swift in Sources */,
-				3E37FD4129B0D0620050169C /* VectorMask.swift in Sources */,
-				3E37FDA529B1C8DB0050169C /* UvUnwrapping.swift in Sources */,
-				3E37FDC129B1E4870050169C /* Sprite.swift in Sources */,
 				040F1DCA2933A3BE008BDC8D /* ControlWheel.swift in Sources */,
 				040F1DBE2933705D008BDC8D /* ControlPointer.swift in Sources */,
-				3E37FD8729B1C0270050169C /* Projection.swift in Sources */,
-				3E37FD8629B1C0270050169C /* ProBuilderSnapping.swift in Sources */,
 				040F1DCE2933AB71008BDC8D /* FreeControl.swift in Sources */,
-				3E37FDDE29B22FAC0050169C /* MeshValidation.swift in Sources */,
-				3E37FD0729B0212C0050169C /* BezierPoint.swift in Sources */,
-				3E37FDB929B1E36D0050169C /* Pipe.swift in Sources */,
-				3E37FDA329B1C7EA0050169C /* UnwrapParameters.swift in Sources */,
-				3E37FD2D29B091620050169C /* IntVec4.swift in Sources */,
-				3E37FDD429B228540050169C /* ElementSelection.swift in Sources */,
-				3E37FD9129B1C0270050169C /* ShapeFactory.swift in Sources */,
-				3E37FD0929B023A60050169C /* Edge.swift in Sources */,
-				3E37FDDA29B22E3B0050169C /* MergeElements.swift in Sources */,
-				3E37FD2929B08FBD0050169C /* VectorHash.swift in Sources */,
 				3E37FD2129B07A7B0050169C /* HandleOrientation.swift in Sources */,
-				3E37FDD029B1EE5C0050169C /* ConnectElements.swift in Sources */,
 				040F1DD02933AC19008BDC8D /* ControlFreeKeyboard.swift in Sources */,
-				3E37FDC829B1E5C60050169C /* ProBuilderShape.swift in Sources */,
-				3E37FD9229B1C0270050169C /* SelectionPicker.swift in Sources */,
-				3E37FDB529B1E3070050169C /* Cylinder.swift in Sources */,
-				3E37FD1129B0499D0050169C /* EdgeLookup.swift in Sources */,
-				3E37FD9729B1C1B10050169C /* SharedVertex.swift in Sources */,
-				3E37FD9F29B1C6310050169C /* TransformUtility.swift in Sources */,
-				3E37FD8529B1C0270050169C /* PivotPoint.swift in Sources */,
-				3E37FD9429B1C0E70050169C /* ShapeGenerator.swift in Sources */,
-				3E37FD0329AF743E0050169C /* ActionResult.swift in Sources */,
 				040F1DB529336F48008BDC8D /* ControlHandlerType.swift in Sources */,
-				3E37FD9D29B1C5C30050169C /* Transform2D.swift in Sources */,
-				3E37FD8B29B1C0270050169C /* SelectionPickerRenderer.swift in Sources */,
-				3E37FDD229B227650050169C /* DeleteElements.swift in Sources */,
 				040F1DB029336AAE008BDC8D /* Spherical.swift in Sources */,
-				3E37FD1B29B069B50050169C /* FaceRebuildData.swift in Sources */,
 				040F1DBB29336FBF008BDC8D /* OrbitControl.swift in Sources */,
-				3E37FDAA29B1CB970050169C /* VertexPositioning.swift in Sources */,
-				3E37FDD629B22BF70050169C /* ExtrudeElements.swift in Sources */,
-				3E37FD1D29B069F50050169C /* Vertex.swift in Sources */,
-				3E37FDE029B232250050169C /* QuadUtility.swift in Sources */,
 				3E37FCDD29ADC5B70050169C /* IMoverController.swift in Sources */,
 				040F1DB829336F86008BDC8D /* IControlInput.swift in Sources */,
 				3E37FCDA29ADC4AC0050169C /* PhysicsMover.swift in Sources */,
 				040F1DCC2933AAF0008BDC8D /* ControlFreePointer.swift in Sources */,
-				3E37FD8E29B1C0270050169C /* ProBuilderEnum.swift in Sources */,
-				3E37FDAF29B1DDCD0050169C /* Arch.swift in Sources */,
 				3E37FCDF29ADCC030050169C /* KinematicCharacterSystem.swift in Sources */,
-				3E37FDD829B22DA30050169C /* InternalMeshUtility.swift in Sources */,
-				3E37FDCA29B1E79B0050169C /* AppendElements.swift in Sources */,
-				3E37FD8C29B1C0270050169C /* Normals.swift in Sources */,
-				3E37FD9029B1C0270050169C /* SelectionModifierBehavior.swift in Sources */,
-				3E37FD2729B087CF0050169C /* IntVec2.swift in Sources */,
-				3E37FDB729B1E32E0050169C /* Door.swift in Sources */,
-				3E37FD0D29B0394A0050169C /* Clipping.swift in Sources */,
-				3E37FD1529B04FF80050169C /* Face.swift in Sources */,
-				3E37FD8029B1C0270050169C /* ProBuilderMesh.swift in Sources */,
-				3E37FD9929B1C2BC0050169C /* Spline.swift in Sources */,
-				3E37FDB129B1E21F0050169C /* Cone.swift in Sources */,
-				3E37FD8929B1C0270050169C /* Normal.swift in Sources */,
-				3E37FDDC29B22F120050169C /* MeshTransform.swift in Sources */,
-				3E37FDA129B1C6E70050169C /* Triangle.swift in Sources */,
 				3E1F12BE29ADB83200F1002E /* ICharacterController.swift in Sources */,
 				43D8C8847DCDFE5DABA15585 /* WireframePrimitive.swift in Sources */,
-				3E37FDBB29B1E3B20050169C /* Plane.swift in Sources */,
 				43D8CB27974E2712F873405E /* WireframeManager.swift in Sources */,
 				3E37FD8229B1C0270050169C /* RaycastHit.swift in Sources */,
 				43D8C57503BAADE4FE366B56 /* GridMaterial.swift in Sources */,
 				43D8C96F57FDDC6923756F57 /* GridControl.swift in Sources */,
-				3E37FD1929B062C70050169C /* WingedEdge.swift in Sources */,
-				3E37FD8A29B1C0270050169C /* Math.swift in Sources */,
-				3E37FD8429B1C0270050169C /* MeshUtility.swift in Sources */,
-				3E37FDE829B238040050169C /* VertexEditing.swift in Sources */,
-				3E37FDE429B233250050169C /* SurfaceTopology.swift in Sources */,
-				3E37FD5429B191DE0050169C /* Shape.swift in Sources */,
 				3E37FD1F29B079250050169C /* HandleConstraint2D.swift in Sources */,
-				3E37FDCE29B1ECBF0050169C /* CombineMeshes.swift in Sources */,
-				3E37FDB329B1E2860050169C /* Cube.swift in Sources */,
-				3E37FD8129B1C0270050169C /* SelectPathFaces.swift in Sources */,
-				3E37FDC329B1E4A30050169C /* Stairs.swift in Sources */,
-				3E37FDC529B1E52A0050169C /* Torus.swift in Sources */,
-				43D8CFBD79ADA533E11655ED /* Bounds2D.swift in Sources */,
-				3E37FDE629B236990050169C /* Triangulation.swift in Sources */,
-				3E37FD2B29B0911B0050169C /* IntVec3.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3618,6 +3469,7 @@
 				3EC038B429321835002187DC /* DynamicCollider.swift in Sources */,
 				3EC039142932186A002187DC /* SceneParser.swift in Sources */,
 				3EC039E929321918002187DC /* PlayState.swift in Sources */,
+				3E1412FB29B5A6BD00099BF1 /* ControllerColliderHit.swift in Sources */,
 				3EC92AE5293D8FA500423396 /* TransparentShadowMaterial.swift in Sources */,
 				3EC038E629321845002187DC /* PhysXJoint.swift in Sources */,
 				3EC039D829321910002187DC /* PositionAnimationCurveOwnerAssembler.swift in Sources */,
@@ -3678,6 +3530,7 @@
 				3EC03980293218C3002187DC /* BufferView.swift in Sources */,
 				3EC0389F29321826002187DC /* Layer.swift in Sources */,
 				3EC03A042932192D002187DC /* BackgroundSubpass.swift in Sources */,
+				3E1412F929B5969C00099BF1 /* ControllerBehavior.swift in Sources */,
 				3EC03975293218C3002187DC /* BlendShapeManager.swift in Sources */,
 				3EC03963293218BA002187DC /* RenderPipelineState.swift in Sources */,
 				3EC039172932186A002187DC /* TextureParser.swift in Sources */,
@@ -3691,7 +3544,6 @@
 				3EC03951293218AA002187DC /* RenderQueueType.swift in Sources */,
 				3EC039CC29321903002187DC /* AnimatorStateData.swift in Sources */,
 				3EC039FD29321920002187DC /* AnimationColorCurve.swift in Sources */,
-				3EC038F32932184C002187DC /* ControllerCollisionFlag.swift in Sources */,
 				3EACA08D29A475C200F08BB2 /* MeshColliderCookingOptions.swift in Sources */,
 				3EC0392229321872002187DC /* KHR_materials_clearcoat.swift in Sources */,
 				3EC039AC293218F0002187DC /* DisorderedArray.swift in Sources */,

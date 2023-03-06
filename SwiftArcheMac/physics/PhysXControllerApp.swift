@@ -13,7 +13,6 @@ class ControllerScript: Script {
     var camera: Entity!
     var character: CharacterController?
     var displacement = Vector3()
-    var _fallAccumulateTime: Float = 0
     
     required init(_ entity: Entity) {
         character = entity.getComponent(CharacterController.self)
@@ -42,7 +41,7 @@ class ControllerScript: Script {
                 displacement = cross.scale(s: -animationSpeed)
             }
             if inputManager.isKeyHeldDown(.VKEY_SPACE) {
-                displacement = Vector3(0, 0.05, 0)
+                displacement = Vector3(0, 0.5, 0)
             }
         } else {
             displacement = Vector3()
@@ -54,31 +53,48 @@ class ControllerScript: Script {
             let physicsManager = engine.physicsManager
             let gravity = physicsManager.gravity
             let fixedTimeStep = physicsManager.fixedTimeStep
-            _fallAccumulateTime += fixedTimeStep
+            displacement.y += gravity.y * fixedTimeStep
             
-            _ = character.move(disp: displacement, minDist: 0.001, elapsedTime: fixedTimeStep)
-            let flags = character.move(disp: Vector3(0, gravity.y * fixedTimeStep * _fallAccumulateTime, 0),
-                                       minDist: 0.001, elapsedTime: fixedTimeStep)
-            if flags & ControllerCollisionFlag.Down.rawValue != 0 {
-                _fallAccumulateTime = 0
-            }
+            _ = character.move(disp: displacement, minDist: 0.01, elapsedTime: fixedTimeStep)
         }
         
     }
 }
 
-class MovableBox : Script {
+class PlayerBehavior: ControllerBehavior {
+    override init() {
+        super.init()
+    }
+    
+    override func onShapeHit(hit: ControllerColliderHit) {
+        
+    }
+    
+    override func getShapeBehaviorFlags(shape: ColliderShape) -> ControllerBehaviorFlag {
+        ControllerBehaviorFlag.CanRideOnObject
+    }
+}
+
+class MovablePlatform : Script {
     var boxEntity: Entity
     var time: Float = 0
+    var platform: DynamicCollider?
     
     required init(_ entity: Entity) {
-        boxEntity = addBox(entity, Vector3(5, 2, 5), Vector3(0, 0, 0), Quaternion(), isDynamic: false)
+        boxEntity = addBox(entity, Vector3(5, 2, 5), Vector3(0, 2, 10), Quaternion(), isDynamic: true)
+        platform = boxEntity.getComponent(DynamicCollider.self)
+        if let platform {
+            platform.isKinematic = true
+            platform.setDensity(1)
+        }
         super.init(entity)
     }
 
     override func onUpdate(_ deltaTime: Float) {
         time += deltaTime
-        boxEntity.transform.position.y = sin(time) * 3 + 3
+        if let platform {
+            platform.movePosition(Vector3(sin(time) * 10, sin(time) * 2 + 3, cos(time) * 10))
+        }
     }
 }
 
@@ -107,6 +123,7 @@ class PhysXControllerApp: NSViewController {
 
         let characterController = capsuleEntity.addComponent(CharacterController.self)
         characterController.addShape(physicsCapsule)
+        characterController.behavior = PlayerBehavior()
 
         return capsuleEntity
     }
@@ -133,8 +150,8 @@ class PhysXControllerApp: NSViewController {
                 }
             }
         }
-        rootEntity.addComponent(MovableBox.self)
-        addDuckMesh(rootEntity)
+        rootEntity.addComponent(MovablePlatform.self)
+//        addDuckMesh(rootEntity)
     }
     
     override func viewDidLoad() {

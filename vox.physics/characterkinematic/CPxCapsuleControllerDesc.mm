@@ -154,47 +154,57 @@
     _c_desc.registerDeletionListener = registerDeletionListener;
 }
 
-- (void)setControllerBehaviorCallback
-        :(uint8_t (^ _Nullable)(CPxShape *_Nonnull shape, CPxRigidActor *_Nonnull actor))getShapeBehaviorFlags
-        :(uint8_t (^ _Nullable)(CPxController *_Nonnull controller))getControllerBehaviorFlags
-        :(uint8_t (^ _Nullable)(CPxObstacle *_Nonnull obstacle))getObstacleBehaviorFlags {
+// MARK: - ControllerBehaviorCallback
+- (void)setControllerBehaviorCallback:(uint8_t (^ _Nullable)(uint32_t obj))getShapeBehaviorFlags {
     class PxControllerBehaviorCallbackWrapper : public PxControllerBehaviorCallback {
     public:
-        std::function<uint8_t(CPxShape *shape, CPxRigidActor *actor)> getShapeBehaviorFlags;
-        std::function<uint8_t(CPxController *controller)> getControllerBehaviorFlags;
-        std::function<uint8_t(CPxObstacle *obstacle)> getObstacleBehaviorFlags;
+        std::function<uint8_t(uint32_t obj)> getShapeBehaviorFlags;
 
-        PxControllerBehaviorCallbackWrapper(std::function<uint8_t(CPxShape *shape, CPxRigidActor *actor)> getShapeBehaviorFlags,
-                std::function<uint8_t(CPxController *controller)> getControllerBehaviorFlags,
-                std::function<uint8_t(CPxObstacle *obstacle)> getObstacleBehaviorFlags) :
-                getShapeBehaviorFlags(getShapeBehaviorFlags),
-                getControllerBehaviorFlags(getControllerBehaviorFlags),
-                getObstacleBehaviorFlags(getObstacleBehaviorFlags) {
+        PxControllerBehaviorCallbackWrapper(std::function<uint8_t(uint32_t obj)> getShapeBehaviorFlags) :
+            getShapeBehaviorFlags(getShapeBehaviorFlags){
         }
 
         PxControllerBehaviorFlags getBehaviorFlags(const PxShape &shape, const PxActor &actor) override {
-            return PxControllerBehaviorFlags(getShapeBehaviorFlags([[CPxShape alloc] initWithShape:const_cast<PxShape *>(&shape)],
-                    [[CPxRigidActor alloc] initWithActor:
-                            const_cast<PxRigidActor *>(static_cast<const PxRigidActor *>(&actor))]));
+            return PxControllerBehaviorFlags(getShapeBehaviorFlags(shape.getQueryFilterData().word3));
         }
 
         PxControllerBehaviorFlags getBehaviorFlags(const PxController &controller) override {
-            return PxControllerBehaviorFlags(getControllerBehaviorFlags([[CPxController alloc] initWithController:const_cast<PxController *>(&controller)]));
+            return PxControllerBehaviorFlags(0);
         }
 
         PxControllerBehaviorFlags getBehaviorFlags(const PxObstacle &obstacle) override {
-            if (obstacle.getType() == PxGeometryType::Enum::eBOX) {
-                return PxControllerBehaviorFlags(getObstacleBehaviorFlags([[CPxBoxObstacle alloc] initWithObstacle:static_cast<const PxBoxObstacle &>(obstacle)]));
-            } else if (obstacle.getType() == PxGeometryType::Enum::eBOX) {
-                return PxControllerBehaviorFlags(getObstacleBehaviorFlags([[CPxCapsuleObstacle alloc] initWithObstacle:static_cast<const PxCapsuleObstacle &>(obstacle)]));
-            } else {
-                assert(false);
-            }
             return PxControllerBehaviorFlags(0);
         }
     };
 
-    _c_desc.behaviorCallback = new PxControllerBehaviorCallbackWrapper(getShapeBehaviorFlags, getControllerBehaviorFlags, getObstacleBehaviorFlags);
+    _c_desc.behaviorCallback = new PxControllerBehaviorCallbackWrapper(getShapeBehaviorFlags);
+}
+
+// MARK: - UserControllerHitReport
+- (void)setUserControllerHitReport:(void (^ _Nullable)(uint32_t obj, simd_float3 moveDir, float moveLength,
+                                                       simd_float3 normal, simd_float3 point))onShapeHitCallback {
+    class PxUserControllerHitReportWrapper : public PxUserControllerHitReport {
+    public:
+        using OnShapeHitCallback = std::function<void(uint32_t obj, simd_float3 moveDir, float moveLength,
+                                                      simd_float3 normal, simd_float3 point)>;
+        OnShapeHitCallback onShapeHitCallback;
+
+        PxUserControllerHitReportWrapper(OnShapeHitCallback onShapeHitCallback) :
+        onShapeHitCallback(onShapeHitCallback){
+        }
+        
+        void onShapeHit(const PxControllerShapeHit& hit) override {
+            onShapeHitCallback(hit.shape->getQueryFilterData().word3,
+                               transform(hit.dir), hit.length, transform(hit.worldNormal), transform(hit.worldPos));
+        }
+
+        void onControllerHit(const PxControllersHit& hit) override {
+        }
+
+        void onObstacleHit(const PxControllerObstacleHit& hit) override {
+        }
+    };
+    _c_desc.reportCallback = new PxUserControllerHitReportWrapper(onShapeHitCallback);
 }
 
 @end

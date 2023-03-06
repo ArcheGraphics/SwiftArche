@@ -74,7 +74,9 @@
 
 //MARK: - Mass Manipulation
 - (void)setMass:(float)mass {
-    static_cast<PxRigidDynamic *>(super.c_actor)->setMass(mass);
+    auto rigidbody = static_cast<PxRigidDynamic *>(super.c_actor);
+    rigidbody->setMass(mass);
+    PxRigidBodyExt::setMassAndUpdateInertia(*rigidbody, mass);
 }
 
 - (float)getMass {
@@ -210,6 +212,10 @@
 
 - (void)setUseGravity:(bool)value {
     super.c_actor->setActorFlag(PxActorFlag::Enum::eDISABLE_GRAVITY, value);
+}
+
+- (void)setDensity:(float)value {
+    PxRigidBodyExt::updateMassAndInertia(*static_cast<PxRigidDynamic *>(super.c_actor), value);
 }
 
 @end

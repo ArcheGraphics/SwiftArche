@@ -49,8 +49,8 @@ enum CPxCapsuleClimbingMode {
 @property(nonatomic, assign) CPxMaterial *_Nullable material;
 @property(nonatomic, assign) bool registerDeletionListener;
 
-- (void)setControllerBehaviorCallback:(uint8_t (^ _Nullable)(CPxShape *_Nonnull shape, CPxRigidActor *_Nonnull actor))getShapeBehaviorFlags
-        :(uint8_t (^ _Nullable)(CPxController *_Nonnull controller))getControllerBehaviorFlags
-        :(uint8_t (^ _Nullable)(CPxObstacle *_Nonnull obstacle))getObstacleBehaviorFlags;
+- (void)setControllerBehaviorCallback:(uint8_t (^ _Nullable)(uint32_t obj))getShapeBehaviorFlags;
 
+- (void)setUserControllerHitReport:(void (^ _Nullable)(uint32_t obj, simd_float3 moveDir, float moveLength,
+                                                       simd_float3 normal, simd_float3 point))onShapeHitCallback;
 @end

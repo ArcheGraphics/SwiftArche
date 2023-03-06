@@ -35,8 +35,10 @@ public struct Plane {
     /// - Parameters:
     ///   - normal: The normal vector
     ///   - distance: The distance of the plane along its normal to the origin
-    public init(_ normal: Vector3 = Vector3(), _ distance: Float = 0) {
-        _normal = normal.normalized()
+    public init(_ normal: Vector3? = nil, _ distance: Float = 0) {
+        if normal != nil {
+            _normal = normal!
+        }
         _distance = distance
     }
     

@@ -13,6 +13,9 @@ public class CharacterController: Collider {
     private var _upDirection = Vector3(0, 1, 0)
     private var _slopeLimit: Float = 0.707
 
+    /// The controller behavior
+    public var behavior: ControllerBehavior?
+
     /// The step offset for the controller.
     public var stepOffset: Float {
         get {
@@ -60,6 +63,27 @@ public class CharacterController: Collider {
     public required init(_ entity: Entity) {
         super.init(entity)
         _nativeCollider = PhysXPhysics.createCharacterController()
+        (_nativeCollider as! PhysXCharacterController).setHitReport { [self] id, dir, length, normal, point in
+            if let behavior,
+               let shape = engine.physicsManager._getColliderShape(id) {
+                var result = ControllerColliderHit(self)
+                result.colliderShape = shape
+                result.collider = shape.collider
+                result.entity = shape.collider?.entity
+                result.moveDirection = dir
+                result.moveLength = length
+                result.normal = normal
+                result.point = point
+                behavior.onShapeHit(hit: result)
+            }
+        }
+        (_nativeCollider as! PhysXCharacterController).setBehaviorCallback { [self] id in
+            if let behavior,
+               let shape = engine.physicsManager._getColliderShape(id) {
+                return behavior.getShapeBehaviorFlags(shape: shape).rawValue
+            }
+            return 0
+        }
     }
 
     /// Moves the character using a "collide-and-slide" algorithm.
@@ -68,8 +92,9 @@ public class CharacterController: Collider {
     ///   - minDist: The minimum travelled distance to consider.
     ///   - elapsedTime: Time elapsed since last call
     /// - Returns:The ControllerCollisionFlag
-    public func move(disp: Vector3, minDist: Float, elapsedTime: Float) -> UInt8 {
-        (_nativeCollider as! PhysXCharacterController).move(disp, minDist, elapsedTime)
+    @discardableResult
+    public func move(disp: Vector3, minDist: Float, elapsedTime: Float) -> ControllerCollisionFlag {
+        ControllerCollisionFlag(rawValue: (_nativeCollider as! PhysXCharacterController).move(disp, minDist, elapsedTime))
     }
 
     /// Add collider shape on this controller.
@@ -113,5 +138,19 @@ public class CharacterController: Collider {
     override func _onDisable() {
         engine.physicsManager._removeCharacterController(self)
     }
+}
 
+public struct ControllerCollisionFlag: OptionSet {
+    public let rawValue: UInt8
+    
+    public init(rawValue: UInt8) {
+        self.rawValue = rawValue
+    }
+    
+    /// Character is colliding to the sides.
+    public static let Sides = ControllerCollisionFlag(rawValue: 1 << 0)
+    /// Character has collision above.
+    public static let Up = ControllerCollisionFlag(rawValue: 1 << 1)
+    /// Character has collision below.
+    public static let Down = ControllerCollisionFlag(rawValue: 1 << 2)
 }

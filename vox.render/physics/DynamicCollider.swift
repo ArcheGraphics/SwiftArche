@@ -43,7 +43,7 @@ public class DynamicCollider: Collider {
             _angularDamping
         }
         set {
-            if _angularDamping == newValue {
+            if _angularDamping != newValue {
                 _angularDamping = newValue
                 (_nativeCollider as! PhysXDynamicCollider).setAngularDamping(newValue)
             }
@@ -78,7 +78,7 @@ public class DynamicCollider: Collider {
             _mass
         }
         set {
-            if _mass == newValue {
+            if _mass != newValue {
                 _mass = newValue
                 (_nativeCollider as! PhysXDynamicCollider).setMass(newValue)
             }
@@ -113,7 +113,7 @@ public class DynamicCollider: Collider {
             _maxAngularVelocity
         }
         set {
-            if _maxAngularVelocity == newValue {
+            if _maxAngularVelocity != newValue {
                 _maxAngularVelocity = newValue
                 (_nativeCollider as! PhysXDynamicCollider).setMaxAngularVelocity(newValue)
             }
@@ -126,7 +126,7 @@ public class DynamicCollider: Collider {
             _maxDepenetrationVelocity
         }
         set {
-            if _maxDepenetrationVelocity == newValue {
+            if _maxDepenetrationVelocity != newValue {
                 _maxDepenetrationVelocity = newValue
                 (_nativeCollider as! PhysXDynamicCollider).setMaxDepenetrationVelocity(newValue)
             }
@@ -139,7 +139,7 @@ public class DynamicCollider: Collider {
             _sleepThreshold
         }
         set {
-            if _sleepThreshold == newValue {
+            if _sleepThreshold != newValue {
                 _sleepThreshold = newValue
                 (_nativeCollider as! PhysXDynamicCollider).setSleepThreshold(newValue)
             }
@@ -152,7 +152,7 @@ public class DynamicCollider: Collider {
             _solverIterations
         }
         set {
-            if _solverIterations == newValue {
+            if _solverIterations != newValue {
                 _solverIterations = newValue
                 (_nativeCollider as! PhysXDynamicCollider).setSolverIterations(newValue)
             }
@@ -165,7 +165,7 @@ public class DynamicCollider: Collider {
             _isKinematic
         }
         set {
-            if _isKinematic == newValue {
+            if _isKinematic != newValue {
                 _isKinematic = newValue
                 (_nativeCollider as! PhysXDynamicCollider).setIsKinematic(newValue)
             }
@@ -250,6 +250,11 @@ public class DynamicCollider: Collider {
     /// Forces a collider to wake up.
     public func wakeUp() {
         (_nativeCollider as! PhysXDynamicCollider).wakeUp()
+    }
+    
+    /// Sets the mass based on the attached colliders assuming a constant density.
+    public func setDensity(_ value: Float) {
+        (_nativeCollider as! PhysXDynamicCollider).setDensity(value)
     }
 
     override func _onLateUpdate() {
