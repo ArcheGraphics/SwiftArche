@@ -123,22 +123,22 @@
 }
 
 //MARK: - Extension
-- (void)addForceAtPosWith:(simd_float3)force pos:(simd_float3)pos mode:(enum CPxForceMode)mode {
+- (void)addForceAtPosWith:(simd_float3)force pos:(simd_float3)pos mode:(uint8_t)mode {
     PxRigidBodyExt::addForceAtPos(*static_cast<PxRigidDynamic *>(super.c_actor), transform(force),
             transform(pos), PxForceMode::Enum(mode));
 }
 
-- (void)addForceAtLocalPosWith:(simd_float3)force pos:(simd_float3)pos mode:(enum CPxForceMode)mode {
+- (void)addForceAtLocalPosWith:(simd_float3)force pos:(simd_float3)pos mode:(uint8_t)mode {
     PxRigidBodyExt::addForceAtLocalPos(*static_cast<PxRigidDynamic *>(super.c_actor), transform(force),
             transform(pos), PxForceMode::Enum(mode));
 }
 
-- (void)addLocalForceAtPosWith:(simd_float3)force pos:(simd_float3)pos mode:(enum CPxForceMode)mode {
+- (void)addLocalForceAtPosWith:(simd_float3)force pos:(simd_float3)pos mode:(uint8_t)mode {
     PxRigidBodyExt::addLocalForceAtPos(*static_cast<PxRigidDynamic *>(super.c_actor), transform(force),
             transform(pos), PxForceMode::Enum(mode));
 }
 
-- (void)addLocalForceAtLocalPosWith:(simd_float3)force pos:(simd_float3)pos mode:(enum CPxForceMode)mode {
+- (void)addLocalForceAtLocalPosWith:(simd_float3)force pos:(simd_float3)pos mode:(uint8_t)mode {
     PxRigidBodyExt::addLocalForceAtLocalPos(*static_cast<PxRigidDynamic *>(super.c_actor), transform(force),
             transform(pos), PxForceMode::Enum(mode));
 }

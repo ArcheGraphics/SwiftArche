@@ -18,6 +18,18 @@ public enum CollisionDetectionMode: Int {
     case ContinuousSpeculative
 }
 
+public enum ForceMode: UInt8 {
+    /// parameter has unit of mass * distance/ time^2, i.e. a force
+    case Force = 0
+    /// parameter has unit of mass * distance /time
+    case Impulse = 1
+    /// parameter has unit of distance / time, i.e. the effect is mass independent: a velocity change.
+    case VelocityChange = 2
+    /// parameter has unit of distance/ time^2, i.e. an acceleration.
+    /// It gets treated just like a force except the mass is not divided out before integration.
+    case Acceleration = 3
+}
+
 /// Use these flags to constrain motion of dynamic collider.
 public struct DynamicColliderConstraints: OptionSet {
     public let rawValue: UInt32
@@ -68,6 +80,10 @@ class PhysXDynamicCollider: PhysXCollider {
     func setMass(_ value: Float) {
         (_pxActor as! CPxRigidDynamic).setMass(value)
     }
+    
+    func getMass() -> Float {
+        (_pxActor as! CPxRigidDynamic).getMass()
+    }
 
     func setCenterOfMass(_ value: Vector3) {
         (_pxActor as! CPxRigidDynamic).setCMassLocalPose(value.internalValue,
@@ -94,23 +110,21 @@ class PhysXDynamicCollider: PhysXCollider {
         (_pxActor as! CPxRigidDynamic).setSolverIterationCounts(UInt32(value), minVelocityIters: 1)
     }
 
-    func setCollisionDetectionMode(_ value: Int) {
+    func setCollisionDetectionMode(_ value: CollisionDetectionMode) {
         switch (value) {
-        case CollisionDetectionMode.Continuous.rawValue:
+        case CollisionDetectionMode.Continuous:
             (_pxActor as! CPxRigidDynamic).setRigidBodyFlag(eENABLE_CCD, value: true)
             break
-        case CollisionDetectionMode.ContinuousDynamic.rawValue:
+        case CollisionDetectionMode.ContinuousDynamic:
             (_pxActor as! CPxRigidDynamic).setRigidBodyFlag(eENABLE_CCD_FRICTION, value: true)
             break
-        case CollisionDetectionMode.ContinuousSpeculative.rawValue:
+        case CollisionDetectionMode.ContinuousSpeculative:
             (_pxActor as! CPxRigidDynamic).setRigidBodyFlag(eENABLE_SPECULATIVE_CCD, value: true)
             break
-        case CollisionDetectionMode.Discrete.rawValue:
+        case CollisionDetectionMode.Discrete:
             (_pxActor as! CPxRigidDynamic).setRigidBodyFlag(eENABLE_CCD, value: false)
             (_pxActor as! CPxRigidDynamic).setRigidBodyFlag(eENABLE_CCD_FRICTION, value: false)
             (_pxActor as! CPxRigidDynamic).setRigidBodyFlag(eENABLE_SPECULATIVE_CCD, value: false)
-            break
-        default:
             break
         }
     }
@@ -143,8 +157,8 @@ class PhysXDynamicCollider: PhysXCollider {
         (_pxActor as! CPxRigidDynamic).addTorque(torque.internalValue)
     }
 
-    func addForceAtPosition(_ force: Vector3, _ pos: Vector3, _ mode: CPxForceMode) {
-        (_pxActor as! CPxRigidDynamic).addForceAtPos(with: force.internalValue, pos: pos.internalValue, mode: mode)
+    func addForceAtPosition(_ force: Vector3, _ pos: Vector3, _ mode: ForceMode) {
+        (_pxActor as! CPxRigidDynamic).addForceAtPos(with: force.internalValue, pos: pos.internalValue, mode: mode.rawValue)
     }
 
     func movePosition(_ value: Vector3) {

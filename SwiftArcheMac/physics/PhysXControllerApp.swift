@@ -53,7 +53,7 @@ class PlayerBehavior: ControllerBehavior {
                 dir.y = 0
                 rigidBody.applyForceAtPosition(dir.normalized() * 10,
                         hit.controller!.entity.transform.worldPosition,
-                        mode: eIMPULSE)
+                                               mode: .Impulse)
             }
         }
     }

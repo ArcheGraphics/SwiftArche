@@ -12,7 +12,6 @@ public class DynamicCollider: Collider {
     private var _angularDamping: Float = 0.05
     private var _linearVelocity = Vector3()
     private var _angularVelocity = Vector3()
-    private var _mass: Float = 1.0
     private var _centerOfMass = Vector3()
     private var _inertiaTensor = Vector3(1, 1, 1)
     private var _maxAngularVelocity: Float = 100
@@ -23,6 +22,7 @@ public class DynamicCollider: Collider {
     private var _collisionDetectionMode: CollisionDetectionMode = .Discrete
     private var _sleepThreshold: Float = 5e-3
     private var _useGravity: Bool = true
+    private var _density: Float = 1
 
     /// The linear damping of the dynamic collider.
     public var linearDamping: Float {
@@ -75,13 +75,10 @@ public class DynamicCollider: Collider {
     /// The mass of the dynamic collider.
     public var mass: Float {
         get {
-            _mass
+            (_nativeCollider as! PhysXDynamicCollider).getMass()
         }
         set {
-            if _mass != newValue {
-                _mass = newValue
-                (_nativeCollider as! PhysXDynamicCollider).setMass(newValue)
-            }
+            (_nativeCollider as! PhysXDynamicCollider).setMass(newValue)
         }
     }
 
@@ -178,8 +175,10 @@ public class DynamicCollider: Collider {
             _collisionDetectionMode
         }
         set {
-            _collisionDetectionMode = newValue
-            (_nativeCollider as! PhysXDynamicCollider).setCollisionDetectionMode(newValue.rawValue)
+            if _collisionDetectionMode != newValue {
+                _collisionDetectionMode = newValue
+                (_nativeCollider as! PhysXDynamicCollider).setCollisionDetectionMode(newValue)
+            }
         }
     }
 
@@ -201,8 +200,10 @@ public class DynamicCollider: Collider {
             _useGravity
         }
         set {
-            _useGravity = newValue
-            (_nativeCollider as! PhysXDynamicCollider).setUseGravity(newValue)
+            if _useGravity != newValue {
+                _useGravity = newValue
+                (_nativeCollider as! PhysXDynamicCollider).setUseGravity(newValue)
+            }
         }
     }
 
@@ -228,7 +229,7 @@ public class DynamicCollider: Collider {
     }
 
     /// Applies force at position. As a result this will apply a torque and force on the object.
-    public func applyForceAtPosition(_ force: Vector3, _ pos: Vector3, mode: CPxForceMode = eFORCE) {
+    public func applyForceAtPosition(_ force: Vector3, _ pos: Vector3, mode: ForceMode = .Force) {
         (_nativeCollider as! PhysXDynamicCollider).addForceAtPosition(force, pos, mode)
     }
 
@@ -254,7 +255,13 @@ public class DynamicCollider: Collider {
     
     /// Sets the mass based on the attached colliders assuming a constant density.
     public func setDensity(_ value: Float) {
+        _density = value
         (_nativeCollider as! PhysXDynamicCollider).setDensity(value)
+    }
+    
+    public override func addShape(_ shape: ColliderShape) {
+        super.addShape(shape)
+        setDensity(_density)
     }
 
     override func _onLateUpdate() {

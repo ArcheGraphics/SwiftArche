@@ -9,22 +9,6 @@
 #import "CPxRigidActor.h"
 #import <simd/simd.h>
 
-enum CPxForceMode {
-    eFORCE,              //!< parameter has unit of mass * distance/ time^2, i.e. a force
-    eIMPULSE,            //!< parameter has unit of mass * distance /time
-    eVELOCITY_CHANGE,    //!< parameter has unit of distance / time, i.e. the effect is mass independent: a velocity change.
-    eACCELERATION        //!< parameter has unit of distance/ time^2, i.e. an acceleration. It gets treated just like a force except the mass is not divided out before integration.
-};
-
-enum CPxRigidDynamicLockFlag {
-    eLOCK_LINEAR_X = (1 << 0),
-    eLOCK_LINEAR_Y = (1 << 1),
-    eLOCK_LINEAR_Z = (1 << 2),
-    eLOCK_ANGULAR_X = (1 << 3),
-    eLOCK_ANGULAR_Y = (1 << 4),
-    eLOCK_ANGULAR_Z = (1 << 5)
-};
-
 enum CPxRigidBodyFlag {
     eKINEMATIC = (1 << 0),        //!< Enable kinematic mode for the body.
 
@@ -133,22 +117,22 @@ enum CPxRigidBodyFlag {
 /// Applies a force (or impulse) defined in the global coordinate frame, acting at a particular point in global coordinates, to the actor.
 /// @param force Force/impulse to add, defined in the global frame.
 /// @param pos Position in the global frame to add the force at.
-- (void)addForceAtPosWith:(simd_float3)force pos:(simd_float3)pos mode:(enum CPxForceMode)mode;
+- (void)addForceAtPosWith:(simd_float3)force pos:(simd_float3)pos mode:(uint8_t)mode;
 
 /// Applies a force (or impulse) defined in the global coordinate frame, acting at a particular point in local coordinates, to the actor.
 /// @param force Force/impulse to add, defined in the global frame.
 /// @param pos Position in the local frame to add the force at.
-- (void)addForceAtLocalPosWith:(simd_float3)force pos:(simd_float3)pos mode:(enum CPxForceMode)mode;
+- (void)addForceAtLocalPosWith:(simd_float3)force pos:(simd_float3)pos mode:(uint8_t)mode;
 
 ///  Applies a force (or impulse) defined in the actor local coordinate frame, acting at a particular point in global coordinates, to the actor.
 /// @param force Force/impulse to add, defined in the local frame.
 /// @param pos Position in the global frame to add the force at.
-- (void)addLocalForceAtPosWith:(simd_float3)force pos:(simd_float3)pos mode:(enum CPxForceMode)mode;
+- (void)addLocalForceAtPosWith:(simd_float3)force pos:(simd_float3)pos mode:(uint8_t)mode;
 
 /// Applies a force (or impulse) defined in the actor local coordinate frame, acting at a particular point in local coordinates, to the actor.
 /// @param force Force/impulse to add, defined in the local frame.
 /// @param pos Position in the local frame to add the force at.
-- (void)addLocalForceAtLocalPosWith:(simd_float3)force pos:(simd_float3)pos mode:(enum CPxForceMode)mode;
+- (void)addLocalForceAtLocalPosWith:(simd_float3)force pos:(simd_float3)pos mode:(uint8_t)mode;
 
 /// Computes the velocity of a point given in world coordinates if it were attached to the  specified body and moving with it.
 /// @param pos Position we wish to determine the velocity for, defined in the global frame.
