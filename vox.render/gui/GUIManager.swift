@@ -9,7 +9,8 @@ import ImGui
 
 class GUIManager {
     private let _engine: Engine
-    
+    private var _onGUIScripts: DisorderedArray<Script> = DisorderedArray()
+
     init(_ engine:Engine) {
         _engine = engine
         
@@ -24,7 +25,31 @@ class GUIManager {
         ImGui_ImplOSX_Shutdown()
     }
     
+    func addOnGUIScript(_ script: Script) {
+        script._onGUIIndex = _onGUIScripts.count
+        _onGUIScripts.add(script)
+    }
+
+    func removeOnGUIScript(_ script: Script) {
+        let replaced = _onGUIScripts.deleteByIndex(script._onGUIIndex)
+        if replaced != nil {
+            replaced!._onGUIIndex = script._onGUIIndex
+        }
+        script._onGUIIndex = -1
+    }
+    
+    func callScriptOnGUI() {
+        let elements = _onGUIScripts._elements
+        for i in 0..<_onGUIScripts.count {
+            let element = elements[i]!
+            if (element._started) {
+                element.onGUI()
+            }
+        }
+    }
+    
     func draw(_ commandBuffer: MTLCommandBuffer) {
+        callScriptOnGUI()
         if let drawData = ImGuiGetDrawData() {
             let canvas = _engine.canvas
             if let renderPassDescriptor = canvas.currentRenderPassDescriptor {

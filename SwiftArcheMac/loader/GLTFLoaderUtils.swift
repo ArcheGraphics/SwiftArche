@@ -206,8 +206,8 @@ class LoaderGUI: Script {
         }
     }
 
-    override func onUpdate(_ deltaTime: Float) {
-        UIElement.Init(engine.canvas, deltaTime)
+    override func onGUI() {
+        UIElement.Init(engine)
 
         ImGuiNewFrame()
 

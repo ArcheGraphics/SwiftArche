@@ -11,8 +11,8 @@ import vox_toolkit
 import ImGui
 
 fileprivate class GUI: Script {
-    override func onUpdate(_ deltaTime: Float) {
-        UIElement.Init(engine.canvas, deltaTime)
+    override func onGUI() {
+        UIElement.Init(engine)
 
         ImGuiNewFrame()
         UIElement.frameRate()

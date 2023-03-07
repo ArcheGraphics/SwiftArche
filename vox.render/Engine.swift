@@ -32,7 +32,7 @@ public class Engine: NSObject {
 #if os(iOS)
     private var _arManager: ARManager?
 #else
-    private var _guiManager: GUIManager!
+    var _guiManager: GUIManager!
 #endif
 
     // The semaphore used to control GPU-CPU synchronization of frames.

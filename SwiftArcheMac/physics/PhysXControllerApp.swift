@@ -29,8 +29,8 @@ fileprivate class GUI: Script {
     public var jumpGravity: Float = -50.0
     public var jumpForce: Float = 30
 
-    override func onUpdate(_ deltaTime: Float) {
-        UIElement.Init(engine.canvas, deltaTime)
+    override func onGUI() {
+        UIElement.Init(engine)
 
         ImGuiNewFrame()
         ImGuiSliderFloat("Platform Speed", &platformSpeed, 1.0, 10.0, nil, 1)

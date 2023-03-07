@@ -17,6 +17,7 @@ open class Script: Component {
     var _onPhysicsUpdateIndex: Int = -1
     var _onPreRenderIndex: Int = -1
     var _onPostRenderIndex: Int = -1
+    var _onGUIIndex: Int = -1
     var _entityScriptsIndex: Int = -1
     var _waitHandlingInValid: Bool = false
 
@@ -103,6 +104,9 @@ open class Script: Component {
     ///   - type: The event type depend on platform (NSEvent.type or UITouch.phase)
     open func onPointerCast(_ hitResult: HitResult, _ type: UInt) {
     }
+    
+    open func onGUI() {
+    }
 
     /// Called when be disabled.
     open func onDisable() {
@@ -128,6 +132,9 @@ open class Script: Component {
 #if os(iOS)
             engine.arManager?.addOnUpdateScript(self)
 #endif
+#if os(macOS)
+            engine._guiManager.addOnGUIScript(self)
+#endif
             _entity._addScript(self)
         }
         onEnable()
@@ -136,6 +143,9 @@ open class Script: Component {
     override func _onDisable() {
         _waitHandlingInValid = true
         _engine._componentsManager.addDisableScript(component: self)
+#if os(macOS)
+        _engine._guiManager.removeOnGUIScript(self)
+#endif
         onDisable()
     }
 

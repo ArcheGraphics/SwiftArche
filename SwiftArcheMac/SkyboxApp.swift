@@ -18,14 +18,14 @@ fileprivate class GUI: Script {
     var f: Float = 0.0
     var counter: Int = 0
 
-    override func onUpdate(_ deltaTime: Float) {
+    override func onGUI() {
         let view = engine.canvas
         let io = ImGuiGetIO()!
         io.pointee.DisplaySize.x = Float(view.bounds.size.width)
         io.pointee.DisplaySize.y = Float(view.bounds.size.height)
         let frameBufferScale = Float(view.window?.screen?.backingScaleFactor ?? NSScreen.main!.backingScaleFactor)
         io.pointee.DisplayFramebufferScale = ImVec2(x: frameBufferScale, y: frameBufferScale)
-        io.pointee.DeltaTime = deltaTime
+        io.pointee.DeltaTime = 1.0 / 60
 
         ImGuiNewFrame()
 

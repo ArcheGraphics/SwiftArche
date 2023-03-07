@@ -126,8 +126,8 @@ fileprivate class GUI: Script {
         }
     }
 
-    override func onUpdate(_ deltaTime: Float) {
-        UIElement.Init(engine.canvas, deltaTime)
+    override func onGUI() {
+        UIElement.Init(engine)
 
         ImGuiNewFrame()
         ImGuiCheckbox("pause", &pause)

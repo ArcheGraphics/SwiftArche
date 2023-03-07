@@ -69,8 +69,8 @@ class FaceGUI: Script {
         "tongueOut":            0
     ]
     
-    override func onUpdate(_ deltaTime: Float) {
-        UIElement.Init(engine.canvas, deltaTime)
+    override func onGUI() {
+        UIElement.Init(engine)
 
         ImGuiNewFrame()
         for morph in morphNameMap {
