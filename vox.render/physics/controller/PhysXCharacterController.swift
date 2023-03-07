@@ -51,6 +51,10 @@ class PhysXCharacterController: PhysXCollider {
     func setHitReport(_ script: @escaping (UInt32, Vector3, Float, Vector3, Vector3) -> Void) {
         _hitReport = script
     }
+    
+    func getCollisionFlags() -> ControllerCollisionFlag {
+        ControllerCollisionFlag(rawValue: UInt8(_pxController.collisionFlags()))
+    }
 
     override func addShape(_ shape: PhysXColliderShape) {
         if _pxManager != nil {

@@ -63,4 +63,6 @@ enum CPxControllerCollisionFlag {
 
 - (void)setUUID:(uint32_t)uuid;
 
+- (uint32_t)collisionFlags;
+
 @end

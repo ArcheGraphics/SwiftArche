@@ -14,6 +14,8 @@ fileprivate class GUI: Script {
     var platformControl: KinematicPlatform!
     private var _platformSpeed: Float = 1
     
+    var player: ControlledPlayer!
+    
     var platformSpeed: Float {
         get {
             _platformSpeed
@@ -23,15 +25,41 @@ fileprivate class GUI: Script {
             platformControl.setDefaultTravelTime(platformSpeed: newValue)
         }
     }
+    
+    public var jumpGravity: Float = -50.0
+    public var jumpForce: Float = 30
 
     override func onUpdate(_ deltaTime: Float) {
         UIElement.Init(engine.canvas, deltaTime)
 
-        let postprocess = scene.postprocessManager
         ImGuiNewFrame()
         ImGuiSliderFloat("Platform Speed", &platformSpeed, 1.0, 10.0, nil, 1)
+        ImGuiSliderFloat("Jump Force", &player.jump.jumpForce, 0.0, 50.0, nil, 1)
+        ImGuiSliderFloat("Jump Gravity", &player.jump.jumpGravity, -50, -10.0, nil, 1)
         // Rendering
         ImGuiRender()
+    }
+}
+
+class PlayerBehavior: ControllerBehavior {
+    override init() {
+        super.init()
+    }
+
+    override func onShapeHit(hit: ControllerColliderHit) {
+        if let rigidBody = hit.collider as? DynamicCollider {
+            if !rigidBody.isKinematic {
+                var dir = hit.entity!.transform.worldPosition - hit.controller!.entity.transform.worldPosition
+                dir.y = 0
+                rigidBody.applyForceAtPosition(dir.normalized() * 10,
+                        hit.controller!.entity.transform.worldPosition,
+                        mode: eIMPULSE)
+            }
+        }
+    }
+
+    override func getShapeBehaviorFlags(shape: ColliderShape) -> ControllerBehaviorFlag {
+        [ControllerBehaviorFlag.CanRideOnObject, ControllerBehaviorFlag.Slide]
     }
 }
 
@@ -63,8 +91,11 @@ class PhysXControllerApp: NSViewController {
 
         let characterController = capsuleEntity.addComponent(CharacterController.self)
         characterController.addShape(physicsCapsule)
+        characterController.behavior = PlayerBehavior()
         let player = capsuleEntity.addComponent(ControlledPlayer.self)
         player.camera = cameraEntity
+        gui.player = player
+        
         return capsuleEntity
     }
     

@@ -11,6 +11,7 @@
 
 @implementation CPxController {
     uint32_t index;
+    PxControllerState state;
 }
 
 - (instancetype)initWithController:(PxController *)controller {
@@ -111,6 +112,11 @@
     actor->getShapes(&shape, 1);
     index = uuid;
     shape->userData = &index;
+}
+
+- (uint32_t)collisionFlags {
+    _c_controller->getState(state);
+    return state.collisionFlags;
 }
 
 @end

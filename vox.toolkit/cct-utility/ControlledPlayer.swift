@@ -12,9 +12,10 @@ public class ControlledPlayer: Script {
     var character: CharacterController?
     var displacement = Vector3()
     
+    public var jump = Jump()
+
     required init(_ entity: Entity) {
         character = entity.getComponent(CharacterController.self)
-        character!.behavior = PlayerBehavior()
         super.init(entity)
     }
     
@@ -25,7 +26,7 @@ public class ControlledPlayer: Script {
             forward.y = 0
             _ = forward.normalize()
             var cross = Vector3(forward.z, 0, -forward.x)
-            
+
             let animationSpeed: Float = 0.1
             if inputManager.isKeyHeldDown(.VKEY_W) {
                 displacement = forward.scale(s: animationSpeed)
@@ -40,43 +41,71 @@ public class ControlledPlayer: Script {
                 displacement = cross.scale(s: -animationSpeed)
             }
             if inputManager.isKeyHeldDown(.VKEY_SPACE) {
-                displacement = Vector3(0, 0.5, 0)
+                startJump()
             }
         } else {
             displacement = Vector3()
         }
     }
-    
+
     public override func onPhysicsUpdate() {
         if let character = character {
             let physicsManager = engine.physicsManager
             let gravity = physicsManager.gravity
             let fixedTimeStep = physicsManager.fixedTimeStep
-            displacement.y += gravity.y * fixedTimeStep
             
-            _ = character.move(disp: displacement, minDist: 0.01, elapsedTime: fixedTimeStep)
-        }
-    }
-}
+            let heightDelta = jump.getHeight(elapsedTime: fixedTimeStep)
+            var dy: Float = 0
+            if(heightDelta != 0.0) {
+                dy = heightDelta;
+            } else {
+                dy = gravity.y * fixedTimeStep;
+            }
+            displacement.y = dy
 
-class PlayerBehavior: ControllerBehavior {
-    override init() {
-        super.init()
-    }
-    
-    override func onShapeHit(hit: ControllerColliderHit) {
-        if let rigidBody = hit.collider as? DynamicCollider {
-            if !rigidBody.isKinematic {
-                var dir = hit.entity!.transform.worldPosition - hit.controller!.entity.transform.worldPosition
-                dir.y = 0
-                rigidBody.applyForceAtPosition(dir.normalized() * 10,
-                                               hit.controller!.entity.transform.worldPosition,
-                                               mode: eIMPULSE)
+            let flags = character.move(disp: displacement, minDist: 0.01, elapsedTime: fixedTimeStep)
+            if flags.contains(ControllerCollisionFlag.Down) {
+                jump.stopJump()
             }
         }
     }
     
-    override func getShapeBehaviorFlags(shape: ColliderShape) -> ControllerBehaviorFlag {
-        [ControllerBehaviorFlag.CanRideOnObject, ControllerBehaviorFlag.Slide]
+    func startJump() {
+        if let character = character,
+           character.isGrounded {
+            jump.startJump()
+        }
+    }
+}
+
+public struct Jump {
+    public var jumpGravity: Float = -50.0
+    public var jumpForce: Float = 30
+
+    private var jump: Bool = false
+    private var jumpTime: Float = 0
+
+    mutating func startJump() {
+        if (jump) {
+            return
+        }
+        jumpTime = 0.0
+        jump = true
+    }
+
+    mutating func stopJump() {
+        if (!jump) {
+            return
+        }
+        jump = false
+    }
+
+    mutating func getHeight(elapsedTime: Float) -> Float {
+        if (!jump) {
+            return 0.0
+        }
+        jumpTime += elapsedTime
+        let h = jumpGravity * jumpTime * jumpTime + jumpForce * jumpTime
+        return h * elapsedTime
     }
 }

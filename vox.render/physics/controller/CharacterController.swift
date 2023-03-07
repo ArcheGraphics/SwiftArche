@@ -59,6 +59,14 @@ public class CharacterController: Collider {
             (_nativeCollider as! PhysXCharacterController).setSlopeLimit(newValue)
         }
     }
+    
+    public var collisionFlags: ControllerCollisionFlag {
+        (_nativeCollider as! PhysXCharacterController).getCollisionFlags()
+    }
+    
+    public var isGrounded: Bool {
+        collisionFlags.contains(ControllerCollisionFlag.Down)
+    }
 
     public required init(_ entity: Entity) {
         super.init(entity)
