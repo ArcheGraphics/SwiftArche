@@ -15,16 +15,16 @@
 
 - (void)setFlags:(uint8_t)inFlags;
 
-- (void)setQueryFilterData:(uint32_t)w0 w1:(uint32_t)w1 w2:(uint32_t)w2 w3:(uint32_t)w3;
-
 - (void)setGeometry:(CPxGeometry *)geometry;
 
 - (void)setLocalPose:(simd_float3)position rotation:(simd_quatf)rotation;
 
 - (void)setMaterial:(CPxMaterial *)material;
 
-- (int)getQueryFilterData:(int)index;
-
 - (void)setContactOffset:(float)contactOffset;
+
+- (void)setUUID:(uint32_t)uuid;
+
+- (uint32_t)getUUID;
 
 @end

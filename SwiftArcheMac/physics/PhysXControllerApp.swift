@@ -57,7 +57,6 @@ class ControllerScript: Script {
             
             _ = character.move(disp: displacement, minDist: 0.01, elapsedTime: fixedTimeStep)
         }
-        
     }
 }
 
@@ -132,6 +131,8 @@ class PhysXControllerApp: NSViewController {
         let characterController = capsuleEntity.addComponent(CharacterController.self)
         characterController.addShape(physicsCapsule)
         characterController.behavior = PlayerBehavior()
+        
+        capsuleEntity.addComponent(CollisionScript.self)
 
         return capsuleEntity
     }
@@ -145,7 +146,8 @@ class PhysXControllerApp: NSViewController {
                 let random = Int(floor(Float.random(in: 0...3))) % 3
                 switch (random) {
                 case 0:
-                    _ = addBox(rootEntity, Vector3(3, 3, 3), Vector3(Float(-4 + i), floor(Float.random(in: 0...6)) + 5, Float(-4 + j)), quat)
+                    _ = addBox(rootEntity, Vector3(3, 3, 3), Vector3(Float(-4 + i), floor(Float.random(in: 0...6)) + 5, Float(-4 + j)),
+                               quat, isDynamic: true)
                     break
                 case 1:
                     _ = addSphere(rootEntity, 0.5, Vector3(floor(Float.random(in: 0...16)) - 4, 5, floor(Float.random(in: 0...16)) - 4), quat)

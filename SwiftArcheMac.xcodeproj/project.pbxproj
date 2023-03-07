@@ -148,6 +148,7 @@
 		3EB32B882932303A0019A4F3 /* libc++.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 3EB32B852932303A0019A4F3 /* libc++.tbd */; };
 		3EB32B8D293239170019A4F3 /* InputManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EB32B8C293239170019A4F3 /* InputManager.swift */; };
 		3EB32B912932391F0019A4F3 /* PointerManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EB32B8F2932391F0019A4F3 /* PointerManager.swift */; };
+		3EBA3CFE29B6FC3F00E5FB42 /* SimulationFilterShader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3EBA3CFD29B6FC3F00E5FB42 /* SimulationFilterShader.cpp */; };
 		3EC0370529321131002187DC /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EC0370429321131002187DC /* AppDelegate.swift */; };
 		3EC0370E29321132002187DC /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3EC0370D29321132002187DC /* Assets.xcassets */; };
 		3EC0371129321132002187DC /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3EC0370F29321132002187DC /* Main.storyboard */; };
@@ -850,6 +851,8 @@
 		3EB32B8C293239170019A4F3 /* InputManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InputManager.swift; sourceTree = "<group>"; };
 		3EB32B8F2932391F0019A4F3 /* PointerManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PointerManager.swift; sourceTree = "<group>"; };
 		3EB32B9429323D9B0019A4F3 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		3EBA3CFC29B6FC3300E5FB42 /* SimulationFilterShader.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SimulationFilterShader.h; sourceTree = "<group>"; };
+		3EBA3CFD29B6FC3F00E5FB42 /* SimulationFilterShader.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = SimulationFilterShader.cpp; sourceTree = "<group>"; };
 		3EC0370129321131002187DC /* SwiftArcheMac.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SwiftArcheMac.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		3EC0370429321131002187DC /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		3EC0370D29321132002187DC /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -2016,6 +2019,8 @@
 				3EC03773293213B1002187DC /* characterkinematic */,
 				3E1F129129A762F000F1002E /* VHACD_ConvexCompose.h */,
 				3E1F129229A762FC00F1002E /* VHACD_ConvexCompose.mm */,
+				3EBA3CFC29B6FC3300E5FB42 /* SimulationFilterShader.h */,
+				3EBA3CFD29B6FC3F00E5FB42 /* SimulationFilterShader.cpp */,
 			);
 			path = vox.physics;
 			sourceTree = "<group>";
@@ -3414,6 +3419,7 @@
 				3EC037CC293213E6002187DC /* CPxJointLinearLimit.mm in Sources */,
 				3EACA08629A4584500F08BB2 /* CPxMeshGeometry.mm in Sources */,
 				3EC0378E293213D6002187DC /* CPxRigidDynamic.mm in Sources */,
+				3EBA3CFE29B6FC3F00E5FB42 /* SimulationFilterShader.cpp in Sources */,
 				3EC0379F293213D6002187DC /* CPxShape.mm in Sources */,
 				3EC0381C293213F9002187DC /* CPxCapsuleController.mm in Sources */,
 			);

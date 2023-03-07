@@ -97,7 +97,7 @@ class PhysXColliderShape {
                 isExclusive: true,
                 shapeFlags: _shapeFlags
         )
-        _pxShape.setQueryFilterData(0, w1: 0, w2: 0, w3: id)
+        _pxShape.setUUID(id)
     }
 
     private func _modifyFlag(_ flag: UInt8, _ value: Bool) {

@@ -16,6 +16,7 @@
 #import "joint/CPxJoint+Internal.h"
 #import "PxPhysicsAPI.h"
 #import "extensions/PxExtensionsAPI.h"
+#include "SimulationFilterShader.h"
 #include "CPXHelper.h"
 #include <functional>
 #include <vector>
@@ -151,12 +152,12 @@ using namespace physx;
                 uint32_t index0 = -1;
                 if (actor0 != nullptr) {
                     actor0->getShapes(shapes.data(), 1);
-                    index0 = shapes[0]->getQueryFilterData().word3;
+                    index0 = getUUID(shapes[0]);
                 }
                 uint32_t index1 = -1;
                 if (actor1 != nullptr) {
                     actor1->getShapes(shapes.data(), 1);
-                    index1 = shapes[0]->getQueryFilterData().word3;
+                    index1 = getUUID(shapes[0]);
                 }
                 onJointBreak(index0, index1, [[NSString alloc] initWithUTF8String:joint->getName()]);
             }
@@ -168,23 +169,23 @@ using namespace physx;
         void onSleep(PxActor **, PxU32) override {
         }
 
-        void onContact(const PxContactPairHeader &, const PxContactPair *pairs, PxU32 nbPairs) override {
+        void onContact(const PxContactPairHeader& pairHeader, const PxContactPair* pairs, PxU32 nbPairs) override {
             for (PxU32 i = 0; i < nbPairs; i++) {
                 const PxContactPair &cp = pairs[i];
                 userBuffer.resize(cp.contactCount);
                 extractContacts(userBuffer, cp);
 
                 if (cp.events & (PxPairFlag::eNOTIFY_TOUCH_FOUND | PxPairFlag::eNOTIFY_TOUCH_CCD)) {
-                    onContactEnter(cp.shapes[0]->getQueryFilterData().word3, cp.shapes[1]->getQueryFilterData().word3,
+                    onContactEnter(getUUID(cp.shapes[0]), getUUID(cp.shapes[1]),
                             userBuffer.data(), static_cast<uint32_t>(userBuffer.size()));
                 } else if (cp.events & PxPairFlag::eNOTIFY_TOUCH_LOST) {
                     if (!cp.flags.isSet(PxContactPairFlag::Enum::eREMOVED_SHAPE_0) &&
                             !cp.flags.isSet(PxContactPairFlag::Enum::eREMOVED_SHAPE_1)) {
-                        onContactExit(cp.shapes[0]->getQueryFilterData().word3, cp.shapes[1]->getQueryFilterData().word3,
+                        onContactExit(getUUID(cp.shapes[0]), getUUID(cp.shapes[1]),
                                 userBuffer.data(), static_cast<uint32_t>(userBuffer.size()));
                     }
                 } else if (cp.events & PxPairFlag::eNOTIFY_TOUCH_PERSISTS) {
-                    onContactStay(cp.shapes[0]->getQueryFilterData().word3, cp.shapes[1]->getQueryFilterData().word3,
+                    onContactStay(getUUID(cp.shapes[0]), getUUID(cp.shapes[1]),
                             userBuffer.data(), static_cast<uint32_t>(userBuffer.size()));
                 }
             }
@@ -195,17 +196,17 @@ using namespace physx;
                 const PxTriggerPair &tp = pairs[i];
 
                 if (tp.status & PxPairFlag::eNOTIFY_TOUCH_FOUND) {
-                    onTriggerEnter(tp.triggerShape->getQueryFilterData().word3, tp.otherShape->getQueryFilterData().word3);
+                    onTriggerEnter(getUUID(tp.triggerShape), getUUID(tp.otherShape));
                 } else if (tp.status & PxPairFlag::eNOTIFY_TOUCH_LOST) {
                     if (!tp.flags.isSet(PxTriggerPairFlag::Enum::eREMOVED_SHAPE_OTHER) &&
                             !tp.flags.isSet(PxTriggerPairFlag::Enum::eREMOVED_SHAPE_TRIGGER)) {
-                        onTriggerExit(tp.triggerShape->getQueryFilterData().word3, tp.otherShape->getQueryFilterData().word3);
+                        onTriggerExit(getUUID(tp.triggerShape), getUUID(tp.otherShape));
                     }
                 }
             }
         }
 
-        void onAdvance(const PxRigidBody *const *, const PxTransform *, const PxU32) override {
+        void onAdvance(const PxRigidBody*const* bodyBuffer, const PxTransform* poseBuffer, const PxU32 count) override {
         }
     };
 
@@ -216,11 +217,8 @@ using namespace physx;
     PxSceneDesc sceneDesc(_physics->getTolerancesScale());
     sceneDesc.gravity = PxVec3(0.0f, -9.81f, 0.0f);
     sceneDesc.cpuDispatcher = PxDefaultCpuDispatcherCreate(1);
-    sceneDesc.filterShader = PxDefaultSimulationFilterShader;
+    sceneDesc.filterShader = vox::simulationFilterShader;
     sceneDesc.simulationEventCallback = simulationEventCallback;
-    sceneDesc.kineKineFilteringMode = PxPairFilteringMode::eKEEP;
-    sceneDesc.staticKineFilteringMode = PxPairFilteringMode::eKEEP;
-    sceneDesc.flags |= PxSceneFlag::eENABLE_CCD;
 
     return [[CPxScene alloc] initWithScene:_physics->createScene(sceneDesc)];
 }

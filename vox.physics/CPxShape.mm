@@ -12,12 +12,14 @@
 #include "CPXHelper.h"
 
 @implementation CPxShape {
+    uint32_t index;
 }
 
 - (instancetype)initWithShape:(PxShape *)shape {
     self = [super init];
     if (self) {
         _c_shape = shape;
+        _c_shape->userData = &index;
     }
     return self;
 }
@@ -28,10 +30,6 @@
 
 - (void)setFlags:(uint8_t)inFlags {
     _c_shape->setFlags(PxShapeFlags(inFlags));
-}
-
-- (void)setQueryFilterData:(uint32_t)w0 w1:(uint32_t)w1 w2:(uint32_t)w2 w3:(uint32_t)w3 {
-    _c_shape->setQueryFilterData(PxFilterData(w0, w1, w2, w3));
 }
 
 - (void)setGeometry:(CPxGeometry *)geometry {
@@ -52,23 +50,12 @@
     _c_shape->setContactOffset(contactOffset);
 }
 
-- (int)getQueryFilterData:(int)index {
-    switch (index) {
-        case 0:
-            return _c_shape->getQueryFilterData().word0;
+- (void)setUUID:(uint32_t)uuid {
+    index = uuid;
+}
 
-        case 1:
-            return _c_shape->getQueryFilterData().word1;
-
-        case 2:
-            return _c_shape->getQueryFilterData().word2;
-
-        case 3:
-            return _c_shape->getQueryFilterData().word3;
-
-        default:
-            return -1;
-    }
+- (uint32_t)getUUID {
+    return index;
 }
 
 - (PxGeometryHolder)getGeometry {

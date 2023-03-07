@@ -38,3 +38,11 @@ inline simd_float3 transform(PxExtendedVec3 position) {
 inline simd_quatf transform(PxQuat rotation) {
     return simd_quaternion(rotation.x, rotation.y, rotation.z, rotation.w);
 }
+
+inline uint32_t getUUID(PxShape* shape) {
+    return *static_cast<uint32_t*>(shape->userData);
+}
+
+inline uint32_t getUUID(const PxShape* shape) {
+    return *static_cast<uint32_t*>(shape->userData);
+}

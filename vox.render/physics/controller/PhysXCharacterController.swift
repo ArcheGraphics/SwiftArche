@@ -99,7 +99,7 @@ class PhysXCharacterController: PhysXCollider {
             fatalError("unsupported shape type")
         }
 
-        _pxController.setQueryFilterData(0, w1: 0, w2: 0, w3: shape._id)
+        _pxController.setUUID(shape._id)
     }
 
     func _destroyPXController() {

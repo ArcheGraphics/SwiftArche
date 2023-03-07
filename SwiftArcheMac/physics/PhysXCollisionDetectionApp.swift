@@ -9,24 +9,6 @@ import vox_render
 import vox_math
 import vox_toolkit
 
-fileprivate class CollisionScript: Script {
-    private var sphereRenderer: MeshRenderer!
-
-    override func onAwake() {
-        sphereRenderer = entity.getComponent(MeshRenderer.self)
-    }
-
-    override func onTriggerEnter(_ other: ColliderShape) {
-        (sphereRenderer.getMaterial() as! PBRMaterial).baseColor = Color(Float.random(in: 0..<1),
-                Float.random(in: 0..<1), Float.random(in: 0..<1), 1.0)
-    }
-
-    override func onTriggerExit(_ other: ColliderShape) {
-        (sphereRenderer.getMaterial() as! PBRMaterial).baseColor = Color(Float.random(in: 0..<1),
-                Float.random(in: 0..<1), Float.random(in: 0..<1), 1.0)
-    }
-}
-
 fileprivate class MoveScript: Script {
     var pos: Float = -5
     var vel: Float = 0.05

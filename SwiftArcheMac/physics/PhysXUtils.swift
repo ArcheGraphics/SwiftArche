@@ -150,3 +150,43 @@ func addDuckMesh(_ rootEntity: Entity) {
         createDebugWireframe(colliderShape, entity)
     }, true)
 }
+
+class CollisionScript: Script {
+    private var sphereRenderer: MeshRenderer!
+
+    override func onAwake() {
+        sphereRenderer = entity.getComponent(MeshRenderer.self)
+    }
+
+    override func onTriggerEnter(_ other: ColliderShape) {
+        print("onTriggerEnter")
+        if let sphereRenderer {
+            (sphereRenderer.getMaterial() as! PBRMaterial).baseColor = Color(Float.random(in: 0..<1),
+                                                                             Float.random(in: 0..<1), Float.random(in: 0..<1), 1.0)
+        }
+    }
+    
+    override func onTriggerStay(_ other: ColliderShape) {
+        print("onTriggerStay")
+    }
+
+    override func onTriggerExit(_ other: ColliderShape) {
+        print("onTriggerExit")
+        if let sphereRenderer {
+            (sphereRenderer.getMaterial() as! PBRMaterial).baseColor = Color(Float.random(in: 0..<1),
+                                                                             Float.random(in: 0..<1), Float.random(in: 0..<1), 1.0)
+        }
+    }
+    
+    override func onCollisionExit(_ other: Collision) {
+        print("onCollisionExit")
+    }
+    
+    override func onCollisionStay(_ other: Collision) {
+        print("onCollisionStay")
+    }
+    
+    override func onCollisionEnter(_ other: Collision) {
+        print("onCollisionEnter")
+    }
+}

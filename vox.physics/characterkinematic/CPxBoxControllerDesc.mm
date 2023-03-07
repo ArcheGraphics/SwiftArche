@@ -209,7 +209,7 @@
         }
 
         PxControllerBehaviorFlags getBehaviorFlags(const PxShape &shape, const PxActor &actor) override {
-            return PxControllerBehaviorFlags(getShapeBehaviorFlags(shape.getQueryFilterData().word3));
+            return PxControllerBehaviorFlags(getShapeBehaviorFlags(getUUID(&shape)));
         }
 
         PxControllerBehaviorFlags getBehaviorFlags(const PxController &controller) override {
@@ -238,7 +238,7 @@
         }
         
         void onShapeHit(const PxControllerShapeHit& hit) override {
-            onShapeHitCallback(hit.shape->getQueryFilterData().word3,
+            onShapeHitCallback(getUUID(hit.shape),
                                transform(hit.dir), hit.length, transform(hit.worldNormal), transform(hit.worldPos));
         }
 

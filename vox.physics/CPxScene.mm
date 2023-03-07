@@ -25,8 +25,7 @@ namespace {
 
         PxQueryHitType::Enum preFilter(const PxFilterData &filterData, const PxShape *shape,
                 const PxRigidActor *actor, PxHitFlags &queryFlags) override {
-            auto index = shape->getQueryFilterData().word3;
-            if (filterCallback(index)) {
+            if (filterCallback(getUUID(shape))) {
                 return PxQueryHitType::Enum::eBLOCK;
             } else {
                 return PxQueryHitType::Enum::eNONE;
@@ -91,7 +90,7 @@ namespace {
         hit->position = transform(pxHit.position);
         hit->normal = transform(pxHit.normal);
         hit->distance = pxHit.distance;
-        hit->index = pxHit.shape->getQueryFilterData().word3;
+        hit->index = getUUID(pxHit.shape);
     }
     return result > 0;
 }
@@ -129,7 +128,7 @@ namespace {
         hit->position = transform(pxHit.position);
         hit->normal = transform(pxHit.normal);
         hit->distance = pxHit.distance;
-        hit->index = pxHit.shape->getQueryFilterData().word3;
+        hit->index = getUUID(pxHit.shape);
     }
 
     return result;
@@ -155,7 +154,7 @@ namespace {
         for (int i = 0; i < result; i++) {
             auto &pxHit = pxHits[i];
             LocationHit locHit;
-            locHit.index = pxHit.shape->getQueryFilterData().word3;
+            locHit.index = getUUID(pxHit.shape);
             locHit.distance = pxHit.distance;
             locHit.position = transform(pxHit.position);
             locHit.normal = transform(pxHit.normal);
@@ -183,7 +182,7 @@ namespace {
         hit->position = transform(pxHit.position);
         hit->normal = transform(pxHit.normal);
         hit->distance = pxHit.distance;
-        hit->index = pxHit.shape->getQueryFilterData().word3;
+        hit->index = getUUID(pxHit.shape);
     }
     return result;
 }
@@ -225,7 +224,7 @@ namespace {
         hit->position = transform(pxHit.position);
         hit->normal = transform(pxHit.normal);
         hit->distance = pxHit.distance;
-        hit->index = pxHit.shape->getQueryFilterData().word3;
+        hit->index = getUUID(pxHit.shape);
     }
 
     return result;
@@ -253,7 +252,7 @@ namespace {
         for (int i = 0; i < result; i++) {
             auto &pxHit = pxHits[i];
             LocationHit locHit;
-            locHit.index = pxHit.shape->getQueryFilterData().word3;
+            locHit.index = getUUID(pxHit.shape);
             locHit.distance = pxHit.distance;
             locHit.position = transform(pxHit.position);
             locHit.normal = transform(pxHit.normal);
@@ -305,7 +304,7 @@ namespace {
         for (int i = 0; i < result; i++) {
             auto &pxHit = pxHits[i];
             LocationHit locHit;
-            locHit.index = pxHit.shape->getQueryFilterData().word3;
+            locHit.index = getUUID(pxHit.shape);
             hit[i] = locHit;
         }
     }

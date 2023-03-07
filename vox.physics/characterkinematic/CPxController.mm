@@ -9,7 +9,9 @@
 #import "../CPxRigidDynamic+Internal.h"
 #include "CPXHelper.h"
 
-@implementation CPxController
+@implementation CPxController {
+    uint32_t index;
+}
 
 - (instancetype)initWithController:(PxController *)controller {
     self = [super init];
@@ -103,11 +105,12 @@
     _c_controller->resize(height);
 }
 
-- (void)setQueryFilterData:(uint32_t)w0 w1:(uint32_t)w1 w2:(uint32_t)w2 w3:(uint32_t)w3 {
+- (void)setUUID:(uint32_t)uuid {
     PxRigidDynamic *actor = _c_controller->getActor();
     PxShape *shape;
     actor->getShapes(&shape, 1);
-    shape->setQueryFilterData(PxFilterData(w0, w1, w2, w3));
+    index = uuid;
+    shape->userData = &index;
 }
 
 @end
