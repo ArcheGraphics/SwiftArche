@@ -174,6 +174,13 @@
 		3E67EED42921DB4A00ED60C8 /* function_common.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3E67EED32921DB4A00ED60C8 /* function_common.metal */; };
 		3E6B2362294291E8000AC29F /* BlendShapeWeightsAnimationCurveOwnerAssembler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E6B2361294291E8000AC29F /* BlendShapeWeightsAnimationCurveOwnerAssembler.swift */; };
 		3E6B236429429240000AC29F /* FaceAnchorApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E6B236329429240000AC29F /* FaceAnchorApp.swift */; };
+		3EBA3CE929B6C5DE00E5FB42 /* ControllerBehavior.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EBA3CE729B6C5DE00E5FB42 /* ControllerBehavior.swift */; };
+		3EBA3CEA29B6C5DE00E5FB42 /* ControllerColliderHit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EBA3CE829B6C5DE00E5FB42 /* ControllerColliderHit.swift */; };
+		3EBA3CEE29B6C5FC00E5FB42 /* MeshColliderShape.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EBA3CEB29B6C5FC00E5FB42 /* MeshColliderShape.swift */; };
+		3EBA3CEF29B6C5FC00E5FB42 /* PhysXMeshColliderShape.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EBA3CEC29B6C5FC00E5FB42 /* PhysXMeshColliderShape.swift */; };
+		3EBA3CF029B6C5FC00E5FB42 /* ConvexCompose.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EBA3CED29B6C5FC00E5FB42 /* ConvexCompose.swift */; };
+		3EBA3CF329B6C60A00E5FB42 /* CPxMeshGeometry.mm in Sources */ = {isa = PBXBuildFile; fileRef = 3EBA3CF229B6C60900E5FB42 /* CPxMeshGeometry.mm */; };
+		3EBA3CF529B6C63800E5FB42 /* Collision.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EBA3CF429B6C63700E5FB42 /* Collision.swift */; };
 		3EC92A9E2937427200423396 /* grid_shading.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3EC92A9C2937427100423396 /* grid_shading.metal */; };
 		3EC92AA5293742D400423396 /* WireframePrimitive.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EC92AA3293742D300423396 /* WireframePrimitive.swift */; };
 		3EC92AA6293742D400423396 /* WireframeManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EC92AA4293742D400423396 /* WireframeManager.swift */; };
@@ -250,7 +257,6 @@
 		43D8C9647CDE671684EC8086 /* IAnimationCurveOwnerAssembler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8C079C8F46AD5B9A6547D /* IAnimationCurveOwnerAssembler.swift */; };
 		43D8C96B8F27460AAA1F15C2 /* AnimationColorCurve.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8C78D7BC71BE996FBCF4A /* AnimationColorCurve.swift */; };
 		43D8C986FF4865C01080A94A /* SpringJoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8C54936F3EFC16FD740F6 /* SpringJoint.swift */; };
-		43D8C9A73CD95F4EBB5E2263 /* ControllerCollisionFlag.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8C4C743C5C9882240C555 /* ControllerCollisionFlag.swift */; };
 		43D8C9C577229A021BDFB510 /* SceneManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8C4C1A94B6732BDC31049 /* SceneManager.swift */; };
 		43D8C9EC1A7A5C45F5B324C2 /* EntityParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8C82FD1E401C7E73BA61D /* EntityParser.swift */; };
 		43D8CA34B1F2CB3690D38D8C /* RotationAnimationCurveOwnerAssembler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8C65ABA75CCC2C82E9050 /* RotationAnimationCurveOwnerAssembler.swift */; };
@@ -726,6 +732,17 @@
 		3E6B2361294291E8000AC29F /* BlendShapeWeightsAnimationCurveOwnerAssembler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BlendShapeWeightsAnimationCurveOwnerAssembler.swift; sourceTree = "<group>"; };
 		3E6B236329429240000AC29F /* FaceAnchorApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FaceAnchorApp.swift; sourceTree = "<group>"; };
 		3EB32B9529323DA30019A4F3 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		3EBA3CE729B6C5DE00E5FB42 /* ControllerBehavior.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ControllerBehavior.swift; sourceTree = "<group>"; };
+		3EBA3CE829B6C5DE00E5FB42 /* ControllerColliderHit.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ControllerColliderHit.swift; sourceTree = "<group>"; };
+		3EBA3CEB29B6C5FC00E5FB42 /* MeshColliderShape.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MeshColliderShape.swift; sourceTree = "<group>"; };
+		3EBA3CEC29B6C5FC00E5FB42 /* PhysXMeshColliderShape.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhysXMeshColliderShape.swift; sourceTree = "<group>"; };
+		3EBA3CED29B6C5FC00E5FB42 /* ConvexCompose.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConvexCompose.swift; sourceTree = "<group>"; };
+		3EBA3CF129B6C60900E5FB42 /* CPxMeshGeometry.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CPxMeshGeometry.h; sourceTree = "<group>"; };
+		3EBA3CF229B6C60900E5FB42 /* CPxMeshGeometry.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = CPxMeshGeometry.mm; sourceTree = "<group>"; };
+		3EBA3CF429B6C63700E5FB42 /* Collision.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Collision.swift; sourceTree = "<group>"; };
+		3EBA3CF629B6C67200E5FB42 /* CPXHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CPXHelper.h; sourceTree = "<group>"; };
+		3EBA3CF729B6C67B00E5FB42 /* bridging.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = bridging.h; sourceTree = "<group>"; };
+		3EBA3CF829B6C67B00E5FB42 /* CPxPhysics+Internal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "CPxPhysics+Internal.h"; sourceTree = "<group>"; };
 		3EC92A892937422700423396 /* toolkit.shader.metallib */ = {isa = PBXFileReference; explicitFileType = "archive.metal-library"; includeInIndex = 0; path = toolkit.shader.metallib; sourceTree = BUILT_PRODUCTS_DIR; };
 		3EC92A942937424400423396 /* libvox.toolkit.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libvox.toolkit.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		3EC92A9C2937427100423396 /* grid_shading.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; path = grid_shading.metal; sourceTree = "<group>"; };
@@ -776,7 +793,6 @@
 		43D8C4ABB8F112C1032D3028 /* BlendShapeManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BlendShapeManager.swift; sourceTree = "<group>"; };
 		43D8C4B08C621CA82C7DB591 /* PointerManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PointerManager.swift; sourceTree = "<group>"; };
 		43D8C4C1A94B6732BDC31049 /* SceneManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SceneManager.swift; sourceTree = "<group>"; };
-		43D8C4C743C5C9882240C555 /* ControllerCollisionFlag.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ControllerCollisionFlag.swift; sourceTree = "<group>"; };
 		43D8C4FB7FE01E2F173F67CA /* ShadowResolution.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ShadowResolution.swift; sourceTree = "<group>"; };
 		43D8C518C7B03C3787F9676C /* DepthState.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DepthState.swift; sourceTree = "<group>"; };
 		43D8C51FABA0980F27EB7615 /* RenderPass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RenderPass.swift; sourceTree = "<group>"; };
@@ -1123,6 +1139,8 @@
 		3E0F7BBA2925FBBF00C4A843 /* vox.physics */ = {
 			isa = PBXGroup;
 			children = (
+				3EBA3CF729B6C67B00E5FB42 /* bridging.h */,
+				3EBA3CF629B6C67200E5FB42 /* CPXHelper.h */,
 				3E0F7BCC2925FCBE00C4A843 /* CPxMaterial.h */,
 				3E0F7BD72925FCBE00C4A843 /* CPxMaterial+Internal.h */,
 				3E0F7BD52925FCBE00C4A843 /* CPxMaterial.mm */,
@@ -1137,6 +1155,7 @@
 				3E0F7BC22925FC5D00C4A843 /* characterkinematic */,
 				3E0F7BCE2925FCBE00C4A843 /* CPxPhysics.h */,
 				3E0F7BCB2925FCBD00C4A843 /* CPxPhysics.mm */,
+				3EBA3CF829B6C67B00E5FB42 /* CPxPhysics+Internal.h */,
 				3E0F7BCD2925FCBE00C4A843 /* CPxScene.h */,
 				3E0F7BC72925FCBD00C4A843 /* CPxScene.mm */,
 				3E0F7BDB2925FCBF00C4A843 /* CPxScene+Internal.h */,
@@ -1240,6 +1259,8 @@
 				3E0F7BE62925FCC500C4A843 /* CPxPlaneGeometry.mm */,
 				3E0F7BE72925FCC500C4A843 /* CPxSphereGeometry.h */,
 				3E0F7BEB2925FCC600C4A843 /* CPxSphereGeometry.mm */,
+				3EBA3CF129B6C60900E5FB42 /* CPxMeshGeometry.h */,
+				3EBA3CF229B6C60900E5FB42 /* CPxMeshGeometry.mm */,
 			);
 			path = shape;
 			sourceTree = "<group>";
@@ -1263,6 +1284,7 @@
 				3E0F7C902926644F00C4A843 /* PhysicsManager.swift */,
 				3E0F7C4E2926036E00C4A843 /* PhysXPhysicsMaterial.swift */,
 				43D8C05C2BF0796E12C8C94F /* HitResult.swift */,
+				3EBA3CF429B6C63700E5FB42 /* Collision.swift */,
 			);
 			path = physics;
 			sourceTree = "<group>";
@@ -1273,7 +1295,6 @@
 				3E0F7C82292607AB00C4A843 /* ColliderShapeUpAxis.swift */,
 				3E0F7C81292607AB00C4A843 /* PhysicsMaterialCombineMode.swift */,
 				43D8C890FF41EDC96C909FC5 /* ControllerNonWalkableMode.swift */,
-				43D8C4C743C5C9882240C555 /* ControllerCollisionFlag.swift */,
 				43D8C0115848492526783538 /* HingeJointFlag.swift */,
 			);
 			path = enums;
@@ -1303,6 +1324,9 @@
 		3E0F7C492926020100C4A843 /* shapes */ = {
 			isa = PBXGroup;
 			children = (
+				3EBA3CED29B6C5FC00E5FB42 /* ConvexCompose.swift */,
+				3EBA3CEB29B6C5FC00E5FB42 /* MeshColliderShape.swift */,
+				3EBA3CEC29B6C5FC00E5FB42 /* PhysXMeshColliderShape.swift */,
 				43D8C66B8DF3C8EF8964106C /* ColliderShape.swift */,
 				3E0F7C572926038E00C4A843 /* PhysXColliderShape.swift */,
 				3E0F7C882926642D00C4A843 /* BoxColliderShape.swift */,
@@ -1320,6 +1344,8 @@
 		3E0F7C4C2926035500C4A843 /* controller */ = {
 			isa = PBXGroup;
 			children = (
+				3EBA3CE729B6C5DE00E5FB42 /* ControllerBehavior.swift */,
+				3EBA3CE829B6C5DE00E5FB42 /* ControllerColliderHit.swift */,
 				3E0F7C762926039D00C4A843 /* PhysXCharacterController.swift */,
 				43D8C7BBBFCE83FF47BEC229 /* CharacterController.swift */,
 			);
@@ -2226,6 +2252,7 @@
 				3E0F7C442925FCDD00C4A843 /* CPxControllerDesc.mm in Sources */,
 				3E0F7C422925FCDD00C4A843 /* CPxCapsuleController.mm in Sources */,
 				3E0F7BE12925FCBF00C4A843 /* CPxRigidStatic.mm in Sources */,
+				3EBA3CF329B6C60A00E5FB42 /* CPxMeshGeometry.mm in Sources */,
 				3E0F7BF02925FCC600C4A843 /* CPxPlaneGeometry.mm in Sources */,
 				3E0F7C1E2925FCD100C4A843 /* CPxRevoluteJoint.mm in Sources */,
 				3E0F7C202925FCD100C4A843 /* CPxPrismaticJoint.mm in Sources */,
@@ -2306,6 +2333,7 @@
 				043E2CA029212E8C0057BDD1 /* Light.swift in Sources */,
 				3E0F7C9829270B6F00C4A843 /* BufferView.swift in Sources */,
 				3E67EEB2291CF07E00ED60C8 /* Util.swift in Sources */,
+				3EBA3CE929B6C5DE00E5FB42 /* ControllerBehavior.swift in Sources */,
 				3E0F7C6A2926039500C4A843 /* PhysXFixedJoint.swift in Sources */,
 				43D8C64F87A019BFA0DE1CC0 /* BoolUpdateFlag.swift in Sources */,
 				43D8C73C5DE246FB90B0C7CD /* ListenerUpdateFlag .swift in Sources */,
@@ -2347,11 +2375,13 @@
 				43D8C8CE36C33163DDB2FBD7 /* ResourceCache.swift in Sources */,
 				3E0F7C702926039500C4A843 /* PhysXTranslationalJoint.swift in Sources */,
 				43D8C176638524E94B6771A4 /* Material.swift in Sources */,
+				3EBA3CEF29B6C5FC00E5FB42 /* PhysXMeshColliderShape.swift in Sources */,
 				43D8C4A0C09957580D8029FA /* RenderQueueType.swift in Sources */,
 				3E5D867E292B1D5600759BA9 /* AnimationCurveOwner.swift in Sources */,
 				43D8C1B2AED98876E2A587FC /* BaseMaterial.swift in Sources */,
 				3E58E1AB2940B866006A49CD /* ComputePass.swift in Sources */,
 				43D8CE61BE3200DB2073AC80 /* BlendMode.swift in Sources */,
+				3EBA3CEA29B6C5DE00E5FB42 /* ControllerColliderHit.swift in Sources */,
 				43D8C91C88772F8F3AB795F2 /* RenderFace.swift in Sources */,
 				43D8CDB093F067C1F7E65758 /* UnlitMaterial.swift in Sources */,
 				3E5D8689292B44BB00759BA9 /* AnimatorStateMachine.swift in Sources */,
@@ -2371,6 +2401,7 @@
 				43D8C77DD4198A013659D501 /* Mesh.swift in Sources */,
 				3E0F7C552926036F00C4A843 /* PhysXPhysicsManager.swift in Sources */,
 				43D8CE559C09812B32CB1E26 /* ModelMesh.swift in Sources */,
+				3EBA3CEE29B6C5FC00E5FB42 /* MeshColliderShape.swift in Sources */,
 				3E5D868A292B44BB00759BA9 /* AnimatorStateTransition.swift in Sources */,
 				43D8CFDE172582A4463B835E /* PrimitiveMesh.swift in Sources */,
 				E63B15AE550BABADB0BEFA9E /* Renderer.swift in Sources */,
@@ -2423,7 +2454,6 @@
 				3E5D868D292B44BB00759BA9 /* StateMachineScript.swift in Sources */,
 				43D8CB6C869DD874CFBF194E /* CharacterController.swift in Sources */,
 				43D8CD3C7521C26895BB6BA7 /* ControllerNonWalkableMode.swift in Sources */,
-				43D8C9A73CD95F4EBB5E2263 /* ControllerCollisionFlag.swift in Sources */,
 				43D8C0DDDACE043EA45EFCE1 /* Joint.swift in Sources */,
 				43D8C058C79C4CF107774FD3 /* FixedJoint.swift in Sources */,
 				43D8C8DA95DABECFDE06AC41 /* JointLimits.swift in Sources */,
@@ -2469,9 +2499,11 @@
 				43D8CD2BA2E5A9DE50147A42 /* ScaleAnimationCurveOwnerAssembler.swift in Sources */,
 				43D8C70412541939D0EEEFD7 /* AnimationProperty.swift in Sources */,
 				43D8C90AE24197CDB540FB64 /* BlendShapeFrame.swift in Sources */,
+				3EBA3CF029B6C5FC00E5FB42 /* ConvexCompose.swift in Sources */,
 				43D8C2CB4F0700F837ACB006 /* BlendShape.swift in Sources */,
 				43D8CD8D2BC1EABCB75765FC /* BlendShapeManager.swift in Sources */,
 				43D8C0A05C147C20A0897150 /* SkinnedMeshRenderer.swift in Sources */,
+				3EBA3CF529B6C63800E5FB42 /* Collision.swift in Sources */,
 				43D8CAA03A64561654BAEC83 /* KHR_materials_clearcoat.swift in Sources */,
 				43D8C013A31176A5BCE169AC /* KHR_materials_pbrSpecularGlossiness.swift in Sources */,
 				43D8CC13F4EA7765C1149E6C /* KHR_lights_punctual.swift in Sources */,
@@ -2917,14 +2949,12 @@
 				INFOPLIST_KEY_UIRequiresFullScreen = YES;
 				INFOPLIST_KEY_UIStatusBarHidden = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationLandscapeRight;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.2;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				LIBRARY_SEARCH_PATHS = (
-					./third_party/physx/physx/bin/ios.arm_64/debug,
-					./third_party/physx/physx/bin/mac.x86_64/debug,
-				);
+				LIBRARY_SEARCH_PATHS = ./third_party/physx/physx/bin/ios.arm_64/debug;
 				MARKETING_VERSION = 1.0;
 				OTHER_LDFLAGS = (
 					"-lPhysX_static_64",
@@ -2933,6 +2963,7 @@
 					"-lPhysXPvdSDK_static_64",
 					"-lPhysXExtensions_static_64",
 					"-lPhysXCharacterKinematic_static_64",
+					"-lPhysXCooking_static_64",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = archegraphics.SwiftArche;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -2967,6 +2998,7 @@
 				INFOPLIST_KEY_UIRequiresFullScreen = YES;
 				INFOPLIST_KEY_UIStatusBarHidden = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationLandscapeRight;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.2;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -2980,6 +3012,7 @@
 					"-lPhysXPvdSDK_static_64",
 					"-lPhysXExtensions_static_64",
 					"-lPhysXCharacterKinematic_static_64",
+					"-lPhysXCooking_static_64",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = archegraphics.SwiftArche;
 				PRODUCT_NAME = "$(TARGET_NAME)";

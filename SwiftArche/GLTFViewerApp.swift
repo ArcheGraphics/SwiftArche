@@ -21,7 +21,7 @@ fileprivate class ARScript: Script {
             GLTFLoader.parse(engine, assetURL) { [self] resource in
                 entity.clearChildren()
                 entity.addChild(resource.defaultSceneRoot)
-                let renderers: [Renderer] = resource.defaultSceneRoot.getComponentsIncludeChildren()
+                let renderers = resource.defaultSceneRoot.getComponentsIncludeChildren(Renderer.self)
                 var bounds = BoundingBox()
                 for renderer in renderers {
                     bounds = BoundingBox.merge(box1: bounds, box2: renderer.bounds)
@@ -56,17 +56,17 @@ class GltfViewerApp: UIViewController {
         let rootEntity = scene.createRootEntity()
 
         let cameraEntity = rootEntity.createChild()
-        let camera: Camera = cameraEntity.addComponent()
+        let camera = cameraEntity.addComponent(Camera.self)
         engine.arManager!.camera = camera
 
         let light = rootEntity.createChild("light")
         light.transform.position = Vector3(0.1, 5, 0.1)
         light.transform.lookAt(targetPosition: Vector3())
-        let directLight: DirectLight = light.addComponent()
+        let directLight = light.addComponent(DirectLight.self)
         directLight.shadowType = .SoftLow
         
         let arEntity = rootEntity.createChild()
-        let _: ARScript = arEntity.addComponent()
+        arEntity.addComponent(ARScript.self)
 
         engine.run()
     }

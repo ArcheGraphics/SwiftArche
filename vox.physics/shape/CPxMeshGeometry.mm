@@ -225,7 +225,7 @@ namespace {
     desc.triangles.count = indicesCount / 3;
     desc.triangles.data = indices;
     if (isUint16) {
-        desc.triangles.stride = sizeof(uint16) * 3;
+        desc.triangles.stride = sizeof(uint16_t) * 3;
         desc.flags = PxMeshFlag::e16_BIT_INDICES;
         meshGeometry->triangleMesh = physics.c_cooking->createTriangleMesh(desc, [physics getPhysicsInsertionCallback]);
     } else {

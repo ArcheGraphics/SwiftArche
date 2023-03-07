@@ -76,7 +76,7 @@ fileprivate class ARScript: Script {
             entity.addChild(avatar)
             _avatar = avatar
 
-            let skinRenderers: [SkinnedMeshRenderer] = avatar.getComponentsIncludeChildren()
+            let skinRenderers = avatar.getComponentsIncludeChildren(SkinnedMeshRenderer.self)
             for renderer in skinRenderers {
                 if !renderer.blendShapeWeights.isEmpty {
                     _morphRenderer = renderer
@@ -84,7 +84,7 @@ fileprivate class ARScript: Script {
             }
         
             _light = entity.createChild("light")
-            let directLight: DirectLight = _light!.addComponent()
+            let directLight = _light!.addComponent(DirectLight.self)
             directLight.intensity = 0.9;
         }
     }
@@ -127,11 +127,11 @@ class FaceAnchorApp: UIViewController {
         let rootEntity = scene.createRootEntity()
 
         let cameraEntity = rootEntity.createChild()
-        let camera: Camera = cameraEntity.addComponent()
+        let camera = cameraEntity.addComponent(Camera.self)
         engine.arManager!.camera = camera
         
         let arEntity = rootEntity.createChild()
-        let _: ARScript = arEntity.addComponent()
+        arEntity.addComponent(ARScript.self)
 
         engine.run()
     }

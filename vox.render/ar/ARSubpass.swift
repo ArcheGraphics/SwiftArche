@@ -77,7 +77,7 @@ public class ARSubpass: Subpass {
         engine.canvas.updateFlagManager.addFlag(flag: updateFlag)
     }
 
-    override func draw(_ encoder: inout RenderCommandEncoder) {
+    public override func draw(_ encoder: inout RenderCommandEncoder) {
         guard let currentFrame = arManager.session.currentFrame else {
             return
         }

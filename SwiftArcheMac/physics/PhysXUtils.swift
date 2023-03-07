@@ -76,6 +76,7 @@ func addBox(_ rootEntity: Entity, _ size: Vector3,
     if isDynamic {
         let boxCollider = boxEntity.addComponent(DynamicCollider.self)
         boxCollider.addShape(physicsBox)
+        boxCollider.setDensity(1)
     } else {
         let boxCollider = boxEntity.addComponent(StaticCollider.self)
         boxCollider.addShape(physicsBox)

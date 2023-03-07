@@ -67,11 +67,19 @@ class PlayerBehavior: ControllerBehavior {
     }
     
     override func onShapeHit(hit: ControllerColliderHit) {
-        
+        if let rigidBody = hit.collider as? DynamicCollider {
+            if !rigidBody.isKinematic {
+                var dir = hit.entity!.transform.worldPosition - hit.controller!.entity.transform.worldPosition
+                dir.y = 0
+                rigidBody.applyForceAtPosition(dir.normalized() * 10,
+                                               hit.controller!.entity.transform.worldPosition,
+                                               mode: eIMPULSE)
+            }
+        }
     }
     
     override func getShapeBehaviorFlags(shape: ColliderShape) -> ControllerBehaviorFlag {
-        ControllerBehaviorFlag.CanRideOnObject
+        [ControllerBehaviorFlag.CanRideOnObject, ControllerBehaviorFlag.Slide]
     }
 }
 
@@ -93,7 +101,7 @@ class MovablePlatform : Script {
     override func onUpdate(_ deltaTime: Float) {
         time += deltaTime
         if let platform {
-            platform.movePosition(Vector3(sin(time) * 10, sin(time) * 2 + 3, cos(time) * 10))
+            platform.movePosition(Vector3(sin(time) * 15, sin(time) * 2 + 3, cos(time) * 15))
         }
     }
 }
@@ -137,7 +145,7 @@ class PhysXControllerApp: NSViewController {
                 let random = Int(floor(Float.random(in: 0...3))) % 3
                 switch (random) {
                 case 0:
-                    _ = addBox(rootEntity, Vector3(1, 1, 1), Vector3(Float(-4 + i), floor(Float.random(in: 0...6)) + 1, Float(-4 + j)), quat)
+                    _ = addBox(rootEntity, Vector3(3, 3, 3), Vector3(Float(-4 + i), floor(Float.random(in: 0...6)) + 5, Float(-4 + j)), quat)
                     break
                 case 1:
                     _ = addSphere(rootEntity, 0.5, Vector3(floor(Float.random(in: 0...16)) - 4, 5, floor(Float.random(in: 0...16)) - 4), quat)

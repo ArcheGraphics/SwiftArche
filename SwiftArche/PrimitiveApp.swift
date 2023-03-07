@@ -16,8 +16,8 @@ fileprivate class ARScript: Script {
     override func onARUpdate(_ deltaTime: Float, _ frame: ARFrame) {
         if _cubeEntity == nil {
             _cubeEntity = entity.createChild()
-            let renderer: MeshRenderer = _cubeEntity!.addComponent()
-            renderer.mesh = PrimitiveMesh.createCuboid(engine, 0.1, 0.1, 0.1)
+            let renderer = _cubeEntity!.addComponent(MeshRenderer.self)
+            renderer.mesh = PrimitiveMesh.createCuboid(engine, width: 0.1, height: 0.1, depth: 0.1)
             let material = PBRMaterial(engine)
             material.baseColor = Color(0.4, 0.6, 0.6)
             renderer.setMaterial(material)
@@ -51,16 +51,16 @@ class PrimitiveApp: UIViewController {
         let hdr = engine.textureLoader.loadHDR(with: "assets/kloppenheim_06_4k.hdr")!
         iblBaker.bake(scene, with: hdr, size: 256, level: 3)
         let rootEntity = scene.createRootEntity()
-        let _: ARScript = rootEntity.addComponent()
+        rootEntity.addComponent(ARScript.self)
 
         let cameraEntity = rootEntity.createChild()
-        let camera: Camera = cameraEntity.addComponent()
+        let camera = cameraEntity.addComponent(Camera.self)
         engine.arManager!.camera = camera
 
         let light = rootEntity.createChild("light")
         light.transform.position = Vector3(1, 3, 0)
         light.transform.lookAt(targetPosition: Vector3())
-        let _: DirectLight = light.addComponent()
+        light.addComponent(DirectLight.self)
 
         engine.run()
     }
