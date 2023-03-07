@@ -71,21 +71,6 @@
 		3E1F129729A78B3300F1002E /* PhysXConvexComposeApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E1F129629A78B3300F1002E /* PhysXConvexComposeApp.swift */; };
 		3E1F129929A7A49900F1002E /* PhysXConcaveDynamicApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E1F129829A7A49900F1002E /* PhysXConcaveDynamicApp.swift */; };
 		3E1F12AD29AC879E00F1002E /* Collision.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E1F12AC29AC879E00F1002E /* Collision.swift */; };
-		3E1F12BE29ADB83200F1002E /* ICharacterController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E1F12BD29ADB83200F1002E /* ICharacterController.swift */; };
-		3E37FCDA29ADC4AC0050169C /* PhysicsMover.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E37FCD929ADC4AC0050169C /* PhysicsMover.swift */; };
-		3E37FCDB29ADC4B60050169C /* KinematicCharacterMotor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E1F12BF29ADB8E200F1002E /* KinematicCharacterMotor.swift */; };
-		3E37FCDD29ADC5B70050169C /* IMoverController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E37FCDC29ADC5B70050169C /* IMoverController.swift */; };
-		3E37FCDF29ADCC030050169C /* KinematicCharacterSystem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E37FCDE29ADCC030050169C /* KinematicCharacterSystem.swift */; };
-		3E37FCE129ADCC410050169C /* KCCSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E37FCE029ADCC410050169C /* KCCSettings.swift */; };
-		3E37FCEA29AF22990050169C /* ExampleCharacterCamera.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E37FCE929AF22990050169C /* ExampleCharacterCamera.swift */; };
-		3E37FCED29AF28C20050169C /* ExampleCharacterController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E37FCEC29AF28C20050169C /* ExampleCharacterController.swift */; };
-		3E37FCEF29AF312C0050169C /* ExamplePlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E37FCEE29AF312C0050169C /* ExamplePlayer.swift */; };
-		3E37FCF129AF33260050169C /* ExampleAIController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E37FCF029AF33260050169C /* ExampleAIController.swift */; };
-		3E37FCF329AF34180050169C /* ExampleMovingPlatform.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E37FCF229AF34180050169C /* ExampleMovingPlatform.swift */; };
-		3E37FCF529AF35C20050169C /* PlanetManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E37FCF429AF35C20050169C /* PlanetManager.swift */; };
-		3E37FCF729AF36150050169C /* Teleporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E37FCF629AF36150050169C /* Teleporter.swift */; };
-		3E37FCFB29AF399B0050169C /* MyCharacterController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E37FCFA29AF399B0050169C /* MyCharacterController.swift */; };
-		3E37FCFD29AF3A160050169C /* MyPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E37FCFC29AF3A160050169C /* MyPlayer.swift */; };
 		3E37FD0B29B027C30050169C /* Rect.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E37FD0A29B027C30050169C /* Rect.swift */; };
 		3E37FD1F29B079250050169C /* HandleConstraint2D.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E37FD1E29B079250050169C /* HandleConstraint2D.swift */; };
 		3E37FD2129B07A7B0050169C /* HandleOrientation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E37FD2029B07A7B0050169C /* HandleOrientation.swift */; };
@@ -149,6 +134,8 @@
 		3EB32B8D293239170019A4F3 /* InputManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EB32B8C293239170019A4F3 /* InputManager.swift */; };
 		3EB32B912932391F0019A4F3 /* PointerManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EB32B8F2932391F0019A4F3 /* PointerManager.swift */; };
 		3EBA3CFE29B6FC3F00E5FB42 /* SimulationFilterShader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3EBA3CFD29B6FC3F00E5FB42 /* SimulationFilterShader.cpp */; };
+		3EBA3D0029B71D1000E5FB42 /* KinematicPlatform.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EBA3CFF29B71D1000E5FB42 /* KinematicPlatform.swift */; };
+		3EBA3D0229B71DD900E5FB42 /* ControlledPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EBA3D0129B71DD900E5FB42 /* ControlledPlayer.swift */; };
 		3EC0370529321131002187DC /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EC0370429321131002187DC /* AppDelegate.swift */; };
 		3EC0370E29321132002187DC /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3EC0370D29321132002187DC /* Assets.xcassets */; };
 		3EC0371129321132002187DC /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3EC0370F29321132002187DC /* Main.storyboard */; };
@@ -695,22 +682,7 @@
 		3E1F129629A78B3300F1002E /* PhysXConvexComposeApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhysXConvexComposeApp.swift; sourceTree = "<group>"; };
 		3E1F129829A7A49900F1002E /* PhysXConcaveDynamicApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhysXConcaveDynamicApp.swift; sourceTree = "<group>"; };
 		3E1F12AC29AC879E00F1002E /* Collision.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Collision.swift; sourceTree = "<group>"; };
-		3E1F12BD29ADB83200F1002E /* ICharacterController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ICharacterController.swift; sourceTree = "<group>"; };
-		3E1F12BF29ADB8E200F1002E /* KinematicCharacterMotor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KinematicCharacterMotor.swift; sourceTree = "<group>"; };
-		3E37FCD929ADC4AC0050169C /* PhysicsMover.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhysicsMover.swift; sourceTree = "<group>"; };
-		3E37FCDC29ADC5B70050169C /* IMoverController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IMoverController.swift; sourceTree = "<group>"; };
-		3E37FCDE29ADCC030050169C /* KinematicCharacterSystem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KinematicCharacterSystem.swift; sourceTree = "<group>"; };
-		3E37FCE029ADCC410050169C /* KCCSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KCCSettings.swift; sourceTree = "<group>"; };
 		3E37FCE529AEE9A70050169C /* CPXHelper.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CPXHelper.h; sourceTree = "<group>"; };
-		3E37FCE929AF22990050169C /* ExampleCharacterCamera.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExampleCharacterCamera.swift; sourceTree = "<group>"; };
-		3E37FCEC29AF28C20050169C /* ExampleCharacterController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExampleCharacterController.swift; sourceTree = "<group>"; };
-		3E37FCEE29AF312C0050169C /* ExamplePlayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExamplePlayer.swift; sourceTree = "<group>"; };
-		3E37FCF029AF33260050169C /* ExampleAIController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExampleAIController.swift; sourceTree = "<group>"; };
-		3E37FCF229AF34180050169C /* ExampleMovingPlatform.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExampleMovingPlatform.swift; sourceTree = "<group>"; };
-		3E37FCF429AF35C20050169C /* PlanetManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanetManager.swift; sourceTree = "<group>"; };
-		3E37FCF629AF36150050169C /* Teleporter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Teleporter.swift; sourceTree = "<group>"; };
-		3E37FCFA29AF399B0050169C /* MyCharacterController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyCharacterController.swift; sourceTree = "<group>"; };
-		3E37FCFC29AF3A160050169C /* MyPlayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyPlayer.swift; sourceTree = "<group>"; };
 		3E37FD0229AF743E0050169C /* ActionResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActionResult.swift; sourceTree = "<group>"; };
 		3E37FD0429AF9CA00050169C /* AutoUnwrapSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AutoUnwrapSettings.swift; sourceTree = "<group>"; };
 		3E37FD0629B0212C0050169C /* BezierPoint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BezierPoint.swift; sourceTree = "<group>"; };
@@ -853,6 +825,8 @@
 		3EB32B9429323D9B0019A4F3 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		3EBA3CFC29B6FC3300E5FB42 /* SimulationFilterShader.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SimulationFilterShader.h; sourceTree = "<group>"; };
 		3EBA3CFD29B6FC3F00E5FB42 /* SimulationFilterShader.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = SimulationFilterShader.cpp; sourceTree = "<group>"; };
+		3EBA3CFF29B71D1000E5FB42 /* KinematicPlatform.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KinematicPlatform.swift; sourceTree = "<group>"; };
+		3EBA3D0129B71DD900E5FB42 /* ControlledPlayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ControlledPlayer.swift; sourceTree = "<group>"; };
 		3EC0370129321131002187DC /* SwiftArcheMac.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SwiftArcheMac.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		3EC0370429321131002187DC /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		3EC0370D29321132002187DC /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -1320,7 +1294,7 @@
 			isa = PBXGroup;
 			children = (
 				3E37FCFE29AF738F0050169C /* architecture */,
-				3E1F129A29AC3BCB00F1002E /* kinematic-character-controller */,
+				3E1F129A29AC3BCB00F1002E /* cct-utility */,
 				3EC92A4E2936F71D00423396 /* bridging.h */,
 				3EC92A412936334600423396 /* custom-material */,
 				3EC92A402936333A00423396 /* auxiliary-lines */,
@@ -1522,57 +1496,13 @@
 			path = sdf;
 			sourceTree = "<group>";
 		};
-		3E1F129A29AC3BCB00F1002E /* kinematic-character-controller */ = {
+		3E1F129A29AC3BCB00F1002E /* cct-utility */ = {
 			isa = PBXGroup;
 			children = (
-				3E1F12BD29ADB83200F1002E /* ICharacterController.swift */,
-				3E1F12BF29ADB8E200F1002E /* KinematicCharacterMotor.swift */,
-				3E37FCDC29ADC5B70050169C /* IMoverController.swift */,
-				3E37FCD929ADC4AC0050169C /* PhysicsMover.swift */,
-				3E37FCDE29ADCC030050169C /* KinematicCharacterSystem.swift */,
-				3E37FCE029ADCC410050169C /* KCCSettings.swift */,
+				3EBA3CFF29B71D1000E5FB42 /* KinematicPlatform.swift */,
+				3EBA3D0129B71DD900E5FB42 /* ControlledPlayer.swift */,
 			);
-			path = "kinematic-character-controller";
-			sourceTree = "<group>";
-		};
-		3E37FCE629AF22380050169C /* cct */ = {
-			isa = PBXGroup;
-			children = (
-				3E37FCEB29AF22CC0050169C /* 1- Player Camera Character Setup */,
-				3E37FCE829AF22650050169C /* scene */,
-				3E37FCE729AF225C0050169C /* character */,
-			);
-			path = cct;
-			sourceTree = "<group>";
-		};
-		3E37FCE729AF225C0050169C /* character */ = {
-			isa = PBXGroup;
-			children = (
-				3E37FCE929AF22990050169C /* ExampleCharacterCamera.swift */,
-				3E37FCEC29AF28C20050169C /* ExampleCharacterController.swift */,
-				3E37FCEE29AF312C0050169C /* ExamplePlayer.swift */,
-			);
-			path = character;
-			sourceTree = "<group>";
-		};
-		3E37FCE829AF22650050169C /* scene */ = {
-			isa = PBXGroup;
-			children = (
-				3E37FCF029AF33260050169C /* ExampleAIController.swift */,
-				3E37FCF229AF34180050169C /* ExampleMovingPlatform.swift */,
-				3E37FCF429AF35C20050169C /* PlanetManager.swift */,
-				3E37FCF629AF36150050169C /* Teleporter.swift */,
-			);
-			path = scene;
-			sourceTree = "<group>";
-		};
-		3E37FCEB29AF22CC0050169C /* 1- Player Camera Character Setup */ = {
-			isa = PBXGroup;
-			children = (
-				3E37FCFA29AF399B0050169C /* MyCharacterController.swift */,
-				3E37FCFC29AF3A160050169C /* MyPlayer.swift */,
-			);
-			path = "1- Player Camera Character Setup";
+			path = "cct-utility";
 			sourceTree = "<group>";
 		};
 		3E37FCFE29AF738F0050169C /* architecture */ = {
@@ -2611,7 +2541,6 @@
 			isa = PBXGroup;
 			children = (
 				3EACA08229A4463000F08BB2 /* PhysXControllerApp.swift */,
-				3E37FCE629AF22380050169C /* cct */,
 				3E1F129829A7A49900F1002E /* PhysXConcaveDynamicApp.swift */,
 				3E1F129629A78B3300F1002E /* PhysXConvexComposeApp.swift */,
 				3EACA08E29A4925900F08BB2 /* PhysXMeshColliderApp.swift */,
@@ -3173,23 +3102,19 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				3E37FCDB29ADC4B60050169C /* KinematicCharacterMotor.swift in Sources */,
 				040F1DC82933A172008BDC8D /* ControlKeyboard.swift in Sources */,
-				3E37FCE129ADCC410050169C /* KCCSettings.swift in Sources */,
 				040F1DCA2933A3BE008BDC8D /* ControlWheel.swift in Sources */,
 				040F1DBE2933705D008BDC8D /* ControlPointer.swift in Sources */,
 				040F1DCE2933AB71008BDC8D /* FreeControl.swift in Sources */,
+				3EBA3D0229B71DD900E5FB42 /* ControlledPlayer.swift in Sources */,
 				3E37FD2129B07A7B0050169C /* HandleOrientation.swift in Sources */,
 				040F1DD02933AC19008BDC8D /* ControlFreeKeyboard.swift in Sources */,
 				040F1DB529336F48008BDC8D /* ControlHandlerType.swift in Sources */,
 				040F1DB029336AAE008BDC8D /* Spherical.swift in Sources */,
+				3EBA3D0029B71D1000E5FB42 /* KinematicPlatform.swift in Sources */,
 				040F1DBB29336FBF008BDC8D /* OrbitControl.swift in Sources */,
-				3E37FCDD29ADC5B70050169C /* IMoverController.swift in Sources */,
 				040F1DB829336F86008BDC8D /* IControlInput.swift in Sources */,
-				3E37FCDA29ADC4AC0050169C /* PhysicsMover.swift in Sources */,
 				040F1DCC2933AAF0008BDC8D /* ControlFreePointer.swift in Sources */,
-				3E37FCDF29ADCC030050169C /* KinematicCharacterSystem.swift in Sources */,
-				3E1F12BE29ADB83200F1002E /* ICharacterController.swift in Sources */,
 				43D8C8847DCDFE5DABA15585 /* WireframePrimitive.swift in Sources */,
 				43D8CB27974E2712F873405E /* WireframeManager.swift in Sources */,
 				3E37FD8229B1C0270050169C /* RaycastHit.swift in Sources */,
@@ -3298,7 +3223,6 @@
 				3EACA08329A4463000F08BB2 /* PhysXControllerApp.swift in Sources */,
 				3EB32B7529322DB30019A4F3 /* PrimitiveApp.swift in Sources */,
 				3E107648296545F700F751A5 /* ParticleSystemSolverApp.swift in Sources */,
-				3E37FCED29AF28C20050169C /* ExampleCharacterController.swift in Sources */,
 				3E6B235E294220BC000AC29F /* FaceMorphApp.swift in Sources */,
 				3EC0370529321131002187DC /* AppDelegate.swift in Sources */,
 				43D8C62B488D6837DDD5BBA8 /* SkyboxApp.swift in Sources */,
@@ -3307,19 +3231,14 @@
 				3ED9BCE6294DA4F300876ABC /* ScreenSpaceFluidApp.swift in Sources */,
 				3ED9BD032952B23F00876ABC /* BitonicSortApp.swift in Sources */,
 				3E6B23DC2949B32C000AC29F /* ImplicitTriangleApp.swift in Sources */,
-				3E37FCEA29AF22990050169C /* ExampleCharacterCamera.swift in Sources */,
 				43D8C033021F4B86E95953E6 /* IBLApp.swift in Sources */,
-				3E37FCF729AF36150050169C /* Teleporter.swift in Sources */,
 				3E1F129929A7A49900F1002E /* PhysXConcaveDynamicApp.swift in Sources */,
 				43D8C40438F0527739C7D662 /* AtomicComputeApp.swift in Sources */,
-				3E37FCF329AF34180050169C /* ExampleMovingPlatform.swift in Sources */,
 				3E10764629653F0300F751A5 /* PointEmitterApp.swift in Sources */,
 				040F1DF3293781B0008BDC8D /* RenderingUtils.swift in Sources */,
-				3E37FCF129AF33260050169C /* ExampleAIController.swift in Sources */,
 				43D8CF515E4D90196E7E806B /* PhysXCollisionDetectionApp.swift in Sources */,
 				3EABF5E6294C3716009943C1 /* VolumeEmitterApp.swift in Sources */,
 				43D8C808C0FA018090454567 /* PhysXAttractorApp.swift in Sources */,
-				3E37FCF529AF35C20050169C /* PlanetManager.swift in Sources */,
 				3E6B2360294224C1000AC29F /* FaceGUI.swift in Sources */,
 				43D8CC13B0B39DD99DEE0DC4 /* PhysXCompoundApp.swift in Sources */,
 				43D8C1413D08147985256B8A /* PhysXJointBasicApp.swift in Sources */,
@@ -3327,12 +3246,9 @@
 				43D8CE4CE0A0E392D06A3B25 /* PhysXUtils.swift in Sources */,
 				43D8CC8E6EC814867725CBD1 /* PhysXDebug.swift in Sources */,
 				E63B1AB88F741EC4FFD734F6 /* InputCastApp.swift in Sources */,
-				3E37FCEF29AF312C0050169C /* ExamplePlayer.swift in Sources */,
 				3E1F129729A78B3300F1002E /* PhysXConvexComposeApp.swift in Sources */,
 				3E6D2F11293F1AAB00B63F73 /* GLTFLoaderUtils.swift in Sources */,
 				E63B19C92479C2BE78B928A9 /* CascadeShadowApp.swift in Sources */,
-				3E37FCFB29AF399B0050169C /* MyCharacterController.swift in Sources */,
-				3E37FCFD29AF3A160050169C /* MyPlayer.swift in Sources */,
 				43D8CA0AB31B8C46122C1EAB /* IBLBaker.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

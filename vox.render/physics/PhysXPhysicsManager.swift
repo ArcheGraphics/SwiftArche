@@ -175,7 +175,7 @@ class PhysXPhysicsManager {
     }
 
     private func _fireEvent() {
-        for i in 0..<_currentEvents.count {
+        for i in stride(from: _currentEvents.count - 1, to: 0, by: -1) {
             let event = _currentEvents.get(i)!
             if (event.state == TriggerEventState.Enter) {
                 _onTriggerEnter(event.index1, event.index2)

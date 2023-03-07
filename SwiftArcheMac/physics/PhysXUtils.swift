@@ -10,7 +10,7 @@ import vox_math
 import vox_toolkit
 
 func addSphere(_ rootEntity: Entity, _ radius: Float,
-               _ position: Vector3, _ rotation: Quaternion) -> Entity {
+               _ position: Vector3, _ rotation: Quaternion, isDynamic: Bool = true) -> Entity {
     let mtl = PBRMaterial(rootEntity.engine)
     mtl.baseColor = Color(Float.random(in: 0...1), Float.random(in: 0...1), Float.random(in: 0...1), 1.0)
     mtl.metallic = 0.0
@@ -24,14 +24,19 @@ func addSphere(_ rootEntity: Entity, _ radius: Float,
 
     let physicsSphere = SphereColliderShape()
     physicsSphere.radius = radius
-    let sphereCollider = sphereEntity.addComponent(DynamicCollider.self)
-    sphereCollider.addShape(physicsSphere)
+    if isDynamic {
+        let sphereCollider = sphereEntity.addComponent(DynamicCollider.self)
+        sphereCollider.addShape(physicsSphere)
+    } else {
+        let sphereCollider = sphereEntity.addComponent(StaticCollider.self)
+        sphereCollider.addShape(physicsSphere)
+    }
 
     return sphereEntity
 }
 
 func addCapsule(_ rootEntity: Entity, _ radius: Float, _ height: Float,
-                _ position: Vector3, _ rotation: Quaternion) -> Entity {
+                _ position: Vector3, _ rotation: Quaternion, isDynamic: Bool = true) -> Entity {
     let mtl = PBRMaterial(rootEntity.engine)
     mtl.baseColor = Color(Float.random(in: 0...1), Float.random(in: 0...1), Float.random(in: 0...1), 1.0)
     mtl.metallic = 0.0
@@ -46,8 +51,13 @@ func addCapsule(_ rootEntity: Entity, _ radius: Float, _ height: Float,
     let physicsCapsule = CapsuleColliderShape()
     physicsCapsule.radius = radius
     physicsCapsule.height = height
-    let capsuleCollider = capsuleEntity.addComponent(DynamicCollider.self)
-    capsuleCollider.addShape(physicsCapsule)
+    if isDynamic {
+        let capsuleCollider = capsuleEntity.addComponent(DynamicCollider.self)
+        capsuleCollider.addShape(physicsCapsule)
+    } else {
+        let capsuleCollider = capsuleEntity.addComponent(StaticCollider.self)
+        capsuleCollider.addShape(physicsCapsule)
+    }
 
     return capsuleEntity
 }
