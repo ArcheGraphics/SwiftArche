@@ -150,16 +150,14 @@ class PhysXDynamicCollider: PhysXCollider {
     func movePosition(_ value: Vector3) {
         var position = SIMD3<Float>()
         var rotation = simd_quatf(ix: 0, iy: 0, iz: 0, r: 1)
-        _pxActor.getGlobalPose(&position, rotation: &rotation)
-
+        (_pxActor as! CPxRigidDynamic).getKinematicTarget(&position, rotation: &rotation)
         (_pxActor as! CPxRigidDynamic).setKinematicTarget(value.internalValue, rotation: rotation)
     }
 
     func moveRotation(_ value: Quaternion) {
         var position = SIMD3<Float>()
         var rotation = simd_quatf(ix: 0, iy: 0, iz: 0, r: 1)
-        _pxActor.getGlobalPose(&position, rotation: &rotation)
-
+        (_pxActor as! CPxRigidDynamic).getKinematicTarget(&position, rotation: &rotation)
         (_pxActor as! CPxRigidDynamic).setKinematicTarget(position, rotation: value.internalValue)
     }
 

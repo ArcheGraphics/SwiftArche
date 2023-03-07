@@ -8,6 +8,32 @@ import Cocoa
 import vox_render
 import vox_math
 import vox_toolkit
+import ImGui
+
+fileprivate class GUI: Script {
+    var platformControl: KinematicPlatform!
+    private var _platformSpeed: Float = 1
+    
+    var platformSpeed: Float {
+        get {
+            _platformSpeed
+        }
+        set {
+            _platformSpeed = newValue
+            platformControl.setDefaultTravelTime(platformSpeed: newValue)
+        }
+    }
+
+    override func onUpdate(_ deltaTime: Float) {
+        UIElement.Init(engine.canvas, deltaTime)
+
+        let postprocess = scene.postprocessManager
+        ImGuiNewFrame()
+        ImGuiSliderFloat("Platform Speed", &platformSpeed, 1.0, 10.0, nil, 1)
+        // Rendering
+        ImGuiRender()
+    }
+}
 
 class PhysXControllerApp: NSViewController {
     var canvas: Canvas!
@@ -15,6 +41,7 @@ class PhysXControllerApp: NSViewController {
     var iblBaker: IBLBaker!
     var rootEntity: Entity!
     var cameraEntity: Entity!
+    fileprivate var gui: GUI!
     
     @discardableResult
     func addPlayer(_ radius: Float, _ height: Float, _ position: Vector3, _ rotation: Quaternion) -> Entity {
@@ -68,7 +95,11 @@ class PhysXControllerApp: NSViewController {
         }
         
         let platform = addBox(rootEntity, Vector3(5, 2, 5), Vector3(0, 2, 10), Quaternion(), isDynamic: true)
-        platform.addComponent(KinematicPlatform.self)
+        let platformControl = platform.addComponent(KinematicPlatform.self)
+        platformControl.points = [Vector3(), Vector3(10, 10, 10)]
+        platformControl.setDefaultTravelTime(platformSpeed: 1)
+        gui.platformControl = platformControl
+        
 //        addDuckMesh(rootEntity)
     }
     
@@ -83,6 +114,8 @@ class PhysXControllerApp: NSViewController {
         iblBaker.bake(scene, with: hdr, size: 256, level: 3)
         
         rootEntity = scene.createRootEntity()
+        gui = rootEntity.addComponent(GUI.self)
+        
         cameraEntity = rootEntity.createChild()
         cameraEntity.transform.position = Vector3(20, 20, 20)
         cameraEntity.transform.lookAt(targetPosition: Vector3())
