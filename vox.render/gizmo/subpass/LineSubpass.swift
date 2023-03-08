@@ -10,6 +10,12 @@ class LineSubpass : Subpass {
     static var _ins: LineSubpass!
     var pointBuffer: BufferView!
     var colorBuffer: BufferView!
+    
+    var indirectPointBuffer: BufferView?
+    var indirectColorBuffer: BufferView?
+    var indirectIndicesBuffer: BufferView?
+    var indicesCount: Int = 0
+    
     var maxVerts: Int = 0
     var numVerts: Int = 0
     var engine: Engine!
@@ -32,7 +38,7 @@ class LineSubpass : Subpass {
     }
     
     var containData: Bool {
-        numVerts != 0
+        numVerts != 0 || indicesCount > 0
     }
         
     func set(_ engine: Engine) {
@@ -48,6 +54,27 @@ class LineSubpass : Subpass {
         checkResizePoint(count: numVerts + 2)
         addVert(p0, color32: color)
         addVert(p1, color32: color)
+    }
+    
+    func addLines(indicesCount: Int, positions: [Vector3], indices: [UInt32], colors: [Color32]) {
+        self.indicesCount = indicesCount
+        if indirectPointBuffer?.count ?? 0 > positions.count {
+            indirectPointBuffer!.assign(with: positions)
+        } else {
+            indirectPointBuffer = BufferView(device: engine.device, array: positions)
+        }
+        
+        if indirectIndicesBuffer?.count ?? 0 > indices.count {
+            indirectIndicesBuffer!.assign(with: indices)
+        } else {
+            indirectIndicesBuffer = BufferView(device: engine.device, array: indices)
+        }
+        
+        if indirectColorBuffer?.count ?? 0 > colors.count {
+            indirectColorBuffer!.assign(with: colors)
+        } else {
+            indirectColorBuffer = BufferView(device: engine.device, array: colors)
+        }
     }
     
     func checkResizePoint(count: Int) {
@@ -119,26 +146,34 @@ class LineSubpass : Subpass {
     }
     
     override func draw(_ encoder: inout RenderCommandEncoder) {
+        encoder.handle.pushDebugGroup("Line Gizmo Subpass")
+        if (_pso == nil) {
+            prepare(encoder.handle)
+        }
+        encoder.handle.setDepthStencilState(_depthStencilState)
+        encoder.handle.setFrontFacing(.clockwise)
+        encoder.handle.setCullMode(.back)
+        encoder.bind(camera: camera, _pso, _resourceCache)
+        
         if let pointBuffer = pointBuffer,
            let colorBuffer = colorBuffer {
-            encoder.handle.pushDebugGroup("Line Gizmo Subpass")
-            if (_pso == nil) {
-                prepare(encoder.handle)
-            }
-            
-            encoder.handle.setDepthStencilState(_depthStencilState)
-            encoder.handle.setFrontFacing(.clockwise)
-            encoder.handle.setCullMode(.back)
-            
-            encoder.bind(camera: camera, _pso, _resourceCache)
-            
             encoder.handle.setVertexBuffer(pointBuffer.buffer, offset: 0, index: 0)
             encoder.handle.setVertexBuffer(colorBuffer.buffer, offset: 0, index: 1)
             encoder.handle.drawPrimitives(type: .line, vertexStart: 0,
                                           vertexCount: numVerts, instanceCount: 1)
-            encoder.handle.popDebugGroup()
             // flush
             numVerts = 0
         }
+        
+        if indicesCount > 0,
+           let indirectPointBuffer,
+           let indirectColorBuffer,
+           let indirectIndicesBuffer {
+            encoder.handle.setVertexBuffer(indirectPointBuffer.buffer, offset: 0, index: 0)
+            encoder.handle.setVertexBuffer(indirectColorBuffer.buffer, offset: 0, index: 1)
+            encoder.handle.drawIndexedPrimitives(type: .line, indexCount: indicesCount, indexType: .uint32,
+                                                 indexBuffer: indirectIndicesBuffer.buffer, indexBufferOffset: 0)
+        }
+        encoder.handle.popDebugGroup()
     }
 }

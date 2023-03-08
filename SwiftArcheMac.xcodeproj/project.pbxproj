@@ -143,6 +143,8 @@
 		3EBA3D1129B8578E00E5FB42 /* LineSubpass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EBA3D1029B8578E00E5FB42 /* LineSubpass.swift */; };
 		3EBA3D1329B8579800E5FB42 /* TriangleSubpass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EBA3D1229B8579800E5FB42 /* TriangleSubpass.swift */; };
 		3EBA3D1529B85D6C00E5FB42 /* VisualizationParameter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EBA3D1429B85D6C00E5FB42 /* VisualizationParameter.swift */; };
+		3EBA3D1629B8891300E5FB42 /* WireframePrimitive.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8CB37C6DA6DAEFDC5A2A4 /* WireframePrimitive.swift */; };
+		3EBA3D1729B8891300E5FB42 /* EngineVisualizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8C0CC365128B7B18E4074 /* EngineVisualizer.swift */; };
 		3EC0370529321131002187DC /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EC0370429321131002187DC /* AppDelegate.swift */; };
 		3EC0370E29321132002187DC /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3EC0370D29321132002187DC /* Assets.xcassets */; };
 		3EC0371129321132002187DC /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3EC0370F29321132002187DC /* Main.storyboard */; };
@@ -489,10 +491,8 @@
 		43D8C62B488D6837DDD5BBA8 /* SkyboxApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8C50348EB9AC72BD7BF83 /* SkyboxApp.swift */; };
 		43D8C645AB2BDFD62E330B9C /* PhysXRaycast.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8C645B5CB351C0BFE24C7 /* PhysXRaycast.swift */; };
 		43D8C808C0FA018090454567 /* PhysXAttractorApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8C5E1D5FA1D3B1F819147 /* PhysXAttractorApp.swift */; };
-		43D8C8847DCDFE5DABA15585 /* WireframePrimitive.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8CB37C6DA6DAEFDC5A2A4 /* WireframePrimitive.swift */; };
 		43D8C96F57FDDC6923756F57 /* GridControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8CB2BAD2A9385A0612F78 /* GridControl.swift */; };
 		43D8CA0AB31B8C46122C1EAB /* IBLBaker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8C355424505E83C14B2A4 /* IBLBaker.swift */; };
-		43D8CB27974E2712F873405E /* WireframeManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8C0CC365128B7B18E4074 /* WireframeManager.swift */; };
 		43D8CC13B0B39DD99DEE0DC4 /* PhysXCompoundApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8CFE45C9E5B56F6B8A397 /* PhysXCompoundApp.swift */; };
 		43D8CC2C3372F5E3258A852D /* IrradianceApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8C159E7E7844EB632C57F /* IrradianceApp.swift */; };
 		43D8CC8E6EC814867725CBD1 /* PhysXDebug.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8CCD2428D0365772246E7 /* PhysXDebug.swift */; };
@@ -1212,7 +1212,7 @@
 		3ED9BD1229568E2D00876ABC /* HashGridApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HashGridApp.swift; sourceTree = "<group>"; };
 		43D8C090F42BE8E48D6FC4E1 /* GridMaterial.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GridMaterial.swift; sourceTree = "<group>"; };
 		43D8C0A4A7B56D737C3F4FE2 /* PhysXCollisionDetectionApp.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhysXCollisionDetectionApp.swift; sourceTree = "<group>"; };
-		43D8C0CC365128B7B18E4074 /* WireframeManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WireframeManager.swift; sourceTree = "<group>"; };
+		43D8C0CC365128B7B18E4074 /* EngineVisualizer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EngineVisualizer.swift; sourceTree = "<group>"; };
 		43D8C12DBC7510CB05B703F8 /* PhysXJointBasicApp.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhysXJointBasicApp.swift; sourceTree = "<group>"; };
 		43D8C159E7E7844EB632C57F /* IrradianceApp.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IrradianceApp.swift; sourceTree = "<group>"; };
 		43D8C355424505E83C14B2A4 /* IBLBaker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IBLBaker.swift; sourceTree = "<group>"; };
@@ -1818,12 +1818,22 @@
 		3EBA3D0629B834A900E5FB42 /* gizmo */ = {
 			isa = PBXGroup;
 			children = (
-				3EBA3D0729B834B600E5FB42 /* PointSubpass.swift */,
-				3EBA3D1029B8578E00E5FB42 /* LineSubpass.swift */,
-				3EBA3D1229B8579800E5FB42 /* TriangleSubpass.swift */,
+				3EBA3D1829B889E700E5FB42 /* subpass */,
+				43D8CB37C6DA6DAEFDC5A2A4 /* WireframePrimitive.swift */,
+				43D8C0CC365128B7B18E4074 /* EngineVisualizer.swift */,
 				3EBA3D0929B83CA700E5FB42 /* Gizmos.swift */,
 			);
 			path = gizmo;
+			sourceTree = "<group>";
+		};
+		3EBA3D1829B889E700E5FB42 /* subpass */ = {
+			isa = PBXGroup;
+			children = (
+				3EBA3D0729B834B600E5FB42 /* PointSubpass.swift */,
+				3EBA3D1029B8578E00E5FB42 /* LineSubpass.swift */,
+				3EBA3D1229B8579800E5FB42 /* TriangleSubpass.swift */,
+			);
+			path = subpass;
 			sourceTree = "<group>";
 		};
 		3EC036F829321131002187DC = {
@@ -2587,8 +2597,6 @@
 		3EC92A402936333A00423396 /* auxiliary-lines */ = {
 			isa = PBXGroup;
 			children = (
-				43D8CB37C6DA6DAEFDC5A2A4 /* WireframePrimitive.swift */,
-				43D8C0CC365128B7B18E4074 /* WireframeManager.swift */,
 			);
 			path = "auxiliary-lines";
 			sourceTree = "<group>";
@@ -3144,8 +3152,6 @@
 				040F1DBB29336FBF008BDC8D /* OrbitControl.swift in Sources */,
 				040F1DB829336F86008BDC8D /* IControlInput.swift in Sources */,
 				040F1DCC2933AAF0008BDC8D /* ControlFreePointer.swift in Sources */,
-				43D8C8847DCDFE5DABA15585 /* WireframePrimitive.swift in Sources */,
-				43D8CB27974E2712F873405E /* WireframeManager.swift in Sources */,
 				3E37FD8229B1C0270050169C /* RaycastHit.swift in Sources */,
 				43D8C57503BAADE4FE366B56 /* GridMaterial.swift in Sources */,
 				43D8C96F57FDDC6923756F57 /* GridControl.swift in Sources */,
@@ -3417,6 +3423,7 @@
 				3EC039F729321920002187DC /* AnimationVector3Curve.swift in Sources */,
 				3EC038DF29321845002187DC /* JointLimits.swift in Sources */,
 				3EC038E729321845002187DC /* SpringJoint.swift in Sources */,
+				3EBA3D1729B8891300E5FB42 /* EngineVisualizer.swift in Sources */,
 				040F1E0B293AAFB1008BDC8D /* HDRLoader.m in Sources */,
 				3EC038B929321835002187DC /* PhysicsMaterial.swift in Sources */,
 				3EC039D629321910002187DC /* ScaleAnimationCurveOwnerAssembler.swift in Sources */,
@@ -3454,6 +3461,7 @@
 				3EC039CD29321903002187DC /* AnimatorLayerData.swift in Sources */,
 				3EC03A032932192D002187DC /* BackgroundMode.swift in Sources */,
 				3EC03962293218BA002187DC /* ComputePipelineState.swift in Sources */,
+				3EBA3D1629B8891300E5FB42 /* WireframePrimitive.swift in Sources */,
 				3EC038E229321845002187DC /* PhysXTolerancesScale.swift in Sources */,
 				3EC03964293218BA002187DC /* ResourceCache.swift in Sources */,
 				3EC039BE293218FB002187DC /* AnimatorStateTransition.swift in Sources */,

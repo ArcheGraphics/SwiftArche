@@ -108,7 +108,7 @@ class PhysXDebugApp: NSViewController {
         sphereEntity.addComponent(MoveScript.self)
 
         //MARK: - debug draw
-        let wireframe = rootEntity.addComponent(WireframeManager.self)
+        let wireframe = rootEntity.addComponent(EngineVisualizer.self)
         wireframe.addEntityWireframe(with: sphereEntity)
         wireframe.addEntityWireframe(with: boxEntity)
 

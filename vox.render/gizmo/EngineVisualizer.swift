@@ -5,11 +5,9 @@
 //  property of any third parties.
 
 import vox_math
-import vox_render
-import Foundation
 import Metal
 
-public class WireframeManager: Script {
+public class EngineVisualizer: Script {
     private static let _ndcPosition: [Vector3] = [
         Vector3(-1, 1, -1),
         Vector3(1, 1, -1),
@@ -20,26 +18,16 @@ public class WireframeManager: Script {
 
     private var _localPositions: [Vector3] = []
     private var _globalPositions: [Vector3] = []
-    private var _indices: [UInt32] = []
+    private var _indices = [UInt32](repeating: 0, count: 128)
     private var _indicesCount = 0
     private var _boundsIndicesCount = 0
 
     private var _wireframeRenderers: [Renderer] = []
     private var _wireframeElements: [WireframeElement] = []
-    private var _renderer: MeshRenderer!
-    private var _material: UnlitMaterial!
-    private var _mesh: ModelMesh!
 
     /// Base color.
-    public var baseColor: Color {
-        get {
-            _material.baseColor
-        }
-        set {
-            _material.baseColor = newValue
-        }
-    }
-
+    public var baseColor = Color32(r: 255, g: 255, b: 255)
+    private var _colorPool: [Color32] = []
 
     /// Clear all wireframe.
     public func clear() {
@@ -48,7 +36,6 @@ public class WireframeManager: Script {
         _localPositions = []
         _globalPositions = []
         _indicesCount = 0
-        _mesh.subMesh!.count = 0
     }
 
     /// Create auxiliary mesh for entity.
@@ -112,14 +99,14 @@ public class WireframeManager: Script {
 
         // front
         for i in 0..<4 {
-            var newPosition = WireframeManager._ndcPosition[i]
+            var newPosition = EngineVisualizer._ndcPosition[i]
             _ = newPosition.transformCoordinate(m: inverseProj)
             _localPositions.append(newPosition)
         }
 
         // back
         for i in 0..<4 {
-            var newPosition = WireframeManager._ndcPosition[i]
+            var newPosition = EngineVisualizer._ndcPosition[i]
             newPosition = Vector3(newPosition.x, newPosition.y, 1)
             _ = newPosition.transformCoordinate(m: inverseProj)
             _localPositions.append(newPosition)
@@ -332,13 +319,13 @@ public class WireframeManager: Script {
         var tempAxis = Quaternion()
         switch (shape.upAxis) {
         case ColliderShapeUpAxis.X:
-            tempAxis = Quaternion(0, 0, WireframeManager._halfSqrt, WireframeManager._halfSqrt)
+            tempAxis = Quaternion(0, 0, EngineVisualizer._halfSqrt, EngineVisualizer._halfSqrt)
             break
         case ColliderShapeUpAxis.Y:
             tempAxis = Quaternion(0, 0, 0, 1)
             break
         case ColliderShapeUpAxis.Z:
-            tempAxis = Quaternion(WireframeManager._halfSqrt, 0, 0, WireframeManager._halfSqrt)
+            tempAxis = Quaternion(EngineVisualizer._halfSqrt, 0, 0, EngineVisualizer._halfSqrt)
         }
         var tempRotation = Quaternion.rotationYawPitchRoll(yaw: shape.rotation.x, pitch: shape.rotation.y, roll: shape.rotation.z)
         tempRotation *= tempAxis
@@ -350,31 +337,7 @@ public class WireframeManager: Script {
         _wireframeElements.append(WireframeElement(transform, positionsOffset))
     }
 
-    public override func onAwake() {
-        let mesh = ModelMesh(engine)
-        let material = UnlitMaterial(engine)
-        let renderer = entity.addComponent(MeshRenderer.self)
-
-        _ = mesh.addSubMesh(0, _indicesCount, MTLPrimitiveType.line)
-        renderer.mesh = mesh
-        renderer.setMaterial(material)
-
-        _mesh = mesh
-        _material = material
-        _renderer = renderer
-        _indices = [UInt32](repeating: 0, count: 128)
-    }
-
-    public override func onEnable() {
-        _renderer.enabled = true
-    }
-
-
-    public override func onDisable() {
-        _renderer.enabled = false
-    }
-
-    public override func onUpdate(_ deltaTime: Float) {
+    public override func onGUI() {
         // update local to world geometry
         let localPositionLength = _localPositions.count
         if localPositionLength > _globalPositions.count {
@@ -383,7 +346,6 @@ public class WireframeManager: Script {
             _ = _globalPositions.dropLast(_globalPositions.count - localPositionLength)
         }
         var positionIndex = 0
-        var needUpdate = false
         for i in 0..<_wireframeElements.count {
             let wireframeElement = _wireframeElements[i]
             let beginIndex = wireframeElement.transformRanges
@@ -398,7 +360,6 @@ public class WireframeManager: Script {
                     positionIndex += 1
                 }
                 wireframeElement.updateFlag.flag = false
-                needUpdate = true
             } else {
                 positionIndex += endIndex - beginIndex
             }
@@ -429,18 +390,16 @@ public class WireframeManager: Script {
             indicesCount += Int(WireframePrimitive.cuboidIndexCount)
         }
 
-        if (_wireframeRenderers.count > 0 || needUpdate) {
-            _mesh.setPositions(positions: _globalPositions)
-            _mesh.setIndices(indices: _indices)
-            _mesh.uploadData(false)
-            _mesh.subMesh!.count = indicesCount
+        if _colorPool.count != _globalPositions.count {
+            _colorPool = [Color32](repeating: baseColor, count: _globalPositions.count)
         }
+        LineSubpass.ins.addLines(indicesCount: indicesCount, positions: _globalPositions, indices: _indices, colors: _colorPool)
     }
 
     private func _growthIndexMemory(_ length: Int) {
         let neededLength = _indicesCount + length
         if (neededLength > _indices.count) {
-            if (neededLength > 4294967295) {
+            if (neededLength > UInt32.max) {
                 fatalError("The vertex count is over limit.")
             }
 

@@ -62,9 +62,15 @@ class GUIManager {
             // Gizmos
             if PointSubpass.ins.containData || LineSubpass.ins.containData || TriangleSubpass.ins.containData {
                 var encoder = RenderCommandEncoder(commandBuffer, renderPassDescriptor, "gizmos")
-                PointSubpass.ins.draw(&encoder)
-                LineSubpass.ins.draw(&encoder)
-                TriangleSubpass.ins.draw(&encoder)
+                if PointSubpass.ins.containData {
+                    PointSubpass.ins.draw(&encoder)
+                }
+                if LineSubpass.ins.containData {
+                    LineSubpass.ins.draw(&encoder)
+                }
+                if TriangleSubpass.ins.containData {
+                    TriangleSubpass.ins.draw(&encoder)
+                }
                 encoder.endEncoding()
             }
             

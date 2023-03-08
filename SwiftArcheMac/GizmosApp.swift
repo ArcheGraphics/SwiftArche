@@ -23,6 +23,8 @@ fileprivate class GizmosScript: Script {
         Gizmos.addLine(p0: Vector3(1,1,1), p1: Vector3(2,2,2), color: Color32(r: 23, g: 212, b: 42 , a: 255))
         Gizmos.addTriangle(p0: Vector3(2,2,2), p1: Vector3(3,3,3), p2: Vector3(0,1,0),
                            color: Color32(r: 23, g: 12, b: 242 , a: 255))
+        
+        Gizmos.addArrow(posA: Vector3(), posB: Vector3(-1, 1, 1), color: Color32(r: 23, g: 12, b: 242))
     }
 }
 
@@ -43,7 +45,7 @@ class GizmosApp: NSViewController {
         let rootEntity = scene.createRootEntity()
 
         let cameraEntity = rootEntity.createChild()
-        cameraEntity.transform.position = Vector3(5, 5, 5)
+        cameraEntity.transform.position = Vector3(2, 2, 2)
         cameraEntity.transform.lookAt(targetPosition: Vector3())
         let camera = cameraEntity.addComponent(Camera.self)
         cameraEntity.addComponent(OrbitControl.self)
