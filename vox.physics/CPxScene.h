@@ -141,4 +141,17 @@ typedef struct {
                        group2:(const uint16_t)group2
                        enable:(const bool)enable;
 
+// MARK: - Visualize
+@property(nonatomic) float visualScale;
+
+- (void)setVisualType:(uint32_t)type
+                value:(bool)value;
+
+- (void)draw:(void (^ _Nullable)(simd_float3 p0, uint32_t color))addPoint
+            :(void (^ _Nullable)(uint32_t count))checkResizePoint
+            :(void (^ _Nullable)(simd_float3 p0, simd_float3 p1, uint32_t color))addLine
+            :(void (^ _Nullable)(uint32_t count))checkResizeLine
+            :(void (^ _Nullable)(simd_float3 p0, simd_float3 p1, simd_float3 p2, uint32_t color))addTriangle
+            :(void (^ _Nullable)(uint32_t count))checkResizeTriangle;
+
 @end

@@ -66,4 +66,8 @@
     return _c_shape->getLocalPose();
 }
 
+- (void)setVisualize:(bool)value {
+    _c_shape->setFlag(PxShapeFlag::Enum::eVISUALIZATION, value);
+}
+
 @end

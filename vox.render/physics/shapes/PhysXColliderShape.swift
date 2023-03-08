@@ -34,6 +34,10 @@ class PhysXColliderShape {
     var _pxGeometry: CPxGeometry!
     var _id: UInt32!
     var _contactOffset: Float = 0
+    
+    func setVisualize(_ value: Bool) {
+        _pxShape.setVisualize(value)
+    }
 
     func setRotation(_ value: Vector3) {
         _rotation = value

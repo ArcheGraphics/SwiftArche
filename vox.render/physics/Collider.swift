@@ -13,7 +13,18 @@ public class Collider: Component {
 
     var _updateFlag: BoolUpdateFlag
     var _shapes: [ColliderShape] = []
+    private var _visualize: Bool = false
 
+    public var isVisualize: Bool {
+        get {
+            _visualize
+        }
+        set {
+            _visualize = newValue
+            _nativeCollider.setVisualize(newValue)
+        }
+    }
+    
     /// The shapes of this collider.
     public var shapes: [ColliderShape] {
         get {

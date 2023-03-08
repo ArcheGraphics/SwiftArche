@@ -354,4 +354,60 @@ namespace {
     PxSetGroupCollisionFlag(group1, group2, enable);
 }
 
+// MARK: - Visualize
+- (float)visualScale {
+    return _scene->getVisualizationParameter(PxVisualizationParameter::Enum::eSCALE);
+}
+
+- (void)setVisualScale:(float)visualScale {
+    _scene->setVisualizationParameter(PxVisualizationParameter::Enum::eSCALE, visualScale);
+}
+
+- (void)setVisualType:(uint32_t)type
+                value:(bool)value {
+    _scene->setVisualizationParameter(PxVisualizationParameter::Enum(type), value);
+}
+
+- (void)draw:(void (^ _Nullable)(simd_float3 p0, uint32_t color))addPoint
+            :(void (^ _Nullable)(uint32_t count))checkResizePoint
+            :(void (^ _Nullable)(simd_float3 p0, simd_float3 p1, uint32_t color))addLine
+            :(void (^ _Nullable)(uint32_t count))checkResizeLine
+            :(void (^ _Nullable)(simd_float3 p0, simd_float3 p1, simd_float3 p2, uint32_t color))addTriangle
+            :(void (^ _Nullable)(uint32_t count))checkResizeTriangle {
+    const PxRenderBuffer& debugRenderable = _scene->getRenderBuffer();
+    // Points
+    const PxU32 numPoints = debugRenderable.getNbPoints();
+    if(numPoints) {
+        const PxDebugPoint* PX_RESTRICT points = debugRenderable.getPoints();
+        checkResizePoint(numPoints);
+        for(PxU32 i=0; i<numPoints; i++) {
+            const PxDebugPoint& point = points[i];
+            addPoint(transform(point.pos), point.color);
+        }
+    }
+
+    // Lines
+    const PxU32 numLines = debugRenderable.getNbLines();
+    if(numLines) {
+        const PxDebugLine* PX_RESTRICT lines = debugRenderable.getLines();
+        checkResizeLine(numLines * 2);
+        for(PxU32 i=0; i<numLines; i++) {
+            const PxDebugLine& line = lines[i];
+            addLine(transform(line.pos0), transform(line.pos1), line.color0);
+        }
+    }
+
+    // Triangles
+    const PxU32 numTriangles = debugRenderable.getNbTriangles();
+    if(numTriangles) {
+        const PxDebugTriangle* PX_RESTRICT triangles = debugRenderable.getTriangles();
+        checkResizeTriangle(numTriangles * 3);
+        for(PxU32 i=0; i<numTriangles; i++) {
+            const PxDebugTriangle& triangle = triangles[i];
+            addTriangle(transform(triangle.pos0), transform(triangle.pos1), transform(triangle.pos2), triangle.color0);
+        }
+    }
+}
+
+
 @end

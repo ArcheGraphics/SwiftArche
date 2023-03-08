@@ -52,4 +52,8 @@
     PxSetGroup(*_c_actor, collisionGroup);
 }
 
+- (void)setVisualize:(bool)value {
+    _c_actor->setActorFlag(PxActorFlag::Enum::eVISUALIZATION, value);
+}
+
 @end

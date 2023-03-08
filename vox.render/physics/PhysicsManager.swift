@@ -491,3 +491,36 @@ extension PhysicsManager {
         _nativePhysicsManager.ignoreCollision(group1: group1._nativeCollider, group2: group2._nativeCollider, enable: enable)
     }
 }
+
+// MARK: - Visualize
+extension PhysicsManager {
+    public var visualScale: Float {
+        get {
+            _nativePhysicsManager.getVisualScale()
+        }
+        set {
+            _nativePhysicsManager.setVisualScale(newValue)
+        }
+    }
+    
+    public func setVisualType(_ type: VisualizationParameter, value: Bool) {
+        _nativePhysicsManager.setVisualType(type, value)
+    }
+    
+    /// Must be called in onGUI
+    public func drawGizmos() {
+        _nativePhysicsManager.draw { p0, color in
+            PointSubpass.ins.addPoint(p0, color: color)
+        } checkResizePoint: { count in
+            PointSubpass.ins.checkResizePoint(count: Int(count))
+        } addLine: { p0, p1, color in
+            LineSubpass.ins.addLine(p0: p0, p1: p1, color: color)
+        } checkResizeLine: { count in
+            LineSubpass.ins.checkResizePoint(count: Int(count))
+        } addTriangle: { p0, p1, p2, color in
+            TriangleSubpass.ins.addTriangle(p0: p0, p1: p1, p2: p2, color: color)
+        } checkResizeTriangle: { count in
+            TriangleSubpass.ins.checkResizePoint(count: Int(count))
+        }
+    }
+}

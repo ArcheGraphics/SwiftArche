@@ -45,9 +45,12 @@ class PhysXDebugApp: NSViewController {
         let cameraEntity = rootEntity.createChild()
         cameraEntity.transform.position = Vector3(10, 10, 10)
         cameraEntity.transform.lookAt(targetPosition: Vector3())
-        cameraEntity.addComponent(Camera.self)
+        let camera = cameraEntity.addComponent(Camera.self)
         cameraEntity.addComponent(OrbitControl.self)
-
+        
+        rootEntity.addComponent(PhysicsVisual.self)
+        Gizmos.set(camera: camera)
+        
         let light = rootEntity.createChild("light")
         light.transform.position = Vector3(1, 3, 0)
         light.transform.lookAt(targetPosition: Vector3())
@@ -59,9 +62,10 @@ class PhysXDebugApp: NSViewController {
 
         let boxMtl = PBRMaterial(engine)
         let boxRenderer = boxEntity.addComponent(MeshRenderer.self)
-        boxMtl.baseColor = Color(0.6, 0.3, 0.3, 1.0)
+        boxMtl.baseColor = Color(0.6, 0.3, 0.3, 0.5)
         boxMtl.metallic = 0.0
         boxMtl.roughness = 0.5
+        boxMtl.isTransparent = true
         boxRenderer.mesh = PrimitiveMesh.createCuboid(engine, width: cubeSize, height: cubeSize, depth: cubeSize)
         boxRenderer.setMaterial(boxMtl)
 
@@ -82,9 +86,10 @@ class PhysXDebugApp: NSViewController {
 
         let sphereMtl = PBRMaterial(engine)
         let sphereRenderer = sphereEntity.addComponent(MeshRenderer.self)
-        sphereMtl.baseColor = Color(Float.random(in: 0..<1), Float.random(in: 0..<1), Float.random(in: 0..<1), 1.0)
+        sphereMtl.baseColor = Color(Float.random(in: 0..<1), Float.random(in: 0..<1), Float.random(in: 0..<1), 0.5)
         sphereMtl.metallic = 0.0
         sphereMtl.roughness = 0.5
+        sphereMtl.isTransparent = true
         sphereRenderer.mesh = PrimitiveMesh.createSphere(engine, radius: radius)
         sphereRenderer.setMaterial(sphereMtl)
 

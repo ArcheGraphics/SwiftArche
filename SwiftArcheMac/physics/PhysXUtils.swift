@@ -8,6 +8,7 @@ import Cocoa
 import vox_render
 import vox_math
 import vox_toolkit
+import ImGui
 
 func addSphere(_ rootEntity: Entity, _ radius: Float,
                _ position: Vector3, _ rotation: Quaternion, isDynamic: Bool = true) -> Entity {
@@ -161,6 +162,7 @@ func addDuckMesh(_ rootEntity: Entity) {
     }, true)
 }
 
+// MARK: - CollisionScript
 class CollisionScript: Script {
     private var sphereRenderer: MeshRenderer!
 
@@ -169,34 +171,165 @@ class CollisionScript: Script {
     }
 
     override func onTriggerEnter(_ other: ColliderShape) {
-        print("onTriggerEnter")
+//        print("onTriggerEnter")
         if let sphereRenderer {
             (sphereRenderer.getMaterial() as! PBRMaterial).baseColor = Color(Float.random(in: 0..<1),
-                                                                             Float.random(in: 0..<1), Float.random(in: 0..<1), 1.0)
+                                                                             Float.random(in: 0..<1), Float.random(in: 0..<1), 0.5)
         }
     }
     
     override func onTriggerStay(_ other: ColliderShape) {
-        print("onTriggerStay")
+//        print("onTriggerStay")
     }
 
     override func onTriggerExit(_ other: ColliderShape) {
-        print("onTriggerExit")
+//        print("onTriggerExit")
         if let sphereRenderer {
             (sphereRenderer.getMaterial() as! PBRMaterial).baseColor = Color(Float.random(in: 0..<1),
-                                                                             Float.random(in: 0..<1), Float.random(in: 0..<1), 1.0)
+                                                                             Float.random(in: 0..<1), Float.random(in: 0..<1), 0.5)
         }
     }
     
     override func onCollisionExit(_ other: Collision) {
-        print("onCollisionExit")
+//        print("onCollisionExit")
     }
     
     override func onCollisionStay(_ other: Collision) {
-        print("onCollisionStay")
+//        print("onCollisionStay")
     }
     
     override func onCollisionEnter(_ other: Collision) {
-        print("onCollisionEnter")
+//        print("onCollisionEnter")
+    }
+}
+
+// MARK: - PhysicsVisual
+@propertyWrapper
+struct EnumToBool {
+    static var engine: Engine!
+    var number: Bool = false
+    var type: VisualizationParameter
+    
+    init(type: VisualizationParameter) {
+        self.type = type
+    }
+    
+    var wrappedValue: Bool {
+        get { number }
+        set {
+            if number != newValue {
+                number = newValue
+                EnumToBool.engine.physicsManager.setVisualType(type, value: newValue)
+            }
+        }
+    }
+}
+
+class PhysicsVisual: Script {
+    @EnumToBool(type: .WorldAxes)
+    var worldAxes: Bool
+    
+    @EnumToBool(type: .BodyAxes)
+    var bodyAxes: Bool
+    
+    @EnumToBool(type: .BodyMassAxes)
+    var bodyMassAxes: Bool
+    
+    @EnumToBool(type: .BodyLinVelocity)
+    var bodyLinVelocity: Bool
+    
+    @EnumToBool(type: .BodyAngVelocity)
+    var bodyAngVelocity: Bool
+    
+    @EnumToBool(type: .ContactPoint)
+    var contactPoint: Bool
+    
+    @EnumToBool(type: .ContactNormal)
+    var contactNormal: Bool
+    
+    @EnumToBool(type: .ContactError)
+    var contactError: Bool
+    
+    @EnumToBool(type: .ContactForce)
+    var contactForce: Bool
+    
+    @EnumToBool(type: .ActorAxes)
+    var actorAxes: Bool
+    
+    @EnumToBool(type: .CollisionAABBS)
+    var collisionAABBS: Bool
+    
+    @EnumToBool(type: .CollisionShapes)
+    var collisionShapes: Bool
+    
+    @EnumToBool(type: .CollisionAxes)
+    var collisionAxes: Bool
+    
+    @EnumToBool(type: .CollisionCompounds)
+    var collisionCompounds: Bool
+    
+    @EnumToBool(type: .CollisionFaceNormal)
+    var collisionFaceNormal: Bool
+    
+    @EnumToBool(type: .CollisionEdges)
+    var collisionEdges: Bool
+    
+    @EnumToBool(type: .CollisionStatic)
+    var collisionStatic: Bool
+    
+    @EnumToBool(type: .CollisionDynamic)
+    var collisionDynamic: Bool
+    
+    @EnumToBool(type: .JointLocalFrames)
+    var jointLocalFrames: Bool
+    
+    @EnumToBool(type: .JointLimits)
+    var jointLimits: Bool
+    
+    @EnumToBool(type: .CullBox)
+    var cullBox: Bool
+    
+    @EnumToBool(type: .MBPRegins)
+    var mbpRegins: Bool
+    
+    override func onAwake() {
+        EnumToBool.engine = engine
+    }
+    
+    override func onGUI() {
+        UIElement.Init(engine)
+        
+        ImGuiNewFrame()
+        ImGuiSliderFloat("visual size", &engine.physicsManager.visualScale, 1.0, 10.0, nil, 1)
+        ImGuiCheckbox("worldAxes", &worldAxes)
+        ImGuiCheckbox("bodyAxes", &bodyAxes)
+        ImGuiCheckbox("bodyMassAxes", &bodyMassAxes)
+        ImGuiCheckbox("bodyLinVelocity", &bodyLinVelocity)
+        ImGuiCheckbox("bodyAngVelocity", &bodyAngVelocity)
+        
+        ImGuiCheckbox("contactPoint", &contactPoint)
+        ImGuiCheckbox("contactNormal", &contactNormal)
+        ImGuiCheckbox("contactError", &contactError)
+        ImGuiCheckbox("contactForce", &contactForce)
+        ImGuiCheckbox("actorAxes", &actorAxes)
+        ImGuiCheckbox("collisionAABBS", &collisionAABBS)
+        ImGuiCheckbox("collisionShapes", &collisionShapes)
+        ImGuiCheckbox("collisionAxes", &collisionAxes)
+        ImGuiCheckbox("collisionCompounds", &collisionCompounds)
+        ImGuiCheckbox("collisionFaceNormal", &collisionFaceNormal)
+        ImGuiCheckbox("collisionEdges", &collisionEdges)
+        ImGuiCheckbox("collisionStatic", &collisionStatic)
+        ImGuiCheckbox("collisionDynamic", &collisionDynamic)
+        ImGuiCheckbox("jointLocalFrames", &jointLocalFrames)
+        ImGuiCheckbox("jointLimits", &jointLimits)
+        ImGuiCheckbox("cullBox", &cullBox)
+        ImGuiCheckbox("mbpRegins", &mbpRegins)
+
+
+        // Rendering
+        ImGuiRender()
+        
+        engine.physicsManager.visualScale = 1
+        engine.physicsManager.drawGizmos()
     }
 }

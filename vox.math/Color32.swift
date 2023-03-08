@@ -24,6 +24,13 @@ public struct Color32 {
         self.b = b
         self.a = a
     }
+    
+    public init(rgba: UInt32) {
+        b = UInt8((rgba>>16) & 0xff)
+        g = UInt8((rgba>>8)  & 0xff)
+        r = UInt8((rgba)     & 0xff)
+        a = 255
+    }
 
     /// Linearly interpolates between colors a and b by t.
     public static func lerp(a: Color32, b: Color32, t: Float) -> Color32 {

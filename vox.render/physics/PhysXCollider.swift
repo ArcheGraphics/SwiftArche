@@ -10,6 +10,10 @@ import vox_math
 class PhysXCollider {
     internal var _pxActor: CPxRigidActor!
 
+    func setVisualize(_ value: Bool) {
+        _pxActor.setVisualize(value)
+    }
+    
     func addShape(_ shape: PhysXColliderShape) {
         _pxActor.attachShape(with: shape._pxShape)
     }

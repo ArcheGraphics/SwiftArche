@@ -27,4 +27,6 @@
 
 - (uint32_t)getUUID;
 
+- (void)setVisualize:(bool)value;
+
 @end

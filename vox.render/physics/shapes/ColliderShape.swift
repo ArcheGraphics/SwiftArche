@@ -19,7 +19,18 @@ public class ColliderShape {
     private var _rotation: Vector3 = Vector3()
     private var _position: Vector3 = Vector3()
     private var _contactOffset: Float = 0.02
+    private var _visualize: Bool = false
 
+    public var isVisualize: Bool {
+        get {
+            _visualize
+        }
+        set {
+            _visualize = newValue
+            _nativeShape.setVisualize(newValue)
+        }
+    }
+    
     /// Whether raycast can select it.
     public var isSceneQuery: Bool = true
     

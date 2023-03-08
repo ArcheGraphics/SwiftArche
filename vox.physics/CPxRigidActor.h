@@ -25,4 +25,6 @@
 /// Sets which collision group this actor is part of
 - (void)setGroup:(const uint16_t)collisionGroup;
 
+- (void)setVisualize:(bool)value;
+
 @end

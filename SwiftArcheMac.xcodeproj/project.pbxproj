@@ -142,6 +142,7 @@
 		3EBA3D0F29B84C0100E5FB42 /* GizmosApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EBA3D0E29B84C0100E5FB42 /* GizmosApp.swift */; };
 		3EBA3D1129B8578E00E5FB42 /* LineSubpass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EBA3D1029B8578E00E5FB42 /* LineSubpass.swift */; };
 		3EBA3D1329B8579800E5FB42 /* TriangleSubpass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EBA3D1229B8579800E5FB42 /* TriangleSubpass.swift */; };
+		3EBA3D1529B85D6C00E5FB42 /* VisualizationParameter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EBA3D1429B85D6C00E5FB42 /* VisualizationParameter.swift */; };
 		3EC0370529321131002187DC /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EC0370429321131002187DC /* AppDelegate.swift */; };
 		3EC0370E29321132002187DC /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3EC0370D29321132002187DC /* Assets.xcassets */; };
 		3EC0371129321132002187DC /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3EC0370F29321132002187DC /* Main.storyboard */; };
@@ -839,6 +840,7 @@
 		3EBA3D0E29B84C0100E5FB42 /* GizmosApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GizmosApp.swift; sourceTree = "<group>"; };
 		3EBA3D1029B8578E00E5FB42 /* LineSubpass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LineSubpass.swift; sourceTree = "<group>"; };
 		3EBA3D1229B8579800E5FB42 /* TriangleSubpass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TriangleSubpass.swift; sourceTree = "<group>"; };
+		3EBA3D1429B85D6C00E5FB42 /* VisualizationParameter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VisualizationParameter.swift; sourceTree = "<group>"; };
 		3EC0370129321131002187DC /* SwiftArcheMac.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SwiftArcheMac.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		3EC0370429321131002187DC /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		3EC0370D29321132002187DC /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -2507,6 +2509,7 @@
 				3EC038ED2932184C002187DC /* HingeJointFlag.swift */,
 				3EC038EA2932184C002187DC /* PhysicsMaterialCombineMode.swift */,
 				3EACA08C29A475C200F08BB2 /* MeshColliderCookingOptions.swift */,
+				3EBA3D1429B85D6C00E5FB42 /* VisualizationParameter.swift */,
 			);
 			path = enums;
 			sourceTree = "<group>";
@@ -3533,6 +3536,7 @@
 				040F1E12293B4436008BDC8D /* PostprocessManager.swift in Sources */,
 				3EC0398F293218D1002187DC /* TextureCoordinate.swift in Sources */,
 				3EC03948293218A3002187DC /* RenderTargetBlendState.swift in Sources */,
+				3EBA3D1529B85D6C00E5FB42 /* VisualizationParameter.swift in Sources */,
 				3EC92AE12939F97300423396 /* RenderCommandEncoder.swift in Sources */,
 				3EC038C62932183D002187DC /* PhysXPlaneColliderShape.swift in Sources */,
 				3EC03978293218C3002187DC /* Skin.swift in Sources */,
