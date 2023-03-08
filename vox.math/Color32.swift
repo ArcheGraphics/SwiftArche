@@ -8,7 +8,6 @@ import simd
 
 /// Representation of RGBA colors in 32 bit format.
 public struct Color32 {
-    private var rgba: UInt
     /// Red component of the color.
     public var r: UInt8
     /// Green component of the color.
@@ -19,8 +18,7 @@ public struct Color32 {
     public var a: UInt8
 
     /// Constructs a new Color32 with given r, g, b, a components.
-    public init(r: UInt8, g: UInt8, b: UInt8, a: UInt8) {
-        rgba = 0
+    public init(r: UInt8, g: UInt8, b: UInt8, a: UInt8 = 255) {
         self.r = r
         self.g = g
         self.b = b
@@ -28,7 +26,7 @@ public struct Color32 {
     }
 
     /// Linearly interpolates between colors a and b by t.
-    public static func Lerp(a: Color32, b: Color32, t: Float) -> Color32 {
+    public static func lerp(a: Color32, b: Color32, t: Float) -> Color32 {
         let t = MathUtil.clamp01(value: t)
         return Color32(r: UInt8(Double(a.r) + Double(Int(b.r) - Int(a.r)) * Double(t)),
                 g: UInt8(Double(a.g) + Double(Int(b.g) - Int(a.g)) * Double(t)),
@@ -37,7 +35,7 @@ public struct Color32 {
     }
 
     /// Linearly interpolates between colors a and b by t.
-    public static func LerpUnclamped(a: Color32, b: Color32, t: Float) -> Color32 {
+    public static func lerpUnclamped(a: Color32, b: Color32, t: Float) -> Color32 {
         Color32(r: UInt8(Double(a.r) + Double(Int(b.r) - Int(a.r)) * Double(t)),
                 g: UInt8(Double(a.g) + Double(Int(b.g) - Int(a.g)) * Double(t)),
                 b: UInt8(Double(a.b) + Double(Int(b.b) - Int(a.b)) * Double(t)),

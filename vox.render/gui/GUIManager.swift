@@ -8,6 +8,7 @@ import Metal
 import ImGui
 
 class GUIManager {
+    private var _renderPass: RenderPass!
     private let _engine: Engine
     private var _onGUIScripts: DisorderedArray<Script> = DisorderedArray()
 
@@ -19,6 +20,8 @@ class GUIManager {
         
         ImGui_ImplMetal_Init(engine.device)
         ImGui_ImplOSX_Init(engine.canvas)
+        
+        PointSubpass.ins.set(engine)
     }
     
     deinit {
@@ -50,24 +53,32 @@ class GUIManager {
     
     func draw(_ commandBuffer: MTLCommandBuffer) {
         callScriptOnGUI()
-        if let drawData = ImGuiGetDrawData() {
-            let canvas = _engine.canvas
-            if let renderPassDescriptor = canvas.currentRenderPassDescriptor {
-                renderPassDescriptor.colorAttachments[0].loadAction = .load
+        
+        let canvas = _engine.canvas
+        if let renderPassDescriptor = canvas.currentRenderPassDescriptor {
+            renderPassDescriptor.colorAttachments[0].loadAction = .load
+            // Gizmos
+            if PointSubpass.ins.containData {
+                var encoder = RenderCommandEncoder(commandBuffer, renderPassDescriptor, "gizmos")
+                PointSubpass.ins.draw(&encoder)
+                encoder.endEncoding()
+            }
+            
+            // GUI
+            if let drawData = ImGuiGetDrawData() {
                 guard let renderEncoder = commandBuffer.makeRenderCommandEncoder(descriptor: renderPassDescriptor) else {
                     return
                 }
-                renderPassDescriptor.colorAttachments[0].loadAction = .clear
-                
                 renderEncoder.label = "ImGui"
                 renderEncoder.pushDebugGroup("ImGui")
                 ImGui_ImplMetal_NewFrame(renderPassDescriptor)
                 ImGui_ImplOSX_NewFrame(canvas)
-
+                
                 ImGui_ImplMetal_RenderDrawData(drawData.pointee, commandBuffer, renderEncoder)
                 renderEncoder.popDebugGroup()
                 renderEncoder.endEncoding()
             }
+            renderPassDescriptor.colorAttachments[0].loadAction = .clear
         }
     }
 }

@@ -136,6 +136,10 @@
 		3EBA3CFE29B6FC3F00E5FB42 /* SimulationFilterShader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3EBA3CFD29B6FC3F00E5FB42 /* SimulationFilterShader.cpp */; };
 		3EBA3D0029B71D1000E5FB42 /* KinematicPlatform.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EBA3CFF29B71D1000E5FB42 /* KinematicPlatform.swift */; };
 		3EBA3D0229B71DD900E5FB42 /* ControlledPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EBA3D0129B71DD900E5FB42 /* ControlledPlayer.swift */; };
+		3EBA3D0829B834B600E5FB42 /* PointSubpass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EBA3D0729B834B600E5FB42 /* PointSubpass.swift */; };
+		3EBA3D0A29B83CA700E5FB42 /* Gizmos.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EBA3D0929B83CA700E5FB42 /* Gizmos.swift */; };
+		3EBA3D0D29B83EDD00E5FB42 /* gizmos.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3EBA3D0C29B83EDD00E5FB42 /* gizmos.metal */; };
+		3EBA3D0F29B84C0100E5FB42 /* GizmosApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EBA3D0E29B84C0100E5FB42 /* GizmosApp.swift */; };
 		3EC0370529321131002187DC /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EC0370429321131002187DC /* AppDelegate.swift */; };
 		3EC0370E29321132002187DC /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3EC0370D29321132002187DC /* Assets.xcassets */; };
 		3EC0371129321132002187DC /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3EC0370F29321132002187DC /* Main.storyboard */; };
@@ -827,6 +831,10 @@
 		3EBA3CFD29B6FC3F00E5FB42 /* SimulationFilterShader.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = SimulationFilterShader.cpp; sourceTree = "<group>"; };
 		3EBA3CFF29B71D1000E5FB42 /* KinematicPlatform.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KinematicPlatform.swift; sourceTree = "<group>"; };
 		3EBA3D0129B71DD900E5FB42 /* ControlledPlayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ControlledPlayer.swift; sourceTree = "<group>"; };
+		3EBA3D0729B834B600E5FB42 /* PointSubpass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PointSubpass.swift; sourceTree = "<group>"; };
+		3EBA3D0929B83CA700E5FB42 /* Gizmos.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Gizmos.swift; sourceTree = "<group>"; };
+		3EBA3D0C29B83EDD00E5FB42 /* gizmos.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = gizmos.metal; sourceTree = "<group>"; };
+		3EBA3D0E29B84C0100E5FB42 /* GizmosApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GizmosApp.swift; sourceTree = "<group>"; };
 		3EC0370129321131002187DC /* SwiftArcheMac.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SwiftArcheMac.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		3EC0370429321131002187DC /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		3EC0370D29321132002187DC /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -1801,6 +1809,15 @@
 			path = pointer;
 			sourceTree = "<group>";
 		};
+		3EBA3D0629B834A900E5FB42 /* gizmo */ = {
+			isa = PBXGroup;
+			children = (
+				3EBA3D0729B834B600E5FB42 /* PointSubpass.swift */,
+				3EBA3D0929B83CA700E5FB42 /* Gizmos.swift */,
+			);
+			path = gizmo;
+			sourceTree = "<group>";
+		};
 		3EC036F829321131002187DC = {
 			isa = PBXGroup;
 			children = (
@@ -1856,6 +1873,7 @@
 				43D8C50348EB9AC72BD7BF83 /* SkyboxApp.swift */,
 				43D8C888ABFCE2075E7AA5BE /* AtomicComputeApp.swift */,
 				E63B1700C137922B042BB8C2 /* InputCastApp.swift */,
+				3EBA3D0E29B84C0100E5FB42 /* GizmosApp.swift */,
 				3E6D2F0B293F135000B63F73 /* loader */,
 				3EC92A3F29360C6800423396 /* physics */,
 				040F1DF129378195008BDC8D /* rendering */,
@@ -2070,6 +2088,7 @@
 				3EC0384029321495002187DC /* pbr_shading.metal */,
 				040F1E13293B86AC008BDC8D /* luminance.metal */,
 				3EC92AC72939A1ED00423396 /* postprocess_merge.metal */,
+				3EBA3D0C29B83EDD00E5FB42 /* gizmos.metal */,
 			);
 			path = vox.shader;
 			sourceTree = "<group>";
@@ -2105,6 +2124,7 @@
 				3EC038662932154A002187DC /* animation */,
 				3EC0387029321739002187DC /* loader */,
 				040F1DD72934E6CF008BDC8D /* gui */,
+				3EBA3D0629B834A900E5FB42 /* gizmo */,
 				3EC0389029321826002187DC /* Layer.swift */,
 				3EC0388629321825002187DC /* Canvas.swift */,
 				3EC0388429321825002187DC /* Engine.swift */,
@@ -3243,6 +3263,7 @@
 				43D8CC13B0B39DD99DEE0DC4 /* PhysXCompoundApp.swift in Sources */,
 				43D8C1413D08147985256B8A /* PhysXJointBasicApp.swift in Sources */,
 				43D8C645AB2BDFD62E330B9C /* PhysXRaycast.swift in Sources */,
+				3EBA3D0F29B84C0100E5FB42 /* GizmosApp.swift in Sources */,
 				43D8CE4CE0A0E392D06A3B25 /* PhysXUtils.swift in Sources */,
 				43D8CC8E6EC814867725CBD1 /* PhysXDebug.swift in Sources */,
 				E63B1AB88F741EC4FFD734F6 /* InputCastApp.swift in Sources */,
@@ -3348,6 +3369,7 @@
 				3EC0384F29321496002187DC /* function_common.metal in Sources */,
 				3EC0385229321496002187DC /* unlit_shading.metal in Sources */,
 				3EC0385129321496002187DC /* skybox_shading.metal in Sources */,
+				3EBA3D0D29B83EDD00E5FB42 /* gizmos.metal in Sources */,
 				3EC0384E29321496002187DC /* ar_shading.metal in Sources */,
 				040F1E27293C727D008BDC8D /* transparent_shadow.metal in Sources */,
 				3EC03856293214A2002187DC /* shadowmap.metal in Sources */,
@@ -3370,6 +3392,7 @@
 				3EC0397A293218C3002187DC /* Mesh.swift in Sources */,
 				3EC0391C2932186B002187DC /* ParserContext.swift in Sources */,
 				040F1DC4293397B3008BDC8D /* Keys.swift in Sources */,
+				3EBA3D0829B834B600E5FB42 /* PointSubpass.swift in Sources */,
 				3EC039CE29321903002187DC /* AnimationEventHandler.swift in Sources */,
 				3EC0393829321893002187DC /* ShadowResolution.swift in Sources */,
 				3EC0389429321826002187DC /* EngineSettings.swift in Sources */,
@@ -3428,6 +3451,7 @@
 				3EC0392329321872002187DC /* KHR_materials_pbrSpecularGlossiness.swift in Sources */,
 				3EC0390929321862002187DC /* GLTFLoader.swift in Sources */,
 				3EC03981293218C3002187DC /* PrimitiveMesh.swift in Sources */,
+				3EBA3D0A29B83CA700E5FB42 /* Gizmos.swift in Sources */,
 				3EC039F929321920002187DC /* AnimationQuaternionCurve.swift in Sources */,
 				3EC038F02932184C002187DC /* ColliderShapeUpAxis.swift in Sources */,
 				3EC0390629321862002187DC /* GLTFAsset.m in Sources */,
