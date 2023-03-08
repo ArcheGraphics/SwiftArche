@@ -47,10 +47,9 @@ class GizmosApp: NSViewController {
         let cameraEntity = rootEntity.createChild()
         cameraEntity.transform.position = Vector3(2, 2, 2)
         cameraEntity.transform.lookAt(targetPosition: Vector3())
-        let camera = cameraEntity.addComponent(Camera.self)
+        cameraEntity.addComponent(Camera.self)
         cameraEntity.addComponent(OrbitControl.self)
         
-        Gizmos.set(camera: camera)
         rootEntity.addComponent(GizmosScript.self)
         
         let light = rootEntity.createChild("light")

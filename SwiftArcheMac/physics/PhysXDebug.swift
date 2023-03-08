@@ -42,15 +42,14 @@ class PhysXDebugApp: NSViewController {
         iblBaker.bake(scene, with: hdr, size: 256, level: 3)
 
         let rootEntity = scene.createRootEntity()
+        rootEntity.addComponent(PhysicsVisual.self)
+
         let cameraEntity = rootEntity.createChild()
         cameraEntity.transform.position = Vector3(10, 10, 10)
         cameraEntity.transform.lookAt(targetPosition: Vector3())
-        let camera = cameraEntity.addComponent(Camera.self)
+        cameraEntity.addComponent(Camera.self)
         cameraEntity.addComponent(OrbitControl.self)
-        
-        rootEntity.addComponent(PhysicsVisual.self)
-        Gizmos.set(camera: camera)
-        
+                
         let light = rootEntity.createChild("light")
         light.transform.position = Vector3(1, 3, 0)
         light.transform.lookAt(targetPosition: Vector3())

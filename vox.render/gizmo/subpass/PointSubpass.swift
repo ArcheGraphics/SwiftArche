@@ -13,7 +13,7 @@ class PointSubpass : Subpass {
     var maxVerts: Int = 0
     var numVerts: Int = 0
     var engine: Engine!
-    var camera: Camera!
+    var camera: Camera?
     
     private var _resourceCache: ResourceCache!
     private let _shaderMacro = ShaderMacroCollection()
@@ -40,10 +40,6 @@ class PointSubpass : Subpass {
     func set(_ engine: Engine) {
         self.engine = engine
         _resourceCache = ResourceCache(engine.device)
-    }
-    
-    func setCamera(_ camera: Camera) {
-        self.camera = camera
     }
     
     func addPoint(_ p0: Vector3, color: Color32) {
@@ -120,6 +116,13 @@ class PointSubpass : Subpass {
     }
     
     override func draw(_ encoder: inout RenderCommandEncoder) {
+        if camera == nil {
+            camera = Camera.mainCamera
+        }
+        guard let camera = camera else {
+            fatalError("without enabled camera")
+        }
+        
         if let pointBuffer = pointBuffer,
            let colorBuffer = colorBuffer {
             encoder.handle.pushDebugGroup("Point Gizmo Subpass")

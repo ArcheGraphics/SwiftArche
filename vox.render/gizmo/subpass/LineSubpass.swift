@@ -19,7 +19,7 @@ class LineSubpass : Subpass {
     var maxVerts: Int = 0
     var numVerts: Int = 0
     var engine: Engine!
-    var camera: Camera!
+    var camera: Camera?
     
     private var _resourceCache: ResourceCache!
     private let _shaderMacro = ShaderMacroCollection()
@@ -46,10 +46,6 @@ class LineSubpass : Subpass {
         _resourceCache = ResourceCache(engine.device)
     }
     
-    func setCamera(_ camera: Camera) {
-        self.camera = camera
-    }
-    
     func addLine(p0: Vector3, p1: Vector3, color: Color32) {
         checkResizePoint(count: numVerts + 2)
         addVert(p0, color32: color)
@@ -58,22 +54,24 @@ class LineSubpass : Subpass {
     
     func addLines(indicesCount: Int, positions: [Vector3], indices: [UInt32], colors: [Color32]) {
         self.indicesCount = indicesCount
-        if indirectPointBuffer?.count ?? 0 > positions.count {
-            indirectPointBuffer!.assign(with: positions)
-        } else {
-            indirectPointBuffer = BufferView(device: engine.device, array: positions)
-        }
-        
-        if indirectIndicesBuffer?.count ?? 0 > indices.count {
-            indirectIndicesBuffer!.assign(with: indices)
-        } else {
-            indirectIndicesBuffer = BufferView(device: engine.device, array: indices)
-        }
-        
-        if indirectColorBuffer?.count ?? 0 > colors.count {
-            indirectColorBuffer!.assign(with: colors)
-        } else {
-            indirectColorBuffer = BufferView(device: engine.device, array: colors)
+        if indicesCount > 0 {
+            if indirectPointBuffer?.count ?? 0 > positions.count {
+                indirectPointBuffer!.assign(with: positions)
+            } else {
+                indirectPointBuffer = BufferView(device: engine.device, array: positions)
+            }
+            
+            if indirectIndicesBuffer?.count ?? 0 > indices.count {
+                indirectIndicesBuffer!.assign(with: indices)
+            } else {
+                indirectIndicesBuffer = BufferView(device: engine.device, array: indices)
+            }
+            
+            if indirectColorBuffer?.count ?? 0 > colors.count {
+                indirectColorBuffer!.assign(with: colors)
+            } else {
+                indirectColorBuffer = BufferView(device: engine.device, array: colors)
+            }
         }
     }
     
@@ -146,6 +144,13 @@ class LineSubpass : Subpass {
     }
     
     override func draw(_ encoder: inout RenderCommandEncoder) {
+        if camera == nil {
+            camera = Camera.mainCamera
+        }
+        guard let camera = camera else {
+            fatalError("without enabled camera")
+        }
+            
         encoder.handle.pushDebugGroup("Line Gizmo Subpass")
         if (_pso == nil) {
             prepare(encoder.handle)

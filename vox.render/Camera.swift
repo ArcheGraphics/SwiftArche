@@ -8,6 +8,9 @@ import Metal
 import vox_math
 
 public class Camera: Component {
+    /// The first enabled Camera component that is tagged "MainCamera"
+    public static var mainCamera: Camera?
+    
     private var _cameraData = CameraData()
     private static var _cameraProperty = "u_camera"
 
@@ -219,6 +222,9 @@ public class Camera: Component {
     }
 
     override func _onEnable() {
+        if Camera.mainCamera == nil {
+            Camera.mainCamera = self
+        }
         entity.scene._attachRenderCamera(self)
     }
 

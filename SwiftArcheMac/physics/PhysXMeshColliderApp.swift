@@ -65,8 +65,6 @@ class PhysXMeshColliderApp: NSViewController {
         let capsuleCollider = capsuleEntity.addComponent(DynamicCollider.self)
         capsuleCollider.addShape(physicsCapsule)
         
-        createDebugWireframe(physicsCapsule, capsuleEntity)
-
         return capsuleEntity
     }
 
@@ -99,8 +97,6 @@ class PhysXMeshColliderApp: NSViewController {
         )
         let boxCollider = boxEntity.addComponent(DynamicCollider.self)
         boxCollider.addShape(physicsBox)
-        
-        createDebugWireframe(physicsBox, boxEntity)
 
         return boxEntity
     }
@@ -141,6 +137,7 @@ class PhysXMeshColliderApp: NSViewController {
         iblBaker.bake(scene, with: hdr, size: 256, level: 3)
 
         let rootEntity = scene.createRootEntity()
+        rootEntity.addComponent(EngineVisualizer.self)
 
         let cameraEntity = rootEntity.createChild()
         cameraEntity.transform.position = Vector3(15, 15, 15)
@@ -156,7 +153,7 @@ class PhysXMeshColliderApp: NSViewController {
         light.addComponent(DirectLight.self)
         
         initialize(rootEntity)
-
+        
         engine.run()
     }
 }

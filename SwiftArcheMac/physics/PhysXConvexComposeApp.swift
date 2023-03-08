@@ -96,8 +96,6 @@ class PhysXConvexComposeApp: NSViewController {
                 colliderShape.cookConvexHull(&convex)
                 let collider = entity.addComponent(StaticCollider.self)
                 collider.addShape(colliderShape)
-                
-                createDebugWireframe(colliderShape, entity)
             }
         }, true)
     }

@@ -130,22 +130,6 @@ func addPlane(_ rootEntity: Entity, _ size: Vector3,
     return planeEntity
 }
 
-func createDebugWireframe(_ shape: MeshColliderShape, _ entity: Entity) {
-    let points = shape.colliderPoints
-    let indices = shape.colliderWireframeIndices
-    
-    let mesh = ModelMesh(entity.engine)
-    mesh.setPositions(positions: points)
-    mesh.setIndices(indices: indices)
-    _ = mesh.addSubMesh(0, indices.count, .line)
-    mesh.uploadData(true)
-    
-    let mtl = UnlitMaterial(entity.engine)
-    let renderer = entity.addComponent(MeshRenderer.self)
-    renderer.setMaterial(mtl)
-    renderer.mesh = mesh
-}
-
 func addDuckMesh(_ rootEntity: Entity) {
     let assetURL = Bundle.main.url(forResource: "Duck", withExtension: "glb", subdirectory: "glTF-Sample-Models/2.0/Duck/glTF-Binary")!
     GLTFLoader.parse(rootEntity.engine, assetURL, { resource in
@@ -158,7 +142,7 @@ func addDuckMesh(_ rootEntity: Entity) {
         let collider = entity.addComponent(StaticCollider.self)
         collider.addShape(colliderShape)
         
-        createDebugWireframe(colliderShape, entity)
+        rootEntity.getComponent(EngineVisualizer.self)?.addMeshColliderShapeWireframe(with: colliderShape)
     }, true)
 }
 

@@ -234,12 +234,14 @@ public class EngineVisualizer: Script {
     public func addCollideWireframe(with collider: Collider) {
         let shapes = collider.shapes
         for shape in shapes {
-            if (shape is BoxColliderShape) {
+            if shape is BoxColliderShape {
                 addBoxColliderShapeWireframe(with: shape as! BoxColliderShape)
-            } else if (shape is SphereColliderShape) {
+            } else if shape is SphereColliderShape {
                 addSphereColliderShapeWireframe(with: shape as! SphereColliderShape)
-            } else if (shape is CapsuleColliderShape) {
+            } else if shape is CapsuleColliderShape {
                 addCapsuleColliderShapeWireframe(with: shape as! CapsuleColliderShape)
+            } else if shape is MeshColliderShape {
+                addMeshColliderShapeWireframe(with: shape as! MeshColliderShape)
             }
         }
     }
@@ -334,6 +336,26 @@ public class EngineVisualizer: Script {
         _localTranslate(positionsOffset, tempVector)
 
         _indicesCount += Int(capsuleIndicesCount)
+        _wireframeElements.append(WireframeElement(transform, positionsOffset))
+    }
+    
+    public func addMeshColliderShapeWireframe(with shape: MeshColliderShape) {
+        let transform = shape.collider!.entity.transform!
+        let worldScale = transform.lossyWorldScale
+        let positionsOffset = _localPositions.count
+
+        let points = shape.colliderPoints
+        let indices = shape.colliderWireframeIndices
+        
+        _growthIndexMemory(indices.count)
+        for i in 0..<indices.count {
+            _indices[_indicesCount + i] = indices[i] + UInt32(positionsOffset)
+        }
+        points.forEach({ v in
+            _localPositions.append(worldScale * v)
+        })
+        
+        _indicesCount += indices.count
         _wireframeElements.append(WireframeElement(transform, positionsOffset))
     }
 

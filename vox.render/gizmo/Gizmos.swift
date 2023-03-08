@@ -16,12 +16,6 @@ public class Gizmos {
         }
     }
     
-    public static func set(camera: Camera) {
-        PointSubpass.ins.setCamera(camera)
-        LineSubpass.ins.setCamera(camera)
-        TriangleSubpass.ins.setCamera(camera)
-    }
-    
     public static func addPoint(_ p0: Vector3, color: Color32) {
         PointSubpass.ins.addPoint(p0, color: color)
     }

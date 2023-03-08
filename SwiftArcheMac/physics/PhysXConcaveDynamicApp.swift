@@ -74,8 +74,6 @@ fileprivate class CupPrefab: Script {
                 colliderShape.isConvex = true
                 colliderShape.cookConvexHull(&convex)
                 collider.addShape(colliderShape)
-                
-                createDebugWireframe(colliderShape, entity)
             }
         }
     }
