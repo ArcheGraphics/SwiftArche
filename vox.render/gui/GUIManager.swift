@@ -22,6 +22,8 @@ class GUIManager {
         ImGui_ImplOSX_Init(engine.canvas)
         
         PointSubpass.ins.set(engine)
+        LineSubpass.ins.set(engine)
+        TriangleSubpass.ins.set(engine)
     }
     
     deinit {
@@ -58,9 +60,11 @@ class GUIManager {
         if let renderPassDescriptor = canvas.currentRenderPassDescriptor {
             renderPassDescriptor.colorAttachments[0].loadAction = .load
             // Gizmos
-            if PointSubpass.ins.containData {
+            if PointSubpass.ins.containData || LineSubpass.ins.containData || TriangleSubpass.ins.containData {
                 var encoder = RenderCommandEncoder(commandBuffer, renderPassDescriptor, "gizmos")
                 PointSubpass.ins.draw(&encoder)
+                LineSubpass.ins.draw(&encoder)
+                TriangleSubpass.ins.draw(&encoder)
                 encoder.endEncoding()
             }
             

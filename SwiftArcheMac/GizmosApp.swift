@@ -19,7 +19,10 @@ fileprivate class GizmosScript: Script {
         // Rendering
         ImGuiRender()
         
-        Gizmos.addPoint(Vector3(1, 1, 1), color: Color32(r: 123, g: 112, b: 142 , a: 255))
+        Gizmos.addPoint(Vector3(1, 1, 1), color: Color32(r: 123, g: 112, b: 142, a: 255))
+        Gizmos.addLine(p0: Vector3(1,1,1), p1: Vector3(2,2,2), color: Color32(r: 23, g: 212, b: 42 , a: 255))
+        Gizmos.addTriangle(p0: Vector3(2,2,2), p1: Vector3(3,3,3), p2: Vector3(0,1,0),
+                           color: Color32(r: 23, g: 12, b: 242 , a: 255))
     }
 }
 

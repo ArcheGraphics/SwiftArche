@@ -140,6 +140,8 @@
 		3EBA3D0A29B83CA700E5FB42 /* Gizmos.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EBA3D0929B83CA700E5FB42 /* Gizmos.swift */; };
 		3EBA3D0D29B83EDD00E5FB42 /* gizmos.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3EBA3D0C29B83EDD00E5FB42 /* gizmos.metal */; };
 		3EBA3D0F29B84C0100E5FB42 /* GizmosApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EBA3D0E29B84C0100E5FB42 /* GizmosApp.swift */; };
+		3EBA3D1129B8578E00E5FB42 /* LineSubpass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EBA3D1029B8578E00E5FB42 /* LineSubpass.swift */; };
+		3EBA3D1329B8579800E5FB42 /* TriangleSubpass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EBA3D1229B8579800E5FB42 /* TriangleSubpass.swift */; };
 		3EC0370529321131002187DC /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EC0370429321131002187DC /* AppDelegate.swift */; };
 		3EC0370E29321132002187DC /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3EC0370D29321132002187DC /* Assets.xcassets */; };
 		3EC0371129321132002187DC /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3EC0370F29321132002187DC /* Main.storyboard */; };
@@ -835,6 +837,8 @@
 		3EBA3D0929B83CA700E5FB42 /* Gizmos.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Gizmos.swift; sourceTree = "<group>"; };
 		3EBA3D0C29B83EDD00E5FB42 /* gizmos.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = gizmos.metal; sourceTree = "<group>"; };
 		3EBA3D0E29B84C0100E5FB42 /* GizmosApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GizmosApp.swift; sourceTree = "<group>"; };
+		3EBA3D1029B8578E00E5FB42 /* LineSubpass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LineSubpass.swift; sourceTree = "<group>"; };
+		3EBA3D1229B8579800E5FB42 /* TriangleSubpass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TriangleSubpass.swift; sourceTree = "<group>"; };
 		3EC0370129321131002187DC /* SwiftArcheMac.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SwiftArcheMac.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		3EC0370429321131002187DC /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		3EC0370D29321132002187DC /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -1813,6 +1817,8 @@
 			isa = PBXGroup;
 			children = (
 				3EBA3D0729B834B600E5FB42 /* PointSubpass.swift */,
+				3EBA3D1029B8578E00E5FB42 /* LineSubpass.swift */,
+				3EBA3D1229B8579800E5FB42 /* TriangleSubpass.swift */,
 				3EBA3D0929B83CA700E5FB42 /* Gizmos.swift */,
 			);
 			path = gizmo;
@@ -3482,6 +3488,7 @@
 				3EC039172932186A002187DC /* TextureParser.swift in Sources */,
 				3EC039C1293218FB002187DC /* AnimationClip.swift in Sources */,
 				3EC03997293218DA002187DC /* PointLight.swift in Sources */,
+				3EBA3D1329B8579800E5FB42 /* TriangleSubpass.swift in Sources */,
 				040F1DC0293392FA008BDC8D /* WheelManager.swift in Sources */,
 				3EC038F12932184C002187DC /* ControllerNonWalkableMode.swift in Sources */,
 				3EC0389829321826002187DC /* Scene.swift in Sources */,
@@ -3575,6 +3582,7 @@
 				3EC039C3293218FB002187DC /* AnimationClipCurveBinding.swift in Sources */,
 				040F1E29293C865E008BDC8D /* UIElement.swift in Sources */,
 				3EC039C0293218FB002187DC /* AnimatorController.swift in Sources */,
+				3EBA3D1129B8578E00E5FB42 /* LineSubpass.swift in Sources */,
 				3EC0389C29321826002187DC /* Entity.swift in Sources */,
 				3EC039AD293218F0002187DC /* Time.swift in Sources */,
 				3EC039322932188D002187DC /* ShadowManager.swift in Sources */,

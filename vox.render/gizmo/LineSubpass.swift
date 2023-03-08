@@ -6,8 +6,8 @@
 
 import vox_math
 
-class PointSubpass : Subpass {
-    static var _ins: PointSubpass!
+class LineSubpass : Subpass {
+    static var _ins: LineSubpass!
     var pointBuffer: BufferView!
     var colorBuffer: BufferView!
     var maxVerts: Int = 0
@@ -24,9 +24,9 @@ class PointSubpass : Subpass {
     private var _shaderPass: ShaderPass!
     private let _descriptor = MTLVertexDescriptor()
 
-    static var ins: PointSubpass {
+    static var ins: LineSubpass {
         if _ins == nil {
-            _ins = PointSubpass()
+            _ins = LineSubpass()
         }
         return _ins
     }
@@ -34,9 +34,7 @@ class PointSubpass : Subpass {
     var containData: Bool {
         numVerts != 0
     }
-    
-    var pointSize: Float = 10
-    
+        
     func set(_ engine: Engine) {
         self.engine = engine
         _resourceCache = ResourceCache(engine.device)
@@ -46,9 +44,10 @@ class PointSubpass : Subpass {
         self.camera = camera
     }
     
-    func addPoint(_ p0: Vector3, color: Color32) {
-        checkResizePoint(count: numVerts + 1)
+    func addLine(p0: Vector3, p1: Vector3, color: Color32) {
+        checkResizePoint(count: numVerts + 2)
         addVert(p0, color32: color)
+        addVert(p1, color32: color)
     }
     
     func checkResizePoint(count: Int) {
@@ -100,9 +99,9 @@ class PointSubpass : Subpass {
         _descriptor.attributes[Int(Color_0.rawValue)] = desc
         _descriptor.layouts[1].stride = MemoryLayout<Color32>.stride
         
-        _shaderPass = ShaderPass(engine.library(), "vertex_point_gizmos", "fragment_point_gizmos")
+        _shaderPass = ShaderPass(engine.library(), "vertex_line_gizmos", "fragment_line_gizmos")
 
-        _pipelineDescriptor.label = "Point Gizmo Pipeline"
+        _pipelineDescriptor.label = "Line Gizmo Pipeline"
         _pipelineDescriptor.colorAttachments[0].pixelFormat = Canvas.colorPixelFormat
         _pipelineDescriptor.depthAttachmentPixelFormat = Canvas.depthPixelFormat
         if let format = Canvas.stencilPixelFormat  {
@@ -122,7 +121,7 @@ class PointSubpass : Subpass {
     override func draw(_ encoder: inout RenderCommandEncoder) {
         if let pointBuffer = pointBuffer,
            let colorBuffer = colorBuffer {
-            encoder.handle.pushDebugGroup("Point Gizmo Subpass")
+            encoder.handle.pushDebugGroup("Line Gizmo Subpass")
             if (_pso == nil) {
                 prepare(encoder.handle)
             }
@@ -135,8 +134,7 @@ class PointSubpass : Subpass {
             
             encoder.handle.setVertexBuffer(pointBuffer.buffer, offset: 0, index: 0)
             encoder.handle.setVertexBuffer(colorBuffer.buffer, offset: 0, index: 1)
-            encoder.handle.setVertexBytes(&pointSize, length: MemoryLayout<Float>.stride, index: 3)
-            encoder.handle.drawPrimitives(type: .point, vertexStart: 0,
+            encoder.handle.drawPrimitives(type: .line, vertexStart: 0,
                                           vertexCount: numVerts, instanceCount: 1)
             encoder.handle.popDebugGroup()
             // flush
