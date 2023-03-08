@@ -624,5 +624,11 @@ extension Matrix {
                 elements.columns.3[1],
                 elements.columns.3[2])
     }
+    
+    public mutating func setTranslation(_ v: Vector3) {
+        elements.columns.3[0] = v.x
+        elements.columns.3[1] = v.y
+        elements.columns.3[2] = v.z
+    }
 
 }

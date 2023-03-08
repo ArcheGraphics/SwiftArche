@@ -293,12 +293,8 @@ public class Gizmos {
         var pts = [Vector3](repeating: Vector3(), count: NB_CIRCLE_PTS)
         generatePolygon(nbVerts: nbVerts, verts: &pts, orientation: .ORIENTATION_XZ, amplitude: radius, phase: 0.0, transform: tr)
 
-        let translate = Vector3.transformCoordinate(v: Vector3(0.0, height, 0.0), m: tr)
-        var elements = tr.elements
-        elements.columns.3[0] = translate.x
-        elements.columns.3[1] = translate.y
-        elements.columns.3[2] = translate.z
-        let tr2 = Matrix(elements)
+        var tr2 = tr
+        tr2.setTranslation(Vector3.transformCoordinate(v: Vector3(0.0, height, 0.0), m: tr))
         var pts2 = [Vector3](repeating: Vector3(), count: NB_CIRCLE_PTS)
         generatePolygon(nbVerts: nbVerts, verts: &pts2, orientation: .ORIENTATION_XZ, amplitude: radius, phase: 0.0, transform: tr2)
 
@@ -327,11 +323,15 @@ public class Gizmos {
         }
     }
 
-    public static func addCapsule(p0: Vector3, p1: Vector3, radius: Float,
-                                  height: Float, tr: Matrix, color: Color32, renderFlags: RenderFlag) {
+    public static func addCapsule(radius: Float, height: Float, tr: Matrix, color: Color32, renderFlags: RenderFlag) {
+        let p0 = Vector3.transformCoordinate(v: Vector3(0, -height / 2, 0), m: tr)
+        let p1 = Vector3.transformCoordinate(v: Vector3(0, height / 2, 0), m: tr)
+        
+        var tr2 = tr
+        tr2.setTranslation(p0)
         addSphere(sphereCenter: p0, sphereRadius: radius, color: color, renderFlags: renderFlags)
         addSphere(sphereCenter: p1, sphereRadius: radius, color: color, renderFlags: renderFlags)
-        addCylinder(radius: radius, height: height, tr: tr, color: color, renderFlags: renderFlags)
+        addCylinder(radius: radius, height: height, tr: tr2, color: color, renderFlags: renderFlags)
     }
 
     public static func addRectangle(width: Float, length: Float, tr: Matrix, color: Color32) {
