@@ -21,6 +21,7 @@ typedef struct {
     float pointSize [[point_size]];
     uchar4 v_color;
     float3 normal;
+    float3 v_pos;
 } VertexOut;
 
 vertex VertexOut vertex_point_gizmos(const GizmoVertexIn in [[stage_in]],
@@ -69,9 +70,20 @@ vertex VertexOut vertex_triangle_gizmos(const GizmoVertexIn in [[stage_in]],
     out.position = u_camera.u_VPMat * position;
     out.v_color = in.COLOR_0;
     out.normal = in.NORMAL;
+    out.v_pos = in.POSITION;
     return out;
 }
 
-fragment float4 fragment_triangle_gizmos(VertexOut in [[stage_in]]) {
-    return float4(in.v_color.r / 255.0, in.v_color.g / 255.0, in.v_color.b /255.0, in.v_color.a / 255.0);
+fragment float4 fragment_triangle_gizmos(VertexOut in [[stage_in]],
+                                         constant CameraData &u_camera [[buffer(3)]]) {
+    constexpr float shininess = 16;
+    constexpr float3 lightDirection = float3(-1, -1, -1);
+
+    float3 V = normalize(u_camera.u_cameraPos - in.v_pos);
+    float3 halfDir = normalize( V - lightDirection );
+    float s = pow( clamp( dot( in.normal, halfDir ), 0.0, 1.0 ), shininess );
+    
+    float d = max(dot(in.normal, -lightDirection), 0.0);
+    float3 baseColor = float3(in.v_color.r / 255.0, in.v_color.g / 255.0, in.v_color.b /255.0);
+    return float4(baseColor * (d + s) + float3(0.2, 0.2, 0.2), in.v_color.a /255.0);
 }

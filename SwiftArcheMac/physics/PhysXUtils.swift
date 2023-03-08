@@ -325,11 +325,9 @@ class PhysicsVisual: Script {
         ImGuiCheckbox("cullBox", &cullBox)
         ImGuiCheckbox("mbpRegins", &mbpRegins)
 
-
         // Rendering
         ImGuiRender()
         
-        engine.physicsManager.visualScale = 1
         engine.physicsManager.drawGizmos()
     }
 }
