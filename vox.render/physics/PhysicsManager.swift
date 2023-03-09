@@ -508,7 +508,7 @@ extension PhysicsManager {
     }
     
     /// Must be called in onGUI
-    public func drawGizmos() {
+    public func drawGizmos(font: MTLFontAtlas? = nil) {
         _nativePhysicsManager.draw { p0, color in
             PointBatcher.ins.addPoint(p0, color: color)
         } checkResizePoint: { count in
@@ -522,6 +522,12 @@ extension PhysicsManager {
                                             color0: color0, color1: color1, color2: color2)
         } checkResizeTriangle: { count in
             TriangleBatcher.ins.checkResizePoint(count: Int(count))
+        } addText: { p, color, size, string in
+            if let font = font {
+                Gizmos.addText(string: string, position: p, color: color, size: size, font: font)
+            }
+        } checkResizeText: { count in
+            print(count)
         }
     }
 }

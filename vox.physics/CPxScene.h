@@ -154,6 +154,8 @@ typedef struct {
             :(void (^ _Nullable)(uint32_t count))checkResizeLine
             :(void (^ _Nullable)(simd_float3 p0, simd_float3 p1, simd_float3 p2,
                                  uint32_t color0, uint32_t color1, uint32_t color2))addTriangle
-            :(void (^ _Nullable)(uint32_t count))checkResizeTriangle;
+            :(void (^ _Nullable)(uint32_t count))checkResizeTriangle
+            :(void (^ _Nullable)(simd_float3 p0, uint32_t color, float size, NSString* _Nonnull string))addText
+            :(void (^ _Nullable)(uint32_t count))checkResizeText;
 
 @end

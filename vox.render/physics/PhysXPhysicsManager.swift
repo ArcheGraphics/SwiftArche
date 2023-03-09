@@ -108,7 +108,9 @@ class PhysXPhysicsManager {
               addLine: @escaping (Vector3, Vector3, Color32, Color32) -> Void,
               checkResizeLine: @escaping (UInt32)->Void,
               addTriangle: @escaping (Vector3, Vector3, Vector3, Color32, Color32, Color32) -> Void,
-              checkResizeTriangle: @escaping (UInt32)->Void) {
+              checkResizeTriangle: @escaping (UInt32)->Void,
+              addText: @escaping (Vector3, Color32, Float, String) -> Void,
+              checkResizeText: @escaping (UInt32)->Void) {
         _pxScene.draw { p0, color in
             addPoint(Vector3(p0), Color32(rgba: color))
         } _: { count in
@@ -123,6 +125,10 @@ class PhysXPhysicsManager {
                         Color32(rgba: color0), Color32(rgba: color1), Color32(rgba: color2))
         } _: { count in
             checkResizeTriangle(count)
+        } _: { p, color, size, string in
+            addText(Vector3(p), Color32(rgba: color), size, string)
+        } _: { count in
+            checkResizeText(count)
         }
     }
 

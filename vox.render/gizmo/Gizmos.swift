@@ -153,6 +153,10 @@ public class Gizmos {
         TriangleBatcher.ins.addTriangle(p0: p0, p1: p1, p2: p2,
                                         color0: color0, color1: color1, color2: color2)
     }
+    
+    public static func addText(string: String, position: Vector3, color: Color32, size: Float, font: MTLFontAtlas) {
+        // TODO: Refactor TextBatcher
+    }
 
     public static func addArrow(posA: Vector3, posB: Vector3, color: Color32) {
         let t0 = (posB - posA).normalized()
