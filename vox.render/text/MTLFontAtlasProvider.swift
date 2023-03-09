@@ -272,6 +272,7 @@ final public class MTLFontAtlasProvider {
         textureDescriptor.width = descriptor.textureSize
         textureDescriptor.height = descriptor.textureSize
         textureDescriptor.pixelFormat = .r8Unorm
+        textureDescriptor.mipmapLevelCount = Int(floor(log2(Float(descriptor.textureSize))))
         guard let fontAtlasTexture = engine.device.makeTexture(descriptor: textureDescriptor)
         else {
             throw MetalError.MTLDeviceError.textureCreationFailed
@@ -294,6 +295,11 @@ final public class MTLFontAtlasProvider {
             commandEncoder.dispatchThreads(fontAtlas.fontAtlasTexture.size,
                     threadsPerThreadgroup: MTLSize(width: w, height: h, depth: 1))
             commandEncoder.endEncoding()
+            
+            if let blit = commandBuffer.makeBlitCommandEncoder() {
+                blit.generateMipmaps(for: fontAtlas.fontAtlasTexture)
+                blit.endEncoding()
+            }
 
             commandBuffer.commit()
             commandBuffer.waitUntilCompleted()
@@ -304,6 +310,6 @@ final public class MTLFontAtlasProvider {
 
     private static let defaultAtlasFileURL = Bundle.main.url(forResource: "HelveticaNeue",
             withExtension: "mtlfontatlas")!
-    public static let defaultAtlasDescriptor = MTLFontAtlasDescriptor(fontName: "American Typewriter", textureSize: 2048)
+    public static let defaultAtlasDescriptor = MTLFontAtlasDescriptor(fontName: "HelveticaNeue", textureSize: 2048)
 
 }

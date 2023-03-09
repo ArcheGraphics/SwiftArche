@@ -70,8 +70,8 @@ class TextBatcher: Batcher {
     
     func flush() {
         currentBufferCount = 0
-        for var buffer in batcherBuffer {
-            buffer.reset()
+        for i in 0..<batcherBuffer.count {
+            batcherBuffer[i].reset()
         }
         _batchedQueue = []
     }
@@ -126,6 +126,10 @@ class TextBatcher: Batcher {
             batcherData.count += textRenderer.indices.count
             batcherBuffer.append(batcherData)
         } else {
+            batcherBuffer[currentBufferCount].renderer = textRenderer
+            batcherBuffer[currentBufferCount].material = element.material
+            batcherBuffer[currentBufferCount].shaderPass = element.shaderPass
+            batcherBuffer[currentBufferCount].texture = textRenderer.fontAtlas!.fontAtlasTexture
             batcherBuffer[currentBufferCount].verticeArray.append(contentsOf: textRenderer.worldVertice)
             batcherBuffer[currentBufferCount].uvArray.append(contentsOf: textRenderer.texCoords)
             batcherBuffer[currentBufferCount].indexArray.append(contentsOf: textRenderer.indices)
