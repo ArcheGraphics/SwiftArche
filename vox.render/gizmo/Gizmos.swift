@@ -133,6 +133,10 @@ public class Gizmos {
     public static func addLine(p0: Vector3, p1: Vector3, color: Color32) {
         LineBatcher.ins.addLine(p0: p0, p1: p1, color: color)
     }
+    
+    public static func addLine(p0: Vector3, p1: Vector3, color0: Color32, color1: Color32) {
+        LineBatcher.ins.addLine(p0: p0, p1: p1, color0: color0, color1: color1)
+    }
 
     public static func addTriangle(p0: Vector3, p1: Vector3, p2: Vector3,
                                    n0: Vector3, n1: Vector3, n2: Vector3, color: Color32) {
@@ -142,6 +146,12 @@ public class Gizmos {
 
     public static func addTriangle(p0: Vector3, p1: Vector3, p2: Vector3, color: Color32) {
         TriangleBatcher.ins.addTriangle(p0: p0, p1: p1, p2: p2, color: color)
+    }
+    
+    public static func addTriangle(p0: Vector3, p1: Vector3, p2: Vector3,
+                                   color0: Color32, color1: Color32, color2: Color32) {
+        TriangleBatcher.ins.addTriangle(p0: p0, p1: p1, p2: p2,
+                                        color0: color0, color1: color1, color2: color2)
     }
 
     public static func addArrow(posA: Vector3, posB: Vector3, color: Color32) {

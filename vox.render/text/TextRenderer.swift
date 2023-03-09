@@ -12,6 +12,8 @@ import AppKit
 #endif
 
 public class TextRenderer: Renderer {
+    private static var _defaultMaterial: Material?
+    
     private var _string: String = ""
     private var _fontAtlas: MTLFontAtlas?
     private var _fontSize: Float = 1
@@ -77,12 +79,17 @@ public class TextRenderer: Renderer {
     
     public required init(_ entity: Entity) {
         super.init(entity)
-        let shader = ShaderPass(engine.library(), "vertex_text", "fragment_text")
-        shader.setRenderQueueType(.Transparent)
-        shader._renderState!.rasterState.cullMode = .front
-        let mtl = Material(engine, "default text")
-        mtl.shader.append(shader)
-        setMaterial(mtl)
+        if let material = TextRenderer._defaultMaterial {
+            setMaterial(material)
+        } else {
+            let shader = ShaderPass(engine.library(), "vertex_text", "fragment_text")
+            shader.setRenderQueueType(.Transparent)
+            shader._renderState!.rasterState.cullMode = .front
+            let material = Material(engine, "default text")
+            material.shader.append(shader)
+            setMaterial(material)
+            TextRenderer._defaultMaterial = material
+        }
     }
     
     override func _render(_ devicePipeline: DevicePipeline) {

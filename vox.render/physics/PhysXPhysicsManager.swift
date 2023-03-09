@@ -105,20 +105,22 @@ class PhysXPhysicsManager {
     
     func draw(with addPoint: @escaping (Vector3, Color32) -> Void,
               checkResizePoint: @escaping (UInt32) -> Void,
-              addLine: @escaping (Vector3, Vector3, Color32) -> Void,
+              addLine: @escaping (Vector3, Vector3, Color32, Color32) -> Void,
               checkResizeLine: @escaping (UInt32)->Void,
-              addTriangle: @escaping (Vector3, Vector3, Vector3, Color32) -> Void,
+              addTriangle: @escaping (Vector3, Vector3, Vector3, Color32, Color32, Color32) -> Void,
               checkResizeTriangle: @escaping (UInt32)->Void) {
         _pxScene.draw { p0, color in
             addPoint(Vector3(p0), Color32(rgba: color))
         } _: { count in
             checkResizePoint(count)
-        } _: { p0, p1, color in
-            addLine(Vector3(p0), Vector3(p1), Color32(rgba: color))
+        } _: { p0, p1, color0, color1 in
+            addLine(Vector3(p0), Vector3(p1),
+                    Color32(rgba: color0), Color32(rgba: color1))
         } _: { count in
             checkResizeLine(count)
-        } _: { p0, p1, p2, color in
-            addTriangle(Vector3(p0), Vector3(p1), Vector3(p2), Color32(rgba: color))
+        } _: { p0, p1, p2, color0, color1, color2 in
+            addTriangle(Vector3(p0), Vector3(p1), Vector3(p2),
+                        Color32(rgba: color0), Color32(rgba: color1), Color32(rgba: color2))
         } _: { count in
             checkResizeTriangle(count)
         }

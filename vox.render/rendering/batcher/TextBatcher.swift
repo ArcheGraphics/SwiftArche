@@ -82,12 +82,16 @@ class TextBatcher: Batcher {
         
         // Compare mask
         if (!checkBatchWithMask(preRenderer, curRenderer)) {
-          return false;
+            return false
+        }
+        
+        if preRenderer.color != curRenderer.color {
+            return false
         }
         
         // Compare texture
         if (preElement.texture !== curElement.texture) {
-          return false;
+            return false
         }
 
         // Compare material
@@ -101,7 +105,7 @@ class TextBatcher: Batcher {
     func _updateData() {
         var preElement: RenderElement?
         for curElement in _batchedQueue {
-            if preElement != nil && canBatch(preElement: preElement!, curElement: curElement) {
+            if preElement != nil && !canBatch(preElement: preElement!, curElement: curElement) {
                 batcherBuffer[currentBufferCount].syncToGPU()
                 currentBufferCount += 1
             }
@@ -130,9 +134,12 @@ class TextBatcher: Batcher {
             batcherBuffer[currentBufferCount].material = element.material
             batcherBuffer[currentBufferCount].shaderPass = element.shaderPass
             batcherBuffer[currentBufferCount].texture = textRenderer.fontAtlas!.fontAtlasTexture
+            let offset = batcherBuffer[currentBufferCount].verticeArray.count
             batcherBuffer[currentBufferCount].verticeArray.append(contentsOf: textRenderer.worldVertice)
             batcherBuffer[currentBufferCount].uvArray.append(contentsOf: textRenderer.texCoords)
-            batcherBuffer[currentBufferCount].indexArray.append(contentsOf: textRenderer.indices)
+            batcherBuffer[currentBufferCount].indexArray.append(contentsOf: textRenderer.indices.map({ v in
+                v + UInt32(offset)
+            }))
             batcherBuffer[currentBufferCount].count += textRenderer.indices.count
         }
     }

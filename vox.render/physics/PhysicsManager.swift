@@ -513,12 +513,13 @@ extension PhysicsManager {
             PointBatcher.ins.addPoint(p0, color: color)
         } checkResizePoint: { count in
             PointBatcher.ins.checkResizePoint(count: Int(count))
-        } addLine: { p0, p1, color in
-            LineBatcher.ins.addLine(p0: p0, p1: p1, color: color)
+        } addLine: { p0, p1, color0, color1 in
+            LineBatcher.ins.addLine(p0: p0, p1: p1, color0: color0, color1: color1)
         } checkResizeLine: { count in
             LineBatcher.ins.checkResizePoint(count: Int(count))
-        } addTriangle: { p0, p1, p2, color in
-            TriangleBatcher.ins.addTriangle(p0: p0, p1: p1, p2: p2, color: color)
+        } addTriangle: { p0, p1, p2, color0, color1, color2 in
+            TriangleBatcher.ins.addTriangle(p0: p0, p1: p1, p2: p2,
+                                            color0: color0, color1: color1, color2: color2)
         } checkResizeTriangle: { count in
             TriangleBatcher.ins.checkResizePoint(count: Int(count))
         }

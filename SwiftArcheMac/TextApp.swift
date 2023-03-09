@@ -42,9 +42,17 @@ class TextApp: NSViewController {
         let textEntity = rootEntity.createChild()
         let renderer = textEntity.addComponent(TextRenderer.self)
         renderer.fontAtlas = atlas
-        renderer.string = "Hello World"
+        renderer.string = "Hello"
         renderer.color = Color(0.2, 0.4, 0.7)
         renderer.fontSize = 2
+        
+        let textEntity2 = rootEntity.createChild()
+        textEntity2.transform.worldPosition = Vector3(0, 2, -2)
+        let renderer2 = textEntity2.addComponent(TextRenderer.self)
+        renderer2.fontAtlas = atlas
+        renderer2.string = "World"
+        renderer2.color = Color(0.4, 0.2, 0.7)
+        renderer2.fontSize = 2
         
         engine.run()
     }

@@ -49,6 +49,12 @@ class LineBatcher : Batcher {
         addVert(p1, color32: color)
     }
     
+    func addLine(p0: Vector3, p1: Vector3, color0: Color32, color1: Color32) {
+        checkResizePoint(count: numVerts + 2)
+        addVert(p0, color32: color0)
+        addVert(p1, color32: color1)
+    }
+    
     func addLines(indicesCount: Int, positions: [Vector3], indices: [UInt32], colors: [Color32]) {
         self.indicesCount = indicesCount
         if indicesCount > 0 {

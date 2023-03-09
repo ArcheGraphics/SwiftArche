@@ -56,6 +56,15 @@ class TriangleBatcher : Batcher {
         addVert(p2, n: normal.normalized(), color32: color)
     }
     
+    func addTriangle(p0: Vector3, p1: Vector3, p2: Vector3,
+                     color0: Color32, color1: Color32, color2: Color32) {
+        checkResizePoint(count: numVerts + 3)
+        let normal = Vector3.cross(left: p1 - p0, right: p2 - p0)
+        addVert(p0, n: normal.normalized(), color32: color0)
+        addVert(p1, n: normal.normalized(), color32: color1)
+        addVert(p2, n: normal.normalized(), color32: color2)
+    }
+    
     func checkResizePoint(count: Int) {
         if count > maxVerts {
             maxVerts = Int(ceil(Float(count) * 1.2))

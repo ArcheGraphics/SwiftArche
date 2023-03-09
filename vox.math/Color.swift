@@ -440,5 +440,8 @@ extension Color {
     }
 }
 
+extension Color: Equatable {
+}
+
 extension Color: Codable {
 }
