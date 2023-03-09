@@ -11,6 +11,7 @@ class GUIManager {
     private var _renderPass: RenderPass!
     private let _engine: Engine
     private var _onGUIScripts: DisorderedArray<Script> = DisorderedArray()
+    private var _resourceCache: ResourceCache!
 
     init(_ engine:Engine) {
         _engine = engine
@@ -21,9 +22,10 @@ class GUIManager {
         ImGui_ImplMetal_Init(engine.device)
         ImGui_ImplOSX_Init(engine.canvas)
         
-        PointSubpass.ins.set(engine)
-        LineSubpass.ins.set(engine)
-        TriangleSubpass.ins.set(engine)
+        _resourceCache = ResourceCache(engine.device)
+        PointBatcher.ins.set(engine)
+        LineBatcher.ins.set(engine)
+        TriangleBatcher.ins.set(engine)
     }
     
     deinit {
@@ -60,16 +62,17 @@ class GUIManager {
         if let renderPassDescriptor = canvas.currentRenderPassDescriptor {
             renderPassDescriptor.colorAttachments[0].loadAction = .load
             // Gizmos
-            if PointSubpass.ins.containData || LineSubpass.ins.containData || TriangleSubpass.ins.containData {
+            if let camera = Camera.mainCamera,
+               PointBatcher.ins.containData || LineBatcher.ins.containData || TriangleBatcher.ins.containData {
                 var encoder = RenderCommandEncoder(commandBuffer, renderPassDescriptor, "gizmos")
-                if PointSubpass.ins.containData {
-                    PointSubpass.ins.draw(&encoder)
+                if PointBatcher.ins.containData {
+                    PointBatcher.ins.drawBatcher(&encoder, camera, _resourceCache)
                 }
-                if LineSubpass.ins.containData {
-                    LineSubpass.ins.draw(&encoder)
+                if LineBatcher.ins.containData {
+                    LineBatcher.ins.drawBatcher(&encoder, camera, _resourceCache)
                 }
-                if TriangleSubpass.ins.containData {
-                    TriangleSubpass.ins.draw(&encoder)
+                if TriangleBatcher.ins.containData {
+                    TriangleBatcher.ins.drawBatcher(&encoder, camera, _resourceCache)
                 }
                 encoder.endEncoding()
             }

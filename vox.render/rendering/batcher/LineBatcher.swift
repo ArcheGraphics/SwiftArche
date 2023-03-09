@@ -6,16 +6,20 @@
 
 import vox_math
 
-class PointSubpass : Subpass {
-    static var _ins: PointSubpass!
+class LineBatcher : Batcher {
+    static var _ins: LineBatcher!
     var pointBuffer: BufferView!
     var colorBuffer: BufferView!
+    
+    var indirectPointBuffer: BufferView?
+    var indirectColorBuffer: BufferView?
+    var indirectIndicesBuffer: BufferView?
+    var indicesCount: Int = 0
+    
     var maxVerts: Int = 0
     var numVerts: Int = 0
     var engine: Engine!
-    var camera: Camera?
     
-    private var _resourceCache: ResourceCache!
     private let _shaderMacro = ShaderMacroCollection()
     private let _depthStencilDescriptor = MTLDepthStencilDescriptor()
     private let _pipelineDescriptor = MTLRenderPipelineDescriptor()
@@ -24,27 +28,48 @@ class PointSubpass : Subpass {
     private var _shaderPass: ShaderPass!
     private let _descriptor = MTLVertexDescriptor()
 
-    static var ins: PointSubpass {
+    static var ins: LineBatcher {
         if _ins == nil {
-            _ins = PointSubpass()
+            _ins = LineBatcher()
         }
         return _ins
     }
     
     var containData: Bool {
-        numVerts != 0
+        numVerts != 0 || indicesCount > 0
     }
-    
-    var pointSize: Float = 10
-    
+        
     func set(_ engine: Engine) {
         self.engine = engine
-        _resourceCache = ResourceCache(engine.device)
     }
     
-    func addPoint(_ p0: Vector3, color: Color32) {
-        checkResizePoint(count: numVerts + 1)
+    func addLine(p0: Vector3, p1: Vector3, color: Color32) {
+        checkResizePoint(count: numVerts + 2)
         addVert(p0, color32: color)
+        addVert(p1, color32: color)
+    }
+    
+    func addLines(indicesCount: Int, positions: [Vector3], indices: [UInt32], colors: [Color32]) {
+        self.indicesCount = indicesCount
+        if indicesCount > 0 {
+            if indirectPointBuffer?.count ?? 0 > positions.count {
+                indirectPointBuffer!.assign(with: positions)
+            } else {
+                indirectPointBuffer = BufferView(device: engine.device, array: positions)
+            }
+            
+            if indirectIndicesBuffer?.count ?? 0 > indices.count {
+                indirectIndicesBuffer!.assign(with: indices)
+            } else {
+                indirectIndicesBuffer = BufferView(device: engine.device, array: indices)
+            }
+            
+            if indirectColorBuffer?.count ?? 0 > colors.count {
+                indirectColorBuffer!.assign(with: colors)
+            } else {
+                indirectColorBuffer = BufferView(device: engine.device, array: colors)
+            }
+        }
     }
     
     func checkResizePoint(count: Int) {
@@ -81,7 +106,7 @@ class PointSubpass : Subpass {
         }
     }
     
-    func prepare(_ encoder: MTLRenderCommandEncoder) {
+    func prepare(_ encoder: MTLRenderCommandEncoder, _ cache: ResourceCache) {
         var desc = MTLVertexAttributeDescriptor()
         desc.format = .float3
         desc.offset = 0
@@ -96,54 +121,54 @@ class PointSubpass : Subpass {
         _descriptor.attributes[Int(Color_0.rawValue)] = desc
         _descriptor.layouts[1].stride = MemoryLayout<Color32>.stride
         
-        _shaderPass = ShaderPass(engine.library(), "vertex_point_gizmos", "fragment_point_gizmos")
+        _shaderPass = ShaderPass(engine.library(), "vertex_line_gizmos", "fragment_line_gizmos")
 
-        _pipelineDescriptor.label = "Point Gizmo Pipeline"
+        _pipelineDescriptor.label = "Line Gizmo Pipeline"
         _pipelineDescriptor.colorAttachments[0].pixelFormat = Canvas.colorPixelFormat
         _pipelineDescriptor.depthAttachmentPixelFormat = Canvas.depthPixelFormat
         if let format = Canvas.stencilPixelFormat  {
             _pipelineDescriptor.stencilAttachmentPixelFormat = format
         }
 
-        let functions = _resourceCache.requestShaderModule(_shaderPass, _shaderMacro)
+        let functions = cache.requestShaderModule(_shaderPass, _shaderMacro)
         _pipelineDescriptor.vertexFunction = functions[0]
         _pipelineDescriptor.fragmentFunction = functions[1]
         _pipelineDescriptor.vertexDescriptor = _descriptor
         _shaderPass.renderState!._apply(_pipelineDescriptor, _depthStencilDescriptor, encoder, false)
 
-        _pso = _resourceCache.requestGraphicsPipeline(_pipelineDescriptor)
-        _depthStencilState = _resourceCache.requestDepthStencilState(_depthStencilDescriptor)
+        _pso = cache.requestGraphicsPipeline(_pipelineDescriptor)
+        _depthStencilState = cache.requestDepthStencilState(_depthStencilDescriptor)
     }
     
-    override func draw(_ encoder: inout RenderCommandEncoder) {
-        if camera == nil {
-            camera = Camera.mainCamera
+    override func drawBatcher(_ encoder: inout RenderCommandEncoder, _ camera: Camera, _ cache: ResourceCache) {
+        encoder.handle.pushDebugGroup("Line Gizmo Subpass")
+        if (_pso == nil) {
+            prepare(encoder.handle, cache)
         }
-        guard let camera = camera else {
-            fatalError("without enabled camera")
-        }
+        encoder.handle.setDepthStencilState(_depthStencilState)
+        encoder.handle.setFrontFacing(.clockwise)
+        encoder.handle.setCullMode(.back)
+        encoder.bind(camera: camera, _pso, cache)
         
         if let pointBuffer = pointBuffer,
            let colorBuffer = colorBuffer {
-            encoder.handle.pushDebugGroup("Point Gizmo Subpass")
-            if (_pso == nil) {
-                prepare(encoder.handle)
-            }
-            
-            encoder.handle.setDepthStencilState(_depthStencilState)
-            encoder.handle.setFrontFacing(.clockwise)
-            encoder.handle.setCullMode(.back)
-            
-            encoder.bind(camera: camera, _pso, _resourceCache)
-            
             encoder.handle.setVertexBuffer(pointBuffer.buffer, offset: 0, index: 0)
             encoder.handle.setVertexBuffer(colorBuffer.buffer, offset: 0, index: 1)
-            encoder.handle.setVertexBytes(&pointSize, length: MemoryLayout<Float>.stride, index: 3)
-            encoder.handle.drawPrimitives(type: .point, vertexStart: 0,
+            encoder.handle.drawPrimitives(type: .line, vertexStart: 0,
                                           vertexCount: numVerts, instanceCount: 1)
-            encoder.handle.popDebugGroup()
             // flush
             numVerts = 0
         }
+        
+        if indicesCount > 0,
+           let indirectPointBuffer,
+           let indirectColorBuffer,
+           let indirectIndicesBuffer {
+            encoder.handle.setVertexBuffer(indirectPointBuffer.buffer, offset: 0, index: 0)
+            encoder.handle.setVertexBuffer(indirectColorBuffer.buffer, offset: 0, index: 1)
+            encoder.handle.drawIndexedPrimitives(type: .line, indexCount: indicesCount, indexType: .uint32,
+                                                 indexBuffer: indirectIndicesBuffer.buffer, indexBufferOffset: 0)
+        }
+        encoder.handle.popDebugGroup()
     }
 }

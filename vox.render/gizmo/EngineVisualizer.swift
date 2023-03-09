@@ -415,7 +415,7 @@ public class EngineVisualizer: Script {
         if _colorPool.count != _globalPositions.count {
             _colorPool = [Color32](repeating: baseColor, count: _globalPositions.count)
         }
-        LineSubpass.ins.addLines(indicesCount: indicesCount, positions: _globalPositions, indices: _indices, colors: _colorPool)
+        LineBatcher.ins.addLines(indicesCount: indicesCount, positions: _globalPositions, indices: _indices, colors: _colorPool)
     }
 
     private func _growthIndexMemory(_ length: Int) {

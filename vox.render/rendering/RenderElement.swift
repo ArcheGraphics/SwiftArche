@@ -18,13 +18,18 @@ public struct RenderElement {
     public var mesh: Mesh?
     /// Sub mesh.
     public var subMesh: SubMesh?
+    /// sprite texture
+    public var texture: MTLTexture?
     
-    public init(_ renderer: Renderer, _ material: Material, _ shaderPass: ShaderPass) {
+    /// 2D Sprite Element
+    public init(_ renderer: Renderer, _ texture: MTLTexture, _ material: Material, _ shaderPass: ShaderPass) {
         self.renderer = renderer
+        self.texture = texture
         self.material = material
         self.shaderPass = shaderPass
     }
 
+    /// 3D Mesh Element
     public init(_ renderer: Renderer, _ mesh: Mesh, _ subMesh: SubMesh, _ material: Material, _ shaderPass: ShaderPass) {
         self.renderer = renderer
         self.mesh = mesh

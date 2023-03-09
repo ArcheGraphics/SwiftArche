@@ -510,17 +510,17 @@ extension PhysicsManager {
     /// Must be called in onGUI
     public func drawGizmos() {
         _nativePhysicsManager.draw { p0, color in
-            PointSubpass.ins.addPoint(p0, color: color)
+            PointBatcher.ins.addPoint(p0, color: color)
         } checkResizePoint: { count in
-            PointSubpass.ins.checkResizePoint(count: Int(count))
+            PointBatcher.ins.checkResizePoint(count: Int(count))
         } addLine: { p0, p1, color in
-            LineSubpass.ins.addLine(p0: p0, p1: p1, color: color)
+            LineBatcher.ins.addLine(p0: p0, p1: p1, color: color)
         } checkResizeLine: { count in
-            LineSubpass.ins.checkResizePoint(count: Int(count))
+            LineBatcher.ins.checkResizePoint(count: Int(count))
         } addTriangle: { p0, p1, p2, color in
-            TriangleSubpass.ins.addTriangle(p0: p0, p1: p1, p2: p2, color: color)
+            TriangleBatcher.ins.addTriangle(p0: p0, p1: p1, p2: p2, color: color)
         } checkResizeTriangle: { count in
-            TriangleSubpass.ins.checkResizePoint(count: Int(count))
+            TriangleBatcher.ins.checkResizePoint(count: Int(count))
         }
     }
 }

@@ -6,8 +6,8 @@
 
 import vox_math
 
-class TriangleSubpass : Subpass {
-    static var _ins: TriangleSubpass!
+class TriangleBatcher : Batcher {
+    static var _ins: TriangleBatcher!
     var pointBuffer: BufferView!
     var colorBuffer: BufferView!
     var normalBuffer: BufferView!
@@ -16,7 +16,6 @@ class TriangleSubpass : Subpass {
     var engine: Engine!
     var camera: Camera?
     
-    private var _resourceCache: ResourceCache!
     private let _shaderMacro = ShaderMacroCollection()
     private let _depthStencilDescriptor = MTLDepthStencilDescriptor()
     private let _pipelineDescriptor = MTLRenderPipelineDescriptor()
@@ -25,9 +24,9 @@ class TriangleSubpass : Subpass {
     private var _shaderPass: ShaderPass!
     private let _descriptor = MTLVertexDescriptor()
 
-    static var ins: TriangleSubpass {
+    static var ins: TriangleBatcher {
         if _ins == nil {
-            _ins = TriangleSubpass()
+            _ins = TriangleBatcher()
         }
         return _ins
     }
@@ -38,7 +37,6 @@ class TriangleSubpass : Subpass {
         
     func set(_ engine: Engine) {
         self.engine = engine
-        _resourceCache = ResourceCache(engine.device)
     }
     
     func addTriangle(p0: Vector3, p1: Vector3, p2: Vector3,
@@ -99,7 +97,7 @@ class TriangleSubpass : Subpass {
         }
     }
     
-    func prepare(_ encoder: MTLRenderCommandEncoder) {
+    func prepare(_ encoder: MTLRenderCommandEncoder, _ cache: ResourceCache) {
         var desc = MTLVertexAttributeDescriptor()
         desc.format = .float3
         desc.offset = 0
@@ -130,36 +128,29 @@ class TriangleSubpass : Subpass {
             _pipelineDescriptor.stencilAttachmentPixelFormat = format
         }
 
-        let functions = _resourceCache.requestShaderModule(_shaderPass, _shaderMacro)
+        let functions = cache.requestShaderModule(_shaderPass, _shaderMacro)
         _pipelineDescriptor.vertexFunction = functions[0]
         _pipelineDescriptor.fragmentFunction = functions[1]
         _pipelineDescriptor.vertexDescriptor = _descriptor
         _shaderPass.renderState!._apply(_pipelineDescriptor, _depthStencilDescriptor, encoder, false)
 
-        _pso = _resourceCache.requestGraphicsPipeline(_pipelineDescriptor)
-        _depthStencilState = _resourceCache.requestDepthStencilState(_depthStencilDescriptor)
+        _pso = cache.requestGraphicsPipeline(_pipelineDescriptor)
+        _depthStencilState = cache.requestDepthStencilState(_depthStencilDescriptor)
     }
     
-    override func draw(_ encoder: inout RenderCommandEncoder) {
-        if camera == nil {
-            camera = Camera.mainCamera
-        }
-        guard let camera = camera else {
-            fatalError("without enabled camera")
-        }
-        
+    override func drawBatcher(_ encoder: inout RenderCommandEncoder, _ camera: Camera, _ cache: ResourceCache) {
         if let pointBuffer = pointBuffer,
            let colorBuffer = colorBuffer {
             encoder.handle.pushDebugGroup("Triangle Gizmo Subpass")
             if (_pso == nil) {
-                prepare(encoder.handle)
+                prepare(encoder.handle, cache)
             }
             
             encoder.handle.setDepthStencilState(_depthStencilState)
             encoder.handle.setFrontFacing(.clockwise)
             encoder.handle.setCullMode(.none)
             
-            encoder.bind(camera: camera, _pso, _resourceCache)
+            encoder.bind(camera: camera, _pso, cache)
             
             encoder.handle.setVertexBuffer(pointBuffer.buffer, offset: 0, index: 0)
             encoder.handle.setVertexBuffer(colorBuffer.buffer, offset: 0, index: 1)
