@@ -27,9 +27,10 @@ extension NSFont {
     }
 
     private static func stringWithFontFitsInRect(font: NSFont,
-                                                 rect: CGRect,
+                                                 rectWidth: Float,
+                                                 rectHeight: Float,
                                                  characterCount: Int) -> Bool {
-        let area = rect.size.width * rect.size.height
+        let area = CGFloat(rectWidth * rectHeight)
         let glyphMargin = font.estimatedLineWidth
         let averageGlyphSize = font.estimatedGlyphSize
         let estimatedGlyphTotalArea = (averageGlyphSize.width + glyphMargin)
@@ -38,14 +39,14 @@ extension NSFont {
         return estimatedGlyphTotalArea < area
     }
 
-    public static func atlasFont(name fontName: String, atlasRect: CGRect,
+    public static func atlasFont(name fontName: String, rectWidth: Float, rectHeight: Float,
                                  trialFontSize: CGFloat = 32) -> NSFont? {
         guard let temporaryFont = NSFont(name: fontName, size: 8)
         else {
             return nil
         }
         let glyphCount = CTFontGetGlyphCount(temporaryFont.ctFont)
-        let fittedPointSize = Self.calculateFontSizeToFit(rect: atlasRect,
+        let fittedPointSize = Self.calculateFontSizeToFit(rectWidth: rectWidth, rectHeight: rectHeight,
                 fontName: fontName,
                 characterCount: glyphCount,
                 trialFontSize: trialFontSize)
@@ -54,19 +55,20 @@ extension NSFont {
                 size: fittedPointSize)
     }
 
-    public static func calculateFontSizeToFit(rect: CGRect,
+    public static func calculateFontSizeToFit(rectWidth: Float,
+                                              rectHeight: Float,
                                               fontName: String,
                                               characterCount: Int,
                                               trialFontSize: CGFloat = 32) -> CGFloat {
         var fittedSize = trialFontSize
         while let trialFont = NSFont(name: fontName, size: fittedSize),
-              NSFont.stringWithFontFitsInRect(font: trialFont, rect: rect,
+              NSFont.stringWithFontFitsInRect(font: trialFont, rectWidth: rectWidth, rectHeight: rectHeight,
                       characterCount: characterCount) {
             fittedSize += 1
         }
 
         while let trialFont = NSFont(name: fontName, size: fittedSize),
-              !NSFont.stringWithFontFitsInRect(font: trialFont, rect: rect,
+              !NSFont.stringWithFontFitsInRect(font: trialFont, rectWidth: rectWidth, rectHeight: rectHeight,
                       characterCount: characterCount) {
             fittedSize -= 1
         }
@@ -100,9 +102,10 @@ extension UIFont {
     }
 
     private static func stringWithFontFitsInRect(font: UIFont,
-                                                 rect: CGRect,
+                                                 rectWidth: Float,
+                                                 rectHeight: Float,
                                                  characterCount: Int) -> Bool {
-        let area = rect.size.width * rect.size.height
+        let area = CGFloat(rectWidth * rectHeight)
         let glyphMargin = font.estimatedLineWidth
         let averageGlyphSize = font.estimatedGlyphSize
         let estimatedGlyphTotalArea = (averageGlyphSize.width + glyphMargin)
@@ -112,32 +115,36 @@ extension UIFont {
     }
 
     public static func atlasFont(name fontName: String,
-                                 atlasRect: CGRect,
+                                 rectWidth: Float,
+                                 rectHeight: Float,
                                  trialFontSize: CGFloat = 32) -> UIFont? {
         guard let temporaryFont = UIFont(name: fontName, size: 8)
         else {
             return nil
         }
         let glyphCount = CTFontGetGlyphCount(temporaryFont.ctFont)
-        let fittedPointSize = Self.calculateFontSizeToFit(rect: atlasRect, fontName: fontName, characterCount: glyphCount, trialFontSize: trialFontSize)
+        let fittedPointSize = Self.calculateFontSizeToFit(rectWidth: rectWidth, rectHeight: rectHeight,
+                                                          fontName: fontName, characterCount: glyphCount,
+                                                          trialFontSize: trialFontSize)
 
         return UIFont(name: fontName,
                 size: fittedPointSize)
     }
 
-    public static func calculateFontSizeToFit(rect: CGRect,
+    public static func calculateFontSizeToFit(rectWidth: Float,
+                                              rectHeight: Float,
                                               fontName: String,
                                               characterCount: Int,
                                               trialFontSize: CGFloat = 32) -> CGFloat {
         var fittedSize = trialFontSize
         while let trialFont = UIFont(name: fontName, size: fittedSize),
-              UIFont.stringWithFontFitsInRect(font: trialFont, rect: rect,
+              UIFont.stringWithFontFitsInRect(font: trialFont, rectWidth: rectWidth, rectHeight: rectHeight,
                       characterCount: characterCount) {
             fittedSize += 1
         }
 
         while let trialFont = UIFont(name: fontName, size: fittedSize),
-              !UIFont.stringWithFontFitsInRect(font: trialFont, rect: rect,
+              !UIFont.stringWithFontFitsInRect(font: trialFont, rectWidth: rectWidth, rectHeight: rectHeight,
                       characterCount: characterCount) {
             fittedSize -= 1
         }

@@ -167,6 +167,7 @@
 		3EBA3D4D29B9A47900E5FB42 /* Font+Rect.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EBA3D4C29B9A47900E5FB42 /* Font+Rect.swift */; };
 		3EBA3D4F29B9A54A00E5FB42 /* MTLFontAtlasProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EBA3D4A29B9A3D200E5FB42 /* MTLFontAtlasProvider.swift */; };
 		3EBA3D5129B9A69700E5FB42 /* quantize_distance_field.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3EBA3D5029B9A69700E5FB42 /* quantize_distance_field.metal */; };
+		3EBA3D5329B9AF0D00E5FB42 /* TextRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EBA3D5229B9AF0D00E5FB42 /* TextRenderer.swift */; };
 		3EC0370529321131002187DC /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EC0370429321131002187DC /* AppDelegate.swift */; };
 		3EC0370E29321132002187DC /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3EC0370D29321132002187DC /* Assets.xcassets */; };
 		3EC0371129321132002187DC /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3EC0370F29321132002187DC /* Main.storyboard */; };
@@ -885,6 +886,7 @@
 		3EBA3D4A29B9A3D200E5FB42 /* MTLFontAtlasProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MTLFontAtlasProvider.swift; sourceTree = "<group>"; };
 		3EBA3D4C29B9A47900E5FB42 /* Font+Rect.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Font+Rect.swift"; sourceTree = "<group>"; };
 		3EBA3D5029B9A69700E5FB42 /* quantize_distance_field.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = quantize_distance_field.metal; sourceTree = "<group>"; };
+		3EBA3D5229B9AF0D00E5FB42 /* TextRenderer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextRenderer.swift; sourceTree = "<group>"; };
 		3EC0370129321131002187DC /* SwiftArcheMac.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SwiftArcheMac.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		3EC0370429321131002187DC /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		3EC0370D29321132002187DC /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -1889,6 +1891,7 @@
 				3EBA3D2029B97E0700E5FB42 /* MTLFontAtlasCodableContainer.swift */,
 				3EBA3D1E29B97DD900E5FB42 /* MTLFontAtlasDescriptor.swift */,
 				3EBA3D4A29B9A3D200E5FB42 /* MTLFontAtlasProvider.swift */,
+				3EBA3D5229B9AF0D00E5FB42 /* TextRenderer.swift */,
 			);
 			path = text;
 			sourceTree = "<group>";
@@ -3491,6 +3494,7 @@
 				3EC0397A293218C3002187DC /* Mesh.swift in Sources */,
 				3EC0391C2932186B002187DC /* ParserContext.swift in Sources */,
 				040F1DC4293397B3008BDC8D /* Keys.swift in Sources */,
+				3EBA3D5329B9AF0D00E5FB42 /* TextRenderer.swift in Sources */,
 				3EBA3D0829B834B600E5FB42 /* PointSubpass.swift in Sources */,
 				3EC039CE29321903002187DC /* AnimationEventHandler.swift in Sources */,
 				3EC0393829321893002187DC /* ShadowResolution.swift in Sources */,

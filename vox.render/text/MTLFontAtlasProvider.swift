@@ -323,18 +323,16 @@ final public class MTLFontAtlasProvider {
 
     private func createAtlas(descriptor: MTLFontAtlasDescriptor) throws -> MTLFontAtlas {
         #if os(macOS)
-        guard let font = NSFont.atlasFont(name: descriptor.fontName,
-                atlasRect: .init(origin: .zero,
-                        size: .init(width: sourceFontAtlasSize, height: sourceFontAtlasSize)))
+        guard let font = NSFont.atlasFont(name: descriptor.fontName, rectWidth: Float(sourceFontAtlasSize),
+                                          rectHeight: Float(sourceFontAtlasSize))
         else {
             throw Error.fontCreationFailed
         }
         #endif
 
         #if os(iOS) || targetEnvironment(macCatalyst)
-        guard let font = UIFont.atlasFont(name: descriptor.fontName,
-                atlasRect: .init(origin: .zero,
-                        size: .init(width: sourceFontAtlasSize, height: sourceFontAtlasSize)))
+        guard let font = UIFont.atlasFont(name: descriptor.fontName, rectWidth: Float(sourceFontAtlasSize),
+                                          rectHeight: Float(sourceFontAtlasSize))
         else {
             throw Error.fontCreationFailed
         }
