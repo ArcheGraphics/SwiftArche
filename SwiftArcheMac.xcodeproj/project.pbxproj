@@ -173,6 +173,7 @@
 		3EBA3D5B29B9CB2F00E5FB42 /* TextUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EBA3D5A29B9CB2F00E5FB42 /* TextUtils.swift */; };
 		3EBA3D5E29B9D05A00E5FB42 /* TextBatcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EBA3D5D29B9D05A00E5FB42 /* TextBatcher.swift */; };
 		3EBA3D6029B9D09D00E5FB42 /* Batcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EBA3D5F29B9D09D00E5FB42 /* Batcher.swift */; };
+		3EBA3D6329B9FF0E00E5FB42 /* MTLFontAtlasProvider.c in Sources */ = {isa = PBXBuildFile; fileRef = 3EBA3D6229B9FF0E00E5FB42 /* MTLFontAtlasProvider.c */; };
 		3EC0370529321131002187DC /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EC0370429321131002187DC /* AppDelegate.swift */; };
 		3EC0370E29321132002187DC /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3EC0370D29321132002187DC /* Assets.xcassets */; };
 		3EC0371129321132002187DC /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3EC0370F29321132002187DC /* Main.storyboard */; };
@@ -897,6 +898,8 @@
 		3EBA3D5A29B9CB2F00E5FB42 /* TextUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextUtils.swift; sourceTree = "<group>"; };
 		3EBA3D5D29B9D05A00E5FB42 /* TextBatcher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextBatcher.swift; sourceTree = "<group>"; };
 		3EBA3D5F29B9D09D00E5FB42 /* Batcher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Batcher.swift; sourceTree = "<group>"; };
+		3EBA3D6129B9FED700E5FB42 /* MTLFontAtlasProvider.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MTLFontAtlasProvider.h; sourceTree = "<group>"; };
+		3EBA3D6229B9FF0E00E5FB42 /* MTLFontAtlasProvider.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = MTLFontAtlasProvider.c; sourceTree = "<group>"; };
 		3EC0370129321131002187DC /* SwiftArcheMac.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SwiftArcheMac.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		3EC0370429321131002187DC /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		3EC0370D29321132002187DC /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -1889,6 +1892,8 @@
 				3EBA3D1C29B97D9800E5FB42 /* MTLFontAtlas.swift */,
 				3EBA3D2029B97E0700E5FB42 /* MTLFontAtlasCodableContainer.swift */,
 				3EBA3D1E29B97DD900E5FB42 /* MTLFontAtlasDescriptor.swift */,
+				3EBA3D6129B9FED700E5FB42 /* MTLFontAtlasProvider.h */,
+				3EBA3D6229B9FF0E00E5FB42 /* MTLFontAtlasProvider.c */,
 				3EBA3D4A29B9A3D200E5FB42 /* MTLFontAtlasProvider.swift */,
 				3EBA3D5A29B9CB2F00E5FB42 /* TextUtils.swift */,
 				3EBA3D5229B9AF0D00E5FB42 /* TextRenderer.swift */,
@@ -3670,6 +3675,7 @@
 				3EBA3D5B29B9CB2F00E5FB42 /* TextUtils.swift in Sources */,
 				3EC03978293218C3002187DC /* Skin.swift in Sources */,
 				3EC039162932186A002187DC /* EntityParser.swift in Sources */,
+				3EBA3D6329B9FF0E00E5FB42 /* MTLFontAtlasProvider.c in Sources */,
 				3EC039FC29321920002187DC /* AnimationArrayCurve.swift in Sources */,
 				3EC038C72932183D002187DC /* PhysXCapsuleColliderShape.swift in Sources */,
 				3EC038A129321826002187DC /* Script.swift in Sources */,

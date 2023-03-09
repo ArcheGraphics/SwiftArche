@@ -12,18 +12,15 @@ import AppKit
 #endif
 
 class TextUtils {
-    static func textUpdate(rectWidth: Float, rectHeight: Float,
-                           fontAtlas: MTLFontAtlas, string: String,
+    static func textUpdate(fontSize: Float, fontAtlas: MTLFontAtlas, string: String,
                            vertices: inout [Vector3], texCoords: inout [Vector2], indices: inout [UInt32],
                            bounds: inout BoundingBox) {
-        let fontSize = NSFont.calculateFontSizeToFit(rectWidth: rectWidth, rectHeight: rectHeight,
-                fontName: fontAtlas.font.fontName, characterCount: string.count)
-
-        let font = NSFont(name: fontAtlas.font.fontName, size: fontSize)!
+        let textRect = CGRectInset(NSScreen.main!.visibleFrame, 0, 0) // RG: text x,y from top left
+        let font = NSFont(name: fontAtlas.font.fontName, size: CGFloat(fontSize))!
         let attributedString = NSAttributedString(string: string,
                 attributes: [NSAttributedString.Key.font: font])
         let stringRange = CFRangeMake(0, attributedString.length)
-        let rectPath = CGPath(rect: CGRect(x: 0, y: 0, width: Int(rectWidth), height: Int(rectHeight)), transform: nil)
+        let rectPath = CGPath(rect: textRect, transform: nil)
 
         let framesetter = CTFramesetterCreateWithAttributedString(attributedString)
         let frame = CTFramesetterCreateFrame(framesetter, stringRange, rectPath, nil)
@@ -88,6 +85,12 @@ class TextUtils {
             i += 1
         }
         bounds = BoundingBox.fromPoints(points: vertices)
+        vertices = vertices.map { v in
+            var vertice = v - bounds.center
+            vertice.y *= -1
+            return vertice
+        }
+        bounds.center = Vector3()
     }
     
     private static func enumerateGlyphs(in frame: CTFrame,

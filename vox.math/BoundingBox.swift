@@ -104,9 +104,9 @@ extension BoundingBox {
 
         var out = BoundingBox(Vector3(Float.greatestFiniteMagnitude, Float.greatestFiniteMagnitude, Float.greatestFiniteMagnitude),
                 Vector3(-Float.greatestFiniteMagnitude, -Float.greatestFiniteMagnitude, -Float.greatestFiniteMagnitude))
-        for i in 0..<points.count {
-            out.min = Vector3.min(left: out.min, right: points[i])
-            out.max = Vector3.max(left: out.max, right: points[i])
+        for point in points {
+            out.setMinMax(Vector3.min(left: out.min, right: point),
+                          Vector3.max(left: out.max, right: point))
         }
         return out
     }

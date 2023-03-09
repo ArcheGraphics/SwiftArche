@@ -34,13 +34,17 @@ class TextApp: NSViewController {
         light.transform.lookAt(targetPosition: Vector3())
         light.addComponent(DirectLight.self)
         
+        // let scope = engine.createCaptureScope(name: "sdf text")
+        // scope.begin()
         let atlas = try! fontProvider.fontAtlas(descriptor: MTLFontAtlasProvider.defaultAtlasDescriptor)
-
+        // scope.end()
+        
         let textEntity = rootEntity.createChild()
         let renderer = textEntity.addComponent(TextRenderer.self)
         renderer.fontAtlas = atlas
         renderer.string = "Hello World"
         renderer.color = Color(0.2, 0.4, 0.7)
+        renderer.fontSize = 2
         
         engine.run()
     }

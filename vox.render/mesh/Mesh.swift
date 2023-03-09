@@ -84,6 +84,6 @@ public class Mesh {
 }
 
 enum MeshModifyFlags: Int {
-    case  Bounds = 0x1
-    case  VertexElements = 0x2
+    case Bounds = 0x1
+    case VertexElements = 0x2
 }

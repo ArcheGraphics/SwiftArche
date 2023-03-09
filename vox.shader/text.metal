@@ -30,8 +30,13 @@ vertex TransformedTextVertex vertex_text(const TextVertexIn in [[stage_in]],
 
 fragment float4 fragment_text(TransformedTextVertex vert [[ stage_in ]],
                             constant float4& u_color [[ buffer(0) ]],
-                            sampler sampler [[ sampler(0) ]],
                             texture2d<float, access::sample> texture [[ texture(0) ]]) {
+    constexpr sampler sampler(mip_filter::none,
+                              mag_filter::linear,
+                              min_filter::nearest,
+                              s_address::clamp_to_zero,
+                              t_address::clamp_to_zero);
+    
     // Outline of glyph is the isocontour with value 50%.
     float edgeDistance = 0.5;
     // Sample the signed-distance field to find distance from this fragment to the glyph outline.

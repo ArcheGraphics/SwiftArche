@@ -14,8 +14,7 @@ import AppKit
 public class TextRenderer: Renderer {
     private var _string: String = ""
     private var _fontAtlas: MTLFontAtlas?
-    private var _rectWidth: Float = 0
-    private var _rectHeight: Float = 0
+    private var _fontSize: Float = 1
     private var _color = Color()
     private var _isDirty: Bool = false
 
@@ -63,27 +62,14 @@ public class TextRenderer: Renderer {
         }
     }
     
-    /// rect width
-    public var rectWidth: Float {
+    /// font size
+    public var fontSize: Float {
         get {
-            _rectWidth
+            _fontSize
         }
         set {
-            if _rectWidth != newValue {
-                _rectWidth = newValue
-                _isDirty = true
-            }
-        }
-    }
-    
-    /// rect height
-    public var rectHeight: Float {
-        get {
-            _rectHeight
-        }
-        set {
-            if _rectHeight == newValue {
-                _rectHeight = newValue
+            if _fontSize != newValue {
+                _fontSize = newValue
                 _isDirty = true
             }
         }
@@ -91,13 +77,16 @@ public class TextRenderer: Renderer {
     
     public required init(_ entity: Entity) {
         super.init(entity)
+        let shader = ShaderPass(engine.library(), "vertex_text", "fragment_text")
+        shader.setRenderQueueType(.Transparent)
+        shader._renderState!.rasterState.cullMode = .front
         let mtl = Material(engine, "default text")
-        mtl.shader.append(ShaderPass(engine.library(), "vertex_text", "fragment_text"))
+        mtl.shader.append(shader)
         setMaterial(mtl)
     }
     
     override func _render(_ devicePipeline: DevicePipeline) {
-        if (_dirtyUpdateFlag & MeshRendererUpdateFlags.VertexElementMacro.rawValue != 0) {
+        if (_dirtyUpdateFlag & RendererUpdateFlags.WorldVolume.rawValue != 0) {
             worldVertice = vertices.map({ v in
                 Vector3.transformCoordinate(v: v, m: entity.transform.worldMatrix)
             })
@@ -111,10 +100,13 @@ public class TextRenderer: Renderer {
     override func update(_ deltaTime: Float) {
         if let fontAtlas,
            _isDirty {
-            TextUtils.textUpdate(rectWidth: rectWidth, rectHeight: rectHeight,
-                                 fontAtlas: fontAtlas, string: string,
+            TextUtils.textUpdate(fontSize: fontSize, fontAtlas: fontAtlas, string: string,
                                  vertices: &vertices, texCoords: &texCoords,
                                  indices: &indices, bounds: &_bounds)
+            
+            worldVertice = vertices.map({ v in
+                Vector3.transformCoordinate(v: v, m: entity.transform.worldMatrix)
+            })
             _isDirty = false
         }
     }

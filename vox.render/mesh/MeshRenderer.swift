@@ -8,6 +8,13 @@ import Metal
 import vox_math
 
 public class MeshRenderer: Renderer {
+    enum MeshRendererUpdateFlags: Int {
+        /// VertexElementMacro.
+        case  VertexElementMacro = 0x2
+        /// All.
+        case  All = 0x3
+    }
+    
     var _mesh: Mesh?
 
     /// Mesh assigned to the renderer.
@@ -92,11 +99,4 @@ public class MeshRenderer: Renderer {
             _dirtyUpdateFlag |= MeshRendererUpdateFlags.VertexElementMacro.rawValue
         }
     }
-}
-
-enum MeshRendererUpdateFlags: Int {
-    /// VertexElementMacro.
-    case  VertexElementMacro = 0x2
-    /// All.
-    case  All = 0x3
 }

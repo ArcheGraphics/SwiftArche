@@ -18,6 +18,7 @@ class TextBatcher: Batcher {
         var material: Material!
         var shaderPass: ShaderPass!
         var renderer: Renderer!
+        var texture: MTLTexture!
         
         var verticeArray: [Vector3] = []
         var uvArray: [Vector2] = []
@@ -27,6 +28,7 @@ class TextBatcher: Batcher {
             verticeArray = []
             uvArray = []
             indexArray = []
+            
             count = 0
         }
         
@@ -111,11 +113,12 @@ class TextBatcher: Batcher {
     
     func _addBatchData(_ element: RenderElement, at currentBufferCount: Int) {
         let textRenderer = element.renderer as! TextRenderer
-        if currentBufferCount > batcherBuffer.count {
+        if currentBufferCount >= batcherBuffer.count {
             var batcherData = BatcherData(device: _engine.device)
             batcherData.renderer = textRenderer
             batcherData.material = element.material
             batcherData.shaderPass = element.shaderPass
+            batcherData.texture = textRenderer.fontAtlas!.fontAtlasTexture
             
             batcherData.verticeArray.append(contentsOf: textRenderer.worldVertice)
             batcherData.uvArray.append(contentsOf: textRenderer.texCoords)
@@ -167,9 +170,7 @@ class TextBatcher: Batcher {
                 
                 let functions = cache.requestShaderModule(data.shaderPass, shaderMacro)
                 pipelineDescriptor.vertexFunction = functions[0]
-                if functions.count == 2 {
-                    pipelineDescriptor.fragmentFunction = functions[1]
-                }
+                pipelineDescriptor.fragmentFunction = functions[1]
                 pipelineDescriptor.vertexDescriptor = _descriptor
                 data.shaderPass.renderState!._apply(pipelineDescriptor, depthStencilDescriptor, encoder.handle,
                                                     data.renderer.entity.transform._isFrontFaceInvert())
@@ -181,9 +182,10 @@ class TextBatcher: Batcher {
                 encoder.bind(renderer: data.renderer, pso, cache)
                 encoder.bind(scene: camera.scene, pso, cache)
                 
+                encoder.handle.setFragmentTexture(data.texture, index: 0)
                 encoder.handle.setVertexBuffer(data.position!.buffer, offset: 0, index: 0)
                 encoder.handle.setVertexBuffer(data.uv!.buffer, offset: 0, index: 1)
-                encoder.handle.drawIndexedPrimitives(type: .line, indexCount: data.count, indexType: .uint32,
+                encoder.handle.drawIndexedPrimitives(type: .triangle, indexCount: data.count, indexType: .uint32,
                                                      indexBuffer: data.indices!.buffer, indexBufferOffset: 0)
             }
             flush()

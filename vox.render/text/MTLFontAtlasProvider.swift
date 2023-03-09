@@ -35,10 +35,10 @@ final public class MTLFontAtlasProvider {
         function = engine.library("vox.shader").makeFunction(name: "quantizeDistanceField")!
         pipelineState = try! engine.device.makeComputePipelineState(function: function)
 
-        let defaultAtlas = try JSONDecoder().decode(MTLFontAtlasCodableContainer.self,
-                        from: .init(contentsOf: Self.defaultAtlasFileURL))
-                .fontAtlas(device: engine.device)
-        atlasCache[Self.defaultAtlasDescriptor] = defaultAtlas
+//        let defaultAtlas = try JSONDecoder().decode(MTLFontAtlasCodableContainer.self,
+//                        from: .init(contentsOf: Self.defaultAtlasFileURL))
+//                .fontAtlas(device: engine.device)
+//        atlasCache[Self.defaultAtlasDescriptor] = defaultAtlas
     }
 
     /// Provide font atlas
@@ -224,103 +224,6 @@ final public class MTLFontAtlasProvider {
     }
     #endif
 
-    /// Compute signed-distance field for an 8-bpp grayscale image (values greater than 127 are considered "on")
-    /// For details of this algorithm, see "The 'dead reckoning' signed distance transform" [Grevera 2004]
-    private func createSignedDistanceFieldData(from fontAtlasData: [UInt8], width: Int, height: Int) -> [Float] {
-        let maxDist = hypot(Float(width), Float(height))
-        // Initialization phase.
-        // Distance to nearest boundary point map - set all distances to "infinity".
-        var distanceMap = [Float](repeating: maxDist, count: width * height)
-        // Nearest boundary point map - zero out nearest boundary point map.
-        var boundaryPointMap = [SIMD2<Int32>](repeating: .zero, count: width * height)
-        let distUnit: Float = 1
-        let distDiag: Float = sqrtf(2)
-        // Immediate interior/exterior phase: mark all points along the boundary as such.
-        for y in 1..<(height - 1) {
-            for x in 1..<(width - 1) {
-                let inside = fontAtlasData[y * width + x] > 0x7f // aka 127
-                if (fontAtlasData[y * width + x - 1] > 0x7f) != inside ||
-                           (fontAtlasData[y * width + x + 1] > 0x7f) != inside ||
-                           (fontAtlasData[(y - 1) * width + x] > 0x7f) != inside ||
-                           (fontAtlasData[(y + 1) * width + x] > 0x7f) != inside {
-                    distanceMap[y * width + x] = 0
-                    boundaryPointMap[y * width + x].x = Int32(x)
-                    boundaryPointMap[y * width + x].y = Int32(y)
-                }
-            }
-        }
-        // Forward dead-reckoning pass.
-        for y in 1..<(height - 2) {
-            for x in 1..<(width - 2) {
-                var d: Float {
-                    distanceMap[y * width + x]
-                }
-                var n: SIMD2<Int32> {
-                    boundaryPointMap[y * width + x]
-                }
-                var h: Float {
-                    hypot(Float(x) - Float(n.x), Float(y) - Float(n.y))
-                }
-                if distanceMap[(y - 1) * width + x - 1] + distDiag < d {
-                    boundaryPointMap[y * width + x] = boundaryPointMap[(y - 1) * width + (x - 1)]
-                    distanceMap[y * width + x] = h
-                }
-                if distanceMap[(y - 1) * width + x] + distUnit < d {
-                    boundaryPointMap[y * width + x] = boundaryPointMap[(y - 1) * width + x]
-                    distanceMap[y * width + x] = h
-                }
-                if distanceMap[(y - 1) * width + x + 1] + distDiag < d {
-                    boundaryPointMap[y * width + x] = boundaryPointMap[(y - 1) * width + (x + 1)]
-                    distanceMap[y * width + x] = h
-                }
-                if distanceMap[y * width + x - 1] + distUnit < d {
-                    boundaryPointMap[y * width + x] = boundaryPointMap[y * width + (x - 1)]
-                    distanceMap[y * width + x] = h
-                }
-            }
-        }
-        // Backward dead-reckoning pass.
-        for y in (1...(height - 2)).reversed() {
-            for x in (1...(width - 2)).reversed() {
-                var d: Float {
-                    distanceMap[y * width + x]
-                }
-                var n: SIMD2<Int32> {
-                    boundaryPointMap[y * width + x]
-                }
-                var h: Float {
-                    hypot(Float(x) - Float(n.x), Float(y) - Float(n.y))
-                }
-
-                if distanceMap[y * width + x + 1] + distUnit < d {
-                    boundaryPointMap[y * width + x] = boundaryPointMap[y * width + x + 1]
-                    distanceMap[y * width + x] = h
-                }
-                if distanceMap[(y + 1) * width + x - 1] + distDiag < d {
-                    boundaryPointMap[y * width + x] = boundaryPointMap[(y + 1) * width + x - 1]
-                    distanceMap[y * width + x] = h
-                }
-                if distanceMap[(y + 1) * width + x] + distUnit < d {
-                    boundaryPointMap[y * width + x] = boundaryPointMap[(y + 1) * width + x]
-                    distanceMap[y * width + x] = h
-                }
-                if distanceMap[(y + 1) * width + x + 1] + distDiag < d {
-                    boundaryPointMap[y * width + x] = boundaryPointMap[(y + 1) * width + x + 1]
-                    distanceMap[y * width + x] = h
-                }
-            }
-        }
-        // Interior distance negation pass; distances outside the figure are considered negative.
-        for y in 0..<height {
-            for x in 0..<width {
-                if fontAtlasData[y * width + x] <= 0x7f {
-                    distanceMap[y * width + x] = -distanceMap[y * width + x]
-                }
-            }
-        }
-        return distanceMap
-    }
-
     private func createAtlas(descriptor: MTLFontAtlasDescriptor) throws -> MTLFontAtlas {
         #if os(macOS)
         guard let font = NSFont.atlasFont(name: descriptor.fontName, rectWidth: Float(sourceFontAtlasSize),
@@ -338,20 +241,24 @@ final public class MTLFontAtlasProvider {
         }
         #endif
 
-        let fontAtlasData = createFontAtlasData(font: font,
+        var fontAtlasData = createFontAtlasData(font: font,
                 width: sourceFontAtlasSize,
                 height: sourceFontAtlasSize)
 
-        var sdfFontAtlasData = createSignedDistanceFieldData(from: fontAtlasData.data,
-                width: sourceFontAtlasSize,
-                height: sourceFontAtlasSize)
+        let sdfFontAtlasPtr = createSignedDistanceFieldForGrayscaleImage(&fontAtlasData.data,
+                                                                         sourceFontAtlasSize, sourceFontAtlasSize)
+        var sdfFontAtlasData = Array(UnsafeBufferPointer(start: sdfFontAtlasPtr,
+                                                         count: sourceFontAtlasSize * sourceFontAtlasSize))
 
-        var textureDescriptor = MTLTextureDescriptor()
+        let textureDescriptor = MTLTextureDescriptor()
         textureDescriptor.width = sourceFontAtlasSize
         textureDescriptor.height = sourceFontAtlasSize
         textureDescriptor.pixelFormat = .r32Float
         textureDescriptor.resourceOptions = []
         textureDescriptor.usage = [.shaderRead, .shaderWrite]
+#if os(macOS)
+        textureDescriptor.storageMode = .managed
+#endif
         guard let sdfFontAtlasTexture = engine.device.makeTexture(descriptor: textureDescriptor)
         else {
             throw MetalError.MTLDeviceError.textureCreationFailed
@@ -362,12 +269,9 @@ final public class MTLFontAtlasProvider {
                 withBytes: &sdfFontAtlasData,
                 bytesPerRow: sdfFontAtlasTexture.width * MemoryLayout<Float>.stride)
 
-        textureDescriptor = MTLTextureDescriptor()
         textureDescriptor.width = descriptor.textureSize
         textureDescriptor.height = descriptor.textureSize
         textureDescriptor.pixelFormat = .r8Unorm
-        textureDescriptor.resourceOptions = []
-        textureDescriptor.usage = [.shaderRead, .shaderWrite]
         guard let fontAtlasTexture = engine.device.makeTexture(descriptor: textureDescriptor)
         else {
             throw MetalError.MTLDeviceError.textureCreationFailed
@@ -400,7 +304,6 @@ final public class MTLFontAtlasProvider {
 
     private static let defaultAtlasFileURL = Bundle.main.url(forResource: "HelveticaNeue",
             withExtension: "mtlfontatlas")!
-    public static let defaultAtlasDescriptor = MTLFontAtlasDescriptor(fontName: "HelveticaNeue",
-            textureSize: 2048)
+    public static let defaultAtlasDescriptor = MTLFontAtlasDescriptor(fontName: "American Typewriter", textureSize: 2048)
 
 }
