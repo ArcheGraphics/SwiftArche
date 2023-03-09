@@ -16,12 +16,24 @@ public class TextRenderer: Renderer {
     private var _fontAtlas: MTLFontAtlas?
     private var _rectWidth: Float = 0
     private var _rectHeight: Float = 0
+    private var _color = Color()
     private var _isDirty: Bool = false
 
-    var vertices: [Vector4] = []
+    var vertices: [Vector3] = []
     var texCoords: [Vector2] = []
-    var worldVertice: [Vector4] = []
+    var worldVertice: [Vector3] = []
     var indices: [UInt32] = []
+    
+    /// text color
+    public var color: Color {
+        get {
+            _color
+        }
+        set {
+            _color = newValue
+            shaderData.setData("u_color", _color)
+        }
+    }
     
     /// text string
     public var string: String {
@@ -85,7 +97,7 @@ public class TextRenderer: Renderer {
     override func _render(_ devicePipeline: DevicePipeline) {
         if (_dirtyUpdateFlag & MeshRendererUpdateFlags.VertexElementMacro.rawValue != 0) {
             worldVertice = vertices.map({ v in
-                Vector4.transform(v: v, m: entity.transform.worldMatrix)
+                Vector3.transformCoordinate(v: v, m: entity.transform.worldMatrix)
             })
         }
         let mtl = _materials[0]!
@@ -116,7 +128,7 @@ public class TextRenderer: Renderer {
             let vertexCount = frameGlyphCount * 4
             let indexCount = frameGlyphCount * 6
 
-            vertices = [Vector4](repeating: .init(), count: vertexCount)
+            vertices = [Vector3](repeating: .init(), count: vertexCount)
             texCoords = [Vector2](repeating: .init(), count: vertexCount)
             indices = [UInt32](repeating: .zero, count: indexCount)
 
@@ -140,16 +152,16 @@ public class TextRenderer: Renderer {
                 let minT = glyphInfo.topLeftCoordinate.y
                 let maxT = glyphInfo.bottomRightCoordinate.y
 
-                vertices[v] = Vector4(minX, maxY, 0, 1)
+                vertices[v] = Vector3(minX, maxY, 0)
                 texCoords[v] = Vector2(minS, maxT)
                 v += 1
-                vertices[v] = Vector4(minX, minY, 0, 1)
+                vertices[v] = Vector3(minX, minY, 0)
                 texCoords[v] = Vector2(minS, minT)
                 v += 1
-                vertices[v] = Vector4(maxX, minY, 0, 1)
+                vertices[v] = Vector3(maxX, minY, 0)
                 texCoords[v] = Vector2(maxS, minT)
                 v += 1
-                vertices[v] = Vector4(maxX, maxY, 0, 1)
+                vertices[v] = Vector3(maxX, maxY, 0)
                 texCoords[v] = Vector2(maxS, maxT)
                 v += 1
 
@@ -166,6 +178,7 @@ public class TextRenderer: Renderer {
                 indices[i] = .init(glyphIndex) * 4
                 i += 1
             }
+            _bounds = BoundingBox.fromPoints(points: vertices)
             _isDirty = false
         }
     }

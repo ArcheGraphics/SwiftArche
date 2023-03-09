@@ -169,6 +169,7 @@
 		3EBA3D5129B9A69700E5FB42 /* quantize_distance_field.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3EBA3D5029B9A69700E5FB42 /* quantize_distance_field.metal */; };
 		3EBA3D5329B9AF0D00E5FB42 /* TextRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EBA3D5229B9AF0D00E5FB42 /* TextRenderer.swift */; };
 		3EBA3D5529B9C23500E5FB42 /* text.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3EBA3D5429B9C23500E5FB42 /* text.metal */; };
+		3EBA3D5929B9C74000E5FB42 /* TextApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EBA3D5829B9C74000E5FB42 /* TextApp.swift */; };
 		3EC0370529321131002187DC /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EC0370429321131002187DC /* AppDelegate.swift */; };
 		3EC0370E29321132002187DC /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3EC0370D29321132002187DC /* Assets.xcassets */; };
 		3EC0371129321132002187DC /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3EC0370F29321132002187DC /* Main.storyboard */; };
@@ -889,6 +890,7 @@
 		3EBA3D5029B9A69700E5FB42 /* quantize_distance_field.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = quantize_distance_field.metal; sourceTree = "<group>"; };
 		3EBA3D5229B9AF0D00E5FB42 /* TextRenderer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextRenderer.swift; sourceTree = "<group>"; };
 		3EBA3D5429B9C23500E5FB42 /* text.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = text.metal; sourceTree = "<group>"; };
+		3EBA3D5829B9C74000E5FB42 /* TextApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextApp.swift; sourceTree = "<group>"; };
 		3EC0370129321131002187DC /* SwiftArcheMac.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SwiftArcheMac.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		3EC0370429321131002187DC /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		3EC0370D29321132002187DC /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -1976,6 +1978,7 @@
 				43D8C888ABFCE2075E7AA5BE /* AtomicComputeApp.swift */,
 				E63B1700C137922B042BB8C2 /* InputCastApp.swift */,
 				3EBA3D0E29B84C0100E5FB42 /* GizmosApp.swift */,
+				3EBA3D5829B9C74000E5FB42 /* TextApp.swift */,
 				3E6D2F0B293F135000B63F73 /* loader */,
 				3EC92A3F29360C6800423396 /* physics */,
 				040F1DF129378195008BDC8D /* rendering */,
@@ -3353,6 +3356,7 @@
 				43D8CC2C3372F5E3258A852D /* IrradianceApp.swift in Sources */,
 				3ED9BCE6294DA4F300876ABC /* ScreenSpaceFluidApp.swift in Sources */,
 				3ED9BD032952B23F00876ABC /* BitonicSortApp.swift in Sources */,
+				3EBA3D5929B9C74000E5FB42 /* TextApp.swift in Sources */,
 				3E6B23DC2949B32C000AC29F /* ImplicitTriangleApp.swift in Sources */,
 				43D8C033021F4B86E95953E6 /* IBLApp.swift in Sources */,
 				3E1F129929A7A49900F1002E /* PhysXConcaveDynamicApp.swift in Sources */,

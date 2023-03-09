@@ -11,7 +11,7 @@ using namespace metal;
 #include "shader_common.h"
 
 typedef struct {
-    float4 POSITION [[attribute(Position)]];
+    float3 POSITION [[attribute(Position)]];
     float2 TEXCOORD_0 [[attribute(UV_0)]];
 } TextVertexIn;
 
@@ -23,13 +23,13 @@ struct TransformedTextVertex {
 vertex TransformedTextVertex vertex_text(const TextVertexIn in [[stage_in]],
                                         constant CameraData &u_camera [[buffer(5)]]) {
     TransformedTextVertex outVert;
-    outVert.position = u_camera.u_VPMat * in.POSITION;
+    outVert.position = u_camera.u_VPMat * float4(in.POSITION, 1.0);
     outVert.texCoords = in.TEXCOORD_0;
     return outVert;
 }
 
-fragment half4 fragment_text(TransformedTextVertex vert [[ stage_in ]],
-                            constant float4& color [[ buffer(0) ]],
+fragment float4 fragment_text(TransformedTextVertex vert [[ stage_in ]],
+                            constant float4& u_color [[ buffer(0) ]],
                             sampler sampler [[ sampler(0) ]],
                             texture2d<float, access::sample> texture [[ texture(0) ]]) {
     // Outline of glyph is the isocontour with value 50%.
@@ -40,5 +40,5 @@ fragment half4 fragment_text(TransformedTextVertex vert [[ stage_in ]],
     float edgeWidth = 0.75 * length(float2(dfdx(sampleDistance), dfdy(sampleDistance)));
     // Smooth the glyph edge by interpolating across the boundary in a band with the width determined above.
     float insideness = smoothstep(edgeDistance - edgeWidth, edgeDistance + edgeWidth, sampleDistance);
-    return half4(color.r, color.g, color.b, insideness);
+    return float4(u_color.r, u_color.g, u_color.b, insideness);
 }
