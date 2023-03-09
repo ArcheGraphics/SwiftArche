@@ -99,3 +99,6 @@ extension Plane {
         return self
     }
 }
+
+extension Plane: Codable {
+}

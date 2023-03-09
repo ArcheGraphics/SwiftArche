@@ -84,3 +84,6 @@ public struct Color32 {
         }
     }
 }
+
+extension Color32: Codable {
+}

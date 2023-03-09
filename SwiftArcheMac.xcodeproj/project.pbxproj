@@ -145,6 +145,7 @@
 		3EBA3D1529B85D6C00E5FB42 /* VisualizationParameter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EBA3D1429B85D6C00E5FB42 /* VisualizationParameter.swift */; };
 		3EBA3D1629B8891300E5FB42 /* WireframePrimitive.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8CB37C6DA6DAEFDC5A2A4 /* WireframePrimitive.swift */; };
 		3EBA3D1729B8891300E5FB42 /* EngineVisualizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8C0CC365128B7B18E4074 /* EngineVisualizer.swift */; };
+		3EBA3D1B29B9726700E5FB42 /* GlyphDescriptor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EBA3D1A29B9726700E5FB42 /* GlyphDescriptor.swift */; };
 		3EC0370529321131002187DC /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EC0370429321131002187DC /* AppDelegate.swift */; };
 		3EC0370E29321132002187DC /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3EC0370D29321132002187DC /* Assets.xcassets */; };
 		3EC0371129321132002187DC /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3EC0370F29321132002187DC /* Main.storyboard */; };
@@ -841,6 +842,7 @@
 		3EBA3D1029B8578E00E5FB42 /* LineSubpass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LineSubpass.swift; sourceTree = "<group>"; };
 		3EBA3D1229B8579800E5FB42 /* TriangleSubpass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TriangleSubpass.swift; sourceTree = "<group>"; };
 		3EBA3D1429B85D6C00E5FB42 /* VisualizationParameter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VisualizationParameter.swift; sourceTree = "<group>"; };
+		3EBA3D1A29B9726700E5FB42 /* GlyphDescriptor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlyphDescriptor.swift; sourceTree = "<group>"; };
 		3EC0370129321131002187DC /* SwiftArcheMac.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SwiftArcheMac.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		3EC0370429321131002187DC /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		3EC0370D29321132002187DC /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -1836,6 +1838,14 @@
 			path = subpass;
 			sourceTree = "<group>";
 		};
+		3EBA3D1929B93F2800E5FB42 /* text */ = {
+			isa = PBXGroup;
+			children = (
+				3EBA3D1A29B9726700E5FB42 /* GlyphDescriptor.swift */,
+			);
+			path = text;
+			sourceTree = "<group>";
+		};
 		3EC036F829321131002187DC = {
 			isa = PBXGroup;
 			children = (
@@ -2143,6 +2153,7 @@
 				3EC0387029321739002187DC /* loader */,
 				040F1DD72934E6CF008BDC8D /* gui */,
 				3EBA3D0629B834A900E5FB42 /* gizmo */,
+				3EBA3D1929B93F2800E5FB42 /* text */,
 				3EC0389029321826002187DC /* Layer.swift */,
 				3EC0388629321825002187DC /* Canvas.swift */,
 				3EC0388429321825002187DC /* Engine.swift */,
@@ -3573,6 +3584,7 @@
 				3EC038E329321845002187DC /* PhysXSpringJoint.swift in Sources */,
 				3EC038F22932184C002187DC /* HingeJointFlag.swift in Sources */,
 				3EC039C2293218FB002187DC /* AnimationEvent.swift in Sources */,
+				3EBA3D1B29B9726700E5FB42 /* GlyphDescriptor.swift in Sources */,
 				3EC03998293218DA002187DC /* AmbientLight.swift in Sources */,
 				3EC038DE29321845002187DC /* Joint.swift in Sources */,
 				3EC0399A293218DA002187DC /* SpotLight.swift in Sources */,

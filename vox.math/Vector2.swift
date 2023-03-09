@@ -330,3 +330,6 @@ extension Vector2 {
         out[outOffset + 1] = y
     }
 }
+
+extension Vector2: Codable {
+}

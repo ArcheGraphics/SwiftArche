@@ -647,3 +647,6 @@ extension Vector3 {
         return self
     }
 }
+
+extension Vector3: Codable {
+}

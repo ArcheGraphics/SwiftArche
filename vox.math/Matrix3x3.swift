@@ -9,6 +9,12 @@ import simd
 /// Represents a 3x3 mathematical matrix.
 public struct Matrix3x3 {
     public var elements: simd_float3x3
+    
+    enum CodingKeys: String, CodingKey {
+        case m11; case m12; case m13
+        case m21; case m22; case m23
+        case m31; case m32; case m33
+    }
 
     /// Constructor of 3*3 matrix.
     /// - Parameters:
@@ -418,5 +424,42 @@ extension Matrix3x3 {
     /// - Returns: The determinant of this matrix
     public func determinant() -> Float {
         elements.determinant
+    }
+}
+
+extension Matrix3x3: Encodable {
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encode(elements.columns.0[0], forKey: .m11)
+        try container.encode(elements.columns.0[1], forKey: .m12)
+        try container.encode(elements.columns.0[2], forKey: .m13)
+        
+        try container.encode(elements.columns.1[0], forKey: .m21)
+        try container.encode(elements.columns.1[1], forKey: .m22)
+        try container.encode(elements.columns.1[2], forKey: .m23)
+        
+        try container.encode(elements.columns.2[0], forKey: .m31)
+        try container.encode(elements.columns.2[1], forKey: .m32)
+        try container.encode(elements.columns.2[2], forKey: .m33)
+    }
+}
+
+extension Matrix3x3: Decodable {
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        let m11 = try container.decode(Float.self, forKey: .m11)
+        let m12 = try container.decode(Float.self, forKey: .m12)
+        let m13 = try container.decode(Float.self, forKey: .m13)
+        
+        let m21 = try container.decode(Float.self, forKey: .m21)
+        let m22 = try container.decode(Float.self, forKey: .m22)
+        let m23 = try container.decode(Float.self, forKey: .m23)
+        
+        let m31 = try container.decode(Float.self, forKey: .m31)
+        let m32 = try container.decode(Float.self, forKey: .m32)
+        let m33 = try container.decode(Float.self, forKey: .m33)
+        elements = simd_float3x3([SIMD3<Float>(m11, m12, m13),
+                                  SIMD3<Float>(m21, m22, m23),
+                                  SIMD3<Float>(m31, m32, m33)])
     }
 }

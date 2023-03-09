@@ -202,3 +202,6 @@ extension BoundingBox {
 }
 
 public typealias Bounds = BoundingBox
+
+extension BoundingBox: Codable {
+}

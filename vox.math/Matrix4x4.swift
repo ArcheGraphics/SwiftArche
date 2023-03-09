@@ -11,6 +11,13 @@ public struct Matrix {
     /// An array containing the elements of the matrix (column matrix).
     /// - Remark:
     public var elements: simd_float4x4
+    
+    enum CodingKeys: String, CodingKey {
+        case m11; case m12; case m13; case m14
+        case m21; case m22; case m23; case m24
+        case m31; case m32; case m33; case m34
+        case m41; case m42; case m43; case m44
+    }
 
     /// Constructor of 4x4 Matrix.
     /// - Parameters:
@@ -630,5 +637,58 @@ extension Matrix {
         elements.columns.3[1] = v.y
         elements.columns.3[2] = v.z
     }
+}
 
+extension Matrix: Encodable {
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encode(elements.columns.0[0], forKey: .m11)
+        try container.encode(elements.columns.0[1], forKey: .m12)
+        try container.encode(elements.columns.0[2], forKey: .m13)
+        try container.encode(elements.columns.0[3], forKey: .m14)
+
+        try container.encode(elements.columns.1[0], forKey: .m21)
+        try container.encode(elements.columns.1[1], forKey: .m22)
+        try container.encode(elements.columns.1[2], forKey: .m23)
+        try container.encode(elements.columns.1[3], forKey: .m24)
+
+        try container.encode(elements.columns.2[0], forKey: .m31)
+        try container.encode(elements.columns.2[1], forKey: .m32)
+        try container.encode(elements.columns.2[2], forKey: .m33)
+        try container.encode(elements.columns.2[3], forKey: .m34)
+
+        try container.encode(elements.columns.3[0], forKey: .m41)
+        try container.encode(elements.columns.3[1], forKey: .m42)
+        try container.encode(elements.columns.3[2], forKey: .m43)
+        try container.encode(elements.columns.3[3], forKey: .m44)
+    }
+}
+
+extension Matrix: Decodable {
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        let m11 = try container.decode(Float.self, forKey: .m11)
+        let m12 = try container.decode(Float.self, forKey: .m12)
+        let m13 = try container.decode(Float.self, forKey: .m13)
+        let m14 = try container.decode(Float.self, forKey: .m14)
+
+        let m21 = try container.decode(Float.self, forKey: .m21)
+        let m22 = try container.decode(Float.self, forKey: .m22)
+        let m23 = try container.decode(Float.self, forKey: .m23)
+        let m24 = try container.decode(Float.self, forKey: .m24)
+
+        let m31 = try container.decode(Float.self, forKey: .m31)
+        let m32 = try container.decode(Float.self, forKey: .m32)
+        let m33 = try container.decode(Float.self, forKey: .m33)
+        let m34 = try container.decode(Float.self, forKey: .m34)
+
+        let m41 = try container.decode(Float.self, forKey: .m41)
+        let m42 = try container.decode(Float.self, forKey: .m42)
+        let m43 = try container.decode(Float.self, forKey: .m43)
+        let m44 = try container.decode(Float.self, forKey: .m44)
+        elements = simd_float4x4([SIMD4<Float>(m11, m12, m13, m14),
+                                  SIMD4<Float>(m21, m22, m23, m24),
+                                  SIMD4<Float>(m31, m32, m33, m34),
+                                  SIMD4<Float>(m41, m42, m43, m44)])
+    }
 }

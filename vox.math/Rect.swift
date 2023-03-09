@@ -285,5 +285,7 @@ public struct Rect {
         Vector2(MathUtil.inverseLerp(a: rectangle.x, b: rectangle.xMax, value: point.x),
                 MathUtil.inverseLerp(a: rectangle.y, b: rectangle.yMax, value: point.y))
     }
+}
 
+extension Rect: Codable {
 }

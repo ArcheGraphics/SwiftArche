@@ -79,3 +79,6 @@ extension BoundingSphere {
         return BoundingSphere(center, Vector3.distance(left: center, right: max))
     }
 }
+
+extension BoundingSphere: Codable {
+}

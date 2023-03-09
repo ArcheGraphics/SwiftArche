@@ -439,3 +439,6 @@ extension Color {
         return white
     }
 }
+
+extension Color: Codable {
+}

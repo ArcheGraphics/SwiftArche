@@ -396,3 +396,5 @@ extension Vector4 {
     }
 }
 
+extension Vector4: Codable {
+}
