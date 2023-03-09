@@ -4,13 +4,20 @@
 //  personal capacity and am not conveying any rights to any intellectual
 //  property of any third parties.
 
-import AppKit.NSFont
+#if os(macOS)
+import AppKit
+#endif
+
+#if os(iOS) || targetEnvironment(macCatalyst)
+import UIKit
+#endif
 
 final public class MTLFontAtlas {
-    let font: NSFont
     let glyphDescriptors: [GlyphDescriptor]
     let fontAtlasTexture: MTLTexture
 
+#if os(macOS)
+    let font: NSFont
     public init(font: NSFont,
                 glyphDescriptors: [GlyphDescriptor],
                 fontAtlasTexture: MTLTexture) {
@@ -18,8 +25,19 @@ final public class MTLFontAtlas {
         self.glyphDescriptors = glyphDescriptors
         self.fontAtlasTexture = fontAtlasTexture
     }
+#endif
+#if os(iOS) || targetEnvironment(macCatalyst)
+    let font: UIFont
+    public init(font: UIFont,
+                glyphDescriptors: [GlyphDescriptor],
+                fontAtlasTexture: MTLTexture) {
+        self.font = font
+        self.glyphDescriptors = glyphDescriptors
+        self.fontAtlasTexture = fontAtlasTexture
+    }
+#endif
 
     public func codable() throws -> MTLFontAtlasCodableContainer {
-        return try .init(fontAtlas: self)
+        try .init(fontAtlas: self)
     }
 }
