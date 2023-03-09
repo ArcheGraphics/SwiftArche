@@ -75,12 +75,21 @@ public class TextRenderer: Renderer {
         }
     }
     
+    public required init(_ entity: Entity) {
+        super.init(entity)
+        let mtl = Material(engine, "default text")
+        mtl.shader.append(ShaderPass(engine.library(), "vertex_text", "fragment_text"))
+        setMaterial(mtl)
+    }
+    
     override func _render(_ devicePipeline: DevicePipeline) {
         if (_dirtyUpdateFlag & MeshRendererUpdateFlags.VertexElementMacro.rawValue != 0) {
             worldVertice = vertices.map({ v in
                 Vector4.transform(v: v, m: entity.transform.worldMatrix)
             })
         }
+        let mtl = _materials[0]!
+        devicePipeline.pushPrimitive(RenderElement(self, mtl, mtl.shader[0]))
     }
 
     override func update(_ deltaTime: Float) {

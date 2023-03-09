@@ -168,6 +168,7 @@
 		3EBA3D4F29B9A54A00E5FB42 /* MTLFontAtlasProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EBA3D4A29B9A3D200E5FB42 /* MTLFontAtlasProvider.swift */; };
 		3EBA3D5129B9A69700E5FB42 /* quantize_distance_field.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3EBA3D5029B9A69700E5FB42 /* quantize_distance_field.metal */; };
 		3EBA3D5329B9AF0D00E5FB42 /* TextRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EBA3D5229B9AF0D00E5FB42 /* TextRenderer.swift */; };
+		3EBA3D5529B9C23500E5FB42 /* text.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3EBA3D5429B9C23500E5FB42 /* text.metal */; };
 		3EC0370529321131002187DC /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EC0370429321131002187DC /* AppDelegate.swift */; };
 		3EC0370E29321132002187DC /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3EC0370D29321132002187DC /* Assets.xcassets */; };
 		3EC0371129321132002187DC /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3EC0370F29321132002187DC /* Main.storyboard */; };
@@ -887,6 +888,7 @@
 		3EBA3D4C29B9A47900E5FB42 /* Font+Rect.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Font+Rect.swift"; sourceTree = "<group>"; };
 		3EBA3D5029B9A69700E5FB42 /* quantize_distance_field.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = quantize_distance_field.metal; sourceTree = "<group>"; };
 		3EBA3D5229B9AF0D00E5FB42 /* TextRenderer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextRenderer.swift; sourceTree = "<group>"; };
+		3EBA3D5429B9C23500E5FB42 /* text.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = text.metal; sourceTree = "<group>"; };
 		3EC0370129321131002187DC /* SwiftArcheMac.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SwiftArcheMac.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		3EC0370429321131002187DC /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		3EC0370D29321132002187DC /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -2190,6 +2192,7 @@
 				3EC92AC72939A1ED00423396 /* postprocess_merge.metal */,
 				3EBA3D0C29B83EDD00E5FB42 /* gizmos.metal */,
 				3EBA3D5029B9A69700E5FB42 /* quantize_distance_field.metal */,
+				3EBA3D5429B9C23500E5FB42 /* text.metal */,
 			);
 			path = vox.shader;
 			sourceTree = "<group>";
@@ -3466,6 +3469,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3EBA3D5529B9C23500E5FB42 /* text.metal in Sources */,
 				3EC0384F29321496002187DC /* function_common.metal in Sources */,
 				3EC0385229321496002187DC /* unlit_shading.metal in Sources */,
 				3EC0385129321496002187DC /* skybox_shading.metal in Sources */,

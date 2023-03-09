@@ -46,17 +46,19 @@ open class GeometrySubpass: Subpass {
         if functions.count == 2 {
             pipelineDescriptor.fragmentFunction = functions[1]
         }
-        pipelineDescriptor.vertexDescriptor = mesh._vertexDescriptor
-        element.shaderPass.renderState!._apply(pipelineDescriptor, depthStencilDescriptor, encoder.handle,
-                renderer.entity.transform._isFrontFaceInvert())
-
-        let pso = cache.requestGraphicsPipeline(pipelineDescriptor)
-        encoder.bind(depthStencilState: depthStencilDescriptor, cache)
-        encoder.bind(camera: camera, pso, cache)
-        encoder.bind(material: material, pso, cache)
-        encoder.bind(renderer: renderer, pso, cache)
-        encoder.bind(scene: camera.scene, pso, cache)
-        encoder.bind(mesh: mesh)
-        encoder.draw(subMesh: element.subMesh, with: mesh)
+        if let mesh {
+            pipelineDescriptor.vertexDescriptor = mesh._vertexDescriptor
+            element.shaderPass.renderState!._apply(pipelineDescriptor, depthStencilDescriptor, encoder.handle,
+                                                   renderer.entity.transform._isFrontFaceInvert())
+            
+            let pso = cache.requestGraphicsPipeline(pipelineDescriptor)
+            encoder.bind(depthStencilState: depthStencilDescriptor, cache)
+            encoder.bind(camera: camera, pso, cache)
+            encoder.bind(material: material, pso, cache)
+            encoder.bind(renderer: renderer, pso, cache)
+            encoder.bind(scene: camera.scene, pso, cache)
+            encoder.bind(mesh: mesh)
+            encoder.draw(subMesh: element.subMesh!, with: mesh)
+        }
     }
 }

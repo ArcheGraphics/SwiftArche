@@ -15,9 +15,15 @@ public struct RenderElement {
     /// Shader Pass
     public var shaderPass: ShaderPass
     /// Mesh.
-    public var mesh: Mesh
+    public var mesh: Mesh?
     /// Sub mesh.
-    public var subMesh: SubMesh
+    public var subMesh: SubMesh?
+    
+    public init(_ renderer: Renderer, _ material: Material, _ shaderPass: ShaderPass) {
+        self.renderer = renderer
+        self.material = material
+        self.shaderPass = shaderPass
+    }
 
     public init(_ renderer: Renderer, _ mesh: Mesh, _ subMesh: SubMesh, _ material: Material, _ shaderPass: ShaderPass) {
         self.renderer = renderer
