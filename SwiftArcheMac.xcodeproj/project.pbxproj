@@ -146,6 +146,24 @@
 		3EBA3D1629B8891300E5FB42 /* WireframePrimitive.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8CB37C6DA6DAEFDC5A2A4 /* WireframePrimitive.swift */; };
 		3EBA3D1729B8891300E5FB42 /* EngineVisualizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8C0CC365128B7B18E4074 /* EngineVisualizer.swift */; };
 		3EBA3D1B29B9726700E5FB42 /* GlyphDescriptor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EBA3D1A29B9726700E5FB42 /* GlyphDescriptor.swift */; };
+		3EBA3D1F29B97DD900E5FB42 /* MTLFontAtlasDescriptor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EBA3D1E29B97DD900E5FB42 /* MTLFontAtlasDescriptor.swift */; };
+		3EBA3D2729B9873B00E5FB42 /* MetalError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EBA3D2629B9873B00E5FB42 /* MetalError.swift */; };
+		3EBA3D2929B99C4900E5FB42 /* MTL+Codable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EBA3D2829B99C4900E5FB42 /* MTL+Codable.swift */; };
+		3EBA3D2B29B99CB200E5FB42 /* MTLDevice+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EBA3D2A29B99CB200E5FB42 /* MTLDevice+Extensions.swift */; };
+		3EBA3D2D29B99CEF00E5FB42 /* MTLDevice+Features.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EBA3D2C29B99CEF00E5FB42 /* MTLDevice+Features.swift */; };
+		3EBA3D2F29B99D0500E5FB42 /* MTLOrigin+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EBA3D2E29B99D0500E5FB42 /* MTLOrigin+Extensions.swift */; };
+		3EBA3D3129B99D1200E5FB42 /* MTLPixelFormat+CVPixelFormat.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EBA3D3029B99D1200E5FB42 /* MTLPixelFormat+CVPixelFormat.swift */; };
+		3EBA3D3329B99D2400E5FB42 /* MTLPixelFormat+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EBA3D3229B99D2400E5FB42 /* MTLPixelFormat+Extensions.swift */; };
+		3EBA3D3529B99D3200E5FB42 /* MTLRegion+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EBA3D3429B99D3200E5FB42 /* MTLRegion+Extensions.swift */; };
+		3EBA3D3729B99D5600E5FB42 /* MTLResource+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EBA3D3629B99D5600E5FB42 /* MTLResource+Extensions.swift */; };
+		3EBA3D3929B99D6100E5FB42 /* MTLSize+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EBA3D3829B99D6100E5FB42 /* MTLSize+Extensions.swift */; };
+		3EBA3D3B29B99D6E00E5FB42 /* MTLSizeAndAlign+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EBA3D3A29B99D6E00E5FB42 /* MTLSizeAndAlign+Extensions.swift */; };
+		3EBA3D3D29B99D7A00E5FB42 /* MTLTexture+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EBA3D3C29B99D7A00E5FB42 /* MTLTexture+Extensions.swift */; };
+		3EBA3D3F29B99D8600E5FB42 /* MTLTexture+Serialization.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EBA3D3E29B99D8600E5FB42 /* MTLTexture+Serialization.swift */; };
+		3EBA3D4129B99D9200E5FB42 /* MTLTextureDescriptor+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EBA3D4029B99D9200E5FB42 /* MTLTextureDescriptor+Extensions.swift */; };
+		3EBA3D4329B99D9E00E5FB42 /* MTLTextureDescriptor+Serialization.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EBA3D4229B99D9E00E5FB42 /* MTLTextureDescriptor+Serialization.swift */; };
+		3EBA3D4429B9A07400E5FB42 /* MTLFontAtlas.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EBA3D1C29B97D9800E5FB42 /* MTLFontAtlas.swift */; };
+		3EBA3D4529B9A07400E5FB42 /* MTLFontAtlasCodableContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EBA3D2029B97E0700E5FB42 /* MTLFontAtlasCodableContainer.swift */; };
 		3EC0370529321131002187DC /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EC0370429321131002187DC /* AppDelegate.swift */; };
 		3EC0370E29321132002187DC /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3EC0370D29321132002187DC /* Assets.xcassets */; };
 		3EC0371129321132002187DC /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3EC0370F29321132002187DC /* Main.storyboard */; };
@@ -843,6 +861,25 @@
 		3EBA3D1229B8579800E5FB42 /* TriangleSubpass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TriangleSubpass.swift; sourceTree = "<group>"; };
 		3EBA3D1429B85D6C00E5FB42 /* VisualizationParameter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VisualizationParameter.swift; sourceTree = "<group>"; };
 		3EBA3D1A29B9726700E5FB42 /* GlyphDescriptor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlyphDescriptor.swift; sourceTree = "<group>"; };
+		3EBA3D1C29B97D9800E5FB42 /* MTLFontAtlas.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MTLFontAtlas.swift; sourceTree = "<group>"; };
+		3EBA3D1E29B97DD900E5FB42 /* MTLFontAtlasDescriptor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MTLFontAtlasDescriptor.swift; sourceTree = "<group>"; };
+		3EBA3D2029B97E0700E5FB42 /* MTLFontAtlasCodableContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MTLFontAtlasCodableContainer.swift; sourceTree = "<group>"; };
+		3EBA3D2329B9869300E5FB42 /* MTLTextureCodable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MTLTextureCodable.swift; sourceTree = "<group>"; };
+		3EBA3D2629B9873B00E5FB42 /* MetalError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MetalError.swift; sourceTree = "<group>"; };
+		3EBA3D2829B99C4900E5FB42 /* MTL+Codable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MTL+Codable.swift"; sourceTree = "<group>"; };
+		3EBA3D2A29B99CB200E5FB42 /* MTLDevice+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MTLDevice+Extensions.swift"; sourceTree = "<group>"; };
+		3EBA3D2C29B99CEF00E5FB42 /* MTLDevice+Features.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MTLDevice+Features.swift"; sourceTree = "<group>"; };
+		3EBA3D2E29B99D0500E5FB42 /* MTLOrigin+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MTLOrigin+Extensions.swift"; sourceTree = "<group>"; };
+		3EBA3D3029B99D1200E5FB42 /* MTLPixelFormat+CVPixelFormat.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MTLPixelFormat+CVPixelFormat.swift"; sourceTree = "<group>"; };
+		3EBA3D3229B99D2400E5FB42 /* MTLPixelFormat+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MTLPixelFormat+Extensions.swift"; sourceTree = "<group>"; };
+		3EBA3D3429B99D3200E5FB42 /* MTLRegion+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MTLRegion+Extensions.swift"; sourceTree = "<group>"; };
+		3EBA3D3629B99D5600E5FB42 /* MTLResource+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MTLResource+Extensions.swift"; sourceTree = "<group>"; };
+		3EBA3D3829B99D6100E5FB42 /* MTLSize+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MTLSize+Extensions.swift"; sourceTree = "<group>"; };
+		3EBA3D3A29B99D6E00E5FB42 /* MTLSizeAndAlign+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MTLSizeAndAlign+Extensions.swift"; sourceTree = "<group>"; };
+		3EBA3D3C29B99D7A00E5FB42 /* MTLTexture+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MTLTexture+Extensions.swift"; sourceTree = "<group>"; };
+		3EBA3D3E29B99D8600E5FB42 /* MTLTexture+Serialization.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MTLTexture+Serialization.swift"; sourceTree = "<group>"; };
+		3EBA3D4029B99D9200E5FB42 /* MTLTextureDescriptor+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MTLTextureDescriptor+Extensions.swift"; sourceTree = "<group>"; };
+		3EBA3D4229B99D9E00E5FB42 /* MTLTextureDescriptor+Serialization.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MTLTextureDescriptor+Serialization.swift"; sourceTree = "<group>"; };
 		3EC0370129321131002187DC /* SwiftArcheMac.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SwiftArcheMac.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		3EC0370429321131002187DC /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		3EC0370D29321132002187DC /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -1842,8 +1879,41 @@
 			isa = PBXGroup;
 			children = (
 				3EBA3D1A29B9726700E5FB42 /* GlyphDescriptor.swift */,
+				3EBA3D1E29B97DD900E5FB42 /* MTLFontAtlasDescriptor.swift */,
+				3EBA3D1C29B97D9800E5FB42 /* MTLFontAtlas.swift */,
+				3EBA3D2029B97E0700E5FB42 /* MTLFontAtlasCodableContainer.swift */,
 			);
 			path = text;
+			sourceTree = "<group>";
+		};
+		3EBA3D2229B9866A00E5FB42 /* texture */ = {
+			isa = PBXGroup;
+			children = (
+				3EBA3D2329B9869300E5FB42 /* MTLTextureCodable.swift */,
+			);
+			path = texture;
+			sourceTree = "<group>";
+		};
+		3EBA3D2529B9872D00E5FB42 /* gpu */ = {
+			isa = PBXGroup;
+			children = (
+				3EBA3D2629B9873B00E5FB42 /* MetalError.swift */,
+				3EBA3D2829B99C4900E5FB42 /* MTL+Codable.swift */,
+				3EBA3D2E29B99D0500E5FB42 /* MTLOrigin+Extensions.swift */,
+				3EBA3D3429B99D3200E5FB42 /* MTLRegion+Extensions.swift */,
+				3EBA3D3829B99D6100E5FB42 /* MTLSize+Extensions.swift */,
+				3EBA3D3A29B99D6E00E5FB42 /* MTLSizeAndAlign+Extensions.swift */,
+				3EBA3D2A29B99CB200E5FB42 /* MTLDevice+Extensions.swift */,
+				3EBA3D2C29B99CEF00E5FB42 /* MTLDevice+Features.swift */,
+				3EBA3D3029B99D1200E5FB42 /* MTLPixelFormat+CVPixelFormat.swift */,
+				3EBA3D3229B99D2400E5FB42 /* MTLPixelFormat+Extensions.swift */,
+				3EBA3D3629B99D5600E5FB42 /* MTLResource+Extensions.swift */,
+				3EBA3D3C29B99D7A00E5FB42 /* MTLTexture+Extensions.swift */,
+				3EBA3D3E29B99D8600E5FB42 /* MTLTexture+Serialization.swift */,
+				3EBA3D4029B99D9200E5FB42 /* MTLTextureDescriptor+Extensions.swift */,
+				3EBA3D4229B99D9E00E5FB42 /* MTLTextureDescriptor+Serialization.swift */,
+			);
+			path = gpu;
 			sourceTree = "<group>";
 		};
 		3EC036F829321131002187DC = {
@@ -2138,6 +2208,8 @@
 				3EC0388E29321826002187DC /* bridging.h */,
 				3EC03868293216F1002187DC /* enums */,
 				3EC0386729321551002187DC /* base */,
+				3EBA3D2529B9872D00E5FB42 /* gpu */,
+				3EBA3D2229B9866A00E5FB42 /* texture */,
 				3EC0386D29321718002187DC /* shader */,
 				3EC0386A29321700002187DC /* material */,
 				3EC0386B29321707002187DC /* mesh */,
@@ -3413,6 +3485,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3EBA3D3B29B99D6E00E5FB42 /* MTLSizeAndAlign+Extensions.swift in Sources */,
 				3EC0394B293218A3002187DC /* StencilState.swift in Sources */,
 				3EC03954293218B3002187DC /* ForwardSubpass.swift in Sources */,
 				3EC0397A293218C3002187DC /* Mesh.swift in Sources */,
@@ -3426,6 +3499,7 @@
 				3EC039C4293218FB002187DC /* AnimatorControllerLayer.swift in Sources */,
 				3EC03961293218BA002187DC /* ReflectionUniform.swift in Sources */,
 				3EC0389729321826002187DC /* Camera.swift in Sources */,
+				3EBA3D2B29B99CB200E5FB42 /* MTLDevice+Extensions.swift in Sources */,
 				3EB32B912932391F0019A4F3 /* PointerManager.swift in Sources */,
 				3EC03960293218BA002187DC /* DevicePipeline.swift in Sources */,
 				3EACA08B29A46CE300F08BB2 /* MeshColliderShape.swift in Sources */,
@@ -3443,6 +3517,7 @@
 				3EC039E929321918002187DC /* PlayState.swift in Sources */,
 				3E1412FB29B5A6BD00099BF1 /* ControllerColliderHit.swift in Sources */,
 				3EC92AE5293D8FA500423396 /* TransparentShadowMaterial.swift in Sources */,
+				3EBA3D3929B99D6100E5FB42 /* MTLSize+Extensions.swift in Sources */,
 				3EC038E629321845002187DC /* PhysXJoint.swift in Sources */,
 				3EC039D829321910002187DC /* PositionAnimationCurveOwnerAssembler.swift in Sources */,
 				3EC03949293218A3002187DC /* BlendState.swift in Sources */,
@@ -3451,6 +3526,7 @@
 				3EC03967293218BA002187DC /* ComputePass.swift in Sources */,
 				3EC039AA293218F0002187DC /* BoolUpdateFlag.swift in Sources */,
 				3EC039D729321910002187DC /* IAnimationCurveOwnerAssembler.swift in Sources */,
+				3EBA3D4329B99D9E00E5FB42 /* MTLTextureDescriptor+Serialization.swift in Sources */,
 				3EC03A022932192D002187DC /* Background.swift in Sources */,
 				3EB32B8D293239170019A4F3 /* InputManager.swift in Sources */,
 				040F1DC2293393E2008BDC8D /* KeyboardManager.swift in Sources */,
@@ -3480,6 +3556,7 @@
 				3EC0390929321862002187DC /* GLTFLoader.swift in Sources */,
 				3EC03981293218C3002187DC /* PrimitiveMesh.swift in Sources */,
 				3EBA3D0A29B83CA700E5FB42 /* Gizmos.swift in Sources */,
+				3EBA3D4129B99D9200E5FB42 /* MTLTextureDescriptor+Extensions.swift in Sources */,
 				3EC039F929321920002187DC /* AnimationQuaternionCurve.swift in Sources */,
 				3EC038F02932184C002187DC /* ColliderShapeUpAxis.swift in Sources */,
 				3EC0390629321862002187DC /* GLTFAsset.m in Sources */,
@@ -3493,6 +3570,7 @@
 				3EC039AB293218F0002187DC /* ListenerUpdateFlag .swift in Sources */,
 				3EC039332932188D002187DC /* CascadedShadowSubpass.swift in Sources */,
 				3EC038B329321835002187DC /* Collider.swift in Sources */,
+				3EBA3D3329B99D2400E5FB42 /* MTLPixelFormat+Extensions.swift in Sources */,
 				3EC039CF29321903002187DC /* AnimatorStatePlayData.swift in Sources */,
 				3EC03988293218CB002187DC /* PBRMaterial.swift in Sources */,
 				3EC0393929321893002187DC /* ShadowType.swift in Sources */,
@@ -3500,7 +3578,9 @@
 				3EC0398B293218CB002187DC /* UnlitMaterial.swift in Sources */,
 				3EC038B729321835002187DC /* StaticCollider.swift in Sources */,
 				3EC03946293218A3002187DC /* DepthState.swift in Sources */,
+				3EBA3D4529B9A07400E5FB42 /* MTLFontAtlasCodableContainer.swift in Sources */,
 				3EC039F429321920002187DC /* AnimationVector4Curve.swift in Sources */,
+				3EBA3D2729B9873B00E5FB42 /* MetalError.swift in Sources */,
 				3EC03980293218C3002187DC /* BufferView.swift in Sources */,
 				3EC0389F29321826002187DC /* Layer.swift in Sources */,
 				3EC03A042932192D002187DC /* BackgroundSubpass.swift in Sources */,
@@ -3508,8 +3588,10 @@
 				3EC03975293218C3002187DC /* BlendShapeManager.swift in Sources */,
 				3EC03963293218BA002187DC /* RenderPipelineState.swift in Sources */,
 				3EC039172932186A002187DC /* TextureParser.swift in Sources */,
+				3EBA3D3129B99D1200E5FB42 /* MTLPixelFormat+CVPixelFormat.swift in Sources */,
 				3EC039C1293218FB002187DC /* AnimationClip.swift in Sources */,
 				3EC03997293218DA002187DC /* PointLight.swift in Sources */,
+				3EBA3D3D29B99D7A00E5FB42 /* MTLTexture+Extensions.swift in Sources */,
 				3EBA3D1329B8579800E5FB42 /* TriangleSubpass.swift in Sources */,
 				040F1DC0293392FA008BDC8D /* WheelManager.swift in Sources */,
 				3EC038F12932184C002187DC /* ControllerNonWalkableMode.swift in Sources */,
@@ -3526,6 +3608,7 @@
 				3EC039FA29321920002187DC /* AnimationBoolCurve.swift in Sources */,
 				3EC039BD293218FB002187DC /* StateMachineScript.swift in Sources */,
 				3EC0389E29321826002187DC /* Component.swift in Sources */,
+				3EBA3D3F29B99D8600E5FB42 /* MTLTexture+Serialization.swift in Sources */,
 				3EC03966293218BA002187DC /* Subpass.swift in Sources */,
 				3EC0389329321826002187DC /* Engine.swift in Sources */,
 				040F1DDD2934E89F008BDC8D /* GUIShader.swift in Sources */,
@@ -3551,6 +3634,7 @@
 				3EC038CB2932183D002187DC /* PhysXSphereColliderShape.swift in Sources */,
 				3EC038AF29321835002187DC /* PhysXCollider.swift in Sources */,
 				3EC0393729321893002187DC /* ShadowCascadesMode.swift in Sources */,
+				3EBA3D4429B9A07400E5FB42 /* MTLFontAtlas.swift in Sources */,
 				3EC0392B29321885002187DC /* SkyBoxMaterial.swift in Sources */,
 				040F1E12293B4436008BDC8D /* PostprocessManager.swift in Sources */,
 				3EC0398F293218D1002187DC /* TextureCoordinate.swift in Sources */,
@@ -3564,6 +3648,7 @@
 				3EC038C72932183D002187DC /* PhysXCapsuleColliderShape.swift in Sources */,
 				3EC038A129321826002187DC /* Script.swift in Sources */,
 				3EC0397D293218C3002187DC /* ModelMesh.swift in Sources */,
+				3EBA3D2F29B99D0500E5FB42 /* MTLOrigin+Extensions.swift in Sources */,
 				3EC039192932186A002187DC /* Parser.swift in Sources */,
 				3EC03989293218CB002187DC /* PBRBaseMaterial.swift in Sources */,
 				3EACA08929A4604600F08BB2 /* PhysXMeshColliderShape.swift in Sources */,
@@ -3577,12 +3662,15 @@
 				3EC0389629321826002187DC /* SceneManager.swift in Sources */,
 				3EC038C42932183D002187DC /* PhysXBoxColliderShape.swift in Sources */,
 				3EC03A052932192D002187DC /* BackgroundTextureFillMode.swift in Sources */,
+				3EBA3D2D29B99CEF00E5FB42 /* MTLDevice+Features.swift in Sources */,
 				3EC0390429321862002187DC /* GLTFResource.swift in Sources */,
 				3EC038B629321835002187DC /* PhysXPhysics.swift in Sources */,
 				3EC039C7293218FB002187DC /* Keyframe.swift in Sources */,
+				3EBA3D3529B99D3200E5FB42 /* MTLRegion+Extensions.swift in Sources */,
 				3EC039302932188D002187DC /* ShadowUtils.swift in Sources */,
 				3EC038E329321845002187DC /* PhysXSpringJoint.swift in Sources */,
 				3EC038F22932184C002187DC /* HingeJointFlag.swift in Sources */,
+				3EBA3D1F29B97DD900E5FB42 /* MTLFontAtlasDescriptor.swift in Sources */,
 				3EC039C2293218FB002187DC /* AnimationEvent.swift in Sources */,
 				3EBA3D1B29B9726700E5FB42 /* GlyphDescriptor.swift in Sources */,
 				3EC03998293218DA002187DC /* AmbientLight.swift in Sources */,
@@ -3608,6 +3696,7 @@
 				3EC039C0293218FB002187DC /* AnimatorController.swift in Sources */,
 				3EBA3D1129B8578E00E5FB42 /* LineSubpass.swift in Sources */,
 				3EC0389C29321826002187DC /* Entity.swift in Sources */,
+				3EBA3D3729B99D5600E5FB42 /* MTLResource+Extensions.swift in Sources */,
 				3EC039AD293218F0002187DC /* Time.swift in Sources */,
 				3EC039322932188D002187DC /* ShadowManager.swift in Sources */,
 				3EC03947293218A3002187DC /* RasterState.swift in Sources */,
@@ -3631,6 +3720,7 @@
 				3EC039E229321918002187DC /* AnimatorConditionMode.swift in Sources */,
 				3EC039C5293218FB002187DC /* AnimatorState.swift in Sources */,
 				3EC0389B29321826002187DC /* CameraInfo.swift in Sources */,
+				3EBA3D2929B99C4900E5FB42 /* MTL+Codable.swift in Sources */,
 				3EC039FB29321920002187DC /* AnimationFloatCurve.swift in Sources */,
 				3E6D2F01293E13DF00B63F73 /* BufferPool.swift in Sources */,
 			);
