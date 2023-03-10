@@ -62,7 +62,7 @@ open class GeometrySubpass: Subpass {
         }
     }
     
-    public func _drawBatcher(_ encoder: inout RenderCommandEncoder, _ batcher: Batcher) {
+    public func _drawBatcher<B: Batcher>(_ encoder: inout RenderCommandEncoder, _ batcher: B) {
         let pipeline = _renderPass.pipeline!
         batcher.drawBatcher(&encoder, pipeline.camera, pipeline._resourceCache)
     }

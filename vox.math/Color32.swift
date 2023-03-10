@@ -87,3 +87,12 @@ public struct Color32 {
 
 extension Color32: Codable {
 }
+
+extension Color {
+    public init(_ color32: Color32) {
+        elements = SIMD4<Float>(Float(color32.r) / 255,
+                                Float(color32.g) / 255,
+                                Float(color32.b) / 255,
+                                Float(color32.a) / 255)
+    }
+}

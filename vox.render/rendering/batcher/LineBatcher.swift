@@ -112,6 +112,7 @@ class LineBatcher : Batcher {
         }
     }
     
+    // MARK: - Render
     func prepare(_ encoder: MTLRenderCommandEncoder, _ cache: ResourceCache) {
         var desc = MTLVertexAttributeDescriptor()
         desc.format = .float3
@@ -146,7 +147,7 @@ class LineBatcher : Batcher {
         _depthStencilState = cache.requestDepthStencilState(_depthStencilDescriptor)
     }
     
-    override func drawBatcher(_ encoder: inout RenderCommandEncoder, _ camera: Camera, _ cache: ResourceCache) {
+    func drawBatcher(_ encoder: inout RenderCommandEncoder, _ camera: Camera, _ cache: ResourceCache) {
         encoder.handle.pushDebugGroup("Line Gizmo Subpass")
         if (_pso == nil) {
             prepare(encoder.handle, cache)
@@ -162,8 +163,6 @@ class LineBatcher : Batcher {
             encoder.handle.setVertexBuffer(colorBuffer.buffer, offset: 0, index: 1)
             encoder.handle.drawPrimitives(type: .line, vertexStart: 0,
                                           vertexCount: numVerts, instanceCount: 1)
-            // flush
-            numVerts = 0
         }
         
         if indicesCount > 0,
@@ -176,5 +175,11 @@ class LineBatcher : Batcher {
                                                  indexBuffer: indirectIndicesBuffer.buffer, indexBufferOffset: 0)
         }
         encoder.handle.popDebugGroup()
+        flush()
+    }
+    
+    func flush() {
+        numVerts = 0
+        indicesCount = 0
     }
 }

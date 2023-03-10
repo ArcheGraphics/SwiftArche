@@ -8,6 +8,8 @@ import Metal
 import vox_math
 
 class TextBatcher: Batcher {
+    static var _ins: TextBatcher!
+
     struct BatcherData {
         let device: MTLDevice
         
@@ -17,7 +19,7 @@ class TextBatcher: Batcher {
         var count: Int = 0
         var material: Material!
         var shaderPass: ShaderPass!
-        var renderer: Renderer!
+        var color: Color = Color()
         var texture: MTLTexture!
         
         var verticeArray: [Vector3] = []
@@ -55,25 +57,46 @@ class TextBatcher: Batcher {
     
     var batcherBuffer: [BatcherData] = []
     var currentBufferCount: Int = 0
-    var shaderMacro = ShaderMacroCollection()
-    private var _batchedQueue: [RenderElement] = []
     private let _descriptor = MTLVertexDescriptor()
-    private var _engine: Engine
-
-    init(_ engine: Engine) {
-        _engine = engine
-    }
+    private var _engine: Engine!
+    private var _lastColor: Color?
+    private var _lastElement: RenderElement?
     
-    func appendElement(_ element: RenderElement) {
-        _batchedQueue.append(element)
-    }
-    
-    func flush() {
-        currentBufferCount = 0
-        for i in 0..<batcherBuffer.count {
-            batcherBuffer[i].reset()
+    static var ins: TextBatcher {
+        if _ins == nil {
+            _ins = TextBatcher()
         }
-        _batchedQueue = []
+        return _ins
+    }
+
+    var containData: Bool {
+        currentBufferCount != 0
+    }
+        
+    func set(_ engine: Engine) {
+        self._engine = engine
+    }
+    
+    func appendElement(_ curElement: RenderElement) {
+        if _lastElement != nil && !canBatch(preElement: _lastElement!, curElement: curElement) {
+            batcherBuffer[currentBufferCount].syncToGPU()
+            currentBufferCount += 1
+        }
+        _addBatchData(curElement, at: currentBufferCount)
+        _lastElement = curElement
+        batcherBuffer[currentBufferCount].syncToGPU()
+    }
+    
+    func appendElement(vertices: [Vector3], texCoords: [Vector2], indices: [UInt32], color: Color,
+                       fontAtlas: MTLTexture, material: Material) {
+        if _lastColor != color {
+            batcherBuffer[currentBufferCount].syncToGPU()
+            currentBufferCount += 1
+        }
+        _addBatchData(vertices, texCoords, indices, color, fontAtlas,
+                      material, at: currentBufferCount)
+        _lastColor = color
+        batcherBuffer[currentBufferCount].syncToGPU()
     }
     
     func canBatch(preElement: RenderElement, curElement: RenderElement) -> Bool {
@@ -102,48 +125,44 @@ class TextBatcher: Batcher {
         left.maskLayer == right.maskLayer
     }
     
-    func _updateData() {
-        var preElement: RenderElement?
-        for curElement in _batchedQueue {
-            if preElement != nil && !canBatch(preElement: preElement!, curElement: curElement) {
-                batcherBuffer[currentBufferCount].syncToGPU()
-                currentBufferCount += 1
-            }
-            _addBatchData(curElement, at: currentBufferCount)
-            preElement = curElement
-        }
-        batcherBuffer[currentBufferCount].syncToGPU()
-    }
-    
     func _addBatchData(_ element: RenderElement, at currentBufferCount: Int) {
         let textRenderer = element.renderer as! TextRenderer
+        _addBatchData(textRenderer.worldVertice, textRenderer.texCoords, textRenderer.indices,
+                      textRenderer.color, textRenderer.fontAtlas!.fontAtlasTexture,
+                      element.material, at: currentBufferCount)
+    }
+    
+    func _addBatchData(_ vertices: [Vector3], _ texCoords: [Vector2],
+                       _ indices: [UInt32], _ color: Color, _ fontAtlas: MTLTexture,
+                       _ material: Material, at currentBufferCount: Int) {
         if currentBufferCount >= batcherBuffer.count {
             var batcherData = BatcherData(device: _engine.device)
-            batcherData.renderer = textRenderer
-            batcherData.material = element.material
-            batcherData.shaderPass = element.shaderPass
-            batcherData.texture = textRenderer.fontAtlas!.fontAtlasTexture
+            batcherData.color = color
+            batcherData.material = material
+            batcherData.shaderPass = material.shader[0]
+            batcherData.texture = fontAtlas
             
-            batcherData.verticeArray.append(contentsOf: textRenderer.worldVertice)
-            batcherData.uvArray.append(contentsOf: textRenderer.texCoords)
-            batcherData.indexArray.append(contentsOf: textRenderer.indices)
-            batcherData.count += textRenderer.indices.count
+            batcherData.verticeArray.append(contentsOf: vertices)
+            batcherData.uvArray.append(contentsOf: texCoords)
+            batcherData.indexArray.append(contentsOf: indices)
+            batcherData.count += indices.count
             batcherBuffer.append(batcherData)
         } else {
-            batcherBuffer[currentBufferCount].renderer = textRenderer
-            batcherBuffer[currentBufferCount].material = element.material
-            batcherBuffer[currentBufferCount].shaderPass = element.shaderPass
-            batcherBuffer[currentBufferCount].texture = textRenderer.fontAtlas!.fontAtlasTexture
+            batcherBuffer[currentBufferCount].color = color
+            batcherBuffer[currentBufferCount].material = material
+            batcherBuffer[currentBufferCount].shaderPass = material.shader[0]
+            batcherBuffer[currentBufferCount].texture = fontAtlas
             let offset = batcherBuffer[currentBufferCount].verticeArray.count
-            batcherBuffer[currentBufferCount].verticeArray.append(contentsOf: textRenderer.worldVertice)
-            batcherBuffer[currentBufferCount].uvArray.append(contentsOf: textRenderer.texCoords)
-            batcherBuffer[currentBufferCount].indexArray.append(contentsOf: textRenderer.indices.map({ v in
+            batcherBuffer[currentBufferCount].verticeArray.append(contentsOf: vertices)
+            batcherBuffer[currentBufferCount].uvArray.append(contentsOf: texCoords)
+            batcherBuffer[currentBufferCount].indexArray.append(contentsOf: indices.map({ v in
                 v + UInt32(offset)
             }))
-            batcherBuffer[currentBufferCount].count += textRenderer.indices.count
+            batcherBuffer[currentBufferCount].count += indices.count
         }
     }
     
+    // MARK: - Render
     public func prepare(_ pipelineDescriptor: MTLRenderPipelineDescriptor,
                         _ depthStencilDescriptor: MTLDepthStencilDescriptor) {
         pipelineDescriptor.label = "Forward Pipeline"
@@ -168,31 +187,27 @@ class TextBatcher: Batcher {
         _descriptor.layouts[1].stride = MemoryLayout<Vector2>.stride
     }
 
-    override func drawBatcher(_ encoder: inout RenderCommandEncoder, _ camera: Camera, _ cache: ResourceCache) {
-        if !_batchedQueue.isEmpty {
-            _updateData()
+    func drawBatcher(_ encoder: inout RenderCommandEncoder, _ camera: Camera, _ cache: ResourceCache) {
+        if currentBufferCount > 0 {
             for data in batcherBuffer {
                 let pipelineDescriptor = MTLRenderPipelineDescriptor()
                 let depthStencilDescriptor = MTLDepthStencilDescriptor()
                 prepare(pipelineDescriptor, depthStencilDescriptor)
                 
-                ShaderMacroCollection.unionCollection(data.material.shaderData._macroCollection,
-                                                      data.renderer._globalShaderMacro, shaderMacro)
-                
-                let functions = cache.requestShaderModule(data.shaderPass, shaderMacro)
+                let functions = cache.requestShaderModule(data.shaderPass, data.material.shaderData._macroCollection)
                 pipelineDescriptor.vertexFunction = functions[0]
                 pipelineDescriptor.fragmentFunction = functions[1]
                 pipelineDescriptor.vertexDescriptor = _descriptor
-                data.shaderPass.renderState!._apply(pipelineDescriptor, depthStencilDescriptor, encoder.handle,
-                                                    data.renderer.entity.transform._isFrontFaceInvert())
+                data.shaderPass.renderState!._apply(pipelineDescriptor, depthStencilDescriptor, encoder.handle, false)
                 
                 let pso = cache.requestGraphicsPipeline(pipelineDescriptor)
                 encoder.bind(depthStencilState: depthStencilDescriptor, cache)
                 encoder.bind(camera: camera, pso, cache)
                 encoder.bind(material: data.material, pso, cache)
-                encoder.bind(renderer: data.renderer, pso, cache)
                 encoder.bind(scene: camera.scene, pso, cache)
                 
+                var color = data.color
+                encoder.handle.setFragmentBytes(&color, length: MemoryLayout<Color>.stride, index: 0)
                 encoder.handle.setFragmentTexture(data.texture, index: 0)
                 encoder.handle.setVertexBuffer(data.position!.buffer, offset: 0, index: 0)
                 encoder.handle.setVertexBuffer(data.uv!.buffer, offset: 0, index: 1)
@@ -201,5 +216,14 @@ class TextBatcher: Batcher {
             }
             flush()
         }
+    }
+    
+    func flush() {
+        currentBufferCount = 0
+        for i in 0..<batcherBuffer.count {
+            batcherBuffer[i].reset()
+        }
+        _lastElement = nil
+        _lastColor = nil
     }
 }

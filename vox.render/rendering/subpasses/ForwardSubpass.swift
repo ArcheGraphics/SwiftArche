@@ -7,13 +7,6 @@
 import Metal
 
 public class ForwardSubpass: GeometrySubpass {
-    var textBatcher: TextBatcher!
-    
-    override func setRenderPass(_ renderPass: RenderPass) {
-        super.setRenderPass(renderPass)
-        textBatcher = TextBatcher(renderPass.pipeline.camera.engine)
-    }
-    
     public override func prepare(_ pipelineDescriptor: MTLRenderPipelineDescriptor,
                                  _ depthStencilDescriptor: MTLDepthStencilDescriptor) {
         pipelineDescriptor.label = "Forward Pipeline"
@@ -37,31 +30,31 @@ public class ForwardSubpass: GeometrySubpass {
         // opaque
         for element in pipeline._opaqueQueue {
             if element.renderer is TextRenderer {
-                textBatcher.appendElement(element)
+                TextBatcher.ins.appendElement(element)
             } else {
                 super._drawElement(&encoder, element)
             }
         }
-        super._drawBatcher(&encoder, textBatcher)
+        super._drawBatcher(&encoder, TextBatcher.ins)
         
         // alphaTest
         for element in pipeline._alphaTestQueue {
             if element.renderer is TextRenderer {
-                textBatcher.appendElement(element)
+                TextBatcher.ins.appendElement(element)
             } else {
                 super._drawElement(&encoder, element)
             }
         }
-        super._drawBatcher(&encoder, textBatcher)
+        super._drawBatcher(&encoder, TextBatcher.ins)
 
         // transparent
         for element in pipeline._transparentQueue {
             if element.renderer is TextRenderer {
-                textBatcher.appendElement(element)
+                TextBatcher.ins.appendElement(element)
             } else {
                 super._drawElement(&encoder, element)
             }
         }
-        super._drawBatcher(&encoder, textBatcher)
+        super._drawBatcher(&encoder, TextBatcher.ins)
     }
 }

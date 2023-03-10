@@ -26,6 +26,14 @@ class GUIManager {
         PointBatcher.ins.set(engine)
         LineBatcher.ins.set(engine)
         TriangleBatcher.ins.set(engine)
+        
+        TextBatcher.ins.set(engine)
+        let shader = ShaderPass(engine.library(), "vertex_text", "fragment_text")
+        shader.setRenderQueueType(.Transparent)
+        shader._renderState!.rasterState.cullMode = .front
+        let material = Material(engine, "default text")
+        material.shader.append(shader)
+        TextRenderer._defaultMaterial = material
     }
     
     deinit {
@@ -73,6 +81,9 @@ class GUIManager {
                 }
                 if TriangleBatcher.ins.containData {
                     TriangleBatcher.ins.drawBatcher(&encoder, camera, _resourceCache)
+                }
+                if TextBatcher.ins.containData {
+                    TextBatcher.ins.drawBatcher(&encoder, camera, _resourceCache)
                 }
                 encoder.endEncoding()
             }

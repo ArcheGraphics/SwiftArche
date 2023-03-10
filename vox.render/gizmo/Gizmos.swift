@@ -155,7 +155,19 @@ public class Gizmos {
     }
     
     public static func addText(string: String, position: Vector3, color: Color32, size: Float, font: MTLFontAtlas) {
-        // TODO: Refactor TextBatcher
+        var vertices: [Vector3] = []
+        var texCoords: [Vector2] = []
+        var indices: [UInt32] = []
+        var bounds = BoundingBox()
+        TextUtils.textUpdate(fontSize: size, fontAtlas: font, string: string,
+                             vertices: &vertices, texCoords: &texCoords, indices: &indices, bounds: &bounds)
+        let worldVertice = vertices.map({ v in
+            v + position
+        })
+        
+        TextBatcher.ins.appendElement(vertices: worldVertice, texCoords: texCoords, indices: indices,
+                                      color: Color(color), fontAtlas: font.fontAtlasTexture,
+                                      material: TextRenderer._defaultMaterial)
     }
 
     public static func addArrow(posA: Vector3, posB: Vector3, color: Color32) {

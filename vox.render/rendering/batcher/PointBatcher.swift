@@ -78,6 +78,7 @@ class PointBatcher : Batcher {
         }
     }
     
+    // MARK: - Render
     func prepare(_ encoder: MTLRenderCommandEncoder, _ cache: ResourceCache) {
         var desc = MTLVertexAttributeDescriptor()
         desc.format = .float3
@@ -112,7 +113,7 @@ class PointBatcher : Batcher {
         _depthStencilState = cache.requestDepthStencilState(_depthStencilDescriptor)
     }
     
-    override func drawBatcher(_ encoder: inout RenderCommandEncoder, _ camera: Camera, _ cache: ResourceCache) {
+    func drawBatcher(_ encoder: inout RenderCommandEncoder, _ camera: Camera, _ cache: ResourceCache) {
         if let pointBuffer = pointBuffer,
            let colorBuffer = colorBuffer {
             encoder.handle.pushDebugGroup("Point Gizmo Subpass")
@@ -132,8 +133,11 @@ class PointBatcher : Batcher {
             encoder.handle.drawPrimitives(type: .point, vertexStart: 0,
                                           vertexCount: numVerts, instanceCount: 1)
             encoder.handle.popDebugGroup()
-            // flush
-            numVerts = 0
+            flush()
         }
+    }
+    
+    func flush() {
+        numVerts = 0
     }
 }
