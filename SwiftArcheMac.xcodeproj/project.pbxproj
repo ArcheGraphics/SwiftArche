@@ -104,6 +104,8 @@
 		3E6D2F0D293F137300B63F73 /* GLTFViewerApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E6D2F0C293F137300B63F73 /* GLTFViewerApp.swift */; };
 		3E6D2F0F293F14FD00B63F73 /* glTF-Sample-Models in Resources */ = {isa = PBXBuildFile; fileRef = 3E6D2F0E293F14FD00B63F73 /* glTF-Sample-Models */; };
 		3E6D2F11293F1AAB00B63F73 /* GLTFLoaderUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E6D2F10293F1AAB00B63F73 /* GLTFLoaderUtils.swift */; };
+		3E8B00D029BB637A00A70123 /* CAnimationState.mm in Sources */ = {isa = PBXBuildFile; fileRef = 3E8B00CF29BB637A00A70123 /* CAnimationState.mm */; };
+		3E8B00D429BB691200A70123 /* AnimationState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E8B00D329BB691200A70123 /* AnimationState.swift */; };
 		3EABF5C4294ABB7B009943C1 /* ParticleSystemData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EABF5C3294ABB7B009943C1 /* ParticleSystemData.swift */; };
 		3EABF5C6294AC323009943C1 /* ParticleEmitter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EABF5C5294AC323009943C1 /* ParticleEmitter.swift */; };
 		3EABF5C8294AC3F1009943C1 /* VolumeParticleEmitter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EABF5C7294AC3F1009943C1 /* VolumeParticleEmitter.swift */; };
@@ -826,6 +828,11 @@
 		3E6D2F0C293F137300B63F73 /* GLTFViewerApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GLTFViewerApp.swift; sourceTree = "<group>"; };
 		3E6D2F0E293F14FD00B63F73 /* glTF-Sample-Models */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "glTF-Sample-Models"; sourceTree = SOURCE_ROOT; };
 		3E6D2F10293F1AAB00B63F73 /* GLTFLoaderUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GLTFLoaderUtils.swift; sourceTree = "<group>"; };
+		3E8B00CF29BB637A00A70123 /* CAnimationState.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = CAnimationState.mm; sourceTree = "<group>"; };
+		3E8B00D129BB638400A70123 /* CAnimationState.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CAnimationState.h; sourceTree = "<group>"; };
+		3E8B00D229BB65AB00A70123 /* CAnimationState+Internal.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "CAnimationState+Internal.h"; sourceTree = "<group>"; };
+		3E8B00D329BB691200A70123 /* AnimationState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnimationState.swift; sourceTree = "<group>"; };
+		3E8B00D529BB693900A70123 /* bridging.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = bridging.h; sourceTree = "<group>"; };
 		3EABF5C3294ABB7B009943C1 /* ParticleSystemData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParticleSystemData.swift; sourceTree = "<group>"; };
 		3EABF5C5294AC323009943C1 /* ParticleEmitter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParticleEmitter.swift; sourceTree = "<group>"; };
 		3EABF5C7294AC3F1009943C1 /* VolumeParticleEmitter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VolumeParticleEmitter.swift; sourceTree = "<group>"; };
@@ -1819,6 +1826,18 @@
 			path = loader;
 			sourceTree = "<group>";
 		};
+		3E8B00CE29BB594D00A70123 /* ozz */ = {
+			isa = PBXGroup;
+			children = (
+				3E8B00D529BB693900A70123 /* bridging.h */,
+				3E8B00D129BB638400A70123 /* CAnimationState.h */,
+				3E8B00CF29BB637A00A70123 /* CAnimationState.mm */,
+				3E8B00D229BB65AB00A70123 /* CAnimationState+Internal.h */,
+				3E8B00D329BB691200A70123 /* AnimationState.swift */,
+			);
+			path = ozz;
+			sourceTree = "<group>";
+		};
 		3EABF5E4294C3702009943C1 /* flex */ = {
 			isa = PBXGroup;
 			children = (
@@ -2278,6 +2297,7 @@
 		3EC038662932154A002187DC /* animation */ = {
 			isa = PBXGroup;
 			children = (
+				3E8B00CE29BB594D00A70123 /* ozz */,
 				3EC0387329321754002187DC /* enums */,
 				3EC038742932175C002187DC /* internal */,
 				3EC038722932174B002187DC /* animationCurve */,
@@ -3623,6 +3643,7 @@
 				3EBA3D3D29B99D7A00E5FB42 /* MTLTexture+Extensions.swift in Sources */,
 				3EBA3D1329B8579800E5FB42 /* TriangleBatcher.swift in Sources */,
 				3EBA3D4D29B9A47900E5FB42 /* Font+Rect.swift in Sources */,
+				3E8B00D429BB691200A70123 /* AnimationState.swift in Sources */,
 				040F1DC0293392FA008BDC8D /* WheelManager.swift in Sources */,
 				3EC038F12932184C002187DC /* ControllerNonWalkableMode.swift in Sources */,
 				3EC0389829321826002187DC /* Scene.swift in Sources */,
@@ -3720,6 +3741,7 @@
 				3EC039B0293218F0002187DC /* UpdateFlagManager.swift in Sources */,
 				3EC039F629321920002187DC /* AnimationVector2Curve.swift in Sources */,
 				3EC0391A2932186B002187DC /* MaterialParser.swift in Sources */,
+				3E8B00D029BB637A00A70123 /* CAnimationState.mm in Sources */,
 				3EC038F629321853002187DC /* CharacterController.swift in Sources */,
 				3EC0395F293218BA002187DC /* RenderPass.swift in Sources */,
 				3EC039AE293218F0002187DC /* EngineObject.swift in Sources */,

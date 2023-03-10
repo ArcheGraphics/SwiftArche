@@ -13,5 +13,5 @@
 
 #include "loader/GLTFAsset.h"
 #include "loader/HDRLoader.h"
-
+#include "animation/ozz/bridging.h"
 #include "text/MTLFontAtlasProvider.h"
