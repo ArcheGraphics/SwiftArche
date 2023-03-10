@@ -2,13 +2,15 @@
 
 ## Motivation
 
-ArcheGraphics was originally designed to develop a graphics engine based on WebGPU. Therefore, the design goal of
-Arche-cpp is cross-platform versatility. This project is a heterogeneous project, aiming to design an engine based on
-Metal and Swift under the Apple platform. This design is mainly for mobile devices, especially AR scenarios, and aims to
-highlight AR-based user interaction.
+SwiftArche aims to develop an exclusive game engine for the Apple platform based on Swift and Metal. 
+This idea stems from my many practices in engine development, including the experience of developing on Vulkan, WebGPU, C++ and other platforms. 
+As a personal project, I hope to focus on a single platform to reduce the workload of development, 
+and I like the Swift language very much, I think it has the potential to be comparable to those game engines based on C#.
 
-This architecture of project is very similar to Unity's component entity pattern (not ECS). Based on entity and
-component, it is easy to combine other open-source ability
+The architecture of the entire engine adopts a component system architecture similar to Unity. 
+And similar to Unity, I will use a lot of C++ third-party libraries and bridge them through OBJC++, so the whole project is a mixed project. 
+I will try my best to improve the comments to make it easier for other developers to understand the structure of the code, 
+but I don't have much time to write additional documents. Developers can Clone this project and use Xcode to generate Apple-style documentation.
 
 ## Cloning && Install
 
@@ -28,10 +30,12 @@ git submodule update
 
 ## Feature
 
-###. ARKit integration
+Please Refer to [Demos](https://github.com/ArcheGraphics/Demo) which show some gifs.
+
+### ARKit integration
 1. Face Tracking with morph
 
-###. PhysX 
+### PhysX 
 1. Collider
 2. Character Controller
 3. Joint
