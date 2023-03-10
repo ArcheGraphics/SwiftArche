@@ -13,3 +13,6 @@
 [submodule "third_party/vhacd"]
 	path = third_party/vhacd
 	url = https://github.com/kmammou/v-hacd.git
+[submodule "assets"]
+	path = assets
+	url = https://github.com/ArcheGraphics/assets
