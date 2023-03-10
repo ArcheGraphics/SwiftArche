@@ -71,7 +71,8 @@ class GUIManager {
             renderPassDescriptor.colorAttachments[0].loadAction = .load
             // Gizmos
             if let camera = Camera.mainCamera,
-               PointBatcher.ins.containData || LineBatcher.ins.containData || TriangleBatcher.ins.containData {
+               PointBatcher.ins.containData || LineBatcher.ins.containData
+                || TriangleBatcher.ins.containData || TextBatcher.ins.containData {
                 var encoder = RenderCommandEncoder(commandBuffer, renderPassDescriptor, "gizmos")
                 if PointBatcher.ins.containData {
                     PointBatcher.ins.drawBatcher(&encoder, camera, _resourceCache)

@@ -9,6 +9,15 @@ import vox_render
 import vox_math
 import vox_toolkit
 
+fileprivate class GizmosScript: Script {
+    var atlas: MTLFontAtlas!
+    
+    override func onGUI() {
+        Gizmos.addText(string: "This is Gizmos", position: Vector3(-1, -1, 1),
+                       color: Color32(r: 124, g: 233, b: 23), size: 3, font: atlas)
+    }
+}
+
 class TextApp: NSViewController {
     var canvas: Canvas!
     var engine: Engine!
@@ -53,6 +62,8 @@ class TextApp: NSViewController {
         renderer2.string = "World"
         renderer2.color = Color(0.4, 0.2, 0.7)
         renderer2.fontSize = 2
+        
+        rootEntity.addComponent(GizmosScript.self).atlas = atlas
         
         engine.run()
     }

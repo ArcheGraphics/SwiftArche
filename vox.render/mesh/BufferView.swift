@@ -64,7 +64,7 @@ public struct BufferView {
     /// Replaces the buffer's memory with the values in the array.
     public func assign<Element>(with array: [Element]) {
         let byteCount = array.count * stride
-        precondition(byteCount == _buffer.length, "Mismatch between the byte count of the array's contents and the MTLBuffer length.")
+        precondition(byteCount <= _buffer.length, "Mismatch between the byte count of the array's contents and the MTLBuffer length.")
         _buffer.contents().copyMemory(from: array, byteCount: byteCount)
     }
 
