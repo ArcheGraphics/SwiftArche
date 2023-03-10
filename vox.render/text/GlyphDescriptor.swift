@@ -10,12 +10,12 @@ import CoreText
 
 public struct GlyphDescriptor {
     var glyphIndex: CGGlyph
-    var topLeftCoordinate: Vector2
-    var bottomRightCoordinate: Vector2
+    var topLeftCoordinate: SIMD2<Float>
+    var bottomRightCoordinate: SIMD2<Float>
 
     public init(glyphIndex: UInt,
-                topLeftCoordinate: Vector2,
-                bottomRightCoordinate: Vector2) {
+                topLeftCoordinate: SIMD2<Float>,
+                bottomRightCoordinate: SIMD2<Float>) {
         self.glyphIndex = CGGlyph(glyphIndex)
         self.topLeftCoordinate = topLeftCoordinate
         self.bottomRightCoordinate = bottomRightCoordinate

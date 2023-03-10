@@ -35,10 +35,9 @@ final public class MTLFontAtlasProvider {
         function = engine.library("vox.shader").makeFunction(name: "quantizeDistanceField")!
         pipelineState = try! engine.device.makeComputePipelineState(function: function)
 
-//        let defaultAtlas = try JSONDecoder().decode(MTLFontAtlasCodableContainer.self,
-//                        from: .init(contentsOf: Self.defaultAtlasFileURL))
-//                .fontAtlas(device: engine.device)
-//        atlasCache[Self.defaultAtlasDescriptor] = defaultAtlas
+        let defaultAtlas = try JSONDecoder().decode(MTLFontAtlasCodableContainer.self,
+                                                    from: Data(contentsOf: Self.defaultAtlasFileURL)).fontAtlas(device: engine.device)
+        atlasCache[Self.defaultAtlasDescriptor] = defaultAtlas
     }
 
     /// Provide font atlas
@@ -309,7 +308,7 @@ final public class MTLFontAtlasProvider {
     }
 
     private static let defaultAtlasFileURL = Bundle.main.url(forResource: "HelveticaNeue",
-            withExtension: "mtlfontatlas")!
+                                                             withExtension: "mtlfontatlas", subdirectory: "assets")!
     public static let defaultAtlasDescriptor = MTLFontAtlasDescriptor(fontName: "HelveticaNeue", textureSize: 2048)
 
 }
