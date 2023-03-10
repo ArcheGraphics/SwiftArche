@@ -28,14 +28,33 @@ git submodule update
 
 ## Feature
 
-1. ARKit integration
-2. PhysX
-3. Cascade Stable ShadowMap
-4. PBR Rendering (roghness-metallic, clearcoat)
-4. HDR IBL Lighting and baker (pure compute shader)
-5. Fog (Linear, Exponential, ExponentialSquared)
-6. ACES ToneMapping with auto luminance exposure
-7. Skinned Animation and Morph
+###. ARKit integration
+1. Face Tracking with morph
+
+###. PhysX 
+1. Collider
+2. Character Controller
+3. Joint
+4. Scene Query
+
+### Rendering
+1. Cascade Stable ShadowMap
+2. PBR Rendering (roghness-metallic, clearcoat)
+3. HDR IBL Lighting and baker (pure compute shader)
+4. Fog (Linear, Exponential, ExponentialSquared)
+5. ACES ToneMapping with auto luminance exposure
+6. Custom Shader with split Metal Shading Library
+
+### Animation
+1. Skinned Animation
+2. Morph Traget
+
+### Gizmos
+1. SDF Text
+2. Debugger tools with auxiliary wireframe rendering
+
+### GPGPU
+1. Fluid simulation
 
 ## Assets
 In order to speed up the speed of git clone, assets are not introduced in the way of submodule. 
