@@ -23,8 +23,6 @@ public class GLTFResource {
     public var meshes: [[ModelMesh]]?
     /** Oasis Skin after SkinParser. */
     public var skins: [Skin]?
-    /** Oasis AnimationClip after AnimationParser. */
-    public var animations: [AnimationClip]?
     /** Oasis Entity after EntityParser. */
     public var entities: [Entity]!
     /** Oasis Camera after SceneParser. */

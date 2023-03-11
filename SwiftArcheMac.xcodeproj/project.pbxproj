@@ -86,7 +86,6 @@
 		3E43DCA2295BDDDC00732AC0 /* ssf_depth_thick_shading.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3EABF5ED294CBCD4009943C1 /* ssf_depth_thick_shading.metal */; };
 		3E43DCA3295BDDE400732AC0 /* hash_grid.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3ED9BD102956767900876ABC /* hash_grid.metal */; };
 		3E43DCA4295BDDE900732AC0 /* hash_grid_visual.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3E0E0B422959C7F700B25625 /* hash_grid_visual.metal */; };
-		3E6B235C2941BF88000AC29F /* BlendShapeWeightsAnimationCurveOwnerAssembler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E6B235B2941BF88000AC29F /* BlendShapeWeightsAnimationCurveOwnerAssembler.swift */; };
 		3E6B235E294220BC000AC29F /* FaceMorphApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E6B235D294220BC000AC29F /* FaceMorphApp.swift */; };
 		3E6B2360294224C1000AC29F /* FaceGUI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E6B235F294224C1000AC29F /* FaceGUI.swift */; };
 		3E6B23C329470F30000AC29F /* quad_shading.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3E6B23C229470F30000AC29F /* quad_shading.metal */; };
@@ -378,7 +377,6 @@
 		3EC0391A2932186B002187DC /* MaterialParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EC039102932186A002187DC /* MaterialParser.swift */; };
 		3EC0391B2932186B002187DC /* MeshParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EC039112932186A002187DC /* MeshParser.swift */; };
 		3EC0391C2932186B002187DC /* ParserContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EC039122932186A002187DC /* ParserContext.swift */; };
-		3EC0391D2932186B002187DC /* AnimationParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EC039132932186A002187DC /* AnimationParser.swift */; };
 		3EC0392229321872002187DC /* KHR_materials_clearcoat.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EC0391E29321871002187DC /* KHR_materials_clearcoat.swift */; };
 		3EC0392329321872002187DC /* KHR_materials_pbrSpecularGlossiness.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EC0391F29321872002187DC /* KHR_materials_pbrSpecularGlossiness.swift */; };
 		3EC0392429321872002187DC /* KHR_texture_transform.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EC0392029321872002187DC /* KHR_texture_transform.swift */; };
@@ -451,44 +449,7 @@
 		3EC039AF293218F0002187DC /* UpdateFlag.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EC039A7293218F0002187DC /* UpdateFlag.swift */; };
 		3EC039B0293218F0002187DC /* UpdateFlagManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EC039A8293218F0002187DC /* UpdateFlagManager.swift */; };
 		3EC039B1293218F0002187DC /* Util.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EC039A9293218F0002187DC /* Util.swift */; };
-		3EC039BD293218FB002187DC /* StateMachineScript.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EC039B2293218FA002187DC /* StateMachineScript.swift */; };
-		3EC039BE293218FB002187DC /* AnimatorStateTransition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EC039B3293218FA002187DC /* AnimatorStateTransition.swift */; };
 		3EC039BF293218FB002187DC /* Animator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EC039B4293218FA002187DC /* Animator.swift */; };
-		3EC039C0293218FB002187DC /* AnimatorController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EC039B5293218FA002187DC /* AnimatorController.swift */; };
-		3EC039C1293218FB002187DC /* AnimationClip.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EC039B6293218FA002187DC /* AnimationClip.swift */; };
-		3EC039C2293218FB002187DC /* AnimationEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EC039B7293218FA002187DC /* AnimationEvent.swift */; };
-		3EC039C3293218FB002187DC /* AnimationClipCurveBinding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EC039B8293218FA002187DC /* AnimationClipCurveBinding.swift */; };
-		3EC039C4293218FB002187DC /* AnimatorControllerLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EC039B9293218FA002187DC /* AnimatorControllerLayer.swift */; };
-		3EC039C5293218FB002187DC /* AnimatorState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EC039BA293218FB002187DC /* AnimatorState.swift */; };
-		3EC039C6293218FB002187DC /* AnimatorStateMachine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EC039BB293218FB002187DC /* AnimatorStateMachine.swift */; };
-		3EC039C7293218FB002187DC /* Keyframe.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EC039BC293218FB002187DC /* Keyframe.swift */; };
-		3EC039CC29321903002187DC /* AnimatorStateData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EC039C829321903002187DC /* AnimatorStateData.swift */; };
-		3EC039CD29321903002187DC /* AnimatorLayerData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EC039C929321903002187DC /* AnimatorLayerData.swift */; };
-		3EC039CE29321903002187DC /* AnimationEventHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EC039CA29321903002187DC /* AnimationEventHandler.swift */; };
-		3EC039CF29321903002187DC /* AnimatorStatePlayData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EC039CB29321903002187DC /* AnimatorStatePlayData.swift */; };
-		3EC039D12932190A002187DC /* AnimationCurveOwner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EC039D029321909002187DC /* AnimationCurveOwner.swift */; };
-		3EC039D629321910002187DC /* ScaleAnimationCurveOwnerAssembler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EC039D229321910002187DC /* ScaleAnimationCurveOwnerAssembler.swift */; };
-		3EC039D729321910002187DC /* IAnimationCurveOwnerAssembler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EC039D329321910002187DC /* IAnimationCurveOwnerAssembler.swift */; };
-		3EC039D829321910002187DC /* PositionAnimationCurveOwnerAssembler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EC039D429321910002187DC /* PositionAnimationCurveOwnerAssembler.swift */; };
-		3EC039D929321910002187DC /* RotationAnimationCurveOwnerAssembler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EC039D529321910002187DC /* RotationAnimationCurveOwnerAssembler.swift */; };
-		3EC039E229321918002187DC /* AnimatorConditionMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EC039DA29321917002187DC /* AnimatorConditionMode.swift */; };
-		3EC039E329321918002187DC /* WrapMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EC039DB29321917002187DC /* WrapMode.swift */; };
-		3EC039E429321918002187DC /* AnimatorLayerBlendingMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EC039DC29321918002187DC /* AnimatorLayerBlendingMode.swift */; };
-		3EC039E529321918002187DC /* InterpolationType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EC039DD29321918002187DC /* InterpolationType.swift */; };
-		3EC039E629321918002187DC /* LayerState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EC039DE29321918002187DC /* LayerState.swift */; };
-		3EC039E729321918002187DC /* AnimatorStatePlayState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EC039DF29321918002187DC /* AnimatorStatePlayState.swift */; };
-		3EC039E829321918002187DC /* AnimationProperty.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EC039E029321918002187DC /* AnimationProperty.swift */; };
-		3EC039E929321918002187DC /* PlayState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EC039E129321918002187DC /* PlayState.swift */; };
-		3EC039F429321920002187DC /* AnimationVector4Curve.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EC039EA2932191F002187DC /* AnimationVector4Curve.swift */; };
-		3EC039F529321920002187DC /* IAnimationCurveCalculator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EC039EB2932191F002187DC /* IAnimationCurveCalculator.swift */; };
-		3EC039F629321920002187DC /* AnimationVector2Curve.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EC039EC2932191F002187DC /* AnimationVector2Curve.swift */; };
-		3EC039F729321920002187DC /* AnimationVector3Curve.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EC039ED2932191F002187DC /* AnimationVector3Curve.swift */; };
-		3EC039F829321920002187DC /* AnimationCurve.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EC039EE2932191F002187DC /* AnimationCurve.swift */; };
-		3EC039F929321920002187DC /* AnimationQuaternionCurve.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EC039EF2932191F002187DC /* AnimationQuaternionCurve.swift */; };
-		3EC039FA29321920002187DC /* AnimationBoolCurve.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EC039F02932191F002187DC /* AnimationBoolCurve.swift */; };
-		3EC039FB29321920002187DC /* AnimationFloatCurve.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EC039F12932191F002187DC /* AnimationFloatCurve.swift */; };
-		3EC039FC29321920002187DC /* AnimationArrayCurve.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EC039F229321920002187DC /* AnimationArrayCurve.swift */; };
-		3EC039FD29321920002187DC /* AnimationColorCurve.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EC039F329321920002187DC /* AnimationColorCurve.swift */; };
 		3EC03A022932192D002187DC /* Background.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EC039FE2932192D002187DC /* Background.swift */; };
 		3EC03A032932192D002187DC /* BackgroundMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EC039FF2932192D002187DC /* BackgroundMode.swift */; };
 		3EC03A042932192D002187DC /* BackgroundSubpass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EC03A002932192D002187DC /* BackgroundSubpass.swift */; };
@@ -804,7 +765,6 @@
 		3E37FDE529B236990050169C /* Triangulation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Triangulation.swift; sourceTree = "<group>"; };
 		3E37FDE729B238040050169C /* VertexEditing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VertexEditing.swift; sourceTree = "<group>"; };
 		3E37FDEA29B239510050169C /* UVEditing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UVEditing.swift; sourceTree = "<group>"; };
-		3E6B235B2941BF88000AC29F /* BlendShapeWeightsAnimationCurveOwnerAssembler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlendShapeWeightsAnimationCurveOwnerAssembler.swift; sourceTree = "<group>"; };
 		3E6B235D294220BC000AC29F /* FaceMorphApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FaceMorphApp.swift; sourceTree = "<group>"; };
 		3E6B235F294224C1000AC29F /* FaceGUI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FaceGUI.swift; sourceTree = "<group>"; };
 		3E6B23A82946B3CA000AC29F /* libvox.flex.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libvox.flex.a; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -1133,7 +1093,6 @@
 		3EC039102932186A002187DC /* MaterialParser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MaterialParser.swift; sourceTree = "<group>"; };
 		3EC039112932186A002187DC /* MeshParser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MeshParser.swift; sourceTree = "<group>"; };
 		3EC039122932186A002187DC /* ParserContext.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ParserContext.swift; sourceTree = "<group>"; };
-		3EC039132932186A002187DC /* AnimationParser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AnimationParser.swift; sourceTree = "<group>"; };
 		3EC0391E29321871002187DC /* KHR_materials_clearcoat.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KHR_materials_clearcoat.swift; sourceTree = "<group>"; };
 		3EC0391F29321872002187DC /* KHR_materials_pbrSpecularGlossiness.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KHR_materials_pbrSpecularGlossiness.swift; sourceTree = "<group>"; };
 		3EC0392029321872002187DC /* KHR_texture_transform.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KHR_texture_transform.swift; sourceTree = "<group>"; };
@@ -1206,44 +1165,7 @@
 		3EC039A7293218F0002187DC /* UpdateFlag.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UpdateFlag.swift; sourceTree = "<group>"; };
 		3EC039A8293218F0002187DC /* UpdateFlagManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UpdateFlagManager.swift; sourceTree = "<group>"; };
 		3EC039A9293218F0002187DC /* Util.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Util.swift; sourceTree = "<group>"; };
-		3EC039B2293218FA002187DC /* StateMachineScript.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StateMachineScript.swift; sourceTree = "<group>"; };
-		3EC039B3293218FA002187DC /* AnimatorStateTransition.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AnimatorStateTransition.swift; sourceTree = "<group>"; };
 		3EC039B4293218FA002187DC /* Animator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Animator.swift; sourceTree = "<group>"; };
-		3EC039B5293218FA002187DC /* AnimatorController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AnimatorController.swift; sourceTree = "<group>"; };
-		3EC039B6293218FA002187DC /* AnimationClip.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AnimationClip.swift; sourceTree = "<group>"; };
-		3EC039B7293218FA002187DC /* AnimationEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AnimationEvent.swift; sourceTree = "<group>"; };
-		3EC039B8293218FA002187DC /* AnimationClipCurveBinding.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AnimationClipCurveBinding.swift; sourceTree = "<group>"; };
-		3EC039B9293218FA002187DC /* AnimatorControllerLayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AnimatorControllerLayer.swift; sourceTree = "<group>"; };
-		3EC039BA293218FB002187DC /* AnimatorState.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AnimatorState.swift; sourceTree = "<group>"; };
-		3EC039BB293218FB002187DC /* AnimatorStateMachine.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AnimatorStateMachine.swift; sourceTree = "<group>"; };
-		3EC039BC293218FB002187DC /* Keyframe.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Keyframe.swift; sourceTree = "<group>"; };
-		3EC039C829321903002187DC /* AnimatorStateData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AnimatorStateData.swift; sourceTree = "<group>"; };
-		3EC039C929321903002187DC /* AnimatorLayerData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AnimatorLayerData.swift; sourceTree = "<group>"; };
-		3EC039CA29321903002187DC /* AnimationEventHandler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AnimationEventHandler.swift; sourceTree = "<group>"; };
-		3EC039CB29321903002187DC /* AnimatorStatePlayData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AnimatorStatePlayData.swift; sourceTree = "<group>"; };
-		3EC039D029321909002187DC /* AnimationCurveOwner.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AnimationCurveOwner.swift; sourceTree = "<group>"; };
-		3EC039D229321910002187DC /* ScaleAnimationCurveOwnerAssembler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScaleAnimationCurveOwnerAssembler.swift; sourceTree = "<group>"; };
-		3EC039D329321910002187DC /* IAnimationCurveOwnerAssembler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IAnimationCurveOwnerAssembler.swift; sourceTree = "<group>"; };
-		3EC039D429321910002187DC /* PositionAnimationCurveOwnerAssembler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PositionAnimationCurveOwnerAssembler.swift; sourceTree = "<group>"; };
-		3EC039D529321910002187DC /* RotationAnimationCurveOwnerAssembler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RotationAnimationCurveOwnerAssembler.swift; sourceTree = "<group>"; };
-		3EC039DA29321917002187DC /* AnimatorConditionMode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AnimatorConditionMode.swift; sourceTree = "<group>"; };
-		3EC039DB29321917002187DC /* WrapMode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WrapMode.swift; sourceTree = "<group>"; };
-		3EC039DC29321918002187DC /* AnimatorLayerBlendingMode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AnimatorLayerBlendingMode.swift; sourceTree = "<group>"; };
-		3EC039DD29321918002187DC /* InterpolationType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InterpolationType.swift; sourceTree = "<group>"; };
-		3EC039DE29321918002187DC /* LayerState.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LayerState.swift; sourceTree = "<group>"; };
-		3EC039DF29321918002187DC /* AnimatorStatePlayState.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AnimatorStatePlayState.swift; sourceTree = "<group>"; };
-		3EC039E029321918002187DC /* AnimationProperty.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AnimationProperty.swift; sourceTree = "<group>"; };
-		3EC039E129321918002187DC /* PlayState.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlayState.swift; sourceTree = "<group>"; };
-		3EC039EA2932191F002187DC /* AnimationVector4Curve.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AnimationVector4Curve.swift; sourceTree = "<group>"; };
-		3EC039EB2932191F002187DC /* IAnimationCurveCalculator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IAnimationCurveCalculator.swift; sourceTree = "<group>"; };
-		3EC039EC2932191F002187DC /* AnimationVector2Curve.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AnimationVector2Curve.swift; sourceTree = "<group>"; };
-		3EC039ED2932191F002187DC /* AnimationVector3Curve.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AnimationVector3Curve.swift; sourceTree = "<group>"; };
-		3EC039EE2932191F002187DC /* AnimationCurve.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AnimationCurve.swift; sourceTree = "<group>"; };
-		3EC039EF2932191F002187DC /* AnimationQuaternionCurve.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AnimationQuaternionCurve.swift; sourceTree = "<group>"; };
-		3EC039F02932191F002187DC /* AnimationBoolCurve.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AnimationBoolCurve.swift; sourceTree = "<group>"; };
-		3EC039F12932191F002187DC /* AnimationFloatCurve.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AnimationFloatCurve.swift; sourceTree = "<group>"; };
-		3EC039F229321920002187DC /* AnimationArrayCurve.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AnimationArrayCurve.swift; sourceTree = "<group>"; };
-		3EC039F329321920002187DC /* AnimationColorCurve.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AnimationColorCurve.swift; sourceTree = "<group>"; };
 		3EC039FE2932192D002187DC /* Background.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Background.swift; sourceTree = "<group>"; };
 		3EC039FF2932192D002187DC /* BackgroundMode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BackgroundMode.swift; sourceTree = "<group>"; };
 		3EC03A002932192D002187DC /* BackgroundSubpass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BackgroundSubpass.swift; sourceTree = "<group>"; };
@@ -1842,7 +1764,6 @@
 				3E8B00D229BB65AB00A70123 /* CAnimationState+Internal.h */,
 				3E8B00CF29BB637A00A70123 /* CAnimationState.mm */,
 				3E8B00D629BC09D400A70123 /* animation_states */,
-				3E8B00D329BB691200A70123 /* AnimationState.swift */,
 			);
 			path = ozz;
 			sourceTree = "<group>";
@@ -2320,20 +2241,8 @@
 			isa = PBXGroup;
 			children = (
 				3E8B00CE29BB594D00A70123 /* ozz */,
-				3EC0387329321754002187DC /* enums */,
-				3EC038742932175C002187DC /* internal */,
-				3EC038722932174B002187DC /* animationCurve */,
-				3EC039B6293218FA002187DC /* AnimationClip.swift */,
-				3EC039B8293218FA002187DC /* AnimationClipCurveBinding.swift */,
-				3EC039B7293218FA002187DC /* AnimationEvent.swift */,
+				3E8B00D329BB691200A70123 /* AnimationState.swift */,
 				3EC039B4293218FA002187DC /* Animator.swift */,
-				3EC039B5293218FA002187DC /* AnimatorController.swift */,
-				3EC039B9293218FA002187DC /* AnimatorControllerLayer.swift */,
-				3EC039BA293218FB002187DC /* AnimatorState.swift */,
-				3EC039BB293218FB002187DC /* AnimatorStateMachine.swift */,
-				3EC039B3293218FA002187DC /* AnimatorStateTransition.swift */,
-				3EC039BC293218FB002187DC /* Keyframe.swift */,
-				3EC039B2293218FA002187DC /* StateMachineScript.swift */,
 			);
 			path = animation;
 			sourceTree = "<group>";
@@ -2506,71 +2415,6 @@
 			path = physics;
 			sourceTree = "<group>";
 		};
-		3EC038722932174B002187DC /* animationCurve */ = {
-			isa = PBXGroup;
-			children = (
-				3EC039F229321920002187DC /* AnimationArrayCurve.swift */,
-				3EC039F02932191F002187DC /* AnimationBoolCurve.swift */,
-				3EC039F329321920002187DC /* AnimationColorCurve.swift */,
-				3EC039EE2932191F002187DC /* AnimationCurve.swift */,
-				3EC039F12932191F002187DC /* AnimationFloatCurve.swift */,
-				3EC039EF2932191F002187DC /* AnimationQuaternionCurve.swift */,
-				3EC039EC2932191F002187DC /* AnimationVector2Curve.swift */,
-				3EC039ED2932191F002187DC /* AnimationVector3Curve.swift */,
-				3EC039EA2932191F002187DC /* AnimationVector4Curve.swift */,
-				3EC039EB2932191F002187DC /* IAnimationCurveCalculator.swift */,
-			);
-			path = animationCurve;
-			sourceTree = "<group>";
-		};
-		3EC0387329321754002187DC /* enums */ = {
-			isa = PBXGroup;
-			children = (
-				3EC039E029321918002187DC /* AnimationProperty.swift */,
-				3EC039DA29321917002187DC /* AnimatorConditionMode.swift */,
-				3EC039DC29321918002187DC /* AnimatorLayerBlendingMode.swift */,
-				3EC039DF29321918002187DC /* AnimatorStatePlayState.swift */,
-				3EC039DD29321918002187DC /* InterpolationType.swift */,
-				3EC039DE29321918002187DC /* LayerState.swift */,
-				3EC039E129321918002187DC /* PlayState.swift */,
-				3EC039DB29321917002187DC /* WrapMode.swift */,
-			);
-			path = enums;
-			sourceTree = "<group>";
-		};
-		3EC038742932175C002187DC /* internal */ = {
-			isa = PBXGroup;
-			children = (
-				3EC039CA29321903002187DC /* AnimationEventHandler.swift */,
-				3EC039C929321903002187DC /* AnimatorLayerData.swift */,
-				3EC039C829321903002187DC /* AnimatorStateData.swift */,
-				3EC039CB29321903002187DC /* AnimatorStatePlayData.swift */,
-				3EC0387529321765002187DC /* animationCurveOwner */,
-			);
-			path = internal;
-			sourceTree = "<group>";
-		};
-		3EC0387529321765002187DC /* animationCurveOwner */ = {
-			isa = PBXGroup;
-			children = (
-				3EC039D029321909002187DC /* AnimationCurveOwner.swift */,
-				3EC038762932176E002187DC /* assembler */,
-			);
-			path = animationCurveOwner;
-			sourceTree = "<group>";
-		};
-		3EC038762932176E002187DC /* assembler */ = {
-			isa = PBXGroup;
-			children = (
-				3EC039D329321910002187DC /* IAnimationCurveOwnerAssembler.swift */,
-				3EC039D429321910002187DC /* PositionAnimationCurveOwnerAssembler.swift */,
-				3EC039D529321910002187DC /* RotationAnimationCurveOwnerAssembler.swift */,
-				3EC039D229321910002187DC /* ScaleAnimationCurveOwnerAssembler.swift */,
-				3E6B235B2941BF88000AC29F /* BlendShapeWeightsAnimationCurveOwnerAssembler.swift */,
-			);
-			path = assembler;
-			sourceTree = "<group>";
-		};
 		3EC0387729321783002187DC /* enums */ = {
 			isa = PBXGroup;
 			children = (
@@ -2632,7 +2476,6 @@
 		3EC0387E293217CF002187DC /* parser */ = {
 			isa = PBXGroup;
 			children = (
-				3EC039132932186A002187DC /* AnimationParser.swift */,
 				3EC0390C2932186A002187DC /* EntityParser.swift */,
 				3EC039102932186A002187DC /* MaterialParser.swift */,
 				3EC039112932186A002187DC /* MeshParser.swift */,
@@ -3560,41 +3403,33 @@
 				040F1DC4293397B3008BDC8D /* Keys.swift in Sources */,
 				3EBA3D5329B9AF0D00E5FB42 /* TextRenderer.swift in Sources */,
 				3EBA3D0829B834B600E5FB42 /* PointBatcher.swift in Sources */,
-				3EC039CE29321903002187DC /* AnimationEventHandler.swift in Sources */,
 				3EC0393829321893002187DC /* ShadowResolution.swift in Sources */,
 				3EC0389429321826002187DC /* EngineSettings.swift in Sources */,
 				3EC03996293218DA002187DC /* DirectLight.swift in Sources */,
-				3EC039C4293218FB002187DC /* AnimatorControllerLayer.swift in Sources */,
 				3EC03961293218BA002187DC /* ReflectionUniform.swift in Sources */,
 				3EC0389729321826002187DC /* Camera.swift in Sources */,
 				3EBA3D2B29B99CB200E5FB42 /* MTLDevice+Extensions.swift in Sources */,
 				3EB32B912932391F0019A4F3 /* PointerManager.swift in Sources */,
 				3EC03960293218BA002187DC /* DevicePipeline.swift in Sources */,
 				3EACA08B29A46CE300F08BB2 /* MeshColliderShape.swift in Sources */,
-				3EC039F829321920002187DC /* AnimationCurve.swift in Sources */,
 				3EC0390729321862002187DC /* GLTFAssetReader.m in Sources */,
-				3EC039F729321920002187DC /* AnimationVector3Curve.swift in Sources */,
 				3EC038DF29321845002187DC /* JointLimits.swift in Sources */,
 				3EC038E729321845002187DC /* SpringJoint.swift in Sources */,
 				3EBA3D1729B8891300E5FB42 /* EngineVisualizer.swift in Sources */,
 				040F1E0B293AAFB1008BDC8D /* HDRLoader.m in Sources */,
 				3EC038B929321835002187DC /* PhysicsMaterial.swift in Sources */,
-				3EC039D629321910002187DC /* ScaleAnimationCurveOwnerAssembler.swift in Sources */,
 				3EC038B429321835002187DC /* DynamicCollider.swift in Sources */,
 				3EC039142932186A002187DC /* SceneParser.swift in Sources */,
-				3EC039E929321918002187DC /* PlayState.swift in Sources */,
 				3E1412FB29B5A6BD00099BF1 /* ControllerColliderHit.swift in Sources */,
 				3EC92AE5293D8FA500423396 /* TransparentShadowMaterial.swift in Sources */,
 				3EBA3D3929B99D6100E5FB42 /* MTLSize+Extensions.swift in Sources */,
 				3EC038E629321845002187DC /* PhysXJoint.swift in Sources */,
 				3EBA3D5E29B9D05A00E5FB42 /* TextBatcher.swift in Sources */,
-				3EC039D829321910002187DC /* PositionAnimationCurveOwnerAssembler.swift in Sources */,
 				3EC03949293218A3002187DC /* BlendState.swift in Sources */,
 				040F1DE32934ED68008BDC8D /* GUIManager.swift in Sources */,
 				3EC0399D293218DF002187DC /* DiffuseMode.swift in Sources */,
 				3EC03967293218BA002187DC /* ComputePass.swift in Sources */,
 				3EC039AA293218F0002187DC /* BoolUpdateFlag.swift in Sources */,
-				3EC039D729321910002187DC /* IAnimationCurveOwnerAssembler.swift in Sources */,
 				3EBA3D4329B99D9E00E5FB42 /* MTLTextureDescriptor+Serialization.swift in Sources */,
 				3EC03A022932192D002187DC /* Background.swift in Sources */,
 				3EB32B8D293239170019A4F3 /* InputManager.swift in Sources */,
@@ -3611,39 +3446,32 @@
 				3EC0391B2932186B002187DC /* MeshParser.swift in Sources */,
 				3EC0392A29321885002187DC /* SkySubpass.swift in Sources */,
 				3EC039BF293218FB002187DC /* Animator.swift in Sources */,
-				3EC039C6293218FB002187DC /* AnimatorStateMachine.swift in Sources */,
 				3EBA3D4F29B9A54A00E5FB42 /* MTLFontAtlasProvider.swift in Sources */,
 				3EC038CD2932183D002187DC /* PlaneColliderShape.swift in Sources */,
 				3EC038DD29321845002187DC /* PhysXSphericalJoint.swift in Sources */,
 				3EC0398A293218CB002187DC /* PBRSpecularMaterial.swift in Sources */,
-				3EC039CD29321903002187DC /* AnimatorLayerData.swift in Sources */,
 				3EC03A032932192D002187DC /* BackgroundMode.swift in Sources */,
 				3EC03962293218BA002187DC /* ComputePipelineState.swift in Sources */,
 				3EBA3D1629B8891300E5FB42 /* WireframePrimitive.swift in Sources */,
 				3EC038E229321845002187DC /* PhysXTolerancesScale.swift in Sources */,
 				3EC03964293218BA002187DC /* ResourceCache.swift in Sources */,
-				3EC039BE293218FB002187DC /* AnimatorStateTransition.swift in Sources */,
 				3E8B00D929BC09F500A70123 /* CAnimatorBlending.mm in Sources */,
 				3EC0392329321872002187DC /* KHR_materials_pbrSpecularGlossiness.swift in Sources */,
 				3EC0390929321862002187DC /* GLTFLoader.swift in Sources */,
 				3EC03981293218C3002187DC /* PrimitiveMesh.swift in Sources */,
 				3EBA3D0A29B83CA700E5FB42 /* Gizmos.swift in Sources */,
 				3EBA3D4129B99D9200E5FB42 /* MTLTextureDescriptor+Extensions.swift in Sources */,
-				3EC039F929321920002187DC /* AnimationQuaternionCurve.swift in Sources */,
 				3EC038F02932184C002187DC /* ColliderShapeUpAxis.swift in Sources */,
 				3EC0390629321862002187DC /* GLTFAsset.m in Sources */,
-				3E6B235C2941BF88000AC29F /* BlendShapeWeightsAnimationCurveOwnerAssembler.swift in Sources */,
 				3EC0394A293218A3002187DC /* RenderState.swift in Sources */,
 				040F1DD92934E6F6008BDC8D /* imgui_impl_osx.swift in Sources */,
 				3EC038CA2932183D002187DC /* CapsuleColliderShape.swift in Sources */,
-				3EC039F529321920002187DC /* IAnimationCurveCalculator.swift in Sources */,
 				3EC0393D2932189D002187DC /* ShaderPass.swift in Sources */,
 				3EC038F729321853002187DC /* PhysXCharacterController.swift in Sources */,
 				3EC039AB293218F0002187DC /* ListenerUpdateFlag .swift in Sources */,
 				3EC039332932188D002187DC /* CascadedShadowSubpass.swift in Sources */,
 				3EC038B329321835002187DC /* Collider.swift in Sources */,
 				3EBA3D3329B99D2400E5FB42 /* MTLPixelFormat+Extensions.swift in Sources */,
-				3EC039CF29321903002187DC /* AnimatorStatePlayData.swift in Sources */,
 				3EC03988293218CB002187DC /* PBRMaterial.swift in Sources */,
 				3EC0393929321893002187DC /* ShadowType.swift in Sources */,
 				3EC038EF2932184C002187DC /* PhysicsMaterialCombineMode.swift in Sources */,
@@ -3651,7 +3479,6 @@
 				3EC038B729321835002187DC /* StaticCollider.swift in Sources */,
 				3EC03946293218A3002187DC /* DepthState.swift in Sources */,
 				3EBA3D4529B9A07400E5FB42 /* MTLFontAtlasCodableContainer.swift in Sources */,
-				3EC039F429321920002187DC /* AnimationVector4Curve.swift in Sources */,
 				3EBA3D2729B9873B00E5FB42 /* MetalError.swift in Sources */,
 				3EC03980293218C3002187DC /* BufferView.swift in Sources */,
 				3EC0389F29321826002187DC /* Layer.swift in Sources */,
@@ -3661,7 +3488,6 @@
 				3EC03963293218BA002187DC /* RenderPipelineState.swift in Sources */,
 				3EC039172932186A002187DC /* TextureParser.swift in Sources */,
 				3EBA3D3129B99D1200E5FB42 /* MTLPixelFormat+CVPixelFormat.swift in Sources */,
-				3EC039C1293218FB002187DC /* AnimationClip.swift in Sources */,
 				3EC03997293218DA002187DC /* PointLight.swift in Sources */,
 				3EBA3D3D29B99D7A00E5FB42 /* MTLTexture+Extensions.swift in Sources */,
 				3EBA3D1329B8579800E5FB42 /* TriangleBatcher.swift in Sources */,
@@ -3674,14 +3500,10 @@
 				3EC038E929321845002187DC /* JointMotor.swift in Sources */,
 				3EC038A029321826002187DC /* Renderer.swift in Sources */,
 				3EC03951293218AA002187DC /* RenderQueueType.swift in Sources */,
-				3EC039CC29321903002187DC /* AnimatorStateData.swift in Sources */,
-				3EC039FD29321920002187DC /* AnimationColorCurve.swift in Sources */,
 				3EACA08D29A475C200F08BB2 /* MeshColliderCookingOptions.swift in Sources */,
 				3EC0392229321872002187DC /* KHR_materials_clearcoat.swift in Sources */,
 				3EC039AC293218F0002187DC /* DisorderedArray.swift in Sources */,
 				3EC038DC29321845002187DC /* PhysXHingeJoint.swift in Sources */,
-				3EC039FA29321920002187DC /* AnimationBoolCurve.swift in Sources */,
-				3EC039BD293218FB002187DC /* StateMachineScript.swift in Sources */,
 				3EC0389E29321826002187DC /* Component.swift in Sources */,
 				3EBA3D3F29B99D8600E5FB42 /* MTLTexture+Serialization.swift in Sources */,
 				3EC03966293218BA002187DC /* Subpass.swift in Sources */,
@@ -3697,12 +3519,10 @@
 				3EC0397E293218C3002187DC /* BlendShapeFrame.swift in Sources */,
 				3EC038C92932183D002187DC /* PhysXColliderShape.swift in Sources */,
 				3EC038C82932183D002187DC /* SphereColliderShape.swift in Sources */,
-				3EC039E429321918002187DC /* AnimatorLayerBlendingMode.swift in Sources */,
 				3EC03999293218DA002187DC /* LightManager.swift in Sources */,
 				3EC0392529321872002187DC /* KHR_lights_punctual.swift in Sources */,
 				3EC0393E2932189D002187DC /* ShaderData.swift in Sources */,
 				3EC03976293218C3002187DC /* BlendShape.swift in Sources */,
-				3EC039E729321918002187DC /* AnimatorStatePlayState.swift in Sources */,
 				040F1DDB2934E772008BDC8D /* imgui_impl_metal.swift in Sources */,
 				3EC0393F2932189D002187DC /* ShaderMacroCollection.swift in Sources */,
 				3EC0397B293218C3002187DC /* SubMesh.swift in Sources */,
@@ -3721,7 +3541,6 @@
 				3EC03978293218C3002187DC /* Skin.swift in Sources */,
 				3EC039162932186A002187DC /* EntityParser.swift in Sources */,
 				3EBA3D6329B9FF0E00E5FB42 /* MTLFontAtlasProvider.c in Sources */,
-				3EC039FC29321920002187DC /* AnimationArrayCurve.swift in Sources */,
 				3EC038C72932183D002187DC /* PhysXCapsuleColliderShape.swift in Sources */,
 				3EC038A129321826002187DC /* Script.swift in Sources */,
 				3EC0397D293218C3002187DC /* ModelMesh.swift in Sources */,
@@ -3729,12 +3548,9 @@
 				3EC039192932186A002187DC /* Parser.swift in Sources */,
 				3EC03989293218CB002187DC /* PBRBaseMaterial.swift in Sources */,
 				3EACA08929A4604600F08BB2 /* PhysXMeshColliderShape.swift in Sources */,
-				3EC039E629321918002187DC /* LayerState.swift in Sources */,
 				3EC038AE29321835002187DC /* PhysicsManager.swift in Sources */,
 				040F1E18293B887C008BDC8D /* Luminance.swift in Sources */,
 				3EC0392429321872002187DC /* KHR_texture_transform.swift in Sources */,
-				3EC039E829321918002187DC /* AnimationProperty.swift in Sources */,
-				3EC039E529321918002187DC /* InterpolationType.swift in Sources */,
 				3E1F12AD29AC879E00F1002E /* Collision.swift in Sources */,
 				3EC0389629321826002187DC /* SceneManager.swift in Sources */,
 				3EC038C42932183D002187DC /* PhysXBoxColliderShape.swift in Sources */,
@@ -3742,13 +3558,11 @@
 				3EBA3D2D29B99CEF00E5FB42 /* MTLDevice+Features.swift in Sources */,
 				3EC0390429321862002187DC /* GLTFResource.swift in Sources */,
 				3EC038B629321835002187DC /* PhysXPhysics.swift in Sources */,
-				3EC039C7293218FB002187DC /* Keyframe.swift in Sources */,
 				3EBA3D3529B99D3200E5FB42 /* MTLRegion+Extensions.swift in Sources */,
 				3EC039302932188D002187DC /* ShadowUtils.swift in Sources */,
 				3EC038E329321845002187DC /* PhysXSpringJoint.swift in Sources */,
 				3EC038F22932184C002187DC /* HingeJointFlag.swift in Sources */,
 				3EBA3D1F29B97DD900E5FB42 /* MTLFontAtlasDescriptor.swift in Sources */,
-				3EC039C2293218FB002187DC /* AnimationEvent.swift in Sources */,
 				3EBA3D1B29B9726700E5FB42 /* GlyphDescriptor.swift in Sources */,
 				3EC03998293218DA002187DC /* AmbientLight.swift in Sources */,
 				3EC038DE29321845002187DC /* Joint.swift in Sources */,
@@ -3758,20 +3572,15 @@
 				3EC0398D293218CB002187DC /* Material.swift in Sources */,
 				3EC038E029321845002187DC /* PhysXTranslationalJoint.swift in Sources */,
 				3EC0390329321862002187DC /* TextureLoader.swift in Sources */,
-				3EC039D12932190A002187DC /* AnimationCurveOwner.swift in Sources */,
 				3EC0390529321862002187DC /* GLTFUtil.swift in Sources */,
 				3EC92ADF2939C6A000423396 /* Extensions.swift in Sources */,
-				3EC039E329321918002187DC /* WrapMode.swift in Sources */,
 				3EC039B0293218F0002187DC /* UpdateFlagManager.swift in Sources */,
-				3EC039F629321920002187DC /* AnimationVector2Curve.swift in Sources */,
 				3EC0391A2932186B002187DC /* MaterialParser.swift in Sources */,
 				3E8B00D029BB637A00A70123 /* CAnimationState.mm in Sources */,
 				3EC038F629321853002187DC /* CharacterController.swift in Sources */,
 				3EC0395F293218BA002187DC /* RenderPass.swift in Sources */,
 				3EC039AE293218F0002187DC /* EngineObject.swift in Sources */,
-				3EC039C3293218FB002187DC /* AnimationClipCurveBinding.swift in Sources */,
 				040F1E29293C865E008BDC8D /* UIElement.swift in Sources */,
-				3EC039C0293218FB002187DC /* AnimatorController.swift in Sources */,
 				3EBA3D1129B8578E00E5FB42 /* LineBatcher.swift in Sources */,
 				3EC0389C29321826002187DC /* Entity.swift in Sources */,
 				3EBA3D3729B99D5600E5FB42 /* MTLResource+Extensions.swift in Sources */,
@@ -3783,10 +3592,8 @@
 				3EC038E429321845002187DC /* PhysXConfigurableJoint.swift in Sources */,
 				3EC038B229321835002187DC /* HitResult.swift in Sources */,
 				3EC039A0293218E9002187DC /* CameraClearFlags.swift in Sources */,
-				3EC039D929321910002187DC /* RotationAnimationCurveOwnerAssembler.swift in Sources */,
 				3EC039312932188D002187DC /* ShadowSliceData.swift in Sources */,
 				3EC0397F293218C3002187DC /* SkinnedMeshRenderer.swift in Sources */,
-				3EC0391D2932186B002187DC /* AnimationParser.swift in Sources */,
 				3EC0389A29321826002187DC /* Transform.swift in Sources */,
 				3EC038CC2932183D002187DC /* BoxColliderShape.swift in Sources */,
 				3EC038B529321835002187DC /* PhysXDynamicCollider.swift in Sources */,
@@ -3795,11 +3602,8 @@
 				3EC03965293218BA002187DC /* RenderElement.swift in Sources */,
 				3EC038B129321835002187DC /* PhysXPhysicsMaterial.swift in Sources */,
 				3EC0389529321826002187DC /* Canvas.swift in Sources */,
-				3EC039E229321918002187DC /* AnimatorConditionMode.swift in Sources */,
-				3EC039C5293218FB002187DC /* AnimatorState.swift in Sources */,
 				3EC0389B29321826002187DC /* CameraInfo.swift in Sources */,
 				3EBA3D2929B99C4900E5FB42 /* MTL+Codable.swift in Sources */,
-				3EC039FB29321920002187DC /* AnimationFloatCurve.swift in Sources */,
 				3E6D2F01293E13DF00B63F73 /* BufferPool.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

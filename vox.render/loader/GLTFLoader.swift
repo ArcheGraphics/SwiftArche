@@ -14,12 +14,10 @@ public class GLTFLoader {
         MeshParser(),
         EntityParser(),
         SkinParser(),
-        AnimationParser(),
         SceneParser()
     ]);
     private static let texturePipeline = GLTFLoader([TextureParser()]);
     private static let materialPipeline = GLTFLoader([TextureParser(), MaterialParser()]);
-    private static let animationPipeline = GLTFLoader([EntityParser(), AnimationParser()]);
     private static let meshPipeline = GLTFLoader([MeshParser()]);
 
     private var _pipes: [Parser] = [];
@@ -54,16 +52,6 @@ public class GLTFLoader {
         context.keepMeshData = keepMeshData
         context.materialIndex = materialIndex
         GLTFLoader.materialPipeline._parse(url, context, callback)
-    }
-
-    public static func parseAnimation(_ engine: Engine, _ url: URL, _ callback: @escaping (GLTFResource) -> Void,
-                                      _ keepMeshData: Bool = false, _ animationIndex: Int? = nil) {
-        let context = ParserContext()
-        context.glTFResource = GLTFResource()
-        context.glTFResource.engine = engine
-        context.keepMeshData = keepMeshData
-        context.animationIndex = animationIndex
-        GLTFLoader.animationPipeline._parse(url, context, callback)
     }
 
     public static func parseMesh(_ engine: Engine, _ url: URL, _ callback: @escaping (GLTFResource) -> Void,

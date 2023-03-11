@@ -41,10 +41,6 @@ class SceneParser: Parser {
                 KHR_lights_punctual.parseEngineResource(light, entity, context)
             }
         }
-
-        if (glTFResource.defaultSceneRoot != nil) {
-            _createAnimator(context)
-        }
     }
 
     private func _createCamera(_ context: GLTFResource, _ cameraSchema: GLTFCamera, _ entity: Entity) {
@@ -105,33 +101,5 @@ class SceneParser: Parser {
                 renderer.setMaterial(SceneParser._getDefaultMaterial(glTFResource.engine))
             }
         }
-    }
-
-    private func _createAnimator(_ context: ParserContext) {
-        if (!context.hasSkinned && context.glTFResource!.animations == nil) {
-            return
-        }
-
-        let defaultSceneRoot = context.glTFResource.defaultSceneRoot!
-        let animator = defaultSceneRoot.addComponent(Animator.self)
-        let animatorController = AnimatorController()
-        let layer = AnimatorControllerLayer("layer")
-        let animatorStateMachine = AnimatorStateMachine()
-        animatorController.addLayer(layer)
-        animator.animatorController = animatorController
-        layer.stateMachine = animatorStateMachine
-        if let animations = context.glTFResource.animations {
-            for i in 0..<animations.count {
-                let animationClip = animations[i]
-                var name = animationClip.name
-                let uniqueName = animatorStateMachine.makeUniqueStateName(&name)
-                if (uniqueName != name) {
-                    logger.warning("AnimatorState name is existed, name: \(name) reset to \(uniqueName)")
-                }
-                let animatorState = animatorStateMachine.addState(uniqueName)
-                animatorState.clip = animationClip
-            }
-        }
-
     }
 }
