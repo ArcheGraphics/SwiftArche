@@ -15,7 +15,7 @@ public class AnimationBlending: AnimationState {
             (_nativeState as! CAnimatorBlending).threshold = newValue
         }
     }
-    
+
     public override init() {
         super.init()
         _nativeState = CAnimatorBlending()

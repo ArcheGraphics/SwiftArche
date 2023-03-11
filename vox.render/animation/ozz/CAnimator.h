@@ -6,12 +6,10 @@
 
 #pragma once
 
-#import "../CAnimationState+Internal.h"
+#import <Foundation/Foundation.h>
 
-@interface CAnimatorBlending ()
+@interface CAnimator : NSObject
 
-- (void)loadSkeleton:(ozz::animation::Skeleton *_Nonnull)skeleton;
-
-- (ozz::vector<ozz::math::SoaTransform> *_Nonnull)locals;
+- (void) update:(float) dt;
 
 @end

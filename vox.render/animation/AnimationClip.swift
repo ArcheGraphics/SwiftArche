@@ -16,7 +16,7 @@ public class AnimationClip: AnimationState {
             (_nativeState as! CAnimationClip).playback_speed = newValue
         }
     }
-    
+
     /// Animation play mode state: play/pause.
     public var play: Bool {
         get {
@@ -36,7 +36,7 @@ public class AnimationClip: AnimationState {
             (_nativeState as! CAnimationClip).loop = newValue
         }
     }
-    
+
     /// Gets animation current time.
     public var timeRatio: Float {
         get {
@@ -46,7 +46,7 @@ public class AnimationClip: AnimationState {
             (_nativeState as! CAnimationClip).setTimeRatio(newValue)
         }
     }
-    
+
     /// Gets animation time ratio of last update. Useful when the range between
     /// previous and current frame needs to pe processed.
     public var previousTimeRatio: Float {
@@ -54,17 +54,17 @@ public class AnimationClip: AnimationState {
             (_nativeState as! CAnimationClip).previousTimeRatio()
         }
     }
-    
+
     public init(filename: String) {
         super.init()
         _nativeState = CAnimationClip(filename: filename)
     }
-    
+
     /// Resets all parameters to their default value.
     public func reset() {
         (_nativeState as! CAnimationClip).reset()
     }
-    
+
     public func loadAnimation(_ filename: String) {
         (_nativeState as! CAnimationClip).loadAnimation(filename)
     }

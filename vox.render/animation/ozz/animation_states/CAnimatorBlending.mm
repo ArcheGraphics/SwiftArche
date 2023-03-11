@@ -53,7 +53,7 @@
     _blend_job.rest_pose = skeleton->joint_rest_poses();
 }
 
-- (const ozz::vector<ozz::math::SoaTransform> *)locals {
+- (ozz::vector<ozz::math::SoaTransform> *)locals {
     return &_blended_locals;
 }
 

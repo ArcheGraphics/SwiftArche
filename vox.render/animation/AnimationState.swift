@@ -12,7 +12,7 @@ public class AnimationState {
         case Additive = 1
         case NoBlend = 2
     }
-    
+
     public var blendMode: BlendMode {
         get {
             BlendMode(rawValue: _nativeState.blendMode)!
@@ -21,7 +21,7 @@ public class AnimationState {
             _nativeState.blendMode = newValue.rawValue
         }
     }
-    
+
     public var weight: Float {
         get {
             _nativeState.weight
@@ -30,9 +30,9 @@ public class AnimationState {
             _nativeState.weight = newValue
         }
     }
-    
+
     var _nativeState: CAnimationState!
-    
+
     public func addChild(state: AnimationState) {
         _nativeState.addChild(state._nativeState)
     }

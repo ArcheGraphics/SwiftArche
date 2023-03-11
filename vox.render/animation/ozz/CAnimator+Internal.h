@@ -6,12 +6,9 @@
 
 #pragma once
 
-#import "../CAnimationState+Internal.h"
+#import <Foundation/Foundation.h>
+#include <ozz/animation/runtime/skeleton.h>
 
-@interface CAnimatorBlending ()
-
-- (void)loadSkeleton:(ozz::animation::Skeleton *_Nonnull)skeleton;
-
-- (ozz::vector<ozz::math::SoaTransform> *_Nonnull)locals;
+@interface CAnimator()
 
 @end

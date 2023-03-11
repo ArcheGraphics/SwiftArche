@@ -19,6 +19,6 @@
 
 - (void)loadSkeleton:(ozz::animation::Skeleton *_Nonnull)skeleton;
 
-- (const ozz::vector<ozz::math::SoaTransform> *_Nonnull)locals;
+- (ozz::vector<ozz::math::SoaTransform> *_Nonnull)locals;
 
 @end

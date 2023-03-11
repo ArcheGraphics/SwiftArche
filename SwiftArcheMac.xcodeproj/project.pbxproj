@@ -109,6 +109,7 @@
 		3E8B00DE29BC1D7700A70123 /* CAnimationClip.mm in Sources */ = {isa = PBXBuildFile; fileRef = 3E8B00DD29BC1D7600A70123 /* CAnimationClip.mm */; };
 		3E8B00E029BC2ABF00A70123 /* AnimationClip.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E8B00DF29BC2ABF00A70123 /* AnimationClip.swift */; };
 		3E8B00E229BC314D00A70123 /* AnimationBlending.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E8B00E129BC314D00A70123 /* AnimationBlending.swift */; };
+		3E8B00E529BC358200A70123 /* CAnimator.mm in Sources */ = {isa = PBXBuildFile; fileRef = 3E8B00E429BC358200A70123 /* CAnimator.mm */; };
 		3EABF5C4294ABB7B009943C1 /* ParticleSystemData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EABF5C3294ABB7B009943C1 /* ParticleSystemData.swift */; };
 		3EABF5C6294AC323009943C1 /* ParticleEmitter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EABF5C5294AC323009943C1 /* ParticleEmitter.swift */; };
 		3EABF5C8294AC3F1009943C1 /* VolumeParticleEmitter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EABF5C7294AC3F1009943C1 /* VolumeParticleEmitter.swift */; };
@@ -805,6 +806,9 @@
 		3E8B00DD29BC1D7600A70123 /* CAnimationClip.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = CAnimationClip.mm; sourceTree = "<group>"; };
 		3E8B00DF29BC2ABF00A70123 /* AnimationClip.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnimationClip.swift; sourceTree = "<group>"; };
 		3E8B00E129BC314D00A70123 /* AnimationBlending.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnimationBlending.swift; sourceTree = "<group>"; };
+		3E8B00E329BC356F00A70123 /* CAnimator.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CAnimator.h; sourceTree = "<group>"; };
+		3E8B00E429BC358200A70123 /* CAnimator.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = CAnimator.mm; sourceTree = "<group>"; };
+		3E8B00E629BC359600A70123 /* CAnimator+Internal.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "CAnimator+Internal.h"; sourceTree = "<group>"; };
 		3EABF5C3294ABB7B009943C1 /* ParticleSystemData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParticleSystemData.swift; sourceTree = "<group>"; };
 		3EABF5C5294AC323009943C1 /* ParticleEmitter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParticleEmitter.swift; sourceTree = "<group>"; };
 		3EABF5C7294AC3F1009943C1 /* VolumeParticleEmitter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VolumeParticleEmitter.swift; sourceTree = "<group>"; };
@@ -1768,6 +1772,9 @@
 				3E8B00D229BB65AB00A70123 /* CAnimationState+Internal.h */,
 				3E8B00CF29BB637A00A70123 /* CAnimationState.mm */,
 				3E8B00D629BC09D400A70123 /* animation_states */,
+				3E8B00E329BC356F00A70123 /* CAnimator.h */,
+				3E8B00E629BC359600A70123 /* CAnimator+Internal.h */,
+				3E8B00E429BC358200A70123 /* CAnimator.mm */,
 			);
 			path = ozz;
 			sourceTree = "<group>";
@@ -3590,6 +3597,7 @@
 				040F1E29293C865E008BDC8D /* UIElement.swift in Sources */,
 				3EBA3D1129B8578E00E5FB42 /* LineBatcher.swift in Sources */,
 				3EC0389C29321826002187DC /* Entity.swift in Sources */,
+				3E8B00E529BC358200A70123 /* CAnimator.mm in Sources */,
 				3EBA3D3729B99D5600E5FB42 /* MTLResource+Extensions.swift in Sources */,
 				3EC039AD293218F0002187DC /* Time.swift in Sources */,
 				3EC039322932188D002187DC /* ShadowManager.swift in Sources */,

@@ -79,7 +79,7 @@
     }
 }
 
-- (const ozz::vector<ozz::math::SoaTransform> *_Nonnull)locals {
+- (ozz::vector<ozz::math::SoaTransform> *_Nonnull)locals {
     return &_locals;
 }
 

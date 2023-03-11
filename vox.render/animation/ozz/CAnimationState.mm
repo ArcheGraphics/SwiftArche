@@ -63,7 +63,7 @@
     _skeleton = skeleton;
 }
 
-- (const ozz::vector<ozz::math::SoaTransform> *)locals {
+- (ozz::vector<ozz::math::SoaTransform> *)locals {
     return nullptr;
 }
 
