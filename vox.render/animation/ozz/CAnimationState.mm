@@ -32,9 +32,9 @@
     }
 }
 
-- (void)setJointMasks:(float)mask :(const char *)root {
+- (void)setJointMasks:(float)mask :(NSString *_Nullable)root {
     ozz::math::SimdFloat4 simdMask = ozz::math::simd_float4::Load1(mask);
-    if (root == nullptr) {
+    if (root == nil) {
         for (int i = 0; i < _skeleton->num_soa_joints(); ++i) {
             _joint_masks[i] = simdMask;
         }
@@ -44,7 +44,7 @@
             soa_weight = ozz::math::SetI(soa_weight, simdMask, _joint % 4);
         };
 
-        const int joint = ozz::animation::FindJoint(*_skeleton, root);
+        const int joint = ozz::animation::FindJoint(*_skeleton, [root cStringUsingEncoding:NSUTF8StringEncoding]);
         if (joint >= 0) {
             ozz::animation::IterateJointsDF(*_skeleton, set_joint, joint);
         }

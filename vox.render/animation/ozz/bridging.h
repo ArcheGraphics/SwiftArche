@@ -8,3 +8,4 @@
 
 #include "CAnimationState.h"
 #include "CAnimatorBlending.h"
+#include "CAnimationClip.h"

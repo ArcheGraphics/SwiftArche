@@ -18,9 +18,8 @@
 
 - (void)removeChild:(CAnimationState *_Nonnull)state;
 
-- (void)setJointMasks:(float)mask :(const char *_Nonnull)root;
+- (void)setJointMasks:(float)mask :(NSString *_Nullable)root;
 
 - (void)update:(float)dt;
-
 
 @end
