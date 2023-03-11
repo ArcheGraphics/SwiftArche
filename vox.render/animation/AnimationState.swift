@@ -6,6 +6,38 @@
 
 import Foundation
 
-class AnimationState {
+public class AnimationState {
+    public enum BlendMode: UInt8 {
+        case Normal = 0
+        case Additive = 1
+        case NoBlend = 2
+    }
+    
+    public var blendMode: BlendMode {
+        get {
+            BlendMode(rawValue: _nativeState.blendMode)!
+        }
+        set {
+            _nativeState.blendMode = newValue.rawValue
+        }
+    }
+    
+    public var weight: Float {
+        get {
+            _nativeState.weight
+        }
+        set {
+            _nativeState.weight = newValue
+        }
+    }
+    
     var _nativeState: CAnimationState!
+    
+    public func addChild(state: AnimationState) {
+        _nativeState.addChild(state._nativeState)
+    }
+
+    public func removeChild(state: AnimationState) {
+        _nativeState.removeChild(state._nativeState)
+    }
 }
