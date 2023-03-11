@@ -6,5 +6,12 @@
 
 #pragma once
 
-#include "CAnimationState.h"
-#include "CAnimatorBlending.h"
+#import "../CAnimationState.h"
+
+@interface CAnimatorBlending : CAnimationState
+
+@property(nonatomic) float threshold;
+
+- (void)update:(float)dt;
+
+@end

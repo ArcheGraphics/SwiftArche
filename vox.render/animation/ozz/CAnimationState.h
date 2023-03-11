@@ -10,8 +10,17 @@
 
 @interface CAnimationState : NSObject
 
+@property(nonatomic) float weight;
+
+@property(nonatomic) uint8 blendMode;
+
 - (void)addChild:(CAnimationState *_Nonnull)state;
 
 - (void)removeChild:(CAnimationState *_Nonnull)state;
+
+- (void)setJointMasks:(float)mask :(const char *_Nonnull)root;
+
+- (void)update:(float)dt;
+
 
 @end

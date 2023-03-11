@@ -6,16 +6,9 @@
 
 #pragma once
 
-#import <Foundation/Foundation.h>
-#include <ozz/base/containers/vector.h>
-#include <ozz/base/maths/soa_transform.h>
-#include <ozz/animation/runtime/skeleton.h>
+#import "../CAnimationState+Internal.h"
 
-@interface CAnimationState ()
-
-@property(nonatomic) ozz::vector<CAnimationState *_Nonnull> states;
-
-- (ozz::vector<ozz::math::SimdFloat4>)jointMasks;
+@interface CAnimatorBlending ()
 
 - (void)loadSkeleton:(ozz::animation::Skeleton *_Nonnull)skeleton;
 
