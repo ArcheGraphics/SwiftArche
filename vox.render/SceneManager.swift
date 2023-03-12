@@ -30,6 +30,15 @@ public class SceneManager {
     init(engine: Engine) {
         _engine = engine
     }
+    
+    func destroy() {
+        _allScenes.forEach { s in
+            s.destroy()
+        }
+        _allScenes = []
+        _activeScene = nil
+        _engine = nil
+    }
 
     /// Merge the source scene into the target scene.
     /// - Parameters:

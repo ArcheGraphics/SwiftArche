@@ -10,7 +10,7 @@ import Foundation
 public class UpdateFlag {
     var _flagManagers: [UpdateFlagManager] = []
 
-    deinit {
+    func destroy() {
         _removeFromManagers()
         _flagManagers = []
     }

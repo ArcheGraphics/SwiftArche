@@ -112,5 +112,9 @@ class VolumeEmitterApp: NSViewController {
         createParticleRenderer(rootEntity, particleSystem, gui)
         engine.run()
     }
+    
+    override func viewDidDisappear() {
+        engine.destroy()
+    }
 }
 

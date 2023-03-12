@@ -69,5 +69,9 @@ class GizmosApp: NSViewController {
 
         engine.run()
     }
+    
+    override func viewDidDisappear() {
+        engine.destroy()
+    }
 }
 

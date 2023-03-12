@@ -28,7 +28,7 @@ open class EngineObject: NSObject {
         _engine = engine
     }
 
-    deinit {
+    func destroy() {
         // _engine.resourceManager?._deleteAsset(this)
     }
 }

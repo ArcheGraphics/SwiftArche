@@ -65,4 +65,13 @@
     _blend_job.threshold = threshold;
 }
 
+- (void)destroy {
+    _blend_job.~BlendingJob();
+    _additive_layers.~vector();
+    _layers.~vector();
+    _blended_locals.~vector();
+    
+    [super destroy];
+}
+
 @end

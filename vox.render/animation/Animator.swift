@@ -56,6 +56,10 @@ public class Animator: Component {
         super.init(entity)
     }
 
+    override func _onDestroy() {
+        _nativeAnimator.destroy()
+    }
+    
     @discardableResult
     public func loadSkeleton(_ url: URL) -> Bool {
         _nativeAnimator.loadSkeleton(url.path(percentEncoded: false))

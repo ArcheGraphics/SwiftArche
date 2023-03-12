@@ -38,4 +38,6 @@
 /// Resets all parameters to their default value.
 - (void)reset;
 
+- (void)destroy;
+
 @end

@@ -10,10 +10,11 @@
 #include <ozz/base/containers/vector.h>
 #include <ozz/base/maths/soa_transform.h>
 #include <ozz/animation/runtime/skeleton.h>
+#include <vector>
 
 @interface CAnimationState ()
 
-@property(nonatomic) ozz::vector<CAnimationState *_Nonnull> states;
+@property(nonatomic) std::vector<CAnimationState *_Nonnull> states;
 
 - (ozz::vector<ozz::math::SimdFloat4>&)jointMasks;
 

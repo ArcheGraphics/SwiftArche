@@ -73,7 +73,7 @@ public class Renderer: Component {
         shaderData.enableMacro(NEED_RECEIVE_SHADOWS.rawValue)
     }
 
-    deinit {
+    override func _onDestroy() {
         let listener = ListenerUpdateFlag()
         listener.listener = _onTransformChanged
         entity.transform._updateFlagManager.removeFlag(flag: listener)

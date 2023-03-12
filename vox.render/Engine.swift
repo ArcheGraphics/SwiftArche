@@ -205,6 +205,11 @@ public class Engine: NSObject {
     public func run() {
         isPaused = false
     }
+    
+    public func destroy() {
+        sceneManager.destroy()
+        _guiManager.destroy()
+    }
 
     /// Update the engine loop manually. If you call engine.run(), you generally don't need to call this function.
     func update() {

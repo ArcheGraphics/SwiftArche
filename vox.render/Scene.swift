@@ -179,13 +179,20 @@ public class Scene: EngineObject {
         _computeLinearFogParams(_fogStart, _fogEnd)
         _computeExponentialFogParams(_fogDensity)
     }
-
+    
     deinit {
+        destroy()
+    }
+
+    override func destroy() {
         if _isActiveInEngine {
             _engine.sceneManager.activeScene = nil
         }
         engine.sceneManager._allScenes.removeAll { (v: Scene) in
             v === self
+        }
+        _rootEntities.forEach { v in
+            v.destroy()
         }
         _rootEntities = []
     }

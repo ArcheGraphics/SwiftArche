@@ -36,7 +36,7 @@ class GUIManager {
         TextRenderer._defaultMaterial = material
     }
     
-    deinit {
+    func destroy() {
         ImGui_ImplOSX_Shutdown()
     }
     

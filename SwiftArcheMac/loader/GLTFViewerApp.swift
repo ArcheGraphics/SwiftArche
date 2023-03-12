@@ -57,5 +57,9 @@ class GltfViewerApp: NSViewController {
         gui.camera = camera
         engine.run()
     }
+    
+    override func viewDidDisappear() {
+        engine.destroy()
+    }
 }
 

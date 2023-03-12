@@ -8,6 +8,25 @@ import Cocoa
 import vox_render
 import vox_math
 import vox_toolkit
+import ImGui
+
+fileprivate class GUI: Script {
+    var sampler0: AnimationClip?
+    var sampler1: AnimationClip?
+    
+    override func onGUI() {
+        if let sampler0,
+            let sampler1 {
+            UIElement.Init(engine)
+            
+            ImGuiNewFrame()
+            ImGuiSliderFloat("Clip Curl Additive Weight", &sampler0.weight, 0.0, 1.0, nil, 1)
+            ImGuiSliderFloat("Clip Splay Additive Weight", &sampler1.weight, 0.0, 1.0, nil, 1)
+            // Rendering
+            ImGuiRender()
+        }
+    }
+}
 
 class AnimationAdditiveApp: NSViewController {
     var canvas: Canvas!
@@ -24,6 +43,7 @@ class AnimationAdditiveApp: NSViewController {
         let hdr = engine.textureLoader.loadHDR(with: "assets/kloppenheim_06_4k.hdr")!
         iblBaker.bake(scene, with: hdr, size: 256, level: 3)
         let rootEntity = scene.createRootEntity()
+        let gui = rootEntity.addComponent(GUI.self)
 
         let cameraEntity = rootEntity.createChild()
         cameraEntity.transform.position = Vector3(5, 5, 5)
@@ -53,12 +73,14 @@ class AnimationAdditiveApp: NSViewController {
                               subdirectory: "assets/Animation")!
         let sampler0 = AnimationClip(url)
         sampler0.blendMode = .Additive
-        
+        gui.sampler0 = sampler0
+
         url = Bundle.main.url(forResource: "pab_splay_additive",
                               withExtension: "ozz",
                               subdirectory: "assets/Animation")!
         let sampler1 = AnimationClip(url)
         sampler1.blendMode = .Additive
+        gui.sampler1 = sampler1
         
         let animationBlending = AnimationBlending()
         animationBlending.addChild(state: sampler0)
@@ -69,6 +91,10 @@ class AnimationAdditiveApp: NSViewController {
         characterEntity.addComponent(AnimationVisualizer.self)
 
         engine.run()
+    }
+    
+    override func viewDidDisappear() {
+        engine.destroy()
     }
 }
 

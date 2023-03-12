@@ -22,4 +22,6 @@
 
 - (void)update:(float)dt;
 
+- (void)destroy;
+
 @end

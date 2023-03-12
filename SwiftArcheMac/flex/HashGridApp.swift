@@ -52,5 +52,9 @@ class HashGridApp: NSViewController {
 
         engine.run()
     }
+    
+    override func viewDidDisappear() {
+        engine.destroy()
+    }
 }
 

@@ -20,7 +20,7 @@
     ozz::animation::Skeleton _skeleton;
     ozz::animation::LocalToModelJob _ltm_job;
     // Buffer of local transforms as sampled from animation_.
-    ozz::vector<ozz::math::SoaTransform> *_locals;
+    ozz::vector<ozz::math::SoaTransform> _locals;
     // Buffer of model space matrices.
     ozz::vector<ozz::math::Float4x4> _models;
     CAnimationState *_rootState;
@@ -40,6 +40,16 @@
     simd_float3 pelvis_offset;
 }
 
+- (void)destroy {
+    _models.~vector();
+    _locals.~vector();
+    _skeleton.~Skeleton();
+    _ltm_job.~LocalToModelJob();
+    if (_rootState) {
+        [_rootState destroy];
+    }
+}
+
 + (int)kMaxJoints {
     return ozz::animation::Skeleton::kMaxJoints;
 }
@@ -48,15 +58,15 @@
     if (_rootState) {
         [_rootState loadSkeleton:&_skeleton];
         [_rootState update:dt];
-        _locals = [_rootState locals];
+        _locals = *[_rootState locals];
     } else {
-        _locals->resize(_skeleton.num_soa_joints());
+        _locals.resize(_skeleton.num_soa_joints());
         // Initialize locals from skeleton rest pose
-        for (size_t i = 0; i < _locals->size(); ++i) {
-            (*_locals)[i] = _skeleton.joint_rest_poses()[i];
+        for (size_t i = 0; i < _locals.size(); ++i) {
+            _locals[i] = _skeleton.joint_rest_poses()[i];
         }
     }
-    _ltm_job.input = make_span(*_locals);
+    _ltm_job.input = make_span(_locals);
     (void) _ltm_job.Run();
 }
 

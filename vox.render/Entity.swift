@@ -55,10 +55,19 @@ public final class Entity: EngineObject {
         transform = addComponent(Transform.self)
         _inverseWorldMatFlag = transform.registerWorldChangeFlag()
     }
-
+    
     deinit {
+        destroy()
+    }
+
+    override public func destroy() {
+        _components.forEach { v in
+            v.destroy()
+        }
         _components = []
-        _children = []
+        _children.forEach { v in
+            v.destroy()
+        }
 
         if (_isRoot) {
             _scene._removeFromEntityList(self)

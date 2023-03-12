@@ -11,6 +11,8 @@
 
 @interface CAnimator : NSObject
 
+- (void)destroy;
+
 + (int)kMaxJoints;
 
 - (void)update:(float)dt;

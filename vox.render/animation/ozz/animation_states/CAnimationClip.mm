@@ -33,6 +33,9 @@
 - (instancetype)initWithFilename:(NSString *)filename {
     self = [super init];
     if (self) {
+        _playback_speed = 1.0;
+        _play = true;
+        _loop = true;
         if ([filename length] != 0) {
             [self loadAnimation:filename];
         }
@@ -40,6 +43,15 @@
         _sampling_job.context = &_context;
     }
     return self;
+}
+
+- (void)destroy {
+    _sampling_job.~SamplingJob();
+    _animation.~Animation();
+    _context.~Context();
+    _locals.~vector();
+    
+    [super destroy];
 }
 
 - (bool)loadAnimation:(NSString *)filename {

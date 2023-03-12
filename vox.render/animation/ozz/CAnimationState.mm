@@ -54,6 +54,13 @@
 - (void)update:(float)dt {
 }
 
+- (void)destroy {
+    _joint_masks.~vector();
+    for (auto &state: _states) {
+        [state destroy];
+    }
+}
+
 // MARK: - Internal
 - (ozz::vector<ozz::math::SimdFloat4>&)jointMasks {
     return _joint_masks;

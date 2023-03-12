@@ -128,14 +128,14 @@ public class AnimationVisualizer: Script {
         if length_squared(boneTangent) < Float.leastNonzeroMagnitude {
             world_matrix.columns.1 = SIMD4<Float>(0, 0, 0, 0)
         } else {
-            world_matrix.columns.1 = SIMD4<Float>(bone_len * normalize(cross(binormal, bone_dir)), 0.0)
+            world_matrix.columns.1 = SIMD4<Float>(bone_len * normalize(boneTangent), 0.0)
         }
         
         boneTangent = cross(bone_dir, world_matrix[1].xyz)
         if length_squared(boneTangent) < Float.leastNonzeroMagnitude {
-            world_matrix.columns.2 = SIMD4<Float>(bone_len * normalize(cross(bone_dir, world_matrix[1].xyz)), 0.0)
+            world_matrix.columns.2 = SIMD4<Float>(0, 0, 0, 0)
         } else {
-            world_matrix.columns.2 = SIMD4<Float>(bone_len * normalize(cross(binormal, bone_dir)), 0.0)
+            world_matrix.columns.2 = SIMD4<Float>(bone_len * normalize(boneTangent), 0.0)
         }
         
         world_matrix.columns.3 = SIMD4<Float>(joint3.xyz, 1.0)
