@@ -141,7 +141,8 @@ class PhysXPhysicsManager {
     }
 
     func removeColliderShape(_ colliderShape: PhysXColliderShape) {
-        for i in 0..<_currentEvents.count {
+        let count = _currentEvents.count
+        for i in 0..<count {
             let event = _currentEvents.get(i)!
             if (event.index1 == colliderShape._id || event.index2 == colliderShape._id) {
                 _ = _currentEvents.deleteByIndex(i)

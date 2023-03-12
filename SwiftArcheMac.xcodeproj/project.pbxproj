@@ -114,6 +114,7 @@
 		3E8B00EB29BD7DB000A70123 /* AnimationAdditiveApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E8B00EA29BD7DB000A70123 /* AnimationAdditiveApp.swift */; };
 		3E8B00ED29BDBA2400A70123 /* AnimationAttachApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E8B00EC29BDBA2400A70123 /* AnimationAttachApp.swift */; };
 		3E8B00EF29BDBF6600A70123 /* AnimationBlendApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E8B00EE29BDBF6600A70123 /* AnimationBlendApp.swift */; };
+		3E8B00F129BDC15400A70123 /* AnimationPartialBlendApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E8B00F029BDC15400A70123 /* AnimationPartialBlendApp.swift */; };
 		3EABF5C4294ABB7B009943C1 /* ParticleSystemData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EABF5C3294ABB7B009943C1 /* ParticleSystemData.swift */; };
 		3EABF5C6294AC323009943C1 /* ParticleEmitter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EABF5C5294AC323009943C1 /* ParticleEmitter.swift */; };
 		3EABF5C8294AC3F1009943C1 /* VolumeParticleEmitter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EABF5C7294AC3F1009943C1 /* VolumeParticleEmitter.swift */; };
@@ -817,6 +818,7 @@
 		3E8B00EA29BD7DB000A70123 /* AnimationAdditiveApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnimationAdditiveApp.swift; sourceTree = "<group>"; };
 		3E8B00EC29BDBA2400A70123 /* AnimationAttachApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnimationAttachApp.swift; sourceTree = "<group>"; };
 		3E8B00EE29BDBF6600A70123 /* AnimationBlendApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnimationBlendApp.swift; sourceTree = "<group>"; };
+		3E8B00F029BDC15400A70123 /* AnimationPartialBlendApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnimationPartialBlendApp.swift; sourceTree = "<group>"; };
 		3EABF5C3294ABB7B009943C1 /* ParticleSystemData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParticleSystemData.swift; sourceTree = "<group>"; };
 		3EABF5C5294AC323009943C1 /* ParticleEmitter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParticleEmitter.swift; sourceTree = "<group>"; };
 		3EABF5C7294AC3F1009943C1 /* VolumeParticleEmitter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VolumeParticleEmitter.swift; sourceTree = "<group>"; };
@@ -1806,6 +1808,7 @@
 				3E8B00EA29BD7DB000A70123 /* AnimationAdditiveApp.swift */,
 				3E8B00EC29BDBA2400A70123 /* AnimationAttachApp.swift */,
 				3E8B00EE29BDBF6600A70123 /* AnimationBlendApp.swift */,
+				3E8B00F029BDC15400A70123 /* AnimationPartialBlendApp.swift */,
 			);
 			path = animation;
 			sourceTree = "<group>";
@@ -3313,6 +3316,7 @@
 				3E6D2F11293F1AAB00B63F73 /* GLTFLoaderUtils.swift in Sources */,
 				E63B19C92479C2BE78B928A9 /* CascadeShadowApp.swift in Sources */,
 				43D8CA0AB31B8C46122C1EAB /* IBLBaker.swift in Sources */,
+				3E8B00F129BDC15400A70123 /* AnimationPartialBlendApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
