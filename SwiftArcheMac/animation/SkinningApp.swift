@@ -39,12 +39,12 @@ class SkinningApp: NSViewController {
 
         let characterEntity = rootEntity.createChild()
         let animator = characterEntity.addComponent(Animator.self)
-        var url = Bundle.main.url(forResource: "pab_skeleton",
+        var url = Bundle.main.url(forResource: "ruby_skeleton",
                                   withExtension: "ozz",
                                   subdirectory: "assets/Animation")!
         animator.loadSkeleton(url)
         
-        url = Bundle.main.url(forResource: "pab_walk",
+        url = Bundle.main.url(forResource: "ruby_animation",
                               withExtension: "ozz",
                               subdirectory: "assets/Animation")!
         let baseSampler = AnimationClip(url)
@@ -68,7 +68,7 @@ class SkinningApp: NSViewController {
             renderer.setSkinnedMeshTarget(for: i)
         }
 
-        characterEntity.addComponent(AnimationVisualizer.self)
+//        characterEntity.addComponent(AnimationVisualizer.self)
 
         engine.run()
     }

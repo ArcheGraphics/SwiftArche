@@ -50,7 +50,7 @@ public class SkinnedMeshRenderer: MeshRenderer {
     
     public func setSkinnedMeshTarget(for index: Int) {
         if let mesh = _mesh as? SkinnedMesh {
-            _skinnedMeshIndex = 0
+            _skinnedMeshIndex = index
             let jointCount = mesh.skinningMatricesCount(at: index)
             if (jointCount != 0) {
                 // Allocates skinning matrices.
@@ -146,6 +146,11 @@ public class SkinnedMeshRenderer: MeshRenderer {
 
     override func _updateBounds(_ worldBounds: inout BoundingBox) {
         super._updateBounds(&worldBounds)
+        if let animator = _animator {
+            let localBounds = animator.computeSkeletonBounds()
+            let worldMatrix = _entity.transform.worldMatrix
+            worldBounds = BoundingBox.transform(source: localBounds, matrix: worldMatrix)
+        }
     }
 
     private func _createJointTexture() {

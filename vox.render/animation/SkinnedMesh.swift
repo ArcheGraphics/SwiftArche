@@ -74,7 +74,7 @@ public class SkinnedMesh: Mesh {
         if (_vertices.count != vertexFloatCount) {
             _vertices = [Float](repeating: 0, count: vertexFloatCount)
         }
-        _updateVertices(&_vertices, with: index)
+        _updateVertices(&_vertices, with: vertexCount)
         
         let mesh = Mesh()
         mesh._vertexDescriptor = _vertexDescriptor
@@ -88,7 +88,7 @@ public class SkinnedMesh: Mesh {
         // position
         for i in 0..<vertexCount {
             let start = _elementCount * i
-            vertices[start] = _positions[i]
+            vertices[start] = _positions[i * 3]
             vertices[start + 1] = _positions[i * 3 + 1]
             vertices[start + 2] = _positions[i * 3 + 2]
         }

@@ -128,6 +128,7 @@
 
         vertex_count += part_vertex_count;
     }
+    std::copy(skins_pool_[index].triangle_indices.begin(), skins_pool_[index].triangle_indices.end(), indices);
 }
 
 -(void)getSkinningMatricesAt:(uint32_t)index
