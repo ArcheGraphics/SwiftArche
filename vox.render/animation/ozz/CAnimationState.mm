@@ -55,7 +55,7 @@
 }
 
 // MARK: - Internal
-- (ozz::vector<ozz::math::SimdFloat4>)jointMasks {
+- (ozz::vector<ozz::math::SimdFloat4>&)jointMasks {
     return _joint_masks;
 }
 

@@ -123,9 +123,22 @@ public class AnimationVisualizer: Script {
 
         var world_matrix = simd_float4x4()
         world_matrix.columns.0 = SIMD4<Float>(bone_dir, 0.0)
-        world_matrix.columns.1 = SIMD4<Float>(bone_len * normalize(cross(binormal, bone_dir)), 0.0)
-        world_matrix.columns.2 = SIMD4<Float>(bone_len * normalize(cross(bone_dir, world_matrix[1].xyz)), 0.0)
-        world_matrix.columns.2 = SIMD4<Float>(joint3.xyz, 1.0)
+        
+        var boneTangent = cross(binormal, bone_dir)
+        if length_squared(boneTangent) < Float.leastNonzeroMagnitude {
+            world_matrix.columns.1 = SIMD4<Float>(0, 0, 0, 0)
+        } else {
+            world_matrix.columns.1 = SIMD4<Float>(bone_len * normalize(cross(binormal, bone_dir)), 0.0)
+        }
+        
+        boneTangent = cross(bone_dir, world_matrix[1].xyz)
+        if length_squared(boneTangent) < Float.leastNonzeroMagnitude {
+            world_matrix.columns.2 = SIMD4<Float>(bone_len * normalize(cross(bone_dir, world_matrix[1].xyz)), 0.0)
+        } else {
+            world_matrix.columns.2 = SIMD4<Float>(bone_len * normalize(cross(binormal, bone_dir)), 0.0)
+        }
+        
+        world_matrix.columns.3 = SIMD4<Float>(joint3.xyz, 1.0)
         return Matrix(world_matrix)
     }
 
@@ -173,7 +186,7 @@ public class AnimationVisualizer: Script {
     func _getJointWorldMatrix(_ joint0: SIMD4<Float>, _ joint1: SIMD4<Float>,
                               _ joint2: SIMD4<Float>, _ joint3: SIMD4<Float>) -> Matrix {
         // Rebuilds joint matrix.
-        var joint_matrix: [SIMD4<Float>] = []
+        var joint_matrix = [SIMD4<Float>](repeating: SIMD4<Float>(), count: 4)
         joint_matrix[0] = SIMD4<Float>(normalize(joint0.xyz), 0.0)
         joint_matrix[1] = SIMD4<Float>(normalize(joint1.xyz), 0.0)
         joint_matrix[2] = SIMD4<Float>(normalize(joint2.xyz), 0.0)
@@ -186,9 +199,9 @@ public class AnimationVisualizer: Script {
         // Setup rendering world matrix.
         var world_matrix = simd_float4x4()
         world_matrix.columns.0 = joint_matrix[0] * bone_len
-        world_matrix.columns.0 = joint_matrix[1] * bone_len
-        world_matrix.columns.0 = joint_matrix[2] * bone_len
-        world_matrix.columns.0 = joint_matrix[3]
+        world_matrix.columns.1 = joint_matrix[1] * bone_len
+        world_matrix.columns.2 = joint_matrix[2] * bone_len
+        world_matrix.columns.3 = joint_matrix[3]
         return Matrix(world_matrix)
     }
 }

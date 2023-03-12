@@ -74,16 +74,17 @@ vertex VertexOut vertex_triangle_gizmos(const GizmoVertexIn in [[stage_in]],
     return out;
 }
 
+float4 GetAmbient(float3 _world_normal) {
+    float3 normal = normalize(_world_normal);
+    float3 alpha = (normal + 1.) * .5;
+    float2 bt = mix(float2(.3, .7), float2(.4, .8), alpha.xz);
+    float3 ambient = mix(float3(bt.x, .3, bt.x), float3(bt.y, .8, bt.y), alpha.y);
+    return float4(ambient, 1.);
+}
+
 fragment float4 fragment_triangle_gizmos(VertexOut in [[stage_in]],
                                          constant CameraData &u_camera [[buffer(3)]]) {
-    constexpr float shininess = 16;
-    constexpr float3 lightDirection = float3(-1, -1, -1);
-
-    float3 V = normalize(u_camera.u_cameraPos - in.v_pos);
-    float3 halfDir = normalize( V - lightDirection );
-    float s = pow( clamp( dot( in.normal, halfDir ), 0.0, 1.0 ), shininess );
-    
-    float d = max(dot(in.normal, -lightDirection), 0.0);
-    float3 baseColor = float3(in.v_color.r / 255.0, in.v_color.g / 255.0, in.v_color.b /255.0);
-    return float4(baseColor * (d + s) + float3(0.2, 0.2, 0.2), in.v_color.a /255.0);
+    float4 ambient = GetAmbient(in.normal);
+    float4 baseColor = float4(in.v_color.r / 255.0, in.v_color.g / 255.0, in.v_color.b /255.0, in.v_color.a /255.0);
+    return baseColor * ambient;
 }

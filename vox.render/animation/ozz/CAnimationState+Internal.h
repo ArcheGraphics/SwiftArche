@@ -15,7 +15,7 @@
 
 @property(nonatomic) ozz::vector<CAnimationState *_Nonnull> states;
 
-- (ozz::vector<ozz::math::SimdFloat4>)jointMasks;
+- (ozz::vector<ozz::math::SimdFloat4>&)jointMasks;
 
 - (void)loadSkeleton:(ozz::animation::Skeleton *_Nonnull)skeleton;
 
