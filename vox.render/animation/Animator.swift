@@ -68,6 +68,10 @@ public class Animator: Component {
         return BoundingBox(Vector3(min), Vector3(max))
     }
 
+    func fillPostureUniforms(_ uniforms: inout [Float]) -> Int {
+        Int(_nativeAnimator.fillPostureUniforms(&uniforms))
+    }
+
     func bindEntity(_ entity: Entity, for name: String) {
         let index = _nativeAnimator.findJontIndex(name)
         if index != UInt32.max {

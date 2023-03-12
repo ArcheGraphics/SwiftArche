@@ -590,6 +590,10 @@ extension Vector3 {
     public func lengthSquared() -> Float {
         simd_length_squared(elements)
     }
+    
+    public func cross(_ left: Vector3) -> Vector3 {
+        Vector3(simd_cross(elements, left.elements))
+    }
 
     /// Clone the value of this vector to an array.
     /// - Parameters:

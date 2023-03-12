@@ -7,6 +7,21 @@
 import vox_math
 
 public class Gizmos {
+    /// A vertex made of positions and normals.
+    public struct VertexPNC {
+        public var pos: Vector3
+        public var normal: Vector3
+        public var color: Color32
+        
+        init(_ pos: Vector3 = Vector3(),
+             _ normal: Vector3 = Vector3(),
+             _ color: Color32 = Color32(r: 0, g: 0, b: 0)) {
+            self.pos = pos
+            self.normal = normal
+            self.color = color
+        }
+    }
+    
     static let gCapsuleVertices: [Vector3] = [
         Vector3(0.0000, -2.0000, -0.0000),
         Vector3(0.3827, -1.9239, -0.0000),
@@ -142,6 +157,14 @@ public class Gizmos {
                                    n0: Vector3, n1: Vector3, n2: Vector3, color: Color32) {
         TriangleBatcher.ins.addTriangle(p0: p0, p1: p1, p2: p2,
                 n0: n0, n1: n1, n2: n2, color: color)
+    }
+    
+    public static func addTriangle(p0: Vector3, p1: Vector3, p2: Vector3,
+                                   n0: Vector3, n1: Vector3, n2: Vector3,
+                                   color0: Color32, color1: Color32, color2: Color32) {
+        TriangleBatcher.ins.addTriangle(p0: p0, p1: p1, p2: p2,
+                                        n0: n0, n1: n1, n2: n2,
+                                        color0: color0, color1: color1, color2: color2)
     }
 
     public static func addTriangle(p0: Vector3, p1: Vector3, p2: Vector3, color: Color32) {

@@ -11,6 +11,8 @@
 
 @interface CAnimator : NSObject
 
++ (int)kMaxJoints;
+
 - (void)update:(float)dt;
 
 - (void)setRootState:(CAnimationState *_Nullable)state;
@@ -30,5 +32,9 @@
 - (uint32_t)findJontIndex:(NSString *_Nonnull)name;
 
 - (simd_float4x4)modelsAt:(uint32_t)index;
+
+- (int)fillPostureUniforms:(float *_Nonnull)uniforms;
+
+// MARK: - IK
 
 @end

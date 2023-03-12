@@ -34,7 +34,7 @@ class LoaderGUI: Script {
     var camera: Camera!
     var currentItem: Int = -1
     var currentAnimationItem: Int = -1
-    var animator: Animator?
+//    var animator: Animator?
     var animationName: [String] = []
     
     let gltfInfo = [
@@ -164,10 +164,10 @@ class LoaderGUI: Script {
                 let assetURL = Bundle.main.url(forResource: gltfInfo[newValue].fileName,
                         withExtension: gltfInfo[newValue].ext,
                         subdirectory: gltfInfo[newValue].dir)!
-                GLTFLoader.parse(engine, assetURL) { [self] resource in
+                GLTFLoader.parse(engine, assetURL, { [self] resource in
                     entity.clearChildren()
                     animationName = []
-                    animator = nil
+//                    animator = nil
                     currentAnimationItem = -1
                     
                     entity.addChild(resource.defaultSceneRoot)
@@ -180,14 +180,14 @@ class LoaderGUI: Script {
                     resource.defaultSceneRoot.transform.worldPosition = Vector3()
                     resource.defaultSceneRoot.transform.scale *= scale
                     
-                    animator = resource.defaultSceneRoot!.getComponent(Animator.self)
-                    if let animation = resource.animations {
-                        animationName = animation.map { clip in
-                            return clip.name
-                        }
-                        animationItem = 0
-                    }
-                }
+//                    animator = resource.defaultSceneRoot!.getComponent(Animator.self)
+//                    if let animation = resource.animations {
+//                        animationName = animation.map { clip in
+//                            return clip.name
+//                        }
+//                        animationItem = 0
+//                    }
+                }, false)
             }
         }
     }
@@ -199,9 +199,9 @@ class LoaderGUI: Script {
         set {
             if newValue != currentAnimationItem {
                 currentAnimationItem = newValue
-                if let animator = animator {
-                    animator.play(animationName[currentAnimationItem])
-                }
+                // if let animator = animator {
+                    // animator.play(animationName[currentAnimationItem])
+                // }
             }
         }
     }
@@ -216,7 +216,7 @@ class LoaderGUI: Script {
         }, &loaderItem)
         if !animationName.isEmpty {
             UIElement.selection("Animation Name", animationName, &animationItem)
-            ImGuiSliderFloat("Speed", &animator!.speed, -1.0, 1.0, nil, 1)
+            // ImGuiSliderFloat("Speed", &animator!.speed, -1.0, 1.0, nil, 1)
         }
         
         if loaderItem > -1 {

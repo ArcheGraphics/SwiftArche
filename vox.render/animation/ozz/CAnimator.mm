@@ -10,6 +10,7 @@
 #include <ozz/animation/runtime/ik_aim_job.h>
 #include <ozz/animation/runtime/ik_two_bone_job.h>
 #include <ozz/animation/runtime/local_to_model_job.h>
+#include <ozz/animation/runtime/skeleton_utils.h>
 #include <ozz/base/containers/vector.h>
 #include <ozz/base/maths/soa_transform.h>
 #include <ozz/base/io/archive.h>
@@ -37,6 +38,10 @@
     std::vector<simd_float3> _ankles_initial_ws;
     std::vector<simd_float3> _ankles_target_ws;
     simd_float3 pelvis_offset;
+}
+
++ (int)kMaxJoints {
+    return ozz::animation::Skeleton::kMaxJoints;
 }
 
 - (void)update:(float)dt {
@@ -155,7 +160,8 @@ void _computePostureBounds(ozz::span<const ozz::math::Float4x4> _matrices,
 }
 
 - (uint32_t)findJontIndex:(NSString *_Nonnull)name {
-    auto iter = std::find(_skeleton.joint_names().begin(), _skeleton.joint_names().end(), [name cStringUsingEncoding:NSUTF8StringEncoding]);
+    auto iter = std::find(_skeleton.joint_names().begin(), _skeleton.joint_names().end(),
+            [name cStringUsingEncoding:NSUTF8StringEncoding]);
     if (iter != _skeleton.joint_names().end()) {
         return static_cast<uint32_t>(iter - _skeleton.joint_names().begin());
     }
@@ -167,5 +173,64 @@ void _computePostureBounds(ozz::span<const ozz::math::Float4x4> _matrices,
     memcpy(&localMatrix, &_models[index].cols[0], sizeof(simd_float4x4));
     return localMatrix;
 }
+
+- (int)fillPostureUniforms:(float *_Nonnull)_uniforms {
+    assert(ozz::IsAligned(_uniforms, alignof(ozz::math::SimdFloat4)));
+
+    // Prepares computation constants.
+    const int num_joints = _skeleton.num_joints();
+    const ozz::span<const int16_t> &parents = _skeleton.joint_parents();
+
+    int instances = 0;
+    for (int i = 0; i < num_joints && instances < ozz::animation::Skeleton::kMaxJoints * 2; ++i) {
+        // Root isn't rendered.
+        const int16_t parent_id = parents[i];
+        if (parent_id == ozz::animation::Skeleton::kNoParent) {
+            continue;
+        }
+
+        // Selects joint matrices.
+        const ozz::math::Float4x4 &parent = _models[parent_id];
+        const ozz::math::Float4x4 &current = _models[i];
+
+        // Copy parent joint's raw matrix, to render a bone between the parent
+        // and current matrix.
+        float *uniform = _uniforms + instances * 16;
+        std::memcpy(uniform, parent.cols, 16 * sizeof(float));
+
+        // Set bone direction (bone_dir). The shader expects to find it at index
+        // [3,7,11] of the matrix.
+        // Index 15 is used to store whether a bone should be rendered,
+        // otherwise it's a leaf.
+        float bone_dir[4];
+        ozz::math::StorePtrU(current.cols[3] - parent.cols[3], bone_dir);
+        uniform[3] = bone_dir[0];
+        uniform[7] = bone_dir[1];
+        uniform[11] = bone_dir[2];
+        uniform[15] = 1.f;  // Enables bone rendering.
+
+        // Next instance.
+        ++instances;
+        uniform += 16;
+
+        // Only the joint is rendered for leaves, the bone model isn't.
+        if (IsLeaf(_skeleton, i)) {
+            // Copy current joint's raw matrix.
+            std::memcpy(uniform, current.cols, 16 * sizeof(float));
+
+            // Re-use bone_dir to fix the size of the leaf (same as previous bone).
+            // The shader expects to find it at index [3,7,11] of the matrix.
+            uniform[3] = bone_dir[0];
+            uniform[7] = bone_dir[1];
+            uniform[11] = bone_dir[2];
+            uniform[15] = 0.f;  // Disables bone rendering.
+            ++instances;
+        }
+    }
+
+    return instances;
+}
+
+// MARK: - IK
 
 @end

@@ -45,6 +45,10 @@ public struct Vector4 {
             elements.w = newValue
         }
     }
+    
+    public var xyz: Vector3 {
+        Vector3(elements.xyz)
+    }
 
     public var internalValue: SIMD4<Float> {
         get {
@@ -393,6 +397,12 @@ extension Vector4 {
         out[outOffset + 1] = y
         out[outOffset + 2] = z
         out[outOffset + 3] = w
+    }
+}
+
+extension SIMD4<Float> {
+    public var xyz: SIMD3<Float> {
+        SIMD3<Float>(x, y, z)
     }
 }
 
