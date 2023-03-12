@@ -14,6 +14,8 @@
 
 -(void)loadSkin:(NSString*_Nonnull)filename;
 
+-(void)destroy;
+
 -(uint32_t)skinCount;
 
 // MARK: - vertex count

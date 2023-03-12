@@ -13,6 +13,10 @@
     std::vector<ozz::Skin> skins_pool_;
 }
 
+-(void)destroy {
+    skins_pool_.~vector();
+}
+
 -(void)loadSkin:(NSString*_Nonnull)filename {
     ozz::io::File file([filename cStringUsingEncoding:NSUTF8StringEncoding], "rb");
     if (!file.opened()) {

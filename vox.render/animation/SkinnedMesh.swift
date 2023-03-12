@@ -9,6 +9,7 @@ import vox_math
 public class SkinnedMesh: Mesh {
     private var _nativeSkin = CSkin()
     
+    private var _destroyed = false
     private var _device: MTLDevice
     private var _positions: [Float] = []
     private var _normals: [Float] = []
@@ -24,6 +25,13 @@ public class SkinnedMesh: Mesh {
 
     public var skinCount: Int {
         Int(_nativeSkin.skinCount())
+    }
+    
+    public func destroy() {
+        if !_destroyed {
+            _nativeSkin.destroy()
+            _destroyed = true
+        }
     }
     
     public init(_ engine: Engine) {

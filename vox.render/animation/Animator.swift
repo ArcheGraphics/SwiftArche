@@ -13,7 +13,6 @@ public class Animator: Component {
     private var _rootState: AnimationState?
     private var _entityBindingMap: [UInt32: Set<Entity>] = [:]
 
-
     public var rootState: AnimationState? {
         get {
             _rootState

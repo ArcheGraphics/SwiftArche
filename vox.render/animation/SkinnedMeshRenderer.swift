@@ -152,6 +152,13 @@ public class SkinnedMeshRenderer: MeshRenderer {
             worldBounds = BoundingBox.transform(source: localBounds, matrix: worldMatrix)
         }
     }
+    
+    override func _onDestroy() {
+        super._onDestroy()
+        if let mesh = _mesh as? SkinnedMesh {
+            mesh.destroy()
+        }
+    }
 
     private func _createJointTexture() {
         if (_jointTexture == nil) {
