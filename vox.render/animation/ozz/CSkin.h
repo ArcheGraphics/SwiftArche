@@ -19,6 +19,8 @@
 // MARK: - vertex count
 -(uint32_t)vertexCountAt:(uint32_t)index;
 
+-(uint32_t)indicesCountAt:(uint32_t)index;
+
 -(void)getMeshDataAt:(uint32_t)index
                     :(float*_Nonnull)positions
                     :(float*_Nonnull)normals

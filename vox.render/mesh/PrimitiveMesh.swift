@@ -922,6 +922,6 @@ extension PrimitiveMesh {
         mesh.setIndices(indices: indices)
 
         mesh.uploadData(noLongerAccessible)
-        _ = mesh.addSubMesh(0, indices.count)
+        mesh.addSubMesh(0, indices.count)
     }
 }

@@ -39,6 +39,7 @@ public class Mesh {
     /// Add sub-mesh, each sub-mesh can correspond to an independent material.
     /// - Parameter subMesh: Start drawing offset, if the index buffer is set, it means the offset in the index buffer, if not set, it means the offset in the vertex buffer
     /// - Returns: Sub-mesh
+    @discardableResult
     public func addSubMesh(_ subMesh: SubMesh) -> SubMesh {
         _subMeshes.append(subMesh)
         return subMesh
@@ -50,6 +51,7 @@ public class Mesh {
     ///   - count: Drawing count, if the index buffer is set, it means the count in the index buffer, if not set, it means the count in the vertex buffer
     ///   - topology: Drawing topology, default is MeshTopology.Triangles
     /// - Returns: Sub-mesh
+    @discardableResult
     public func addSubMesh(_ start: Int = 0, _ count: Int = 0, _ topology: MTLPrimitiveType = .triangle) -> SubMesh {
         let submesh = SubMesh(start, count, topology)
         _subMeshes.append(submesh)

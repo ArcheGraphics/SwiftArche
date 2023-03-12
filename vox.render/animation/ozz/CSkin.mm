@@ -39,6 +39,10 @@
     return vertex_count;
 }
 
+-(uint32_t)indicesCountAt:(uint32_t)index {
+    return uint32_t(std::ceil(float(skins_pool_[index].triangle_indices.size()) / 4.0)) * 4;
+}
+
 -(uint32_t)skinningMatricesCountAt:(uint32_t)index {
     // Computes the number of skinning matrices required to skin all meshes.
     // A mesh is skinned by only a subset of joints, so the number of skinning
