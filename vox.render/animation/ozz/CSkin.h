@@ -10,7 +10,7 @@
 #import <simd/simd.h>
 #import "CAnimator.h"
 
-@interface CSkinGroup : NSObject
+@interface CSkin : NSObject
 
 -(void)loadSkin:(NSString*_Nonnull)filename;
 

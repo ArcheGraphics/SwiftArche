@@ -4,12 +4,12 @@
 //  personal capacity and am not conveying any rights to any intellectual
 //  property of any third parties.
 
-#import "CSkinGroup.h"
+#import "CSkin.h"
 #include "Skin.h"
 #import "CAnimator+Internal.h"
 #include <ozz/base/io/archive.h>
 
-@implementation CSkinGroup {
+@implementation CSkin {
     std::vector<ozz::Skin> skins_pool_;
 }
 

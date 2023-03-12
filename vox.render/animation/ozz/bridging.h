@@ -10,4 +10,4 @@
 #include "CAnimatorBlending.h"
 #include "CAnimationClip.h"
 #include "CAnimator.h"
-#include "CSkinGroup.h"
+#include "CSkin.h"

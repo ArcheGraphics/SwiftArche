@@ -18,8 +18,6 @@ public class SkinnedMeshRenderer: MeshRenderer {
     private var _hasInitJoints: Bool = false
     /// Whether to use joint texture. Automatically used when the device can't support the maximum number of bones.
     private var _useJointTexture: Bool = false
-    private var _skinGounp: SkinGroup?
-    private var _skinIndex: Int = 0
     private var _animator: Animator?
     
     private var _blendShapeWeights: [Float] = []
@@ -49,11 +47,21 @@ public class SkinnedMeshRenderer: MeshRenderer {
         }
     }
     
-    public func setSkinnedMesh(with group: SkinGroup, at index: Int) {
-        _skinGounp = group
-        _skinIndex = index
-        
-        let jointCount = group.skinningMatricesCount(at: index)
+    /// Mesh assigned to the renderer.
+    public override var mesh: Mesh? {
+        get {
+            _mesh
+        }
+        set {
+            if let skinnedMesh = newValue as? SkinnedMesh {
+                setSkinnedMesh(with: skinnedMesh, at: 0)
+            }
+            super.mesh = newValue
+        }
+    }
+    
+    public func setSkinnedMesh(with mesh: SkinnedMesh, at index: Int) {
+        let jointCount = mesh.skinningMatricesCount(at: index)
         if (jointCount != 0) {
             // Allocates skinning matrices.
             _skinningMatrices = [simd_float4x4](repeating: simd_float4x4(), count: jointCount)
@@ -78,8 +86,8 @@ public class SkinnedMeshRenderer: MeshRenderer {
         }
         
         if let animator = _animator,
-           let skinGounp = _skinGounp {
-            skinGounp.getSkinningMatrices(at: _skinIndex, animator: animator, matrix: &_skinningMatrices)
+           let skinnedMesh = _mesh as? SkinnedMesh {
+            skinnedMesh.getSkinningMatrices(at: 0, animator: animator, matrix: &_skinningMatrices)
         }
     }
 
