@@ -9,6 +9,6 @@
 #import <Foundation/Foundation.h>
 #include <ozz/animation/runtime/skeleton.h>
 
-@interface CAnimator()
+@interface CAnimator ()
 
 @end

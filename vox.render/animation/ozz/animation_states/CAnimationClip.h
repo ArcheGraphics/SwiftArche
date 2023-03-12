@@ -19,9 +19,9 @@
 /// Animation loop mode.
 @property(nonatomic) bool loop;
 
-- (instancetype)initWithFilename:(NSString *)filename;
+- (instancetype _Nonnull )initWithFilename:(NSString *_Nonnull)filename;
 
-- (bool)loadAnimation:(NSString *)filename;
+- (bool)loadAnimation:(NSString *_Nonnull)filename;
 
 - (void)update:(float)dt;
 

@@ -6,24 +6,23 @@
 
 #import "CAnimator.h"
 #import "CAnimator+Internal.h"
-#import "CAnimationState.h"
 #import "CAnimationState+Internal.h"
 #include <ozz/animation/runtime/ik_aim_job.h>
 #include <ozz/animation/runtime/ik_two_bone_job.h>
 #include <ozz/animation/runtime/local_to_model_job.h>
 #include <ozz/base/containers/vector.h>
 #include <ozz/base/maths/soa_transform.h>
+#include <ozz/base/io/archive.h>
 #include <unordered_map>
-#include <simd/simd.h>
 
 @implementation CAnimator {
     ozz::animation::Skeleton _skeleton;
     ozz::animation::LocalToModelJob _ltm_job;
     // Buffer of local transforms as sampled from animation_.
-    ozz::vector<ozz::math::SoaTransform>* _locals;
+    ozz::vector<ozz::math::SoaTransform> *_locals;
     // Buffer of model space matrices.
     ozz::vector<ozz::math::Float4x4> _models;
-    CAnimationState* _rootState;
+    CAnimationState *_rootState;
     std::vector<std::function<void()>> _scheduleFunctor;
 
     struct LegRayInfo {
@@ -40,7 +39,7 @@
     simd_float3 pelvis_offset;
 }
 
-- (void) update:(float) dt {
+- (void)update:(float)dt {
     if (_rootState) {
         [_rootState loadSkeleton:&_skeleton];
         [_rootState update:dt];
@@ -53,7 +52,120 @@
         }
     }
     _ltm_job.input = make_span(*_locals);
-    (void)_ltm_job.Run();
+    (void) _ltm_job.Run();
+}
+
+- (void)setRootState:(CAnimationState *_Nullable)state {
+    _rootState = state;
+}
+
+- (bool)loadSkeleton:(NSString *_Nonnull)filename {
+//    LOGI("Loading skeleton archive {}", filename)
+    ozz::io::File file([filename cStringUsingEncoding:NSUTF8StringEncoding], "rb");
+    if (!file.opened()) {
+//        LOGE("Failed to open skeleton file {}", filename)
+        return false;
+    }
+    ozz::io::IArchive archive(&file);
+    if (!archive.TestTag<ozz::animation::Skeleton>()) {
+//        LOGE("Failed to load skeleton instance from file {}.", filename)
+        return false;
+    }
+
+    // Once the tag is validated, reading cannot fail.
+    archive >> _skeleton;
+
+    _models.resize(_skeleton.num_joints());
+    _ltm_job.output = make_span(_models);
+    _ltm_job.skeleton = &_skeleton;
+    return true;
+}
+
+- (bool)localToModelFromExcluded {
+    return _ltm_job.from_excluded;
+}
+
+- (void)setLocalToModelFromExcluded:(bool)localToModelFromExcluded {
+    _ltm_job.from_excluded = localToModelFromExcluded;
+}
+
+- (int)localToModelFrom {
+    return _ltm_job.from;
+}
+
+- (void)setLocalToModelFrom:(int)localToModelFrom {
+    _ltm_job.from = localToModelFrom;
+}
+
+- (int)localToModelTo {
+    return _ltm_job.to;
+}
+
+- (void)setLocalToModelTo:(int)localToModelTo {
+    _ltm_job.to = localToModelTo;
+}
+
+- (void)computeSkeletonBounds:(simd_float3 *_Nonnull)min
+        :(simd_float3 *_Nonnull)max {
+    const int num_joints = _skeleton.num_joints();
+    if (!num_joints) {
+        return;
+    }
+
+    // Allocate matrix array, out of memory is handled by the LocalToModelJob.
+    ozz::vector<ozz::math::Float4x4> models(num_joints);
+
+    // Compute model space rest pose.
+    ozz::animation::LocalToModelJob job;
+    job.input = _skeleton.joint_rest_poses();
+    job.output = make_span(models);
+    job.skeleton = &_skeleton;
+    if (job.Run()) {
+        // Forwards to posture function.
+        _computePostureBounds(job.output, min, max);
+    }
+}
+
+void _computePostureBounds(ozz::span<const ozz::math::Float4x4> _matrices,
+        simd_float3 *boundMin, simd_float3 *boundMax) {
+    // Set a default box.
+    *boundMin = simd_make_float3(0, 0, 0);
+    *boundMax = simd_make_float3(0, 0, 0);
+
+    if (_matrices.empty()) {
+        return;
+    }
+
+    // Loops through matrices and stores min/max.
+    // Matrices array cannot be empty, it was checked at the beginning of the
+    // function.
+    const ozz::math::Float4x4 *current = _matrices.begin();
+    ozz::math::SimdFloat4 min = current->cols[3];
+    ozz::math::SimdFloat4 max = current->cols[3];
+    ++current;
+    while (current < _matrices.end()) {
+        min = ozz::math::Min(min, current->cols[3]);
+        max = ozz::math::Max(max, current->cols[3]);
+        ++current;
+    }
+
+    // Stores in math::Box structure.
+    ozz::math::Store3PtrU(min, (float *) boundMin);
+    ozz::math::Store3PtrU(max, (float *) boundMax);
+}
+
+- (uint32_t)findJontIndex:(NSString *_Nonnull)name {
+    auto iter = std::find(_skeleton.joint_names().begin(), _skeleton.joint_names().end(), [name cStringUsingEncoding:NSUTF8StringEncoding]);
+    if (iter != _skeleton.joint_names().end()) {
+        return static_cast<uint32_t>(iter - _skeleton.joint_names().begin());
+    }
+    return std::numeric_limits<uint32_t>::max();
+}
+
+- (simd_float4x4)modelsAt:(uint32_t)index {
+    simd_float4x4 localMatrix;
+    memcpy(&localMatrix, &_models[index].cols[0], sizeof(simd_float4x4));
+    return localMatrix;
 }
 
 @end
