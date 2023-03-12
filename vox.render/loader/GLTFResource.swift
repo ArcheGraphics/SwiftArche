@@ -21,8 +21,6 @@ public class GLTFResource {
     public var materials: [Material]?
     /** Oasis ModelMesh after MeshParser. */
     public var meshes: [[ModelMesh]]?
-    /** Oasis Skin after SkinParser. */
-    public var skins: [Skin]?
     /** Oasis Entity after EntityParser. */
     public var entities: [Entity]!
     /** Oasis Camera after SceneParser. */

@@ -69,7 +69,6 @@ class SceneParser: Parser {
     private func _createRenderer(_ context: ParserContext, _ gltfNode: GLTFNode, _ entity: Entity) {
         let glTFResource = context.glTFResource!
         let glTFMesh = gltfNode.mesh!
-        let skin = gltfNode.skin
         let gltfMeshPrimitives = glTFMesh.primitives
         let blendShapeWeights = gltfNode.weights ?? glTFMesh.weights
 
@@ -77,13 +76,10 @@ class SceneParser: Parser {
             let mesh = glTFResource.meshes![glTFMesh.index][i]
             let renderer: MeshRenderer
 
-            if (skin != nil || blendShapeWeights != nil) {
+            if (blendShapeWeights != nil) {
                 context.hasSkinned = true
                 let skinRenderer = entity.addComponent(SkinnedMeshRenderer.self)
                 skinRenderer.mesh = mesh
-                if let skin = skin {
-                    skinRenderer.skin = glTFResource.skins![skin.index]
-                }
                 if let blendShapeWeights = blendShapeWeights {
                     skinRenderer.blendShapeWeights = blendShapeWeights.map { value in
                         value.floatValue

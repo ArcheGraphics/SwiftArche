@@ -13,7 +13,6 @@ public class GLTFLoader {
         MaterialParser(),
         MeshParser(),
         EntityParser(),
-        SkinParser(),
         SceneParser()
     ]);
     private static let texturePipeline = GLTFLoader([TextureParser()]);

@@ -13,21 +13,20 @@ public class SkinnedMeshRenderer: MeshRenderer {
     private static let _jointTextureProperty = "u_jointTexture"
     private static let _jointSamplerProperty = "u_jointSampler"
     private static let _jointMatrixProperty = "u_jointMatrix"
-    private static var _maxJoints: Int = 0
+    private static var _maxJoints: Int = 256
 
     private var _hasInitJoints: Bool = false
     /// Whether to use joint texture. Automatically used when the device can't support the maximum number of bones.
     private var _useJointTexture: Bool = false
     private var _skinGounp: SkinGroup?
     private var _skinIndex: Int = 0
+    private var _animator: Animator?
     
     private var _blendShapeWeights: [Float] = []
     private var _maxVertexUniformVectors: Int = 256
-    private var _rootBone: Entity?
     private var _localBounds: BoundingBox = BoundingBox()
-    private var _jointMatrixs: [simd_float4x4] = []
+    private var _skinningMatrices: [simd_float4x4] = []
     private var _jointTexture: MTLTexture?
-    private var _jointEntities: [Entity?] = []
     private var _listenerFlag: ListenerUpdateFlag?
 
     var _condensedBlendShapeWeights: [Float] = []
@@ -53,17 +52,42 @@ public class SkinnedMeshRenderer: MeshRenderer {
     public func setSkinnedMesh(with group: SkinGroup, at index: Int) {
         _skinGounp = group
         _skinIndex = index
+        
+        let jointCount = group.skinningMatricesCount(at: index)
+        if (jointCount != 0) {
+            // Allocates skinning matrices.
+            _skinningMatrices = [simd_float4x4](repeating: simd_float4x4(), count: jointCount)
+            
+            shaderData.enableMacro(HAS_SKIN.rawValue)
+            shaderData.setData(SkinnedMeshRenderer._jointCountProperty, jointCount)
+            if (jointCount > SkinnedMeshRenderer._maxJoints) {
+                _useJointTexture = true
+            } else {
+                let maxJoints = max(SkinnedMeshRenderer._maxJoints, jointCount)
+                SkinnedMeshRenderer._maxJoints = maxJoints
+                shaderData.disableMacro(HAS_JOINT_TEXTURE.rawValue)
+            }
+        } else {
+            shaderData.disableMacro(HAS_SKIN.rawValue)
+        }
     }
 
     override func update(_ deltaTime: Float) {
+        if _animator == nil {
+            _animator = entity.getComponent(Animator.self)
+        }
+        
+        if let animator = _animator,
+           let skinGounp = _skinGounp {
+            skinGounp.getSkinningMatrices(at: _skinIndex, animator: animator, matrix: &_skinningMatrices)
+        }
     }
 
     override func _updateShaderData(_ cameraInfo: CameraInfo) {
-        let worldMatrix = _rootBone != nil ? _rootBone!.transform.worldMatrix : entity.transform.worldMatrix
-        _updateTransformShaderData(cameraInfo, worldMatrix)
+        _updateTransformShaderData(cameraInfo, entity.transform.worldMatrix)
 
-        if (!_useJointTexture && !_jointMatrixs.isEmpty) {
-            shaderData.setData(SkinnedMeshRenderer._jointMatrixProperty, _jointMatrixs)
+        if (!_useJointTexture && !_skinningMatrices.isEmpty) {
+            shaderData.setData(SkinnedMeshRenderer._jointMatrixProperty, _skinningMatrices)
         }
 
         let mesh = mesh as! ModelMesh
@@ -78,7 +102,7 @@ public class SkinnedMeshRenderer: MeshRenderer {
         if (_jointTexture == nil) {
             let descriptor = MTLTextureDescriptor()
             descriptor.width = 4
-            descriptor.height = _jointEntities.count
+            descriptor.height = _skinningMatrices.count
             descriptor.pixelFormat = .rgba32Float
             descriptor.mipmapLevelCount = 1
             _jointTexture = engine.device.makeTexture(descriptor: descriptor)
@@ -95,7 +119,7 @@ public class SkinnedMeshRenderer: MeshRenderer {
         if let texture = _jointTexture {
             texture.replace(region: MTLRegion(origin: MTLOrigin(x: 0, y: 0, z: 0),
                     size: MTLSize(width: texture.width, height: texture.height, depth: 1)),
-                            mipmapLevel: 0, withBytes: &_jointMatrixs, bytesPerRow: 16 * MemoryLayout<Float>.stride)
+                            mipmapLevel: 0, withBytes: &_skinningMatrices, bytesPerRow: 16 * MemoryLayout<Float>.stride)
         }
     }
 

@@ -381,7 +381,6 @@
 		3EC0390829321862002187DC /* GLTFAsset.h in Headers */ = {isa = PBXBuildFile; fileRef = 3EC038FF29321862002187DC /* GLTFAsset.h */; };
 		3EC0390929321862002187DC /* GLTFLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EC0390029321862002187DC /* GLTFLoader.swift */; };
 		3EC039142932186A002187DC /* SceneParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EC0390A2932186A002187DC /* SceneParser.swift */; };
-		3EC039152932186A002187DC /* SkinParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EC0390B2932186A002187DC /* SkinParser.swift */; };
 		3EC039162932186A002187DC /* EntityParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EC0390C2932186A002187DC /* EntityParser.swift */; };
 		3EC039172932186A002187DC /* TextureParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EC0390D2932186A002187DC /* TextureParser.swift */; };
 		3EC039182932186A002187DC /* Validator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EC0390E2932186A002187DC /* Validator.swift */; };
@@ -1112,7 +1111,6 @@
 		3EC038FF29321862002187DC /* GLTFAsset.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GLTFAsset.h; sourceTree = "<group>"; };
 		3EC0390029321862002187DC /* GLTFLoader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GLTFLoader.swift; sourceTree = "<group>"; };
 		3EC0390A2932186A002187DC /* SceneParser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SceneParser.swift; sourceTree = "<group>"; };
-		3EC0390B2932186A002187DC /* SkinParser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SkinParser.swift; sourceTree = "<group>"; };
 		3EC0390C2932186A002187DC /* EntityParser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EntityParser.swift; sourceTree = "<group>"; };
 		3EC0390D2932186A002187DC /* TextureParser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TextureParser.swift; sourceTree = "<group>"; };
 		3EC0390E2932186A002187DC /* Validator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Validator.swift; sourceTree = "<group>"; };
@@ -2531,7 +2529,6 @@
 				3EC0390F2932186A002187DC /* Parser.swift */,
 				3EC039122932186A002187DC /* ParserContext.swift */,
 				3EC0390A2932186A002187DC /* SceneParser.swift */,
-				3EC0390B2932186A002187DC /* SkinParser.swift */,
 				3EC0390D2932186A002187DC /* TextureParser.swift */,
 				3EC0390E2932186A002187DC /* Validator.swift */,
 				3EC03883293217FF002187DC /* extensions */,
@@ -3656,7 +3653,6 @@
 				3EC0389A29321826002187DC /* Transform.swift in Sources */,
 				3EC038CC2932183D002187DC /* BoxColliderShape.swift in Sources */,
 				3EC038B529321835002187DC /* PhysXDynamicCollider.swift in Sources */,
-				3EC039152932186A002187DC /* SkinParser.swift in Sources */,
 				3EC03955293218B3002187DC /* GeometrySubpass.swift in Sources */,
 				3EC03965293218BA002187DC /* RenderElement.swift in Sources */,
 				3EC038B129321835002187DC /* PhysXPhysicsMaterial.swift in Sources */,

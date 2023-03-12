@@ -11,8 +11,6 @@
 #include <ozz/animation/runtime/ik_two_bone_job.h>
 #include <ozz/animation/runtime/local_to_model_job.h>
 #include <ozz/animation/runtime/skeleton_utils.h>
-#include <ozz/base/containers/vector.h>
-#include <ozz/base/maths/soa_transform.h>
 #include <ozz/base/io/archive.h>
 #include <unordered_map>
 #include <string>
@@ -240,6 +238,10 @@ void _computePostureBounds(ozz::span<const ozz::math::Float4x4> _matrices,
     }
 
     return instances;
+}
+
+-(const ozz::vector<ozz::math::Float4x4>&) models {
+    return _models;
 }
 
 // MARK: - IK
