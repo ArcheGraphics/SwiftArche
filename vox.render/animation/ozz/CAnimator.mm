@@ -15,6 +15,7 @@
 #include <ozz/base/maths/soa_transform.h>
 #include <ozz/base/io/archive.h>
 #include <unordered_map>
+#include <string>
 
 @implementation CAnimator {
     ozz::animation::Skeleton _skeleton;
@@ -171,7 +172,7 @@ void _computePostureBounds(ozz::span<const ozz::math::Float4x4> _matrices,
 
 - (uint32_t)findJontIndex:(NSString *_Nonnull)name {
     auto iter = std::find(_skeleton.joint_names().begin(), _skeleton.joint_names().end(),
-            [name cStringUsingEncoding:NSUTF8StringEncoding]);
+            std::string([name cStringUsingEncoding:NSUTF8StringEncoding]));
     if (iter != _skeleton.joint_names().end()) {
         return static_cast<uint32_t>(iter - _skeleton.joint_names().begin());
     }

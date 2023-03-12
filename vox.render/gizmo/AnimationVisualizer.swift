@@ -36,23 +36,29 @@ public class AnimationVisualizer: Script {
                     let bone0 = bones[j * 3]
                     let bone1 = bones[j * 3 + 1]
                     let bone2 = bones[j * 3 + 2]
-                    let matrix = modelMat * _getBoneWorldMatrix(col0, col1, col2, col3)
+                    let instanceMat = _getBoneWorldMatrix(col0, col1, col2, col3)
+                    let matrix = modelMat * instanceMat.modelMat
                     Gizmos.addTriangle(p0: Vector3.transformCoordinate(v: bone0.pos, m: matrix),
-                            p1: Vector3.transformCoordinate(v: bone1.pos, m: matrix),
-                            p2: Vector3.transformCoordinate(v: bone2.pos, m: matrix),
-                            n0: bone0.normal, n1: bone1.normal, n2: bone2.normal,
-                            color0: bone0.color, color1: bone1.color, color2: bone2.color)
+                                       p1: Vector3.transformCoordinate(v: bone1.pos, m: matrix),
+                                       p2: Vector3.transformCoordinate(v: bone2.pos, m: matrix),
+                                       n0: Vector3.transformNormal(v: bone0.normal, m: instanceMat.normalMat),
+                                       n1: Vector3.transformNormal(v: bone1.normal, m: instanceMat.normalMat),
+                                       n2: Vector3.transformNormal(v: bone2.normal, m: instanceMat.normalMat),
+                                       color0: bone0.color, color1: bone1.color, color2: bone2.color)
                 }
                 for j in 0..<joints.count / 3 {
                     let joint0 = joints[j * 3]
                     let joint1 = joints[j * 3 + 1]
                     let joint2 = joints[j * 3 + 2]
-                    let matrix = modelMat * _getJointWorldMatrix(col0, col1, col2, col3)
+                    let instanceMat = _getJointWorldMatrix(col0, col1, col2, col3)
+                    let matrix = modelMat * instanceMat.modelMat
                     Gizmos.addTriangle(p0: Vector3.transformCoordinate(v: joint0.pos, m: matrix),
-                            p1: Vector3.transformCoordinate(v: joint1.pos, m: matrix),
-                            p2: Vector3.transformCoordinate(v: joint2.pos, m: matrix),
-                            n0: joint0.normal, n1: joint1.normal, n2: joint2.normal,
-                            color0: joint0.color, color1: joint1.color, color2: joint2.color)
+                                       p1: Vector3.transformCoordinate(v: joint1.pos, m: matrix),
+                                       p2: Vector3.transformCoordinate(v: joint2.pos, m: matrix),
+                                       n0: Vector3.transformNormal(v: joint0.normal, m: instanceMat.normalMat),
+                                       n1: Vector3.transformNormal(v: joint1.normal, m: instanceMat.normalMat),
+                                       n2: Vector3.transformNormal(v: joint2.normal, m: instanceMat.normalMat),
+                                       color0: joint0.color, color1: joint1.color, color2: joint2.color)
                 }
             }
         }
@@ -109,7 +115,7 @@ public class AnimationVisualizer: Script {
     }
 
     func _getBoneWorldMatrix(_ joint0: SIMD4<Float>, _ joint1: SIMD4<Float>,
-                             _ joint2: SIMD4<Float>, _ joint3: SIMD4<Float>) -> Matrix {
+                             _ joint2: SIMD4<Float>, _ joint3: SIMD4<Float>) -> (modelMat: Matrix, normalMat: Matrix3x3) {
         // Rebuilds bone properties.
         // Bone length is set to zero to disable leaf rendering.
         let is_bone = joint3.w
@@ -139,7 +145,14 @@ public class AnimationVisualizer: Script {
         }
         
         world_matrix.columns.3 = SIMD4<Float>(joint3.xyz, 1.0)
-        return Matrix(world_matrix)
+
+        let cross_matrix = simd_float3x3(
+        cross(world_matrix[1].xyz, world_matrix[2].xyz),
+        cross(world_matrix[2].xyz, world_matrix[0].xyz),
+        cross(world_matrix[0].xyz, world_matrix[1].xyz));
+        let invdet = 1.0 / dot(cross_matrix[2], world_matrix[2].xyz);
+        let normal_matrix = cross_matrix * invdet;
+        return (Matrix(world_matrix), Matrix3x3(normal_matrix))
     }
 
     private func _createJointMesh() {
@@ -184,7 +197,7 @@ public class AnimationVisualizer: Script {
     }
 
     func _getJointWorldMatrix(_ joint0: SIMD4<Float>, _ joint1: SIMD4<Float>,
-                              _ joint2: SIMD4<Float>, _ joint3: SIMD4<Float>) -> Matrix {
+                              _ joint2: SIMD4<Float>, _ joint3: SIMD4<Float>) -> (modelMat: Matrix, normalMat: Matrix3x3) {
         // Rebuilds joint matrix.
         var joint_matrix = [SIMD4<Float>](repeating: SIMD4<Float>(), count: 4)
         joint_matrix[0] = SIMD4<Float>(normalize(joint0.xyz), 0.0)
@@ -202,6 +215,13 @@ public class AnimationVisualizer: Script {
         world_matrix.columns.1 = joint_matrix[1] * bone_len
         world_matrix.columns.2 = joint_matrix[2] * bone_len
         world_matrix.columns.3 = joint_matrix[3]
-        return Matrix(world_matrix)
+        
+        let cross_matrix = simd_float3x3(
+        cross(world_matrix[1].xyz, world_matrix[2].xyz),
+        cross(world_matrix[2].xyz, world_matrix[0].xyz),
+        cross(world_matrix[0].xyz, world_matrix[1].xyz));
+        let invdet = 1.0 / dot(cross_matrix[2], world_matrix[2].xyz);
+        let normal_matrix = cross_matrix * invdet;
+        return (Matrix(world_matrix), Matrix3x3(normal_matrix))
     }
 }

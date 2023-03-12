@@ -290,6 +290,15 @@ extension Vector3 {
                 x * m.elements.columns.0[1] + y * m.elements.columns.1[1] + z * m.elements.columns.2[1],
                 x * m.elements.columns.0[2] + y * m.elements.columns.1[2] + z * m.elements.columns.2[2])
     }
+    
+    public static func transformNormal(v: Vector3, m: Matrix3x3) -> Vector3 {
+        let x = v.x
+        let y = v.y
+        let z = v.z
+        return Vector3(x * m.elements.columns.0[0] + y * m.elements.columns.1[0] + z * m.elements.columns.2[0],
+                x * m.elements.columns.0[1] + y * m.elements.columns.1[1] + z * m.elements.columns.2[1],
+                x * m.elements.columns.0[2] + y * m.elements.columns.1[2] + z * m.elements.columns.2[2])
+    }
 
     /// Performs a transformation using the given 4x4 matrix.
     /// - Parameters:
