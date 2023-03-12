@@ -110,6 +110,7 @@ class IrradianceApp: NSViewController {
     }
     
     override func viewDidDisappear() {
+        super.viewDidDisappear()
         engine.destroy()
     }
 }

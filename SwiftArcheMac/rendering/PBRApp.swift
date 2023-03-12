@@ -89,6 +89,7 @@ class PbrApp: NSViewController {
     }
     
     override func viewDidDisappear() {
+        super.viewDidDisappear()
         engine.destroy()
     }
 }

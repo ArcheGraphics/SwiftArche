@@ -131,6 +131,7 @@ class PhysXConvexComposeApp: NSViewController {
     }
     
     override func viewDidDisappear() {
+        super.viewDidDisappear()
         engine.destroy()
     }
 }

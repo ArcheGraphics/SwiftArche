@@ -59,6 +59,7 @@ class GltfViewerApp: NSViewController {
     }
     
     override func viewDidDisappear() {
+        super.viewDidDisappear()
         engine.destroy()
     }
 }

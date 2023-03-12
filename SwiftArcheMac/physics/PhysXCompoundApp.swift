@@ -158,6 +158,7 @@ class PhysXCompoundApp: NSViewController {
     }
     
     override func viewDidDisappear() {
+        super.viewDidDisappear()
         engine.destroy()
     }
 }

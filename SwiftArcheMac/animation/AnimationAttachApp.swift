@@ -67,6 +67,7 @@ class AnimationAttachApp: NSViewController {
     }
     
     override func viewDidDisappear() {
+        super.viewDidDisappear()
         engine.destroy()
     }
 }

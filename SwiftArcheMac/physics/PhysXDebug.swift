@@ -115,6 +115,7 @@ class PhysXDebugApp: NSViewController {
     }
     
     override func viewDidDisappear() {
+        super.viewDidDisappear()
         engine.destroy()
     }
 }

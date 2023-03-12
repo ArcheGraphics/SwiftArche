@@ -113,6 +113,7 @@ class ScreenSpaceFluidApp: NSViewController {
     }
     
     override func viewDidDisappear() {
+        super.viewDidDisappear()
         engine.destroy()
     }
 }

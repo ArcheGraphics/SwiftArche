@@ -120,6 +120,7 @@ class PhysXRaycastApp: NSViewController {
     }
     
     override func viewDidDisappear() {
+        super.viewDidDisappear()
         engine.destroy()
     }
 }

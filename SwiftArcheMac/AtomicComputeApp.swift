@@ -67,6 +67,7 @@ class AtomicComputeApp: NSViewController {
     }
     
     override func viewDidDisappear() {
+        super.viewDidDisappear()
         engine.destroy()
     }
 }

@@ -167,6 +167,7 @@ class PhysXControllerApp: NSViewController {
     }
     
     override func viewDidDisappear() {
+        super.viewDidDisappear()
         engine.destroy()
     }
 }

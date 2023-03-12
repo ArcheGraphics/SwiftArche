@@ -13,22 +13,25 @@ import ImGui
 fileprivate class GUI: Script {
     var sampler0: AnimationClip?
     var sampler1: AnimationClip?
-    
+    var sampler2: AnimationClip?
+
     override func onGUI() {
         if let sampler0,
-            let sampler1 {
+           let sampler1,
+           let sampler2 {
             UIElement.Init(engine)
             
             ImGuiNewFrame()
-            ImGuiSliderFloat("Clip Curl Additive Weight", &sampler0.weight, 0.0, 1.0, nil, 1)
-            ImGuiSliderFloat("Clip Splay Additive Weight", &sampler1.weight, 0.0, 1.0, nil, 1)
+            ImGuiSliderFloat("Clip Jog Weight", &sampler0.weight, 0.0, 1.0, nil, 1)
+            ImGuiSliderFloat("Clip Walk Weight", &sampler1.weight, 0.0, 1.0, nil, 1)
+            ImGuiSliderFloat("Clip Run Weight", &sampler2.weight, 0.0, 1.0, nil, 1)
             // Rendering
             ImGuiRender()
         }
     }
 }
 
-class AnimationAdditiveApp: NSViewController {
+class AnimationBlendApp: NSViewController {
     var canvas: Canvas!
     var engine: Engine!
     var iblBaker: IBLBaker!
@@ -67,20 +70,19 @@ class AnimationAdditiveApp: NSViewController {
                               withExtension: "ozz",
                               subdirectory: "assets/Animation")!
         let baseSampler = AnimationClip(url)
-        
-        url = Bundle.main.url(forResource: "pab_curl_additive",
+        gui.sampler0 = baseSampler
+
+        url = Bundle.main.url(forResource: "pab_jog",
                               withExtension: "ozz",
                               subdirectory: "assets/Animation")!
         let sampler0 = AnimationClip(url)
-        sampler0.blendMode = .Additive
-        gui.sampler0 = sampler0
+        gui.sampler1 = sampler0
 
-        url = Bundle.main.url(forResource: "pab_splay_additive",
+        url = Bundle.main.url(forResource: "pab_run",
                               withExtension: "ozz",
                               subdirectory: "assets/Animation")!
         let sampler1 = AnimationClip(url)
-        sampler1.blendMode = .Additive
-        gui.sampler1 = sampler1
+        gui.sampler2 = sampler1
         
         let animationBlending = AnimationBlending()
         animationBlending.addChild(state: sampler0)

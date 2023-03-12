@@ -106,6 +106,7 @@ class PhysXCollisionDetectionApp: NSViewController {
     }
     
     override func viewDidDisappear() {
+        super.viewDidDisappear()
         engine.destroy()
     }
 }
