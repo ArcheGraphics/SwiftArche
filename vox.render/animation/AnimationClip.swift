@@ -55,9 +55,9 @@ public class AnimationClip: AnimationState {
         }
     }
 
-    public init(filename: String) {
+    public init(_ url: URL) {
         super.init()
-        _nativeState = CAnimationClip(filename: filename)
+        _nativeState = CAnimationClip(filename: url.path(percentEncoded: false))
     }
 
     /// Resets all parameters to their default value.

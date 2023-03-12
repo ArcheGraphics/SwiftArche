@@ -56,10 +56,22 @@ public class Animator: Component {
         super.init(entity)
     }
 
-    func loadSkeleton(_ filename: String) -> Bool {
-        _nativeAnimator.loadSkeleton(filename)
+    @discardableResult
+    public func loadSkeleton(_ url: URL) -> Bool {
+        _nativeAnimator.loadSkeleton(url.path(percentEncoded: false))
     }
 
+    public func bindEntity(_ entity: Entity, for name: String) {
+        let index = _nativeAnimator.findJontIndex(name)
+        if index != UInt32.max {
+            if _entityBindingMap[index] != nil {
+                _entityBindingMap[index]?.insert(entity)
+            } else {
+                _entityBindingMap[index] = [entity]
+            }
+        }
+    }
+    
     /// Computes the bounding box of _skeleton. This is the box that encloses all skeleton's joints in model space.
     func computeSkeletonBounds() -> BoundingBox {
         var min = SIMD3<Float>()
@@ -70,17 +82,6 @@ public class Animator: Component {
 
     func fillPostureUniforms(_ uniforms: inout [Float]) -> Int {
         Int(_nativeAnimator.fillPostureUniforms(&uniforms))
-    }
-
-    func bindEntity(_ entity: Entity, for name: String) {
-        let index = _nativeAnimator.findJontIndex(name)
-        if index != UInt32.max {
-            if _entityBindingMap[index] != nil {
-                _entityBindingMap[index]?.insert(entity)
-            } else {
-                _entityBindingMap[index] = [entity]
-            }
-        }
     }
 
     /// Evaluates the animator component based on deltaTime.

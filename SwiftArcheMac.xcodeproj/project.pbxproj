@@ -111,6 +111,7 @@
 		3E8B00E229BC314D00A70123 /* AnimationBlending.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E8B00E129BC314D00A70123 /* AnimationBlending.swift */; };
 		3E8B00E529BC358200A70123 /* CAnimator.mm in Sources */ = {isa = PBXBuildFile; fileRef = 3E8B00E429BC358200A70123 /* CAnimator.mm */; };
 		3E8B00E829BD6F6500A70123 /* AnimationVisualizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E8B00E729BD6F6500A70123 /* AnimationVisualizer.swift */; };
+		3E8B00EB29BD7DB000A70123 /* AnimationAdditiveApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E8B00EA29BD7DB000A70123 /* AnimationAdditiveApp.swift */; };
 		3EABF5C4294ABB7B009943C1 /* ParticleSystemData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EABF5C3294ABB7B009943C1 /* ParticleSystemData.swift */; };
 		3EABF5C6294AC323009943C1 /* ParticleEmitter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EABF5C5294AC323009943C1 /* ParticleEmitter.swift */; };
 		3EABF5C8294AC3F1009943C1 /* VolumeParticleEmitter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EABF5C7294AC3F1009943C1 /* VolumeParticleEmitter.swift */; };
@@ -811,6 +812,7 @@
 		3E8B00E429BC358200A70123 /* CAnimator.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = CAnimator.mm; sourceTree = "<group>"; };
 		3E8B00E629BC359600A70123 /* CAnimator+Internal.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "CAnimator+Internal.h"; sourceTree = "<group>"; };
 		3E8B00E729BD6F6500A70123 /* AnimationVisualizer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnimationVisualizer.swift; sourceTree = "<group>"; };
+		3E8B00EA29BD7DB000A70123 /* AnimationAdditiveApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnimationAdditiveApp.swift; sourceTree = "<group>"; };
 		3EABF5C3294ABB7B009943C1 /* ParticleSystemData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParticleSystemData.swift; sourceTree = "<group>"; };
 		3EABF5C5294AC323009943C1 /* ParticleEmitter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParticleEmitter.swift; sourceTree = "<group>"; };
 		3EABF5C7294AC3F1009943C1 /* VolumeParticleEmitter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VolumeParticleEmitter.swift; sourceTree = "<group>"; };
@@ -1794,6 +1796,14 @@
 			path = animation_states;
 			sourceTree = "<group>";
 		};
+		3E8B00E929BD7D9A00A70123 /* animation */ = {
+			isa = PBXGroup;
+			children = (
+				3E8B00EA29BD7DB000A70123 /* AnimationAdditiveApp.swift */,
+			);
+			path = animation;
+			sourceTree = "<group>";
+		};
 		3EABF5E4294C3702009943C1 /* flex */ = {
 			isa = PBXGroup;
 			children = (
@@ -1969,6 +1979,7 @@
 				3EBA3D5829B9C74000E5FB42 /* TextApp.swift */,
 				3E6D2F0B293F135000B63F73 /* loader */,
 				3EC92A3F29360C6800423396 /* physics */,
+				3E8B00E929BD7D9A00A70123 /* animation */,
 				040F1DF129378195008BDC8D /* rendering */,
 				3EABF5E4294C3702009943C1 /* flex */,
 			);
@@ -3274,6 +3285,7 @@
 				3EBA3D5929B9C74000E5FB42 /* TextApp.swift in Sources */,
 				3E6B23DC2949B32C000AC29F /* ImplicitTriangleApp.swift in Sources */,
 				43D8C033021F4B86E95953E6 /* IBLApp.swift in Sources */,
+				3E8B00EB29BD7DB000A70123 /* AnimationAdditiveApp.swift in Sources */,
 				3E1F129929A7A49900F1002E /* PhysXConcaveDynamicApp.swift in Sources */,
 				43D8C40438F0527739C7D662 /* AtomicComputeApp.swift in Sources */,
 				3E10764629653F0300F751A5 /* PointEmitterApp.swift in Sources */,
