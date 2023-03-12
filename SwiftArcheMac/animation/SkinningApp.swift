@@ -53,17 +53,19 @@ class SkinningApp: NSViewController {
         animationBlending.addChild(state: baseSampler)
         animator.rootState = animationBlending
         
+        let material = PBRMaterial(engine);
+        material.baseColor = Color(0.4, 0.6, 0.6, 0.6)
+        material.isTransparent = true
         url = Bundle.main.url(forResource: "ruby_mesh",
                               withExtension: "ozz",
                               subdirectory: "assets/Animation")!
-        let skinGroup = SkinGroup(url)
-        for i in 0..<skinGroup.count {
+        let skinnedMesh = SkinnedMesh(engine)
+        skinnedMesh.loadSkin(url)
+        for i in 0..<skinnedMesh.skinCount {
             let renderer = characterEntity.addComponent(SkinnedMeshRenderer.self)
-            renderer.setSkinnedMesh(with: skinGroup, at: i)
-            let material = PBRMaterial(engine);
-            material.baseColor = Color(0.4, 0.6, 0.6, 0.6)
-            material.isTransparent = true
             renderer.setMaterial(material)
+            renderer.mesh = skinnedMesh
+            renderer.setSkinnedMeshTarget(for: i)
         }
 
         characterEntity.addComponent(AnimationVisualizer.self)

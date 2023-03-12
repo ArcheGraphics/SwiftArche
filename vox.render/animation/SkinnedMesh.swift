@@ -19,8 +19,8 @@ public class SkinnedMesh: Mesh {
     private var _boneIndices: [Float] = []
     private var _indices: [UInt16] = []
     private var _vertices: [Float] = []
-    private var _meshes: [Mesh] = []
     private var _elementCount: Int = 0
+    var _meshes: [Mesh] = []
 
     public var skinCount: Int {
         Int(_nativeSkin.skinCount())

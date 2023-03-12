@@ -19,6 +19,7 @@ public class SkinnedMeshRenderer: MeshRenderer {
     /// Whether to use joint texture. Automatically used when the device can't support the maximum number of bones.
     private var _useJointTexture: Bool = false
     private var _animator: Animator?
+    private var _skinnedMeshIndex: Int = 0
     
     private var _blendShapeWeights: [Float] = []
     private var _maxVertexUniformVectors: Int = 256
@@ -47,36 +48,76 @@ public class SkinnedMeshRenderer: MeshRenderer {
         }
     }
     
-    /// Mesh assigned to the renderer.
-    public override var mesh: Mesh? {
-        get {
-            _mesh
-        }
-        set {
-            if let skinnedMesh = newValue as? SkinnedMesh {
-                setSkinnedMesh(with: skinnedMesh, at: 0)
-            }
-            super.mesh = newValue
-        }
-    }
-    
-    public func setSkinnedMesh(with mesh: SkinnedMesh, at index: Int) {
-        let jointCount = mesh.skinningMatricesCount(at: index)
-        if (jointCount != 0) {
-            // Allocates skinning matrices.
-            _skinningMatrices = [simd_float4x4](repeating: simd_float4x4(), count: jointCount)
-            
-            shaderData.enableMacro(HAS_SKIN.rawValue)
-            shaderData.setData(SkinnedMeshRenderer._jointCountProperty, jointCount)
-            if (jointCount > SkinnedMeshRenderer._maxJoints) {
-                _useJointTexture = true
+    public func setSkinnedMeshTarget(for index: Int) {
+        if let mesh = _mesh as? SkinnedMesh {
+            _skinnedMeshIndex = 0
+            let jointCount = mesh.skinningMatricesCount(at: index)
+            if (jointCount != 0) {
+                // Allocates skinning matrices.
+                _skinningMatrices = [simd_float4x4](repeating: simd_float4x4(), count: jointCount)
+                
+                shaderData.enableMacro(HAS_SKIN.rawValue)
+                shaderData.setData(SkinnedMeshRenderer._jointCountProperty, jointCount)
+                if (jointCount > SkinnedMeshRenderer._maxJoints) {
+                    _useJointTexture = true
+                } else {
+                    let maxJoints = max(SkinnedMeshRenderer._maxJoints, jointCount)
+                    SkinnedMeshRenderer._maxJoints = maxJoints
+                    shaderData.disableMacro(HAS_JOINT_TEXTURE.rawValue)
+                }
             } else {
-                let maxJoints = max(SkinnedMeshRenderer._maxJoints, jointCount)
-                SkinnedMeshRenderer._maxJoints = maxJoints
-                shaderData.disableMacro(HAS_JOINT_TEXTURE.rawValue)
+                shaderData.disableMacro(HAS_SKIN.rawValue)
             }
         } else {
             shaderData.disableMacro(HAS_SKIN.rawValue)
+        }
+    }
+    
+    override func _render(_ devicePipeline: DevicePipeline) {
+        let mesh: Mesh?
+        if let skinnedMesh = _mesh as? SkinnedMesh {
+            mesh = skinnedMesh._meshes[_skinnedMeshIndex]
+        } else {
+            mesh = _mesh
+        }
+        
+        if let mesh {
+            if (_dirtyUpdateFlag & MeshRendererUpdateFlags.VertexElementMacro.rawValue != 0) {
+                let vertexDescriptor = mesh._vertexDescriptor
+                shaderData.disableMacro(HAS_UV.rawValue)
+                shaderData.disableMacro(HAS_NORMAL.rawValue)
+                shaderData.disableMacro(HAS_TANGENT.rawValue)
+                shaderData.disableMacro(HAS_VERTEXCOLOR.rawValue)
+
+                if vertexDescriptor.attributes[Int(UV_0.rawValue)].format != .invalid {
+                    shaderData.enableMacro(HAS_UV.rawValue)
+                }
+                if vertexDescriptor.attributes[Int(Normal.rawValue)].format != .invalid {
+                    shaderData.enableMacro(HAS_NORMAL.rawValue)
+                }
+                if vertexDescriptor.attributes[Int(Tangent.rawValue)].format != .invalid {
+                    shaderData.enableMacro(HAS_TANGENT.rawValue)
+                }
+                if vertexDescriptor.attributes[Int(Color_0.rawValue)].format != .invalid {
+                    shaderData.enableMacro(HAS_VERTEXCOLOR.rawValue)
+                }
+                _dirtyUpdateFlag &= ~MeshRendererUpdateFlags.VertexElementMacro.rawValue
+            }
+
+            let subMeshes = mesh.subMeshes
+            for i in 0..<subMeshes.count {
+                let material: Material?
+                if i < _materials.count {
+                    material = _materials[i]
+                } else {
+                    material = nil
+                }
+                if (material != nil) {
+                    for j in 0..<material!.shader.count {
+                        devicePipeline.pushPrimitive(RenderElement(self, mesh, subMeshes[i], material!, material!.shader[j]))
+                    }
+                }
+            }
         }
     }
 
@@ -87,7 +128,7 @@ public class SkinnedMeshRenderer: MeshRenderer {
         
         if let animator = _animator,
            let skinnedMesh = _mesh as? SkinnedMesh {
-            skinnedMesh.getSkinningMatrices(at: 0, animator: animator, matrix: &_skinningMatrices)
+            skinnedMesh.getSkinningMatrices(at: _skinnedMeshIndex, animator: animator, matrix: &_skinningMatrices)
         }
     }
 
@@ -98,8 +139,9 @@ public class SkinnedMeshRenderer: MeshRenderer {
             shaderData.setData(SkinnedMeshRenderer._jointMatrixProperty, _skinningMatrices)
         }
 
-        let mesh = mesh as! ModelMesh
-        mesh._blendShapeManager._updateShaderData(shaderData, self)
+        if let mesh = mesh as? ModelMesh {
+            mesh._blendShapeManager._updateShaderData(shaderData, self)
+        }
     }
 
     override func _updateBounds(_ worldBounds: inout BoundingBox) {
@@ -132,22 +174,23 @@ public class SkinnedMeshRenderer: MeshRenderer {
     }
 
     private func _checkBlendShapeWeightLength() {
-        let mesh = _mesh as? ModelMesh
-        let newBlendShapeCount = mesh != nil ? mesh!.blendShapeCount : 0
-        if (!_blendShapeWeights.isEmpty) {
-            if (_blendShapeWeights.count != newBlendShapeCount) {
-                var newBlendShapeWeights = [Float](repeating: 0, count: newBlendShapeCount)
-                if (newBlendShapeCount > _blendShapeWeights.count) {
-                    newBlendShapeWeights.insert(contentsOf: _blendShapeWeights, at: 0)
-                } else {
-                    for i in 0..<newBlendShapeCount {
-                        newBlendShapeWeights[i] = _blendShapeWeights[i]
+        if let mesh = _mesh as? ModelMesh {
+            let newBlendShapeCount = mesh.blendShapeCount
+            if (!_blendShapeWeights.isEmpty) {
+                if (_blendShapeWeights.count != newBlendShapeCount) {
+                    var newBlendShapeWeights = [Float](repeating: 0, count: newBlendShapeCount)
+                    if (newBlendShapeCount > _blendShapeWeights.count) {
+                        newBlendShapeWeights.insert(contentsOf: _blendShapeWeights, at: 0)
+                    } else {
+                        for i in 0..<newBlendShapeCount {
+                            newBlendShapeWeights[i] = _blendShapeWeights[i]
+                        }
                     }
+                    _blendShapeWeights = newBlendShapeWeights
                 }
-                _blendShapeWeights = newBlendShapeWeights
+            } else {
+                _blendShapeWeights = [Float](repeating: 0, count: newBlendShapeCount)
             }
-        } else {
-            _blendShapeWeights = [Float](repeating: 0, count: newBlendShapeCount)
         }
     }
 
