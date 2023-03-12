@@ -6,8 +6,12 @@
 
 #pragma once
 
-#include "CAnimationState.h"
-#include "CAnimatorBlending.h"
-#include "CAnimationClip.h"
-#include "CAnimator.h"
-#include "CSkinGroup.h"
+#import <Foundation/Foundation.h>
+
+@interface CSkinGroup : NSObject
+
+-(void)loadSkin:(NSString*_Nonnull)filename;
+
+-(uint32_t)count;
+
+@end

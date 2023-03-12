@@ -115,6 +115,10 @@
 		3E8B00ED29BDBA2400A70123 /* AnimationAttachApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E8B00EC29BDBA2400A70123 /* AnimationAttachApp.swift */; };
 		3E8B00EF29BDBF6600A70123 /* AnimationBlendApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E8B00EE29BDBF6600A70123 /* AnimationBlendApp.swift */; };
 		3E8B00F129BDC15400A70123 /* AnimationPartialBlendApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E8B00F029BDC15400A70123 /* AnimationPartialBlendApp.swift */; };
+		3E8B00F329BDC47F00A70123 /* SkinningApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E8B00F229BDC47F00A70123 /* SkinningApp.swift */; };
+		3E8B00F629BDC81400A70123 /* Skin.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3E8B00F529BDC81400A70123 /* Skin.cpp */; };
+		3E8B00F929BDC8F600A70123 /* CSkinGroup.mm in Sources */ = {isa = PBXBuildFile; fileRef = 3E8B00F829BDC8F600A70123 /* CSkinGroup.mm */; };
+		3E8B00FB29BDCA7A00A70123 /* SkinGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E8B00FA29BDCA7A00A70123 /* SkinGroup.swift */; };
 		3EABF5C4294ABB7B009943C1 /* ParticleSystemData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EABF5C3294ABB7B009943C1 /* ParticleSystemData.swift */; };
 		3EABF5C6294AC323009943C1 /* ParticleEmitter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EABF5C5294AC323009943C1 /* ParticleEmitter.swift */; };
 		3EABF5C8294AC3F1009943C1 /* VolumeParticleEmitter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EABF5C7294AC3F1009943C1 /* VolumeParticleEmitter.swift */; };
@@ -424,7 +428,6 @@
 		3EC03975293218C3002187DC /* BlendShapeManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EC03968293218C2002187DC /* BlendShapeManager.swift */; };
 		3EC03976293218C3002187DC /* BlendShape.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EC03969293218C2002187DC /* BlendShape.swift */; };
 		3EC03977293218C3002187DC /* MeshRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EC0396A293218C2002187DC /* MeshRenderer.swift */; };
-		3EC03978293218C3002187DC /* Skin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EC0396B293218C2002187DC /* Skin.swift */; };
 		3EC03979293218C3002187DC /* IndexBufferBinding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EC0396C293218C3002187DC /* IndexBufferBinding.swift */; };
 		3EC0397A293218C3002187DC /* Mesh.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EC0396D293218C3002187DC /* Mesh.swift */; };
 		3EC0397B293218C3002187DC /* SubMesh.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EC0396E293218C3002187DC /* SubMesh.swift */; };
@@ -819,6 +822,12 @@
 		3E8B00EC29BDBA2400A70123 /* AnimationAttachApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnimationAttachApp.swift; sourceTree = "<group>"; };
 		3E8B00EE29BDBF6600A70123 /* AnimationBlendApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnimationBlendApp.swift; sourceTree = "<group>"; };
 		3E8B00F029BDC15400A70123 /* AnimationPartialBlendApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnimationPartialBlendApp.swift; sourceTree = "<group>"; };
+		3E8B00F229BDC47F00A70123 /* SkinningApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SkinningApp.swift; sourceTree = "<group>"; };
+		3E8B00F429BDC7F500A70123 /* Skin.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Skin.h; sourceTree = "<group>"; };
+		3E8B00F529BDC81400A70123 /* Skin.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Skin.cpp; sourceTree = "<group>"; };
+		3E8B00F729BDC8EA00A70123 /* CSkinGroup.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CSkinGroup.h; sourceTree = "<group>"; };
+		3E8B00F829BDC8F600A70123 /* CSkinGroup.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = CSkinGroup.mm; sourceTree = "<group>"; };
+		3E8B00FA29BDCA7A00A70123 /* SkinGroup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SkinGroup.swift; sourceTree = "<group>"; };
 		3EABF5C3294ABB7B009943C1 /* ParticleSystemData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParticleSystemData.swift; sourceTree = "<group>"; };
 		3EABF5C5294AC323009943C1 /* ParticleEmitter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParticleEmitter.swift; sourceTree = "<group>"; };
 		3EABF5C7294AC3F1009943C1 /* VolumeParticleEmitter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VolumeParticleEmitter.swift; sourceTree = "<group>"; };
@@ -1150,7 +1159,6 @@
 		3EC03968293218C2002187DC /* BlendShapeManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BlendShapeManager.swift; sourceTree = "<group>"; };
 		3EC03969293218C2002187DC /* BlendShape.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BlendShape.swift; sourceTree = "<group>"; };
 		3EC0396A293218C2002187DC /* MeshRenderer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MeshRenderer.swift; sourceTree = "<group>"; };
-		3EC0396B293218C2002187DC /* Skin.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Skin.swift; sourceTree = "<group>"; };
 		3EC0396C293218C3002187DC /* IndexBufferBinding.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IndexBufferBinding.swift; sourceTree = "<group>"; };
 		3EC0396D293218C3002187DC /* Mesh.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Mesh.swift; sourceTree = "<group>"; };
 		3EC0396E293218C3002187DC /* SubMesh.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SubMesh.swift; sourceTree = "<group>"; };
@@ -1785,6 +1793,10 @@
 				3E8B00E329BC356F00A70123 /* CAnimator.h */,
 				3E8B00E629BC359600A70123 /* CAnimator+Internal.h */,
 				3E8B00E429BC358200A70123 /* CAnimator.mm */,
+				3E8B00F429BDC7F500A70123 /* Skin.h */,
+				3E8B00F529BDC81400A70123 /* Skin.cpp */,
+				3E8B00F729BDC8EA00A70123 /* CSkinGroup.h */,
+				3E8B00F829BDC8F600A70123 /* CSkinGroup.mm */,
 			);
 			path = ozz;
 			sourceTree = "<group>";
@@ -1809,6 +1821,7 @@
 				3E8B00EC29BDBA2400A70123 /* AnimationAttachApp.swift */,
 				3E8B00EE29BDBF6600A70123 /* AnimationBlendApp.swift */,
 				3E8B00F029BDC15400A70123 /* AnimationPartialBlendApp.swift */,
+				3E8B00F229BDC47F00A70123 /* SkinningApp.swift */,
 			);
 			path = animation;
 			sourceTree = "<group>";
@@ -2279,6 +2292,8 @@
 				3E8B00DF29BC2ABF00A70123 /* AnimationClip.swift */,
 				3E8B00E129BC314D00A70123 /* AnimationBlending.swift */,
 				3EC039B4293218FA002187DC /* Animator.swift */,
+				3E8B00FA29BDCA7A00A70123 /* SkinGroup.swift */,
+				3EC03972293218C3002187DC /* SkinnedMeshRenderer.swift */,
 			);
 			path = animation;
 			sourceTree = "<group>";
@@ -2350,8 +2365,6 @@
 				3EC03971293218C3002187DC /* BlendShapeFrame.swift */,
 				3EC03968293218C2002187DC /* BlendShapeManager.swift */,
 				3EC0396A293218C2002187DC /* MeshRenderer.swift */,
-				3EC0396B293218C2002187DC /* Skin.swift */,
-				3EC03972293218C3002187DC /* SkinnedMeshRenderer.swift */,
 			);
 			path = mesh;
 			sourceTree = "<group>";
@@ -3286,6 +3299,7 @@
 				3E107648296545F700F751A5 /* ParticleSystemSolverApp.swift in Sources */,
 				3E6B235E294220BC000AC29F /* FaceMorphApp.swift in Sources */,
 				3EC0370529321131002187DC /* AppDelegate.swift in Sources */,
+				3E8B00F329BDC47F00A70123 /* SkinningApp.swift in Sources */,
 				43D8C62B488D6837DDD5BBA8 /* SkyboxApp.swift in Sources */,
 				3ED9BD1329568E2D00876ABC /* HashGridApp.swift in Sources */,
 				43D8CC2C3372F5E3258A852D /* IrradianceApp.swift in Sources */,
@@ -3524,6 +3538,7 @@
 				3EC03980293218C3002187DC /* BufferView.swift in Sources */,
 				3EC0389F29321826002187DC /* Layer.swift in Sources */,
 				3EC03A042932192D002187DC /* BackgroundSubpass.swift in Sources */,
+				3E8B00F629BDC81400A70123 /* Skin.cpp in Sources */,
 				3E1412F929B5969C00099BF1 /* ControllerBehavior.swift in Sources */,
 				3EC03975293218C3002187DC /* BlendShapeManager.swift in Sources */,
 				3EC03963293218BA002187DC /* RenderPipelineState.swift in Sources */,
@@ -3579,7 +3594,6 @@
 				3EC92AE12939F97300423396 /* RenderCommandEncoder.swift in Sources */,
 				3EC038C62932183D002187DC /* PhysXPlaneColliderShape.swift in Sources */,
 				3EBA3D5B29B9CB2F00E5FB42 /* TextUtils.swift in Sources */,
-				3EC03978293218C3002187DC /* Skin.swift in Sources */,
 				3EC039162932186A002187DC /* EntityParser.swift in Sources */,
 				3EBA3D6329B9FF0E00E5FB42 /* MTLFontAtlasProvider.c in Sources */,
 				3EC038C72932183D002187DC /* PhysXCapsuleColliderShape.swift in Sources */,
@@ -3596,6 +3610,7 @@
 				3EC0389629321826002187DC /* SceneManager.swift in Sources */,
 				3EC038C42932183D002187DC /* PhysXBoxColliderShape.swift in Sources */,
 				3EC03A052932192D002187DC /* BackgroundTextureFillMode.swift in Sources */,
+				3E8B00F929BDC8F600A70123 /* CSkinGroup.mm in Sources */,
 				3EBA3D2D29B99CEF00E5FB42 /* MTLDevice+Features.swift in Sources */,
 				3EC0390429321862002187DC /* GLTFResource.swift in Sources */,
 				3EC038B629321835002187DC /* PhysXPhysics.swift in Sources */,
@@ -3648,6 +3663,7 @@
 				3EC0389529321826002187DC /* Canvas.swift in Sources */,
 				3EC0389B29321826002187DC /* CameraInfo.swift in Sources */,
 				3EBA3D2929B99C4900E5FB42 /* MTL+Codable.swift in Sources */,
+				3E8B00FB29BDCA7A00A70123 /* SkinGroup.swift in Sources */,
 				3E6D2F01293E13DF00B63F73 /* BufferPool.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

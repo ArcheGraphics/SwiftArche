@@ -18,7 +18,9 @@ public class SkinnedMeshRenderer: MeshRenderer {
     private var _hasInitJoints: Bool = false
     /// Whether to use joint texture. Automatically used when the device can't support the maximum number of bones.
     private var _useJointTexture: Bool = false
-    private var _skin: Skin?
+    private var _skinGounp: SkinGroup?
+    private var _skinIndex: Int = 0
+    
     private var _blendShapeWeights: [Float] = []
     private var _maxVertexUniformVectors: Int = 256
     private var _rootBone: Entity?
@@ -47,65 +49,13 @@ public class SkinnedMeshRenderer: MeshRenderer {
             }
         }
     }
-
-    /// Skin Object.
-    public var skin: Skin? {
-        get {
-            _skin
-        }
-        set {
-            if (_skin !== newValue) {
-                _skin = newValue
-                _hasInitJoints = false
-            }
-        }
-    }
-
-    /// Local bounds.
-    public var localBounds: BoundingBox {
-        get {
-            _localBounds
-        }
-        set {
-            _localBounds = newValue
-            _onLocalBoundsChanged()
-        }
-    }
-
-    /// Root bone.
-    public var rootBone: Entity? {
-        get {
-            _rootBone
-        }
-        set {
-            _rootBone = newValue
-            _dirtyUpdateFlag |= RendererUpdateFlags.WorldVolume.rawValue
-        }
+    
+    public func setSkinnedMesh(with group: SkinGroup, at index: Int) {
+        _skinGounp = group
+        _skinIndex = index
     }
 
     override func update(_ deltaTime: Float) {
-        if (!_hasInitJoints) {
-            _initJoints()
-            _hasInitJoints = true
-        }
-        if let skin = _skin {
-            let ibms = skin.inverseBindMatrices
-            let worldMatrix = _rootBone != nil ? _rootBone!.transform.worldMatrix : entity.transform.worldMatrix
-            let worldToLocal = simd_inverse(worldMatrix.elements)
-
-            for i in 0..<_jointEntities.count {
-                let joint = _jointEntities[i]
-                if let joint = joint {
-                    _jointMatrixs[i] = joint.transform.worldMatrix.elements * ibms[i].elements
-                } else {
-                    _jointMatrixs[i] = ibms[i].elements
-                }
-                _jointMatrixs[i] = worldToLocal * _jointMatrixs[i]
-            }
-            if (_useJointTexture) {
-                _createJointTexture()
-            }
-        }
     }
 
     override func _updateShaderData(_ cameraInfo: CameraInfo) {
@@ -121,12 +71,7 @@ public class SkinnedMeshRenderer: MeshRenderer {
     }
 
     override func _updateBounds(_ worldBounds: inout BoundingBox) {
-        if (_rootBone != nil) {
-            let worldMatrix = _rootBone!.transform.worldMatrix
-            worldBounds = BoundingBox.transform(source: localBounds, matrix: worldMatrix)
-        } else {
-            super._updateBounds(&worldBounds)
-        }
+        super._updateBounds(&worldBounds)
     }
 
     private func _createJointTexture() {
@@ -152,75 +97,6 @@ public class SkinnedMeshRenderer: MeshRenderer {
                     size: MTLSize(width: texture.width, height: texture.height, depth: 1)),
                             mipmapLevel: 0, withBytes: &_jointMatrixs, bytesPerRow: 16 * MemoryLayout<Float>.stride)
         }
-    }
-
-    private func _initJoints() {
-        if (skin == nil) {
-            shaderData.disableMacro(HAS_SKIN.rawValue)
-            return
-        }
-
-        let joints = skin!.joints
-        let jointCount = joints.count
-        var jointEntities: [Entity] = []
-        for i in 0..<jointCount {
-            jointEntities.append(_findByEntityName(entity, joints[i])!)
-        }
-        _jointEntities = jointEntities
-        _jointMatrixs = [simd_float4x4](repeating: simd_float4x4(), count: jointCount)
-
-        let lastRootBone = _rootBone
-        let rootBone = _findByEntityName(entity, skin!.skeleton)
-
-        if lastRootBone != nil {
-            lastRootBone!.transform._updateFlagManager.removeFlag(flag: _listenerFlag!)
-        }
-        _listenerFlag = ListenerUpdateFlag()
-        _listenerFlag!.listener = _onTransformChanged
-        rootBone!.transform._updateFlagManager.addFlag(flag: _listenerFlag!)
-
-        let rootIndex = joints.firstIndex { v in
-            v == skin!.skeleton
-        }
-        if (rootIndex != nil) {
-            _localBounds = BoundingBox.transform(source: _mesh!.bounds, matrix: skin!.inverseBindMatrices[rootIndex!])
-        } else {
-            // Root bone is not in joints list,we can only use default pose compute local bounds
-            // Default pose is slightly less accurate than bind pose
-            let inverseRootBone = Matrix.invert(a: rootBone!.transform.worldMatrix)
-            _localBounds = BoundingBox.transform(source: _mesh!.bounds, matrix: inverseRootBone)
-        }
-
-        _rootBone = rootBone
-
-        let maxJoints = Int(floor(Float(_maxVertexUniformVectors - 30) / 4.0))
-
-        if (jointCount != 0) {
-            shaderData.enableMacro(HAS_SKIN.rawValue)
-            shaderData.setData(SkinnedMeshRenderer._jointCountProperty, jointCount)
-            if (jointCount > maxJoints) {
-                _useJointTexture = true
-            } else {
-                let maxJoints = max(SkinnedMeshRenderer._maxJoints, jointCount)
-                SkinnedMeshRenderer._maxJoints = maxJoints
-                shaderData.disableMacro(HAS_JOINT_TEXTURE.rawValue)
-            }
-        } else {
-            shaderData.disableMacro(HAS_SKIN.rawValue)
-        }
-    }
-
-    private func _findByEntityName(_ rootEntity: Entity?, _ name: String) -> Entity? {
-        if (rootEntity == nil) {
-            return nil
-        }
-
-        let result = rootEntity!.findByName(name)
-        if (result != nil) {
-            return result
-        }
-
-        return _findByEntityName(rootEntity!.parent, name)
     }
 
     private func _checkBlendShapeWeightLength() {
