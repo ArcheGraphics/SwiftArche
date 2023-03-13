@@ -1,6 +1,15 @@
 {
   "pins" : [
     {
+      "identity" : "math",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/ArcheGraphics/Math.git",
+      "state" : {
+        "branch" : "main",
+        "revision" : "35a6317575cc4ff538cecc2a7c107d18a9a53b0d"
+      }
+    },
+    {
       "identity" : "swift-log",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/apple/swift-log.git",

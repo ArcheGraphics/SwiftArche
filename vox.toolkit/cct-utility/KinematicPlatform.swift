@@ -5,7 +5,7 @@
 //  property of any third parties.
 
 import vox_render
-import vox_math
+import Math
 
 public class KinematicPlatform: Script {
     // PT: Captures the state of the platform. We decouple this data from the platform itself so that the

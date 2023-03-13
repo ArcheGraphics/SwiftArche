@@ -5,7 +5,7 @@
 //  property of any third parties.
 
 import Cocoa
-import vox_math
+import Math
 
 class WheelManager {
     var _delta: Vector3 = Vector3()

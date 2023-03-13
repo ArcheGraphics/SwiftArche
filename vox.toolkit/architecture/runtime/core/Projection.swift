@@ -5,7 +5,7 @@
 //  property of any third parties.
 
 import vox_render
-import vox_math
+import Math
 
 /// Functions for projecting 3d points to 2d space.
 public class Projection {

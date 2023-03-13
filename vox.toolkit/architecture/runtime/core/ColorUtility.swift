@@ -5,7 +5,7 @@
 //  property of any third parties.
 
 import vox_render
-import vox_math
+import Math
 
 /// Hue (0,360), Saturation (0,1), Value (0,1)
 struct HSVColor {

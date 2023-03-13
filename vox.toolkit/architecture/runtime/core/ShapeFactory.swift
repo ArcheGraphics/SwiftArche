@@ -5,7 +5,7 @@
 //  property of any third parties.
 
 import vox_render
-import vox_math
+import Math
 
 /// Describes the type of pivot ProBuilder would automatically assign on primitive creation.
 public enum PivotLocation {

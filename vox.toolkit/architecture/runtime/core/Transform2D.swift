@@ -5,7 +5,7 @@
 //  property of any third parties.
 
 import vox_render
-import vox_math
+import Math
 
 /// A Transform class limited to 2D
 final class Transform2D {

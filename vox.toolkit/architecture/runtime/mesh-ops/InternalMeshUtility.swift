@@ -5,7 +5,7 @@
 //  property of any third parties.
 
 import vox_render
-import vox_math
+import Math
 
 class InternalMeshUtility {
     /// Averages shared normals with the mask of all (indexes contained in perimeter edge)

@@ -5,7 +5,7 @@
 //  property of any third parties.
 
 import vox_render
-import vox_math
+import Math
 
 /// Methods for merging and splitting common (or shared) vertices.
 public class VertexEditing {

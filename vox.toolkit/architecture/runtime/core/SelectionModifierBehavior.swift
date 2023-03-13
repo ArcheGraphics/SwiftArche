@@ -5,7 +5,7 @@
 //  property of any third parties.
 
 import vox_render
-import vox_math
+import Math
 
 /// When drag selecting mesh elements, this defines how the Shift key will modify the selection.
 public enum SelectionModifierBehavior {

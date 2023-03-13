@@ -5,7 +5,7 @@
 //  property of any third parties.
 
 import Metal
-import vox_math
+import Math
 
 class TextBatcher: Batcher {
     static var _ins: TextBatcher!

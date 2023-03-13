@@ -5,7 +5,7 @@
 //  property of any third parties.
 
 import vox_render
-import vox_math
+import Math
 
 public class Door: Shape {
     var m_DoorHeight: Float = 0.5

@@ -5,7 +5,7 @@
 //  property of any third parties.
 
 import vox_render
-import vox_math
+import Math
 
 struct Vector2Mask {
     static let X: UInt8 = 1 << 0

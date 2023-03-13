@@ -5,7 +5,7 @@
 //  property of any third parties.
 
 import Metal
-import vox_math
+import Math
 
 /// Used to generate common primitive meshes.
 public class PrimitiveMesh {

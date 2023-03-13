@@ -5,7 +5,7 @@
 //  property of any third parties.
 
 import vox_render
-import vox_math
+import Math
 
 /// Functions for removing vertices and triangles from a mesh.
 public class DeleteElements {

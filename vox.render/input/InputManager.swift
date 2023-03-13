@@ -9,7 +9,7 @@ import UIKit
 #else
 import Cocoa
 #endif
-import vox_math
+import Math
 
 /// InputManager manages device input such as mouse, touch, keyboard, etc.
 public class InputManager {

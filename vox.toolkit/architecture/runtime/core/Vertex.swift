@@ -5,7 +5,7 @@
 //  property of any third parties.
 
 import vox_render
-import vox_math
+import Math
 
 /// Holds information about a single vertex, and provides methods for averaging between many.
 /// - Remark: All values are optional. Where not present a default value will be substituted if necessary.

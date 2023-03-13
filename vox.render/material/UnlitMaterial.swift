@@ -5,7 +5,7 @@
 //  property of any third parties.
 
 import Metal
-import vox_math
+import Math
 
 /// Unlit Material.
 public class UnlitMaterial: BaseMaterial {

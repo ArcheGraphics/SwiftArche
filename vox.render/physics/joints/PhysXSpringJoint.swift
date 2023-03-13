@@ -4,7 +4,7 @@
 //  personal capacity and am not conveying any rights to any intellectual
 //  property of any third parties.
 
-import vox_math
+import Math
 
 class PhysXSpringJoint: PhysXJoint {
     private var _swingOffset = Vector3()

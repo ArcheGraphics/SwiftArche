@@ -5,7 +5,7 @@
 //  property of any third parties.
 
 import Metal
-import vox_math
+import Math
 
 public class Camera: Component {
     /// The first enabled Camera component that is tagged "MainCamera"

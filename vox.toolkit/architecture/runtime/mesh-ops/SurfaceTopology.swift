@@ -5,7 +5,7 @@
 //  property of any third parties.
 
 import vox_render
-import vox_math
+import Math
 
 /// Utilities for working with triangle and quad primitives.
 public class SurfaceTopology {

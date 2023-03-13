@@ -5,7 +5,7 @@
 //  property of any third parties.
 
 import vox_render
-import vox_math
+import Math
 
 /// A set of commonly used functions for modifying mesh positions.
 public class VertexPositioning {

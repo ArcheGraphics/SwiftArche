@@ -4,7 +4,7 @@
 //  personal capacity and am not conveying any rights to any intellectual
 //  property of any third parties.
 
-import vox_math
+import Math
 
 class PhysXSphericalJoint: PhysXJoint {
     init(_ actor0: PhysXCollider?, _ position0: Vector3, _ rotation0: Quaternion,

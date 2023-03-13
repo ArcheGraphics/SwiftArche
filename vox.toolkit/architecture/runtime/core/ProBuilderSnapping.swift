@@ -5,7 +5,7 @@
 //  property of any third parties.
 
 import vox_render
-import vox_math
+import Math
 
 /// Snapping functions (didn't exist in UnityEngine prior to 2019.3)
 class ProBuilderSnapping {

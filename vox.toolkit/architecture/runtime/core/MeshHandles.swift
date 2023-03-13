@@ -5,7 +5,7 @@
 //  property of any third parties.
 
 import vox_render
-import vox_math
+import Math
 
 class MeshHandles {
     static var s_Vector2List: [Vector3] = []

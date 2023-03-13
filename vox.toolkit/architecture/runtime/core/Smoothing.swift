@@ -5,7 +5,7 @@
 //  property of any third parties.
 
 import vox_render
-import vox_math
+import Math
 
 /// Utilities for working with smoothing groups. Smoothing groups are how ProBuilder defines hard and soft edges.
 /// ProBuilder calculates vertex normals by first calculating the normal for every face, which in turn is applied to each

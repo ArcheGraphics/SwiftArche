@@ -5,7 +5,7 @@
 //  property of any third parties.
 
 import vox_render
-import vox_math
+import Math
 
 /// Static methods for working with ProBuilderMesh objects in an editor.
 extension Camera {

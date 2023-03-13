@@ -5,7 +5,7 @@
 //  property of any third parties.
 
 import vox_render
-import vox_math
+import Math
 
 /// Store UV2 unwrapping parameters.
 public final class UnwrapParameters {

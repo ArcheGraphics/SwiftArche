@@ -4,7 +4,7 @@
 //  personal capacity and am not conveying any rights to any intellectual
 //  property of any third parties.
 
-import vox_math
+import Math
 
 class KHR_lights_punctual {
     static func parseEngineResource(_ schema: GLTFLight, _ entity: Entity, _ context: ParserContext) {

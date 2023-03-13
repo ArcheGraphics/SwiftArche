@@ -6,7 +6,7 @@
 
 import Metal
 import vox_render
-import vox_math
+import Math
 
 public class ScreenSpaceFluidMaterial: BaseMaterial {
     private static let _normalDepthTextureProp = "u_normalDepthTexture"

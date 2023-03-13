@@ -5,7 +5,7 @@
 //  property of any third parties.
 
 import vox_render
-import vox_math
+import Math
 
 /// A collection of settings defining how mesh element picking behaves.
 public struct PickerOptions {

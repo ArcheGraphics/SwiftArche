@@ -5,7 +5,7 @@
 //  property of any third parties.
 
 import vox_render
-import vox_math
+import Math
 
 /// Functions for generating mesh attributes and various other mesh utilities.
 public class MeshUtility {

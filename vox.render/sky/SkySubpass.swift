@@ -5,7 +5,7 @@
 //  property of any third parties.
 
 import Metal
-import vox_math
+import Math
 
 public class SkySubpass: Subpass {
     private static var _epsilon: Float = 1e-6

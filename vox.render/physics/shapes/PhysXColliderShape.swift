@@ -4,7 +4,7 @@
 //  personal capacity and am not conveying any rights to any intellectual
 //  property of any third parties.
 
-import vox_math
+import Math
 
 /// Flags which affect the behavior of Shapes.
 enum ShapeFlag: UInt8 {

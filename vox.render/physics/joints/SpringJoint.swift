@@ -4,7 +4,7 @@
 //  personal capacity and am not conveying any rights to any intellectual
 //  property of any third parties.
 
-import vox_math
+import Math
 
 /// A joint that maintains an upper or lower bound (or both) on the distance between two points on different objects.
 public class SpringJoint: Joint {

@@ -5,7 +5,7 @@
 //  property of any third parties.
 
 import vox_render
-import vox_math
+import Math
 
 /// Fuzzy hashing functions for vector types. Exists as a shortcut to create hashcodes for Vector3 in the style of
 /// IntVector3 without the overhead of casting.

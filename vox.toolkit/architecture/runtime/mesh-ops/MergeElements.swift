@@ -5,7 +5,7 @@
 //  property of any third parties.
 
 import vox_render
-import vox_math
+import Math
 
 /// Methods for merging multiple faces of a <see cref="ProBuilderMesh"/> to a single face.
 public class MergeElements {

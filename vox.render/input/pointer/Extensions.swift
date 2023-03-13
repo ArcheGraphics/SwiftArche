@@ -9,7 +9,7 @@ import UIKit
 #else
 import Cocoa
 #endif
-import vox_math
+import Math
 
 #if os(iOS)
 

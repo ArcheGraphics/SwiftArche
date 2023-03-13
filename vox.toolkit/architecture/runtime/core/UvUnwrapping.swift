@@ -5,7 +5,7 @@
 //  property of any third parties.
 
 import vox_render
-import vox_math
+import Math
 
 class UvUnwrapping {
     static var s_TempVector2 = Vector2.zero;

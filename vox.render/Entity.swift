@@ -5,7 +5,7 @@
 //  property of any third parties.
 
 import Foundation
-import vox_math
+import Math
 
 /// Entity, be used as components container.
 public final class Entity: EngineObject {

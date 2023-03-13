@@ -5,7 +5,7 @@
 //  property of any third parties.
 
 import vox_render
-import vox_math
+import Math
 
 /// Defines what objects are selectable for the scene tool.
 public struct SelectMode: OptionSet {

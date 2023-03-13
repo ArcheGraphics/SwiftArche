@@ -5,7 +5,7 @@
 //  property of any third parties.
 
 import vox_render
-import vox_math
+import Math
 
 /// Rect to line segment clipping implementation.
 /// https://en.wikipedia.org/wiki/Cohen%E2%80%93Sutherland_algorithm

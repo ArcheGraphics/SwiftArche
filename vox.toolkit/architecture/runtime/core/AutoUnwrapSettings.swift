@@ -6,7 +6,7 @@
 
 import Foundation
 import vox_render
-import vox_math
+import Math
 
 /// A collection of settings describing how to project UV coordinates for a @"UnityEngine.ProBuilder.Face".
 public struct AutoUnwrapSettings {

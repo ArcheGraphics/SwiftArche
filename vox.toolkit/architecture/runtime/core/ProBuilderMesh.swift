@@ -5,7 +5,7 @@
 //  property of any third parties.
 
 import vox_render
-import vox_math
+import Math
 
 /// This component is responsible for storing all the data necessary for editing and compiling UnityEngine.Mesh objects.
 public final class ProBuilderMesh: Script {

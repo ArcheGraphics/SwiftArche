@@ -5,7 +5,7 @@
 //  property of any third parties.
 
 import vox_render
-import vox_math
+import Math
 
 /// A collection of math functions that are useful when working with 3d meshes.
 public class Math {

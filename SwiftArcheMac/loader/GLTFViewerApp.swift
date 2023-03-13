@@ -6,7 +6,7 @@
 
 import Cocoa
 import vox_render
-import vox_math
+import Math
 import vox_toolkit
 
 class GltfViewerApp: NSViewController {

@@ -5,7 +5,7 @@
 //  property of any third parties.
 
 import Metal
-import vox_math
+import Math
 
 public class PBRSpecularMaterial: PBRBaseMaterial {
     private var _pbrSpecularData = PBRSpecularData(specularColor: vector_float3(1, 1, 1), glossiness: 1)

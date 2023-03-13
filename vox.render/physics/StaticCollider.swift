@@ -4,7 +4,7 @@
 //  personal capacity and am not conveying any rights to any intellectual
 //  property of any third parties.
 
-import vox_math
+import Math
 
 /// A static collider component that will not move.
 /// - Remark: Mostly used for object which always stays at the same place and never moves around.

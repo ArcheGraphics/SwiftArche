@@ -5,7 +5,7 @@
 //  property of any third parties.
 
 import vox_render
-import vox_math
+import Math
 
 /// Store face rebuild data with indexes to mark which vertices are new.
 final class ConnectFaceRebuildData {

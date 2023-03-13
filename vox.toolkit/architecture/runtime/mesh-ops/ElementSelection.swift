@@ -5,7 +5,7 @@
 //  property of any third parties.
 
 import vox_render
-import vox_math
+import Math
 
 public class ElementSelection {
     static let k_MaxHoleIterations = 2048

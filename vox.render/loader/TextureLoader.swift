@@ -6,7 +6,7 @@
 
 import Metal
 import MetalKit
-import vox_math
+import Math
 
 public class TextureLoader {
     private var _engine: Engine

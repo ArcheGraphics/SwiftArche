@@ -5,7 +5,7 @@
 //  property of any third parties.
 
 import vox_render
-import vox_math
+import Math
 
 public class Sprite: Shape {
     public func CopyShape(_ shape: Shape) {

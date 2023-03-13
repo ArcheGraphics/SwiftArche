@@ -5,7 +5,7 @@
 //  property of any third parties.
 
 import vox_render
-import vox_math
+import Math
 
 public class Cube: Shape {
     /// A set of 8 vertices forming the template for a cube mesh.

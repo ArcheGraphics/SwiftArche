@@ -5,7 +5,7 @@
 //  property of any third parties.
 
 import Metal
-import vox_math
+import Math
 
 public class PBRBaseMaterial: BaseMaterial {
     private var _pbrBaseData = PBRBaseData(baseColor: vector_float4(1, 1, 1, 1),

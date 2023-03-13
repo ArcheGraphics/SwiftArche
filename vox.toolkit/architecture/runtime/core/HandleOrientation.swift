@@ -5,7 +5,7 @@
 //  property of any third parties.
 
 import vox_render
-import vox_math
+import Math
 
 /// How the handle gizmo is oriented with regards to the current element selection.
 /// This overrides the Unity Pivot / Global setting when editing vertices, faces, or edges.

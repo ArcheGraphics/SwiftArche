@@ -5,7 +5,7 @@
 //  property of any third parties.
 
 import vox_render
-import vox_math
+import Math
 
 
 /// How bezier handles behave when being manipulated in the scene view.

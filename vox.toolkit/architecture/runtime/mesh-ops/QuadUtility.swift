@@ -5,7 +5,7 @@
 //  property of any third parties.
 
 import vox_render
-import vox_math
+import Math
 
 public class QuadUtility {
     public static func ToQuads(mesh: ProBuilderMesh, faces: [Face], smoothing: Bool = true) -> [Face] {

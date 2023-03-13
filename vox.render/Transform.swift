@@ -5,7 +5,7 @@
 //  property of any third parties.
 
 import Foundation
-import vox_math
+import Math
 
 /// Used to implement transformation related functions.
 public class Transform: Component {

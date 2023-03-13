@@ -4,7 +4,7 @@
 //  personal capacity and am not conveying any rights to any intellectual
 //  property of any third parties.
 
-import vox_math
+import Math
 
 /// A joint which behaves in a similar way to a hinge or axle.
 public class HingeJoint: Joint {

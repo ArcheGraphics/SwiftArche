@@ -5,7 +5,7 @@
 //  property of any third parties.
 
 import vox_render
-import vox_math
+import Math
 
 /// Contains information about a ProBuilder action (success, failure, notification, etc)
 public final class ActionResult {

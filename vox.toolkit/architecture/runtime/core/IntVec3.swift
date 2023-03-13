@@ -5,7 +5,7 @@
 //  property of any third parties.
 
 import vox_render
-import vox_math
+import Math
 
 /// Vertex positions are sorted as integers to avoid floating point precision errors.
 struct IntVec3 {

@@ -4,7 +4,7 @@
 //  personal capacity and am not conveying any rights to any intellectual
 //  property of any third parties.
 
-import vox_math
+import Math
 
 /// A fixed joint permits no relative movement between two colliders. ie the colliders are glued together.
 public class FixedJoint: Joint {

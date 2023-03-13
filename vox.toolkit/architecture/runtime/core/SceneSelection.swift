@@ -5,7 +5,7 @@
 //  property of any third parties.
 
 import vox_render
-import vox_math
+import Math
 
 // This should not be public until there is something meaningful that can be done with it. However it has been
 // public in the past, so we can't change it until the next major version increment.

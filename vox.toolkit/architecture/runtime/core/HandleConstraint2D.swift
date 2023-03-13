@@ -5,7 +5,7 @@
 //  property of any third parties.
 
 import vox_render
-import vox_math
+import Math
 
 /// A class for storing and applying Vector2 masks.
 final class HandleConstraint2D {

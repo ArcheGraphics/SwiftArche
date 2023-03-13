@@ -4,7 +4,7 @@
 //  personal capacity and am not conveying any rights to any intellectual
 //  property of any third parties.
 
-import vox_math
+import Math
 
 /// Describes how physics materials of the colliding objects are combined.
 enum CombineMode: Int {

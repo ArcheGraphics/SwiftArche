@@ -5,7 +5,7 @@
 //  property of any third parties.
 
 import vox_render
-import vox_math
+import Math
 
 class Spline {
     /// Create a new pb_Object by extruding along a bezier spline.

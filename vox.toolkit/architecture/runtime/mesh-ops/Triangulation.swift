@@ -5,7 +5,7 @@
 //  property of any third parties.
 
 import vox_render
-import vox_math
+import Math
 
 /// <summary>
 /// Wrapper around Triangle.NET triangulation methods. https://github.com/zon/triangle

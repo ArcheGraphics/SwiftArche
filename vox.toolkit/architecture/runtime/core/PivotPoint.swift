@@ -5,7 +5,7 @@
 //  property of any third parties.
 
 import vox_render
-import vox_math
+import Math
 
 public enum PivotPoint {
     /// Transforms are applied from the center point of the selection bounding box.

@@ -4,7 +4,7 @@
 //  personal capacity and am not conveying any rights to any intellectual
 //  property of any third parties.
 
-import vox_math
+import Math
 
 /// A physics manager is a collection of bodies and constraints which can interact.
 public class PhysicsManager {

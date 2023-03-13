@@ -5,7 +5,7 @@
 //  property of any third parties.
 
 import Cocoa
-import vox_math
+import Math
 
 class KeyboardManager {
     var _curHeldDownKeyToIndexMap: [Keys: Int] = [:]

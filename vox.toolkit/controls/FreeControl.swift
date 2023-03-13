@@ -5,7 +5,7 @@
 //  property of any third parties.
 
 import vox_render
-import vox_math
+import Math
 
 /// The camera's roaming controller, can move up and down, left and right, and rotate the viewing angle.
 public class FreeControl : Script {
