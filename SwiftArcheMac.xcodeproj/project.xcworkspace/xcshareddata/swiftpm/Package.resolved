@@ -17,6 +17,15 @@
         "revision" : "9a521cba8523fe4c2db4775e6d3fd2aff6cb9849",
         "version" : "1.86.0"
       }
+    },
+    {
+      "identity" : "tween",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/ArcheGraphics/Tween",
+      "state" : {
+        "branch" : "main",
+        "revision" : "9a227e52010e9b3642d11e0d2d2604a8bfce93b5"
+      }
     }
   ],
   "version" : 2

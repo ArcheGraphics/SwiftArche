@@ -473,6 +473,7 @@
 		3EC92ADF2939C6A000423396 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EC92ADE2939C6A000423396 /* Extensions.swift */; };
 		3EC92AE12939F97300423396 /* RenderCommandEncoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EC92AE02939F97300423396 /* RenderCommandEncoder.swift */; };
 		3EC92AE5293D8FA500423396 /* TransparentShadowMaterial.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EC92AE4293D8FA500423396 /* TransparentShadowMaterial.swift */; };
+		3ED7A25629BF43F900602AB2 /* Tween in Frameworks */ = {isa = PBXBuildFile; productRef = 3ED7A25529BF43F900602AB2 /* Tween */; };
 		3ED9BCE3294D753900876ABC /* ScreenSpaceFluid.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3ED9BCE2294D753900876ABC /* ScreenSpaceFluid.swift */; };
 		3ED9BCE6294DA4F300876ABC /* ScreenSpaceFluidApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3ED9BCE5294DA4F300876ABC /* ScreenSpaceFluidApp.swift */; };
 		3ED9BCE929514A0700876ABC /* cellular_noise.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3ED9BCE829514A0700876ABC /* cellular_noise.metal */; };
@@ -1278,6 +1279,7 @@
 				3EB32B862932303A0019A4F3 /* libc++abi.tbd in Frameworks */,
 				3EB32B872932303A0019A4F3 /* libc++.1.tbd in Frameworks */,
 				3EB32B882932303A0019A4F3 /* libc++.tbd in Frameworks */,
+				3ED7A25629BF43F900602AB2 /* Tween in Frameworks */,
 				3EB32B7F29322E850019A4F3 /* libvox.math.a in Frameworks */,
 				3EB32B8029322E850019A4F3 /* libvox.physics.a in Frameworks */,
 				3EB32B8129322E850019A4F3 /* libvox.render.a in Frameworks */,
@@ -2901,6 +2903,7 @@
 			name = SwiftArcheMac;
 			packageProductDependencies = (
 				040F1DDE2934EAB8008BDC8D /* ImGui */,
+				3ED7A25529BF43F900602AB2 /* Tween */,
 			);
 			productName = SwiftArcheMac;
 			productReference = 3EC0370129321131002187DC /* SwiftArcheMac.app */;
@@ -3098,6 +3101,7 @@
 			packageReferences = (
 				3EB32B012932299A0019A4F3 /* XCRemoteSwiftPackageReference "swift-log" */,
 				040F1DD42934E6B9008BDC8D /* XCRemoteSwiftPackageReference "SwiftImGui" */,
+				3ED7A25429BF43F900602AB2 /* XCRemoteSwiftPackageReference "Tween" */,
 			);
 			productRefGroup = 3EC0370229321131002187DC /* Products */;
 			projectDirPath = "";
@@ -4534,6 +4538,14 @@
 				version = 1.4.4;
 			};
 		};
+		3ED7A25429BF43F900602AB2 /* XCRemoteSwiftPackageReference "Tween" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/ArcheGraphics/Tween";
+			requirement = {
+				branch = main;
+				kind = branch;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -4561,6 +4573,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 3EB32B012932299A0019A4F3 /* XCRemoteSwiftPackageReference "swift-log" */;
 			productName = Logging;
+		};
+		3ED7A25529BF43F900602AB2 /* Tween */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 3ED7A25429BF43F900602AB2 /* XCRemoteSwiftPackageReference "Tween" */;
+			productName = Tween;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
