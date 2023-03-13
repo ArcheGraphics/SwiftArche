@@ -9,14 +9,21 @@ import CoreGraphics
 import CoreText
 #if os(macOS)
 import AppKit
+#else
+import UIKit
 #endif
 
 class TextUtils {
     static func textUpdate(fontSize: Float, fontAtlas: MTLFontAtlas, string: String,
                            vertices: inout [Vector3], texCoords: inout [Vector2], indices: inout [UInt32],
                            bounds: inout BoundingBox) {
+#if os(iOS) || targetEnvironment(macCatalyst)
+        let textRect = CGRectInset(UIScreen.main.accessibilityFrame, 0, 0) // RG: text x,y from top left
+        let font = UIFont(name: fontAtlas.font.fontName, size: CGFloat(fontSize))!
+#else
         let textRect = CGRectInset(NSScreen.main!.visibleFrame, 0, 0) // RG: text x,y from top left
         let font = NSFont(name: fontAtlas.font.fontName, size: CGFloat(fontSize))!
+#endif
         let attributedString = NSAttributedString(string: string,
                 attributes: [NSAttributedString.Key.font: font])
         let stringRange = CFRangeMake(0, attributedString.length)

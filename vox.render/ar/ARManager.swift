@@ -5,7 +5,7 @@
 //  property of any third parties.
 
 import ARKit
-import vox_math
+import Math
 
 public class ARManager: NSObject {
     let _session = ARSession()

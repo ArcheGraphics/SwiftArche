@@ -208,7 +208,9 @@ public class Engine: NSObject {
     
     public func destroy() {
         sceneManager.destroy()
+#if os(macOS)
         _guiManager.destroy()
+#endif
     }
 
     /// Update the engine loop manually. If you call engine.run(), you generally don't need to call this function.

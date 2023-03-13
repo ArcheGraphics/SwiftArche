@@ -18,7 +18,7 @@ public extension MTLDevice {
             #if targetEnvironment(macCatalyst)
             return supportsFamily(.common3)
             #elseif os(iOS)
-            return supportsFamily(.iOS_GPUFamily4_v1)
+            return supportsFamily(.apple8)
             #elseif os(macOS)
             return supportsFamily(.mac2)
             #endif

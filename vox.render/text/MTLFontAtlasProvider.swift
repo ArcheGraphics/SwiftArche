@@ -157,7 +157,7 @@ final public class MTLFontAtlasProvider {
         let rect = CGRect(x: 0, y: 0, width: width, height: height)
 
         // Fill the context with an opaque black color
-        context.setFillColor(NSColor.black.cgColor)
+        context.setFillColor(UIColor.black.cgColor)
         context.fill(rect)
 
         let ctFont = font.ctFont

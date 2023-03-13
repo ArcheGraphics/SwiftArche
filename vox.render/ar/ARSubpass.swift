@@ -6,7 +6,7 @@
 
 import Metal
 import ARKit
-import vox_math
+import Math
 
 public class ARSubpass: Subpass {
     var capturedImagePipelineState: MTLRenderPipelineState!

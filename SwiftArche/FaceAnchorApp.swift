@@ -7,7 +7,7 @@
 import UIKit
 import ARKit
 import vox_render
-import vox_math
+import Math
 import simd
 
 fileprivate class ARScript: Script {

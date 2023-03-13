@@ -12,7 +12,7 @@
 
 @property(nonatomic) float weight;
 
-@property(nonatomic) uint8 blendMode;
+@property(nonatomic) uint8_t blendMode;
 
 - (void)addChild:(CAnimationState *_Nonnull)state;
 

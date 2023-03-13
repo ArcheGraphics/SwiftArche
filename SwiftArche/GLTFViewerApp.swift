@@ -7,7 +7,7 @@
 import UIKit
 import ARKit
 import vox_render
-import vox_math
+import Math
 
 fileprivate class ARScript: Script {
     private var _isInitialize: Bool = false
