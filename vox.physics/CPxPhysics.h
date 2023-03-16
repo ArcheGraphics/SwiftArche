@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 #import <simd/simd.h>
 #import "CPxMaterial.h"
-#import "CPxGeometry.h"
+#import "shape/CPxGeometry.h"
 #import "CPxShape.h"
 #import "CPxRigidStatic.h"
 #import "CPxRigidDynamic.h"

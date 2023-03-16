@@ -1,9 +1,8 @@
+//  Copyright (c) 2023 Feng Yang
 //
-//  SwiftArcheMacUITestsLaunchTests.swift
-//  SwiftArcheMacUITests
-//
-//  Created by yangfengzz on 2022/11/26.
-//
+//  I am making my contributions/submissions to this project solely in my
+//  personal capacity and am not conveying any rights to any intellectual
+//  property of any third parties.
 
 import XCTest
 

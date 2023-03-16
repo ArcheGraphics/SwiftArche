@@ -7,7 +7,7 @@
 #pragma once
 
 #import "CPxGeometry.h"
-#import "CPxPhysics.h"
+#import "../CPxPhysics.h"
 #import <simd/simd.h>
 
 @interface CPxMeshGeometry : CPxGeometry

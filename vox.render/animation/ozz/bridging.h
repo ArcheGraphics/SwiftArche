@@ -7,7 +7,7 @@
 #pragma once
 
 #include "CAnimationState.h"
-#include "CAnimatorBlending.h"
-#include "CAnimationClip.h"
+#include "animation_states/CAnimatorBlending.h"
+#include "animation_states/CAnimationClip.h"
 #include "CAnimator.h"
 #include "CSkin.h"

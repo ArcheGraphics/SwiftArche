@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import <simd/simd.h>
-#import "CPxGeometry.h"
+#import "shape/CPxGeometry.h"
 #import "CPxMaterial.h"
 
 @interface CPxShape : NSObject
