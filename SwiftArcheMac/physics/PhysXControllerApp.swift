@@ -136,7 +136,8 @@ class PhysXControllerApp: NSViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        canvas = Canvas(with: view)
+        canvas = Canvas(frame: view.frame)
+        canvas.setParentView(view)
         engine = Engine(canvas: canvas)
         iblBaker = IBLBaker(engine)
         

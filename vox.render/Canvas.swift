@@ -37,9 +37,8 @@ public class Canvas: MTKView {
         fatalError("init(coder:) has not been implemented")
     }
 
-    public init(with view: CanvasView) {
-        super.init(frame: view.frame, device: nil)
-        _setParentView(view)
+    public override init(frame frameRect: CGRect, device: MTLDevice?) {
+        super.init(frame: frameRect, device: device)
         translatesAutoresizingMaskIntoConstraints = false
         depthStencilPixelFormat = Canvas.depthPixelFormat
         colorPixelFormat = Canvas.colorPixelFormat
@@ -63,7 +62,7 @@ public class Canvas: MTKView {
 #endif
     }
     
-    private func _setParentView(_ view: CanvasView) {
+    public func setParentView(_ view: CanvasView) {
         view.addSubview(self)
         NSLayoutConstraint.activate([
             topAnchor.constraint(equalTo: view.topAnchor),

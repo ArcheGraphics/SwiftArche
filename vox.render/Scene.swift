@@ -19,48 +19,38 @@ public class Scene: EngineObject {
     public var shaderData: ShaderData
 
     /// If cast shadows.
+    @MirrorUI
     public var castShadows: Bool = true
     /// The resolution of the shadow maps.
+    @MirrorUI
     public var shadowResolution: ShadowResolution = ShadowResolution.High
     /// The splits of two cascade distribution.
+    @MirrorUI
     public var shadowTwoCascadeSplits: Float = 1.0 / 3.0
     /// The splits of four cascade distribution.
+    @MirrorUI
     public var shadowFourCascadeSplits: Vector3 = Vector3(1.0 / 15, 3.0 / 15.0, 7.0 / 15.0)
     /// Max Shadow distance.
+    @MirrorUI
     public var shadowDistance: Float = 50
-
+    /// Number of cascades to use for directional light shadows.
+    @MirrorUI
+    public var shadowCascades: ShadowCascadesMode = ShadowCascadesMode.NoCascades
+    
     var _activeCameras: [Camera] = []
     var _isActiveInEngine: Bool = false
     var _globalShaderMacro: ShaderMacroCollection = ShaderMacroCollection()
     var _rootEntities: [Entity] = []
     var _sunLight: Light?
 
-    private var _shadowCascades: ShadowCascadesMode = ShadowCascadesMode.NoCascades
     private var _ambientLight: AmbientLight!
     private var _postprocessManager: PostprocessManager!
-    private var _fogMode: FogMode = FogMode.None
-    private var _fogStart: Float = 0
-    private var _fogEnd: Float = 300
-    private var _fogDensity: Float = 0.01
     private var _fogData = FogData(color: vector_float4(0.5, 0.5, 0.5, 1.0), params: vector_float4())
 
     /// Get the post-process manager.
     public var postprocessManager: PostprocessManager {
         get {
             _postprocessManager
-        }
-    }
-
-    /// Number of cascades to use for directional light shadows.
-    public var shadowCascades: ShadowCascadesMode {
-        get {
-            _shadowCascades
-        }
-        set {
-            if _shadowCascades != newValue {
-                shaderData.enableMacro(CASCADED_COUNT.rawValue, (newValue.rawValue, .int))
-                _shadowCascades = newValue
-            }
         }
     }
 
@@ -78,6 +68,18 @@ public class Scene: EngineObject {
             }
         }
     }
+    
+    /// Fog start.
+    @MirrorUI
+    public var fogStart: Float = 0
+
+    /// Fog end.
+    @MirrorUI
+    public var fogEnd: Float = 300
+
+    /// Fog density.
+    @MirrorUI
+    public var fogDensity: Float = 0.01
 
     /// Fog mode.
     /// - Remarks:
@@ -85,17 +87,8 @@ public class Scene: EngineObject {
     /// If set to `FogMode.Linear`, the fog will be linear and controlled by `fogStart` and `fogEnd`.
     /// If set to `FogMode.Exponential`, the fog will be exponential and controlled by `fogDensity`.
     /// If set to `FogMode.ExponentialSquared`, the fog will be exponential squared and controlled by `fogDensity`.
-    public var fogMode: FogMode {
-        get {
-            _fogMode
-        }
-        set {
-            if (_fogMode != newValue) {
-                shaderData.enableMacro(FOG_MODE.rawValue, (newValue.rawValue, .int))
-                _fogMode = newValue
-            }
-        }
-    }
+    @MirrorUI
+    public var fogMode: FogMode = FogMode.None
 
     /// Fog color.
     public var fogColor: Color {
@@ -105,45 +98,6 @@ public class Scene: EngineObject {
         set {
             _fogData.color = newValue.toLinear().internalValue
             shaderData.setData(Scene._fogProperty, _fogData)
-        }
-    }
-
-    /// Fog start.
-    public var fogStart: Float {
-        get {
-            _fogStart
-        }
-        set {
-            if (_fogStart != newValue) {
-                _computeLinearFogParams(newValue, _fogEnd)
-                _fogStart = newValue
-            }
-        }
-    }
-
-    /// Fog end.
-    public var fogEnd: Float {
-        get {
-            _fogEnd
-        }
-        set {
-            if (_fogEnd != newValue) {
-                _computeLinearFogParams(_fogStart, newValue)
-                _fogEnd = newValue
-            }
-        }
-    }
-
-    /// Fog density.
-    public var fogDensity: Float {
-        get {
-            _fogDensity
-        }
-        set {
-            if (_fogDensity != newValue) {
-                _computeExponentialFogParams(newValue)
-                _fogDensity = newValue
-            }
         }
     }
 
@@ -160,6 +114,20 @@ public class Scene: EngineObject {
             _rootEntities
         }
     }
+    
+    enum CodingKeys: String, CodingKey {
+        case name
+    }
+    
+    public required init(from decoder: Decoder) throws {
+        let engine = decoder.userInfo[CodingUserInfoKey(rawValue: "engine")!] as! Engine
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.name = try container.decode(String.self, forKey: .name)
+        shaderData = ShaderData(engine)
+        super.init(engine)
+        
+        registerCallback()
+    }
 
     /// Create scene.
     /// - Parameters:
@@ -174,14 +142,38 @@ public class Scene: EngineObject {
         _postprocessManager = PostprocessManager(self)
         engine.sceneManager._allScenes.append(self)
 
-        shaderData.enableMacro(FOG_MODE.rawValue, (_fogMode.rawValue, .int))
+        shaderData.enableMacro(FOG_MODE.rawValue, (fogMode.rawValue, .int))
         shaderData.enableMacro(CASCADED_COUNT.rawValue, (shadowCascades.rawValue, .int))
-        _computeLinearFogParams(_fogStart, _fogEnd)
-        _computeExponentialFogParams(_fogDensity)
+        _computeLinearFogParams(fogStart, fogEnd)
+        _computeExponentialFogParams(fogDensity)
+        
+        registerCallback()
     }
     
     deinit {
         destroy()
+    }
+    
+    func registerCallback() {
+        $shadowCascades.didSet = { [weak self] newValue in
+            if newValue != .NoCascades {
+                self?.shaderData.enableMacro(CASCADED_COUNT.rawValue, (newValue.rawValue, .int))
+            }
+        }
+        $fogMode.didSet = { [weak self] newValue in
+            if newValue != .None {
+                self?.shaderData.enableMacro(FOG_MODE.rawValue, (newValue.rawValue, .int))
+            }
+        }
+        $fogStart.didSet = { [weak self] newValue in
+            self!._computeLinearFogParams(newValue, (self?.fogEnd)!)
+        }
+        $fogEnd.didSet = { [weak self] newValue in
+            self!._computeLinearFogParams((self?.fogStart)!, newValue)
+        }
+        $fogDensity.didSet = { [weak self] newValue in
+            self!._computeExponentialFogParams(newValue)
+        }
     }
 
     override func destroy() {
@@ -441,3 +433,7 @@ extension Scene {
     }
 }
 
+extension Scene: Codable {
+    public func encode(to encoder: Encoder) throws {
+    }
+}

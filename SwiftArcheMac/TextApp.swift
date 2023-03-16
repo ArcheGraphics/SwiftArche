@@ -25,7 +25,8 @@ class TextApp: NSViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        canvas = Canvas(with: view)
+        canvas = Canvas(frame: view.frame)
+        canvas.setParentView(view)
         engine = Engine(canvas: canvas)
         fontProvider = try! MTLFontAtlasProvider(engine: engine)
         

@@ -12,7 +12,7 @@ open class EngineObject: NSObject {
     internal var _engine: Engine
 
     /// Engine unique id.
-    public let instanceId: Int
+    private let _instanceId: Int
 
     /// Get the engine which the object belongs.
     public var engine: Engine {
@@ -23,12 +23,18 @@ open class EngineObject: NSObject {
 
     public init(_ engine: Engine) {
         EngineObject._instanceIdCounter += 1
-        instanceId = EngineObject._instanceIdCounter
+        _instanceId = EngineObject._instanceIdCounter
 
         _engine = engine
     }
 
     func destroy() {
         // _engine.resourceManager?._deleteAsset(this)
+    }
+}
+
+extension EngineObject: Identifiable {
+    public var id: Int {
+        _instanceId
     }
 }
