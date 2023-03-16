@@ -91,6 +91,8 @@
 		3E34221A29C2E5E40025C65A /* Dictionary+TypedSubscript.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E34221429C2E5E30025C65A /* Dictionary+TypedSubscript.swift */; };
 		3E34221B29C2E5E40025C65A /* View.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E34221529C2E5E30025C65A /* View.swift */; };
 		3E34221C29C2E5E40025C65A /* PropertyRef.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E34221629C2E5E40025C65A /* PropertyRef.swift */; };
+		3E34221D29C2F1450025C65A /* PropertyNameFormatterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EC0371B29321133002187DC /* PropertyNameFormatterTests.swift */; };
+		3E34222029C2F1F10025C65A /* MirrorApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E34221F29C2F1F10025C65A /* MirrorApp.swift */; };
 		3E37FD1F29B079250050169C /* HandleConstraint2D.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E37FD1E29B079250050169C /* HandleConstraint2D.swift */; };
 		3E37FD2129B07A7B0050169C /* HandleOrientation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E37FD2029B07A7B0050169C /* HandleOrientation.swift */; };
 		3E37FD8229B1C0270050169C /* RaycastHit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E37FD3C29B0AC610050169C /* RaycastHit.swift */; };
@@ -208,9 +210,6 @@
 		3EC0370529321131002187DC /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EC0370429321131002187DC /* AppDelegate.swift */; };
 		3EC0370E29321132002187DC /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3EC0370D29321132002187DC /* Assets.xcassets */; };
 		3EC0371129321132002187DC /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3EC0370F29321132002187DC /* Main.storyboard */; };
-		3EC0371C29321133002187DC /* SwiftArcheMacTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EC0371B29321133002187DC /* SwiftArcheMacTests.swift */; };
-		3EC0372629321133002187DC /* SwiftArcheMacUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EC0372529321133002187DC /* SwiftArcheMacUITests.swift */; };
-		3EC0372829321133002187DC /* SwiftArcheMacUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EC0372729321133002187DC /* SwiftArcheMacUITestsLaunchTests.swift */; };
 		3EC0378D293213D6002187DC /* CPxRigidActor+Internal.h in Headers */ = {isa = PBXBuildFile; fileRef = 3EC03776293213D4002187DC /* CPxRigidActor+Internal.h */; };
 		3EC0378E293213D6002187DC /* CPxRigidDynamic.mm in Sources */ = {isa = PBXBuildFile; fileRef = 3EC03777293213D4002187DC /* CPxRigidDynamic.mm */; };
 		3EC0378F293213D6002187DC /* CPxShape+Internal.h in Headers */ = {isa = PBXBuildFile; fileRef = 3EC03778293213D5002187DC /* CPxShape+Internal.h */; };
@@ -701,6 +700,7 @@
 		3E34221429C2E5E30025C65A /* Dictionary+TypedSubscript.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Dictionary+TypedSubscript.swift"; sourceTree = "<group>"; };
 		3E34221529C2E5E30025C65A /* View.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = View.swift; sourceTree = "<group>"; };
 		3E34221629C2E5E40025C65A /* PropertyRef.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PropertyRef.swift; sourceTree = "<group>"; };
+		3E34221F29C2F1F10025C65A /* MirrorApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MirrorApp.swift; sourceTree = "<group>"; };
 		3E37FCE529AEE9A70050169C /* CPXHelper.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CPXHelper.h; sourceTree = "<group>"; };
 		3E37FD0229AF743E0050169C /* ActionResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActionResult.swift; sourceTree = "<group>"; };
 		3E37FD0429AF9CA00050169C /* AutoUnwrapSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AutoUnwrapSettings.swift; sourceTree = "<group>"; };
@@ -913,7 +913,7 @@
 		3EC0371029321132002187DC /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		3EC0371229321132002187DC /* SwiftArcheMac.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = SwiftArcheMac.entitlements; sourceTree = "<group>"; };
 		3EC0371729321133002187DC /* SwiftArcheMacTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SwiftArcheMacTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		3EC0371B29321133002187DC /* SwiftArcheMacTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftArcheMacTests.swift; sourceTree = "<group>"; };
+		3EC0371B29321133002187DC /* PropertyNameFormatterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PropertyNameFormatterTests.swift; sourceTree = "<group>"; };
 		3EC0372129321133002187DC /* SwiftArcheMacUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SwiftArcheMacUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		3EC0372529321133002187DC /* SwiftArcheMacUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftArcheMacUITests.swift; sourceTree = "<group>"; };
 		3EC0372729321133002187DC /* SwiftArcheMacUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftArcheMacUITestsLaunchTests.swift; sourceTree = "<group>"; };
@@ -1572,6 +1572,14 @@
 			path = utils;
 			sourceTree = "<group>";
 		};
+		3E34221E29C2F1C60025C65A /* mirror */ = {
+			isa = PBXGroup;
+			children = (
+				3E34221F29C2F1F10025C65A /* MirrorApp.swift */,
+			);
+			path = mirror;
+			sourceTree = "<group>";
+		};
 		3E37FCFE29AF738F0050169C /* architecture */ = {
 			isa = PBXGroup;
 			children = (
@@ -2028,6 +2036,7 @@
 				E63B1700C137922B042BB8C2 /* InputCastApp.swift */,
 				3EBA3D0E29B84C0100E5FB42 /* GizmosApp.swift */,
 				3EBA3D5829B9C74000E5FB42 /* TextApp.swift */,
+				3E34221E29C2F1C60025C65A /* mirror */,
 				3E6D2F0B293F135000B63F73 /* loader */,
 				3EC92A3F29360C6800423396 /* physics */,
 				3E8B00E929BD7D9A00A70123 /* animation */,
@@ -2040,7 +2049,7 @@
 		3EC0371A29321133002187DC /* SwiftArcheMacTests */ = {
 			isa = PBXGroup;
 			children = (
-				3EC0371B29321133002187DC /* SwiftArcheMacTests.swift */,
+				3EC0371B29321133002187DC /* PropertyNameFormatterTests.swift */,
 			);
 			path = SwiftArcheMacTests;
 			sourceTree = "<group>";
@@ -3277,6 +3286,7 @@
 				3E8B00EB29BD7DB000A70123 /* AnimationAdditiveApp.swift in Sources */,
 				3E1F129929A7A49900F1002E /* PhysXConcaveDynamicApp.swift in Sources */,
 				43D8C40438F0527739C7D662 /* AtomicComputeApp.swift in Sources */,
+				3E34222029C2F1F10025C65A /* MirrorApp.swift in Sources */,
 				3E10764629653F0300F751A5 /* PointEmitterApp.swift in Sources */,
 				040F1DF3293781B0008BDC8D /* RenderingUtils.swift in Sources */,
 				43D8CF515E4D90196E7E806B /* PhysXCollisionDetectionApp.swift in Sources */,
@@ -3304,7 +3314,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				3EC0371C29321133002187DC /* SwiftArcheMacTests.swift in Sources */,
+				3E34221D29C2F1450025C65A /* PropertyNameFormatterTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3312,8 +3322,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				3EC0372829321133002187DC /* SwiftArcheMacUITestsLaunchTests.swift in Sources */,
-				3EC0372629321133002187DC /* SwiftArcheMacUITests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
