@@ -6,6 +6,8 @@
     <mapping directory="$PROJECT_DIR$/glTF-Sample-Models" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/third_party/bvh" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/third_party/cgltf" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/third_party/ios-cmake" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/third_party/ozz" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/third_party/physx" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/third_party/tinyobj" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/third_party/vhacd" vcs="Git" />

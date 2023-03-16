@@ -21,14 +21,17 @@ public class Camera: Component {
     public var priority: Int = 0
 
     /// Whether to enable frustum culling, it is enabled by default.
+    @MirrorUI
     public var enableFrustumCulling: Bool = true
 
     /// Determining what to clear when rendering by a Camera.
     /// defaultValue `CameraClearFlags.ColorDepth`
+    @MirrorUI
     public var clearFlags: CameraClearFlags = .All
 
     /// Culling mask - which layers the camera renders.
     /// - Remark Support bit manipulation, corresponding to Entity's layer.
+    @MirrorUI
     public var cullingMask: Layer = Layer.Everything
 
     public var devicePipeline: DevicePipeline!
@@ -38,10 +41,6 @@ public class Camera: Component {
     var _cameraInfo = CameraInfo()
 
     private var _isProjMatSetting = false
-    private var _nearClipPlane: Float = 0.1
-    private var _farClipPlane: Float = 100
-    private var _fieldOfView: Float = 45
-    private var _orthographicSize: Float = 10
     private var _isProjectionDirty = true
     private var _isInvProjMatDirty: Bool = true
     private var _isFrustumProjectDirty: Bool = true
@@ -52,51 +51,34 @@ public class Camera: Component {
     private var _transform: Transform
     private var _isViewMatrixDirty: BoolUpdateFlag
     private var _isInvViewProjDirty: BoolUpdateFlag
-    private var _viewport: Vector4 = Vector4(0, 0, 1, 1)
     private var _lastAspectSize: Vector2 = Vector2(0, 0)
     private var _invViewProjMat: Matrix = Matrix()
     private var _inverseProjectionMatrix: Matrix = Matrix()
 
     /// Near clip plane - the closest point to the camera when rendering occurs.
-    public var nearClipPlane: Float {
-        get {
-            _nearClipPlane
-        }
-        set {
-            _nearClipPlane = newValue
-            _projMatChange()
-        }
-    }
+    @MirrorUI
+    public var nearClipPlane: Float = 0.1
 
     /// Far clip plane - the furthest point to the camera when rendering occurs.
-    public var farClipPlane: Float {
-        get {
-            _farClipPlane
-        }
-        set {
-            _farClipPlane = newValue
-            _projMatChange()
-        }
-    }
+    @MirrorUI
+    public var farClipPlane: Float = 100
 
     /// The camera's view angle. activating when camera use perspective projection.
-    public var fieldOfView: Float {
-        get {
-            _fieldOfView
-        }
-        set {
-            _fieldOfView = newValue
-            _projMatChange()
-        }
-    }
+    @MirrorUI
+    public var fieldOfView: Float = 45
 
-
+    /// Viewport, normalized expression, the upper left corner is (0, 0), and the lower right corner is (1, 1).
+    /// - Remark: Re-assignment is required after modification to ensure that the modification takes effect.
+    @MirrorUI
+    public var viewport: Vector4 = Vector4(0, 0, 1, 1)
+    
     /// Aspect ratio. The default is automatically calculated by the viewport's aspect ratio. If it is manually set,
     /// the manual value will be kept. Call resetAspectRatio() to restore it.
     public var aspectRatio: Float {
         get {
             let canvas = _entity.engine.canvas
-            return _customAspectRatio ?? (Float(canvas.bounds.size.width) * _viewport.z) / (Float(canvas.bounds.size.height) * _viewport.w)
+            return _customAspectRatio ?? (Float(canvas.bounds.size.width) * viewport.z)
+            / (Float(canvas.bounds.size.height) * viewport.w)
         }
         set {
             _customAspectRatio = newValue
@@ -104,40 +86,13 @@ public class Camera: Component {
         }
     }
 
-    /// Viewport, normalized expression, the upper left corner is (0, 0), and the lower right corner is (1, 1).
-    /// - Remark: Re-assignment is required after modification to ensure that the modification takes effect.
-    public var viewport: Vector4 {
-        get {
-            _viewport
-        }
-        set {
-            _viewport = newValue
-            _projMatChange()
-        }
-    }
-
-
     /// Whether it is orthogonal, the default is false. True will use orthographic projection, false will use perspective projection.
-    public var isOrthographic: Bool {
-        get {
-            _cameraInfo.isOrthographic
-        }
-        set {
-            _cameraInfo.isOrthographic = newValue
-            _projMatChange()
-        }
-    }
+    @MirrorUI
+    public var isOrthographic: Bool = false
 
     /// Half the size of the camera in orthographic mode.
-    public var orthographicSize: Float {
-        get {
-            _orthographicSize
-        }
-        set {
-            _orthographicSize = newValue
-            _projMatChange()
-        }
-    }
+    @MirrorUI
+    public var orthographicSize: Float = 10
 
     /// View matrix.
     public var viewMatrix: Matrix {
@@ -168,15 +123,15 @@ public class Camera: Component {
             let aspectRatio = aspectRatio
             if (!_cameraInfo.isOrthographic) {
                 _cameraInfo.projectionMatrix = Matrix.perspective(
-                        fovy: MathUtil.degreeToRadian(_fieldOfView),
+                        fovy: MathUtil.degreeToRadian(fieldOfView),
                         aspect: aspectRatio,
-                        near: _nearClipPlane,
-                        far: _farClipPlane)
+                        near: nearClipPlane,
+                        far: farClipPlane)
             } else {
-                let width = _orthographicSize * aspectRatio
-                let height = _orthographicSize
+                let width = orthographicSize * aspectRatio
+                let height = orthographicSize
                 _cameraInfo.projectionMatrix = Matrix.ortho(left: -width, right: width, bottom: -height, top: height,
-                        near: _nearClipPlane, far: _farClipPlane)
+                        near: nearClipPlane, far: farClipPlane)
             }
             return _cameraInfo.projectionMatrix
         }
@@ -219,6 +174,7 @@ public class Camera: Component {
 
         super.init(entity)
         devicePipeline = DevicePipeline(self)
+        registerCallback()
     }
 
     override func _onEnable() {
@@ -230,6 +186,28 @@ public class Camera: Component {
 
     override func _onDisable() {
         entity.scene._detachRenderCamera(self)
+    }
+    
+    func registerCallback() {
+        $fieldOfView.didSet = { [weak self] _ in
+            self?._projMatChange()
+        }
+        $farClipPlane.didSet = { [weak self] _ in
+            self?._projMatChange()
+        }
+        $nearClipPlane.didSet = { [weak self] _ in
+            self?._projMatChange()
+        }
+        $viewport.didSet = { [weak self] _ in
+            self?._projMatChange()
+        }
+        $isOrthographic.didSet = { [weak self] newValue in
+            self?._cameraInfo.isOrthographic = newValue
+            self?._projMatChange()
+        }
+        $orthographicSize.didSet = { [weak self] _ in
+            self?._projMatChange()
+        }
     }
 }
 
