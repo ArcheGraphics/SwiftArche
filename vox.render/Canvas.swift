@@ -7,9 +7,9 @@
 import MetalKit
 
 #if os(iOS)
-public typealias View = UIView
+public typealias CanvasView = UIView
 #else
-public typealias View = NSView
+public typealias CanvasView = NSView
 import ImGui
 import AppKit
 #endif
@@ -37,7 +37,7 @@ public class Canvas: MTKView {
         fatalError("init(coder:) has not been implemented")
     }
 
-    public init(with view: View) {
+    public init(with view: CanvasView) {
         super.init(frame: view.frame, device: nil)
         _setParentView(view)
         translatesAutoresizingMaskIntoConstraints = false
@@ -63,7 +63,7 @@ public class Canvas: MTKView {
 #endif
     }
     
-    private func _setParentView(_ view: View) {
+    private func _setParentView(_ view: CanvasView) {
         view.addSubview(self)
         NSLayoutConstraint.activate([
             topAnchor.constraint(equalTo: view.topAnchor),
