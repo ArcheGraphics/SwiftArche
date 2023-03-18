@@ -7,7 +7,7 @@
 import Metal
 import Math
 
-public class Scene: EngineObject {
+public final class Scene: EngineObject {
     private static let _fogProperty = "u_fog"
 
     /// Scene name.
@@ -113,20 +113,6 @@ public class Scene: EngineObject {
         get {
             _rootEntities
         }
-    }
-    
-    enum CodingKeys: String, CodingKey {
-        case name
-    }
-    
-    public required init(from decoder: Decoder) throws {
-        let engine = decoder.userInfo[CodingUserInfoKey(rawValue: "engine")!] as! Engine
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.name = try container.decode(String.self, forKey: .name)
-        shaderData = ShaderData(engine)
-        super.init(engine)
-        
-        registerCallback()
     }
 
     /// Create scene.
@@ -434,8 +420,22 @@ extension Scene {
 }
 
 extension Scene: Codable {
+    enum CodingKeys: String, CodingKey {
+        case name
+        case rootEntities
+    }
+    
+    public convenience init(from decoder: Decoder) throws {
+        let engine = decoder.userInfo[CodingUserInfoKey(rawValue: "engine")!] as! Engine
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        let name = try container.decode(String.self, forKey: .name)
+        self.init(engine, name)
+        _rootEntities = try container.decode([Entity].self, forKey: .rootEntities)
+    }
+    
     public func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encode(name, forKey: .name)
+        try container.encode(rootEntities, forKey: .rootEntities)
     }
 }

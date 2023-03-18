@@ -140,6 +140,11 @@ public class PhysicsManager {
                 }
         )
     }
+    
+    func destroy() {
+        _nativePhysicsManager.destroy()
+        PhysXPhysics.destroy()
+    }
 
     /// Call on every frame to update pose of objects.
     func _update(_  deltaTime: Float) {

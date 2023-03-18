@@ -23,8 +23,12 @@
 
 using namespace physx;
 
+#define PX_RELEASE(x)    if(x)    { x->release(); x = NULL;    }
+
 @implementation CPxPhysics {
     PxPhysics *_physics;
+    PxFoundation *_gFoundation;
+    PxDefaultCpuDispatcher *_dispatcher;
 
     PxDefaultAllocator gAllocator;
     PxDefaultErrorCallback gErrorCallback;
@@ -41,18 +45,24 @@ using namespace physx;
 }
 
 - (void)initializePhysics {
-    physx::PxFoundation *gFoundation = PxCreateFoundation(PX_PHYSICS_VERSION, gAllocator, gErrorCallback);
+    _gFoundation = PxCreateFoundation(PX_PHYSICS_VERSION, gAllocator, gErrorCallback);
 
-    _physics = PxCreatePhysics(PX_PHYSICS_VERSION, *gFoundation, PxTolerancesScale(), false, nullptr);
-    _c_cooking = PxCreateCooking(PX_PHYSICS_VERSION, *gFoundation, PxCookingParams(PxTolerancesScale()));
+    _physics = PxCreatePhysics(PX_PHYSICS_VERSION, *_gFoundation, PxTolerancesScale(), false, nullptr);
+    _c_cooking = PxCreateCooking(PX_PHYSICS_VERSION, *_gFoundation, PxCookingParams(PxTolerancesScale()));
+    
+    PxInitExtensions(*_physics, nullptr);
+}
+
+- (void)destroy {
+    PX_RELEASE(_dispatcher)
+    PxCloseExtensions();
+    PX_RELEASE(_physics)
+    PX_RELEASE(_c_cooking)
+    PX_RELEASE(_gFoundation)
 }
 
 - (PxPhysicsInsertionCallback &)getPhysicsInsertionCallback {
     return _physics->getPhysicsInsertionCallback();
-}
-
-- (bool)initExtensions {
-    return PxInitExtensions(*_physics, nullptr);
 }
 
 - (CPxMaterial *)createMaterialWithStaticFriction:(float)staticFriction
@@ -216,7 +226,8 @@ using namespace physx;
 
     PxSceneDesc sceneDesc(_physics->getTolerancesScale());
     sceneDesc.gravity = PxVec3(0.0f, -9.81f, 0.0f);
-    sceneDesc.cpuDispatcher = PxDefaultCpuDispatcherCreate(1);
+    _dispatcher = PxDefaultCpuDispatcherCreate(1);
+    sceneDesc.cpuDispatcher = _dispatcher;
     sceneDesc.filterShader = vox::simulationFilterShader;
     sceneDesc.simulationEventCallback = simulationEventCallback;
 

@@ -50,6 +50,11 @@ namespace {
     return self;
 }
 
+- (void)destroy {
+    _scene->release();
+    _scene = nullptr;
+}
+
 - (void)setGravity:(simd_float3)vec {
     _scene->setGravity(transform(vec));
 }

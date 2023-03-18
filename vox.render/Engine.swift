@@ -208,6 +208,7 @@ public class Engine: NSObject {
     
     public func destroy() {
         sceneManager.destroy()
+        physicsManager.destroy()
 #if os(macOS)
         _guiManager.destroy()
 #endif

@@ -30,7 +30,8 @@ struct ContactInfo {
 };
 
 @interface CPxPhysics : NSObject
-- (bool)initExtensions;
+
+- (void)destroy;
 
 - (CPxMaterial *_Nonnull)createMaterialWithStaticFriction:(float)staticFriction
                                           dynamicFriction:(float)dynamicFriction

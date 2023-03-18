@@ -562,13 +562,23 @@ extension Entity {
     }
 }
 
-//MARK: - Depreciation
-extension Entity {
-    func getInvModelMatrix() -> Matrix {
-        if (_inverseWorldMatFlag.flag) {
-            _invModelMatrix = Matrix.invert(a: transform.worldMatrix)
-            _inverseWorldMatFlag.flag = false
-        }
-        return _invModelMatrix
+extension Entity: Codable {
+    enum CodingKeys: String, CodingKey {
+        case name
+        case children
+    }
+    
+    public convenience init(from decoder: Decoder) throws {
+        let engine = decoder.userInfo[CodingUserInfoKey(rawValue: "engine")!] as! Engine
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        let name = try container.decode(String.self, forKey: .name)
+        self.init(engine, name)
+        _children = try container.decode([Entity].self, forKey: .children)
+    }
+    
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encode(name, forKey: .name)
+        try container.encode(children, forKey: .children)
     }
 }

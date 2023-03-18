@@ -91,6 +91,10 @@ class PhysXPhysicsManager {
         )
     }
     
+    func destroy() {
+        _pxScene.destroy()
+    }
+    
     func setVisualScale(_ value: Float) {
         _pxScene.visualScale = value
     }

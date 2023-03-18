@@ -21,6 +21,8 @@ typedef struct {
 
 @interface CPxScene : NSObject
 
+- (void)destroy;
+
 - (void)setGravity:(simd_float3)vec;
 
 - (void)simulate:(float)elapsedTime;

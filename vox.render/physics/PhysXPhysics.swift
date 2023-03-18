@@ -13,7 +13,10 @@ class PhysXPhysics {
 
     static func initialization() {
         _pxPhysics = CPxPhysics()
-        _pxPhysics.initExtensions()
+    }
+    
+    static func destroy() {
+        _pxPhysics.destroy()
     }
 
     static func createPhysicsManager(_ onContactEnter: ((UInt32, UInt32, [ContactInfo]) -> Void)?,
