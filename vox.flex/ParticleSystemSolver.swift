@@ -61,7 +61,7 @@ open class ParticleSystemSolver: ParticleSystemSolverBase {
     }
     
     public required init(from decoder: Decoder) throws {
-        let engine = decoder.userInfo[CodingUserInfoKey(rawValue: "engine")!] as! Engine
+        let engine = decoder.userInfo[.engine] as! Engine
         _timeIntegration = ComputePass(engine)
         _accumulateExternalForces = ComputePass(engine)
         _indirectArgsBuffer = BufferView(device: engine.device, count: 1,

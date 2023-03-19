@@ -11,15 +11,12 @@ final class SceneDecodeTests: XCTestCase {
     var canvas: Canvas!
     var engine: Engine!
     var jsonEncode: JSONEncoder!
-    var jsonDecode: JSONDecoder!
 
     override func setUpWithError() throws {
         canvas = Canvas(frame: CGRect())
         engine = Engine(canvas: canvas)
         
         jsonEncode = JSONEncoder()
-        jsonDecode = JSONDecoder()
-        jsonDecode.userInfo[CodingUserInfoKey(rawValue: "engine")!] = engine
     }
 
     override func tearDownWithError() throws {
@@ -34,7 +31,8 @@ final class SceneDecodeTests: XCTestCase {
 
         let data = try! jsonEncode.encode(scene)
         // let json = String(data: data, encoding: .utf8)
-        let newScene = try! jsonDecode.decode(Scene.self, from: data)
+        
+        let newScene = try! makeDecoder(for: engine).decode(Scene.self, from: data)
         XCTAssertEqual(scene.name, newScene.name)
     }
     
@@ -46,7 +44,8 @@ final class SceneDecodeTests: XCTestCase {
 
         let data = try! jsonEncode.encode(scene)
         // let json = String(data: data, encoding: .utf8)
-        let newScene = try! jsonDecode.decode(Scene.self, from: data)
+        
+        let newScene = try! makeDecoder(for: engine).decode(Scene.self, from: data)
         XCTAssertEqual(rootEntity.name, newScene.rootEntities[0].name)
     }
     
@@ -59,7 +58,8 @@ final class SceneDecodeTests: XCTestCase {
 
         let data = try! jsonEncode.encode(scene)
         // let json = String(data: data, encoding: .utf8)
-        let newScene = try! jsonDecode.decode(Scene.self, from: data)
+        
+        let newScene = try! makeDecoder(for: engine).decode(Scene.self, from: data)
         XCTAssertEqual(childEntity.name, newScene.rootEntities[0].children[0].name)
     }
 }

@@ -92,7 +92,7 @@ open class ParticleSystemSolverBase: PhysicsAnimation {
     }
     
     public required init(from decoder: Decoder) throws {
-        let engine = decoder.userInfo[CodingUserInfoKey(rawValue: "engine")!] as! Engine
+        let engine = decoder.userInfo[.engine] as! Engine
         resourceCache = ResourceCache(engine.device)
 
         try super.init(from: decoder)

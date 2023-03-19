@@ -9,6 +9,8 @@ import Math
 
 /// Entity, be used as components container.
 public final class Entity: EngineObject, Codable {
+    static var ComponentType: [Component.Type] = []
+    
     private var _layer: Layer = .Layer0
     
     /// The name of entity.
@@ -33,7 +35,7 @@ public final class Entity: EngineObject, Codable {
     }
 
     internal var _isActiveInHierarchy: Bool = false
-    internal var _components: [Component] = []
+    internal var _components: [PolymorphicValue<Component>] = []
     internal var _scripts: DisorderedArray<Script> = DisorderedArray()
     internal var _children: [Entity] = []
     internal var _scene: Scene!
@@ -62,7 +64,7 @@ public final class Entity: EngineObject, Codable {
 
     override public func destroy() {
         _components.forEach { v in
-            v.destroy()
+            v.wrappedValue.destroy()
         }
         _components = []
         _children.forEach { v in
@@ -164,18 +166,28 @@ public final class Entity: EngineObject, Codable {
         //todo ComponentsDependencies._addCheck(this, type)
         let component = T(engine)
         component.entity = self
-        _components.append(component)
+        _components.append(PolymorphicValue(wrappedValue: component))
+        insertComponentType(type)
         if (_isActiveInHierarchy) {
             component._setActive(true)
         }
         return component
+    }
+    
+    func insertComponentType<T: Component>(_ type: T.Type) {
+        let result = Entity.ComponentType.first { t in
+            t == type
+        }
+        if result == nil {
+            Entity.ComponentType.append(type)
+        }
     }
 
     /// Get component which match the type.
     /// - Returns: The first component which match type.
     public func getComponent<T: Component>(_ type: T.Type) -> T? {
         for i in 0..<_components.count {
-            let component = _components[i]
+            let component = _components[i].wrappedValue
             if (component is T) {
                 return (component as! T)
             }
@@ -189,7 +201,7 @@ public final class Entity: EngineObject, Codable {
     public func getComponents<T: Component>(_ type: T.Type) -> [T] {
         var results: [T] = []
         for i in 0..<_components.count {
-            let component = _components[i]
+            let component = _components[i].wrappedValue
             if (component is T) {
                 results.append(component as! T)
             }
@@ -348,7 +360,7 @@ public final class Entity: EngineObject, Codable {
 
         let components = _components
         for i in 0..<components.count {
-            let sourceComp = components[i]
+            let sourceComp = components[i].wrappedValue
             if (!(sourceComp is Transform)) {
                 // todo
                 // let targetComp = cloneEntity.addComponent(<new (entity: Entity) => Component>sourceComp.constructor)
@@ -366,26 +378,27 @@ public final class Entity: EngineObject, Codable {
         case component
     }
     
-    func addComponent(_ component: Component) {
+    func addComponent<T: Component>(_ component: T) {
         component.entity = self
-        _components.append(component)
+        _components.append(PolymorphicValue(wrappedValue: component))
+        insertComponentType(T.self)
         if (_isActiveInHierarchy) {
             component._setActive(true)
         }
     }
     
     public required init(from decoder: Decoder) throws {
-        let engine = decoder.userInfo[CodingUserInfoKey(rawValue: "engine")!] as! Engine
+        let engine = decoder.userInfo[.engine] as! Engine
         let container = try decoder.container(keyedBy: CodingKeys.self)
         name = try container.decode(String.self, forKey: .name)
         super.init(engine)
 
         _children = try container.decode([Entity].self, forKey: .children)
-        let components = try container.decode([Component].self, forKey: .component)
+        let components = try container.decode([PolymorphicValue<Component>].self, forKey: .component)
         for component in components {
-            addComponent(component)
+            addComponent(component.wrappedValue)
         }
-        transform = _components[0] as? Transform
+        transform = _components[0].wrappedValue as? Transform
         _inverseWorldMatFlag = transform.registerWorldChangeFlag()
     }
     
@@ -402,7 +415,7 @@ public final class Entity: EngineObject, Codable {
 extension Entity {
     internal func _removeComponent(_ component: Component) {
         _components.removeAll { value in
-            value === component
+            value.wrappedValue === component
         }
     }
 
@@ -505,7 +518,8 @@ extension Entity {
     }
 
     private func _getComponentsInChildren<T: Component>(_ results: inout [T]) {
-        for component in _components {
+        for componentWrapper in _components {
+            let component = componentWrapper.wrappedValue
             if (component is T) {
                 results.append(component as! T)
             }
@@ -527,7 +541,8 @@ extension Entity {
 
     private func _setActiveInHierarchy(_ activeChangedComponents: inout [Component]) {
         _isActiveInHierarchy = true
-        for component in _components {
+        for componentWrapper in _components {
+            let component = componentWrapper.wrappedValue
             if component.enabled || !component._awoken {
                 activeChangedComponents.append(component)
             }
@@ -541,7 +556,8 @@ extension Entity {
 
     private func _setInActiveInHierarchy(_ activeChangedComponents: inout [Component]) {
         _isActiveInHierarchy = false
-        for component in _components {
+        for componentWrapper in _components {
+            let component = componentWrapper.wrappedValue
             if component.enabled {
                 activeChangedComponents.append(component)
             }

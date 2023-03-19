@@ -426,7 +426,7 @@ extension Scene: Codable {
     }
     
     public convenience init(from decoder: Decoder) throws {
-        let engine = decoder.userInfo[CodingUserInfoKey(rawValue: "engine")!] as! Engine
+        let engine = decoder.userInfo[.engine] as! Engine
         let container = try decoder.container(keyedBy: CodingKeys.self)
         let name = try container.decode(String.self, forKey: .name)
         self.init(engine, name)

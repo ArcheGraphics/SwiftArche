@@ -191,7 +191,7 @@ public final class Camera: Component {
     }
     
     required init(from decoder: Decoder) throws {
-        let engine = decoder.userInfo[CodingUserInfoKey(rawValue: "engine")!] as! Engine
+        let engine = decoder.userInfo[.engine] as! Engine
         shaderData = ShaderData(engine)
 
         try super.init(from: decoder)

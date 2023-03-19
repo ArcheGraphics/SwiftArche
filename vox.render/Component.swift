@@ -7,7 +7,7 @@
 import Foundation
 
 /// The base class of the components.
-open class Component: EngineObject, Codable {
+open class Component: EngineObject, Polymorphic {
     var _entity: Entity!
     var _awoken: Bool = false
 
@@ -29,7 +29,7 @@ open class Component: EngineObject, Codable {
     }
     
     required public init(from decoder: Decoder) throws {
-        let engine = decoder.userInfo[CodingUserInfoKey(rawValue: "engine")!] as! Engine
+        let engine = decoder.userInfo[.engine] as! Engine
         super.init(engine)
     }
     
