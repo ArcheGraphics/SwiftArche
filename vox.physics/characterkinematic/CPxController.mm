@@ -24,6 +24,7 @@
 
 - (void)dealloc {
     _c_controller->release();
+    _c_controller = nullptr;
 }
 
 - (enum CPxControllerShapeType)getType {
@@ -52,10 +53,6 @@
 
 - (simd_float3)getFootPosition {
     return transform(_c_controller->getFootPosition());
-}
-
-- (CPxRigidDynamic *_Nonnull)getActor {
-    return [[CPxRigidDynamic alloc] initWithDynamicActor:_c_controller->getActor()];
 }
 
 - (void)setStepOffset:(float)offset {

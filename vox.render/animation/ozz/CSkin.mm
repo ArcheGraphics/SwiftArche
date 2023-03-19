@@ -144,10 +144,10 @@
     // reorder model-space matrices and build skinning ones.
     for (size_t i = 0; i < skins_pool_[index].joint_remaps.size(); ++i) {
         auto result = [animator models][skins_pool_[index].joint_remaps[i]] * skins_pool_[index].inverse_bind_poses[i];
-        matrix[i].columns[0] = result.cols[0];
-        matrix[i].columns[1] = result.cols[1];
-        matrix[i].columns[2] = result.cols[2];
-        matrix[i].columns[3] = result.cols[3];
+        memcpy(&matrix[i].columns[0], &result.cols[0], sizeof(simd_float4));
+        memcpy(&matrix[i].columns[1], &result.cols[1], sizeof(simd_float4));
+        memcpy(&matrix[i].columns[2], &result.cols[2], sizeof(simd_float4));
+        memcpy(&matrix[i].columns[3], &result.cols[3], sizeof(simd_float4));
     }
 }
 

@@ -35,8 +35,6 @@ enum CPxControllerCollisionFlag {
 
 - (simd_float3)getFootPosition;
 
-- (CPxRigidDynamic *_Nonnull)getActor;
-
 - (void)setStepOffset:(float)offset;
 
 - (float)getStepOffset;

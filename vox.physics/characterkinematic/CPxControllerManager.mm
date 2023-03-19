@@ -28,6 +28,11 @@ using namespace physx;
     return self;
 }
 
+- (void)destroy {
+    _c_manager->release();
+    _c_manager = nullptr;
+}
+
 - (uint32_t)getNbControllers {
     return _c_manager->getNbControllers();
 }

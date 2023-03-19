@@ -13,6 +13,8 @@
 
 @interface CPxControllerManager : NSObject
 
+- (void)destroy;
+
 - (uint32_t)getNbControllers;
 
 - (CPxController *)getController:(uint32_t)index;
