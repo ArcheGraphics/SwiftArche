@@ -16,8 +16,7 @@ fileprivate class CupPrefab: Script {
     var height: Float = 3
     var scale: Float = 2
     
-    required init(_ entity: Entity) {
-        super.init(entity)
+    override func onStart() {
         let assetURL = Bundle.main.url(forResource: "cup", withExtension: "glb", subdirectory: "assets")!
         GLTFLoader.parse(entity.engine, assetURL, { [self] resource in
             let entity = resource.defaultSceneRoot!

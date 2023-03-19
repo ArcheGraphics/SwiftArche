@@ -138,20 +138,20 @@ class ScreenSpaceSubpass: GeometrySubpass {
 public class ScreenSpaceFluid: Script {
     private static let _ssfProperty = "u_ssf"
 
-    let thickMtl: ThickMaterial
+    var thickMtl: ThickMaterial!
     var thickTexture: MTLTexture!
-    let depthMtl: DepthMaterial
+    var depthMtl: DepthMaterial!
     var depthTexture: [MTLTexture] = []
-    var depthThickPassDesc: MTLRenderPassDescriptor
-    var renderPass: RenderPass
-    var subpass: ScreenSpaceSubpass
-    var camera: Camera
+    var depthThickPassDesc: MTLRenderPassDescriptor!
+    var renderPass: RenderPass!
+    var subpass: ScreenSpaceSubpass!
+    var camera: Camera!
     
-    let smoothPass: ComputePass
-    let restoreNormalPass: ComputePass
+    var smoothPass: ComputePass!
+    var restoreNormalPass: ComputePass!
     
-    var renderer: MeshRenderer
-    let material: ScreenSpaceFluidMaterial
+    var renderer: MeshRenderer!
+    var material: ScreenSpaceFluidMaterial!
     var normalDepthTexture: MTLTexture!
     
     private var _canvasChanged: Canvas?
@@ -243,7 +243,7 @@ public class ScreenSpaceFluid: Script {
         _canvasChanged = (param as! Canvas) // wait update until next frame
     }
     
-    required init(_ entity: Entity) {
+    public override func onStart() {
         camera = entity.getComponent(Camera.self)!
         thickMtl = ThickMaterial(entity.engine, "ssf-thick")
         depthMtl = DepthMaterial(entity.engine, "ssf-depth")
@@ -265,9 +265,7 @@ public class ScreenSpaceFluid: Script {
         renderer = entity.addComponent(MeshRenderer.self)
         renderer.setMaterial(material)
         renderer.mesh = PrimitiveMesh.createQuadPlane(entity.engine)
-        
-        super.init(entity)
-        
+                
         kernelRadius = 10
         sigmaRadius = 6
         sigmaDepth = 0.1

@@ -7,18 +7,35 @@
 import Foundation
 
 /// The base class of the components.
-open class Component: EngineObject {
-    var _entity: Entity
+open class Component: EngineObject, Codable {
+    var _entity: Entity!
     var _awoken: Bool = false
 
     private var _phasedActive: Bool = false
     private var _enabled: Bool = true
-
-    public required init(_ entity: Entity) {
-        _entity = entity
-        super.init(entity.engine)
+    
+    /// The entity which the component belongs to.
+    public internal(set) var entity: Entity {
+        get {
+            _entity
+        }
+        set {
+            _entity = newValue
+        }
     }
 
+    required public override init(_ engine: Engine) {
+        super.init(engine)
+    }
+    
+    required public init(from decoder: Decoder) throws {
+        let engine = decoder.userInfo[CodingUserInfoKey(rawValue: "engine")!] as! Engine
+        super.init(engine)
+    }
+    
+    open func encode(to encoder: Encoder) throws {
+    }
+    
     /// Destroy this instance.
     deinit {
         destroy()
@@ -54,13 +71,6 @@ open class Component: EngineObject {
                     }
                 }
             }
-        }
-    }
-
-    /// The entity which the component belongs to.
-    public var entity: Entity {
-        get {
-            _entity
         }
     }
 

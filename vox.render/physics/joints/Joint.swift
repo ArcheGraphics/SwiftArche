@@ -124,12 +124,24 @@ public class Joint: Component {
         _name
     }
 
-    required init(_ entity: Entity) {
+    required init(_ engine: Engine) {
         _name = "joint\(Joint._idGenerator)"
         Joint._idGenerator += 1
 
         _connectedCollider.localPosition = Vector3()
-        super.init(entity)
+        super.init(engine)
+    }
+    
+    required init(from decoder: Decoder) throws {
+        _name = "joint\(Joint._idGenerator)"
+        Joint._idGenerator += 1
+
+        _connectedCollider.localPosition = Vector3()
+        try super.init(from: decoder)
+    }
+    
+    public override func encode(to encoder: Encoder) throws {
+        try super.encode(to: encoder)
     }
 }
 

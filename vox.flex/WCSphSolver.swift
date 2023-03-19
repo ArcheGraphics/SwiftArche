@@ -35,13 +35,17 @@ open class WCSphSolver: SphSolverBase {
         }
     }
     
-    public required init(_ entity: Entity) {
-        super.init(entity)
+    public required init(_ engine: Engine) {
+        super.init(engine)
         let sph = SphSystemData(engine, maxLength: ParticleSystemSolverBase.maxLength)
         sph.targetDensity = kWaterDensity
         sph.targetSpacing = 0.1
         sph.relativeKernelRadius = 1.8
         _particleSystemData = sph
+    }
+    
+    public required init(from decoder: Decoder) throws {
+        try super.init(from: decoder)
     }
     
     public override func onBeginAdvanceTimeStep(_ commandBuffer: MTLCommandBuffer, _ timeStepInSeconds: Float) {

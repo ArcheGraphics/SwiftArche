@@ -51,14 +51,28 @@ open class ParticleSystemSolver: ParticleSystemSolverBase {
         }
     }
     
-    public required init(_ entity: Entity) {
-        let engine = entity.engine
+    public required init(_ engine: Engine) {
         _timeIntegration = ComputePass(engine)
         _accumulateExternalForces = ComputePass(engine)
         _indirectArgsBuffer = BufferView(device: engine.device, count: 1,
                                          stride: MemoryLayout<MTLDispatchThreadgroupsIndirectArguments>.stride)
         _initArgsPass = ComputePass(engine)
-        super.init(entity)
+        super.init(engine)
+    }
+    
+    public required init(from decoder: Decoder) throws {
+        let engine = decoder.userInfo[CodingUserInfoKey(rawValue: "engine")!] as! Engine
+        _timeIntegration = ComputePass(engine)
+        _accumulateExternalForces = ComputePass(engine)
+        _indirectArgsBuffer = BufferView(device: engine.device, count: 1,
+                                         stride: MemoryLayout<MTLDispatchThreadgroupsIndirectArguments>.stride)
+        _initArgsPass = ComputePass(engine)
+        
+        try super.init(from: decoder)
+    }
+    
+    public override func encode(to encoder: Encoder) throws {
+        
     }
     
     public override func initialize(_ commandBuffer: MTLCommandBuffer) {

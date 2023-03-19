@@ -206,14 +206,35 @@ public class DynamicCollider: Collider {
             }
         }
     }
+    
+    public internal(set) override var entity: Entity {
+        get {
+            _entity
+        }
+        set {
+            super.entity = newValue
+            let transform = _entity.transform!
+            _nativeCollider = PhysXPhysics.createDynamicCollider(
+                    transform.worldPosition,
+                    transform.worldRotationQuaternion
+            )
+        }
+    }
 
-    public required init(_ entity: Entity) {
-        super.init(entity)
-        let transform = entity.transform!
-        _nativeCollider = PhysXPhysics.createDynamicCollider(
-                transform.worldPosition,
-                transform.worldRotationQuaternion
-        )
+    required init(_ engine: Engine) {
+        super.init(engine)
+    }
+    
+    enum CodingKeys: String, CodingKey {
+        case linearDamping
+    }
+    
+    required init(from decoder: Decoder) throws {
+        try super.init(from: decoder)
+    }
+    
+    public override func encode(to encoder: Encoder) throws {
+        try super.encode(to: encoder)
     }
 
     /// Apply a force to the DynamicCollider.

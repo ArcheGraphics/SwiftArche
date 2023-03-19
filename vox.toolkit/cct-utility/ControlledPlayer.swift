@@ -13,10 +13,9 @@ public class ControlledPlayer: Script {
     var displacement = Vector3()
     
     public var jump = Jump()
-
-    required init(_ entity: Entity) {
+    
+    public override func onStart() {
         character = entity.getComponent(CharacterController.self)
-        super.init(entity)
     }
     
     public override func onUpdate(_ deltaTime: Float) {

@@ -50,9 +50,22 @@ public class Animator: Component {
         }
     }
 
-    public required init(_ entity: Entity) {
+    required init(_ engine: Engine) {
         _nativeAnimator = CAnimator()
-        super.init(entity)
+        super.init(engine)
+    }
+    
+    enum CodingKeys: String, CodingKey {
+        case localToModelFromExcluded
+    }
+    
+    required init(from decoder: Decoder) throws {
+        _nativeAnimator = CAnimator()
+        try super.init(from: decoder)
+    }
+    
+    public override func encode(to encoder: Encoder) throws {
+        try super.encode(to: encoder)
     }
 
     override func _onDestroy() {

@@ -68,8 +68,8 @@ public class CharacterController: Collider {
         collisionFlags.contains(ControllerCollisionFlag.Down)
     }
 
-    public required init(_ entity: Entity) {
-        super.init(entity)
+    required init(_ engine: Engine) {
+        super.init(engine)
         _nativeCollider = PhysXPhysics.createCharacterController()
         (_nativeCollider as! PhysXCharacterController).setHitReport { [self] id, dir, length, normal, point in
             if let behavior,
@@ -92,6 +92,18 @@ public class CharacterController: Collider {
             }
             return 0
         }
+    }
+    
+    enum CodingKeys: String, CodingKey {
+        case stepOffset
+    }
+    
+    required init(from decoder: Decoder) throws {
+        try super.init(from: decoder)
+    }
+    
+    public override func encode(to encoder: Encoder) throws {
+        try super.encode(to: encoder)
     }
 
     /// Moves the character using a "collide-and-slide" algorithm.

@@ -65,12 +65,36 @@ public class Renderer: Component {
             return _bounds
         }
     }
+    
+    public internal(set) override var entity: Entity {
+        get {
+            _entity
+        }
+        set {
+            super.entity = newValue
+            _registerEntityTransformListener()
+        }
+    }
 
-    public required init(_ entity: Entity) {
-        shaderData = ShaderData(entity.engine)
-        super.init(entity)
-        _registerEntityTransformListener()
+    required init(_ engine: Engine) {
+        shaderData = ShaderData(engine)
+        super.init(engine)
         shaderData.enableMacro(NEED_RECEIVE_SHADOWS.rawValue)
+    }
+    
+    enum CodingKeys: String, CodingKey {
+        case castShadows
+    }
+    
+    required init(from decoder: Decoder) throws {
+        let engine = decoder.userInfo[CodingUserInfoKey(rawValue: "engine")!] as! Engine
+        shaderData = ShaderData(engine)
+        
+        try super.init(from: decoder)
+    }
+    
+    public override func encode(to encoder: Encoder) throws {
+        try super.encode(to: encoder)
     }
 
     override func _onDestroy() {

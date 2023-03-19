@@ -9,7 +9,7 @@ import Math
 
 /// The camera's roaming controller, can move up and down, left and right, and rotate the viewing angle.
 public class FreeControl : Script {
-    let input: InputManager
+    var input: InputManager!
     var inputDevices: [IControlInput.Type] = [ControlFreeKeyboard.self, ControlFreePointer.self]
     
     /** Movement distance per second, the unit is the unit before MVP conversion. */
@@ -25,10 +25,8 @@ public class FreeControl : Script {
     private var _spherical: Spherical = Spherical()
     private var _tempVec: Vector3 = Vector3()
     
-    public required init(_ entity: Entity) {
+    public override func onStart() {
         input = entity.engine.inputManager
-        super.init(entity)
-        
         _cameraTransform = entity.transform
         _ = _spherical.setFromVec3(Vector3.transformByQuat(v: Vector3(0, 0, -1), quaternion: _cameraTransform.rotationQuaternion))
     }

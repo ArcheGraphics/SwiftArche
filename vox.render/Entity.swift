@@ -8,7 +8,7 @@ import Foundation
 import Math
 
 /// Entity, be used as components container.
-public final class Entity: EngineObject {
+public final class Entity: EngineObject, Codable {
     private var _layer: Layer = .Layer0
     
     /// The name of entity.
@@ -162,7 +162,8 @@ public final class Entity: EngineObject {
     @discardableResult
     public func addComponent<T: Component>(_ type: T.Type) -> T {
         //todo ComponentsDependencies._addCheck(this, type)
-        let component = T(self)
+        let component = T(engine)
+        component.entity = self
         _components.append(component)
         if (_isActiveInHierarchy) {
             component._setActive(true)
@@ -356,6 +357,43 @@ public final class Entity: EngineObject {
         }
 
         return cloneEntity
+    }
+    
+    // MARK: - Codable
+    enum CodingKeys: String, CodingKey {
+        case name
+        case children
+        case component
+    }
+    
+    func addComponent(_ component: Component) {
+        component.entity = self
+        _components.append(component)
+        if (_isActiveInHierarchy) {
+            component._setActive(true)
+        }
+    }
+    
+    public required init(from decoder: Decoder) throws {
+        let engine = decoder.userInfo[CodingUserInfoKey(rawValue: "engine")!] as! Engine
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        name = try container.decode(String.self, forKey: .name)
+        super.init(engine)
+
+        _children = try container.decode([Entity].self, forKey: .children)
+        let components = try container.decode([Component].self, forKey: .component)
+        for component in components {
+            addComponent(component)
+        }
+        transform = _components[0] as? Transform
+        _inverseWorldMatFlag = transform.registerWorldChangeFlag()
+    }
+    
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encode(name, forKey: .name)
+        try container.encode(_children, forKey: .children)
+        try container.encode(_components, forKey: .component)
     }
 }
 
@@ -559,26 +597,5 @@ extension Entity {
         for child in entity._children {
             _traverseSetOwnerScene(child, scene)
         }
-    }
-}
-
-extension Entity: Codable {
-    enum CodingKeys: String, CodingKey {
-        case name
-        case children
-    }
-    
-    public convenience init(from decoder: Decoder) throws {
-        let engine = decoder.userInfo[CodingUserInfoKey(rawValue: "engine")!] as! Engine
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        let name = try container.decode(String.self, forKey: .name)
-        self.init(engine, name)
-        _children = try container.decode([Entity].self, forKey: .children)
-    }
-    
-    public func encode(to encoder: Encoder) throws {
-        var container = encoder.container(keyedBy: CodingKeys.self)
-        try container.encode(name, forKey: .name)
-        try container.encode(children, forKey: .children)
     }
 }

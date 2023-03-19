@@ -83,8 +83,13 @@ open class SphSolverBase: ParticleSystemSolver {
         }
     }
     
-    public required init(_ entity: Entity) {
-        super.init(entity)
+    public required init(_ engine: Engine) {
+        super.init(engine)
+        isUsingFixedSubTimeSteps = false
+    }
+    
+    public required init(from decoder: Decoder) throws {
+        try super.init(from: decoder)
         isUsingFixedSubTimeSteps = false
     }
     

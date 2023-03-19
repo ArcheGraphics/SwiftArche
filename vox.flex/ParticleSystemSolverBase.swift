@@ -86,8 +86,18 @@ open class ParticleSystemSolverBase: PhysicsAnimation {
         }
     }
     
-    public required init(_ entity: Entity) {
-        resourceCache = ResourceCache(entity.engine.device)
-        super.init(entity)
+    public required init(_ engine: Engine) {
+        resourceCache = ResourceCache(engine.device)
+        super.init(engine)
+    }
+    
+    public required init(from decoder: Decoder) throws {
+        let engine = decoder.userInfo[CodingUserInfoKey(rawValue: "engine")!] as! Engine
+        resourceCache = ResourceCache(engine.device)
+
+        try super.init(from: decoder)
+    }
+    
+    public override func encode(to encoder: Encoder) throws {
     }
 }

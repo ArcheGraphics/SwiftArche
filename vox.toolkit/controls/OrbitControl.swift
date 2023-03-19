@@ -8,8 +8,8 @@ import vox_render
 import Math
 
 public class OrbitControl : Script {
-    let canvas: Canvas
-    let input: InputManager
+    var canvas: Canvas!
+    var input: InputManager!
     var inputDevices: [IControlInput.Type] = [ControlPointer.self, ControlKeyboard.self, ControlWheel.self]
     var camera: Camera!
     var cameraTransform: Transform!
@@ -146,10 +146,9 @@ public class OrbitControl : Script {
         }
     }
     
-    public required init(_ entity: Entity) {
+    public override func onStart() {
         input = entity.engine.inputManager
         canvas = entity.engine.canvas
-        super.init(entity)
     }
     
     public override func onAwake() {

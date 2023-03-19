@@ -97,13 +97,12 @@ public class KinematicPlatform: Script {
         }
         return false
     }
-
-    required init(_ entity: Entity) {
+    
+    public override func onStart() {
         platform = entity.getComponent(DynamicCollider.self)
         if let platform {
             platform.isKinematic = true
         }
-        super.init(entity)
     }
 
     public override func onUpdate(_ deltaTime: Float) {

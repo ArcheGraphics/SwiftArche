@@ -7,7 +7,7 @@
 import Metal
 import Math
 
-public class Camera: Component {
+public final class Camera: Component {
     /// The first enabled Camera component that is tagged "MainCamera"
     public static var mainCamera: Camera?
     
@@ -47,10 +47,10 @@ public class Camera: Component {
     private var _customAspectRatio: Float?
     private var _renderTarget: MTLRenderPassDescriptor? = nil
 
-    private var _frustumViewChangeFlag: BoolUpdateFlag
-    private var _transform: Transform
-    private var _isViewMatrixDirty: BoolUpdateFlag
-    private var _isInvViewProjDirty: BoolUpdateFlag
+    private var _transform: Transform!
+    private var _frustumViewChangeFlag: BoolUpdateFlag!
+    private var _isViewMatrixDirty: BoolUpdateFlag!
+    private var _isInvViewProjDirty: BoolUpdateFlag!
     private var _lastAspectSize: Vector2 = Vector2(0, 0)
     private var _invViewProjMat: Matrix = Matrix()
     private var _inverseProjectionMatrix: Matrix = Matrix()
@@ -162,19 +162,54 @@ public class Camera: Component {
         }
     }
 
+    public internal(set) override var entity: Entity {
+        get {
+            _entity
+        }
+        set {
+            super.entity = newValue
+            _transform = _entity.transform
+            _isViewMatrixDirty = _transform.registerWorldChangeFlag()
+            _isInvViewProjDirty = _transform.registerWorldChangeFlag()
+            _frustumViewChangeFlag = _transform.registerWorldChangeFlag()
+        }
+    }
 
     /// Create the Camera component.
     /// - Parameter entity: Entity
-    public required init(_ entity: Entity) {
-        _transform = entity.transform
-        _isViewMatrixDirty = _transform.registerWorldChangeFlag()
-        _isInvViewProjDirty = _transform.registerWorldChangeFlag()
-        _frustumViewChangeFlag = _transform.registerWorldChangeFlag()
-        shaderData = ShaderData(entity.engine)
+    required init(_ engine: Engine) {
+        shaderData = ShaderData(engine)
 
-        super.init(entity)
+        super.init(engine)
         devicePipeline = DevicePipeline(self)
         registerCallback()
+    }
+    
+    enum CodingKeys: String, CodingKey {
+        case priority
+        case enableFrustumCulling
+    }
+    
+    required init(from decoder: Decoder) throws {
+        let engine = decoder.userInfo[CodingUserInfoKey(rawValue: "engine")!] as! Engine
+        shaderData = ShaderData(engine)
+
+        try super.init(from: decoder)
+        
+        devicePipeline = DevicePipeline(self)
+        registerCallback()
+        
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        priority = try container.decode(Int.self, forKey: .priority)
+        enableFrustumCulling = try container.decode(Bool.self, forKey: .enableFrustumCulling)
+    }
+
+    public override func encode(to encoder: Encoder) throws {
+        try super.encode(to: encoder)
+        
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encode(priority, forKey: .priority)
+        try container.encode(enableFrustumCulling, forKey: .enableFrustumCulling)
     }
 
     override func _onEnable() {

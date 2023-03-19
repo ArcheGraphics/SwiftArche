@@ -11,7 +11,7 @@ public class Collider: Component {
     var _index: Int = -1
     var _nativeCollider: PhysXCollider!
 
-    var _updateFlag: BoolUpdateFlag
+    var _updateFlag: BoolUpdateFlag!
     var _shapes: [ColliderShape] = []
     private var _visualize: Bool = false
 
@@ -31,10 +31,31 @@ public class Collider: Component {
             _shapes
         }
     }
+    
+    public internal(set) override var entity: Entity {
+        get {
+            _entity
+        }
+        set {
+            super.entity = newValue
+            _updateFlag = entity.transform.registerWorldChangeFlag()
+        }
+    }
 
-    required init(_ entity: Entity) {
-        _updateFlag = entity.transform.registerWorldChangeFlag()
-        super.init(entity)
+    required init(_ engine: Engine) {
+        super.init(engine)
+    }
+    
+    enum CodingKeys: String, CodingKey {
+        case shapes
+    }
+    
+    required init(from decoder: Decoder) throws {
+        try super.init(from: decoder)
+    }
+    
+    public override func encode(to encoder: Encoder) throws {
+        try super.encode(to: encoder)
     }
 
     /// Add collider shape on this collider.

@@ -31,8 +31,8 @@ public final class PCISphSolver: WCSphSolver {
         }
     }
     
-    public required init(_ entity: Entity) {
-        super.init(entity)
+    public required init(_ engine: Engine) {
+        super.init(engine)
         let sph = SphSystemData(engine, maxLength: ParticleSystemSolverBase.maxLength)
         sph.targetDensity = kWaterDensity
         sph.targetSpacing = 0.1
@@ -45,6 +45,10 @@ public final class PCISphSolver: WCSphSolver {
         sph.addScalarData(with: "u_tempDensities", initialVal: Float(0), maxLength: Int(ParticleSystemSolverBase.maxLength))
         sph.addScalarData(with: "u_pressureForces", initialVal: Vector3F(), maxLength: Int(ParticleSystemSolverBase.maxLength))
         sph.addScalarData(with: "u_densityErrors", initialVal: Float(0), maxLength: Int(ParticleSystemSolverBase.maxLength))
+    }
+    
+    public required init(from decoder: Decoder) throws {
+        try super.init(from: decoder)
     }
     
     func computeDelta(_ timeStepInSeconds: Float)-> Float {

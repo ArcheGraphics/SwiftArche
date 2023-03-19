@@ -77,9 +77,22 @@ public class TextRenderer: Renderer {
         }
     }
     
-    public required init(_ entity: Entity) {
-        super.init(entity)
+    required init(_ engine: Engine) {
+        super.init(engine)
         setMaterial(TextRenderer._defaultMaterial)
+    }
+    
+    enum CodingKeys: String, CodingKey {
+        case color
+    }
+    
+    required init(from decoder: Decoder) throws {
+        try super.init(from: decoder)
+        setMaterial(TextRenderer._defaultMaterial)
+    }
+    
+    public override func encode(to encoder: Encoder) throws {
+        try super.encode(to: encoder)
     }
     
     override func _render(_ devicePipeline: DevicePipeline) {
