@@ -54,7 +54,7 @@ vertex VertexOut vertex_grid(const VertexIn in [[stage_in]],
 }
 
 // MARK: - Fragment
-float4 grid(float3 fragPos3D, float scale, bool drawAxis, constant GridData& data) {
+float4 grid(float3 fragPos3D, float scale, bool drawAxis, float fade, constant GridData& data) {
     float2 coord = fragPos3D.xz * scale; // use the scale variable to set the distance between the lines
     float2 derivative = fwidth(coord);
     float2 grid = abs(fract(coord - 0.5) - 0.5) / derivative;
@@ -105,7 +105,8 @@ fragment fragmentOut fragment_grid(VertexOut in [[stage_in]],
     float fading = max(0.0, (0.5 - linearDepth));
     
     fragmentOut out;
-    out.color = grid(fragPos3D, u_grid.u_primaryScale, true, u_grid) + grid(fragPos3D, u_grid.u_secondaryScale, true, u_grid);
+    out.color = grid(fragPos3D, u_grid.u_primaryScale, true, u_grid.u_fade, u_grid)
+    + grid(fragPos3D, u_grid.u_secondaryScale, true, 1 - u_grid.u_fade, u_grid);
     out.color.a *= fading;
     out.depth = depth;
     

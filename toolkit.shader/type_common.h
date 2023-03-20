@@ -17,4 +17,5 @@ struct GridData {
     float u_gridIntensity;
     float u_axisIntensity;
     float u_flipProgress;
+    float u_fade;
 };

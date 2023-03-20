@@ -26,6 +26,8 @@ public class GridControl: Script {
             _material
         }
     }
+    
+    public var distance: Float = 8
 
     /// Is 2D Grid.
     public var is2DGrid: Bool {
@@ -50,7 +52,16 @@ public class GridControl: Script {
         if let camera = camera {
             material.nearClipPlane = camera.nearClipPlane
             material.farClipPlane = camera.farClipPlane
-
+            
+            let logDistance = log2(distance)
+            let upperDistance = pow(2, floor(logDistance) + 1)
+            let lowerDistance = pow(2, floor(logDistance))
+            
+            let level = -floor(logDistance)
+            material.primaryScale = pow(2, level)
+            material.secondaryScale = pow(2, level + 1)
+            material.fade = (distance - lowerDistance) / (upperDistance - lowerDistance)
+            
             if (_flipGrid) {
                 _progress += deltaTime
                 var percent = simd_clamp(_progress * speed, 0, 1)

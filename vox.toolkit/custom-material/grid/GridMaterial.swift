@@ -10,7 +10,7 @@ import Metal
 public class GridMaterial: BaseMaterial {
     private static let _gridProperty = "u_grid"
     private var _gridData = GridData(u_far: 100, u_near: 0.1, u_primaryScale: 10, u_secondaryScale: 1,
-            u_gridIntensity: 0.2, u_axisIntensity: 0.1, u_flipProgress: 0)
+            u_gridIntensity: 0.2, u_axisIntensity: 0.1, u_flipProgress: 0, u_fade: 0)
 
     /// Near clip plane - the closest point to the camera when rendering occurs.
     public var nearClipPlane: Float {
@@ -85,6 +85,16 @@ public class GridMaterial: BaseMaterial {
         }
         set {
             _gridData.u_flipProgress = newValue
+            shaderData.setData(GridMaterial._gridProperty, _gridData)
+        }
+    }
+    
+    public var fade: Float {
+        get {
+            _gridData.u_fade
+        }
+        set {
+            _gridData.u_fade = newValue
             shaderData.setData(GridMaterial._gridProperty, _gridData)
         }
     }
