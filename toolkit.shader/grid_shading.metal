@@ -61,7 +61,7 @@ float4 grid(float3 fragPos3D, float scale, bool drawAxis, float fade, constant G
     float line = min(grid.x, grid.y);
     float minimumz = min(derivative.y, 1.0);
     float minimumx = min(derivative.x, 1.0);
-    float4 color = float4(data.u_gridIntensity, data.u_gridIntensity, data.u_gridIntensity, 1.0 - min(line, 1.0));
+    float4 color = float4(data.u_gridIntensity, data.u_gridIntensity, data.u_gridIntensity, fade * (1.0 - min(line, 1.0)));
     // z axis
     if(fragPos3D.x > -data.u_axisIntensity * minimumx && fragPos3D.x < data.u_axisIntensity * minimumx) {
         color = float4(0.0, 0.0, 1.0, 1.0);

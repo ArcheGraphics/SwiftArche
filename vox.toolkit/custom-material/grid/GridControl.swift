@@ -61,6 +61,7 @@ public class GridControl: Script {
             material.primaryScale = pow(2, level)
             material.secondaryScale = pow(2, level + 1)
             material.fade = (distance - lowerDistance) / (upperDistance - lowerDistance)
+            material.axisIntensity = 0.3 / material.primaryScale
             
             if (_flipGrid) {
                 _progress += deltaTime
