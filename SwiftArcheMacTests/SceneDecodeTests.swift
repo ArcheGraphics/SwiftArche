@@ -32,7 +32,7 @@ final class SceneDecodeTests: XCTestCase {
         let data = try! jsonEncode.encode(scene)
         // let json = String(data: data, encoding: .utf8)
         
-        let newScene = try! makeDecoder(for: engine).decode(Scene.self, from: data)
+        let newScene = try! engine.makeDecoder().decode(Scene.self, from: data)
         XCTAssertEqual(scene.name, newScene.name)
     }
     
@@ -45,7 +45,7 @@ final class SceneDecodeTests: XCTestCase {
         let data = try! jsonEncode.encode(scene)
         // let json = String(data: data, encoding: .utf8)
         
-        let newScene = try! makeDecoder(for: engine).decode(Scene.self, from: data)
+        let newScene = try! engine.makeDecoder().decode(Scene.self, from: data)
         XCTAssertEqual(rootEntity.name, newScene.rootEntities[0].name)
     }
     
@@ -55,11 +55,12 @@ final class SceneDecodeTests: XCTestCase {
         let rootEntity = scene.createRootEntity()
         rootEntity.name = "EntityName"
         let childEntity = rootEntity.createChild("ChildName")
-
+        childEntity.addComponent(Camera.self)
+        
         let data = try! jsonEncode.encode(scene)
         // let json = String(data: data, encoding: .utf8)
         
-        let newScene = try! makeDecoder(for: engine).decode(Scene.self, from: data)
+        let newScene = try! engine.makeDecoder().decode(Scene.self, from: data)
         XCTAssertEqual(childEntity.name, newScene.rootEntities[0].children[0].name)
     }
 }

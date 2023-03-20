@@ -8,9 +8,7 @@ import Foundation
 import Math
 
 /// Entity, be used as components container.
-public final class Entity: EngineObject, Codable {
-    static var ComponentType: [Component.Type] = []
-    
+public final class Entity: EngineObject, Codable {    
     private var _layer: Layer = .Layer0
     
     /// The name of entity.
@@ -167,20 +165,11 @@ public final class Entity: EngineObject, Codable {
         let component = T(engine)
         component.entity = self
         _components.append(PolymorphicValue(wrappedValue: component))
-        insertComponentType(type)
+        engine.insertComponentType(type)
         if (_isActiveInHierarchy) {
             component._setActive(true)
         }
         return component
-    }
-    
-    func insertComponentType<T: Component>(_ type: T.Type) {
-        let result = Entity.ComponentType.first { t in
-            t == type
-        }
-        if result == nil {
-            Entity.ComponentType.append(type)
-        }
     }
 
     /// Get component which match the type.
@@ -381,7 +370,7 @@ public final class Entity: EngineObject, Codable {
     func addComponent<T: Component>(_ component: T) {
         component.entity = self
         _components.append(PolymorphicValue(wrappedValue: component))
-        insertComponentType(T.self)
+        engine.insertComponentType(T.self)
         if (_isActiveInHierarchy) {
             component._setActive(true)
         }
@@ -395,11 +384,14 @@ public final class Entity: EngineObject, Codable {
 
         _children = try container.decode([Entity].self, forKey: .children)
         let components = try container.decode([PolymorphicValue<Component>].self, forKey: .component)
-        for component in components {
+        for i in 0..<components.count {
+            let component = components[i]
             addComponent(component.wrappedValue)
+            if i == 0 {
+                transform = component.wrappedValue as? Transform
+                _inverseWorldMatFlag = transform.registerWorldChangeFlag()
+            }
         }
-        transform = _components[0].wrappedValue as? Transform
-        _inverseWorldMatFlag = transform.registerWorldChangeFlag()
     }
     
     public func encode(to encoder: Encoder) throws {

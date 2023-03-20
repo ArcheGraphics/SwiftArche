@@ -10,6 +10,16 @@ import Logging
 
 public let logger = Logger(label: "com.arche.main")
 
+extension CodingUserInfoKey {
+    public static var engine: CodingUserInfoKey {
+        CodingUserInfoKey(rawValue: "com.codable.engine")!
+    }
+    
+    public static var polymorphicTypes: CodingUserInfoKey {
+        CodingUserInfoKey(rawValue: "com.codable.polymophicTypes")!
+    }
+}
+
 public class Engine: NSObject {
     // The max number of command buffers in flight
     let _maxFramesInFlight = 3
@@ -39,6 +49,9 @@ public class Engine: NSObject {
     private let _inFlightSemaphore: DispatchSemaphore
     private var _textureLoader: TextureLoader!
     private var _isPaused: Bool = true;
+    
+    // codable
+    var componentType: [Polymorphic.Type] = []
     
     /// buffer index
     var currentBufferIndex: Int {
@@ -212,6 +225,22 @@ public class Engine: NSObject {
 #if os(macOS)
         _guiManager.destroy()
 #endif
+    }
+    
+    public func makeDecoder() -> JSONDecoder {
+        let decoder = JSONDecoder()
+        decoder.userInfo[.engine] = self
+        decoder.userInfo[.polymorphicTypes] = componentType
+        return decoder
+    }
+    
+    func insertComponentType<T: Component>(_ type: T.Type) {
+        let result = componentType.first { t in
+            t == type
+        }
+        if result == nil {
+            componentType.append(type)
+        }
     }
 
     /// Update the engine loop manually. If you call engine.run(), you generally don't need to call this function.

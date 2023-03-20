@@ -110,7 +110,6 @@
 		3E43DCA3295BDDE400732AC0 /* hash_grid.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3ED9BD102956767900876ABC /* hash_grid.metal */; };
 		3E43DCA4295BDDE900732AC0 /* hash_grid_visual.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3E0E0B422959C7F700B25625 /* hash_grid_visual.metal */; };
 		3E447F1029C7B88300D2FB30 /* Polymorphic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E717DF929C7B2B3004FE1A0 /* Polymorphic.swift */; };
-		3E447F1229C7BED100D2FB30 /* CodingUserInfoKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E447F1129C7BED100D2FB30 /* CodingUserInfoKey.swift */; };
 		3E6B235E294220BC000AC29F /* FaceMorphApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E6B235D294220BC000AC29F /* FaceMorphApp.swift */; };
 		3E6B2360294224C1000AC29F /* FaceGUI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E6B235F294224C1000AC29F /* FaceGUI.swift */; };
 		3E6B23C329470F30000AC29F /* quad_shading.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3E6B23C229470F30000AC29F /* quad_shading.metal */; };
@@ -789,7 +788,6 @@
 		3E37FDE529B236990050169C /* Triangulation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Triangulation.swift; sourceTree = "<group>"; };
 		3E37FDE729B238040050169C /* VertexEditing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VertexEditing.swift; sourceTree = "<group>"; };
 		3E37FDEA29B239510050169C /* UVEditing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UVEditing.swift; sourceTree = "<group>"; };
-		3E447F1129C7BED100D2FB30 /* CodingUserInfoKey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CodingUserInfoKey.swift; sourceTree = "<group>"; };
 		3E6B235D294220BC000AC29F /* FaceMorphApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FaceMorphApp.swift; sourceTree = "<group>"; };
 		3E6B235F294224C1000AC29F /* FaceGUI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FaceGUI.swift; sourceTree = "<group>"; };
 		3E6B23A82946B3CA000AC29F /* libvox.flex.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libvox.flex.a; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -1836,7 +1834,6 @@
 			isa = PBXGroup;
 			children = (
 				3E717DF929C7B2B3004FE1A0 /* Polymorphic.swift */,
-				3E447F1129C7BED100D2FB30 /* CodingUserInfoKey.swift */,
 			);
 			path = codable;
 			sourceTree = "<group>";
@@ -3491,7 +3488,6 @@
 				3EC038E229321845002187DC /* PhysXTolerancesScale.swift in Sources */,
 				3EC03964293218BA002187DC /* ResourceCache.swift in Sources */,
 				3E8B00D929BC09F500A70123 /* CAnimatorBlending.mm in Sources */,
-				3E447F1229C7BED100D2FB30 /* CodingUserInfoKey.swift in Sources */,
 				3EC0392329321872002187DC /* KHR_materials_pbrSpecularGlossiness.swift in Sources */,
 				3EC0390929321862002187DC /* GLTFLoader.swift in Sources */,
 				3EC03981293218C3002187DC /* PrimitiveMesh.swift in Sources */,
