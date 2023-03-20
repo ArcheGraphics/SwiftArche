@@ -53,20 +53,21 @@ vertex VertexOut vertex_grid(const VertexIn in [[stage_in]],
     return out;
 }
 
-float4 grid(float3 fragPos3D, float scale, bool drawAxis) {
+// MARK: - Fragment
+float4 grid(float3 fragPos3D, float scale, bool drawAxis, constant GridData& data) {
     float2 coord = fragPos3D.xz * scale; // use the scale variable to set the distance between the lines
     float2 derivative = fwidth(coord);
     float2 grid = abs(fract(coord - 0.5) - 0.5) / derivative;
     float line = min(grid.x, grid.y);
     float minimumz = min(derivative.y, 1.0);
     float minimumx = min(derivative.x, 1.0);
-    float4 color = float4(0.6, 0.6, 0.6, 1.0 - min(line, 1.0));
+    float4 color = float4(data.u_gridIntensity, data.u_gridIntensity, data.u_gridIntensity, 1.0 - min(line, 1.0));
     // z axis
-    if(fragPos3D.x > -1 * minimumx && fragPos3D.x < 1 * minimumx) {
+    if(fragPos3D.x > -data.u_axisIntensity * minimumx && fragPos3D.x < data.u_axisIntensity * minimumx) {
         color = float4(0.0, 0.0, 1.0, 1.0);
     }
     // x axis
-    if(fragPos3D.z > -1 * minimumz && fragPos3D.z < 1 * minimumz) {
+    if(fragPos3D.z > -data.u_axisIntensity * minimumz && fragPos3D.z < data.u_axisIntensity * minimumz) {
         color = float4(1.0, 0.0, 0.0, 1.0);
     }
     
@@ -78,14 +79,12 @@ float computeDepth(float3 pos, matrix_float4x4 fragView, matrix_float4x4 fragPro
     return (clip_space_pos.z / clip_space_pos.w);
 }
 
-float computeLinearDepth(float3 pos, matrix_float4x4 fragView, matrix_float4x4 fragProj) {
-    float near = 0.01;
-    float far = 100;
-    
+float computeLinearDepth(float3 pos, matrix_float4x4 fragView, matrix_float4x4 fragProj, constant GridData& data) {
     float4 clip_space_pos = fragProj * fragView * float4(pos.xyz, 1.0);
     float clip_space_depth = (clip_space_pos.z / clip_space_pos.w) * 2.0 - 1.0; // put back between -1 and 1
-    float linearDepth = (2.0 * near * far) / (far + near - clip_space_depth * (far - near)); // get linear value between 0.01 and 100
-    return linearDepth / far; // normalize
+    // get linear value between 0.01 and 100
+    float linearDepth = (2.0 * data.u_near * data.u_far) / (data.u_far + data.u_near - clip_space_depth * (data.u_far - data.u_near));
+    return linearDepth / data.u_far; // normalize
 }
 
 struct fragmentOut {
@@ -93,7 +92,8 @@ struct fragmentOut {
     float depth[[depth(greater)]];
 };
 
-fragment fragmentOut fragment_grid(VertexOut in [[stage_in]]) {
+fragment fragmentOut fragment_grid(VertexOut in [[stage_in]],
+                                   constant GridData& u_grid [[buffer(2)]]) {
     float t = -in.nearPoint.y / (in.farPoint.y - in.nearPoint.y);
     float3 fragPos3D = in.nearPoint + t * (in.farPoint - in.nearPoint);
     
@@ -101,11 +101,11 @@ fragment fragmentOut fragment_grid(VertexOut in [[stage_in]]) {
     matrix_float4x4 fragProj = matrix_float4x4(in.fragProj0, in.fragProj1, in.fragProj2, in.fragProj3);
     float depth = computeDepth(fragPos3D, fragView, fragProj);
     
-    float linearDepth = computeLinearDepth(fragPos3D, fragView, fragProj);
+    float linearDepth = computeLinearDepth(fragPos3D, fragView, fragProj, u_grid);
     float fading = max(0.0, (0.5 - linearDepth));
     
     fragmentOut out;
-    out.color = (grid(fragPos3D, 1, true)) * float(t > 0);
+    out.color = grid(fragPos3D, u_grid.u_primaryScale, true, u_grid) + grid(fragPos3D, u_grid.u_secondaryScale, true, u_grid);
     out.color.a *= fading;
     out.depth = depth;
     

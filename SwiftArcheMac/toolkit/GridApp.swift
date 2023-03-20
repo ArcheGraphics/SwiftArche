@@ -12,18 +12,14 @@ import vox_toolkit
 class GridApp: NSViewController {
     var canvas: Canvas!
     var engine: Engine!
-    var iblBaker: IBLBaker!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         canvas = Canvas(frame: view.frame)
         canvas.setParentView(view)
         engine = Engine(canvas: canvas)
-        iblBaker = IBLBaker(engine)
         
         let scene = engine.sceneManager.activeScene!
-        let hdr = engine.textureLoader.loadHDR(with: "assets/kloppenheim_06_4k.hdr")!
-        iblBaker.bake(scene, with: hdr, size: 256, level: 3)
         let rootEntity = scene.createRootEntity()
         
         let cameraEntity = rootEntity.createChild()
