@@ -110,6 +110,7 @@
 		3E43DCA3295BDDE400732AC0 /* hash_grid.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3ED9BD102956767900876ABC /* hash_grid.metal */; };
 		3E43DCA4295BDDE900732AC0 /* hash_grid_visual.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3E0E0B422959C7F700B25625 /* hash_grid_visual.metal */; };
 		3E447F1029C7B88300D2FB30 /* Polymorphic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E717DF929C7B2B3004FE1A0 /* Polymorphic.swift */; };
+		3E447F1929C807F700D2FB30 /* GridApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E447F1829C807F700D2FB30 /* GridApp.swift */; };
 		3E6B235E294220BC000AC29F /* FaceMorphApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E6B235D294220BC000AC29F /* FaceMorphApp.swift */; };
 		3E6B2360294224C1000AC29F /* FaceGUI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E6B235F294224C1000AC29F /* FaceGUI.swift */; };
 		3E6B23C329470F30000AC29F /* quad_shading.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3E6B23C229470F30000AC29F /* quad_shading.metal */; };
@@ -788,6 +789,7 @@
 		3E37FDE529B236990050169C /* Triangulation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Triangulation.swift; sourceTree = "<group>"; };
 		3E37FDE729B238040050169C /* VertexEditing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VertexEditing.swift; sourceTree = "<group>"; };
 		3E37FDEA29B239510050169C /* UVEditing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UVEditing.swift; sourceTree = "<group>"; };
+		3E447F1829C807F700D2FB30 /* GridApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GridApp.swift; sourceTree = "<group>"; };
 		3E6B235D294220BC000AC29F /* FaceMorphApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FaceMorphApp.swift; sourceTree = "<group>"; };
 		3E6B235F294224C1000AC29F /* FaceGUI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FaceGUI.swift; sourceTree = "<group>"; };
 		3E6B23A82946B3CA000AC29F /* libvox.flex.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libvox.flex.a; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -1322,7 +1324,6 @@
 				3E1F129A29AC3BCB00F1002E /* cct-utility */,
 				3EC92A4E2936F71D00423396 /* bridging.h */,
 				3EC92A412936334600423396 /* custom-material */,
-				3EC92A402936333A00423396 /* auxiliary-lines */,
 				040F1DAE29336A67008BDC8D /* controls */,
 			);
 			path = vox.toolkit;
@@ -1756,6 +1757,14 @@
 			name = shapes;
 			sourceTree = "<group>";
 		};
+		3E447F1729C807E700D2FB30 /* toolkit */ = {
+			isa = PBXGroup;
+			children = (
+				3E447F1829C807F700D2FB30 /* GridApp.swift */,
+			);
+			path = toolkit;
+			sourceTree = "<group>";
+		};
 		3E6B23A92946B3CA000AC29F /* vox.flex */ = {
 			isa = PBXGroup;
 			children = (
@@ -2059,6 +2068,7 @@
 				3E8B00E929BD7D9A00A70123 /* animation */,
 				040F1DF129378195008BDC8D /* rendering */,
 				3EABF5E4294C3702009943C1 /* flex */,
+				3E447F1729C807E700D2FB30 /* toolkit */,
 			);
 			path = SwiftArcheMac;
 			sourceTree = "<group>";
@@ -2655,13 +2665,6 @@
 				43D8CF2C4FC2C2529FFE5E7F /* PhysXUtils.swift */,
 			);
 			path = physics;
-			sourceTree = "<group>";
-		};
-		3EC92A402936333A00423396 /* auxiliary-lines */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = "auxiliary-lines";
 			sourceTree = "<group>";
 		};
 		3EC92A412936334600423396 /* custom-material */ = {
@@ -3325,6 +3328,7 @@
 				3E8B00ED29BDBA2400A70123 /* AnimationAttachApp.swift in Sources */,
 				3E6D2F11293F1AAB00B63F73 /* GLTFLoaderUtils.swift in Sources */,
 				E63B19C92479C2BE78B928A9 /* CascadeShadowApp.swift in Sources */,
+				3E447F1929C807F700D2FB30 /* GridApp.swift in Sources */,
 				43D8CA0AB31B8C46122C1EAB /* IBLBaker.swift in Sources */,
 				3E8B00F129BDC15400A70123 /* AnimationPartialBlendApp.swift in Sources */,
 			);
