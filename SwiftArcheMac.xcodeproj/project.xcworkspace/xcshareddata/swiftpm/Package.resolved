@@ -6,7 +6,7 @@
       "location" : "https://github.com/ArcheGraphics/Math.git",
       "state" : {
         "branch" : "main",
-        "revision" : "35a6317575cc4ff538cecc2a7c107d18a9a53b0d"
+        "revision" : "22dd958f5683e9baf195602ab40bb3b9f57f5113"
       }
     },
     {
@@ -33,7 +33,7 @@
       "location" : "https://github.com/ArcheGraphics/Tween",
       "state" : {
         "branch" : "main",
-        "revision" : "9a227e52010e9b3642d11e0d2d2604a8bfce93b5"
+        "revision" : "16c59668fa79649f2769cfc345b1b15ae35c3447"
       }
     }
   ],

@@ -8,59 +8,50 @@ import Foundation
 
 /// Tools for calculating the time per frame.
 public class Time {
-    private var _deltaTime: Float
-    private var _startTime: Date
-    private var _lastTickTime: Date
+    private static var _deltaTime: Float = 0.0001
+    private static var _startTime = Date()
+    private static var _lastTickTime = Date()
 
     /// Current Time
-    public var nowTime: Date {
+    public static var nowTime: Date {
         get {
             Date()
         }
     }
 
     /// Time between two ticks
-    public var deltaTime: Float {
+    public static var deltaTime: Float {
         get {
             _deltaTime
         }
     }
     
     /// The time at the beginning of this frame
-    public var time: Float {
+    public static var time: Float {
         get {
             Float(_lastTickTime.timeIntervalSince1970)
         }
     }
 
     /// Scaled delta time.
-    public var timeScale: Float
+    public static var timeScale: Float = 1.0
 
     /// Unscaled delta time.
-    var unscaledDeltaTime: Float {
+    static var unscaledDeltaTime: Float {
         get {
             _deltaTime / timeScale
         }
     }
 
     /// The elapsed time, after the clock is initialized.
-    var timeSinceStartup: Float {
+    static var timeSinceStartup: Float {
         get {
             Float(Date().timeIntervalSince(_startTime))
         }
     }
 
-    public init() {
-        timeScale = 1.0
-        _deltaTime = 0.0001
-
-        let now = Date()
-        _startTime = now
-        _lastTickTime = now
-    }
-
     /// Call every frame, update delta time and other data.
-    public func tick() {
+    public static func tick() {
         _deltaTime = Float(Date.now.timeIntervalSince(_lastTickTime)) * timeScale
         if _deltaTime < 0 {
             fatalError()
@@ -68,7 +59,7 @@ public class Time {
         _lastTickTime = Date.now
     }
 
-    public func reset() {
+    public static func reset() {
         _lastTickTime = Date()
     }
 }

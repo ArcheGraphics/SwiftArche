@@ -33,7 +33,6 @@ public class Engine: NSObject {
     // Current buffer index to fill with dynamic uniform data and set for the current frame
     private var _currentBufferIndex: Int = 0
     private var _library: [String: MTLLibrary] = [:]
-    private var _time: Time = Time();
     private var _settings: EngineSettings? = nil
     private var _device: MTLDevice
     private var _sceneManager: SceneManager!
@@ -117,13 +116,6 @@ public class Engine: NSObject {
     }
 #endif
 
-    /// Get the timer.
-    public var time: Time {
-        get {
-            _time
-        }
-    }
-
     /// Whether the engine is paused.
     public var isPaused: Bool {
         get {
@@ -132,7 +124,7 @@ public class Engine: NSObject {
         set {
             _isPaused = newValue
             if !newValue {
-                _time.reset()
+                Time.reset()
             }
         }
     }
@@ -245,8 +237,8 @@ public class Engine: NSObject {
 
     /// Update the engine loop manually. If you call engine.run(), you generally don't need to call this function.
     func update() {
-        time.tick();
-        let deltaTime = time.deltaTime;
+        Time.tick();
+        let deltaTime = Time.deltaTime;
 
         if !_isPaused {
             // Wait to ensure only maxFramesInFlight are getting processed by any stage in the Metal
@@ -278,7 +270,7 @@ public class Engine: NSObject {
 #if os(iOS)
         arManager?.update(_time.deltaTime)
 #endif
-        _componentsManager.callRendererOnUpdate(_time.deltaTime)
+        _componentsManager.callRendererOnUpdate(Time.deltaTime)
 
         scene._updateShaderData()
 

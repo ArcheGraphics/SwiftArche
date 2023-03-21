@@ -10,7 +10,7 @@ import Cocoa
 public class UIElement {
     public static func Init(_ engine: Engine) {
         let view = engine.canvas
-        let deltaTime = engine.time.deltaTime
+        let deltaTime = Time.deltaTime
         let io = ImGuiGetIO()!
         io.pointee.DisplaySize.x = Float(view.bounds.size.width)
         io.pointee.DisplaySize.y = Float(view.bounds.size.height)
