@@ -473,7 +473,7 @@ class TriggerEvent {
     var index1: UInt32
     var index2: UInt32
 
-    required init() {
+    init() {
         index1 = 0
         index2 = 0
         state = .Exit

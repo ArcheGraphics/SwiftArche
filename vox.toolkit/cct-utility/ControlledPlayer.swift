@@ -19,7 +19,7 @@ public class ControlledPlayer: Script {
     }
     
     public override func onUpdate(_ deltaTime: Float) {
-        let inputManager = engine.inputManager
+        let inputManager = Engine.inputManager
         if inputManager.isKeyHeldDown() {
             var forward = camera.transform.worldForward
             forward.y = 0
@@ -49,7 +49,7 @@ public class ControlledPlayer: Script {
 
     public override func onPhysicsUpdate() {
         if let character = character {
-            let physicsManager = engine.physicsManager
+            let physicsManager = Engine.physicsManager
             let gravity = physicsManager.gravity
             let fixedTimeStep = physicsManager.fixedTimeStep
             

@@ -8,7 +8,7 @@ import Math
 
 /// The controller of the animation system.
 public class Animator: Component {
-    var _nativeAnimator: CAnimator
+    var _nativeAnimator = CAnimator()
     var _onUpdateIndex: Int = -1
     private var _rootState: AnimationState?
     private var _entityBindingMap: [UInt32: Set<Entity>] = [:]
@@ -49,10 +49,9 @@ public class Animator: Component {
             _nativeAnimator.localToModelTo = Int32(newValue)
         }
     }
-
-    required init(_ engine: Engine) {
-        _nativeAnimator = CAnimator()
-        super.init(engine)
+    
+    public required init() {
+        super.init()
     }
     
     enum CodingKeys: String, CodingKey {
@@ -115,10 +114,10 @@ public class Animator: Component {
     }
 
     internal override func _onEnable() {
-        engine._componentsManager.addOnUpdateAnimations(self)
+        Engine._componentsManager.addOnUpdateAnimations(self)
     }
 
     internal override func _onDisable() {
-        engine._componentsManager.removeOnUpdateAnimations(self)
+        Engine._componentsManager.removeOnUpdateAnimations(self)
     }
 }

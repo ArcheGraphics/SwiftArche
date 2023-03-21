@@ -64,7 +64,7 @@ open class ParticleSystemSolverBase: PhysicsAnimation {
         set {
             _emitter = newValue
             if _particleSystemData == nil {
-                _particleSystemData = ParticleSystemData(engine, maxLength: ParticleSystemSolverBase.maxLength)
+                _particleSystemData = ParticleSystemData(maxLength: ParticleSystemSolverBase.maxLength)
             }
             _emitter?.target = _particleSystemData
             _emitter?.resourceCache = resourceCache
@@ -79,21 +79,20 @@ open class ParticleSystemSolverBase: PhysicsAnimation {
         set {
             _collider = newValue
             if _particleSystemData == nil {
-                _particleSystemData = ParticleSystemData(engine, maxLength: ParticleSystemSolverBase.maxLength)
+                _particleSystemData = ParticleSystemData(maxLength: ParticleSystemSolverBase.maxLength)
             }
             _collider?.target = _particleSystemData
             _collider?.resourceCache = resourceCache
         }
     }
     
-    public required init(_ engine: Engine) {
-        resourceCache = ResourceCache(engine.device)
-        super.init(engine)
+    public required init() {
+        resourceCache = ResourceCache(Engine.device)
+        super.init()
     }
     
     public required init(from decoder: Decoder) throws {
-        let engine = decoder.userInfo[.engine] as! Engine
-        resourceCache = ResourceCache(engine.device)
+        resourceCache = ResourceCache(Engine.device)
 
         try super.init(from: decoder)
     }

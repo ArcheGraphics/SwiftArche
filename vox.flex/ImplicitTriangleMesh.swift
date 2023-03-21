@@ -9,7 +9,6 @@ import vox_render
 
 public class ImplicitTriangleMesh {
     private var _triangleMesh = TriangleMesh()
-    private var _engine: Engine
     private var _signRayCount: UInt32
 
     var data = SDFData()
@@ -21,10 +20,9 @@ public class ImplicitTriangleMesh {
         ImplicitTriangleMesh.Builder()
     }
     
-    public init(_ engine: Engine, mesh: TriangleMesh,
+    public init(mesh: TriangleMesh,
                 resolutionX: Int = 32, margin: Float = 0.2, signRayCount: UInt32 = 12,
                 transform: simd_float4x4 = simd_float4x4()) {
-        _engine = engine
         _triangleMesh = mesh
         _signRayCount = signRayCount
         
@@ -59,13 +57,13 @@ public class ImplicitTriangleMesh {
         desc.textureType = .type3D
         desc.usage = MTLTextureUsage(rawValue: MTLTextureUsage.shaderRead.rawValue | MTLTextureUsage.shaderWrite.rawValue)
         desc.storageMode = .private
-        sdf = _engine.device.makeTexture(descriptor: desc);
+        sdf = Engine.device.makeTexture(descriptor: desc);
     }
     
     private func _generateSDF() {
-        let function = _engine.library("flex.shader").makeFunction(name: "sdfBaker")
-        let pipelineState = try! _engine.device.makeComputePipelineState(function: function!)
-        if let commandBuffer = _engine.commandQueue.makeCommandBuffer() {
+        let function = Engine.library("flex.shader").makeFunction(name: "sdfBaker")
+        let pipelineState = try! Engine.device.makeComputePipelineState(function: function!)
+        if let commandBuffer = Engine.commandQueue.makeCommandBuffer() {
             if let commandEncoder = commandBuffer.makeComputeCommandEncoder() {
                 commandEncoder.setComputePipelineState(pipelineState)
                 commandEncoder.setTexture(sdf!, index: 0)
@@ -136,9 +134,9 @@ public class ImplicitTriangleMesh {
             return self
         }
         /// Builds ImplicitTriangleMesh3.
-        public func build(_ engine: Engine) -> ImplicitTriangleMesh? {
+        public func build() -> ImplicitTriangleMesh? {
             if let mesh = _mesh {
-                return ImplicitTriangleMesh(engine, mesh: mesh, resolutionX: _resolutionX,
+                return ImplicitTriangleMesh(mesh: mesh, resolutionX: _resolutionX,
                                             margin: _margin, signRayCount: _signRayCount, transform: _transform)
             } else {
                 return nil

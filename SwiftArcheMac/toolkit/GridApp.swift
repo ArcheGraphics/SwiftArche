@@ -15,7 +15,7 @@ fileprivate class GUI: Script {
     var speedScale: Float = 8
 
     override func onGUI() {
-        UIElement.Init(engine)
+        UIElement.Init()
 
         ImGuiNewFrame()
         ImGuiSliderFloat("Grid primary Scale", &control.material.primaryScale, 1.0, 20.0, nil, 1)
@@ -42,11 +42,11 @@ class GridApp: NSViewController {
         canvas = Canvas(frame: view.frame)
         canvas.setParentView(view)
         engine = Engine(canvas: canvas)
-        iblBaker = IBLBaker(engine)
+        iblBaker = IBLBaker()
 
-        let scene = engine.sceneManager.activeScene!
+        let scene = Engine.sceneManager.activeScene!
         scene.background.solidColor = Color(0, 0, 0, 1)
-        let hdr = engine.textureLoader.loadHDR(with: "assets/kloppenheim_06_4k.hdr")!
+        let hdr = Engine.textureLoader.loadHDR(with: "assets/kloppenheim_06_4k.hdr")!
         iblBaker.bake(scene, with: hdr, size: 256, level: 3)
         
         let rootEntity = scene.createRootEntity()
@@ -63,17 +63,17 @@ class GridApp: NSViewController {
         
         let cubeEntity = rootEntity.createChild()
         let renderer = cubeEntity.addComponent(MeshRenderer.self)
-        renderer.mesh = PrimitiveMesh.createCuboid(engine)
-        let material = PBRMaterial(engine)
+        renderer.mesh = PrimitiveMesh.createCuboid()
+        let material = PBRMaterial()
         material.baseColor = Color(0.7, 0.0, 0.0)
         renderer.setMaterial(material)
         
-        engine.run()
+        Engine.run()
     }
     
     override func viewDidDisappear() {
         super.viewDidDisappear()
-        engine.destroy()
+        Engine.destroy()
     }
 }
 

@@ -10,10 +10,8 @@ import Math
 /// Used to generate common primitive meshes.
 public class PrimitiveMesh {
     /// Create Mesh with position in clipped space.
-    /// - Parameter engine:
     /// - Returns: Mesh
-    public static func createQuadPlane(_ engine: Engine,
-                                       noLongerAccessible: Bool = true) -> ModelMesh {
+    public static func createQuadPlane(noLongerAccessible: Bool = true) -> ModelMesh {
         var positions: [Vector3] = []
         positions.append(Vector3(1, 1, 0))
         positions.append(Vector3(-1, -1, 0))
@@ -23,7 +21,7 @@ public class PrimitiveMesh {
         positions.append(Vector3(1, -1, 0))
 
         let indices: [UInt16] = [2, 1, 0, 5, 4, 3]
-        let mesh = ModelMesh(engine)
+        let mesh = ModelMesh()
         mesh.setPositions(positions: positions)
         mesh.setIndices(indices: indices)
         mesh.uploadData(noLongerAccessible)
@@ -35,16 +33,14 @@ public class PrimitiveMesh {
     
     /// Create a sphere mesh.
     /// - Parameters:
-    ///   - engine: Engine
     ///   - radius: Sphere radius
     ///   - segments: Number of segments
     ///   - noLongerAccessible: No longer access the vertices of the mesh after creation
     /// - Returns: Sphere model mesh
-    public static func createSphere(_ engine: Engine,
-                                    radius: Float = 0.5,
+    public static func createSphere(radius: Float = 0.5,
                                     segments: Int = 18,
                                     noLongerAccessible: Bool = true) -> ModelMesh {
-        let mesh = ModelMesh(engine)
+        let mesh = ModelMesh()
         let segments = max(2, segments)
 
         let count = segments + 1
@@ -106,24 +102,22 @@ public class PrimitiveMesh {
         }
 
         mesh.bounds = BoundingBox(Vector3(-radius, -radius, -radius), Vector3(radius, radius, radius))
-        PrimitiveMesh._initialize(engine, mesh, positions, normals, uvs, indices, noLongerAccessible)
+        PrimitiveMesh._initialize(mesh, positions, normals, uvs, indices, noLongerAccessible)
         return mesh
     }
 
     /// Create a cuboid mesh.
     /// - Parameters:
-    ///   - engine: Engine
     ///   - width: Cuboid width
     ///   - height: Cuboid height
     ///   - depth: Cuboid depth
     ///   - noLongerAccessible: No longer access the vertices of the mesh after creation
     /// - Returns: Cuboid model mesh
-    public static func createCuboid(_ engine: Engine,
-                                    width: Float = 1,
+    public static func createCuboid(width: Float = 1,
                                     height: Float = 1,
                                     depth: Float = 1,
                                     noLongerAccessible: Bool = true) -> ModelMesh {
-        let mesh = ModelMesh(engine)
+        let mesh = ModelMesh()
 
         let halfWidth: Float = width / 2
         let halfHeight: Float = height / 2
@@ -258,27 +252,25 @@ public class PrimitiveMesh {
         indices[35] = 21
 
         mesh.bounds = BoundingBox(Vector3(-halfWidth, -halfHeight, -halfDepth), Vector3(halfWidth, halfHeight, halfDepth))
-        PrimitiveMesh._initialize(engine, mesh, positions, normals, uvs,
+        PrimitiveMesh._initialize(mesh, positions, normals, uvs,
                 indices, noLongerAccessible)
         return mesh
     }
 
     /// Create a plane mesh.
     /// - Parameters:
-    ///   - engine: Engine
     ///   - width: Plane width
     ///   - height: Plane height
     ///   - horizontalSegments: Plane horizontal segments
     ///   - verticalSegments: Plane vertical segments
     ///   - noLongerAccessible: No longer access the vertices of the mesh after creation
     /// - Returns: Plane model mesh
-    public static func createPlane(_ engine: Engine,
-                                   width: Float = 1,
+    public static func createPlane(width: Float = 1,
                                    height: Float = 1,
                                    horizontalSegments: Int = 1,
                                    verticalSegments: Int = 1,
                                    noLongerAccessible: Bool = true) -> ModelMesh {
-        let mesh = ModelMesh(engine)
+        let mesh = ModelMesh()
         let horizontalSegments = max(1, horizontalSegments)
         let verticalSegments = max(1, verticalSegments)
 
@@ -336,13 +328,12 @@ public class PrimitiveMesh {
         }
 
         mesh.bounds = BoundingBox(Vector3(-halfWidth, 0, -halfWidth), Vector3(halfWidth, 0, halfWidth))
-        PrimitiveMesh._initialize(engine, mesh, positions, normals, uvs, indices, noLongerAccessible)
+        PrimitiveMesh._initialize(mesh, positions, normals, uvs, indices, noLongerAccessible)
         return mesh
     }
 
     /// Create a cylinder mesh.
     /// - Parameters:
-    ///   - engine: Engine
     ///   - radiusTop: The radius of top cap
     ///   - radiusBottom: The radius of bottom cap
     ///   - height: The height of torso
@@ -350,14 +341,13 @@ public class PrimitiveMesh {
     ///   - heightSegments: Cylinder height segments
     ///   - noLongerAccessible: No longer access the vertices of the mesh after creation
     /// - Returns: Cylinder model mesh
-    public static func createCylinder(_ engine: Engine,
-                                      radiusTop: Float = 0.5,
+    public static func createCylinder(radiusTop: Float = 0.5,
                                       radiusBottom: Float = 0.5,
                                       height: Float = 2,
                                       radialSegments: Int = 20,
                                       heightSegments: Int = 1,
                                       noLongerAccessible: Bool = true) -> ModelMesh {
-        let mesh = ModelMesh(engine)
+        let mesh = ModelMesh()
 
         let radialCount = radialSegments + 1
         let verticalCount = heightSegments + 1
@@ -504,13 +494,12 @@ public class PrimitiveMesh {
         let radiusMax = max(radiusTop, radiusBottom)
         mesh.bounds = BoundingBox(Vector3(-radiusMax, -halfHeight, -radiusMax), Vector3(radiusMax, halfHeight, radiusMax))
 
-        PrimitiveMesh._initialize(engine, mesh, positions, normals, uvs, indices, noLongerAccessible)
+        PrimitiveMesh._initialize(mesh, positions, normals, uvs, indices, noLongerAccessible)
         return mesh
     }
 
     /// Create a torus mesh.
     /// - Parameters:
-    ///   - engine: Engine
     ///   - radius: Torus radius
     ///   - tubeRadius: Torus tube
     ///   - radialSegments: Torus radial segments
@@ -518,14 +507,13 @@ public class PrimitiveMesh {
     ///   - arc: Central angle
     ///   - noLongerAccessible: No longer access the vertices of the mesh after creation
     /// - Returns: Torus model mesh
-    public static func createTorus(_ engine: Engine,
-                                   radius: Float = 0.5,
+    public static func createTorus(radius: Float = 0.5,
                                    tubeRadius: Float = 0.1,
                                    radialSegments: Int = 30,
                                    tubularSegments: Int = 30,
                                    arc: Float = 360,
                                    noLongerAccessible: Bool = true) -> ModelMesh {
-        let mesh = ModelMesh(engine)
+        let mesh = ModelMesh()
 
         let vertexCount = (radialSegments + 1) * (tubularSegments + 1)
         let rectangleCount = radialSegments * tubularSegments
@@ -593,26 +581,24 @@ public class PrimitiveMesh {
         mesh.bounds = BoundingBox(Vector3(-outerRadius, -outerRadius, -tubeRadius),
                 Vector3(outerRadius, outerRadius, tubeRadius))
 
-        PrimitiveMesh._initialize(engine, mesh, positions, normals, uvs, indices, noLongerAccessible)
+        PrimitiveMesh._initialize(mesh, positions, normals, uvs, indices, noLongerAccessible)
         return mesh
     }
 
     /// Create a cone mesh.
     /// - Parameters:
-    ///   - engine: Engine
     ///   - radius: The radius of cap
     ///   - height: The height of torso
     ///   - radialSegments: Cylinder radial segments
     ///   - heightSegments: Cylinder height segments
     ///   - noLongerAccessible: No longer access the vertices of the mesh after creation
     /// - Returns: Cone model mesh
-    public static func createCone(_ engine: Engine,
-                                  radius: Float = 0.5,
+    public static func createCone(radius: Float = 0.5,
                                   height: Float = 2,
                                   radialSegments: Int = 20,
                                   heightSegments: Int = 1,
                                   noLongerAccessible: Bool = true) -> ModelMesh {
-        let mesh = ModelMesh(engine)
+        let mesh = ModelMesh()
 
         let radialCount = radialSegments + 1
         let verticalCount = heightSegments + 1
@@ -724,26 +710,24 @@ public class PrimitiveMesh {
         mesh.bounds = BoundingBox(Vector3(-radius, -halfHeight, -radius),
                 Vector3(radius, halfHeight, radius))
 
-        PrimitiveMesh._initialize(engine, mesh, positions, normals, uvs, indices, noLongerAccessible)
+        PrimitiveMesh._initialize(mesh, positions, normals, uvs, indices, noLongerAccessible)
         return mesh
     }
 
     /// Create a capsule mesh.
     /// - Parameters:
-    ///   - engine: Engine
     ///   - radius: The radius of the two hemispherical ends
     ///   - height: The height of the cylindrical part, measured between the centers of the hemispherical ends
     ///   - radialSegments: Hemispherical end radial segments
     ///   - heightSegments: Cylindrical part height segments
     ///   - noLongerAccessible: No longer access the vertices of the mesh after creation
     /// - Returns: Capsule model mesh
-    public static func createCapsule(_ engine: Engine,
-                                     radius: Float = 0.5,
+    public static func createCapsule(radius: Float = 0.5,
                                      height: Float = 2,
                                      radialSegments: Int = 6,
                                      heightSegments: Int = 1,
                                      noLongerAccessible: Bool = true) -> ModelMesh {
-        let mesh = ModelMesh(engine)
+        let mesh = ModelMesh()
 
         let radialSegments = max(2, radialSegments)
 
@@ -841,7 +825,7 @@ public class PrimitiveMesh {
         )
 
         mesh.bounds = BoundingBox(Vector3(-radius, -radius - halfHeight, -radius), Vector3(radius, radius + halfHeight, radius))
-        PrimitiveMesh._initialize(engine, mesh, positions, normals, uvs, indices, noLongerAccessible)
+        PrimitiveMesh._initialize(mesh, positions, normals, uvs, indices, noLongerAccessible)
         return mesh
     }
 
@@ -909,8 +893,7 @@ public class PrimitiveMesh {
 }
 
 extension PrimitiveMesh {
-    private static func _initialize(_ engine: Engine,
-                                    _ mesh: ModelMesh,
+    private static func _initialize(_ mesh: ModelMesh,
                                     _ positions: [Vector3],
                                     _ normals: [Vector3],
                                     _ uvs: [Vector2],

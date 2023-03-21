@@ -7,7 +7,6 @@
 import Metal
 
 open class ShaderData {
-    public var engine: Engine
     private var _shaderDynamicBuffers: [[String: BufferView]] = []
     private var _shaderBuffers: [String: BufferView] = [:]
     private var _shaderBufferFunctors: [String: () -> BufferView] = [:]
@@ -16,9 +15,8 @@ open class ShaderData {
     static private var _defaultSamplerDesc: MTLSamplerDescriptor = MTLSamplerDescriptor()
     internal var _macroCollection = ShaderMacroCollection()
 
-    public init(_ engine: Engine) {
-        self.engine = engine
-        _shaderDynamicBuffers = [[String: BufferView]](repeating: [:], count: engine._maxFramesInFlight)
+    public init() {
+        _shaderDynamicBuffers = [[String: BufferView]](repeating: [:], count: Engine._maxFramesInFlight)
         ShaderData._defaultSamplerDesc.magFilter = .linear
         ShaderData._defaultSamplerDesc.minFilter = .linear
         ShaderData._defaultSamplerDesc.mipFilter = .linear
@@ -44,7 +42,7 @@ open class ShaderData {
             key == property
         }
         if value == nil {
-            _shaderBuffers[property] = BufferView(device: engine.device, array: [data])
+            _shaderBuffers[property] = BufferView(device: Engine.device, array: [data])
         } else {
             value!.value.assign(data)
         }
@@ -55,7 +53,7 @@ open class ShaderData {
             key == property
         }
         if value == nil {
-            _shaderBuffers[property] = BufferView(device: engine.device, array: data)
+            _shaderBuffers[property] = BufferView(device: Engine.device, array: data)
         } else {
             value!.value.assign(with: data)
         }
@@ -106,26 +104,26 @@ open class ShaderData {
 
 extension ShaderData {
     public func setDynamicData(_ property: String, _ value: BufferView) {
-        _shaderDynamicBuffers[engine.currentBufferIndex][property] = value
+        _shaderDynamicBuffers[Engine.currentBufferIndex][property] = value
     }
 
     public func setDynamicData<T>(_ property: String, _ data: T) {
-        let value = _shaderDynamicBuffers[engine.currentBufferIndex].first { (key: String, value: BufferView) in
+        let value = _shaderDynamicBuffers[Engine.currentBufferIndex].first { (key: String, value: BufferView) in
             key == property
         }
         if value == nil {
-            _shaderDynamicBuffers[engine.currentBufferIndex][property] = BufferView(device: engine.device, array: [data])
+            _shaderDynamicBuffers[Engine.currentBufferIndex][property] = BufferView(device: Engine.device, array: [data])
         } else {
             value!.value.assign(data)
         }
     }
 
     public func setDynamicData<T>(_ property: String, _ data: [T]) {
-        let value = _shaderDynamicBuffers[engine.currentBufferIndex].first { (key: String, value: BufferView) in
+        let value = _shaderDynamicBuffers[Engine.currentBufferIndex].first { (key: String, value: BufferView) in
             key == property
         }
         if value == nil {
-            _shaderDynamicBuffers[engine.currentBufferIndex][property] = BufferView(device: engine.device, array: data)
+            _shaderDynamicBuffers[Engine.currentBufferIndex][property] = BufferView(device: Engine.device, array: data)
         } else {
             value!.value.assign(with: data)
         }
@@ -164,7 +162,7 @@ extension ShaderData {
                 if let buffer = _shaderBuffers[uniform.name] {
                     commandEncoder.setBuffer(buffer.buffer, offset: 0, index: uniform.location)
                 }
-                if let buffer = _shaderDynamicBuffers[engine.currentBufferIndex][uniform.name] {
+                if let buffer = _shaderDynamicBuffers[Engine.currentBufferIndex][uniform.name] {
                     commandEncoder.setBuffer(buffer.buffer, offset: 0, index: uniform.location)
                 }
                 if let bufferFunctor = _shaderBufferFunctors[uniform.name] {
@@ -201,7 +199,7 @@ extension ShaderData {
                         commandEncoder.setFragmentBuffer(buffer.buffer, offset: 0, index: uniform.location)
                     }
                 }
-                if let buffer = _shaderDynamicBuffers[engine.currentBufferIndex][uniform.name] {
+                if let buffer = _shaderDynamicBuffers[Engine.currentBufferIndex][uniform.name] {
                     if uniform.functionType == .vertex {
                         commandEncoder.setVertexBuffer(buffer.buffer, offset: 0, index: uniform.location)
                     }

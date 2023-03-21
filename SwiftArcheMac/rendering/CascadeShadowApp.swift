@@ -21,7 +21,7 @@ fileprivate class GUI: Script {
     private var _debugMode: Bool = false
 
     override func onAwake() {
-        visualMaterial = CSSMVisualMaterial(entity.engine)
+        visualMaterial = CSSMVisualMaterial()
     }
 
     private var shadowType: Int {
@@ -127,7 +127,7 @@ fileprivate class GUI: Script {
     }
 
     override func onGUI() {
-        UIElement.Init(engine)
+        UIElement.Init()
 
         ImGuiNewFrame()
         ImGuiCheckbox("pause", &pause)
@@ -176,9 +176,9 @@ fileprivate class CSSMVisualMaterial: BaseMaterial {
         }
     }
     
-    public override init(_ engine: Engine, _ name: String = "") {
-        super.init(engine, name)
-        shader.append(ShaderPass(engine.library("app.shader"), "vertex_unlit", "shadowMap_visual"))
+    public override init(_ name: String = "shadowmap mat") {
+        super.init(name)
+        shader.append(ShaderPass(Engine.library("app.shader"), "vertex_unlit", "shadowMap_visual"))
         shaderData.enableMacro(NEED_WORLDPOS.rawValue)
         shaderData.setData(CSSMVisualMaterial._baseColorProp, _baseColor)
     }
@@ -194,13 +194,13 @@ class CascadeShadowApp: NSViewController {
         canvas = Canvas(frame: view.frame)
         canvas.setParentView(view)
         engine = Engine(canvas: canvas)
-        iblBaker = IBLBaker(engine)
+        iblBaker = IBLBaker()
         
-        let scene = engine.sceneManager.activeScene!
+        let scene = Engine.sceneManager.activeScene!
         scene.shadowResolution = ShadowResolution.High
         scene.shadowDistance = 300
         scene.shadowCascades = ShadowCascadesMode.FourCascades
-        let hdr = engine.textureLoader.loadHDR(with: "assets/kloppenheim_06_4k.hdr")!
+        let hdr = Engine.textureLoader.loadHDR(with: "assets/kloppenheim_06_4k.hdr")!
         iblBaker.bake(scene, with: hdr, size: 256, level: 3)
         
         let rootEntity = scene.createRootEntity()
@@ -224,10 +224,10 @@ class CascadeShadowApp: NSViewController {
         // Create plane
         let planeEntity = rootEntity.createChild("PlaneEntity")
         let planeRenderer = planeEntity.addComponent(MeshRenderer.self)
-        planeRenderer.mesh = PrimitiveMesh.createPlane(engine, width: 10, height: 400)
+        planeRenderer.mesh = PrimitiveMesh.createPlane(width: 10, height: 400)
         gui.planeRenderer = planeRenderer
 
-        let planeMaterial = PBRMaterial(engine)
+        let planeMaterial = PBRMaterial()
         planeMaterial.baseColor = Color(1.0, 0.2, 0, 1.0)
         planeMaterial.roughness = 0.8
         planeMaterial.metallic = 0.2
@@ -239,8 +239,8 @@ class CascadeShadowApp: NSViewController {
         planeRenderer.receiveShadows = true
         
         // Create box
-        let boxMesh = PrimitiveMesh.createCuboid(engine, width: 2.0, height: 2.0, depth: 2.0)
-        let boxMaterial = PBRMaterial(engine)
+        let boxMesh = PrimitiveMesh.createCuboid(width: 2.0, height: 2.0, depth: 2.0)
+        let boxMaterial = PBRMaterial()
         boxMaterial.roughness = 0.2
         boxMaterial.metallic = 1
         gui.boxMaterial = boxMaterial
@@ -254,11 +254,11 @@ class CascadeShadowApp: NSViewController {
             gui.boxRenderers.append(boxRenderer)
         }
 
-        engine.run()
+        Engine.run()
     }
     
     override func viewDidDisappear() {
         super.viewDidDisappear()
-        engine.destroy()
+        Engine.destroy()
     }
 }

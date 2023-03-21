@@ -24,7 +24,7 @@ fileprivate class GUI: Script {
     }
     
     override func onGUI() {
-        UIElement.Init(engine)
+        UIElement.Init()
 
         ImGuiNewFrame()
         ImGuiSliderFloat("point radius", &ssf.pointRadius, 0.0, 100.0, nil, 1)
@@ -45,28 +45,28 @@ class ScreenSpaceFluidApp: NSViewController {
     var iblBaker: IBLBaker!
 
     func loadHDR(_ scene: Scene) {
-        let hdr = engine.textureLoader.loadHDR(with: "assets/kloppenheim_06_4k.hdr")!
+        let hdr = Engine.textureLoader.loadHDR(with: "assets/kloppenheim_06_4k.hdr")!
         iblBaker.bake(scene, with: hdr, size: 256, level: 3)
 
-        let skyMaterial = SkyBoxMaterial(engine)
+        let skyMaterial = SkyBoxMaterial()
         skyMaterial.textureCubeMap = hdr
         skyMaterial.equirectangular = true
         let skySubpass = SkySubpass()
         skySubpass.material = skyMaterial
-        skySubpass.mesh = PrimitiveMesh.createCuboid(engine)
+        skySubpass.mesh = PrimitiveMesh.createCuboid()
         scene.background.mode = .Sky
         scene.background.sky = skySubpass
     }
     
     func createSDF() -> ImplicitTriangleMesh {
         let assetURL = Bundle.main.url(forResource: "bunny", withExtension: "obj", subdirectory: "assets")!
-        let triangleMesh = TriangleMesh(device: engine.device)!
+        let triangleMesh = TriangleMesh(device: Engine.device)!
         triangleMesh.load(assetURL)
         
         return ImplicitTriangleMesh.builder()
             .withTriangleMesh(triangleMesh)
             .withResolutionX(100)
-            .build(engine)!
+            .build()!
     }
     
     override func viewDidLoad() {
@@ -74,9 +74,9 @@ class ScreenSpaceFluidApp: NSViewController {
         canvas = Canvas(frame: view.frame)
         canvas.setParentView(view)
         engine = Engine(canvas: canvas)
-        iblBaker = IBLBaker(engine)
+        iblBaker = IBLBaker()
 
-        let scene = engine.sceneManager.activeScene!
+        let scene = Engine.sceneManager.activeScene!
         loadHDR(scene)
         let rootEntity = scene.createRootEntity()
         let gui = rootEntity.addComponent(GUI.self)
@@ -87,9 +87,9 @@ class ScreenSpaceFluidApp: NSViewController {
         cameraEntity.addComponent(Camera.self)
         cameraEntity.addComponent(OrbitControl.self)
         
-        let particleSystem = ParticleSystemData(engine, maxLength: 10000)
+        let particleSystem = ParticleSystemData(maxLength: 10000)
         
-        let emitter = VolumeParticleEmitter(engine)
+        let emitter = VolumeParticleEmitter()
         emitter.target = particleSystem
         emitter.maxRegion = BoundingBox3F(point1: Vector3F(-1, -1, -1), point2: Vector3F(1, 1, 1))
         emitter.spacing = 0.02
@@ -97,7 +97,7 @@ class ScreenSpaceFluidApp: NSViewController {
         // emitter.maxNumberOfParticles = 100
         // todo
         emitter.resourceCache = scene.postprocessManager.postProcessPass.resourceCache!
-        if let commandBuffer = engine.commandQueue.makeCommandBuffer() {
+        if let commandBuffer = Engine.commandQueue.makeCommandBuffer() {
             if let commandEncoder = commandBuffer.makeComputeCommandEncoder() {
                 emitter.update(commandEncoder, currentTimeInSeconds: 0, timeIntervalInSeconds: 0)
                 commandEncoder.endEncoding()
@@ -110,12 +110,12 @@ class ScreenSpaceFluidApp: NSViewController {
         ssf.particleSystem = particleSystem
         gui.ssf = ssf
         
-        engine.run()
+        Engine.run()
     }
     
     override func viewDidDisappear() {
         super.viewDidDisappear()
-        engine.destroy()
+        Engine.destroy()
     }
 }
 

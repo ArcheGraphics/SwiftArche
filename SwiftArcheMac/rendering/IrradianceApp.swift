@@ -12,9 +12,9 @@ import vox_toolkit
 fileprivate class BakerMaterial: BaseMaterial {
     private var _texture: MTLTexture?
 
-    init(_ engine: Engine) {
-        super.init(engine)
-        let shaderPass = ShaderPass(engine.library("app.shader"), "vertex_cubemap", "fragment_cubemap")
+    init() {
+        super.init()
+        let shaderPass = ShaderPass(Engine.library("app.shader"), "vertex_cubemap", "fragment_cubemap")
         shaderPass.setRenderFace(.Double)
         shader.append(shaderPass)
     }
@@ -52,7 +52,7 @@ class IrradianceApp: NSViewController {
         canvas.setParentView(view)
         engine = Engine(canvas: canvas)
 
-        let scene = engine.sceneManager.activeScene!
+        let scene = Engine.sceneManager.activeScene!
         let rootEntity = scene.createRootEntity()
 
         let cameraEntity = rootEntity.createChild()
@@ -64,11 +64,11 @@ class IrradianceApp: NSViewController {
         // Create Sphere
         let sphereEntity = rootEntity.createChild("box")
         sphereEntity.transform.position = Vector3(-1, 2, 0)
-        let sphereMaterial = PBRMaterial(engine)
+        let sphereMaterial = PBRMaterial()
         sphereMaterial.roughness = 0
         sphereMaterial.metallic = 1
         let renderer = sphereEntity.addComponent(MeshRenderer.self)
-        renderer.mesh = PrimitiveMesh.createSphere(engine, radius: 1, segments: 64)
+        renderer.mesh = PrimitiveMesh.createSphere(radius: 1, segments: 64)
         renderer.setMaterial(sphereMaterial)
 
         // Create planes
@@ -78,9 +78,9 @@ class IrradianceApp: NSViewController {
         for _ in 0..<6 {
             let bakerEntity = rootEntity.createChild("IBL Baker Entity")
             bakerEntity.transform.rotation = Vector3(90, 0, 0)
-            let bakerMaterial = BakerMaterial(engine)
+            let bakerMaterial = BakerMaterial()
             let bakerRenderer = bakerEntity.addComponent(MeshRenderer.self)
-            bakerRenderer.mesh = PrimitiveMesh.createPlane(engine, width: 2, height: 2)
+            bakerRenderer.mesh = PrimitiveMesh.createPlane(width: 2, height: 2)
             bakerRenderer.setMaterial(bakerMaterial)
             planes.append(bakerEntity)
             planeMaterials.append(bakerMaterial)
@@ -93,9 +93,9 @@ class IrradianceApp: NSViewController {
         planes[4].transform.position = Vector3(-1, 0, 0) // PZ
         planes[5].transform.position = Vector3(3, 0, 0) // NZ
 
-        let hdr = engine.textureLoader.loadHDR(with: "assets/kloppenheim_06_4k.hdr")!
-        let cubeMap = createCubemap(engine, with: hdr, size: 512, level: 3)
-        scene.ambientLight.specularTexture = createSpecularTexture(engine, with: cubeMap, format: .rgba16Float)
+        let hdr = Engine.textureLoader.loadHDR(with: "assets/kloppenheim_06_4k.hdr")!
+        let cubeMap = createCubemap(with: hdr, size: 512, level: 3)
+        scene.ambientLight.specularTexture = createSpecularTexture(with: cubeMap, format: .rgba16Float)
         let changeMip: (Int) -> Void = {
             (mipLevel: Int) -> Void in
             for i in 0..<6 {
@@ -107,12 +107,12 @@ class IrradianceApp: NSViewController {
         }
         changeMip(0)
 
-        engine.run()
+        Engine.run()
     }
     
     override func viewDidDisappear() {
         super.viewDidDisappear()
-        engine.destroy()
+        Engine.destroy()
     }
 }
 

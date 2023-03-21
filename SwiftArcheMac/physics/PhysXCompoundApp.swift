@@ -36,7 +36,7 @@ fileprivate class TableGenerator: Script {
         let boxCollider = entity.addComponent(DynamicCollider.self)
         boxCollider.mass = 10.0
 
-        let boxMaterial = PBRMaterial(engine)
+        let boxMaterial = PBRMaterial()
         boxMaterial.baseColor = Color(Float.random(in: 0..<1), Float.random(in: 0..<1), Float.random(in: 0..<1), 1.0)
         boxMaterial.metallic = 0
         boxMaterial.roughness = 0.5
@@ -48,7 +48,7 @@ fileprivate class TableGenerator: Script {
         let child = entity.createChild()
         child.transform.position = Vector3(0, 0, 0.125)
         let boxRenderer = child.addComponent(MeshRenderer.self)
-        boxRenderer.mesh = PrimitiveMesh.createCuboid(engine, width: 0.5, height: 0.4, depth: 0.045)
+        boxRenderer.mesh = PrimitiveMesh.createCuboid(width: 0.5, height: 0.4, depth: 0.045)
         boxRenderer.setMaterial(boxMaterial)
 
 
@@ -59,7 +59,7 @@ fileprivate class TableGenerator: Script {
         let child1 = entity.createChild()
         child1.transform.position = Vector3(-0.2, -0.15, -0.045)
         let boxRenderer1 = child1.addComponent(MeshRenderer.self)
-        boxRenderer1.mesh = PrimitiveMesh.createCuboid(engine, width: 0.1, height: 0.1, depth: 0.3)
+        boxRenderer1.mesh = PrimitiveMesh.createCuboid(width: 0.1, height: 0.1, depth: 0.3)
         boxRenderer1.setMaterial(boxMaterial)
 
 
@@ -70,7 +70,7 @@ fileprivate class TableGenerator: Script {
         let child2 = entity.createChild()
         child2.transform.position = Vector3(0.2, -0.15, -0.045)
         let boxRenderer2 = child2.addComponent(MeshRenderer.self)
-        boxRenderer2.mesh = PrimitiveMesh.createCuboid(engine, width: 0.1, height: 0.1, depth: 0.3)
+        boxRenderer2.mesh = PrimitiveMesh.createCuboid(width: 0.1, height: 0.1, depth: 0.3)
         boxRenderer2.setMaterial(boxMaterial)
 
 
@@ -81,7 +81,7 @@ fileprivate class TableGenerator: Script {
         let child3 = entity.createChild()
         child3.transform.position = Vector3(-0.2, 0.15, -0.045)
         let boxRenderer3 = child3.addComponent(MeshRenderer.self)
-        boxRenderer3.mesh = PrimitiveMesh.createCuboid(engine, width: 0.1, height: 0.1, depth: 0.3)
+        boxRenderer3.mesh = PrimitiveMesh.createCuboid(width: 0.1, height: 0.1, depth: 0.3)
         boxRenderer3.setMaterial(boxMaterial)
 
 
@@ -92,7 +92,7 @@ fileprivate class TableGenerator: Script {
         let child4 = entity.createChild()
         child4.transform.position = Vector3(0.2, 0.15, -0.045)
         let boxRenderer4 = child4.addComponent(MeshRenderer.self)
-        boxRenderer4.mesh = PrimitiveMesh.createCuboid(engine, width: 0.1, height: 0.1, depth: 0.3)
+        boxRenderer4.mesh = PrimitiveMesh.createCuboid(width: 0.1, height: 0.1, depth: 0.3)
         boxRenderer4.setMaterial(boxMaterial)
 
     }
@@ -107,8 +107,7 @@ class PhysXCompoundApp: NSViewController {
                   _ size: Vector2,
                   _ position: Vector3,
                   _ rotation: Quaternion) -> Entity {
-        let engine = rootEntity.engine
-        let material = PBRMaterial(engine)
+        let material = PBRMaterial()
         material.baseColor = Color(0.2179807202597362, 0.2939682161541871, 0.31177952549087604, 1)
         material.roughness = 0.0
         material.metallic = 0.0
@@ -117,7 +116,7 @@ class PhysXCompoundApp: NSViewController {
         let renderer = entity.addComponent(MeshRenderer.self)
         entity.transform.position = position
         entity.transform.rotationQuaternion = rotation
-        renderer.mesh = PrimitiveMesh.createPlane(engine, width: size.x, height: size.y)
+        renderer.mesh = PrimitiveMesh.createPlane(width: size.x, height: size.y)
         renderer.setMaterial(material)
 
         let physicsPlane = PlaneColliderShape()
@@ -132,11 +131,11 @@ class PhysXCompoundApp: NSViewController {
         canvas = Canvas(frame: view.frame)
         canvas.setParentView(view)
         engine = Engine(canvas: canvas)
-        iblBaker = IBLBaker(engine)
+        iblBaker = IBLBaker()
         
-        let scene = engine.sceneManager.activeScene!
+        let scene = Engine.sceneManager.activeScene!
         scene.shadowDistance = 30
-        let hdr = engine.textureLoader.loadHDR(with: "assets/kloppenheim_06_4k.hdr")!
+        let hdr = Engine.textureLoader.loadHDR(with: "assets/kloppenheim_06_4k.hdr")!
         iblBaker.bake(scene, with: hdr, size: 256, level: 3)
         
         let rootEntity = scene.createRootEntity()
@@ -155,12 +154,12 @@ class PhysXCompoundApp: NSViewController {
         _ = addPlane(rootEntity, Vector2(30, 30), Vector3(), Quaternion())
         rootEntity.addComponent(TableGenerator.self)
 
-        engine.run()
+        Engine.run()
     }
     
     override func viewDidDisappear() {
         super.viewDidDisappear()
-        engine.destroy()
+        Engine.destroy()
     }
 }
 

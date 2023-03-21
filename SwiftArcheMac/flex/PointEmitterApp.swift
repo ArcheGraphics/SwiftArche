@@ -25,7 +25,7 @@ fileprivate class GUI: Script {
     }
 
     override func onGUI() {
-        UIElement.Init(engine)
+        UIElement.Init()
 
         ImGuiNewFrame()
         ImGuiSliderInt("highlight", &highlightIndex, 0, maxNumber, nil, ImGuiSliderFlags())
@@ -52,7 +52,7 @@ class PointEmitterApp: NSViewController {
         let maxNumber: Int = particleSystem.numberOfParticles[0]
         _ = particleMesh.addSubMesh(0, maxNumber, .point)
         particleMesh._setVertexBufferBinding(0, particleSystem.positions)
-        let particleMtl = ParticlePointMaterial(engine)
+        let particleMtl = ParticlePointMaterial()
         particleMtl.pointRadius = 5
         particleMtl.pointScale = 10
         gui.particleMtl = particleMtl
@@ -70,7 +70,7 @@ class PointEmitterApp: NSViewController {
         canvas.setParentView(view)
         engine = Engine(canvas: canvas)
         
-        let scene = engine.sceneManager.activeScene!
+        let scene = Engine.sceneManager.activeScene!
         let rootEntity = scene.createRootEntity()
         let gui = rootEntity.addComponent(GUI.self)
 
@@ -80,9 +80,9 @@ class PointEmitterApp: NSViewController {
         cameraEntity.addComponent(Camera.self)
         cameraEntity.addComponent(OrbitControl.self)
         
-        let particleSystem = ParticleSystemData(engine, maxLength: 10000)
+        let particleSystem = ParticleSystemData(maxLength: 10000)
         
-        let emitter = PointParticleEmitter(engine)
+        let emitter = PointParticleEmitter()
         emitter.target = particleSystem
         emitter.origin = Vector3F()
         emitter.direction = Vector3F(0, 1, 0)
@@ -91,7 +91,7 @@ class PointEmitterApp: NSViewController {
         emitter.maxNumberOfNewParticlesPerSecond = 10
         // todo
         emitter.resourceCache = scene.postprocessManager.postProcessPass.resourceCache!
-        if let commandBuffer = engine.commandQueue.makeCommandBuffer() {
+        if let commandBuffer = Engine.commandQueue.makeCommandBuffer() {
             if let commandEncoder = commandBuffer.makeComputeCommandEncoder() {
                 emitter.update(commandEncoder, currentTimeInSeconds: 0, timeIntervalInSeconds: 0.1)
                 commandEncoder.endEncoding()
@@ -101,12 +101,12 @@ class PointEmitterApp: NSViewController {
         }
         
         createParticleRenderer(rootEntity, particleSystem, gui)
-        engine.run()
+        Engine.run()
     }
     
     override func viewDidDisappear() {
         super.viewDidDisappear()
-        engine.destroy()
+        Engine.destroy()
     }
 }
 

@@ -93,10 +93,10 @@ public class PointParticleEmitter: ParticleEmitter {
         }
     }
     
-    public override init(_ engine: Engine) {
-        super.init(engine)
-        shader.append(ShaderPass(engine.library("flex.shader"), "pointEmitter"))
-        _randomTex = createRandomTexture(engine.device, 256)
+    public override init() {
+        super.init()
+        shader.append(ShaderPass(Engine.library("flex.shader"), "pointEmitter"))
+        _randomTex = createRandomTexture(Engine.device, 256)
         defaultShaderData.setImageView("u_randomTexture", "u_randomSampler", _randomTex)
     }
     

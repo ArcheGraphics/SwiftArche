@@ -28,9 +28,9 @@ class TextApp: NSViewController {
         canvas = Canvas(frame: view.frame)
         canvas.setParentView(view)
         engine = Engine(canvas: canvas)
-        fontProvider = try! MTLFontAtlasProvider(engine: engine)
+        fontProvider = try! MTLFontAtlasProvider()
         
-        let scene = engine.sceneManager.activeScene!
+        let scene = Engine.sceneManager.activeScene!
         let rootEntity = scene.createRootEntity()
 
         let cameraEntity = rootEntity.createChild()
@@ -44,7 +44,7 @@ class TextApp: NSViewController {
         light.transform.lookAt(targetPosition: Vector3())
         light.addComponent(DirectLight.self)
         
-        // let scope = engine.createCaptureScope(name: "sdf text")
+        // let scope = Engine.createCaptureScope(name: "sdf text")
         // scope.begin()
         let atlas = try! fontProvider.fontAtlas(descriptor: MTLFontAtlasProvider.defaultAtlasDescriptor)
         // scope.end()
@@ -66,12 +66,12 @@ class TextApp: NSViewController {
         
         rootEntity.addComponent(GizmosScript.self).atlas = atlas
         
-        engine.run()
+        Engine.run()
     }
     
     override func viewDidDisappear() {
         super.viewDidDisappear()
-        engine.destroy()
+        Engine.destroy()
     }
 }
 

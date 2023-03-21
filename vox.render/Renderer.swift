@@ -76,9 +76,9 @@ public class Renderer: Component {
         }
     }
 
-    required init(_ engine: Engine) {
-        shaderData = ShaderData(engine)
-        super.init(engine)
+    required init() {
+        shaderData = ShaderData()
+        super.init()
         shaderData.enableMacro(NEED_RECEIVE_SHADOWS.rawValue)
     }
     
@@ -87,8 +87,7 @@ public class Renderer: Component {
     }
     
     required init(from decoder: Decoder) throws {
-        let engine = decoder.userInfo[.engine] as! Engine
-        shaderData = ShaderData(engine)
+        shaderData = ShaderData()
         
         try super.init(from: decoder)
     }
@@ -158,12 +157,12 @@ public class Renderer: Component {
     }
 
     override func _onEnable() {
-        let componentsManager = engine._componentsManager
+        let componentsManager = Engine._componentsManager
         componentsManager.addRenderer(self)
     }
 
     override func _onDisable() {
-        let componentsManager = engine._componentsManager
+        let componentsManager = Engine._componentsManager
         componentsManager.removeRenderer(self)
     }
 

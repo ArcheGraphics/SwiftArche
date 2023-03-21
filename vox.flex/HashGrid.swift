@@ -8,7 +8,6 @@ import Metal
 import vox_render
 
 public class HashGrid {
-    var _engine: Engine
     var _gridSpacing: Float = 1.0;
     var _resolution: SIMD3<UInt32> = SIMD3<UInt32>(1, 1, 1)
     var _sortedIndices: BufferView!
@@ -31,67 +30,65 @@ public class HashGrid {
         HashGrid.Builder()
     }
     
-    public init(_ engine: Engine,
-                _ resolutionX: UInt32,
+    public init(_ resolutionX: UInt32,
                 _ resolutionY: UInt32,
                 _ resolutionZ: UInt32,
                 _ gridSpacing: Float) {
-        _engine = engine
         _resolution.x = max(resolutionX, 1)
         _resolution.y = max(resolutionY, 1)
         _resolution.z = max(resolutionZ, 1)
         _gridSpacing = gridSpacing
-        _shaderData = ShaderData(engine)
+        _shaderData = ShaderData()
         
-        _indirectArgsBuffer = BufferView(device: engine.device, count: 1,
+        _indirectArgsBuffer = BufferView(device: Engine.device, count: 1,
                                          stride: MemoryLayout<MTLDispatchThreadgroupsIndirectArguments>.stride)
         
         let totalCount = Int(_resolution.x * _resolution.y * _resolution.z)
         _shaderData.setData("u_startIndexTable",
-                            BufferView(device: engine.device, count: totalCount,
+                            BufferView(device: Engine.device, count: totalCount,
                                        stride: MemoryLayout<UInt>.stride, options: .storageModePrivate))
         _shaderData.setData("u_endIndexTable",
-                            BufferView(device: engine.device, count: totalCount,
+                            BufferView(device: Engine.device, count: totalCount,
                                        stride: MemoryLayout<UInt>.stride, options: .storageModePrivate))
         _shaderData.setData("u_hashGridData", HashGridData(resolutionX: _resolution.x,
                                                            resolutionY: _resolution.y,
                                                            resolutionZ: _resolution.z,
                                                            gridSpacing: gridSpacing))
         
-        let resourceCache = engine.sceneManager.activeScene?.postprocessManager.resourceCache
-        _fillPass = ComputePass(engine)
+        let resourceCache = Engine.sceneManager.activeScene?.postprocessManager.resourceCache
+        _fillPass = ComputePass()
         _fillPass.resourceCache = resourceCache
-        _fillPass.shader.append(ShaderPass(engine.library("flex.shader"), "fillHashGrid"))
+        _fillPass.shader.append(ShaderPass(Engine.library("flex.shader"), "fillHashGrid"))
         _fillPass.data.append(_shaderData)
         _fillPass.threadsPerGridX = totalCount
         _fillPass.precompileAll()
         
-        _initArgsPass = ComputePass(engine)
+        _initArgsPass = ComputePass()
         _initArgsPass.resourceCache = resourceCache
         _initArgsPass.defaultShaderData.setData("args", _indirectArgsBuffer)
-        _initArgsPass.shader.append(ShaderPass(engine.library("flex.shader"), "initSortArgs"))
+        _initArgsPass.shader.append(ShaderPass(Engine.library("flex.shader"), "initSortArgs"))
         _initArgsPass.data.append(_shaderData)
         _initArgsPass.precompileAll()
         
-        _preparePass = ComputePass(engine)
+        _preparePass = ComputePass()
         _preparePass.resourceCache = resourceCache
-        _preparePass.shader.append(ShaderPass(engine.library("flex.shader"), "prepareSortHash"))
+        _preparePass.shader.append(ShaderPass(Engine.library("flex.shader"), "prepareSortHash"))
         _preparePass.data.append(_shaderData)
         _preparePass.precompileAll()
         
-        _buildPass = ComputePass(engine)
+        _buildPass = ComputePass()
         _buildPass.resourceCache = resourceCache
-        _buildPass.shader.append(ShaderPass(engine.library("flex.shader"), "buildHashGrid"))
+        _buildPass.shader.append(ShaderPass(Engine.library("flex.shader"), "buildHashGrid"))
         _buildPass.data.append(_shaderData)
         _buildPass.precompileAll()
 
-        _sortPass = BitonicSort(engine)
+        _sortPass = BitonicSort()
     }
     
     public func build(commandBuffer: MTLCommandBuffer, positions: BufferView,
                       itemCount: BufferView, maxNumberOfParticles: UInt32) {
         if _sortedIndices == nil || _sortedIndices.count != maxNumberOfParticles {
-            _sortedIndices = BufferView(device: _engine.device, count: Int(maxNumberOfParticles),
+            _sortedIndices = BufferView(device: Engine.device, count: Int(maxNumberOfParticles),
                                         stride: MemoryLayout<SIMD2<Float>>.stride, options: .storageModePrivate)
             _shaderData.setData("u_sortedIndices", _sortedIndices!)
         }
@@ -161,8 +158,8 @@ public class HashGrid {
         }
 
         //! Builds PointParallelHashGridSearcher3 instance.
-        public func build(_ engine: Engine) -> HashGrid {
-            HashGrid(engine, _resolution.x, _resolution.y, _resolution.z, _gridSpacing)
+        public func build() -> HashGrid {
+            HashGrid(_resolution.x, _resolution.y, _resolution.z, _gridSpacing)
         }
     }
 }

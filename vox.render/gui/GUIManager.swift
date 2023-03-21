@@ -9,29 +9,22 @@ import ImGui
 
 class GUIManager {
     private var _renderPass: RenderPass!
-    private let _engine: Engine
     private var _onGUIScripts: DisorderedArray<Script> = DisorderedArray()
     private var _resourceCache: ResourceCache!
 
-    init(_ engine:Engine) {
-        _engine = engine
-        
+    init() {
         _ = ImGuiCreateContext(nil)
         ImGuiStyleColorsDark(nil)
         
-        ImGui_ImplMetal_Init(engine.device)
-        ImGui_ImplOSX_Init(engine.canvas)
+        ImGui_ImplMetal_Init(Engine.device)
+        ImGui_ImplOSX_Init(Engine.canvas)
         
-        _resourceCache = ResourceCache(engine.device)
-        PointBatcher.ins.set(engine)
-        LineBatcher.ins.set(engine)
-        TriangleBatcher.ins.set(engine)
-        
-        TextBatcher.ins.set(engine)
-        let shader = ShaderPass(engine.library(), "vertex_text", "fragment_text")
+        _resourceCache = ResourceCache(Engine.device)
+
+        let shader = ShaderPass(Engine.library(), "vertex_text", "fragment_text")
         shader.setRenderQueueType(.Transparent)
         shader._renderState!.rasterState.cullMode = .front
-        let material = Material(engine, "default text")
+        let material = Material("default text")
         material.shader.append(shader)
         TextRenderer._defaultMaterial = material
     }
@@ -66,7 +59,7 @@ class GUIManager {
     func draw(_ commandBuffer: MTLCommandBuffer) {
         callScriptOnGUI()
         
-        let canvas = _engine.canvas
+        let canvas = Engine.canvas!
         if let renderPassDescriptor = canvas.currentRenderPassDescriptor {
             renderPassDescriptor.colorAttachments[0].loadAction = .load
             // Gizmos

@@ -59,8 +59,8 @@ public class PBRMaterial: PBRBaseMaterial {
         shaderData.setSampler(PBRMaterial._roughnessMetallicSamplerProp, value)
     }
 
-    public override init(_ engine: Engine, _ name: String = "") {
-        super.init(engine, name)
+    public override init(_ name: String = "pbr") {
+        super.init(name)
         shaderData.enableMacro(IS_METALLIC_WORKFLOW.rawValue)
         shaderData.setData(PBRMaterial._pbrProp, _pbrData)
     }

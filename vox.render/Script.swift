@@ -124,16 +124,16 @@ open class Script: Component {
         if (_waitHandlingInValid) {
             _waitHandlingInValid = false
         } else {
-            let componentsManager = engine._componentsManager
+            let componentsManager = Engine._componentsManager
             if (!_started) {
                 componentsManager.addOnStartScript(self)
             }
             componentsManager.addOnUpdateScript(self)
 #if os(iOS)
-            engine.arManager?.addOnUpdateScript(self)
+            Engine.arManager?.addOnUpdateScript(self)
 #endif
 #if os(macOS)
-            engine._guiManager.addOnGUIScript(self)
+            Engine._guiManager.addOnGUIScript(self)
 #endif
             _entity._addScript(self)
         }
@@ -142,21 +142,21 @@ open class Script: Component {
 
     override func _onDisable() {
         _waitHandlingInValid = true
-        _engine._componentsManager.addDisableScript(component: self)
+        Engine._componentsManager.addDisableScript(component: self)
 #if os(macOS)
-        _engine._guiManager.removeOnGUIScript(self)
+        Engine._guiManager.removeOnGUIScript(self)
 #endif
         onDisable()
     }
 
     override func _onDestroy() {
-        _engine._componentsManager.addDestroyScript(component: self)
+        Engine._componentsManager.addDestroyScript(component: self)
     }
 
     func _handlingInValid() {
-        engine._componentsManager.removeOnUpdateScript(self)
+        Engine._componentsManager.removeOnUpdateScript(self)
 #if os(iOS)
-        engine.arManager?.removeOnUpdateScript(self)
+        Engine.arManager?.removeOnUpdateScript(self)
 #endif
         _entity._removeScript(self)
         _waitHandlingInValid = false

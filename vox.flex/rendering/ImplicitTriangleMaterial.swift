@@ -53,9 +53,9 @@ public class ImplicitTriangleMaterial: BaseMaterial {
         }
     }
 
-    public override init(_ engine: Engine, _ name: String = "") {
-        super.init(engine, name)
-        shader.append(ShaderPass(engine.library("flex.shader"), "vertex_sdf", "fragment_sdf"))
+    public override init(_ name: String = "implicit triangle mat") {
+        super.init(name)
+        shader.append(ShaderPass(Engine.library("flex.shader"), "vertex_sdf", "fragment_sdf"))
 
         shaderData.enableMacro(OMIT_NORMAL.rawValue)
         shaderData.enableMacro(NEED_TILINGOFFSET.rawValue)

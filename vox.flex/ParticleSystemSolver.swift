@@ -42,7 +42,7 @@ open class ParticleSystemSolver: ParticleSystemSolverBase {
         set {
             _emitter = newValue
             if _particleSystemData == nil {
-                _particleSystemData = ParticleSystemData(engine, maxLength: ParticleSystemSolverBase.maxLength)
+                _particleSystemData = ParticleSystemData(maxLength: ParticleSystemSolverBase.maxLength)
                 _particleSystemData?.mass = _mass
                 _particleSystemData?.radius = _radius
             }
@@ -51,22 +51,21 @@ open class ParticleSystemSolver: ParticleSystemSolverBase {
         }
     }
     
-    public required init(_ engine: Engine) {
-        _timeIntegration = ComputePass(engine)
-        _accumulateExternalForces = ComputePass(engine)
-        _indirectArgsBuffer = BufferView(device: engine.device, count: 1,
+    public required init() {
+        _timeIntegration = ComputePass()
+        _accumulateExternalForces = ComputePass()
+        _indirectArgsBuffer = BufferView(device: Engine.device, count: 1,
                                          stride: MemoryLayout<MTLDispatchThreadgroupsIndirectArguments>.stride)
-        _initArgsPass = ComputePass(engine)
-        super.init(engine)
+        _initArgsPass = ComputePass()
+        super.init()
     }
     
     public required init(from decoder: Decoder) throws {
-        let engine = decoder.userInfo[.engine] as! Engine
-        _timeIntegration = ComputePass(engine)
-        _accumulateExternalForces = ComputePass(engine)
-        _indirectArgsBuffer = BufferView(device: engine.device, count: 1,
+        _timeIntegration = ComputePass()
+        _accumulateExternalForces = ComputePass()
+        _indirectArgsBuffer = BufferView(device: Engine.device, count: 1,
                                          stride: MemoryLayout<MTLDispatchThreadgroupsIndirectArguments>.stride)
-        _initArgsPass = ComputePass(engine)
+        _initArgsPass = ComputePass()
         
         try super.init(from: decoder)
     }
@@ -78,16 +77,16 @@ open class ParticleSystemSolver: ParticleSystemSolverBase {
     public override func initialize(_ commandBuffer: MTLCommandBuffer) {
         if let particleSystemData = particleSystemData {
             _initArgsPass.resourceCache = resourceCache
-            _initArgsPass.shader.append(ShaderPass(engine.library("flex.shader"), "initSortArgs"))
+            _initArgsPass.shader.append(ShaderPass(Engine.library("flex.shader"), "initSortArgs"))
             _initArgsPass.defaultShaderData.setData("args", _indirectArgsBuffer)
             _initArgsPass.defaultShaderData.setData("g_NumElements", particleSystemData.numberOfParticles)
             _initArgsPass.precompileAll()
             
-            _timeIntegration.shader.append(ShaderPass(engine.library("flex.shader"), "semiImplicitEuler"))
+            _timeIntegration.shader.append(ShaderPass(Engine.library("flex.shader"), "semiImplicitEuler"))
             _timeIntegration.resourceCache = resourceCache
             _timeIntegration.data.append(particleSystemData)
             
-            _accumulateExternalForces.shader.append(ShaderPass(engine.library("flex.shader"), "gravityForce"))
+            _accumulateExternalForces.shader.append(ShaderPass(Engine.library("flex.shader"), "gravityForce"))
             _accumulateExternalForces.resourceCache = resourceCache
             _accumulateExternalForces.data.append(particleSystemData)
         }

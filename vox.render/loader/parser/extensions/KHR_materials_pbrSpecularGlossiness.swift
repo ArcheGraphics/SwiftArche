@@ -9,7 +9,7 @@ import Math
 class KHR_materials_pbrSpecularGlossiness {
     static func createEngineResource(_ schema: GLTFPBRSpecularGlossinessParams, _ context: ParserContext) -> PBRSpecularMaterial {
         let glTFResource = context.glTFResource!
-        let material = PBRSpecularMaterial(glTFResource.engine)
+        let material = PBRSpecularMaterial()
 
         material.baseColor = Color(
                 Color.linearToGammaSpace(value: schema.diffuseFactor.x),

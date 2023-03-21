@@ -36,13 +36,12 @@ public class BackgroundSubpass: Subpass {
     }
 
     /// Constructor of Background.
-    /// - Parameter engine:  Engine Which the background belongs to.
-    public init(_ engine: Engine) {
-        _canvas = engine.canvas
-        _shader = ShaderPass(engine.library(), "vertex_background", "fragment_background")
+    public override init() {
+        _canvas = Engine.canvas
+        _shader = ShaderPass(Engine.library(), "vertex_background", "fragment_background")
         _shader.renderState!.depthState.compareFunction = MTLCompareFunction.lessEqual
         super.init()
-        _mesh = _createPlane(engine)
+        _mesh = _createPlane()
     }
 
     func prepare(_ encoder: MTLRenderCommandEncoder) {
@@ -113,8 +112,8 @@ public class BackgroundSubpass: Subpass {
         _mesh.uploadData(false)
     }
 
-    private func _createPlane(_ engine: Engine) -> ModelMesh {
-        let mesh = ModelMesh(engine)
+    private func _createPlane() -> ModelMesh {
+        let mesh = ModelMesh()
         let indices: [UInt16] = [1, 2, 0, 1, 3, 2]
 
         var positions = [Vector3](repeating: Vector3(), count: 4)

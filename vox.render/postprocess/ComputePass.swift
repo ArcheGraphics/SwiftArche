@@ -17,16 +17,14 @@ open class ComputePass {
 
     public var shader: [ShaderPass] = []
     public var data: [ShaderData] = []
-    public weak var engine: Engine!
     public var defaultShaderData: ShaderData {
         get {
             data[0]
         }
     }
 
-    public init(_ engine: Engine) {
-        self.engine = engine
-        data.append(ShaderData(engine))
+    public init() {
+        data.append(ShaderData())
     }
     
     /// generate PSO before calculation only work for shader without function constant values.

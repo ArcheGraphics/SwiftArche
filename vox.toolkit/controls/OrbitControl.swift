@@ -147,8 +147,8 @@ public class OrbitControl : Script {
     }
     
     public override func onStart() {
-        input = entity.engine.inputManager
-        canvas = entity.engine.canvas
+        input = Engine.inputManager
+        canvas = Engine.canvas
     }
     
     public override func onAwake() {

@@ -18,13 +18,13 @@ fileprivate class Raycast: Script {
     }
 
     override func onUpdate(_ deltaTime: Float) {
-        let inputManager = engine.inputManager
+        let inputManager = Engine.inputManager
         let pointers = inputManager.pointers
         if (!pointers.isEmpty && inputManager.isPointerTrigger(.leftMouseDown)) {
-            _ = camera.screenPointToRay(pointers[0].screenPoint(engine.canvas), ray)
+            _ = camera.screenPointToRay(pointers[0].screenPoint(Engine.canvas), ray)
 
-            if let hit = engine.physicsManager.raycast(ray, distance: Float.greatestFiniteMagnitude, layerMask: Layer.Layer0) {
-                let mtl = PBRMaterial(engine)
+            if let hit = Engine.physicsManager.raycast(ray, distance: Float.greatestFiniteMagnitude, layerMask: Layer.Layer0) {
+                let mtl = PBRMaterial()
                 mtl.baseColor = Color(Float.random(in: 0...1), Float.random(in: 0...1), Float.random(in: 0...1), 0.5)
                 mtl.metallic = 0.0
                 mtl.roughness = 0.5
@@ -46,7 +46,7 @@ class PhysXConvexComposeApp: NSViewController {
     
     func initialize(_ rootEntity: Entity) {
         let assetURL = Bundle.main.url(forResource: "bunny", withExtension: "glb", subdirectory: "assets")!
-        GLTFLoader.parse(rootEntity.engine, assetURL, { [self] resource in
+        GLTFLoader.parse(assetURL, { [self] resource in
             let entity = resource.defaultSceneRoot!
             rootEntity.addChild(entity)
             
@@ -78,13 +78,13 @@ class PhysXConvexComposeApp: NSViewController {
                     indices.append(v.y)
                     indices.append(v.z)
                 }
-                let mesh = ModelMesh(engine)
+                let mesh = ModelMesh()
                 mesh.setPositions(positions: position)
                 mesh.setIndices(indices: indices)
                 _ = mesh.addSubMesh(0, indices.count, .triangle)
                 mesh.uploadData(true)
                 
-                let mtl = UnlitMaterial(engine)
+                let mtl = UnlitMaterial()
                 mtl.baseColor = Color(Float.random(in: 0..<1), Float.random(in: 0..<1), Float.random(in: 0..<1), 1)
                 let child = entity.createChild()
                 let renderer = child.addComponent(MeshRenderer.self)
@@ -105,12 +105,12 @@ class PhysXConvexComposeApp: NSViewController {
         canvas = Canvas(frame: view.frame)
         canvas.setParentView(view)
         engine = Engine(canvas: canvas)
-        iblBaker = IBLBaker(engine)
+        iblBaker = IBLBaker()
         convexCompose = ConvexCompose()
         
-        let scene = engine.sceneManager.activeScene!
+        let scene = Engine.sceneManager.activeScene!
         scene.shadowDistance = 50
-        let hdr = engine.textureLoader.loadHDR(with: "assets/kloppenheim_06_4k.hdr")!
+        let hdr = Engine.textureLoader.loadHDR(with: "assets/kloppenheim_06_4k.hdr")!
         iblBaker.bake(scene, with: hdr, size: 256, level: 3)
 
         let rootEntity = scene.createRootEntity()
@@ -128,12 +128,12 @@ class PhysXConvexComposeApp: NSViewController {
         
         initialize(rootEntity)
 
-        engine.run()
+        Engine.run()
     }
     
     override func viewDidDisappear() {
         super.viewDidDisappear()
-        engine.destroy()
+        Engine.destroy()
     }
 }
 

@@ -17,7 +17,7 @@ fileprivate class GUI: Script {
     override func onGUI() {
         if let sampler0,
             let sampler1 {
-            UIElement.Init(engine)
+            UIElement.Init()
             
             ImGuiNewFrame()
             ImGuiSliderFloat("Clip Curl Additive Weight", &sampler0.weight, 0.0, 1.0, nil, 1)
@@ -38,10 +38,10 @@ class AnimationAdditiveApp: NSViewController {
         canvas = Canvas(frame: view.frame)
         canvas.setParentView(view)
         engine = Engine(canvas: canvas)
-        iblBaker = IBLBaker(engine)
+        iblBaker = IBLBaker()
         
-        let scene = engine.sceneManager.activeScene!
-        let hdr = engine.textureLoader.loadHDR(with: "assets/kloppenheim_06_4k.hdr")!
+        let scene = Engine.sceneManager.activeScene!
+        let hdr = Engine.textureLoader.loadHDR(with: "assets/kloppenheim_06_4k.hdr")!
         iblBaker.bake(scene, with: hdr, size: 256, level: 3)
         let rootEntity = scene.createRootEntity()
         let gui = rootEntity.addComponent(GUI.self)
@@ -91,12 +91,12 @@ class AnimationAdditiveApp: NSViewController {
         
         characterEntity.addComponent(AnimationVisualizer.self)
 
-        engine.run()
+        Engine.run()
     }
     
     override func viewDidDisappear() {
         super.viewDidDisappear()
-        engine.destroy()
+        Engine.destroy()
     }
 }
 

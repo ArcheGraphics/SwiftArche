@@ -28,7 +28,7 @@ class MeshParser: Parser {
                     continue
                 }
                 let gltfPrimitive = gltfMesh.primitives[j]
-                let mesh = ModelMesh(glTFResource.engine, gltfMesh.name ?? "\(j)")
+                let mesh = ModelMesh(gltfMesh.name ?? "\(j)")
                 primitivePromises.append(mesh)
 
                 // load position

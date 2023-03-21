@@ -18,8 +18,6 @@ final public class MTLFontAtlasProvider {
     }
 
     // MARK: - Properties
-    public let engine: Engine
-
     let function: MTLFunction!
     let pipelineState: MTLComputePipelineState!
 
@@ -30,13 +28,12 @@ final public class MTLFontAtlasProvider {
 
     /// Create a signed-distance field based font atlas with the specified dimensions.
     /// The supplied font will be resized to fit all available glyphs in the texture.
-    public init(engine: Engine) throws {
-        self.engine = engine
-        function = engine.library("vox.shader").makeFunction(name: "quantizeDistanceField")!
-        pipelineState = try! engine.device.makeComputePipelineState(function: function)
+    public init() throws {
+        function = Engine.library("vox.shader").makeFunction(name: "quantizeDistanceField")!
+        pipelineState = try! Engine.device.makeComputePipelineState(function: function)
 
         let defaultAtlas = try JSONDecoder().decode(MTLFontAtlasCodableContainer.self,
-                                                    from: Data(contentsOf: Self.defaultAtlasFileURL)).fontAtlas(device: engine.device)
+                                                    from: Data(contentsOf: Self.defaultAtlasFileURL)).fontAtlas(device: Engine.device)
         atlasCache[Self.defaultAtlasDescriptor] = defaultAtlas
     }
 
@@ -258,7 +255,7 @@ final public class MTLFontAtlasProvider {
 #if os(macOS)
         textureDescriptor.storageMode = .managed
 #endif
-        guard let sdfFontAtlasTexture = engine.device.makeTexture(descriptor: textureDescriptor)
+        guard let sdfFontAtlasTexture = Engine.device.makeTexture(descriptor: textureDescriptor)
         else {
             throw MetalError.MTLDeviceError.textureCreationFailed
         }
@@ -272,7 +269,7 @@ final public class MTLFontAtlasProvider {
         textureDescriptor.height = descriptor.textureSize
         textureDescriptor.pixelFormat = .r8Unorm
         textureDescriptor.mipmapLevelCount = Int(floor(log2(Float(descriptor.textureSize))))
-        guard let fontAtlasTexture = engine.device.makeTexture(descriptor: textureDescriptor)
+        guard let fontAtlasTexture = Engine.device.makeTexture(descriptor: textureDescriptor)
         else {
             throw MetalError.MTLDeviceError.textureCreationFailed
         }
@@ -282,7 +279,7 @@ final public class MTLFontAtlasProvider {
                 fontAtlasTexture: fontAtlasTexture)
         var fontSpread = Float(fontAtlas.font.estimatedLineWidth * 0.5)
 
-        if let commandBuffer = engine.commandQueue.makeCommandBuffer(),
+        if let commandBuffer = Engine.commandQueue.makeCommandBuffer(),
            let commandEncoder = commandBuffer.makeComputeCommandEncoder() {
             commandEncoder.setComputePipelineState(pipelineState)
             commandEncoder.setTexture(sdfFontAtlasTexture, index: 0)

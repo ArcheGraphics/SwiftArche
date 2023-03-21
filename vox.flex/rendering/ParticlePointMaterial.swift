@@ -46,9 +46,9 @@ public class ParticlePointMaterial: BaseMaterial {
         }
     }
 
-    public override init(_ engine: Engine, _ name: String = "") {
-        super.init(engine, name)
-        shader.append(ShaderPass(engine.library("flex.shader"), "vertex_particle", "fragment_particle"))
+    public override init(_ name: String = "particle point mat") {
+        super.init(name)
+        shader.append(ShaderPass(Engine.library("flex.shader"), "vertex_particle", "fragment_particle"))
 
         shaderData.setData(ParticlePointMaterial.scaleProperty, _pointScale)
         shaderData.setData(ParticlePointMaterial.highlightProperty, _highlightIndex)

@@ -25,15 +25,15 @@ public class PointLight: Light {
     }
 
     override func _onEnable() {
-        engine._lightManager._attachPointLight(self)
+        Engine._lightManager._attachPointLight(self)
     }
 
     override func _onDisable() {
-        engine._lightManager._detachPointLight(self)
+        Engine._lightManager._detachPointLight(self)
     }
     
-    public required init(_ engine: Engine) {
-        super.init(engine)
+    public required init() {
+        super.init()
     }
     
     public required init(from decoder: Decoder) throws {

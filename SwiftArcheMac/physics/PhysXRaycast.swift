@@ -17,7 +17,7 @@ fileprivate class GeometryGenerator: Script {
     }
 
     override func onUpdate(_ deltaTime: Float) {
-        let inputManager = engine.inputManager
+        let inputManager = Engine.inputManager
         if (inputManager.isPointerTrigger(.rightMouseDown)) {
             if (Float.random(in: 0...1) > 0.5) {
                 _ = addSphere(entity, 0.5, Vector3(floor(Float.random(in: 0...6)) - 2.5, 5, floor(Float.random(in: 0...6)) - 2.5), quat)
@@ -37,13 +37,13 @@ fileprivate class Raycast: Script {
     }
 
     override func onUpdate(_ deltaTime: Float) {
-        let inputManager = engine.inputManager
+        let inputManager = Engine.inputManager
         let pointers = inputManager.pointers
         if (!pointers.isEmpty && inputManager.isPointerTrigger(.leftMouseDown)) {
-            _ = camera.screenPointToRay(pointers[0].screenPoint(engine.canvas), ray)
+            _ = camera.screenPointToRay(pointers[0].screenPoint(Engine.canvas), ray)
 
-            if let hit = engine.physicsManager.raycast(ray, distance: Float.greatestFiniteMagnitude, layerMask: Layer.Layer0) {
-                let mtl = PBRMaterial(engine)
+            if let hit = Engine.physicsManager.raycast(ray, distance: Float.greatestFiniteMagnitude, layerMask: Layer.Layer0) {
+                let mtl = PBRMaterial()
                 mtl.baseColor = Color(Float.random(in: 0...1), Float.random(in: 0...1), Float.random(in: 0...1), 1.0)
                 mtl.metallic = 0.0
                 mtl.roughness = 0.5
@@ -91,11 +91,11 @@ class PhysXRaycastApp: NSViewController {
         canvas = Canvas(frame: view.frame)
         canvas.setParentView(view)
         engine = Engine(canvas: canvas)
-        iblBaker = IBLBaker(engine)
+        iblBaker = IBLBaker()
         
-        let scene = engine.sceneManager.activeScene!
+        let scene = Engine.sceneManager.activeScene!
         scene.shadowDistance = 50
-        let hdr = engine.textureLoader.loadHDR(with: "assets/kloppenheim_06_4k.hdr")!
+        let hdr = Engine.textureLoader.loadHDR(with: "assets/kloppenheim_06_4k.hdr")!
         iblBaker.bake(scene, with: hdr, size: 256, level: 3)
 
         let rootEntity = scene.createRootEntity()
@@ -117,12 +117,12 @@ class PhysXRaycastApp: NSViewController {
         
         initialize(rootEntity)
 
-        engine.run()
+        Engine.run()
     }
     
     override func viewDidDisappear() {
         super.viewDidDisappear()
-        engine.destroy()
+        Engine.destroy()
     }
 }
 

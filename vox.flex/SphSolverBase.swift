@@ -32,7 +32,7 @@ open class SphSolverBase: ParticleSystemSolver {
         set {
             _emitter = newValue
             if _particleSystemData == nil {
-                _particleSystemData = SphSystemData(engine, maxLength: ParticleSystemSolverBase.maxLength)
+                _particleSystemData = SphSystemData(maxLength: ParticleSystemSolverBase.maxLength)
             }
             _emitter?.target = _particleSystemData
         }
@@ -83,8 +83,8 @@ open class SphSolverBase: ParticleSystemSolver {
         }
     }
     
-    public required init(_ engine: Engine) {
-        super.init(engine)
+    public required init() {
+        super.init()
         isUsingFixedSubTimeSteps = false
     }
     

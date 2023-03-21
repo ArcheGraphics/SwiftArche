@@ -35,15 +35,15 @@ public class DirectLight: Light {
     }
 
     override func _onEnable() {
-        engine._lightManager._attachDirectLight(self)
+        Engine._lightManager._attachDirectLight(self)
     }
 
     override func _onDisable() {
-        engine._lightManager._detachDirectLight(self)
+        Engine._lightManager._detachDirectLight(self)
     }
     
-    public required init(_ engine: Engine) {
-        super.init(engine)
+    public required init() {
+        super.init()
     }
     
     public required init(from decoder: Decoder) throws {

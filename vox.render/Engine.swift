@@ -11,10 +11,6 @@ import Logging
 public let logger = Logger(label: "com.arche.main")
 
 extension CodingUserInfoKey {
-    public static var engine: CodingUserInfoKey {
-        CodingUserInfoKey(rawValue: "com.codable.engine")!
-    }
-    
     public static var polymorphicTypes: CodingUserInfoKey {
         CodingUserInfoKey(rawValue: "com.codable.polymophicTypes")!
     }
@@ -22,86 +18,89 @@ extension CodingUserInfoKey {
 
 public class Engine: NSObject {
     // The max number of command buffers in flight
-    let _maxFramesInFlight = 3
-    let _bufferPools: [BufferPool]
-    let _commandQueue: MTLCommandQueue
-    let _macroCollection: ShaderMacroCollection = ShaderMacroCollection()
-    let _componentsManager: ComponentsManager = ComponentsManager()
-    let _lightManager = LightManager()
-    public let canvas: Canvas
+    static let _maxFramesInFlight = 3
+    static var _bufferPools: [BufferPool] = []
+    static var _commandQueue: MTLCommandQueue!
+    static let _macroCollection: ShaderMacroCollection = ShaderMacroCollection()
+    static let _componentsManager: ComponentsManager = ComponentsManager()
+    static let _lightManager = LightManager()
+    
+    private let _inFlightSemaphore: DispatchSemaphore
 
     // Current buffer index to fill with dynamic uniform data and set for the current frame
-    private var _currentBufferIndex: Int = 0
-    private var _library: [String: MTLLibrary] = [:]
-    private var _settings: EngineSettings? = nil
-    private var _device: MTLDevice
-    private var _sceneManager: SceneManager!
-    private var _physicsManager: PhysicsManager!
-    private var _inputManager: InputManager!
+    private static var _currentBufferIndex: Int = 0
+    private static var _library: [String: MTLLibrary] = [:]
+    private static var _settings: EngineSettings? = nil
+    private static var _device: MTLDevice!
+    private static var _sceneManager: SceneManager!
+    private static var _physicsManager: PhysicsManager!
+    private static var _inputManager: InputManager!
 #if os(iOS)
-    private var _arManager: ARManager?
+    private static var _arManager: ARManager?
 #else
-    var _guiManager: GUIManager!
+    static var _guiManager: GUIManager!
 #endif
-
     // The semaphore used to control GPU-CPU synchronization of frames.
-    private let _inFlightSemaphore: DispatchSemaphore
-    private var _textureLoader: TextureLoader!
-    private var _isPaused: Bool = true;
+    private static var _textureLoader: TextureLoader!
+    private static var _isPaused: Bool = true;
     
     // codable
-    var componentType: [Polymorphic.Type] = []
+    static var componentType: [Polymorphic.Type] = []
     
     /// buffer index
-    var currentBufferIndex: Int {
+    static var currentBufferIndex: Int {
         get {
             _currentBufferIndex
         }
     }
+    
+    // MARK: - Public Method
+    /// canvas
+    public static var canvas: Canvas!
 
     /// Settings of Engine.
-    public var settings: EngineSettings? {
+    public static var settings: EngineSettings? {
         get {
             _settings
         }
     }
 
     /// Get the Metal device.
-    public var device: MTLDevice {
+    public static var device: MTLDevice {
         get {
             _device
         }
     }
     
-    public var commandQueue: MTLCommandQueue {
+    public static var commandQueue: MTLCommandQueue {
         get {
             _commandQueue
         }
     }
 
     /// Get the texture loader.
-    public var textureLoader: TextureLoader {
+    public static var textureLoader: TextureLoader {
         get {
             _textureLoader
         }
     }
 
     /// Get the scene manager.
-    public var sceneManager: SceneManager {
+    public static var sceneManager: SceneManager {
         get {
             _sceneManager
         }
     }
 
     /// Get the physics manager.
-    public var physicsManager: PhysicsManager {
+    public static var physicsManager: PhysicsManager {
         get {
             _physicsManager
         }
     }
 
     /// Get the input manager.
-    public var inputManager: InputManager {
+    public static var inputManager: InputManager {
         get {
             _inputManager
         }
@@ -109,7 +108,7 @@ public class Engine: NSObject {
 
 #if os(iOS)
     /// Get the ar manager.
-    public var arManager: ARManager? {
+    public static var arManager: ARManager? {
         get {
             _arManager
         }
@@ -117,7 +116,7 @@ public class Engine: NSObject {
 #endif
 
     /// Whether the engine is paused.
-    public var isPaused: Bool {
+    public static var isPaused: Bool {
         get {
             _isPaused
         }
@@ -130,37 +129,37 @@ public class Engine: NSObject {
     }
 
     public init(canvas: Canvas) {
-        self.canvas = canvas
+        Engine.canvas = canvas
         guard let device = MTLCreateSystemDefaultDevice() else {
             fatalError("Unable to create default Metal Device")
         }
-        _device = device
+        Engine._device = device
 
         guard let commandQueue = device.makeCommandQueue() else {
             fatalError("Unable to create default Metal Device")
         }
-        _commandQueue = commandQueue
-        _inFlightSemaphore = DispatchSemaphore(value: _maxFramesInFlight)
-        _bufferPools = [BufferPool](repeating: BufferPool(_device, 256), count: _maxFramesInFlight)
+        Engine._commandQueue = commandQueue
+        _inFlightSemaphore = DispatchSemaphore(value: Engine._maxFramesInFlight)
+        Engine._bufferPools = [BufferPool](repeating: BufferPool(Engine._device, 256), count: Engine._maxFramesInFlight)
         
         super.init()
-        _ = createShaderLibrary("vox.shader")
-        _physicsManager = PhysicsManager(engine: self)
-        _inputManager = InputManager(engine: self)
-        _sceneManager = SceneManager(engine: self)
-        _sceneManager.activeScene = Scene(self, "DefaultScene")
+        _ = Engine.createShaderLibrary("vox.shader")
+        Engine._physicsManager = PhysicsManager()
+        Engine._inputManager = InputManager()
+        Engine._sceneManager = SceneManager()
+        Engine._sceneManager.activeScene = Scene("DefaultScene")
         canvas.delegate = self
         canvas.device = device
-        canvas.inputManager = _inputManager
-        _textureLoader = TextureLoader(self)
+        canvas.inputManager = Engine._inputManager
+        Engine._textureLoader = TextureLoader()
 
 #if os(macOS)
-        _guiManager = GUIManager(self)
+        Engine._guiManager = GUIManager()
 #endif
     }
 
 #if os(iOS)
-    public func initArSession() {
+    public static func initArSession() {
         _arManager = ARManager(device)
         let scene = _sceneManager.activeScene!
         scene.background.mode = .AR
@@ -168,7 +167,7 @@ public class Engine: NSObject {
     }
 #endif
     
-    public func createCaptureScope(name: String) -> MTLCaptureScope {
+    public static func createCaptureScope(name: String) -> MTLCaptureScope {
         let scope = MTLCaptureManager.shared().makeCaptureScope(device: device)
         scope.label = name
         let captureDescriptor = MTLCaptureDescriptor()
@@ -182,7 +181,7 @@ public class Engine: NSObject {
         return scope
     }
     
-    public func createShaderLibrary(_ name: String) -> MTLLibrary {
+    public static func createShaderLibrary(_ name: String) -> MTLLibrary {
         // Load all the shader files with a metal file extension in the project
         let libraryURL = Bundle.main.url(forResource: name, withExtension: "metallib")!
         do {
@@ -194,7 +193,7 @@ public class Engine: NSObject {
         }
     }
     
-    public func library(_ name: String = "vox.shader") -> MTLLibrary {
+    public static func library(_ name: String = "vox.shader") -> MTLLibrary {
         if let library = _library[name] {
             return library
         } else {
@@ -202,16 +201,16 @@ public class Engine: NSObject {
         }
     }
     
-    public func requestBufferBlock(minimum_size: Int) -> BufferBlock {
+    public static func requestBufferBlock(minimum_size: Int) -> BufferBlock {
         _bufferPools[_currentBufferIndex].requestBufferBlock(minimum_size: minimum_size)
     }
     
     /// Execution engine loop.
-    public func run() {
+    public static func run() {
         isPaused = false
     }
     
-    public func destroy() {
+    public static func destroy() {
         sceneManager.destroy()
         physicsManager.destroy()
 #if os(macOS)
@@ -219,14 +218,13 @@ public class Engine: NSObject {
 #endif
     }
     
-    public func makeDecoder() -> JSONDecoder {
+    public static func makeDecoder() -> JSONDecoder {
         let decoder = JSONDecoder()
-        decoder.userInfo[.engine] = self
         decoder.userInfo[.polymorphicTypes] = componentType
         return decoder
     }
     
-    func insertComponentType<T: Component>(_ type: T.Type) {
+    static func insertComponentType<T: Component>(_ type: T.Type) {
         let result = componentType.first { t in
             t == type
         }
@@ -234,29 +232,32 @@ public class Engine: NSObject {
             componentType.append(type)
         }
     }
+}
 
-    /// Update the engine loop manually. If you call engine.run(), you generally don't need to call this function.
+// MARK: - Main Loop
+extension Engine: MTKViewDelegate {
+    /// Update the engine loop manually. If you call Engine.run(), you generally don't need to call this function.
     func update() {
         Time.tick();
         let deltaTime = Time.deltaTime;
 
-        if !_isPaused {
+        if !Engine._isPaused {
             // Wait to ensure only maxFramesInFlight are getting processed by any stage in the Metal
             //   pipeline (App, Metal, Drivers, GPU, etc)
             _inFlightSemaphore.wait()
-            _currentBufferIndex = (_currentBufferIndex + 1) % _maxFramesInFlight
-            _bufferPools[_currentBufferIndex].reset()
+            Engine._currentBufferIndex = (Engine._currentBufferIndex + 1) % Engine._maxFramesInFlight
+            Engine._bufferPools[Engine._currentBufferIndex].reset()
             
-            let scene = _sceneManager._activeScene
-            let componentsManager = _componentsManager
+            let scene = Engine._sceneManager._activeScene
+            let componentsManager = Engine._componentsManager
             if (scene != nil) {
                 scene!._activeCameras.sort { camera1, camera2 in
                     camera1.priority > camera2.priority
                 }
 
                 componentsManager.callScriptOnStart()
-                _physicsManager._update(deltaTime)
-                _inputManager._update()
+                Engine._physicsManager._update(deltaTime)
+                Engine._inputManager._update()
                 componentsManager.callScriptOnUpdate(deltaTime)
                 componentsManager.callAnimationUpdate(deltaTime)
                 componentsManager.callScriptOnLateUpdate(deltaTime)
@@ -270,14 +271,14 @@ public class Engine: NSObject {
 #if os(iOS)
         arManager?.update(_time.deltaTime)
 #endif
-        _componentsManager.callRendererOnUpdate(Time.deltaTime)
+        Engine._componentsManager.callRendererOnUpdate(Time.deltaTime)
 
         scene._updateShaderData()
 
         let cameras = scene._activeCameras
         if (cameras.count > 0) {
-            if let commandBuffer = commandQueue.makeCommandBuffer(),
-               let currentDrawable = canvas.currentDrawable {
+            if let commandBuffer = Engine.commandQueue.makeCommandBuffer(),
+               let currentDrawable = Engine.canvas.currentDrawable {
                 // Add completion hander which signals inFlightSemaphore
                 // when Metal and the GPU has fully finished processing the commands encoded for this frame.
                 // This indicates when the dynamic buffers, written this frame, will no longer be needed by Metal and the GPU.
@@ -287,14 +288,14 @@ public class Engine: NSObject {
                 
                 for camera in cameras {
                     camera.update()
-                    _componentsManager.callCameraOnBeginRender(camera, commandBuffer)
+                    Engine._componentsManager.callCameraOnBeginRender(camera, commandBuffer)
                     camera.devicePipeline.commit(commandBuffer)
-                    _componentsManager.callCameraOnEndRender(camera, commandBuffer)
+                    Engine._componentsManager.callCameraOnEndRender(camera, commandBuffer)
                 }
                 scene.postprocess(commandBuffer)
 
 #if os(macOS)
-                _guiManager.draw(commandBuffer)
+                Engine._guiManager.draw(commandBuffer)
 #endif
                 commandBuffer.present(currentDrawable)
                 commandBuffer.commit()
@@ -303,9 +304,7 @@ public class Engine: NSObject {
             logger.debug("NO active camera.")
         }
     }
-}
-
-extension Engine: MTKViewDelegate {
+    
     /// Called whenever the drawableSize of the view will change
     /// - Remark: Delegate can recompute view and projection matrices or regenerate any buffers
     /// to be compatible with the new view size or resolution
@@ -313,7 +312,7 @@ extension Engine: MTKViewDelegate {
     ///   - view: MTKView which called this method
     ///   - size: New drawable size in pixels
     public func mtkView(_ view: MTKView, drawableSizeWillChange size: CGSize) {
-        canvas.dispatchResize(size)
+        Engine.canvas.dispatchResize(size)
     }
 
     /// Called on the delegate when it is asked to render into the view

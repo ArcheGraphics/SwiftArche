@@ -21,23 +21,23 @@ final class SceneDecodeTests: XCTestCase {
 
     override func tearDownWithError() throws {
         canvas = nil
-        engine.destroy()
+        Engine.destroy()
         engine = nil
     }
 
     func testSceneDecode() throws {
-        let scene = engine.sceneManager.activeScene!
+        let scene = Engine.sceneManager.activeScene!
         scene.name = "SceneName"
 
         let data = try! jsonEncode.encode(scene)
         // let json = String(data: data, encoding: .utf8)
         
-        let newScene = try! engine.makeDecoder().decode(Scene.self, from: data)
+        let newScene = try! Engine.makeDecoder().decode(Scene.self, from: data)
         XCTAssertEqual(scene.name, newScene.name)
     }
     
     func testSceneWithEntityDecode() throws {
-        let scene = engine.sceneManager.activeScene!
+        let scene = Engine.sceneManager.activeScene!
         scene.name = "SceneName"
         let rootEntity = scene.createRootEntity()
         rootEntity.name = "EntityName"
@@ -45,12 +45,12 @@ final class SceneDecodeTests: XCTestCase {
         let data = try! jsonEncode.encode(scene)
         // let json = String(data: data, encoding: .utf8)
         
-        let newScene = try! engine.makeDecoder().decode(Scene.self, from: data)
+        let newScene = try! Engine.makeDecoder().decode(Scene.self, from: data)
         XCTAssertEqual(rootEntity.name, newScene.rootEntities[0].name)
     }
     
     func testSceneWithChildEntityDecode() throws {
-        let scene = engine.sceneManager.activeScene!
+        let scene = Engine.sceneManager.activeScene!
         scene.name = "SceneName"
         let rootEntity = scene.createRootEntity()
         rootEntity.name = "EntityName"
@@ -60,7 +60,7 @@ final class SceneDecodeTests: XCTestCase {
         let data = try! jsonEncode.encode(scene)
         // let json = String(data: data, encoding: .utf8)
         
-        let newScene = try! engine.makeDecoder().decode(Scene.self, from: data)
+        let newScene = try! Engine.makeDecoder().decode(Scene.self, from: data)
         XCTAssertEqual(childEntity.name, newScene.rootEntities[0].children[0].name)
     }
 }

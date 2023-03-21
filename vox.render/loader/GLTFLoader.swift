@@ -25,39 +25,35 @@ public class GLTFLoader {
         _pipes = pipes
     }
 
-    public static func parse(_ engine: Engine, _ url: URL, _ callback: @escaping (GLTFResource) -> Void, _ keepMeshData: Bool = false) {
+    public static func parse(_ url: URL, _ callback: @escaping (GLTFResource) -> Void, _ keepMeshData: Bool = false) {
         let context = ParserContext()
         context.glTFResource = GLTFResource()
-        context.glTFResource.engine = engine
         context.keepMeshData = keepMeshData
         GLTFLoader.defaultPipeline._parse(url, context, callback)
     }
 
-    public static func parseTexture(_ engine: Engine, _ url: URL, _ callback: @escaping (GLTFResource) -> Void,
+    public static func parseTexture(_ url: URL, _ callback: @escaping (GLTFResource) -> Void,
                                     _ keepMeshData: Bool = false, _ textureIndex: Int? = nil) {
         let context = ParserContext()
         context.glTFResource = GLTFResource()
-        context.glTFResource.engine = engine
         context.keepMeshData = keepMeshData
         context.textureIndex = textureIndex
         GLTFLoader.texturePipeline._parse(url, context, callback)
     }
 
-    public static func parseMaterial(_ engine: Engine, _ url: URL, _ callback: @escaping (GLTFResource) -> Void,
+    public static func parseMaterial(_ url: URL, _ callback: @escaping (GLTFResource) -> Void,
                                      _ keepMeshData: Bool = false, _ materialIndex: Int? = nil) {
         let context = ParserContext()
         context.glTFResource = GLTFResource()
-        context.glTFResource.engine = engine
         context.keepMeshData = keepMeshData
         context.materialIndex = materialIndex
         GLTFLoader.materialPipeline._parse(url, context, callback)
     }
 
-    public static func parseMesh(_ engine: Engine, _ url: URL, _ callback: @escaping (GLTFResource) -> Void,
+    public static func parseMesh(_ url: URL, _ callback: @escaping (GLTFResource) -> Void,
                                  _ keepMeshData: Bool = false, _ meshIndex: Int? = nil, _ subMeshIndex:Int? = nil) {
         let context = ParserContext()
         context.glTFResource = GLTFResource()
-        context.glTFResource.engine = engine
         context.keepMeshData = keepMeshData
         context.meshIndex = meshIndex
         context.subMeshIndex = subMeshIndex

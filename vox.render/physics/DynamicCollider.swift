@@ -220,9 +220,9 @@ public class DynamicCollider: Collider {
             )
         }
     }
-
-    required init(_ engine: Engine) {
-        super.init(engine)
+    
+    public required init() {
+        super.init()
     }
     
     enum CodingKeys: String, CodingKey {

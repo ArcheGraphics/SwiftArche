@@ -46,11 +46,10 @@ public final class Entity: EngineObject, Codable {
 
     /// Create a entity.
     /// - Parameters:
-    ///   - engine: The engine the entity belongs to.
     ///   - name: The name
-    public init(_ engine: Engine, _ name: String = "") {
+    public init(_ name: String = "") {
         self.name = name
-        super.init(engine)
+        super.init()
 
         transform = addComponent(Transform.self)
         _inverseWorldMatFlag = transform.registerWorldChangeFlag()
@@ -162,10 +161,10 @@ public final class Entity: EngineObject, Codable {
     @discardableResult
     public func addComponent<T: Component>(_ type: T.Type) -> T {
         //todo ComponentsDependencies._addCheck(this, type)
-        let component = T(engine)
+        let component = T()
         component.entity = self
         _components.append(PolymorphicValue(wrappedValue: component))
-        engine.insertComponentType(type)
+        Engine.insertComponentType(type)
         if (_isActiveInHierarchy) {
             component._setActive(true)
         }
@@ -315,7 +314,7 @@ public final class Entity: EngineObject, Codable {
     /// - Parameter name: The child entity's name.
     /// - Returns: The child entity.
     public func createChild(_ name: String = "") -> Entity {
-        let child = Entity(engine, name)
+        let child = Entity(name)
         child.layer = layer
         child.parent = self
         return child
@@ -336,7 +335,7 @@ public final class Entity: EngineObject, Codable {
     /// Clone
     /// - Returns: Cloned entity.
     public func clone() -> Entity {
-        let cloneEntity = Entity(_engine, name)
+        let cloneEntity = Entity(name)
 
         cloneEntity._isActive = _isActive
         cloneEntity.transform.localMatrix = transform.localMatrix
@@ -370,17 +369,16 @@ public final class Entity: EngineObject, Codable {
     func addComponent<T: Component>(_ component: T) {
         component.entity = self
         _components.append(PolymorphicValue(wrappedValue: component))
-        engine.insertComponentType(T.self)
+        Engine.insertComponentType(T.self)
         if (_isActiveInHierarchy) {
             component._setActive(true)
         }
     }
     
     public required init(from decoder: Decoder) throws {
-        let engine = decoder.userInfo[.engine] as! Engine
         let container = try decoder.container(keyedBy: CodingKeys.self)
         name = try container.decode(String.self, forKey: .name)
-        super.init(engine)
+        super.init()
 
         _children = try container.decode([Entity].self, forKey: .children)
         let components = try container.decode([PolymorphicValue<Component>].self, forKey: .component)
@@ -440,7 +438,7 @@ extension Entity {
         if (!_activeChangedComponents.isEmpty) {
             fatalError("Note: can't set the 'main inActive entity' active in hierarchy, if the operation is in main inActive entity or it's children script's onDisable Event.")
         }
-        _activeChangedComponents = _engine._componentsManager.getActiveChangedTempList()
+        _activeChangedComponents = Engine._componentsManager.getActiveChangedTempList()
         _setActiveInHierarchy(&_activeChangedComponents)
         _setActiveComponents(true)
     }
@@ -449,7 +447,7 @@ extension Entity {
         if (!_activeChangedComponents.isEmpty) {
             fatalError("Note: can't set the 'main active entity' inActive in hierarchy, if the operation is in main active entity or it's children script's onEnable Event.")
         }
-        _activeChangedComponents = _engine._componentsManager.getActiveChangedTempList()
+        _activeChangedComponents = Engine._componentsManager.getActiveChangedTempList()
         _setInActiveInHierarchy(&_activeChangedComponents)
         _setActiveComponents(false)
     }
@@ -527,7 +525,7 @@ extension Entity {
             activeChangedComponent._setActive(isActive)
         }
 
-        _engine._componentsManager.putActiveChangedTempList(&_activeChangedComponents)
+        Engine._componentsManager.putActiveChangedTempList(&_activeChangedComponents)
         _activeChangedComponents = []
     }
 

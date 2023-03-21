@@ -13,7 +13,6 @@ import Cocoa
 
 class PointerManager {
     private var _ray = Ray()
-    private let _engine: Engine
     var firePointerEvent: Bool = true
 
     // MARK: - IOS
@@ -57,14 +56,14 @@ class PointerManager {
 
     func fireMacPointerEvent() {
         let raycast = { [self] (event: NSEvent) -> HitResult? in
-            let cameras = _engine.sceneManager.activeScene?._activeCameras;
+            let cameras = Engine.sceneManager.activeScene?._activeCameras;
             if let cameras = cameras {
                 for camera in cameras {
                     if (!camera.enabled || camera.renderTarget != nil) {
                         continue;
                     }
-                    _ = camera.screenPointToRay(event.screenPoint(_engine.canvas), _ray)
-                    return _engine.physicsManager.raycast(_ray, distance: Float.greatestFiniteMagnitude, layerMask: camera.cullingMask)
+                    _ = camera.screenPointToRay(event.screenPoint(Engine.canvas), _ray)
+                    return Engine.physicsManager.raycast(_ray, distance: Float.greatestFiniteMagnitude, layerMask: camera.cullingMask)
                 }
             }
             return nil
@@ -91,10 +90,6 @@ class PointerManager {
         }
     }
 #endif
-
-    init(_ engine: Engine) {
-        _engine = engine
-    }
 
     func _update() {
         _pointers = _nativeEvents

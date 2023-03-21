@@ -12,7 +12,7 @@ import ImGui
 
 fileprivate class GUI: Script {
     override func onGUI() {
-        UIElement.Init(engine)
+        UIElement.Init()
 
         ImGuiNewFrame()
         UIElement.frameRate()
@@ -47,9 +47,9 @@ fileprivate class Interaction: Script {
     }
 
     override func onUpdate(_ deltaTime: Float) {
-        let pointers = engine.inputManager.pointers
+        let pointers = Engine.inputManager.pointers
         if (pointers.count > 0) {
-            _ = camera.screenPointToRay(pointers[0].screenPoint(engine.canvas), ray)
+            _ = camera.screenPointToRay(pointers[0].screenPoint(Engine.canvas), ray)
             entity.transform.position = ray.origin + ray.direction * 18
         }
     }
@@ -64,14 +64,14 @@ class PhysXAttractorApp: NSViewController {
     func addPlane(_ rootEntity: Entity,
                   _ position: Vector3,
                   _ rotation: Quaternion) -> Entity {
-        let mtl = PBRMaterial(rootEntity.engine)
+        let mtl = PBRMaterial()
         mtl.baseColor = Color(0.03179807202597362, 0.3939682161541871, 0.41177952549087604, 1)
         mtl.shader[0].setRenderFace(RenderFace.Double)
         let planeEntity = rootEntity.createChild()
         planeEntity.layer = Layer.Layer1
 
         // let renderer: MeshRenderer = planeEntity.addComponent()
-        // renderer.mesh = PrimitiveMesh.createPlane(rootEntity.engine, 10, 10)
+        // renderer.mesh = PrimitiveMesh.createPlane(10, 10)
         // renderer.setMaterial(mtl)
         planeEntity.transform.position = position
         planeEntity.transform.rotationQuaternion = rotation
@@ -87,14 +87,14 @@ class PhysXAttractorApp: NSViewController {
                    _ radius: Float,
                    _ position: Vector3,
                    _ rotation: Quaternion) -> Entity {
-        let mtl = PBRMaterial(rootEntity.engine)
+        let mtl = PBRMaterial()
         mtl.baseColor = Color(1.0, 168 / 255, 196 / 255, 1.0)
         mtl.roughness = 0.8;
         mtl.metallic = 0.4;
 
         let sphereEntity = rootEntity.createChild()
         let renderer = sphereEntity.addComponent(MeshRenderer.self)
-        renderer.mesh = PrimitiveMesh.createSphere(rootEntity.engine, radius: radius, segments: 60)
+        renderer.mesh = PrimitiveMesh.createSphere(radius: radius, segments: 60)
         renderer.setMaterial(mtl)
         sphereEntity.transform.position = position
         sphereEntity.transform.rotationQuaternion = rotation
@@ -147,10 +147,10 @@ class PhysXAttractorApp: NSViewController {
         canvas = Canvas(frame: view.frame)
         canvas.setParentView(view)
         engine = Engine(canvas: canvas)
-        iblBaker = IBLBaker(engine)
+        iblBaker = IBLBaker()
         
-        let scene = engine.sceneManager.activeScene!
-        let hdr = engine.textureLoader.loadHDR(with: "assets/kloppenheim_06_4k.hdr")!
+        let scene = Engine.sceneManager.activeScene!
+        let hdr = Engine.textureLoader.loadHDR(with: "assets/kloppenheim_06_4k.hdr")!
         iblBaker.bake(scene, with: hdr, size: 256, level: 3)
 
         let rootEntity = scene.createRootEntity()
@@ -172,10 +172,10 @@ class PhysXAttractorApp: NSViewController {
         let attractorEntity = rootEntity.createChild()
         let interaction = attractorEntity.addComponent(Interaction.self)
         interaction.camera = camera
-        // let mtl = PBRMaterial(engine)
+        // let mtl = PBRMaterial()
         // mtl.baseColor = Color(1, 1, 1, 1.0)
         // let renderer: MeshRenderer = attractorEntity.addComponent()
-        // renderer.mesh = PrimitiveMesh.createSphere(engine, 2)
+        // renderer.mesh = PrimitiveMesh.createSphere(2)
         // renderer.setMaterial(mtl)
 
         let attractorSphere = SphereColliderShape()
@@ -184,15 +184,15 @@ class PhysXAttractorApp: NSViewController {
         attractorCollider.isKinematic = true
         attractorCollider.addShape(attractorSphere)
 
-        engine.physicsManager.gravity = Vector3()
+        Engine.physicsManager.gravity = Vector3()
         initialize(rootEntity)
 
-        engine.run()
+        Engine.run()
     }
     
     override func viewDidDisappear() {
         super.viewDidDisappear()
-        engine.destroy()
+        Engine.destroy()
     }
 }
 

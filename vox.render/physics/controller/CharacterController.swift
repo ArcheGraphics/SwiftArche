@@ -68,12 +68,12 @@ public class CharacterController: Collider {
         collisionFlags.contains(ControllerCollisionFlag.Down)
     }
 
-    required init(_ engine: Engine) {
-        super.init(engine)
+    required init() {
+        super.init()
         _nativeCollider = PhysXPhysics.createCharacterController()
         (_nativeCollider as! PhysXCharacterController).setHitReport { [self] id, dir, length, normal, point in
             if let behavior,
-               let shape = engine.physicsManager._getColliderShape(id) {
+               let shape = Engine.physicsManager._getColliderShape(id) {
                 var result = ControllerColliderHit(self)
                 result.colliderShape = shape
                 result.collider = shape.collider
@@ -87,7 +87,7 @@ public class CharacterController: Collider {
         }
         (_nativeCollider as! PhysXCharacterController).setBehaviorCallback { [self] id in
             if let behavior,
-               let shape = engine.physicsManager._getColliderShape(id) {
+               let shape = Engine.physicsManager._getColliderShape(id) {
                 return behavior.getShapeBehaviorFlags(shape: shape).rawValue
             }
             return 0
@@ -152,11 +152,11 @@ public class CharacterController: Collider {
     }
 
     override func _onEnable() {
-        engine.physicsManager._addCharacterController(self)
+        Engine.physicsManager._addCharacterController(self)
     }
 
     override func _onDisable() {
-        engine.physicsManager._removeCharacterController(self)
+        Engine.physicsManager._removeCharacterController(self)
     }
 }
 

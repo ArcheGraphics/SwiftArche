@@ -37,14 +37,13 @@ public class CombineMeshes {
                                                                   targetTransform: Transform? = nil) {
     }
 
-    static func CreateMeshFromSplit(engine: Engine,
-                                    vertices: [Vertex],
+    static func CreateMeshFromSplit(vertices: [Vertex],
                                     faces: [Face],
                                     sharedVertexLookup: [Int: Int],
                                     sharedTextureLookup: [Int: Int],
                                     remap: [Int: Int],
                                     materials: [Material]) -> ProBuilderMesh {
-        let entity = Entity(engine)
+        let entity = Entity()
         return entity.addComponent(ProBuilderMesh.self)
     }
 

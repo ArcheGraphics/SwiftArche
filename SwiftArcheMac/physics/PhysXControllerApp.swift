@@ -30,7 +30,7 @@ fileprivate class GUI: Script {
     public var jumpForce: Float = 30
 
     override func onGUI() {
-        UIElement.Init(engine)
+        UIElement.Init()
 
         ImGuiNewFrame()
         ImGuiSliderFloat("Platform Speed", &platformSpeed, 1.0, 10.0, nil, 1)
@@ -73,14 +73,14 @@ class PhysXControllerApp: NSViewController {
     
     @discardableResult
     func addPlayer(_ radius: Float, _ height: Float, _ position: Vector3, _ rotation: Quaternion) -> Entity {
-        let mtl = PBRMaterial(engine)
+        let mtl = PBRMaterial()
         mtl.baseColor = Color(Float.random(in: 0..<1), Float.random(in: 0..<1), Float.random(in: 0..<1), 1.0)
         mtl.roughness = 0.0
         mtl.metallic = 0.0
         let capsuleEntity = rootEntity.createChild()
         let renderer = capsuleEntity.addComponent(MeshRenderer.self)
 
-        renderer.mesh = PrimitiveMesh.createCapsule(engine, radius: radius, height: height, radialSegments: 20)
+        renderer.mesh = PrimitiveMesh.createCapsule(radius: radius, height: height, radialSegments: 20)
         renderer.setMaterial(mtl)
         capsuleEntity.transform.position = position
         capsuleEntity.transform.rotationQuaternion = rotation
@@ -139,10 +139,10 @@ class PhysXControllerApp: NSViewController {
         canvas = Canvas(frame: view.frame)
         canvas.setParentView(view)
         engine = Engine(canvas: canvas)
-        iblBaker = IBLBaker(engine)
+        iblBaker = IBLBaker()
         
-        let scene = engine.sceneManager.activeScene!
-        let hdr = engine.textureLoader.loadHDR(with: "assets/kloppenheim_06_4k.hdr")!
+        let scene = Engine.sceneManager.activeScene!
+        let hdr = Engine.textureLoader.loadHDR(with: "assets/kloppenheim_06_4k.hdr")!
         iblBaker.bake(scene, with: hdr, size: 256, level: 3)
         
         rootEntity = scene.createRootEntity()
@@ -164,11 +164,11 @@ class PhysXControllerApp: NSViewController {
 
         initialize(rootEntity)
         
-        engine.run()
+        Engine.run()
     }
     
     override func viewDidDisappear() {
         super.viewDidDisappear()
-        engine.destroy()
+        Engine.destroy()
     }
 }

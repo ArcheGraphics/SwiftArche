@@ -124,12 +124,12 @@ public class Joint: Component {
         _name
     }
 
-    required init(_ engine: Engine) {
+    required init() {
         _name = "joint\(Joint._idGenerator)"
         Joint._idGenerator += 1
 
         _connectedCollider.localPosition = Vector3()
-        super.init(engine)
+        super.init()
     }
     
     required init(from decoder: Decoder) throws {

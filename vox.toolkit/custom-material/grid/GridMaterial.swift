@@ -99,9 +99,9 @@ public class GridMaterial: BaseMaterial {
         }
     }
 
-    public override init(_ engine: Engine, _ name: String = "") {
-        super.init(engine, name)
-        shader.append(ShaderPass(engine.library("toolkit.shader"), "vertex_grid", "fragment_grid"))
+    public override init(_ name: String = "") {
+        super.init(name)
+        shader.append(ShaderPass(Engine.library("toolkit.shader"), "vertex_grid", "fragment_grid"))
         isTransparent = true
     }
 }

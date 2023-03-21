@@ -25,7 +25,7 @@ fileprivate class GUI: Script {
     }
 
     override func onGUI() {
-        UIElement.Init(engine)
+        UIElement.Init()
 
         ImGuiNewFrame()
         ImGuiSliderInt("highlight", &highlightIndex, 0, maxNumber, nil, ImGuiSliderFlags())
@@ -66,7 +66,7 @@ class ParticleSystemSolverApp: NSViewController {
         let maxNumber: Int = particleSystem.numberOfParticles[0]
         let subMesh = particleMesh.addSubMesh(0, maxNumber, .point)
         particleMesh._setVertexBufferBinding(0, particleSystem.positions)
-        let particleMtl = ParticlePointMaterial(engine)
+        let particleMtl = ParticlePointMaterial()
         particleMtl.pointRadius = 5
         particleMtl.pointScale = 10
         gui.particleMtl = particleMtl
@@ -89,7 +89,7 @@ class ParticleSystemSolverApp: NSViewController {
         canvas.setParentView(view)
         engine = Engine(canvas: canvas)
         
-        let scene = engine.sceneManager.activeScene!
+        let scene = Engine.sceneManager.activeScene!
         let rootEntity = scene.createRootEntity()
         let gui = rootEntity.addComponent(GUI.self)
 
@@ -99,22 +99,22 @@ class ParticleSystemSolverApp: NSViewController {
         cameraEntity.addComponent(Camera.self)
         cameraEntity.addComponent(OrbitControl.self)
                 
-        let emitter = PointParticleEmitter(engine)
+        let emitter = PointParticleEmitter()
         emitter.origin = Vector3F()
         emitter.direction = Vector3F(0, 1, 0)
         emitter.speed = 0.4
         emitter.spreadAngleInDegrees = 20
         emitter.maxNumberOfNewParticlesPerSecond = 300
         
-        let collider = ParticleCapsuleCollider(engine)
+        let collider = ParticleCapsuleCollider()
         collider.capsuleData.append(CapsuleColliderShapeData(a: Vector3F(1, -1, 0), radius: 0.5, b: Vector3F(-1, -1, 0),
                                                              linearVelocity: Vector3F(), angularVelocity: Vector3F()))
         // raymarching render
-        let rayMarchignMaterial = RayMarchingMaterial(engine, "raymarching")
+        let rayMarchignMaterial = RayMarchingMaterial("raymarching")
         rayMarchignMaterial.capsuleColliderShapes = collider
         let renderer = rootEntity.addComponent(MeshRenderer.self)
         renderer.setMaterial(rayMarchignMaterial)
-        renderer.mesh = PrimitiveMesh.createQuadPlane(engine)
+        renderer.mesh = PrimitiveMesh.createQuadPlane()
         
         let particleEntity = rootEntity.createChild()
         let particleSolver = particleEntity.addComponent(ParticleSystemSolver.self)
@@ -123,17 +123,17 @@ class ParticleSystemSolverApp: NSViewController {
         particleSolver.gravity = Vector3F(0, -1, 0)
         createParticleRenderer(particleEntity, particleSolver.particleSystemData!, gui)
         
-        if let commandBuffer = engine.commandQueue.makeCommandBuffer() {
+        if let commandBuffer = Engine.commandQueue.makeCommandBuffer() {
             particleSolver.initialize(commandBuffer)
             commandBuffer.commit()
             commandBuffer.waitUntilCompleted()
         }
-        engine.run()
+        Engine.run()
     }
     
     override func viewDidDisappear() {
         super.viewDidDisappear()
-        engine.destroy()
+        Engine.destroy()
     }
 }
 

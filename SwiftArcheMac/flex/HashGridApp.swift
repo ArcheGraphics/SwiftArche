@@ -20,7 +20,7 @@ class HashGridApp: NSViewController {
         canvas.setParentView(view)
         engine = Engine(canvas: canvas)
         
-        let scene = engine.sceneManager.activeScene!
+        let scene = Engine.sceneManager.activeScene!
         let rootEntity = scene.createRootEntity()
 
         let cameraEntity = rootEntity.createChild()
@@ -34,16 +34,16 @@ class HashGridApp: NSViewController {
             positions.append(SIMD3<Float>(Float.random(in: 0..<64), Float.random(in: 0..<64), Float.random(in: 0..<64)))
         }
         
-        let positionBuffer = BufferView(device: engine.device, array: positions)
-        let itemCount = BufferView(device: engine.device, array: [count])
+        let positionBuffer = BufferView(device: Engine.device, array: positions)
+        let itemCount = BufferView(device: Engine.device, array: [count])
         let hashGrid = HashGrid
             .builder()
             .withGridSpacing(1)
             .withResolution(SIMD3<UInt32>(64, 64, 64))
-            .build(engine)
-        let scope = engine.createCaptureScope(name: "hashGrid")
+            .build()
+        let scope = Engine.createCaptureScope(name: "hashGrid")
         scope.begin()
-        if let commandBuffer = engine.commandQueue.makeCommandBuffer() {
+        if let commandBuffer = Engine.commandQueue.makeCommandBuffer() {
             hashGrid.build(commandBuffer: commandBuffer, positions: positionBuffer,
                            itemCount: itemCount, maxNumberOfParticles: UInt32(count))
             commandBuffer.commit()
@@ -51,12 +51,12 @@ class HashGridApp: NSViewController {
         }
         scope.end()
 
-        engine.run()
+        Engine.run()
     }
     
     override func viewDidDisappear() {
         super.viewDidDisappear()
-        engine.destroy()
+        Engine.destroy()
     }
 }
 

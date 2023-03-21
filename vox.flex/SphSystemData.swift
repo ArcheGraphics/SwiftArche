@@ -101,8 +101,8 @@ public class SphSystemData: ParticleSystemData {
         }
     }
     
-    public override init(_ engine: Engine, maxLength: UInt32) {
-        super.init(engine, maxLength: maxLength)
+    public override init(maxLength: UInt32) {
+        super.init(maxLength: maxLength)
         addScalarData(with: SphSystemData.pressureProperty, initialVal: Float(0), maxLength: Int(maxLength))
         addScalarData(with: SphSystemData.densityProperty, initialVal: Float(0), maxLength: Int(maxLength))
         targetSpacing = _targetSpacing

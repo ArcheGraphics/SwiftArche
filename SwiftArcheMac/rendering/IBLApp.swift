@@ -22,7 +22,7 @@ fileprivate class GUI: Script {
     }
 
     override func onGUI() {
-        UIElement.Init(engine)
+        UIElement.Init()
 
         let postprocess = scene.postprocessManager
         ImGuiNewFrame()
@@ -79,15 +79,15 @@ class IblApp: NSViewController {
     ]
 
     func loadHDR(_ scene: Scene) {
-        let hdr = engine.textureLoader.loadHDR(with: "assets/kloppenheim_06_4k.hdr")!
+        let hdr = Engine.textureLoader.loadHDR(with: "assets/kloppenheim_06_4k.hdr")!
         iblBaker.bake(scene, with: hdr, size: 256, level: 3)
 
-        let skyMaterial = SkyBoxMaterial(engine)
+        let skyMaterial = SkyBoxMaterial()
         skyMaterial.textureCubeMap = hdr
         skyMaterial.equirectangular = true
         let skySubpass = SkySubpass()
         skySubpass.material = skyMaterial
-        skySubpass.mesh = PrimitiveMesh.createCuboid(engine)
+        skySubpass.mesh = PrimitiveMesh.createCuboid()
         scene.background.mode = .Sky
         scene.background.sky = skySubpass
     }
@@ -96,14 +96,14 @@ class IblApp: NSViewController {
         let pcgSky = MDLSkyCubeTexture(name: "natrual", channelEncoding: .float16,
                 textureDimensions: [512, 512], turbidity: 1.0, sunElevation: 1.0,
                 sunAzimuth: 1.0, upperAtmosphereScattering: 1.0, groundAlbedo: 1.0)
-        let cubeMap = try! engine.textureLoader.loadTexture(with: pcgSky)!
-        scene.ambientLight = loadAmbientLight(engine, withPCG: cubeMap, lodStart: 2, lodEnd: 5)
+        let cubeMap = try! Engine.textureLoader.loadTexture(with: pcgSky)!
+        scene.ambientLight = loadAmbientLight(withPCG: cubeMap, lodStart: 2, lodEnd: 5)
 
-        let skyMaterial = SkyBoxMaterial(engine)
+        let skyMaterial = SkyBoxMaterial()
         skyMaterial.textureCubeMap = cubeMap
         let skySubpass = SkySubpass()
         skySubpass.material = skyMaterial
-        skySubpass.mesh = PrimitiveMesh.createCuboid(engine)
+        skySubpass.mesh = PrimitiveMesh.createCuboid()
         scene.background.mode = .Sky
         scene.background.sky = skySubpass
     }
@@ -113,9 +113,9 @@ class IblApp: NSViewController {
         canvas = Canvas(frame: view.frame)
         canvas.setParentView(view)
         engine = Engine(canvas: canvas)
-        iblBaker = IBLBaker(engine)
+        iblBaker = IBLBaker()
 
-        let scene = engine.sceneManager.activeScene!
+        let scene = Engine.sceneManager.activeScene!
         loadHDR(scene)
         scene.postprocessManager.autoExposure = true
         // loadPCGSky(scene)
@@ -130,12 +130,12 @@ class IblApp: NSViewController {
 
         let mat = _materials[7]
 
-        let sphere = PrimitiveMesh.createSphere(engine, radius: 0.5, segments: 64)
+        let sphere = PrimitiveMesh.createSphere(radius: 0.5, segments: 64)
         for i in 0..<7 {
             for j in 0..<7 {
                 let sphereEntity = rootEntity.createChild("SphereEntity\(i)\(j)")
                 sphereEntity.transform.position = Vector3(Float(i) - 3.5, Float(j) - 3.5, 0)
-                let sphereMtl = PBRMaterial(engine)
+                let sphereMtl = PBRMaterial()
                 sphereMtl.baseColor = mat.baseColor
                 sphereMtl.metallic = simd_clamp(Float(i) / Float(7 - 1), 0, 1.0)
                 sphereMtl.roughness = simd_clamp(Float(j) / Float(7 - 1), 0, 1.0)
@@ -145,12 +145,12 @@ class IblApp: NSViewController {
                 sphereRenderer.setMaterial(sphereMtl)
             }
         }
-        engine.run()
+        Engine.run()
     }
     
     override func viewDidDisappear() {
         super.viewDidDisappear()
-        engine.destroy()
+        Engine.destroy()
     }
 }
 

@@ -43,7 +43,7 @@ class CascadedShadowSubpass: GeometrySubpass {
 
     init(_ camera: Camera) {
         _camera = camera
-        _shaderPass = ShaderPass(camera.engine.library(), "vertex_shadowmap", nil)
+        _shaderPass = ShaderPass(Engine.library(), "vertex_shadowmap", nil)
         _shadowSliceData.virtualCamera.isOrthographic = true
         super.init()
     }
@@ -114,9 +114,9 @@ class CascadedShadowSubpass: GeometrySubpass {
 
     private func _renderDirectShadowMap(_ encoder: inout RenderCommandEncoder) {
         let shadowCascades = _camera.scene.shadowCascades.rawValue
-        let bufferBlock = _camera.engine.requestBufferBlock(minimum_size: 4 * 256)
+        let bufferBlock = Engine.requestBufferBlock(minimum_size: 4 * 256)
 
-        let sunLightIndex = _camera.engine._lightManager._getSunLightIndex()
+        let sunLightIndex = Engine._lightManager._getSunLightIndex()
         if sunLightIndex != -1,
            let light = _camera.scene._sunLight {
             let shadowFar = min(_camera.scene.shadowDistance, _camera.farClipPlane)
@@ -182,7 +182,7 @@ class CascadedShadowSubpass: GeometrySubpass {
                 pipeline._opaqueQueue.removeAll()
                 pipeline._alphaTestQueue.removeAll()
                 pipeline._transparentQueue.removeAll()
-                let renderers = _camera.engine._componentsManager._renderers
+                let renderers = Engine._componentsManager._renderers
                 let elements = renderers._elements
                 for k in 0..<renderers.count {
                     ShadowUtils.shadowCullFrustum(_shadowSliceData.virtualCamera, pipeline, _camera, light, elements[k]!, _shadowSliceData)
@@ -300,7 +300,7 @@ class CascadedShadowSubpass: GeometrySubpass {
             descriptor.pixelFormat = _shadowMapFormat
             descriptor.usage = MTLTextureUsage(rawValue: MTLTextureUsage.renderTarget.rawValue | MTLTextureUsage.shaderRead.rawValue)
             descriptor.storageMode = .private
-            _depthTexture = _camera.engine.device.makeTexture(descriptor: descriptor)
+            _depthTexture = Engine.device.makeTexture(descriptor: descriptor)
         }
     }
 }

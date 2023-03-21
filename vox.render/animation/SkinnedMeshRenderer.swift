@@ -167,7 +167,7 @@ public class SkinnedMeshRenderer: MeshRenderer {
             descriptor.height = _skinningMatrices.count
             descriptor.pixelFormat = .rgba32Float
             descriptor.mipmapLevelCount = 1
-            _jointTexture = engine.device.makeTexture(descriptor: descriptor)
+            _jointTexture = Engine.device.makeTexture(descriptor: descriptor)
             shaderData.enableMacro(HAS_JOINT_TEXTURE.rawValue)
             shaderData.setImageView(SkinnedMeshRenderer._jointTextureProperty, SkinnedMeshRenderer._jointSamplerProperty, _jointTexture)
 

@@ -25,7 +25,7 @@ public class DevicePipeline {
     public var shadowManager: ShadowManager!
 
     public init(_ camera: Camera) {
-        _resourceCache = ResourceCache(camera.engine.device)
+        _resourceCache = ResourceCache(Engine.device)
         self.camera = camera
         shadowManager = ShadowManager(self)
         mainRenderPass = RenderPass(self)
@@ -36,7 +36,7 @@ public class DevicePipeline {
         let background = camera.scene.background
         _changeBackground(background)
 
-        let canvas = camera.engine.canvas
+        let canvas = Engine.canvas!
         let scene = camera.scene
         if let renderPassDescriptor = canvas.currentRenderPassDescriptor {
             if (scene.castShadows && scene._sunLight?.shadowType != ShadowType.None) {
@@ -84,7 +84,7 @@ public class DevicePipeline {
     }
 
     func callRender(_ cameraInfo: CameraInfo) {
-        let renderers = camera.engine._componentsManager._renderers
+        let renderers = Engine._componentsManager._renderers
         for i in 0..<renderers.count {
             let renderer = renderers.get(i)!
 

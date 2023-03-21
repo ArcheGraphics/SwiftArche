@@ -61,15 +61,14 @@ public class PostprocessManager {
 
     init(_ scene: Scene) {
         _scene = scene
-        _canvas = scene.engine.canvas
-        let device = scene.engine.device
-        resourceCache = ResourceCache(device)
+        _canvas = Engine.canvas!
+        resourceCache = ResourceCache(Engine.device)
         _shaderData = scene.shaderData
         _shaderData.setData("u_postprocess", _postprocessData)
 
-        postProcessPass = ComputePass(scene.engine)
+        postProcessPass = ComputePass()
         postProcessPass.resourceCache = resourceCache
-        postProcessPass.shader.append(ShaderPass(scene.engine.library(), "postprocess_merge"))
+        postProcessPass.shader.append(ShaderPass(Engine.library(), "postprocess_merge"))
         postProcessPass.data.append(_shaderData)
     }
 

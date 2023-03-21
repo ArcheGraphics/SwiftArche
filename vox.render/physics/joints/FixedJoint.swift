@@ -14,8 +14,8 @@ public class FixedJoint: Joint {
         _nativeJoint.setName(name)
     }
     
-    required init(_ engine: Engine) {
-        super.init(engine)
+    required init() {
+        super.init()
     }
     
     public required init(from decoder: Decoder) throws {

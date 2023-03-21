@@ -20,9 +20,9 @@ fileprivate class ShootScript: Script {
     }
 
     override func onUpdate(_ deltaTime: Float) {
-        let inputManager = engine.inputManager
+        let inputManager = Engine.inputManager
         if (!inputManager.pointers.isEmpty && inputManager.isPointerTrigger(.leftMouseDown)) {
-            _ = camera.screenPointToRay(inputManager.pointers[0].screenPoint(engine.canvas), ray)
+            _ = camera.screenPointToRay(inputManager.pointers[0].screenPoint(Engine.canvas), ray)
             ray.direction *= 50
             _ = addSphere(entity, 0.5, position, rotation, ray.direction)
         }
@@ -30,13 +30,13 @@ fileprivate class ShootScript: Script {
 
     private func addSphere(_ rootEntity: Entity, _ radius: Float, _ position: Vector3,
                            _ rotation: Quaternion, _ velocity: Vector3) -> Entity {
-        let mtl = PBRMaterial(rootEntity.engine)
+        let mtl = PBRMaterial()
         mtl.baseColor = Color(Float.random(in: 0...1), Float.random(in: 0...1), Float.random(in: 0...1), 1.0)
         mtl.roughness = 0.5
         mtl.metallic = 0.0
         let sphereEntity = rootEntity.createChild()
         let renderer = sphereEntity.addComponent(MeshRenderer.self)
-        renderer.mesh = PrimitiveMesh.createSphere(rootEntity.engine, radius: radius)
+        renderer.mesh = PrimitiveMesh.createSphere(radius: radius)
         renderer.setMaterial(mtl)
         sphereEntity.transform.position = position
         sphereEntity.transform.rotationQuaternion = rotation
@@ -105,10 +105,10 @@ class PhysXJointBasicApp: NSViewController {
         canvas = Canvas(frame: view.frame)
         canvas.setParentView(view)
         engine = Engine(canvas: canvas)
-        iblBaker = IBLBaker(engine)
+        iblBaker = IBLBaker()
         
-        let scene = engine.sceneManager.activeScene!
-        let hdr = engine.textureLoader.loadHDR(with: "assets/kloppenheim_06_4k.hdr")!
+        let scene = Engine.sceneManager.activeScene!
+        let hdr = Engine.textureLoader.loadHDR(with: "assets/kloppenheim_06_4k.hdr")!
         iblBaker.bake(scene, with: hdr, size: 256, level: 3)
 
         let rootEntity = scene.createRootEntity()
@@ -128,12 +128,12 @@ class PhysXJointBasicApp: NSViewController {
         createSpring(rootEntity, Vector3(-4.0, 4.0, 1.0), Quaternion())
         createHinge(rootEntity, Vector3(0, 0, 0), Quaternion())
 
-        engine.run()
+        Engine.run()
     }
     
     override func viewDidDisappear() {
         super.viewDidDisappear()
-        engine.destroy()
+        Engine.destroy()
     }
 }
 

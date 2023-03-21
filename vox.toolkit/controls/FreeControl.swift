@@ -26,7 +26,7 @@ public class FreeControl : Script {
     private var _tempVec: Vector3 = Vector3()
     
     public override func onStart() {
-        input = entity.engine.inputManager
+        input = Engine.inputManager
         _cameraTransform = entity.transform
         _ = _spherical.setFromVec3(Vector3.transformByQuat(v: Vector3(0, 0, -1), quaternion: _cameraTransform.rotationQuaternion))
     }
@@ -71,7 +71,7 @@ public class FreeControl : Script {
     
     private func _rotate(_ moveDelta: Vector3) {
         if (moveDelta.x != 0 || moveDelta.y != 0) {
-            let canvas = engine.canvas
+            let canvas = Engine.canvas!
             let deltaAlpha = (-moveDelta.x * 180) / Float(canvas.bounds.width)
             let deltaPhi = (moveDelta.y * 180) / Float(canvas.bounds.height)
             _spherical.theta += MathUtil.degreeToRadian(deltaAlpha)

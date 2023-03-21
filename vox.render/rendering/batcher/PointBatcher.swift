@@ -12,7 +12,6 @@ class PointBatcher : Batcher {
     var colorBuffer: BufferView!
     var maxVerts: Int = 0
     var numVerts: Int = 0
-    var engine: Engine!
     
     private let _shaderMacro = ShaderMacroCollection()
     private let _depthStencilDescriptor = MTLDepthStencilDescriptor()
@@ -35,10 +34,6 @@ class PointBatcher : Batcher {
     
     var pointSize: Float = 10
     
-    func set(_ engine: Engine) {
-        self.engine = engine
-    }
-    
     func addPoint(_ p0: Vector3, color: Color32) {
         checkResizePoint(count: numVerts + 1)
         addVert(p0, color32: color)
@@ -47,13 +42,13 @@ class PointBatcher : Batcher {
     func checkResizePoint(count: Int) {
         if count > maxVerts {
             maxVerts = Int(ceil(Float(count) * 1.2))
-            let newPointBuffer = BufferView(device: engine.device, count: maxVerts, stride: MemoryLayout<Vector3>.stride,
+            let newPointBuffer = BufferView(device: Engine.device, count: maxVerts, stride: MemoryLayout<Vector3>.stride,
                                             label: "point buffer", options: .storageModeShared)
-            let newColorBuffer = BufferView(device: engine.device, count: maxVerts, stride: MemoryLayout<Color32>.stride,
+            let newColorBuffer = BufferView(device: Engine.device, count: maxVerts, stride: MemoryLayout<Color32>.stride,
                                             label: "color32 buffer", options: .storageModeShared)
             if let pointBuffer = pointBuffer,
                let colorBuffer = colorBuffer,
-               let commandBuffer = engine.commandQueue.makeCommandBuffer(),
+               let commandBuffer = Engine.commandQueue.makeCommandBuffer(),
                let blit = commandBuffer.makeBlitCommandEncoder() {
                 blit.copy(from: pointBuffer.buffer, sourceOffset: 0, to: newPointBuffer.buffer,
                           destinationOffset: 0, size: pointBuffer.count * pointBuffer.stride)
@@ -94,7 +89,7 @@ class PointBatcher : Batcher {
         _descriptor.attributes[Int(Color_0.rawValue)] = desc
         _descriptor.layouts[1].stride = MemoryLayout<Color32>.stride
         
-        _shaderPass = ShaderPass(engine.library(), "vertex_point_gizmos", "fragment_point_gizmos")
+        _shaderPass = ShaderPass(Engine.library(), "vertex_point_gizmos", "fragment_point_gizmos")
 
         _pipelineDescriptor.label = "Point Gizmo Pipeline"
         _pipelineDescriptor.colorAttachments[0].pixelFormat = Canvas.colorPixelFormat

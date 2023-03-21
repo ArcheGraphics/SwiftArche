@@ -19,11 +19,11 @@ class FaceMorphApp: NSViewController {
         canvas = Canvas(frame: view.frame)
         canvas.setParentView(view)
         engine = Engine(canvas: canvas)
-        iblBaker = IBLBaker(engine)
+        iblBaker = IBLBaker()
 
-        let scene = engine.sceneManager.activeScene!
+        let scene = Engine.sceneManager.activeScene!
         scene.shadowCascades = .FourCascades
-        let hdr = engine.textureLoader.loadHDR(with: "assets/kloppenheim_06_4k.hdr")!
+        let hdr = Engine.textureLoader.loadHDR(with: "assets/kloppenheim_06_4k.hdr")!
         iblBaker.bake(scene, with: hdr, size: 256, level: 3)
         let rootEntity = scene.createRootEntity()
 
@@ -41,7 +41,7 @@ class FaceMorphApp: NSViewController {
 
         let gltfRoot = rootEntity.createChild()
         let assetURL = Bundle.main.url(forResource: "arkit52", withExtension: "glb", subdirectory: "assets")!
-        GLTFLoader.parse(engine, assetURL) { [] resource in
+        GLTFLoader.parse(assetURL) { [] resource in
             let faceGUI = gltfRoot.addComponent(FaceGUI.self)
             gltfRoot.addChild(resource.defaultSceneRoot)
             
@@ -54,12 +54,12 @@ class FaceMorphApp: NSViewController {
             }
         }
 
-        engine.run()
+        Engine.run()
     }
     
     override func viewDidDisappear() {
         super.viewDidDisappear()
-        engine.destroy()
+        Engine.destroy()
     }
 }
 

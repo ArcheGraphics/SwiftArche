@@ -13,7 +13,6 @@ class TriangleBatcher : Batcher {
     var normalBuffer: BufferView!
     var maxVerts: Int = 0
     var numVerts: Int = 0
-    var engine: Engine!
     var camera: Camera?
     
     private let _shaderMacro = ShaderMacroCollection()
@@ -33,10 +32,6 @@ class TriangleBatcher : Batcher {
     
     var containData: Bool {
         numVerts != 0
-    }
-        
-    func set(_ engine: Engine) {
-        self.engine = engine
     }
     
     func addTriangle(p0: Vector3, p1: Vector3, p2: Vector3,
@@ -77,15 +72,15 @@ class TriangleBatcher : Batcher {
     func checkResizePoint(count: Int) {
         if count > maxVerts {
             maxVerts = Int(ceil(Float(count) * 1.2))
-            let newPointBuffer = BufferView(device: engine.device, count: maxVerts, stride: MemoryLayout<Vector3>.stride,
+            let newPointBuffer = BufferView(device: Engine.device, count: maxVerts, stride: MemoryLayout<Vector3>.stride,
                                             label: "point buffer", options: .storageModeShared)
-            let newColorBuffer = BufferView(device: engine.device, count: maxVerts, stride: MemoryLayout<Color32>.stride,
+            let newColorBuffer = BufferView(device: Engine.device, count: maxVerts, stride: MemoryLayout<Color32>.stride,
                                             label: "color32 buffer", options: .storageModeShared)
-            let newNormalBuffer = BufferView(device: engine.device, count: maxVerts, stride: MemoryLayout<Vector3>.stride,
+            let newNormalBuffer = BufferView(device: Engine.device, count: maxVerts, stride: MemoryLayout<Vector3>.stride,
                                             label: "normal buffer", options: .storageModeShared)
             if let pointBuffer = pointBuffer,
                let colorBuffer = colorBuffer,
-               let commandBuffer = engine.commandQueue.makeCommandBuffer(),
+               let commandBuffer = Engine.commandQueue.makeCommandBuffer(),
                let blit = commandBuffer.makeBlitCommandEncoder() {
                 blit.copy(from: pointBuffer.buffer, sourceOffset: 0, to: newPointBuffer.buffer,
                           destinationOffset: 0, size: pointBuffer.count * pointBuffer.stride)
@@ -138,7 +133,7 @@ class TriangleBatcher : Batcher {
         _descriptor.attributes[Int(Normal.rawValue)] = desc
         _descriptor.layouts[2].stride = MemoryLayout<Vector3>.stride
         
-        _shaderPass = ShaderPass(engine.library(), "vertex_triangle_gizmos", "fragment_triangle_gizmos")
+        _shaderPass = ShaderPass(Engine.library(), "vertex_triangle_gizmos", "fragment_triangle_gizmos")
 
         _pipelineDescriptor.label = "Triangle Gizmo Pipeline"
         _pipelineDescriptor.colorAttachments[0].pixelFormat = Canvas.colorPixelFormat

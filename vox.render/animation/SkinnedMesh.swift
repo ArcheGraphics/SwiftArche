@@ -10,7 +10,6 @@ public class SkinnedMesh: Mesh {
     private var _nativeSkin = CSkin()
     
     private var _destroyed = false
-    private var _device: MTLDevice
     private var _positions: [Float] = []
     private var _normals: [Float] = []
     private var _colors: [Float] = []
@@ -34,10 +33,8 @@ public class SkinnedMesh: Mesh {
         }
     }
     
-    public init(_ engine: Engine) {
-        _device = engine.device
+    public override init() {
         super.init()
-        
         _vertexDescriptor = _updateVertexDescriptor()
     }
     
@@ -86,8 +83,8 @@ public class SkinnedMesh: Mesh {
         
         let mesh = Mesh()
         mesh._vertexDescriptor = _vertexDescriptor
-        mesh._setVertexBufferBinding(0, BufferView(device: _device, array: _vertices))
-        mesh._setIndexBufferBinding(IndexBufferBinding(BufferView(device: _device, array: _indices), .uint16))
+        mesh._setVertexBufferBinding(0, BufferView(device: Engine.device, array: _vertices))
+        mesh._setIndexBufferBinding(IndexBufferBinding(BufferView(device: Engine.device, array: _indices), .uint16))
         mesh.addSubMesh(0, _indices.count, .triangle)
         _meshes.append(mesh)
     }

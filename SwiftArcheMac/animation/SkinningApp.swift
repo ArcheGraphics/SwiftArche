@@ -20,10 +20,10 @@ class SkinningApp: NSViewController {
         canvas = Canvas(frame: view.frame)
         canvas.setParentView(view)
         engine = Engine(canvas: canvas)
-        iblBaker = IBLBaker(engine)
+        iblBaker = IBLBaker()
         
-        let scene = engine.sceneManager.activeScene!
-        let hdr = engine.textureLoader.loadHDR(with: "assets/kloppenheim_06_4k.hdr")!
+        let scene = Engine.sceneManager.activeScene!
+        let hdr = Engine.textureLoader.loadHDR(with: "assets/kloppenheim_06_4k.hdr")!
         iblBaker.bake(scene, with: hdr, size: 256, level: 3)
         let rootEntity = scene.createRootEntity()
 
@@ -54,13 +54,13 @@ class SkinningApp: NSViewController {
         animationBlending.addChild(state: baseSampler)
         animator.rootState = animationBlending
         
-        let material = PBRMaterial(engine);
+        let material = PBRMaterial();
         material.baseColor = Color(0.4, 0.6, 0.6, 0.6)
         material.isTransparent = true
         url = Bundle.main.url(forResource: "ruby_mesh",
                               withExtension: "ozz",
                               subdirectory: "assets/Animation")!
-        let skinnedMesh = SkinnedMesh(engine)
+        let skinnedMesh = SkinnedMesh()
         skinnedMesh.loadSkin(url)
         for i in 0..<skinnedMesh.skinCount {
             let renderer = characterEntity.addComponent(SkinnedMeshRenderer.self)
@@ -71,11 +71,11 @@ class SkinningApp: NSViewController {
 
 //        characterEntity.addComponent(AnimationVisualizer.self)
 
-        engine.run()
+        Engine.run()
     }
     
     override func viewDidDisappear() {
         super.viewDidDisappear()
-        engine.destroy()
+        Engine.destroy()
     }
 }

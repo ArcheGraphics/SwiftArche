@@ -66,10 +66,10 @@ public class RayMarchingMaterial: BaseMaterial {
         }
     }
     
-    public override init(_ engine: Engine, _ name: String = "") {
+    public override init(_ name: String = "ray marching mat") {
         _rayMarchingData = RayMarchingData(color: Vector3(1, 1, 1), iteration: 32, direction: Vector3(0, 1, 0), tol: 0.001)
-        super.init(engine, name)
-        shader.append(ShaderPass(engine.library("flex.shader"), "vertex_rayMarching", "fragment_rayMarching"))
+        super.init(name)
+        shader.append(ShaderPass(Engine.library("flex.shader"), "vertex_rayMarching", "fragment_rayMarching"))
         shaderData.setData(RayMarchingMaterial._rayMarchingProperty, _rayMarchingData)
         shaderData.enableMacro(OMIT_NORMAL.rawValue)
         shaderData.enableMacro(NEED_TILINGOFFSET.rawValue)

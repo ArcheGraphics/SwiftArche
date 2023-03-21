@@ -33,10 +33,10 @@ class InputCastApp: NSViewController {
         let boxEntity = rootEntity.createChild("BoxEntity")
         boxEntity.transform.position = Vector3(x, y, z)
 
-        let boxMtl = PBRMaterial(engine)
+        let boxMtl = PBRMaterial()
         let boxRenderer = boxEntity.addComponent(MeshRenderer.self)
         boxMtl.baseColor = Color(0.6, 0.3, 0.3, 1.0)
-        boxRenderer.mesh = PrimitiveMesh.createCuboid(engine, width: cubeSize, height: cubeSize, depth: cubeSize)
+        boxRenderer.mesh = PrimitiveMesh.createCuboid(width: cubeSize, height: cubeSize, depth: cubeSize)
         boxRenderer.setMaterial(boxMtl)
 
         let boxCollider = boxEntity.addComponent(StaticCollider.self)
@@ -51,10 +51,10 @@ class InputCastApp: NSViewController {
         canvas = Canvas(frame: view.frame)
         canvas.setParentView(view)
         engine = Engine(canvas: canvas)
-        iblBaker = IBLBaker(engine)
+        iblBaker = IBLBaker()
         
-        let scene = engine.sceneManager.activeScene!
-        let hdr = engine.textureLoader.loadHDR(with: "assets/kloppenheim_06_4k.hdr")!
+        let scene = Engine.sceneManager.activeScene!
+        let hdr = Engine.textureLoader.loadHDR(with: "assets/kloppenheim_06_4k.hdr")!
         iblBaker.bake(scene, with: hdr, size: 256, level: 3)
         
         let rootEntity = scene.createRootEntity()
@@ -70,12 +70,12 @@ class InputCastApp: NSViewController {
 
         _ = createBox(rootEntity, 0, 0, 0).addComponent(ClickScript.self)
 
-        engine.run()
+        Engine.run()
     }
     
     override func viewDidDisappear() {
         super.viewDidDisappear()
-        engine.destroy()
+        Engine.destroy()
     }
 }
 

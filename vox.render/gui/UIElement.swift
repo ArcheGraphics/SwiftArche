@@ -8,13 +8,13 @@ import ImGui
 import Cocoa
 
 public class UIElement {
-    public static func Init(_ engine: Engine) {
-        let view = engine.canvas
+    public static func Init() {
+        let canvas = Engine.canvas!
         let deltaTime = Time.deltaTime
         let io = ImGuiGetIO()!
-        io.pointee.DisplaySize.x = Float(view.bounds.size.width)
-        io.pointee.DisplaySize.y = Float(view.bounds.size.height)
-        let frameBufferScale = Float(view.window?.screen?.backingScaleFactor ?? NSScreen.main!.backingScaleFactor)
+        io.pointee.DisplaySize.x = Float(canvas.bounds.size.width)
+        io.pointee.DisplaySize.y = Float(canvas.bounds.size.height)
+        let frameBufferScale = Float(canvas.window?.screen?.backingScaleFactor ?? NSScreen.main!.backingScaleFactor)
         io.pointee.DisplayFramebufferScale = ImVec2(x: frameBufferScale, y: frameBufferScale)
         io.pointee.DeltaTime = deltaTime
     }

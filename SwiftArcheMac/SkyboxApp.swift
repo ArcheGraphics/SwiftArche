@@ -19,7 +19,7 @@ fileprivate class GUI: Script {
     var counter: Int = 0
 
     override func onGUI() {
-        let view = engine.canvas
+        let view = Engine.canvas!
         let io = ImGuiGetIO()!
         io.pointee.DisplaySize.x = Float(view.bounds.size.width)
         io.pointee.DisplaySize.y = Float(view.bounds.size.height)
@@ -82,17 +82,17 @@ class SkyboxApp: NSViewController {
 
         engine = Engine(canvas: canvas)
 
-        let scene = engine.sceneManager.activeScene!
+        let scene = Engine.sceneManager.activeScene!
         scene.postprocessManager.autoExposure = true
         let rootEntity = scene.createRootEntity()
         rootEntity.addComponent(GUI.self)
 
-        let skyMaterial = SkyBoxMaterial(engine)
+        let skyMaterial = SkyBoxMaterial()
         // method1: load cubemap
-        //skyMaterial.textureCubeMap = try! engine.textureLoader.loadTexture(with: "country")!
+        //skyMaterial.textureCubeMap = try! Engine.textureLoader.loadTexture(with: "country")!
 
         // method2: load hdr
-        let hdr = engine.textureLoader.loadHDR(with: "assets/kloppenheim_06_4k.hdr")!
+        let hdr = Engine.textureLoader.loadHDR(with: "assets/kloppenheim_06_4k.hdr")!
         skyMaterial.textureCubeMap = hdr
         skyMaterial.equirectangular = true
 
@@ -100,11 +100,11 @@ class SkyboxApp: NSViewController {
         // let skyTexture = MDLSkyCubeTexture(name: "natrual", channelEncoding: .float16,
         //                                    textureDimensions: [512, 512], turbidity: 1.0, sunElevation: 1.0,
         //                                    sunAzimuth: 1.0, upperAtmosphereScattering: 1.0, groundAlbedo: 1.0)
-        // skyMaterial.textureCubeMap = try! engine.textureLoader.loadTexture(with: skyTexture)!
+        // skyMaterial.textureCubeMap = try! Engine.textureLoader.loadTexture(with: skyTexture)!
 
         let skySubpass = SkySubpass()
         skySubpass.material = skyMaterial
-        skySubpass.mesh = PrimitiveMesh.createCuboid(engine)
+        skySubpass.mesh = PrimitiveMesh.createCuboid()
 
         scene.background.mode = .Sky
         scene.background.sky = skySubpass
@@ -122,17 +122,17 @@ class SkyboxApp: NSViewController {
 
         let cubeEntity = rootEntity.createChild()
         let renderer = cubeEntity.addComponent(MeshRenderer.self)
-        renderer.mesh = PrimitiveMesh.createCuboid(engine, width: 0.1, height: 0.1, depth: 0.1)
-        let material = UnlitMaterial(engine)
+        renderer.mesh = PrimitiveMesh.createCuboid(width: 0.1, height: 0.1, depth: 0.1)
+        let material = UnlitMaterial()
         material.baseColor = Color(0.4, 0.0, 0.0)
         renderer.setMaterial(material)
 
-        engine.run()
+        Engine.run()
     }
     
     override func viewDidDisappear() {
         super.viewDidDisappear()
-        engine.destroy()
+        Engine.destroy()
     }
 }
 

@@ -19,12 +19,12 @@ class GltfViewerApp: NSViewController {
         canvas = Canvas(frame: view.frame)
         canvas.setParentView(view)
         engine = Engine(canvas: canvas)
-        iblBaker = IBLBaker(engine)
+        iblBaker = IBLBaker()
 
-        let scene = engine.sceneManager.activeScene!
+        let scene = Engine.sceneManager.activeScene!
         scene.postprocessManager.manualExposure = 1
         scene.shadowCascades = .FourCascades
-        let hdr = engine.textureLoader.loadHDR(with: "assets/kloppenheim_06_4k.hdr")!
+        let hdr = Engine.textureLoader.loadHDR(with: "assets/kloppenheim_06_4k.hdr")!
         iblBaker.bake(scene, with: hdr, size: 256, level: 3)
         let rootEntity = scene.createRootEntity()
 
@@ -43,8 +43,8 @@ class GltfViewerApp: NSViewController {
         let planeEntity = rootEntity.createChild()
         planeEntity.transform.position = Vector3(0, -1, 0)
         let shadowPlane = planeEntity.addComponent(MeshRenderer.self)
-        shadowPlane.mesh = PrimitiveMesh.createPlane(engine, width: 10, height: 10)
-        let shadowMtl = PBRMaterial(engine)
+        shadowPlane.mesh = PrimitiveMesh.createPlane(width: 10, height: 10)
+        let shadowMtl = PBRMaterial()
         shadowMtl.baseColor = Color(0.6, 0.6, 0.6, 1.0)
         shadowMtl.roughness = 1
         shadowMtl.metallic = 0
@@ -56,12 +56,12 @@ class GltfViewerApp: NSViewController {
         let gui = gltfRoot.addComponent(LoaderGUI.self)
         gui.loaderItem = 8
         gui.camera = camera
-        engine.run()
+        Engine.run()
     }
     
     override func viewDidDisappear() {
         super.viewDidDisappear()
-        engine.destroy()
+        Engine.destroy()
     }
 }
 

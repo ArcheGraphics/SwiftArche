@@ -36,10 +36,10 @@ class PhysXCollisionDetectionApp: NSViewController {
         canvas = Canvas(frame: view.frame)
         canvas.setParentView(view)
         engine = Engine(canvas: canvas)
-        iblBaker = IBLBaker(engine)
+        iblBaker = IBLBaker()
         
-        let scene = engine.sceneManager.activeScene!
-        let hdr = engine.textureLoader.loadHDR(with: "assets/kloppenheim_06_4k.hdr")!
+        let scene = Engine.sceneManager.activeScene!
+        let hdr = Engine.textureLoader.loadHDR(with: "assets/kloppenheim_06_4k.hdr")!
         iblBaker.bake(scene, with: hdr, size: 256, level: 3)
         
         let rootEntity = scene.createRootEntity()
@@ -58,12 +58,12 @@ class PhysXCollisionDetectionApp: NSViewController {
         let cubeSize: Float = 2.0
         let boxEntity = rootEntity.createChild("BoxEntity")
 
-        let boxMtl = PBRMaterial(engine)
+        let boxMtl = PBRMaterial()
         let boxRenderer = boxEntity.addComponent(MeshRenderer.self)
         boxMtl.baseColor = Color(0.6, 0.3, 0.3, 1.0)
         boxMtl.metallic = 0.0
         boxMtl.roughness = 0.5
-        boxRenderer.mesh = PrimitiveMesh.createCuboid(engine, width: cubeSize, height: cubeSize, depth: cubeSize)
+        boxRenderer.mesh = PrimitiveMesh.createCuboid(width: cubeSize, height: cubeSize, depth: cubeSize)
         boxRenderer.setMaterial(boxMtl)
 
         let physicsBox = BoxColliderShape()
@@ -81,12 +81,12 @@ class PhysXCollisionDetectionApp: NSViewController {
         let sphereEntity = rootEntity.createChild("SphereEntity")
         sphereEntity.transform.position = Vector3(-2, 0, 0)
 
-        let sphereMtl = PBRMaterial(engine)
+        let sphereMtl = PBRMaterial()
         let sphereRenderer = sphereEntity.addComponent(MeshRenderer.self)
         sphereMtl.baseColor = Color(Float.random(in: 0..<1), Float.random(in: 0..<1), Float.random(in: 0..<1), 1.0)
         sphereMtl.metallic = 0.0
         sphereMtl.roughness = 0.5
-        sphereRenderer.mesh = PrimitiveMesh.createSphere(engine, radius: radius)
+        sphereRenderer.mesh = PrimitiveMesh.createSphere(radius: radius)
         sphereRenderer.setMaterial(sphereMtl)
 
         let physicsSphere = SphereColliderShape()
@@ -103,12 +103,12 @@ class PhysXCollisionDetectionApp: NSViewController {
         sphereEntity.addComponent(CollisionScript.self)
         sphereEntity.addComponent(MoveScript.self)
 
-        engine.run()
+        Engine.run()
     }
     
     override func viewDidDisappear() {
         super.viewDidDisappear()
-        engine.destroy()
+        Engine.destroy()
     }
 }
 

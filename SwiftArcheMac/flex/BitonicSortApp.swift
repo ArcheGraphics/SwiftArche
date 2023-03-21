@@ -20,7 +20,7 @@ class BitonicSortApp: NSViewController {
         canvas.setParentView(view)
         engine = Engine(canvas: canvas)
         
-        let scene = engine.sceneManager.activeScene!
+        let scene = Engine.sceneManager.activeScene!
         let rootEntity = scene.createRootEntity()
 
         let cameraEntity = rootEntity.createChild()
@@ -34,12 +34,12 @@ class BitonicSortApp: NSViewController {
             sortArray.append(SIMD2<Float>(Float.random(in: 0..<5), Float(i)))
         }
         
-        let bitonicSort = BitonicSort(engine)
-        let sortBuffer = BufferView(device: engine.device, array: sortArray)
-        let itemCount = BufferView(device: engine.device, array: [count])
-        let scope = engine.createCaptureScope(name: "bitonic")
+        let bitonicSort = BitonicSort()
+        let sortBuffer = BufferView(device: Engine.device, array: sortArray)
+        let itemCount = BufferView(device: Engine.device, array: [count])
+        let scope = Engine.createCaptureScope(name: "bitonic")
         scope.begin()
-        if let commandBuffer = engine.commandQueue.makeCommandBuffer(),
+        if let commandBuffer = Engine.commandQueue.makeCommandBuffer(),
            let commandEncoder = commandBuffer.makeComputeCommandEncoder() {
             commandEncoder.label = "bitonic sort"
             bitonicSort.run(commandEncoder: commandEncoder, maxSize: count, sortBuffer: sortBuffer, itemCount: itemCount)
@@ -49,12 +49,12 @@ class BitonicSortApp: NSViewController {
         }
         scope.end()
 
-        engine.run()
+        Engine.run()
     }
     
     override func viewDidDisappear() {
         super.viewDidDisappear()
-        engine.destroy()
+        Engine.destroy()
     }
 }
 

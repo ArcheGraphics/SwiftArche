@@ -35,9 +35,9 @@ open class WCSphSolver: SphSolverBase {
         }
     }
     
-    public required init(_ engine: Engine) {
-        super.init(engine)
-        let sph = SphSystemData(engine, maxLength: ParticleSystemSolverBase.maxLength)
+    public required init() {
+        super.init()
+        let sph = SphSystemData(maxLength: ParticleSystemSolverBase.maxLength)
         sph.targetDensity = kWaterDensity
         sph.targetSpacing = 0.1
         sph.relativeKernelRadius = 1.8

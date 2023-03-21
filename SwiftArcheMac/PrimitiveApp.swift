@@ -28,10 +28,10 @@ class PrimitiveApp: NSViewController {
         canvas = Canvas(frame: view.frame)
         canvas.setParentView(view)
         engine = Engine(canvas: canvas)
-        iblBaker = IBLBaker(engine)
+        iblBaker = IBLBaker()
         
-        let scene = engine.sceneManager.activeScene!
-        let hdr = engine.textureLoader.loadHDR(with: "assets/kloppenheim_06_4k.hdr")!
+        let scene = Engine.sceneManager.activeScene!
+        let hdr = Engine.textureLoader.loadHDR(with: "assets/kloppenheim_06_4k.hdr")!
         iblBaker.bake(scene, with: hdr, size: 256, level: 3)
         let rootEntity = scene.createRootEntity()
 
@@ -49,17 +49,17 @@ class PrimitiveApp: NSViewController {
         let cubeEntity = rootEntity.createChild()
         cubeEntity.addComponent(MoveScript.self)
         let renderer = cubeEntity.addComponent(MeshRenderer.self)
-        renderer.mesh = PrimitiveMesh.createCuboid(engine)
-        let material = PBRMaterial(engine)
+        renderer.mesh = PrimitiveMesh.createCuboid()
+        let material = PBRMaterial()
         material.baseColor = Color(0.7, 0.0, 0.0)
         renderer.setMaterial(material)
 
-        engine.run()
+        Engine.run()
     }
     
     override func viewDidDisappear() {
         super.viewDidDisappear()
-        engine.destroy()
+        Engine.destroy()
     }
 }
 

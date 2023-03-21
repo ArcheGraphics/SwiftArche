@@ -15,12 +15,12 @@ class ImplicitTriangleApp: NSViewController {
     var engine: Engine!
     
     func createSDFRenderer(_ rootEntity: Entity, _ sdf: ImplicitTriangleMesh) {
-        let sdfMtl = ImplicitTriangleMaterial(engine)
+        let sdfMtl = ImplicitTriangleMaterial()
         sdfMtl.sdf = sdf
         sdfMtl.absThreshold = 0.01
         sdfMtl.maxTraceSteps = 64
         
-        let mesh = ModelMesh(engine)
+        let mesh = ModelMesh()
         _ = mesh.addSubMesh(0, 6, .triangleStrip)
         
         let sdfEntity = rootEntity.createChild()
@@ -35,7 +35,7 @@ class ImplicitTriangleApp: NSViewController {
         canvas.setParentView(view)
         engine = Engine(canvas: canvas)
         
-        let scene = engine.sceneManager.activeScene!
+        let scene = Engine.sceneManager.activeScene!
         let rootEntity = scene.createRootEntity()
 
         let cameraEntity = rootEntity.createChild()
@@ -45,21 +45,21 @@ class ImplicitTriangleApp: NSViewController {
         cameraEntity.addComponent(OrbitControl.self)
         
         let assetURL = Bundle.main.url(forResource: "dragon", withExtension: "obj", subdirectory: "assets")!
-        let triangleMesh = TriangleMesh(device: engine.device)!
+        let triangleMesh = TriangleMesh(device: Engine.device)!
         triangleMesh.load(assetURL)
         
         let sdf = ImplicitTriangleMesh.builder()
             .withTriangleMesh(triangleMesh)
             .withResolutionX(100)
-            .build(engine)
+            .build()
         createSDFRenderer(rootEntity, sdf!)
         
-        engine.run()
+        Engine.run()
     }
     
     override func viewDidDisappear() {
         super.viewDidDisappear()
-        engine.destroy()
+        Engine.destroy()
     }
 }
 

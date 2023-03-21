@@ -8,7 +8,6 @@ import Math
 
 /// A physics manager is a collection of bodies and constraints which can interact.
 public class PhysicsManager {
-    private var _engine: Engine
     private var _restTime: Float = 0
     private var _colliders: DisorderedArray<Collider> = DisorderedArray()
     private var _gravity: Vector3 = Vector3(0, -9.81, 0)
@@ -32,8 +31,7 @@ public class PhysicsManager {
         }
     }
 
-    init(engine: Engine) {
-        _engine = engine
+    init() {
         PhysXPhysics.initialization()
         _nativePhysicsManager = PhysXPhysics.createPhysicsManager(
                 { (obj1: UInt32, obj2: UInt32, info: [ContactInfo]) in
@@ -148,7 +146,7 @@ public class PhysicsManager {
 
     /// Call on every frame to update pose of objects.
     func _update(_  deltaTime: Float) {
-        let componentsManager = _engine._componentsManager
+        let componentsManager = Engine._componentsManager
 
         let simulateTime = deltaTime + _restTime
         let step: Int = Int(floor(min(maxSumTimeStep, simulateTime) / fixedTimeStep))

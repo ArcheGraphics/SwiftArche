@@ -57,7 +57,6 @@ class TextBatcher: Batcher {
     
     var batcherBuffer: [BatcherData] = []
     private let _descriptor = MTLVertexDescriptor()
-    private var _engine: Engine!
     private var _lastColor: Color?
     private var _lastElement: RenderElement?
     private var _currentBufferIndex: Int = 0
@@ -75,10 +74,6 @@ class TextBatcher: Batcher {
 
     var containData: Bool {
         currentBufferCount != 0
-    }
-        
-    func set(_ engine: Engine) {
-        self._engine = engine
     }
     
     func appendElement(_ curElement: RenderElement) {
@@ -140,7 +135,7 @@ class TextBatcher: Batcher {
                        _ indices: [UInt32], _ color: Color, _ fontAtlas: MTLTexture,
                        _ material: Material, at currentBufferIndex: Int) {
         if currentBufferCount > batcherBuffer.count {
-            var batcherData = BatcherData(device: _engine.device)
+            var batcherData = BatcherData(device: Engine.device)
             batcherData.color = color
             batcherData.material = material
             batcherData.shaderPass = material.shader[0]

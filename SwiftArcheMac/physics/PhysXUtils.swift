@@ -12,13 +12,13 @@ import ImGui
 
 func addSphere(_ rootEntity: Entity, _ radius: Float,
                _ position: Vector3, _ rotation: Quaternion, isDynamic: Bool = true) -> Entity {
-    let mtl = PBRMaterial(rootEntity.engine)
+    let mtl = PBRMaterial()
     mtl.baseColor = Color(Float.random(in: 0...1), Float.random(in: 0...1), Float.random(in: 0...1), 1.0)
     mtl.metallic = 0.0
     mtl.roughness = 0.5
     let sphereEntity = rootEntity.createChild()
     let renderer = sphereEntity.addComponent(MeshRenderer.self)
-    renderer.mesh = PrimitiveMesh.createSphere(rootEntity.engine, radius: radius)
+    renderer.mesh = PrimitiveMesh.createSphere(radius: radius)
     renderer.setMaterial(mtl)
     sphereEntity.transform.position = position
     sphereEntity.transform.rotationQuaternion = rotation
@@ -38,13 +38,13 @@ func addSphere(_ rootEntity: Entity, _ radius: Float,
 
 func addCapsule(_ rootEntity: Entity, _ radius: Float, _ height: Float,
                 _ position: Vector3, _ rotation: Quaternion, isDynamic: Bool = true) -> Entity {
-    let mtl = PBRMaterial(rootEntity.engine)
+    let mtl = PBRMaterial()
     mtl.baseColor = Color(Float.random(in: 0...1), Float.random(in: 0...1), Float.random(in: 0...1), 1.0)
     mtl.metallic = 0.0
     mtl.roughness = 0.5
     let capsuleEntity = rootEntity.createChild()
     let renderer = capsuleEntity.addComponent(MeshRenderer.self)
-    renderer.mesh = PrimitiveMesh.createCapsule(rootEntity.engine, radius: radius, height: height, radialSegments: 20)
+    renderer.mesh = PrimitiveMesh.createCapsule(radius: radius, height: height, radialSegments: 20)
     renderer.setMaterial(mtl)
     capsuleEntity.transform.position = position
     capsuleEntity.transform.rotationQuaternion = rotation
@@ -65,14 +65,13 @@ func addCapsule(_ rootEntity: Entity, _ radius: Float, _ height: Float,
 
 func addBox(_ rootEntity: Entity, _ size: Vector3,
             _ position: Vector3, _ rotation: Quaternion, isDynamic: Bool = true) -> Entity {
-    let mtl = PBRMaterial(rootEntity.engine)
+    let mtl = PBRMaterial()
     mtl.baseColor = Color(Float.random(in: 0...1), Float.random(in: 0...1), Float.random(in: 0...1), 1.0)
     mtl.metallic = 0.0
     mtl.roughness = 0.5
     let boxEntity = rootEntity.createChild()
     let renderer = boxEntity.addComponent(MeshRenderer.self)
     renderer.mesh = PrimitiveMesh.createCuboid(
-            rootEntity.engine,
             width: size.x,
             height: size.y,
             depth: size.z
@@ -98,7 +97,7 @@ func addBox(_ rootEntity: Entity, _ size: Vector3,
 
 func addPlane(_ rootEntity: Entity, _ size: Vector3,
               _ position: Vector3, _ rotation: Quaternion) -> Entity {
-    let mtl = PBRMaterial(rootEntity.engine)
+    let mtl = PBRMaterial()
     mtl.baseColor = Color(
             0.2179807202597362,
             0.2939682161541871,
@@ -112,7 +111,6 @@ func addPlane(_ rootEntity: Entity, _ size: Vector3,
 
     let renderer = planeEntity.addComponent(MeshRenderer.self)
     renderer.mesh = PrimitiveMesh.createCuboid(
-            rootEntity.engine,
             width: size.x,
             height: size.y,
             depth: size.z
@@ -132,7 +130,7 @@ func addPlane(_ rootEntity: Entity, _ size: Vector3,
 
 func addDuckMesh(_ rootEntity: Entity) {
     let assetURL = Bundle.main.url(forResource: "Duck", withExtension: "glb", subdirectory: "glTF-Sample-Models/2.0/Duck/glTF-Binary")!
-    GLTFLoader.parse(rootEntity.engine, assetURL, { resource in
+    GLTFLoader.parse(assetURL, { resource in
         let entity = resource.defaultSceneRoot!
         rootEntity.addChild(entity)
         
@@ -190,7 +188,6 @@ class CollisionScript: Script {
 // MARK: - PhysicsVisual
 @propertyWrapper
 struct EnumToBool {
-    static var engine: Engine!
     var number: Bool = false
     var type: VisualizationParameter
     
@@ -203,7 +200,7 @@ struct EnumToBool {
         set {
             if number != newValue {
                 number = newValue
-                EnumToBool.engine.physicsManager.setVisualType(type, value: newValue)
+                Engine.physicsManager.setVisualType(type, value: newValue)
             }
         }
     }
@@ -276,15 +273,11 @@ class PhysicsVisual: Script {
     @EnumToBool(type: .MBPRegins)
     var mbpRegins: Bool
     
-    override func onAwake() {
-        EnumToBool.engine = engine
-    }
-    
     override func onGUI() {
-        UIElement.Init(engine)
+        UIElement.Init()
         
         ImGuiNewFrame()
-        ImGuiSliderFloat("visual size", &engine.physicsManager.visualScale, 1.0, 10.0, nil, 1)
+        ImGuiSliderFloat("visual size", &Engine.physicsManager.visualScale, 1.0, 10.0, nil, 1)
         ImGuiCheckbox("worldAxes", &worldAxes)
         ImGuiCheckbox("bodyAxes", &bodyAxes)
         ImGuiCheckbox("bodyMassAxes", &bodyMassAxes)
@@ -312,6 +305,6 @@ class PhysicsVisual: Script {
         // Rendering
         ImGuiRender()
         
-        engine.physicsManager.drawGizmos()
+        Engine.physicsManager.drawGizmos()
     }
 }

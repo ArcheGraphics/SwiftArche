@@ -10,7 +10,6 @@ import Math
 public class SkyBoxMaterial: Material {
     private var _textureCubeMap: MTLTexture!
     private var _equirectangular: Bool = false
-    private let _library: MTLLibrary
 
     /// Whether to decode from texture with equirectangular HDR format.
     public var equirectangular: Bool {
@@ -22,9 +21,9 @@ public class SkyBoxMaterial: Material {
                 _equirectangular = newValue
                 shader = []
                 if newValue {
-                    shader.append(ShaderPass(_library, "vertex_skybox", "fragment_skyboxHDR"))
+                    shader.append(ShaderPass(Engine.library(), "vertex_skybox", "fragment_skyboxHDR"))
                 } else {
-                    shader.append(ShaderPass(_library, "vertex_skybox", "fragment_skybox"))
+                    shader.append(ShaderPass(Engine.library(), "vertex_skybox", "fragment_skybox"))
                 }
             }
         }
@@ -41,9 +40,8 @@ public class SkyBoxMaterial: Material {
         }
     }
 
-    public override init(_ engine: Engine, _ name: String = "") {
-        _library = engine.library()
-        super.init(engine, name)
-        shader.append(ShaderPass(_library, "vertex_skybox", "fragment_skybox"))
+    public override init(_ name: String = "skybox mat") {
+        super.init(name)
+        shader.append(ShaderPass(Engine.library(), "vertex_skybox", "fragment_skybox"))
     }
 }

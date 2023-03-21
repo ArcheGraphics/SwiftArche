@@ -9,20 +9,13 @@ import MetalKit
 import Math
 
 public class TextureLoader {
-    private var _engine: Engine
-
-    public let textureLoader: MTKTextureLoader
-
-    init(_ engine: Engine) {
-        _engine = engine
-        textureLoader = MTKTextureLoader(device: _engine.device)
-    }
+    public let textureLoader: MTKTextureLoader = MTKTextureLoader(device: Engine.device)
 
     /// configure a texture descriptor and create a texture using that descriptor.
     /// - Parameter descriptor: Texture descriptor
     /// - Returns: Texture
     public func makeTexture(_ descriptor: MTLTextureDescriptor) -> MTLTexture {
-        guard let texture = _engine.device.makeTexture(descriptor: descriptor) else {
+        guard let texture = Engine.device.makeTexture(descriptor: descriptor) else {
             fatalError("Texture not created")
         }
         return texture
@@ -74,6 +67,6 @@ public class TextureLoader {
 
     public func loadHDR(with name: String) -> MTLTexture? {
         var error: NSError?
-        return texture_from_radiance_file(name, _engine.device, &error)
+        return texture_from_radiance_file(name, Engine.device, &error)
     }
 }

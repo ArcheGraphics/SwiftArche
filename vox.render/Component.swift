@@ -24,13 +24,11 @@ open class Component: EngineObject, Polymorphic {
         }
     }
 
-    required public override init(_ engine: Engine) {
-        super.init(engine)
+    public required override init() {
+        super.init()
     }
     
     required public init(from decoder: Decoder) throws {
-        let engine = decoder.userInfo[.engine] as! Engine
-        super.init(engine)
     }
     
     open func encode(to encoder: Encoder) throws {

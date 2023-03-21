@@ -26,9 +26,9 @@ open class PhysicsAnimation: Script {
     }
     
     public override func onUpdate(_ timeIntervalInSeconds: Float) {
-//        let scope = engine.createCaptureScope(name: "bitonic")
+//        let scope = Engine.createCaptureScope(name: "bitonic")
 //        scope.begin()
-        if let commandBuffer = engine.commandQueue.makeCommandBuffer() {
+        if let commandBuffer = Engine.commandQueue.makeCommandBuffer() {
             commandBuffer.label = "physics animation"
             if isUsingFixedSubTimeSteps {
                 logger.info("Using fixed sub-timesteps: \(numberOfFixedSubTimeSteps)")

@@ -46,8 +46,8 @@ public class InputManager {
     }
 #endif
 
-    init(engine: Engine) {
-        _pointerManager = PointerManager(engine)
+    init() {
+        _pointerManager = PointerManager()
 #if os(macOS)
         _wheelManager = WheelManager()
         _keyboardManager = KeyboardManager()

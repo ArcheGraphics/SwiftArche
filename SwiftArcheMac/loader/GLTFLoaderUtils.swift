@@ -164,7 +164,7 @@ class LoaderGUI: Script {
                 let assetURL = Bundle.main.url(forResource: gltfInfo[newValue].fileName,
                         withExtension: gltfInfo[newValue].ext,
                         subdirectory: gltfInfo[newValue].dir)!
-                GLTFLoader.parse(engine, assetURL, { [self] resource in
+                GLTFLoader.parse(assetURL, { [self] resource in
                     entity.clearChildren()
                     animationName = []
 //                    animator = nil
@@ -207,7 +207,7 @@ class LoaderGUI: Script {
     }
 
     override func onGUI() {
-        UIElement.Init(engine)
+        UIElement.Init()
 
         ImGuiNewFrame()
 

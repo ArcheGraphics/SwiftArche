@@ -14,8 +14,8 @@ class InternalMeshUtility {
     }
 
     /// "ProBuilder-ize" function
-    public static func CreateMeshWithTransform(engine: Engine, t: Transform, preserveFaces: Bool) -> ProBuilderMesh {
-        let entity = Entity(engine)
+    public static func CreateMeshWithTransform(t: Transform, preserveFaces: Bool) -> ProBuilderMesh {
+        let entity = Entity()
         return entity.addComponent(ProBuilderMesh.self)
     }
 

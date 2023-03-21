@@ -20,10 +20,10 @@ class AnimationAttachApp: NSViewController {
         canvas = Canvas(frame: view.frame)
         canvas.setParentView(view)
         engine = Engine(canvas: canvas)
-        iblBaker = IBLBaker(engine)
+        iblBaker = IBLBaker()
         
-        let scene = engine.sceneManager.activeScene!
-        let hdr = engine.textureLoader.loadHDR(with: "assets/kloppenheim_06_4k.hdr")!
+        let scene = Engine.sceneManager.activeScene!
+        let hdr = Engine.textureLoader.loadHDR(with: "assets/kloppenheim_06_4k.hdr")!
         iblBaker.bake(scene, with: hdr, size: 256, level: 3)
         let rootEntity = scene.createRootEntity()
 
@@ -56,20 +56,20 @@ class AnimationAttachApp: NSViewController {
         
         let attachEntity = rootEntity.createChild()
         let attachRenderer = attachEntity.addComponent(MeshRenderer.self)
-        attachRenderer.mesh = PrimitiveMesh.createCuboid(engine, width: 0.01, height: 0.01, depth: 1)
-        let attachMtl = UnlitMaterial(engine)
+        attachRenderer.mesh = PrimitiveMesh.createCuboid(width: 0.01, height: 0.01, depth: 1)
+        let attachMtl = UnlitMaterial()
         attachMtl.baseColor = Color(1, 0, 0, 1)
         attachRenderer.setMaterial(attachMtl)
         animator.bindEntity(attachEntity, for: "LeftHandMiddle1")
         
         characterEntity.addComponent(AnimationVisualizer.self)
 
-        engine.run()
+        Engine.run()
     }
     
     override func viewDidDisappear() {
         super.viewDidDisappear()
-        engine.destroy()
+        Engine.destroy()
     }
 }
 

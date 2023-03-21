@@ -12,11 +12,11 @@ import vox_toolkit
 fileprivate class AtomicMaterial: BaseMaterial {
     private var _atomicBuffer: BufferView
 
-    init(_ engine: Engine) {
-        _atomicBuffer = BufferView(device: engine.device, count: 1, stride: MemoryLayout<UInt32>.stride)
-        super.init(engine)
+    init() {
+        _atomicBuffer = BufferView(device: Engine.device, count: 1, stride: MemoryLayout<UInt32>.stride)
+        super.init()
         atomicBuffer = _atomicBuffer
-        shader.append(ShaderPass(engine.library("app.shader"), "vertex_atomic", "fragment_atomic"))
+        shader.append(ShaderPass(Engine.library("app.shader"), "vertex_atomic", "fragment_atomic"))
     }
 
     var atomicBuffer: BufferView {
@@ -41,7 +41,7 @@ class AtomicComputeApp: NSViewController {
         canvas.setParentView(view)
         engine = Engine(canvas: canvas)
 
-        let scene = engine.sceneManager.activeScene!
+        let scene = Engine.sceneManager.activeScene!
         let rootEntity = scene.createRootEntity()
 
         let cameraEntity = rootEntity.createChild()
@@ -52,24 +52,24 @@ class AtomicComputeApp: NSViewController {
 
         let cubeEntity = rootEntity.createChild()
         let renderer = cubeEntity.addComponent(MeshRenderer.self)
-        renderer.mesh = PrimitiveMesh.createCuboid(engine, width: 0.1, height: 0.1, depth: 0.1)
-        let material = AtomicMaterial(engine)
+        renderer.mesh = PrimitiveMesh.createCuboid(width: 0.1, height: 0.1, depth: 0.1)
+        let material = AtomicMaterial()
         renderer.setMaterial(material)
 
-        let atomicCounter = ComputePass(engine)
+        let atomicCounter = ComputePass()
         atomicCounter.threadsPerGridX = 2
         atomicCounter.threadsPerGridY = 2
         atomicCounter.threadsPerGridZ = 2
-        atomicCounter.shader.append(ShaderPass(engine.library("app.shader"), "compute_atomic"))
+        atomicCounter.shader.append(ShaderPass(Engine.library("app.shader"), "compute_atomic"))
         atomicCounter.data.append(renderer.getMaterial()!.shaderData)
         scene.postprocessManager.registerComputePass(atomicCounter)
 
-        engine.run()
+        Engine.run()
     }
     
     override func viewDidDisappear() {
         super.viewDidDisappear()
-        engine.destroy()
+        Engine.destroy()
     }
 }
 

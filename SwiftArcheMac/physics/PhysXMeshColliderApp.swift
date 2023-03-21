@@ -18,13 +18,13 @@ fileprivate class Raycast: Script {
     }
 
     override func onUpdate(_ deltaTime: Float) {
-        let inputManager = engine.inputManager
+        let inputManager = Engine.inputManager
         let pointers = inputManager.pointers
         if (!pointers.isEmpty && inputManager.isPointerTrigger(.leftMouseDown)) {
-            _ = camera.screenPointToRay(pointers[0].screenPoint(engine.canvas), ray)
+            _ = camera.screenPointToRay(pointers[0].screenPoint(Engine.canvas), ray)
 
-            if let hit = engine.physicsManager.raycast(ray, distance: Float.greatestFiniteMagnitude, layerMask: Layer.Layer0) {
-                let mtl = PBRMaterial(engine)
+            if let hit = Engine.physicsManager.raycast(ray, distance: Float.greatestFiniteMagnitude, layerMask: Layer.Layer0) {
+                let mtl = PBRMaterial()
                 mtl.baseColor = Color(Float.random(in: 0...1), Float.random(in: 0...1), Float.random(in: 0...1), 0.5)
                 mtl.metallic = 0.0
                 mtl.roughness = 0.5
@@ -45,14 +45,14 @@ class PhysXMeshColliderApp: NSViewController {
     
     func addCapsuleMesh(_ rootEntity: Entity, _ radius: Float, _ height: Float,
                         _ position: Vector3, _ rotation: Quaternion) -> Entity {
-        let mtl = PBRMaterial(rootEntity.engine)
+        let mtl = PBRMaterial()
         mtl.baseColor = Color(Float.random(in: 0...1), Float.random(in: 0...1), Float.random(in: 0...1), 0.5)
         mtl.metallic = 0.0
         mtl.roughness = 0.5
         mtl.isTransparent = true
         let capsuleEntity = rootEntity.createChild()
         let renderer = capsuleEntity.addComponent(MeshRenderer.self)
-        renderer.mesh = PrimitiveMesh.createCapsule(rootEntity.engine, radius: radius, height: height,
+        renderer.mesh = PrimitiveMesh.createCapsule(radius: radius, height: height,
                                                     radialSegments: 20)
         renderer.setMaterial(mtl)
         capsuleEntity.transform.position = position
@@ -60,7 +60,7 @@ class PhysXMeshColliderApp: NSViewController {
 
         let physicsCapsule = MeshColliderShape()
         physicsCapsule.isConvex = true
-        physicsCapsule.mesh = PrimitiveMesh.createCapsule(rootEntity.engine, radius: radius, height: height,
+        physicsCapsule.mesh = PrimitiveMesh.createCapsule(radius: radius, height: height,
                                                           radialSegments: 6, heightSegments: 1, noLongerAccessible: false)
         let capsuleCollider = capsuleEntity.addComponent(DynamicCollider.self)
         capsuleCollider.addShape(physicsCapsule)
@@ -70,7 +70,7 @@ class PhysXMeshColliderApp: NSViewController {
 
     func addBoxMesh(_ rootEntity: Entity, _ size: Vector3,
                 _ position: Vector3, _ rotation: Quaternion) -> Entity {
-        let mtl = PBRMaterial(rootEntity.engine)
+        let mtl = PBRMaterial()
         mtl.baseColor = Color(Float.random(in: 0...1), Float.random(in: 0...1), Float.random(in: 0...1), 0.5)
         mtl.metallic = 0.0
         mtl.roughness = 0.5
@@ -78,7 +78,6 @@ class PhysXMeshColliderApp: NSViewController {
         let boxEntity = rootEntity.createChild()
         let renderer = boxEntity.addComponent(MeshRenderer.self)
         renderer.mesh = PrimitiveMesh.createCuboid(
-                rootEntity.engine,
                 width: size.x,
                 height: size.y,
                 depth: size.z
@@ -90,7 +89,6 @@ class PhysXMeshColliderApp: NSViewController {
         let physicsBox = MeshColliderShape()
         physicsBox.isConvex = true
         physicsBox.mesh = PrimitiveMesh.createCuboid(
-            rootEntity.engine,
             width: size.x,
             height: size.y,
             depth: size.z, noLongerAccessible: false
@@ -130,11 +128,11 @@ class PhysXMeshColliderApp: NSViewController {
         canvas = Canvas(frame: view.frame)
         canvas.setParentView(view)
         engine = Engine(canvas: canvas)
-        iblBaker = IBLBaker(engine)
+        iblBaker = IBLBaker()
         
-        let scene = engine.sceneManager.activeScene!
+        let scene = Engine.sceneManager.activeScene!
         scene.shadowDistance = 50
-        let hdr = engine.textureLoader.loadHDR(with: "assets/kloppenheim_06_4k.hdr")!
+        let hdr = Engine.textureLoader.loadHDR(with: "assets/kloppenheim_06_4k.hdr")!
         iblBaker.bake(scene, with: hdr, size: 256, level: 3)
 
         let rootEntity = scene.createRootEntity()
@@ -155,12 +153,12 @@ class PhysXMeshColliderApp: NSViewController {
         
         initialize(rootEntity)
         
-        engine.run()
+        Engine.run()
     }
     
     override func viewDidDisappear() {
         super.viewDidDisappear()
-        engine.destroy()
+        Engine.destroy()
     }
 }
 

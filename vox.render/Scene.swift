@@ -117,16 +117,15 @@ public final class Scene: EngineObject {
 
     /// Create scene.
     /// - Parameters:
-    ///   - engine: Engine
     ///   - name: Name
-    public init(_ engine: Engine, _ name: String = "") {
+    public init(_ name: String = "") {
         self.name = name
-        shaderData = ShaderData(engine)
-        super.init(engine)
+        shaderData = ShaderData()
+        super.init()
 
         ambientLight = AmbientLight()
         _postprocessManager = PostprocessManager(self)
-        engine.sceneManager._allScenes.append(self)
+        Engine.sceneManager._allScenes.append(self)
 
         shaderData.enableMacro(FOG_MODE.rawValue, (fogMode.rawValue, .int))
         shaderData.enableMacro(CASCADED_COUNT.rawValue, (shadowCascades.rawValue, .int))
@@ -164,9 +163,9 @@ public final class Scene: EngineObject {
 
     func destroy() {
         if _isActiveInEngine {
-            _engine.sceneManager.activeScene = nil
+            Engine.sceneManager.activeScene = nil
         }
-        engine.sceneManager._allScenes.removeAll { (v: Scene) in
+        Engine.sceneManager._allScenes.removeAll { (v: Scene) in
             v === self
         }
         _rootEntities.forEach { v in
@@ -179,7 +178,7 @@ public final class Scene: EngineObject {
     /// - Parameter name: Entity name
     /// - Returns: Entity
     public func createRootEntity(_ name: String = "") -> Entity {
-        let entity = Entity(_engine, name)
+        let entity = Entity(name)
         addRootEntity(entity)
         return entity
     }
@@ -353,7 +352,7 @@ extension Scene {
     }
 
     func _updateShaderData() {
-        let lightManager = _engine._lightManager
+        let lightManager = Engine._lightManager
 
         lightManager._updateShaderData(shaderData)
         let sunLightIndex = lightManager._getSunLightIndex()
@@ -370,7 +369,7 @@ extension Scene {
 
         // union scene and camera macro.
         ShaderMacroCollection.unionCollection(
-                engine._macroCollection,
+            Engine._macroCollection,
                 shaderData._macroCollection,
                 _globalShaderMacro
         )
@@ -426,10 +425,9 @@ extension Scene: Codable {
     }
     
     public convenience init(from decoder: Decoder) throws {
-        let engine = decoder.userInfo[.engine] as! Engine
         let container = try decoder.container(keyedBy: CodingKeys.self)
         let name = try container.decode(String.self, forKey: .name)
-        self.init(engine, name)
+        self.init(name)
         _rootEntities = try container.decode([Entity].self, forKey: .rootEntities)
     }
     

@@ -47,9 +47,9 @@ open class ParticleCollider : ComputePass {
         }
     }
     
-    public override init(_ engine: Engine) {
+    public override init() {
         _colliderData = ColliderData(radius: 1e-3, restitutionCoefficient: 0, frictionCoefficient: 0, count: 0)
-        super.init(engine)
+        super.init()
         
         defaultShaderData.setData(ParticleCollider.colliderProperty, _colliderData)
     }

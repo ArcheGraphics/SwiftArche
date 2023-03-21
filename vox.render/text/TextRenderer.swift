@@ -77,8 +77,8 @@ public class TextRenderer: Renderer {
         }
     }
     
-    required init(_ engine: Engine) {
-        super.init(engine)
+    required init() {
+        super.init()
         setMaterial(TextRenderer._defaultMaterial)
     }
     

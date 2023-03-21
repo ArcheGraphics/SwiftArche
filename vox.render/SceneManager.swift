@@ -10,7 +10,6 @@ import Foundation
 public class SceneManager {
     var _allScenes: [Scene] = []
     var _activeScene: Scene?
-    private weak var _engine: Engine!
 
     /// The activated scene.
     public var activeScene: Scene? {
@@ -26,10 +25,6 @@ public class SceneManager {
             }
         }
     }
-
-    init(engine: Engine) {
-        _engine = engine
-    }
     
     func destroy() {
         _allScenes.forEach { s in
@@ -37,7 +32,6 @@ public class SceneManager {
         }
         _allScenes = []
         _activeScene = nil
-        _engine = nil
     }
 
     /// Merge the source scene into the target scene.

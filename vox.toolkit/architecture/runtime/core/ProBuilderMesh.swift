@@ -471,47 +471,43 @@ public final class ProBuilderMesh: Script {
     internal func EnsureMeshFilterIsAssigned() {
     }
 
-    internal static func CreateInstanceWithPoints(engine: Engine, positions: [Vector3]) -> ProBuilderMesh {
-        let entity = Entity(engine)
+    internal static func CreateInstanceWithPoints(positions: [Vector3]) -> ProBuilderMesh {
+        let entity = Entity()
         return entity.addComponent(ProBuilderMesh.self)
     }
 
     /// Create a new GameObject with a ProBuilderMesh component, MeshFilter, and MeshRenderer. All arrays are
     /// initialized as empty.
-    /// - Parameter engine: engine
     /// - Returns: A reference to the new ProBuilderMesh component.
-    public static func Create(engine: Engine) -> ProBuilderMesh {
-        let entity = Entity(engine)
+    public static func Create() -> ProBuilderMesh {
+        let entity = Entity()
         return entity.addComponent(ProBuilderMesh.self)
     }
 
     /// Create a new GameObject with a ProBuilderMesh component, MeshFilter, and MeshRenderer, then initializes the ProBuilderMesh with a set of positions and faces.
     /// - Parameters:
-    ///   - engine: engine
     ///   - positions: Vertex positions array.
     ///   - faces: Faces array.
     /// - Returns: A reference to the new ProBuilderMesh component.
-    public static func Create<T: Sequence<Vector3>, U: Sequence<Face>>(engine: Engine, positions: T, faces: U) -> ProBuilderMesh {
-        let entity = Entity(engine)
+    public static func Create<T: Sequence<Vector3>, U: Sequence<Face>>(positions: T, faces: U) -> ProBuilderMesh {
+        let entity = Entity()
         return entity.addComponent(ProBuilderMesh.self)
     }
 
     /// Create a new GameObject with a ProBuilderMesh component, MeshFilter, and MeshRenderer, then initializes the ProBuilderMesh with a set of positions and faces.
     /// - Parameters:
-    ///   - engine: engine
     ///   - vertices: Vertex positions array.
     ///   - faces: Faces array.
     ///   - sharedVertices: Optional SharedVertex[] defines coincident vertices.
     ///   - sharedTextures: Optional SharedVertex[] defines coincident texture coordinates (UV0).
     ///   - materials: Optional array of materials that will be assigned to the MeshRenderer.
     /// - Returns: GameObject
-    public static func Create(engine: Engine,
-                              vertices: [Vertex],
+    public static func Create(vertices: [Vertex],
                               faces: [Face],
                               sharedVertices: [SharedVertex]? = nil,
                               sharedTextures: [SharedVertex]? = nil,
                               materials: [Material]? = nil) -> ProBuilderMesh {
-        let entity = Entity(engine)
+        let entity = Entity()
         return entity.addComponent(ProBuilderMesh.self)
     }
 

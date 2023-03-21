@@ -18,7 +18,6 @@ class LineBatcher : Batcher {
     
     var maxVerts: Int = 0
     var numVerts: Int = 0
-    var engine: Engine!
     
     private let _shaderMacro = ShaderMacroCollection()
     private let _depthStencilDescriptor = MTLDepthStencilDescriptor()
@@ -37,10 +36,6 @@ class LineBatcher : Batcher {
     
     var containData: Bool {
         numVerts != 0 || indicesCount > 0
-    }
-        
-    func set(_ engine: Engine) {
-        self.engine = engine
     }
     
     func addLine(p0: Vector3, p1: Vector3, color: Color32) {
@@ -61,19 +56,19 @@ class LineBatcher : Batcher {
             if indirectPointBuffer?.count ?? 0 > positions.count {
                 indirectPointBuffer!.assign(with: positions)
             } else {
-                indirectPointBuffer = BufferView(device: engine.device, array: positions)
+                indirectPointBuffer = BufferView(device: Engine.device, array: positions)
             }
             
             if indirectIndicesBuffer?.count ?? 0 > indices.count {
                 indirectIndicesBuffer!.assign(with: indices)
             } else {
-                indirectIndicesBuffer = BufferView(device: engine.device, array: indices)
+                indirectIndicesBuffer = BufferView(device: Engine.device, array: indices)
             }
             
             if indirectColorBuffer?.count ?? 0 > colors.count {
                 indirectColorBuffer!.assign(with: colors)
             } else {
-                indirectColorBuffer = BufferView(device: engine.device, array: colors)
+                indirectColorBuffer = BufferView(device: Engine.device, array: colors)
             }
         }
     }
@@ -81,13 +76,13 @@ class LineBatcher : Batcher {
     func checkResizePoint(count: Int) {
         if count > maxVerts {
             maxVerts = Int(ceil(Float(count) * 1.2))
-            let newPointBuffer = BufferView(device: engine.device, count: maxVerts, stride: MemoryLayout<Vector3>.stride,
+            let newPointBuffer = BufferView(device: Engine.device, count: maxVerts, stride: MemoryLayout<Vector3>.stride,
                                             label: "point buffer", options: .storageModeShared)
-            let newColorBuffer = BufferView(device: engine.device, count: maxVerts, stride: MemoryLayout<Color32>.stride,
+            let newColorBuffer = BufferView(device: Engine.device, count: maxVerts, stride: MemoryLayout<Color32>.stride,
                                             label: "color32 buffer", options: .storageModeShared)
             if let pointBuffer = pointBuffer,
                let colorBuffer = colorBuffer,
-               let commandBuffer = engine.commandQueue.makeCommandBuffer(),
+               let commandBuffer = Engine.commandQueue.makeCommandBuffer(),
                let blit = commandBuffer.makeBlitCommandEncoder() {
                 blit.copy(from: pointBuffer.buffer, sourceOffset: 0, to: newPointBuffer.buffer,
                           destinationOffset: 0, size: pointBuffer.count * pointBuffer.stride)
@@ -128,7 +123,7 @@ class LineBatcher : Batcher {
         _descriptor.attributes[Int(Color_0.rawValue)] = desc
         _descriptor.layouts[1].stride = MemoryLayout<Color32>.stride
         
-        _shaderPass = ShaderPass(engine.library(), "vertex_line_gizmos", "fragment_line_gizmos")
+        _shaderPass = ShaderPass(Engine.library(), "vertex_line_gizmos", "fragment_line_gizmos")
 
         _pipelineDescriptor.label = "Line Gizmo Pipeline"
         _pipelineDescriptor.colorAttachments[0].pixelFormat = Canvas.colorPixelFormat

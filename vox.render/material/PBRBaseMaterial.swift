@@ -281,9 +281,9 @@ public class PBRBaseMaterial: BaseMaterial {
         shaderData.setSampler(PBRBaseMaterial._clearCoatNormalSamplerProp, value)
     }
 
-    public override init(_ engine: Engine, _ name: String = "") {
-        super.init(engine, name)
-        shader.append(ShaderPass(engine.library(), "vertex_pbr", "fragment_pbr"))
+    public override init(_ name: String = "pbr") {
+        super.init(name)
+        shader.append(ShaderPass(Engine.library(), "vertex_pbr", "fragment_pbr"))
 
         shaderData.enableMacro(NEED_WORLDPOS.rawValue)
         shaderData.enableMacro(NEED_TILINGOFFSET.rawValue)

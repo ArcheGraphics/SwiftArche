@@ -17,7 +17,7 @@ class EntityParser: Parser {
         var entities: [Entity] = []
         for i in 0..<nodes.count {
             let gltfNode = nodes[i]
-            let entity = Entity(glTFResource.engine, gltfNode.name ?? "EntityParser._defaultName\(i)")
+            let entity = Entity(gltfNode.name ?? "EntityParser._defaultName\(i)")
             entity.transform.localMatrix = Matrix(gltfNode.matrix)
             entities.append(entity)
         }
@@ -57,7 +57,7 @@ class EntityParser: Parser {
             if (nodes.count == 1) {
                 sceneRoots.append(context.entities![nodes[0].index])
             } else {
-                let rootEntity = Entity(context.engine, "GLTF_ROOT")
+                let rootEntity = Entity("GLTF_ROOT")
                 for j in 0..<nodes.count {
                     rootEntity.addChild(context.entities![nodes[j].index])
                 }

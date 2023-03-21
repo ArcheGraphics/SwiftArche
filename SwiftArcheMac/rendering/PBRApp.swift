@@ -51,7 +51,7 @@ class PbrApp: NSViewController {
 
         engine = Engine(canvas: canvas)
 
-        let scene = engine.sceneManager.activeScene!
+        let scene = Engine.sceneManager.activeScene!
         let rootEntity = scene.createRootEntity()
 
         let cameraEntity = rootEntity.createChild()
@@ -70,12 +70,12 @@ class PbrApp: NSViewController {
         let directionLight = light.addComponent(DirectLight.self)
         directionLight.intensity = 0.3
 
-        let sphere = PrimitiveMesh.createSphere(engine, radius: 0.5, segments: 30)
+        let sphere = PrimitiveMesh.createSphere(radius: 0.5, segments: 30)
         for i in 0..<7 {
             for j in 0..<7 {
                 let sphereEntity = rootEntity.createChild("SphereEntity\(i)\(j)")
                 sphereEntity.transform.position = Vector3(Float(i - 3), Float(j - 3), 0)
-                let sphereMtl = PBRMaterial(engine)
+                let sphereMtl = PBRMaterial()
                 sphereMtl.baseColor = mat.baseColor
                 sphereMtl.metallic = simd_clamp(Float(i) / Float(7 - 1), 0, 1.0)
                 sphereMtl.roughness = simd_clamp(Float(j) / Float(7 - 1), 0, 1.0)
@@ -86,12 +86,12 @@ class PbrApp: NSViewController {
             }
         }
 
-        engine.run()
+        Engine.run()
     }
     
     override func viewDidDisappear() {
         super.viewDidDisappear()
-        engine.destroy()
+        Engine.destroy()
     }
 }
 

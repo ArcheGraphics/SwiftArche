@@ -47,9 +47,9 @@ public class ScreenSpaceFluidMaterial: BaseMaterial {
         }
     }
 
-    public override init(_ engine: Engine, _ name: String = "") {
-        super.init(engine, name)
-        shader.append(ShaderPass(engine.library("flex.shader"), "vertex_ssf", "fragment_ssf"))
+    public override init(_ name: String = "ssf mat") {
+        super.init(name)
+        shader.append(ShaderPass(Engine.library("flex.shader"), "vertex_ssf", "fragment_ssf"))
     }
 }
 
@@ -80,9 +80,9 @@ public class ThickMaterial: BaseMaterial {
         }
     }
     
-    public override init(_ engine: Engine, _ name: String = "") {
-        super.init(engine, name)
-        shader.append(ShaderPass(engine.library("flex.shader"), "vertex_ssf_depth_thick", "fragment_ssf_thick"))
+    public override init(_ name: String = "ssf depth thick mat") {
+        super.init(name)
+        shader.append(ShaderPass(Engine.library("flex.shader"), "vertex_ssf_depth_thick", "fragment_ssf_thick"))
         shader[0].setBlendMode(.Additive)
         isTransparent = true
 
@@ -106,9 +106,9 @@ public class DepthMaterial: BaseMaterial {
         }
     }
     
-    public override init(_ engine: Engine, _ name: String = "") {
-        super.init(engine, name)
-        shader.append(ShaderPass(engine.library("flex.shader"), "vertex_ssf_depth_thick", "fragment_ssf_depth"))
+    public override init(_ name: String = "ssf depth thick mat") {
+        super.init(name)
+        shader.append(ShaderPass(Engine.library("flex.shader"), "vertex_ssf_depth_thick", "fragment_ssf_depth"))
 
         pointRadius = 20
     }
@@ -245,8 +245,8 @@ public class ScreenSpaceFluid: Script {
     
     public override func onStart() {
         camera = entity.getComponent(Camera.self)!
-        thickMtl = ThickMaterial(entity.engine, "ssf-thick")
-        depthMtl = DepthMaterial(entity.engine, "ssf-depth")
+        thickMtl = ThickMaterial("ssf-thick")
+        depthMtl = DepthMaterial("ssf-depth")
         depthThickPassDesc = MTLRenderPassDescriptor();
         depthThickPassDesc.depthAttachment.loadAction = .clear
         depthThickPassDesc.colorAttachments[0].loadAction = .clear
@@ -254,23 +254,23 @@ public class ScreenSpaceFluid: Script {
         renderPass = RenderPass(camera.devicePipeline)
         renderPass.addSubpass(subpass)
         
-        smoothPass = ComputePass(entity.engine)
+        smoothPass = ComputePass()
         smoothPass.resourceCache = entity.scene.postprocessManager.resourceCache
-        smoothPass.shader.append(ShaderPass(entity.engine.library("flex.shader"), "ssf_smoothDepth"))
-        restoreNormalPass = ComputePass(entity.engine)
+        smoothPass.shader.append(ShaderPass(Engine.library("flex.shader"), "ssf_smoothDepth"))
+        restoreNormalPass = ComputePass()
         restoreNormalPass.resourceCache = entity.scene.postprocessManager.resourceCache
-        restoreNormalPass.shader.append(ShaderPass(entity.engine.library("flex.shader"), "ssf_restoreNormal"))
+        restoreNormalPass.shader.append(ShaderPass(Engine.library("flex.shader"), "ssf_restoreNormal"))
 
-        material = ScreenSpaceFluidMaterial(entity.engine, "ssf")
+        material = ScreenSpaceFluidMaterial("ssf")
         renderer = entity.addComponent(MeshRenderer.self)
         renderer.setMaterial(material)
-        renderer.mesh = PrimitiveMesh.createQuadPlane(entity.engine)
+        renderer.mesh = PrimitiveMesh.createQuadPlane()
                 
         kernelRadius = 10
         sigmaRadius = 6
         sigmaDepth = 0.1
 
-        let canvas = engine.canvas
+        let canvas = Engine.canvas!
         let flag = ListenerUpdateFlag()
         flag.listener = resize
         canvas.updateFlagManager.addFlag(flag: flag)
@@ -284,25 +284,25 @@ public class ScreenSpaceFluid: Script {
         var desc = MTLTextureDescriptor.texture2DDescriptor(pixelFormat: .r16Float, width: width, height: height, mipmapped: false)
         desc.usage = MTLTextureUsage(rawValue: MTLTextureUsage.shaderRead.rawValue | MTLTextureUsage.renderTarget.rawValue)
         desc.storageMode = .private
-        thickTexture = engine.device.makeTexture(descriptor: desc)
+        thickTexture = Engine.device.makeTexture(descriptor: desc)
         
         desc = MTLTextureDescriptor.texture2DDescriptor(pixelFormat: .r32Float, width: width, height: height, mipmapped: false)
         desc.usage = MTLTextureUsage(rawValue: MTLTextureUsage.shaderRead.rawValue
                                      | MTLTextureUsage.shaderWrite.rawValue
                                      | MTLTextureUsage.renderTarget.rawValue)
         desc.storageMode = .private
-        depthTexture.append( engine.device.makeTexture(descriptor: desc)!)
-        depthTexture.append( engine.device.makeTexture(descriptor: desc)!)
+        depthTexture.append( Engine.device.makeTexture(descriptor: desc)!)
+        depthTexture.append( Engine.device.makeTexture(descriptor: desc)!)
 
         desc = MTLTextureDescriptor.texture2DDescriptor(pixelFormat: .depth32Float, width: width, height: height, mipmapped: false)
         desc.usage = MTLTextureUsage(rawValue: MTLTextureUsage.shaderRead.rawValue | MTLTextureUsage.renderTarget.rawValue)
         desc.storageMode = .private
-        depthThickPassDesc.depthAttachment.texture = engine.device.makeTexture(descriptor: desc)
+        depthThickPassDesc.depthAttachment.texture = Engine.device.makeTexture(descriptor: desc)
         
         desc = MTLTextureDescriptor.texture2DDescriptor(pixelFormat: .rgba32Float, width: width, height: height, mipmapped: false)
         desc.usage = MTLTextureUsage(rawValue: MTLTextureUsage.shaderRead.rawValue | MTLTextureUsage.shaderWrite.rawValue)
         desc.storageMode = .private
-        normalDepthTexture = engine.device.makeTexture(descriptor: desc)
+        normalDepthTexture = Engine.device.makeTexture(descriptor: desc)
         
         // binding texture
         material.normalDepthTexture = normalDepthTexture

@@ -9,7 +9,6 @@ import Metal
 public class Luminance: ComputePass {
     // Target for luminance calculation is fixed at 1/8 the number of pixels of native resolution.
     private let kLogLuminanceTargetScale: Float = 0.25
-    private let device: MTLDevice
     private var _logLuminanceTexture: MTLTexture!
     private var _canvasChanged: Canvas?
 
@@ -20,11 +19,9 @@ public class Luminance: ComputePass {
     }
 
     init(_ scene: Scene) {
-        let engine = scene.engine
-        device = engine.device
-        super.init(engine)
+        super.init()
 
-        let canvas = engine.canvas
+        let canvas = Engine.canvas!
         let flag = ListenerUpdateFlag()
         flag.listener = resize
         canvas.updateFlagManager.addFlag(flag: flag)
@@ -33,7 +30,7 @@ public class Luminance: ComputePass {
             createTexture(texture.width, texture.height)
         }
 
-        shader.append(ShaderPass(engine.library(), "logLuminance"))
+        shader.append(ShaderPass(Engine.library(), "logLuminance"))
     }
 
     func resize(type: Int?, param: AnyObject?) -> Void {
@@ -46,7 +43,7 @@ public class Luminance: ComputePass {
         let desc = MTLTextureDescriptor.texture2DDescriptor(pixelFormat: .r16Float, width: width, height: height, mipmapped: true)
         desc.usage = MTLTextureUsage(rawValue: MTLTextureUsage.shaderRead.rawValue | MTLTextureUsage.shaderWrite.rawValue)
         desc.storageMode = .private
-        _logLuminanceTexture = device.makeTexture(descriptor: desc)
+        _logLuminanceTexture = Engine.device.makeTexture(descriptor: desc)
         defaultShaderData.setImageView("output", _logLuminanceTexture)
 
         threadsPerGridX = width

@@ -79,8 +79,8 @@ public class ParticleSystemData: ShaderData {
         }
     }
     
-    public init(_ engine: Engine, maxLength: UInt32) {
-        super.init(engine)
+    public init(maxLength: UInt32) {
+        super.init()
         _maxLength = maxLength
         addScalarData(with: ParticleSystemData.counterProperty, initialVal: UInt32(0), maxLength: 1)
         addScalarData(with: ParticleSystemData.positionProperty, initialVal: Vector3F(), maxLength: Int(maxLength))
@@ -94,7 +94,7 @@ public class ParticleSystemData: ShaderData {
     ///   - initialVal: Initial value of the new scalar data.
     ///   - maxLength: max length
     public func addScalarData<T>(with name: String, initialVal: T, maxLength: Int) {
-        let data = BufferView(device: engine.device, count: maxLength, stride: MemoryLayout<T>.stride)
+        let data = BufferView(device: Engine.device, count: maxLength, stride: MemoryLayout<T>.stride)
         data.assign(initialVal)
         setData(name, data)
     }
@@ -103,7 +103,7 @@ public class ParticleSystemData: ShaderData {
     
     public func buildNeighborSearcher(commandBuffer: MTLCommandBuffer, maxSearchRadius: Float, hashGridResolution: UInt32 = 64) {
         if _neighborSearcher == nil {
-            _neighborSearcher = HashGrid(engine, hashGridResolution, hashGridResolution, hashGridResolution, maxSearchRadius * 2)
+            _neighborSearcher = HashGrid(hashGridResolution, hashGridResolution, hashGridResolution, maxSearchRadius * 2)
         }
         _neighborSearcher!.build(commandBuffer: commandBuffer, positions: positions,
                                  itemCount: numberOfParticles, maxNumberOfParticles: maxNumberOfParticles)

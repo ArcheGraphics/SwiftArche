@@ -54,8 +54,8 @@ public class Light: Component {
         return c.toLinear().rgb
     }
     
-    public required init(_ engine: Engine) {
-        super.init(engine)
+    public required init() {
+        super.init()
     }
     
     public required init(from decoder: Decoder) throws {

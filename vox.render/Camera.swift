@@ -76,7 +76,7 @@ public final class Camera: Component {
     /// the manual value will be kept. Call resetAspectRatio() to restore it.
     public var aspectRatio: Float {
         get {
-            let canvas = _entity.engine.canvas
+            let canvas = Engine.canvas!
             return _customAspectRatio ?? (Float(canvas.bounds.size.width) * viewport.z)
             / (Float(canvas.bounds.size.height) * viewport.w)
         }
@@ -111,7 +111,7 @@ public final class Camera: Component {
     /// If it is manually set, the manual value will be maintained. Call resetProjectionMatrix() to restore it.
     public var projectionMatrix: Matrix {
         get {
-            let canvas = _entity.engine.canvas
+            let canvas = Engine.canvas!
             if ((!_isProjectionDirty || _isProjMatSetting) &&
                     _lastAspectSize.x == Float(canvas.bounds.size.width) &&
                     _lastAspectSize.y == Float(canvas.bounds.size.height)
@@ -177,10 +177,10 @@ public final class Camera: Component {
 
     /// Create the Camera component.
     /// - Parameter entity: Entity
-    required init(_ engine: Engine) {
-        shaderData = ShaderData(engine)
+    required init() {
+        shaderData = ShaderData()
 
-        super.init(engine)
+        super.init()
         devicePipeline = DevicePipeline(self)
         registerCallback()
     }
@@ -191,8 +191,7 @@ public final class Camera: Component {
     }
     
     required init(from decoder: Decoder) throws {
-        let engine = decoder.userInfo[.engine] as! Engine
-        shaderData = ShaderData(engine)
+        shaderData = ShaderData()
 
         try super.init(from: decoder)
         
@@ -314,14 +313,14 @@ extension Camera {
     ///   - point: Point in screen space
     /// - Returns: Point in viewport space
     public func screenToViewportPoint(_ point: Vector2) -> Vector2 {
-        let canvas = engine.canvas
+        let canvas = Engine.canvas!
         let viewport = viewport
         return Vector2((point.x / Float(canvas.bounds.size.width) - viewport.x) / viewport.z,
                 (point.y / Float(canvas.bounds.size.height) - viewport.y) / viewport.w)
     }
 
     public func screenToViewportPoint(_ point: Vector3) -> Vector3 {
-        let canvas = engine.canvas
+        let canvas = Engine.canvas!
         let viewport = viewport
         return Vector3((point.x / Float(canvas.bounds.size.width) - viewport.x) / viewport.z,
                 (point.y / Float(canvas.bounds.size.height) - viewport.y) / viewport.w,
@@ -333,21 +332,21 @@ extension Camera {
     ///   - point: Point in viewport space
     /// - Returns: Point in screen space
     public func viewportToScreenPoint(_ point: Vector2) -> Vector2 {
-        let canvas = engine.canvas
+        let canvas = Engine.canvas!
         let x = (viewport.x + point.x * viewport.z) * Float(canvas.bounds.size.width)
         let y = (viewport.y + point.y * viewport.w) * Float(canvas.bounds.size.height)
         return Vector2(x, y)
     }
 
     public func viewportToScreenPoint(_ point: Vector3) -> Vector3 {
-        let canvas = engine.canvas
+        let canvas = Engine.canvas!
         let x = (viewport.x + point.x * viewport.z) * Float(canvas.bounds.size.width)
         let y = (viewport.y + point.y * viewport.w) * Float(canvas.bounds.size.height)
         return Vector3(x, y, point.z)
     }
 
     public func viewportToScreenPoint(_ point: Vector4) -> Vector4 {
-        let canvas = engine.canvas
+        let canvas = Engine.canvas!
         let x = (viewport.x + point.x * viewport.z) * Float(canvas.bounds.size.width)
         let y = (viewport.y + point.y * viewport.w) * Float(canvas.bounds.size.height)
         return Vector4(x, y, point.z, point.w)

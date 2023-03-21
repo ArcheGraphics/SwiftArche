@@ -70,7 +70,7 @@ class FaceGUI: Script {
     ]
     
     override func onGUI() {
-        UIElement.Init(engine)
+        UIElement.Init()
 
         ImGuiNewFrame()
         for morph in morphNameMap {

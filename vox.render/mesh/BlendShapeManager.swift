@@ -28,13 +28,11 @@ public class BlendShapeManager {
     private var _vertexElementCount: Int = 0
     private var _vertexElementOffset: Int = 0
     private var _storeInVertexBufferInfo: [Vector2] = []
-    private var _engine: Engine
     private var _modelMesh: ModelMesh
     private var _lastCreateHostInfo: Vector3 = Vector3(0, 0, 0)
     private var _dataTextureInfo: SIMD3<UInt32> = SIMD3<UInt32>()
 
-    init(_ engine: Engine, _ modelMesh: ModelMesh) {
-        _engine = engine
+    init(_ modelMesh: ModelMesh) {
         _modelMesh = modelMesh
         BlendShapeManager._blendSamplerDesc.mipFilter = .nearest
         BlendShapeManager._blendSamplerDesc.magFilter = .nearest
@@ -143,7 +141,7 @@ public class BlendShapeManager {
         descriptor.arrayLength = blendShapeCount
         descriptor.pixelFormat = .rgba32Float
         descriptor.mipmapLevelCount = 1
-        _vertexTexture = _engine.device.makeTexture(descriptor: descriptor)
+        _vertexTexture = Engine.device.makeTexture(descriptor: descriptor)
 
         _vertices = [Float](repeating: 0, count: textureWidth * textureHeight * 4)
         _dataTextureInfo.x = UInt32(_vertexElementCount)

@@ -9,9 +9,9 @@ import Foundation
 class SceneParser: Parser {
     private static var _defaultMaterial: PBRMaterial!
 
-    private static func _getDefaultMaterial(_ engine: Engine) -> PBRMaterial {
+    private static func _getDefaultMaterial() -> PBRMaterial {
         if (SceneParser._defaultMaterial == nil) {
-            SceneParser._defaultMaterial = PBRMaterial(engine)
+            SceneParser._defaultMaterial = PBRMaterial()
         }
 
         return SceneParser._defaultMaterial
@@ -94,7 +94,7 @@ class SceneParser: Parser {
             if let gltfMaterial = gltfMeshPrimitives[i].material {
                 renderer.setMaterial(glTFResource.materials![gltfMaterial.index])
             } else {
-                renderer.setMaterial(SceneParser._getDefaultMaterial(glTFResource.engine))
+                renderer.setMaterial(SceneParser._getDefaultMaterial())
             }
         }
     }

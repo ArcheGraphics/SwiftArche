@@ -64,8 +64,8 @@ open class BaseMaterial: Material {
         }
     }
     
-    public override init(_ engine: Engine, _ name: String = "") {
-        super.init(engine)
+    public override init(_ name: String = "") {
+        super.init()
         shaderData.setData(BaseMaterial._alphaCutoffProp, 0)
     }
 }

@@ -11,15 +11,15 @@ public class ParticleCapsuleCollider: ParticleCollider {
     private var capsuleBuffer: BufferView?
     public var capsuleData: [CapsuleColliderShapeData] = []
     
-    public override init(_ engine: Engine) {
-        super.init(engine)
-        shader.append(ShaderPass(engine.library("flex.shader"), "capsuleCollider"))
+    public override init() {
+        super.init()
+        shader.append(ShaderPass(Engine.library("flex.shader"), "capsuleCollider"))
     }
     
     public override func update(commandEncoder: MTLComputeCommandEncoder,
                                 indirectBuffer: MTLBuffer, threadsPerThreadgroup: MTLSize) {
         if capsuleBuffer == nil || capsuleBuffer!.count != capsuleData.count {
-            capsuleBuffer = BufferView(device: engine.device, array: capsuleData)
+            capsuleBuffer = BufferView(device: Engine.device, array: capsuleData)
         } else {
             capsuleBuffer!.assign(with: capsuleData)
         }

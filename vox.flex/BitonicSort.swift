@@ -16,13 +16,13 @@ public class BitonicSort {
     let stepSortPass: ComputePass
     let indirectSortArgsBuffer: BufferView
     
-    public init(_ engine: Engine) {
-        indirectSortArgsBuffer = BufferView(device: engine.device, count: 1,
+    public init() {
+        indirectSortArgsBuffer = BufferView(device: Engine.device, count: 1,
                                             stride: MemoryLayout<MTLDispatchThreadgroupsIndirectArguments>.stride)
-        let resourceCache = engine.sceneManager.activeScene?.postprocessManager.resourceCache
+        let resourceCache = Engine.sceneManager.activeScene?.postprocessManager.resourceCache
         
-        initSortArgsPass = ComputePass(engine)
-        initSortArgsPass.shader.append(ShaderPass(engine.library("flex.shader"), "initSortArgs"))
+        initSortArgsPass = ComputePass()
+        initSortArgsPass.shader.append(ShaderPass(Engine.library("flex.shader"), "initSortArgs"))
         initSortArgsPass.resourceCache = resourceCache
         initSortArgsPass.threadsPerGridX = 1
         initSortArgsPass.threadsPerGridY = 1
@@ -30,18 +30,18 @@ public class BitonicSort {
         initSortArgsPass.defaultShaderData.setData("args", indirectSortArgsBuffer)
         initSortArgsPass.precompileAll()
         
-        preSortPass = ComputePass(engine)
-        preSortPass.shader.append(ShaderPass(engine.library("flex.shader"), "preBitonicSort"))
+        preSortPass = ComputePass()
+        preSortPass.shader.append(ShaderPass(Engine.library("flex.shader"), "preBitonicSort"))
         preSortPass.resourceCache = resourceCache
         preSortPass.precompileAll()
         
-        innerSortPass = ComputePass(engine)
-        innerSortPass.shader.append(ShaderPass(engine.library("flex.shader"), "innerBitonicSort"))
+        innerSortPass = ComputePass()
+        innerSortPass.shader.append(ShaderPass(Engine.library("flex.shader"), "innerBitonicSort"))
         innerSortPass.resourceCache = resourceCache
         innerSortPass.precompileAll()
         
-        stepSortPass = ComputePass(engine)
-        stepSortPass.shader.append(ShaderPass(engine.library("flex.shader"), "stepBitonicSort"))
+        stepSortPass = ComputePass()
+        stepSortPass.shader.append(ShaderPass(Engine.library("flex.shader"), "stepBitonicSort"))
         stepSortPass.resourceCache = resourceCache
         stepSortPass.precompileAll()
     }
