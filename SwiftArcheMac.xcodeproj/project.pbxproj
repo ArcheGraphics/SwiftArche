@@ -129,6 +129,7 @@
 		3E447F6829C9EB8000D2FB30 /* SerializedCodingKeys.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E447F4E29C9E71000D2FB30 /* SerializedCodingKeys.swift */; };
 		3E447F6929C9EB8000D2FB30 /* SerializableEncodable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E447F5029C9E71000D2FB30 /* SerializableEncodable.swift */; };
 		3E447F6A29C9EB8D00D2FB30 /* Transformable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E447F5229C9E71000D2FB30 /* Transformable.swift */; };
+		3E447F6C29C9F2AA00D2FB30 /* ClassInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E447F6B29C9F2AA00D2FB30 /* ClassInfo.swift */; };
 		3E6B235E294220BC000AC29F /* FaceMorphApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E6B235D294220BC000AC29F /* FaceMorphApp.swift */; };
 		3E6B2360294224C1000AC29F /* FaceGUI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E6B235F294224C1000AC29F /* FaceGUI.swift */; };
 		3E6B23C329470F30000AC29F /* quad_shading.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3E6B23C229470F30000AC29F /* quad_shading.metal */; };
@@ -819,6 +820,7 @@
 		3E447F5D29C9E7FD00D2FB30 /* SerializedComplexSwiftTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SerializedComplexSwiftTests.swift; sourceTree = "<group>"; };
 		3E447F5E29C9E7FD00D2FB30 /* SerializedTransformableSwiftTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SerializedTransformableSwiftTests.swift; sourceTree = "<group>"; };
 		3E447F5F29C9E7FD00D2FB30 /* SerializedBasicSwiftTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SerializedBasicSwiftTests.swift; sourceTree = "<group>"; };
+		3E447F6B29C9F2AA00D2FB30 /* ClassInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClassInfo.swift; sourceTree = "<group>"; };
 		3E6B235D294220BC000AC29F /* FaceMorphApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FaceMorphApp.swift; sourceTree = "<group>"; };
 		3E6B235F294224C1000AC29F /* FaceGUI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FaceGUI.swift; sourceTree = "<group>"; };
 		3E6B23A82946B3CA000AC29F /* libvox.flex.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libvox.flex.a; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -1880,6 +1882,7 @@
 				3E447F4F29C9E71000D2FB30 /* SerializedTransformable.swift */,
 				3E447F5229C9E71000D2FB30 /* Transformable.swift */,
 				3E717DF929C7B2B3004FE1A0 /* Polymorphic.swift */,
+				3E447F6B29C9F2AA00D2FB30 /* ClassInfo.swift */,
 			);
 			path = codable;
 			sourceTree = "<group>";
@@ -3603,6 +3606,7 @@
 				3E34220A29C2E5DD0025C65A /* ViewMapping+Color.swift in Sources */,
 				3E3421FE29C2E5D70025C65A /* PropertyNameFormatter.swift in Sources */,
 				3EC03951293218AA002187DC /* RenderQueueType.swift in Sources */,
+				3E447F6C29C9F2AA00D2FB30 /* ClassInfo.swift in Sources */,
 				3EACA08D29A475C200F08BB2 /* MeshColliderCookingOptions.swift in Sources */,
 				3EC0392229321872002187DC /* KHR_materials_clearcoat.swift in Sources */,
 				3EC039AC293218F0002187DC /* DisorderedArray.swift in Sources */,

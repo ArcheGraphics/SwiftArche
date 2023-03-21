@@ -164,7 +164,6 @@ public final class Entity: NSObject, Codable {
         let component = T()
         component.entity = self
         _components.append(PolymorphicValue(wrappedValue: component))
-        Engine.insertComponentType(type)
         if (_isActiveInHierarchy) {
             component._setActive(true)
         }
@@ -369,7 +368,6 @@ public final class Entity: NSObject, Codable {
     func addComponent<T: Component>(_ component: T) {
         component.entity = self
         _components.append(PolymorphicValue(wrappedValue: component))
-        Engine.insertComponentType(T.self)
         if (_isActiveInHierarchy) {
             component._setActive(true)
         }

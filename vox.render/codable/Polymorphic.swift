@@ -29,11 +29,11 @@ public extension Encoder {
 }
 
 public extension Decoder {
-    func decode<ExpectedType>(_ expectedType: ExpectedType.Type) throws -> ExpectedType {
+    func decode<ExpectedType>(_ expectedType: ExpectedType.Type, of key: CodingUserInfoKey) throws -> ExpectedType {
         let container = try self.container(keyedBy: PolymorphicMetaContainerKeys.self)
         let typeID = try container.decode(String.self, forKey: ._type)
 
-        guard let types = self.userInfo[.polymorphicTypes] as? [Polymorphic.Type] else {
+        guard let types = self.userInfo[key] as? [Polymorphic.Type] else {
             throw PolymorphicCodableError.missingPolymorphicTypes
         }
 
@@ -62,15 +62,17 @@ public extension Decoder {
 @propertyWrapper
 public struct PolymorphicValue<Value> {
     public var wrappedValue: Value
+    var key: CodingUserInfoKey = .polymorphicTypes
     
-    public init(wrappedValue: Value) {
+    public init(wrappedValue: Value, key: CodingUserInfoKey = .polymorphicTypes) {
         self.wrappedValue = wrappedValue
+        self.key = key
     }
 }
 
 extension PolymorphicValue: Codable {
     public init(from decoder: Decoder) throws {
-        self.wrappedValue = try decoder.decode(Value.self)
+        self.wrappedValue = try decoder.decode(Value.self, of: key)
     }
 
     public func encode(to encoder: Encoder) throws {

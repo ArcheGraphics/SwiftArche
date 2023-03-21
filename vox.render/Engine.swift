@@ -10,9 +10,12 @@ import Logging
 
 public let logger = Logger(label: "com.arche.main")
 
-extension CodingUserInfoKey {
-    public static var polymorphicTypes: CodingUserInfoKey {
+public extension CodingUserInfoKey {
+    static var polymorphicTypes: CodingUserInfoKey {
         CodingUserInfoKey(rawValue: "com.codable.polymophicTypes")!
+    }
+    static var colliderShapeTypes: CodingUserInfoKey {
+        CodingUserInfoKey(rawValue: "com.codable.colliderShapeTypes")!
     }
 }
 
@@ -43,9 +46,6 @@ public class Engine: NSObject {
     // The semaphore used to control GPU-CPU synchronization of frames.
     private static var _textureLoader: TextureLoader!
     private static var _isPaused: Bool = true;
-    
-    // codable
-    static var componentType: [Polymorphic.Type] = []
     
     /// buffer index
     static var currentBufferIndex: Int {
@@ -220,17 +220,28 @@ public class Engine: NSObject {
     
     public static func makeDecoder() -> JSONDecoder {
         let decoder = JSONDecoder()
-        decoder.userInfo[.polymorphicTypes] = componentType
+        
+        let scriptClass = ClassInfo.getSubclass(Script.self)
+        var componentList: [Polymorphic.Type] = [
+            Transform.self,
+            Camera.self,
+            Light.self,
+            StaticCollider.self,
+            DynamicCollider.self,
+            FixedJoint.self
+        ]
+        componentList.append(contentsOf: scriptClass.map { info in
+            info.classObject as! Polymorphic.Type
+        })
+        decoder.userInfo[.polymorphicTypes] = componentList
+        decoder.userInfo[.colliderShapeTypes] = [
+            SphereColliderShape.self,
+            CapsuleColliderShape.self,
+            BoxColliderShape.self,
+            PlaneColliderShape.self
+        ]
+
         return decoder
-    }
-    
-    static func insertComponentType<T: Component>(_ type: T.Type) {
-        let result = componentType.first { t in
-            t == type
-        }
-        if result == nil {
-            componentType.append(type)
-        }
     }
 }
 
