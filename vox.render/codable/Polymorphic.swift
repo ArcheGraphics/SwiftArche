@@ -33,11 +33,7 @@ extension Decoder {
         let container = try self.container(keyedBy: PolymorphicMetaContainerKeys.self)
         let typeID = try container.decode(String.self, forKey: ._type)
 
-        guard let types = self.userInfo[.polymorphicTypes] as? [Polymorphic.Type] else {
-            throw PolymorphicCodableError.missingPolymorphicTypes
-        }
-
-        let _matchingType = types.first { type in
+        let _matchingType = Engine.componentType.first { type in
             type.typeID == typeID
         }
 

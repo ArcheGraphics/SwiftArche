@@ -62,8 +62,10 @@ public class ARManager: NSObject {
             let arCamera = currentFrame.camera
             var viewMatrix = Matrix(arCamera.viewMatrix(for: .landscapeRight))
             camera!.entity.transform.worldMatrix = viewMatrix.invert()
-            camera!.projectionMatrix = Matrix(arCamera.projectionMatrix(for: .landscapeRight, viewportSize: camera!.engine.canvas.bounds.size,
-                    zNear: CGFloat(camera!.nearClipPlane), zFar: CGFloat(camera!.farClipPlane)))
+            camera!.projectionMatrix = Matrix(arCamera.projectionMatrix(for: .landscapeRight,
+                                                                        viewportSize: Engine.canvas.bounds.size,
+                                                                        zNear: CGFloat(camera!.nearClipPlane),
+                                                                        zFar: CGFloat(camera!.farClipPlane)))
 
             let elements = _onUpdateScripts._elements
             for i in 0..<_onUpdateScripts.count {

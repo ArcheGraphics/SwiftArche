@@ -18,7 +18,7 @@ fileprivate class ARScript: Script {
             let assetURL = Bundle.main.url(forResource: "SciFiHelmet",
                     withExtension: "gltf",
                     subdirectory: "glTF")!
-            GLTFLoader.parse(engine, assetURL) { [self] resource in
+            GLTFLoader.parse(assetURL) { [self] resource in
                 entity.clearChildren()
                 entity.addChild(resource.defaultSceneRoot)
                 let renderers = resource.defaultSceneRoot.getComponentsIncludeChildren(Renderer.self)
@@ -45,19 +45,20 @@ class GltfViewerApp: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        canvas = Canvas(with: view)
+        canvas = Canvas(frame: view.frame)
+        canvas.setParentView(view)
         engine = Engine(canvas: canvas)
-        engine.initArSession()
-        iblBaker = IBLBaker(engine)
+        Engine.initArSession()
+        iblBaker = IBLBaker()
 
-        let scene = engine.sceneManager.activeScene!
-        let hdr = engine.textureLoader.loadHDR(with: "assets/kloppenheim_06_4k.hdr")!
+        let scene = Engine.sceneManager.activeScene!
+        let hdr = Engine.textureLoader.loadHDR(with: "assets/kloppenheim_06_4k.hdr")!
         iblBaker.bake(scene, with: hdr, size: 256, level: 3)
         let rootEntity = scene.createRootEntity()
 
         let cameraEntity = rootEntity.createChild()
         let camera = cameraEntity.addComponent(Camera.self)
-        engine.arManager!.camera = camera
+        Engine.arManager!.camera = camera
 
         let light = rootEntity.createChild("light")
         light.transform.position = Vector3(0.1, 5, 0.1)
@@ -68,15 +69,20 @@ class GltfViewerApp: UIViewController {
         let arEntity = rootEntity.createChild()
         arEntity.addComponent(ARScript.self)
 
-        engine.run()
+        Engine.run()
     }
 
     override func viewWillAppear(_ animated: Bool) {
-        engine.arManager?.run()
+        Engine.arManager?.run()
     }
 
     override func viewWillDisappear(_ animated: Bool) {
-        engine.arManager?.pause()
+        Engine.arManager?.pause()
+    }
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        Engine.destroy()
     }
 }
 

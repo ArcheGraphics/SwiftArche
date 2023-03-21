@@ -115,7 +115,7 @@ extension ViewMapping {
             Text(context.propertyName)
             picker
         }
-        .animation(.none)
+            .animation(.none, value: 0)
 
         return AnyView(pickerAndTitle)
 

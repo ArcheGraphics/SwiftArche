@@ -10,12 +10,6 @@ import Logging
 
 public let logger = Logger(label: "com.arche.main")
 
-extension CodingUserInfoKey {
-    public static var polymorphicTypes: CodingUserInfoKey {
-        CodingUserInfoKey(rawValue: "com.codable.polymophicTypes")!
-    }
-}
-
 public class Engine: NSObject {
     // The max number of command buffers in flight
     static let _maxFramesInFlight = 3
@@ -163,7 +157,7 @@ public class Engine: NSObject {
         _arManager = ARManager(device)
         let scene = _sceneManager.activeScene!
         scene.background.mode = .AR
-        scene.background.ar = ARSubpass(self)
+        scene.background.ar = ARSubpass()
     }
 #endif
     
@@ -220,7 +214,6 @@ public class Engine: NSObject {
     
     public static func makeDecoder() -> JSONDecoder {
         let decoder = JSONDecoder()
-        decoder.userInfo[.polymorphicTypes] = componentType
         return decoder
     }
     
@@ -269,7 +262,7 @@ extension Engine: MTKViewDelegate {
 
     func _render(_ scene: Scene) {
 #if os(iOS)
-        arManager?.update(_time.deltaTime)
+        Engine.arManager?.update(Time.deltaTime)
 #endif
         Engine._componentsManager.callRendererOnUpdate(Time.deltaTime)
 

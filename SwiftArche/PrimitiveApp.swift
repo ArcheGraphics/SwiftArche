@@ -17,8 +17,8 @@ fileprivate class ARScript: Script {
         if _cubeEntity == nil {
             _cubeEntity = entity.createChild()
             let renderer = _cubeEntity!.addComponent(MeshRenderer.self)
-            renderer.mesh = PrimitiveMesh.createCuboid(engine, width: 0.1, height: 0.1, depth: 0.1)
-            let material = PBRMaterial(engine)
+            renderer.mesh = PrimitiveMesh.createCuboid(width: 0.1, height: 0.1, depth: 0.1)
+            let material = PBRMaterial()
             material.baseColor = Color(0.4, 0.6, 0.6)
             renderer.setMaterial(material)
 
@@ -42,35 +42,41 @@ class PrimitiveApp: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        canvas = Canvas(with: view)
+        canvas = Canvas(frame: view.frame)
+        canvas.setParentView(view)
         engine = Engine(canvas: canvas)
-        engine.initArSession()
-        iblBaker = IBLBaker(engine)
+        Engine.initArSession()
+        iblBaker = IBLBaker()
 
-        let scene = engine.sceneManager.activeScene!
-        let hdr = engine.textureLoader.loadHDR(with: "assets/kloppenheim_06_4k.hdr")!
+        let scene = Engine.sceneManager.activeScene!
+        let hdr = Engine.textureLoader.loadHDR(with: "assets/kloppenheim_06_4k.hdr")!
         iblBaker.bake(scene, with: hdr, size: 256, level: 3)
         let rootEntity = scene.createRootEntity()
         rootEntity.addComponent(ARScript.self)
 
         let cameraEntity = rootEntity.createChild()
         let camera = cameraEntity.addComponent(Camera.self)
-        engine.arManager!.camera = camera
+        Engine.arManager!.camera = camera
 
         let light = rootEntity.createChild("light")
         light.transform.position = Vector3(1, 3, 0)
         light.transform.lookAt(targetPosition: Vector3())
         light.addComponent(DirectLight.self)
 
-        engine.run()
+        Engine.run()
     }
 
     override func viewWillAppear(_ animated: Bool) {
-        engine.arManager?.run()
+        Engine.arManager?.run()
     }
 
     override func viewWillDisappear(_ animated: Bool) {
-        engine.arManager?.pause()
+        Engine.arManager?.pause()
+    }
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        Engine.destroy()
     }
 }
 

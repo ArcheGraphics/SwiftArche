@@ -8,16 +8,10 @@ import vox_render
 import Metal
 
 public class IBLBaker {
-    private var _engine: Engine
-
     public var hdr: MTLTexture!
     public var cubeMap: MTLTexture!
     public var specularTexture: MTLTexture!
     public var shBuffer: BufferView!
-
-    public init(_ engine: Engine) {
-        _engine = engine
-    }
 
     public func bake(_ scene: Scene, with hdr: MTLTexture, size: Int, level: Int) {
         self.hdr = hdr
@@ -29,7 +23,7 @@ public class IBLBaker {
         descriptor.height = size
         descriptor.mipmapLevelCount = level;
         descriptor.usage = MTLTextureUsage(rawValue: MTLTextureUsage.shaderRead.rawValue | MTLTextureUsage.shaderWrite.rawValue)
-        cubeMap = _engine.textureLoader.makeTexture(descriptor)
+        cubeMap = Engine.textureLoader.makeTexture(descriptor)
 
         descriptor = MTLTextureDescriptor()
         descriptor.textureType = .typeCube
@@ -38,12 +32,12 @@ public class IBLBaker {
         descriptor.height = cubeMap.height
         descriptor.mipmapLevelCount = cubeMap.mipmapLevelCount
         descriptor.usage = MTLTextureUsage(rawValue: MTLTextureUsage.shaderRead.rawValue | MTLTextureUsage.shaderWrite.rawValue)
-        specularTexture = _engine.textureLoader.makeTexture(descriptor)
+        specularTexture = Engine.textureLoader.makeTexture(descriptor)
 
         // first 27 is parameter, the last is scale
-        shBuffer = BufferView(device: _engine.device, count: 3 * 9 + 1, stride: MemoryLayout<Float>.stride)
+        shBuffer = BufferView(device: Engine.device, count: 3 * 9 + 1, stride: MemoryLayout<Float>.stride)
 
-        if let commandBuffer = _engine.commandQueue.makeCommandBuffer() {
+        if let commandBuffer = Engine.commandQueue.makeCommandBuffer() {
             _createCubemap(commandBuffer);
             _createSpecularTexture(commandBuffer);
             _createSphericalHarmonicsCoefficients(commandBuffer);
@@ -59,8 +53,8 @@ public class IBLBaker {
     }
 
     private func _createSpecularTexture(_ commandBuffer: MTLCommandBuffer) {
-        let function = _engine.library("app.shader").makeFunction(name: "build_specular")!
-        let pipelineState = try! _engine.device.makeComputePipelineState(function: function)
+        let function = Engine.library("app.shader").makeFunction(name: "build_specular")!
+        let pipelineState = try! Engine.device.makeComputePipelineState(function: function)
         if let commandEncoder = commandBuffer.makeComputeCommandEncoder() {
             commandEncoder.setComputePipelineState(pipelineState)
             commandEncoder.setTexture(cubeMap, index: 0)
@@ -82,8 +76,8 @@ public class IBLBaker {
     }
 
     private func _createSphericalHarmonicsCoefficients(_ commandBuffer: MTLCommandBuffer) {
-        let function = _engine.library("app.shader").makeFunction(name: "compute_sh")
-        let pipelineState = try! _engine.device.makeComputePipelineState(function: function!)
+        let function = Engine.library("app.shader").makeFunction(name: "compute_sh")
+        let pipelineState = try! Engine.device.makeComputePipelineState(function: function!)
         if let commandEncoder = commandBuffer.makeComputeCommandEncoder() {
             commandEncoder.setComputePipelineState(pipelineState)
             commandEncoder.setBuffer(shBuffer.buffer, offset: 0, index: 0)
@@ -98,8 +92,8 @@ public class IBLBaker {
     }
 
     private func _createCubemap(_ commandBuffer: MTLCommandBuffer) {
-        let function = _engine.library("app.shader").makeFunction(name: "cubemap_generator")
-        let pipelineState = try! _engine.device.makeComputePipelineState(function: function!)
+        let function = Engine.library("app.shader").makeFunction(name: "cubemap_generator")
+        let pipelineState = try! Engine.device.makeComputePipelineState(function: function!)
         if let commandEncoder = commandBuffer.makeComputeCommandEncoder() {
             commandEncoder.setComputePipelineState(pipelineState)
             commandEncoder.setTexture(hdr, index: 0)

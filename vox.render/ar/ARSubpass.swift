@@ -12,7 +12,6 @@ public class ARSubpass: Subpass {
     var capturedImagePipelineState: MTLRenderPipelineState!
     var capturedImageDepthState: MTLDepthStencilState!
     var imagePlaneVertexBuffer: MTLBuffer!
-    weak var arManager: ARManager!
 
     var viewportSize: CGSize = CGSize()
     var viewportSizeDidChange: Bool = true
@@ -25,8 +24,7 @@ public class ARSubpass: Subpass {
         1.0, 1.0, 1.0, 0.0,
     ]
 
-    init(_ engine: Engine) {
-        arManager = engine.arManager
+    override init() {
         super.init()
 
         // Create a vertex descriptor for our image plane vertex buffer
@@ -46,22 +44,22 @@ public class ARSubpass: Subpass {
 
         // Create a vertex buffer with our image plane vertex data.
         let imagePlaneVertexDataCount = kImagePlaneVertexData.count * MemoryLayout<Float>.size
-        imagePlaneVertexBuffer = engine.device.makeBuffer(bytes: kImagePlaneVertexData, length: imagePlaneVertexDataCount, options: [])
+        imagePlaneVertexBuffer = Engine.device.makeBuffer(bytes: kImagePlaneVertexData, length: imagePlaneVertexDataCount, options: [])
         imagePlaneVertexBuffer.label = "ImagePlaneVertexBuffer"
 
-        let capturedImageVertexFunction = engine.library().makeFunction(name: "capturedImageVertexTransform")!
-        let capturedImageFragmentFunction = engine.library().makeFunction(name: "capturedImageFragmentShader")!
+        let capturedImageVertexFunction = Engine.library().makeFunction(name: "capturedImageVertexTransform")!
+        let capturedImageFragmentFunction = Engine.library().makeFunction(name: "capturedImageFragmentShader")!
         let capturedImagePipelineStateDescriptor = MTLRenderPipelineDescriptor()
         capturedImagePipelineStateDescriptor.label = "CapturedImagePipeline"
-        capturedImagePipelineStateDescriptor.rasterSampleCount = Int(engine.canvas.sampleCount)
+        capturedImagePipelineStateDescriptor.rasterSampleCount = Int(Engine.canvas.sampleCount)
         capturedImagePipelineStateDescriptor.vertexFunction = capturedImageVertexFunction
         capturedImagePipelineStateDescriptor.fragmentFunction = capturedImageFragmentFunction
         capturedImagePipelineStateDescriptor.vertexDescriptor = imagePlaneVertexDescriptor
-        capturedImagePipelineStateDescriptor.colorAttachments[0].pixelFormat = engine.canvas.colorPixelFormat
-        capturedImagePipelineStateDescriptor.depthAttachmentPixelFormat = engine.canvas.depthStencilPixelFormat
-        capturedImagePipelineStateDescriptor.stencilAttachmentPixelFormat = engine.canvas.depthStencilPixelFormat
+        capturedImagePipelineStateDescriptor.colorAttachments[0].pixelFormat = Engine.canvas.colorPixelFormat
+        capturedImagePipelineStateDescriptor.depthAttachmentPixelFormat = Engine.canvas.depthStencilPixelFormat
+        capturedImagePipelineStateDescriptor.stencilAttachmentPixelFormat = Engine.canvas.depthStencilPixelFormat
         do {
-            try capturedImagePipelineState = engine.device.makeRenderPipelineState(descriptor: capturedImagePipelineStateDescriptor)
+            try capturedImagePipelineState = Engine.device.makeRenderPipelineState(descriptor: capturedImagePipelineStateDescriptor)
         } catch let error {
             print("Failed to created captured image pipeline state, error \(error)")
         }
@@ -69,16 +67,17 @@ public class ARSubpass: Subpass {
         let capturedImageDepthStateDescriptor = MTLDepthStencilDescriptor()
         capturedImageDepthStateDescriptor.depthCompareFunction = .lessEqual
         capturedImageDepthStateDescriptor.isDepthWriteEnabled = false
-        capturedImageDepthState = engine.device.makeDepthStencilState(descriptor: capturedImageDepthStateDescriptor)
+        capturedImageDepthState = Engine.device.makeDepthStencilState(descriptor: capturedImageDepthStateDescriptor)
 
-        viewportSize = engine.canvas.bounds.size
+        viewportSize = Engine.canvas.bounds.size
         let updateFlag = ListenerUpdateFlag()
         updateFlag.listener = resize
-        engine.canvas.updateFlagManager.addFlag(flag: updateFlag)
+        Engine.canvas.updateFlagManager.addFlag(flag: updateFlag)
     }
 
     public override func draw(_ encoder: inout RenderCommandEncoder) {
-        guard let currentFrame = arManager.session.currentFrame else {
+        guard let arManager = Engine.arManager,
+              let currentFrame = arManager.session.currentFrame else {
             return
         }
 
@@ -87,7 +86,8 @@ public class ARSubpass: Subpass {
             updateImagePlane(frame: currentFrame)
         }
 
-        guard let textureY = arManager.capturedImageTextureY, let textureCbCr = arManager.capturedImageTextureCbCr else {
+        guard let textureY = arManager.capturedImageTextureY,
+                let textureCbCr = arManager.capturedImageTextureCbCr else {
             return
         }
 
