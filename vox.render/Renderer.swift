@@ -81,20 +81,6 @@ public class Renderer: Component {
         super.init()
         shaderData.enableMacro(NEED_RECEIVE_SHADOWS.rawValue)
     }
-    
-    enum CodingKeys: String, CodingKey {
-        case castShadows
-    }
-    
-    required init(from decoder: Decoder) throws {
-        shaderData = ShaderData()
-        
-        try super.init(from: decoder)
-    }
-    
-    public override func encode(to encoder: Encoder) throws {
-        try super.encode(to: encoder)
-    }
 
     override func _onDestroy() {
         let listener = ListenerUpdateFlag()

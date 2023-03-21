@@ -220,22 +220,6 @@ public class DynamicCollider: Collider {
             )
         }
     }
-    
-    public required init() {
-        super.init()
-    }
-    
-    enum CodingKeys: String, CodingKey {
-        case linearDamping
-    }
-    
-    required init(from decoder: Decoder) throws {
-        try super.init(from: decoder)
-    }
-    
-    public override func encode(to encoder: Encoder) throws {
-        try super.encode(to: encoder)
-    }
 
     /// Apply a force to the DynamicCollider.
     /// - Parameter force: The force make the collider move

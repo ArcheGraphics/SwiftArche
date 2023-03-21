@@ -15,8 +15,8 @@ enum PolymorphicCodableError: Error {
 }
 
 // MARK: - Extension
-extension Encoder {
-    public func encode<ValueType>(_ value: ValueType) throws {
+public extension Encoder {
+    func encode<ValueType>(_ value: ValueType) throws {
         guard let value = value as? Polymorphic else {
             throw PolymorphicCodableError.unableToRepresentAsPolymorphicForEncoding
         }
@@ -28,12 +28,16 @@ extension Encoder {
     }
 }
 
-extension Decoder {
-    public func decode<ExpectedType>(_ expectedType: ExpectedType.Type) throws -> ExpectedType {
+public extension Decoder {
+    func decode<ExpectedType>(_ expectedType: ExpectedType.Type) throws -> ExpectedType {
         let container = try self.container(keyedBy: PolymorphicMetaContainerKeys.self)
         let typeID = try container.decode(String.self, forKey: ._type)
 
-        let _matchingType = Engine.componentType.first { type in
+        guard let types = self.userInfo[.polymorphicTypes] as? [Polymorphic.Type] else {
+            throw PolymorphicCodableError.missingPolymorphicTypes
+        }
+
+        let _matchingType = types.first { type in
             type.typeID == typeID
         }
 
@@ -79,8 +83,8 @@ public protocol Polymorphic: Codable {
     static var typeID: String { get }
 }
 
-extension Polymorphic {
-    public static var typeID: String {
+public extension Polymorphic {
+    static var typeID: String {
         String(describing: Self.self)
     }
 }

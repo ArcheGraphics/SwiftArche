@@ -60,20 +60,6 @@ open class ParticleSystemSolver: ParticleSystemSolverBase {
         super.init()
     }
     
-    public required init(from decoder: Decoder) throws {
-        _timeIntegration = ComputePass()
-        _accumulateExternalForces = ComputePass()
-        _indirectArgsBuffer = BufferView(device: Engine.device, count: 1,
-                                         stride: MemoryLayout<MTLDispatchThreadgroupsIndirectArguments>.stride)
-        _initArgsPass = ComputePass()
-        
-        try super.init(from: decoder)
-    }
-    
-    public override func encode(to encoder: Encoder) throws {
-        
-    }
-    
     public override func initialize(_ commandBuffer: MTLCommandBuffer) {
         if let particleSystemData = particleSystemData {
             _initArgsPass.resourceCache = resourceCache

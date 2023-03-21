@@ -7,12 +7,6 @@
 import XCTest
 import vox_render
 
-extension CodingUserInfoKey {
-    public static var polymorphicTypes: CodingUserInfoKey {
-        CodingUserInfoKey(rawValue: "com.codable.polymophicTypes")!
-    }
-}
-
 final class PolymorphicDecodeTests: XCTestCase {
     func testComponent() throws {
         let wrapper1 = PolymorphicValue<Component>(wrappedValue: Transform())

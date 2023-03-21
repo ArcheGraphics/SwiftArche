@@ -90,13 +90,4 @@ open class ParticleSystemSolverBase: PhysicsAnimation {
         resourceCache = ResourceCache(Engine.device)
         super.init()
     }
-    
-    public required init(from decoder: Decoder) throws {
-        resourceCache = ResourceCache(Engine.device)
-
-        try super.init(from: decoder)
-    }
-    
-    public override func encode(to encoder: Encoder) throws {
-    }
 }

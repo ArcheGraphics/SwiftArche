@@ -8,15 +8,11 @@ import Math
 
 /// Physical collider shape plane.
 public class PlaneColliderShape: ColliderShape {
-    public override init() {
+    public required init() {
         super.init()
         _nativeShape = PhysXPhysics.createPlaneColliderShape(
                 _id,
                 _material._nativeMaterial
         )
-    }
-    
-    public required init(from decoder: Decoder) throws {
-        try super.init(from: decoder)
     }
 }

@@ -44,10 +44,6 @@ open class WCSphSolver: SphSolverBase {
         _particleSystemData = sph
     }
     
-    public required init(from decoder: Decoder) throws {
-        try super.init(from: decoder)
-    }
-    
     public override func onBeginAdvanceTimeStep(_ commandBuffer: MTLCommandBuffer, _ timeStepInSeconds: Float) {
         if let particleSystemData = particleSystemData as? SphSystemData {
             particleSystemData.buildNeighborSearcher(commandBuffer: commandBuffer, maxSearchRadius: particleSystemData.kernelRadius)

@@ -24,36 +24,6 @@ public class Transform: Component {
     private var _dirtyFlag: Int = TransformModifyFlags.WmWpWeWqWs.rawValue
 
     var _updateFlagManager: UpdateFlagManager = UpdateFlagManager()
-    
-    public required init() {
-        super.init()
-    }
-    
-    enum CodingKeys: String, CodingKey {
-        case position
-        case rotaiton
-        case scale
-    }
-    
-    public required init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        let position = try container.decode(Vector3.self, forKey: .position)
-        let rotation = try container.decode(Quaternion.self, forKey: .rotaiton)
-        let scale = try container.decode(Vector3.self, forKey: .scale)
-
-        try super.init(from: decoder)
-        self.position = position
-        self.rotationQuaternion = rotation
-        self.scale = scale
-    }
-    
-    public override func encode(to encoder: Encoder) throws {
-        var container = encoder.container(keyedBy: CodingKeys.self)
-        try container.encode(position, forKey: .position)
-        try container.encode(rotationQuaternion, forKey: .rotaiton)
-        try container.encode(scale, forKey: .scale)
-        try super.encode(to: encoder)
-    }
 }
 
 //MARK: - Get/Set Property

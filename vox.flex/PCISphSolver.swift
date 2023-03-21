@@ -47,10 +47,6 @@ public final class PCISphSolver: WCSphSolver {
         sph.addScalarData(with: "u_densityErrors", initialVal: Float(0), maxLength: Int(ParticleSystemSolverBase.maxLength))
     }
     
-    public required init(from decoder: Decoder) throws {
-        try super.init(from: decoder)
-    }
-    
     func computeDelta(_ timeStepInSeconds: Float)-> Float {
         if let sphSystemData = sphSystemData {
             let kernelRadius = sphSystemData.kernelRadius

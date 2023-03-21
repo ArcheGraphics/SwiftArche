@@ -88,11 +88,6 @@ open class SphSolverBase: ParticleSystemSolver {
         isUsingFixedSubTimeSteps = false
     }
     
-    public required init(from decoder: Decoder) throws {
-        try super.init(from: decoder)
-        isUsingFixedSubTimeSteps = false
-    }
-    
     open override func numberOfSubTimeSteps(_ timeIntervalInSeconds: Float) -> UInt {
         if let sphSystemData = sphSystemData {
             let kernelRadius = sphSystemData.kernelRadius

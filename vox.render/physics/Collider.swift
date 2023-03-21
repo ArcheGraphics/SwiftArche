@@ -41,22 +41,6 @@ public class Collider: Component {
             _updateFlag = entity.transform.registerWorldChangeFlag()
         }
     }
-    
-    enum CodingKeys: String, CodingKey {
-        case shapes
-    }
-    
-    public required init() {
-        super.init()
-    }
-    
-    required init(from decoder: Decoder) throws {
-        try super.init(from: decoder)
-    }
-    
-    public override func encode(to encoder: Encoder) throws {
-        try super.encode(to: encoder)
-    }
 
     /// Add collider shape on this collider.
     /// - Parameter shape: Collider shape

@@ -7,7 +7,7 @@
 import Foundation
 
 /// The base class of the components.
-open class Component: NSObject, Polymorphic {
+open class Component: NSObject, Polymorphic, Serializable {
     var _entity: Entity!
     var _awoken: Bool = false
 
@@ -26,17 +26,6 @@ open class Component: NSObject, Polymorphic {
 
     public required override init() {
         super.init()
-    }
-    
-    required public init(from decoder: Decoder) throws {
-    }
-    
-    open func encode(to encoder: Encoder) throws {
-    }
-    
-    /// Destroy this instance.
-    deinit {
-        destroy()
     }
 
     /// Destroy this instance.

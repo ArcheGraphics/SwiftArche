@@ -8,7 +8,7 @@ import Metal
 import Math
 
 /// Ambient light.
-public class AmbientLight: Codable {
+public class AmbientLight: Serializable {
     private var _envMapLight = EnvMapLight(diffuse: vector_float3(0.212, 0.227, 0.259), mipMapLevel: 0,
             diffuseIntensity: 1.0, specularIntensity: 1.0)
     private static let _envMapProperty = "u_envMapLight"
@@ -24,7 +24,7 @@ public class AmbientLight: Codable {
     private var _scenes: [Scene] = []
     private var _diffuseMode: DiffuseMode = .SolidColor
 
-    public init() {
+    required public init() {
         _sampler.mipFilter = .linear
         _sampler.minFilter = .linear
         _sampler.magFilter = .linear
@@ -33,12 +33,6 @@ public class AmbientLight: Codable {
         _sampler.rAddressMode = .repeat
         _sampler.sAddressMode = .clampToEdge
         _sampler.tAddressMode = .clampToEdge
-    }
-    
-    public required init(from decoder: Decoder) throws {
-    }
-    
-    public func encode(to encoder: Encoder) throws {
     }
 
     /// Diffuse mode of ambient light.

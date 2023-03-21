@@ -13,15 +13,4 @@ public class FixedJoint: Joint {
         _nativeJoint = PhysXPhysics.createFixedJoint(_collider.collider!._nativeCollider)
         _nativeJoint.setName(name)
     }
-    
-    required init() {
-        super.init()
-    }
-    
-    public required init(from decoder: Decoder) throws {
-        try super.init(from: decoder)
-    }
-    
-    public override func encode(to encoder: Encoder) throws {
-    }
 }

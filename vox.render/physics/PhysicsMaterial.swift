@@ -7,7 +7,7 @@
 import Math
 
 /// Material class to represent a set of surface properties.
-public class PhysicsMaterial: Codable {
+public class PhysicsMaterial: Serializable {
     private var _bounciness: Float = 0.1
     private var _dynamicFriction: Float = 0.1
     private var _staticFriction: Float = 0.1
@@ -16,7 +16,7 @@ public class PhysicsMaterial: Codable {
 
     internal var _nativeMaterial: PhysXPhysicsMaterial
 
-    public init() {
+    public required init() {
         _nativeMaterial = PhysXPhysics.createPhysicsMaterial(
                 _staticFriction,
                 _dynamicFriction,
@@ -24,13 +24,6 @@ public class PhysicsMaterial: Codable {
                 _bounceCombine.rawValue,
                 _frictionCombine.rawValue
         )
-    }
-    
-    public required init(from decoder: Decoder) throws {
-        fatalError()
-    }
-    
-    public func encode(to encoder: Encoder) throws {
     }
 
     /// The coefficient of bounciness.

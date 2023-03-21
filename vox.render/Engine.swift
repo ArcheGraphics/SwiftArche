@@ -10,6 +10,12 @@ import Logging
 
 public let logger = Logger(label: "com.arche.main")
 
+extension CodingUserInfoKey {
+    public static var polymorphicTypes: CodingUserInfoKey {
+        CodingUserInfoKey(rawValue: "com.codable.polymophicTypes")!
+    }
+}
+
 public class Engine: NSObject {
     // The max number of command buffers in flight
     static let _maxFramesInFlight = 3
@@ -214,6 +220,7 @@ public class Engine: NSObject {
     
     public static func makeDecoder() -> JSONDecoder {
         let decoder = JSONDecoder()
+        decoder.userInfo[.polymorphicTypes] = componentType
         return decoder
     }
     

@@ -93,18 +93,6 @@ public class CharacterController: Collider {
             return 0
         }
     }
-    
-    enum CodingKeys: String, CodingKey {
-        case stepOffset
-    }
-    
-    required init(from decoder: Decoder) throws {
-        try super.init(from: decoder)
-    }
-    
-    public override func encode(to encoder: Encoder) throws {
-        try super.encode(to: encoder)
-    }
 
     /// Moves the character using a "collide-and-slide" algorithm.
     /// - Parameters:

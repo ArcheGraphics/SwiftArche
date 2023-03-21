@@ -21,19 +21,12 @@ public class BoxColliderShape: ColliderShape {
         }
     }
 
-    public override init() {
+    public required init() {
         super.init()
         _nativeShape = PhysXPhysics.createBoxColliderShape(
                 _id,
                 _size,
                 _material._nativeMaterial
         )
-    }
-    
-    public required init(from decoder: Decoder) throws {
-        try super.init(from: decoder)
-    }
-    
-    public override func encode(to encoder: Encoder) throws {
     }
 }

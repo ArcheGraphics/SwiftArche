@@ -55,16 +55,4 @@ public class SpotLight: Light {
     override func _onDisable() {
         Engine._lightManager._detachSpotLight(self)
     }
-    
-    public required init() {
-        super.init()
-    }
-    
-    public required init(from decoder: Decoder) throws {
-        try super.init(from: decoder)
-    }
-    
-    public override func encode(to encoder: Encoder) throws {
-        try super.encode(to: encoder)
-    }
 }

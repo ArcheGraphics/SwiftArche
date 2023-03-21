@@ -184,32 +184,6 @@ public final class Camera: Component {
         devicePipeline = DevicePipeline(self)
         registerCallback()
     }
-    
-    enum CodingKeys: String, CodingKey {
-        case priority
-        case enableFrustumCulling
-    }
-    
-    required init(from decoder: Decoder) throws {
-        shaderData = ShaderData()
-
-        try super.init(from: decoder)
-        
-        devicePipeline = DevicePipeline(self)
-        registerCallback()
-        
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        priority = try container.decode(Int.self, forKey: .priority)
-        enableFrustumCulling = try container.decode(Bool.self, forKey: .enableFrustumCulling)
-    }
-
-    public override func encode(to encoder: Encoder) throws {
-        try super.encode(to: encoder)
-        
-        var container = encoder.container(keyedBy: CodingKeys.self)
-        try container.encode(priority, forKey: .priority)
-        try container.encode(enableFrustumCulling, forKey: .enableFrustumCulling)
-    }
 
     override func _onEnable() {
         if Camera.mainCamera == nil {
