@@ -70,6 +70,13 @@ public class MeshColliderShape: ColliderShape {
         )
     }
     
+    public required init(from decoder: Decoder) throws {
+        try super.init(from: decoder)
+    }
+    
+    public override func encode(to encoder: Encoder) throws {
+    }
+    
     /// special API should not change cookingOptions after call
     public func cookConvexHull(_ convexHull: inout ConvexHull) {
         (_nativeShape as! PhysXMeshColliderShape).cookConvexHull(&convexHull)

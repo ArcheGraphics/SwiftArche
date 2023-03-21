@@ -41,4 +41,16 @@ public class DirectLight: Light {
     override func _onDisable() {
         engine._lightManager._detachDirectLight(self)
     }
+    
+    public required init(_ engine: Engine) {
+        super.init(engine)
+    }
+    
+    public required init(from decoder: Decoder) throws {
+        try super.init(from: decoder)
+    }
+    
+    public override func encode(to encoder: Encoder) throws {
+        try super.encode(to: encoder)
+    }
 }

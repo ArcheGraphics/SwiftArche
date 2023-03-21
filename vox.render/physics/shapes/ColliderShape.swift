@@ -7,7 +7,7 @@
 import Math
 
 /// Abstract class for collider shapes.
-public class ColliderShape {
+public class ColliderShape: Codable {
     private static var _idGenerator: UInt32 = 0
 
     var _collider: Collider?
@@ -107,5 +107,12 @@ public class ColliderShape {
         _material = PhysicsMaterial()
         _id = ColliderShape._idGenerator
         ColliderShape._idGenerator += 1
+    }
+    
+    public required init(from decoder: Decoder) throws {
+        fatalError()
+    }
+    
+    public func encode(to encoder: Encoder) throws {
     }
 }

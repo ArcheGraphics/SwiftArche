@@ -6,13 +6,13 @@
 
 import Foundation
 
-open class EngineObject: NSObject {
+open class EngineObject: NSObject, Identifiable {
     private static var _instanceIdCounter: Int = 0
     /// Engine to which the object belongs.
-    internal var _engine: Engine
+    internal weak var _engine: Engine!
 
     /// Engine unique id.
-    private let _instanceId: Int
+    public let id: Int
 
     /// Get the engine which the object belongs.
     public var engine: Engine {
@@ -23,18 +23,8 @@ open class EngineObject: NSObject {
 
     public init(_ engine: Engine) {
         EngineObject._instanceIdCounter += 1
-        _instanceId = EngineObject._instanceIdCounter
+        id = EngineObject._instanceIdCounter
 
         _engine = engine
-    }
-
-    func destroy() {
-        // _engine.resourceManager?._deleteAsset(this)
-    }
-}
-
-extension EngineObject: Identifiable {
-    public var id: Int {
-        _instanceId
     }
 }

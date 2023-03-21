@@ -60,7 +60,7 @@ public final class Entity: EngineObject, Codable {
         destroy()
     }
 
-    override public func destroy() {
+    public func destroy() {
         _components.forEach { v in
             v.wrappedValue.destroy()
         }

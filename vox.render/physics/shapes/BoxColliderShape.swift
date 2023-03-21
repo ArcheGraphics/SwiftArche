@@ -29,4 +29,11 @@ public class BoxColliderShape: ColliderShape {
                 _material._nativeMaterial
         )
     }
+    
+    public required init(from decoder: Decoder) throws {
+        try super.init(from: decoder)
+    }
+    
+    public override func encode(to encoder: Encoder) throws {
+    }
 }

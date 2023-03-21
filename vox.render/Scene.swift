@@ -162,7 +162,7 @@ public final class Scene: EngineObject {
         }
     }
 
-    override func destroy() {
+    func destroy() {
         if _isActiveInEngine {
             _engine.sceneManager.activeScene = nil
         }

@@ -42,7 +42,7 @@ open class Component: EngineObject, Polymorphic {
     }
 
     /// Destroy this instance.
-    override func destroy() {
+    func destroy() {
         _entity._removeComponent(self)
         if (_entity.isActiveInHierarchy) {
             if _enabled {

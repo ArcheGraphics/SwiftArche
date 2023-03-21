@@ -23,7 +23,7 @@ extension Encoder {
         var container = self.container(
             keyedBy: PolymorphicMetaContainerKeys.self
         )
-        try container.encode(type(of: value).id, forKey: ._type)
+        try container.encode(type(of: value).typeID, forKey: ._type)
         try value.encode(to: self)
     }
 }
@@ -38,7 +38,7 @@ extension Decoder {
         }
 
         let _matchingType = types.first { type in
-            type.id == typeID
+            type.typeID == typeID
         }
 
         guard let matchingType = _matchingType else {
@@ -80,11 +80,11 @@ extension PolymorphicValue: Codable {
 
 // MARK: - Polymorphic Protocol
 public protocol Polymorphic: Codable {
-    static var id: String { get }
+    static var typeID: String { get }
 }
 
 extension Polymorphic {
-    public static var id: String {
+    public static var typeID: String {
         String(describing: Self.self)
     }
 }

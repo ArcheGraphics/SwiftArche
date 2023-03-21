@@ -15,4 +15,8 @@ public class PlaneColliderShape: ColliderShape {
                 _material._nativeMaterial
         )
     }
+    
+    public required init(from decoder: Decoder) throws {
+        try super.init(from: decoder)
+    }
 }

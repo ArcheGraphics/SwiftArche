@@ -126,4 +126,15 @@ public class HingeJoint: Joint {
         _nativeJoint = PhysXPhysics.createHingeJoint(_collider.collider!._nativeCollider)
         _nativeJoint.setName(name)
     }
+    
+    required init(_ engine: Engine) {
+        super.init(engine)
+    }
+    
+    public required init(from decoder: Decoder) throws {
+        try super.init(from: decoder)
+    }
+    
+    public override func encode(to encoder: Encoder) throws {
+    }
 }
