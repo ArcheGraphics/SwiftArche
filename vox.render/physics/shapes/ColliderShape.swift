@@ -7,7 +7,7 @@
 import Math
 
 /// Abstract class for collider shapes.
-public class ColliderShape: Codable {
+public class ColliderShape: Codable, Polymorphic {
     private static var _idGenerator: UInt32 = 0
 
     var _collider: Collider?

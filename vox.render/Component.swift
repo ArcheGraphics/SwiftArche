@@ -7,7 +7,7 @@
 import Foundation
 
 /// The base class of the components.
-open class Component: EngineObject, Polymorphic {
+open class Component: NSObject, Polymorphic {
     var _entity: Entity!
     var _awoken: Bool = false
 

@@ -460,7 +460,7 @@
 		3EC039AB293218F0002187DC /* ListenerUpdateFlag .swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EC039A3293218F0002187DC /* ListenerUpdateFlag .swift */; };
 		3EC039AC293218F0002187DC /* DisorderedArray.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EC039A4293218F0002187DC /* DisorderedArray.swift */; };
 		3EC039AD293218F0002187DC /* Time.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EC039A5293218F0002187DC /* Time.swift */; };
-		3EC039AE293218F0002187DC /* EngineObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EC039A6293218F0002187DC /* EngineObject.swift */; };
+		3EC039AE293218F0002187DC /* NSObject+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EC039A6293218F0002187DC /* NSObject+Extensions.swift */; };
 		3EC039AF293218F0002187DC /* UpdateFlag.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EC039A7293218F0002187DC /* UpdateFlag.swift */; };
 		3EC039B0293218F0002187DC /* UpdateFlagManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EC039A8293218F0002187DC /* UpdateFlagManager.swift */; };
 		3EC039B1293218F0002187DC /* Util.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EC039A9293218F0002187DC /* Util.swift */; };
@@ -1184,7 +1184,7 @@
 		3EC039A3293218F0002187DC /* ListenerUpdateFlag .swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "ListenerUpdateFlag .swift"; sourceTree = "<group>"; };
 		3EC039A4293218F0002187DC /* DisorderedArray.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DisorderedArray.swift; sourceTree = "<group>"; };
 		3EC039A5293218F0002187DC /* Time.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Time.swift; sourceTree = "<group>"; };
-		3EC039A6293218F0002187DC /* EngineObject.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EngineObject.swift; sourceTree = "<group>"; };
+		3EC039A6293218F0002187DC /* NSObject+Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NSObject+Extensions.swift"; sourceTree = "<group>"; };
 		3EC039A7293218F0002187DC /* UpdateFlag.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UpdateFlag.swift; sourceTree = "<group>"; };
 		3EC039A8293218F0002187DC /* UpdateFlagManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UpdateFlagManager.swift; sourceTree = "<group>"; };
 		3EC039A9293218F0002187DC /* Util.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Util.swift; sourceTree = "<group>"; };
@@ -1977,6 +1977,7 @@
 		3EBA3D2529B9872D00E5FB42 /* gpu */ = {
 			isa = PBXGroup;
 			children = (
+				3EC039A6293218F0002187DC /* NSObject+Extensions.swift */,
 				3EBA3D2629B9873B00E5FB42 /* MetalError.swift */,
 				3EBA3D2829B99C4900E5FB42 /* MTL+Codable.swift */,
 				3EBA3D2E29B99D0500E5FB42 /* MTLOrigin+Extensions.swift */,
@@ -2290,6 +2291,7 @@
 				040F1DD72934E6CF008BDC8D /* gui */,
 				3EBA3D0629B834A900E5FB42 /* gizmo */,
 				3EBA3D1929B93F2800E5FB42 /* text */,
+				3EC039A5293218F0002187DC /* Time.swift */,
 				3EC0389029321826002187DC /* Layer.swift */,
 				3EC0388629321825002187DC /* Canvas.swift */,
 				3EC0388429321825002187DC /* Engine.swift */,
@@ -2336,13 +2338,11 @@
 		3EC0386729321551002187DC /* base */ = {
 			isa = PBXGroup;
 			children = (
+				3EC039A4293218F0002187DC /* DisorderedArray.swift */,
 				3EC039A2293218F0002187DC /* BoolUpdateFlag.swift */,
 				3EC039A3293218F0002187DC /* ListenerUpdateFlag .swift */,
 				3EC039A7293218F0002187DC /* UpdateFlag.swift */,
 				3EC039A8293218F0002187DC /* UpdateFlagManager.swift */,
-				3EC039A4293218F0002187DC /* DisorderedArray.swift */,
-				3EC039A6293218F0002187DC /* EngineObject.swift */,
-				3EC039A5293218F0002187DC /* Time.swift */,
 				3EC039A9293218F0002187DC /* Util.swift */,
 			);
 			path = base;
@@ -3631,7 +3631,7 @@
 				3E8B00D029BB637A00A70123 /* CAnimationState.mm in Sources */,
 				3EC038F629321853002187DC /* CharacterController.swift in Sources */,
 				3EC0395F293218BA002187DC /* RenderPass.swift in Sources */,
-				3EC039AE293218F0002187DC /* EngineObject.swift in Sources */,
+				3EC039AE293218F0002187DC /* NSObject+Extensions.swift in Sources */,
 				040F1E29293C865E008BDC8D /* UIElement.swift in Sources */,
 				3EBA3D1129B8578E00E5FB42 /* LineBatcher.swift in Sources */,
 				3EC0389C29321826002187DC /* Entity.swift in Sources */,

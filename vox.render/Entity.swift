@@ -8,7 +8,7 @@ import Foundation
 import Math
 
 /// Entity, be used as components container.
-public final class Entity: EngineObject, Codable {    
+public final class Entity: NSObject, Codable {
     private var _layer: Layer = .Layer0
     
     /// The name of entity.

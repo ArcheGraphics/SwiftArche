@@ -7,7 +7,7 @@
 import Metal
 import Math
 
-public final class Scene: EngineObject {
+public final class Scene: NSObject {
     private static let _fogProperty = "u_fog"
 
     /// Scene name.
