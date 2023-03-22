@@ -7,35 +7,47 @@
 import Metal
 import Math
 
-public final class Scene: NSObject {
+public final class Scene: NSObject, Serializable {
     private static let _fogProperty = "u_fog"
 
     /// Scene name.
+    @Serialized(default: "scene")
     public var name: String
 
     /// The background of the scene.
     public var background: Background = Background()
     /// Scene-related shader data.
-    public var shaderData: ShaderData
+    public var shaderData: ShaderData = ShaderData()
 
     /// If cast shadows.
-    @MirrorUI
-    public var castShadows: Bool = true
+    @Serialized(default: true)
+    public var castShadows: Bool
+    
     /// The resolution of the shadow maps.
-    @MirrorUI
-    public var shadowResolution: ShadowResolution = ShadowResolution.High
+    @Serialized(default: .High)
+    public var shadowResolution: ShadowResolution
+    
     /// The splits of two cascade distribution.
-    @MirrorUI
-    public var shadowTwoCascadeSplits: Float = 1.0 / 3.0
+    @Serialized(default: 1.0 / 3.0)
+    public var shadowTwoCascadeSplits: Float
+    
     /// The splits of four cascade distribution.
-    @MirrorUI
-    public var shadowFourCascadeSplits: Vector3 = Vector3(1.0 / 15, 3.0 / 15.0, 7.0 / 15.0)
+    @Serialized(default: Vector3(1.0 / 15, 3.0 / 15.0, 7.0 / 15.0))
+    public var shadowFourCascadeSplits: Vector3
+    
     /// Max Shadow distance.
-    @MirrorUI
-    public var shadowDistance: Float = 50
+    @Serialized(default: 50)
+    public var shadowDistance: Float
+    
     /// Number of cascades to use for directional light shadows.
-    @MirrorUI
-    public var shadowCascades: ShadowCascadesMode = ShadowCascadesMode.NoCascades
+    @Serialized(default: .NoCascades)
+    public var shadowCascades: ShadowCascadesMode {
+        didSet {
+            if shadowCascades != .NoCascades {
+                shaderData.enableMacro(CASCADED_COUNT.rawValue, (shadowCascades.rawValue, .int))
+            }
+        }
+    }
     
     var _activeCameras: [Camera] = []
     var _isActiveInEngine: Bool = false
@@ -70,16 +82,28 @@ public final class Scene: NSObject {
     }
     
     /// Fog start.
-    @MirrorUI
-    public var fogStart: Float = 0
+    @Serialized(default: 0)
+    public var fogStart: Float {
+        didSet {
+            _computeLinearFogParams(fogStart, fogEnd)
+        }
+    }
 
     /// Fog end.
-    @MirrorUI
-    public var fogEnd: Float = 300
+    @Serialized(default: 300)
+    public var fogEnd: Float {
+        didSet {
+            _computeLinearFogParams(fogStart, fogEnd)
+        }
+    }
 
     /// Fog density.
-    @MirrorUI
-    public var fogDensity: Float = 0.01
+    @Serialized(default: 0.01)
+    public var fogDensity: Float {
+        didSet {
+            _computeExponentialFogParams(fogDensity)
+        }
+    }
 
     /// Fog mode.
     /// - Remarks:
@@ -87,8 +111,14 @@ public final class Scene: NSObject {
     /// If set to `FogMode.Linear`, the fog will be linear and controlled by `fogStart` and `fogEnd`.
     /// If set to `FogMode.Exponential`, the fog will be exponential and controlled by `fogDensity`.
     /// If set to `FogMode.ExponentialSquared`, the fog will be exponential squared and controlled by `fogDensity`.
-    @MirrorUI
-    public var fogMode: FogMode = FogMode.None
+    @Serialized(default: .None)
+    public var fogMode: FogMode {
+        didSet {
+            if fogMode != .None {
+                shaderData.enableMacro(FOG_MODE.rawValue, (fogMode.rawValue, .int))
+            }
+        }
+    }
 
     /// Fog color.
     public var fogColor: Color {
@@ -118,9 +148,7 @@ public final class Scene: NSObject {
     /// Create scene.
     /// - Parameters:
     ///   - name: Name
-    public init(_ name: String = "") {
-        self.name = name
-        shaderData = ShaderData()
+    public override init() {
         super.init()
 
         ambientLight = AmbientLight()
@@ -131,34 +159,10 @@ public final class Scene: NSObject {
         shaderData.enableMacro(CASCADED_COUNT.rawValue, (shadowCascades.rawValue, .int))
         _computeLinearFogParams(fogStart, fogEnd)
         _computeExponentialFogParams(fogDensity)
-        
-        registerCallback()
     }
     
     deinit {
         destroy()
-    }
-    
-    func registerCallback() {
-        $shadowCascades.didSet = { [weak self] newValue in
-            if newValue != .NoCascades {
-                self?.shaderData.enableMacro(CASCADED_COUNT.rawValue, (newValue.rawValue, .int))
-            }
-        }
-        $fogMode.didSet = { [weak self] newValue in
-            if newValue != .None {
-                self?.shaderData.enableMacro(FOG_MODE.rawValue, (newValue.rawValue, .int))
-            }
-        }
-        $fogStart.didSet = { [weak self] newValue in
-            self!._computeLinearFogParams(newValue, (self?.fogEnd)!)
-        }
-        $fogEnd.didSet = { [weak self] newValue in
-            self!._computeLinearFogParams((self?.fogStart)!, newValue)
-        }
-        $fogDensity.didSet = { [weak self] newValue in
-            self!._computeExponentialFogParams(newValue)
-        }
     }
 
     func destroy() {
@@ -415,25 +419,5 @@ extension Scene {
         _fogData.params.z = density / log(2)
         _fogData.params.w = density / sqrt(log(2))
         shaderData.setData(Scene._fogProperty, _fogData)
-    }
-}
-
-extension Scene: Codable {
-    enum CodingKeys: String, CodingKey {
-        case name
-        case rootEntities
-    }
-    
-    public convenience init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        let name = try container.decode(String.self, forKey: .name)
-        self.init(name)
-        _rootEntities = try container.decode([Entity].self, forKey: .rootEntities)
-    }
-    
-    public func encode(to encoder: Encoder) throws {
-        var container = encoder.container(keyedBy: CodingKeys.self)
-        try container.encode(name, forKey: .name)
-        try container.encode(rootEntities, forKey: .rootEntities)
     }
 }

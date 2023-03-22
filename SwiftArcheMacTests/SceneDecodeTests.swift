@@ -55,7 +55,8 @@ final class SceneDecodeTests: XCTestCase {
         let rootEntity = scene.createRootEntity()
         rootEntity.name = "EntityName"
         let childEntity = rootEntity.createChild("ChildName")
-        childEntity.addComponent(Camera.self)
+        let camera = childEntity.addComponent(Camera.self)
+        camera.fieldOfView = 10
         
         let data = try! jsonEncode.encode(scene)
         // let json = String(data: data, encoding: .utf8)

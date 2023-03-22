@@ -147,7 +147,9 @@ public class Engine: NSObject {
         Engine._physicsManager = PhysicsManager()
         Engine._inputManager = InputManager()
         Engine._sceneManager = SceneManager()
-        Engine._sceneManager.activeScene = Scene("DefaultScene")
+        let scene = Scene()
+        scene.name = "DefaultScene"
+        Engine._sceneManager.activeScene = scene
         canvas.delegate = self
         canvas.device = device
         canvas.inputManager = Engine._inputManager

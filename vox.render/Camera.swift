@@ -21,18 +21,18 @@ public final class Camera: Component {
     public var priority: Int = 0
 
     /// Whether to enable frustum culling, it is enabled by default.
-    @MirrorUI
-    public var enableFrustumCulling: Bool = true
+    @Serialized(default: true)
+    public var enableFrustumCulling: Bool
 
     /// Determining what to clear when rendering by a Camera.
     /// defaultValue `CameraClearFlags.ColorDepth`
-    @MirrorUI
-    public var clearFlags: CameraClearFlags = .All
+    @Serialized(default: .All)
+    public var clearFlags: CameraClearFlags
 
     /// Culling mask - which layers the camera renders.
     /// - Remark Support bit manipulation, corresponding to Entity's layer.
-    @MirrorUI
-    public var cullingMask: Layer = Layer.Everything
+    @Serialized(default: Layer.Everything)
+    public var cullingMask: Layer
 
     public var devicePipeline: DevicePipeline!
 
@@ -56,21 +56,37 @@ public final class Camera: Component {
     private var _inverseProjectionMatrix: Matrix = Matrix()
 
     /// Near clip plane - the closest point to the camera when rendering occurs.
-    @MirrorUI
-    public var nearClipPlane: Float = 0.1
+    @Serialized(default: 0.1)
+    public var nearClipPlane: Float {
+        didSet {
+            _projMatChange()
+        }
+    }
 
     /// Far clip plane - the furthest point to the camera when rendering occurs.
-    @MirrorUI
-    public var farClipPlane: Float = 100
+    @Serialized(default: 100)
+    public var farClipPlane: Float {
+        didSet {
+            _projMatChange()
+        }
+    }
 
     /// The camera's view angle. activating when camera use perspective projection.
-    @MirrorUI
-    public var fieldOfView: Float = 45
+    @Serialized(default: 45)
+    public var fieldOfView: Float {
+        didSet {
+            _projMatChange()
+        }
+    }
 
     /// Viewport, normalized expression, the upper left corner is (0, 0), and the lower right corner is (1, 1).
     /// - Remark: Re-assignment is required after modification to ensure that the modification takes effect.
-    @MirrorUI
-    public var viewport: Vector4 = Vector4(0, 0, 1, 1)
+    @Serialized(default: Vector4(0, 0, 1, 1))
+    public var viewport: Vector4 {
+        didSet {
+            _projMatChange()
+        }
+    }
     
     /// Aspect ratio. The default is automatically calculated by the viewport's aspect ratio. If it is manually set,
     /// the manual value will be kept. Call resetAspectRatio() to restore it.
@@ -87,12 +103,21 @@ public final class Camera: Component {
     }
 
     /// Whether it is orthogonal, the default is false. True will use orthographic projection, false will use perspective projection.
-    @MirrorUI
-    public var isOrthographic: Bool = false
+    @Serialized(default: false)
+    public var isOrthographic: Bool {
+        didSet {
+            _cameraInfo.isOrthographic = isOrthographic
+            _projMatChange()
+        }
+    }
 
     /// Half the size of the camera in orthographic mode.
-    @MirrorUI
-    public var orthographicSize: Float = 10
+    @Serialized(default: 10)
+    public var orthographicSize: Float {
+        didSet {
+            _projMatChange()
+        }
+    }
 
     /// View matrix.
     public var viewMatrix: Matrix {
@@ -182,7 +207,6 @@ public final class Camera: Component {
 
         super.init()
         devicePipeline = DevicePipeline(self)
-        registerCallback()
     }
 
     override func _onEnable() {
@@ -194,28 +218,6 @@ public final class Camera: Component {
 
     override func _onDisable() {
         entity.scene._detachRenderCamera(self)
-    }
-    
-    func registerCallback() {
-        $fieldOfView.didSet = { [weak self] _ in
-            self?._projMatChange()
-        }
-        $farClipPlane.didSet = { [weak self] _ in
-            self?._projMatChange()
-        }
-        $nearClipPlane.didSet = { [weak self] _ in
-            self?._projMatChange()
-        }
-        $viewport.didSet = { [weak self] _ in
-            self?._projMatChange()
-        }
-        $isOrthographic.didSet = { [weak self] newValue in
-            self?._cameraInfo.isOrthographic = newValue
-            self?._projMatChange()
-        }
-        $orthographicSize.didSet = { [weak self] _ in
-            self?._projMatChange()
-        }
     }
 }
 
