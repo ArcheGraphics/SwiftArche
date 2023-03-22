@@ -8,16 +8,11 @@ import Math
 
 /// Physical collider shape for sphere.
 public class SphereColliderShape: ColliderShape {
-    private var _radius: Float = 1
-
     /// Radius of sphere shape.
+    @Serialized(default: 1)
     public var radius: Float {
-        get {
-            _radius
-        }
-        set {
-            _radius = newValue
-            (_nativeShape as! PhysXSphereColliderShape).setRadius(newValue)
+        didSet {
+            (_nativeShape as! PhysXSphereColliderShape).setRadius(radius)
         }
     }
 
@@ -25,8 +20,8 @@ public class SphereColliderShape: ColliderShape {
         super.init()
         _nativeShape = PhysXPhysics.createSphereColliderShape(
                 _id,
-                _radius,
-                _material._nativeMaterial
+                radius,
+                material._nativeMaterial
         )
     }
 }

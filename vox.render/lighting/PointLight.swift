@@ -16,7 +16,8 @@ public class PointLight: Light {
     }
 
     /// Defines a distance cutoff at which the light's intensity must be considered zero.
-    public var distance: Float = 100
+    @Serialized(default: 100)
+    public var distance: Float
 
     func _appendData(_ lightIndex: Int) {
         PointLight._combinedData[lightIndex].color = _getLightColor()

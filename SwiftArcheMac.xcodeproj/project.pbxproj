@@ -2323,8 +2323,8 @@
 				3EC0386B29321707002187DC /* mesh */,
 				3EC0386C29321710002187DC /* rendering */,
 				040F1E15293B881E008BDC8D /* postprocess */,
-				3EC03869293216F9002187DC /* lighting */,
 				3EC0386E2932171F002187DC /* shadow */,
+				3EC03869293216F9002187DC /* lighting */,
 				3EC0386F29321726002187DC /* sky */,
 				3EC0386529321542002187DC /* background */,
 				3EC0387129321740002187DC /* physics */,
@@ -2407,9 +2407,9 @@
 				3EC0387729321783002187DC /* enums */,
 				3EC03995293218DA002187DC /* Light.swift */,
 				3EC03990293218DA002187DC /* DirectLight.swift */,
-				3EC03993293218DA002187DC /* LightManager.swift */,
 				3EC03991293218DA002187DC /* PointLight.swift */,
 				3EC03994293218DA002187DC /* SpotLight.swift */,
+				3EC03993293218DA002187DC /* LightManager.swift */,
 				3EC03992293218DA002187DC /* AmbientLight.swift */,
 			);
 			path = lighting;

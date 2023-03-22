@@ -17,6 +17,7 @@ final class SceneDecodeTests: XCTestCase {
         engine = Engine(canvas: canvas)
         
         jsonEncode = JSONEncoder()
+        jsonEncode.outputFormatting = .prettyPrinted
     }
 
     override func tearDownWithError() throws {
@@ -30,7 +31,7 @@ final class SceneDecodeTests: XCTestCase {
         scene.name = "SceneName"
 
         let data = try! jsonEncode.encode(scene)
-        // let json = String(data: data, encoding: .utf8)
+        // print(String(data: data, encoding: .utf8)!)
         
         let newScene = try! Engine.makeDecoder().decode(Scene.self, from: data)
         XCTAssertEqual(scene.name, newScene.name)
@@ -43,7 +44,7 @@ final class SceneDecodeTests: XCTestCase {
         rootEntity.name = "EntityName"
 
         let data = try! jsonEncode.encode(scene)
-        // let json = String(data: data, encoding: .utf8)
+        // print(String(data: data, encoding: .utf8)!)
         
         let newScene = try! Engine.makeDecoder().decode(Scene.self, from: data)
         XCTAssertEqual(rootEntity.name, newScene.rootEntities[0].name)
@@ -59,7 +60,7 @@ final class SceneDecodeTests: XCTestCase {
         camera.fieldOfView = 10
         
         let data = try! jsonEncode.encode(scene)
-        // let json = String(data: data, encoding: .utf8)
+        // print(String(data: data, encoding: .utf8)!)
         
         let newScene = try! Engine.makeDecoder().decode(Scene.self, from: data)
         XCTAssertEqual(childEntity.name, newScene.rootEntities[0].children[0].name)

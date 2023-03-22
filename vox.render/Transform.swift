@@ -9,10 +9,14 @@ import Math
 
 /// Used to implement transformation related functions.
 public class Transform: Component {
-    private var _position: Vector3 = Vector3()
+    @Serialized("position", default: Vector3())
+    private var _position: Vector3
+    @Serialized("rotation", default: Quaternion())
+    private var _rotationQuaternion: Quaternion
+    @Serialized("scale", default: Vector3(1, 1, 1))
+    private var _scale: Vector3
+    
     private var _rotation: Vector3 = Vector3()
-    private var _rotationQuaternion: Quaternion = Quaternion()
-    private var _scale: Vector3 = Vector3(1, 1, 1)
     private var _worldPosition: Vector3 = Vector3()
     private var _worldRotation: Vector3 = Vector3()
     private var _worldRotationQuaternion: Quaternion = Quaternion()

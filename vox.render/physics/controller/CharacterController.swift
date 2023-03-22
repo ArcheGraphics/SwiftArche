@@ -8,55 +8,38 @@ import Math
 
 /// The character controllers.
 public class CharacterController: Collider {
-    private var _stepOffset: Float = 0.5
-    private var _nonWalkableMode: ControllerNonWalkableMode = .PreventClimbing
-    private var _upDirection = Vector3(0, 1, 0)
-    private var _slopeLimit: Float = 0.707
-
     /// The controller behavior
     public var behavior: ControllerBehavior?
 
     /// The step offset for the controller.
+    @Serialized(default: 0.5)
     public var stepOffset: Float {
-        get {
-            _stepOffset
-        }
-        set {
-            _stepOffset = newValue
-            (_nativeCollider as! PhysXCharacterController).setStepOffset(newValue)
+        didSet {
+            (_nativeCollider as! PhysXCharacterController).setStepOffset(stepOffset)
         }
     }
 
     /// The value of the non-walkable mode.
+    @Serialized(default: .PreventClimbing)
     public var nonWalkableMode: ControllerNonWalkableMode {
-        get {
-            _nonWalkableMode
-        }
-        set {
-            _nonWalkableMode = newValue
-            (_nativeCollider as! PhysXCharacterController).setNonWalkableMode(newValue.rawValue)
+        didSet {
+            (_nativeCollider as! PhysXCharacterController).setNonWalkableMode(nonWalkableMode.rawValue)
         }
     }
 
     /// The up direction for the controller.
+    @Serialized(default: Vector3(0, 1, 0))
     public var upDirection: Vector3 {
-        get {
-            _upDirection
-        }
-        set {
-            _upDirection = newValue
-            (_nativeCollider as! PhysXCharacterController).setUpDirection(newValue)
+        didSet {
+            (_nativeCollider as! PhysXCharacterController).setUpDirection(upDirection)
         }
     }
 
     /// The slope limit for the controller.
+    @Serialized(default: 0.707)
     public var slopeLimit: Float {
-        get {
-            _slopeLimit
-        }
-        set {
-            _slopeLimit = newValue
-            (_nativeCollider as! PhysXCharacterController).setSlopeLimit(newValue)
+        didSet {
+            (_nativeCollider as! PhysXCharacterController).setSlopeLimit(slopeLimit)
         }
     }
     
@@ -118,7 +101,7 @@ public class CharacterController: Collider {
     /// Remove all shape attached.
     public override func clearShapes() {
         if (_shapes.count > 0) {
-            super.removeShape(_shapes[0])
+            super.removeShape(_shapes[0].wrappedValue)
         }
     }
 
@@ -128,7 +111,7 @@ public class CharacterController: Collider {
 
             let worldScale = entity.transform.lossyWorldScale
             for shape in _shapes {
-                shape._nativeShape.setWorldScale(worldScale)
+                shape.wrappedValue._nativeShape.setWorldScale(worldScale)
             }
             _updateFlag.flag = false
         }

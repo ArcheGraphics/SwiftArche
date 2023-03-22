@@ -12,7 +12,7 @@ public class PlaneColliderShape: ColliderShape {
         super.init()
         _nativeShape = PhysXPhysics.createPlaneColliderShape(
                 _id,
-                _material._nativeMaterial
+                material._nativeMaterial
         )
     }
 }

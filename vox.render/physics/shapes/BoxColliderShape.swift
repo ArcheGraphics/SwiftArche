@@ -8,16 +8,11 @@ import Math
 
 /// Physical collider shape for box.
 public class BoxColliderShape: ColliderShape {
-    private var _size: Vector3 = Vector3(1, 1, 1)
-
     /// Size of box shape.
+    @Serialized(default: Vector3(1, 1, 1))
     public var size: Vector3 {
-        get {
-            _size
-        }
-        set {
-            _size = newValue
-            (_nativeShape as! PhysXBoxColliderShape).setSize(newValue)
+        didSet {
+            (_nativeShape as! PhysXBoxColliderShape).setSize(size)
         }
     }
 
@@ -25,8 +20,8 @@ public class BoxColliderShape: ColliderShape {
         super.init()
         _nativeShape = PhysXPhysics.createBoxColliderShape(
                 _id,
-                _size,
-                _material._nativeMaterial
+                size,
+                material._nativeMaterial
         )
     }
 }

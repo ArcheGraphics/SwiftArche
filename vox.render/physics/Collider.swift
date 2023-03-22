@@ -12,23 +12,23 @@ public class Collider: Component {
     var _nativeCollider: PhysXCollider!
 
     var _updateFlag: BoolUpdateFlag!
-    var _shapes: [ColliderShape] = []
-    private var _visualize: Bool = false
-
-    public var isVisualize: Bool {
-        get {
-            _visualize
-        }
-        set {
-            _visualize = newValue
-            _nativeCollider.setVisualize(newValue)
+    
+    @Serialized("shapes", default: [])
+    var _shapes: [PolymorphicValue<ColliderShape>]
+    
+    @Serialized(default: false)
+    public var visualize: Bool {
+        didSet {
+            _nativeCollider.setVisualize(visualize)
         }
     }
     
     /// The shapes of this collider.
     public var shapes: [ColliderShape] {
         get {
-            _shapes
+            _shapes.map { s in
+                s.wrappedValue
+            }
         }
     }
     
@@ -50,7 +50,7 @@ public class Collider: Component {
             if (oldCollider != nil) {
                 oldCollider!.removeShape(shape)
             }
-            _shapes.append(shape)
+            _shapes.append(PolymorphicValue(wrappedValue: shape, key: .colliderShapeTypes))
             Engine.physicsManager._addColliderShape(shape)
             _nativeCollider.addShape(shape._nativeShape)
             shape._collider = self
@@ -61,7 +61,7 @@ public class Collider: Component {
     /// - Parameter shape: The collider shape.
     public func removeShape(_  shape: ColliderShape) {
         let index = _shapes.firstIndex { s in
-            s === shape
+            s.wrappedValue === shape
         }
 
         if (index != nil) {

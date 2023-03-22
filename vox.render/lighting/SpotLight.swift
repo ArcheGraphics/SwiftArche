@@ -16,11 +16,16 @@ public class SpotLight: Light {
     }
 
     /// Defines a distance cutoff at which the light's intensity must be considered zero.
-    public var distance: Float = 100
+    @Serialized(default: 100)
+    public var distance: Float
+    
     /// Angle, in radians, from centre of spotlight where falloff begins.
-    public var angle: Float = Float.pi / 6
+    @Serialized(default: Float.pi / 6)
+    public var angle: Float
+    
     /// Angle, in radians, from falloff begins to ends.
-    public var penumbra: Float = Float.pi / 12
+    @Serialized(default: Float.pi / 12)
+    public var penumbra: Float
 
     /// Get light direction.
     public var direction: Vector3 {

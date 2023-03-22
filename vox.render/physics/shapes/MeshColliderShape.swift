@@ -8,24 +8,8 @@ import Math
 
 /// Physical collider shape mesh.
 public class MeshColliderShape: ColliderShape {
-    private var _isConvex = false
     private var _mesh: ModelMesh?
-    private var _cookingOptions: UInt8 = 0
-
-    public var isConvex: Bool {
-        get {
-            _isConvex
-        }
-        set {
-            if _isConvex != newValue {
-                _isConvex = newValue
-                if _mesh != nil {
-                    _cook()
-                }
-            }
-        }
-    }
-
+    
     public var mesh: ModelMesh? {
         get {
             _mesh
@@ -38,15 +22,21 @@ public class MeshColliderShape: ColliderShape {
         }
     }
 
-    public var cookingOptions: UInt8 {
-        get {
-            _cookingOptions
-        }
-        set {
-            if _cookingOptions != newValue {
-                _cookingOptions = newValue
-                (_nativeShape as! PhysXMeshColliderShape).setCookParamter(newValue)
+    @Serialized(default: false)
+    public var isConvex: Bool {
+        didSet {
+            if isConvex != oldValue {
+                if _mesh != nil {
+                    _cook()
+                }
             }
+        }
+    }
+
+    @Serialized(default: 0)
+    public var cookingOptions: UInt8 {
+        didSet {
+            (_nativeShape as! PhysXMeshColliderShape).setCookParamter(cookingOptions)
         }
     }
     
@@ -66,7 +56,7 @@ public class MeshColliderShape: ColliderShape {
         super.init()
         _nativeShape = PhysXPhysics.createMeshColliderShape(
                 _id,
-                _material._nativeMaterial
+                material._nativeMaterial
         )
     }
     

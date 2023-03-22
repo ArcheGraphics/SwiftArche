@@ -8,37 +8,27 @@ import Math
 
 /// Physical collider shape for capsule.
 public class CapsuleColliderShape: ColliderShape {
-    private var _radius: Float = 1
-    private var _height: Float = 2
-    private var _upAxis: ColliderShapeUpAxis = ColliderShapeUpAxis.Y
-
     /// Radius of capsule.
+    @Serialized(default: 1)
     public var radius: Float {
-        get {
-            _radius
-        }
-        set {
-            (_nativeShape as! PhysXCapsuleColliderShape).setRadius(newValue)
+        didSet {
+            (_nativeShape as! PhysXCapsuleColliderShape).setRadius(radius)
         }
     }
 
     /// Height of capsule.
+    @Serialized(default: 2)
     public var height: Float {
-        get {
-            _height
-        }
-        set {
-            (_nativeShape as! PhysXCapsuleColliderShape).setHeight(newValue)
+        didSet {
+            (_nativeShape as! PhysXCapsuleColliderShape).setHeight(height)
         }
     }
 
     /// Up axis of capsule.
+    @Serialized(default: .Y)
     public var upAxis: ColliderShapeUpAxis {
-        get {
-            _upAxis
-        }
-        set {
-            (_nativeShape as! PhysXCapsuleColliderShape).setUpAxis(newValue.rawValue)
+        didSet {
+            (_nativeShape as! PhysXCapsuleColliderShape).setUpAxis(upAxis.rawValue)
         }
     }
 
@@ -46,9 +36,9 @@ public class CapsuleColliderShape: ColliderShape {
         super.init()
         _nativeShape = PhysXPhysics.createCapsuleColliderShape(
                 _id,
-                _radius,
-                _height,
-                _material._nativeMaterial
+                radius,
+                height,
+                material._nativeMaterial
         )
     }
 }

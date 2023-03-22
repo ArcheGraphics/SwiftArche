@@ -13,21 +13,36 @@ public class Light: Component {
 
     /// Culling mask - which layers the light affect.
     /// - Remark: Support bit manipulation, corresponding to `Layer`.
-    public var cullingMask: Layer = Layer.Everything
+    @Serialized(default: Layer.Everything)
+    public var cullingMask: Layer
+    
     /// Light Intensity
-    public var intensity: Float = 1
+    @Serialized(default: 1)
+    public var intensity: Float
+    
     /// How this light casts shadows.
-    public var shadowType: ShadowType = ShadowType.None
+    @Serialized(default: ShadowType.None)
+    public var shadowType: ShadowType
+    
     /// Shadow bias.
-    public var shadowBias: Float = 1
+    @Serialized(default: 1)
+    public var shadowBias: Float
+    
     /// Shadow mapping normal-based bias.
-    public var shadowNormalBias: Float = 1
+    @Serialized(default: 1)
+    public var shadowNormalBias: Float
+    
     /// Near plane value to use for shadow frustums.
-    public var shadowNearPlane: Float = 0.1
+    @Serialized(default: 0.1)
+    public var shadowNearPlane: Float
+
     /// Shadow intensity, the larger the value, the clearer and darker the shadow.
-    public var shadowStrength: Float = 1.0
+    @Serialized(default: 1.0)
+    public var shadowStrength: Float
+    
     // Light Color.
-    public var color: Color = Color(1, 1, 1, 1)
+    @Serialized(default: Color(1, 1, 1, 1))
+    public var color: Color
 
     var _lightIndex: Int = -1
 

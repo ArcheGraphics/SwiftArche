@@ -49,10 +49,12 @@ public final class Scene: NSObject, Serializable {
         }
     }
     
+    @Serialized("rootEntities", default: [])
+    var _rootEntities: [Entity]
+    
     var _activeCameras: [Camera] = []
     var _isActiveInEngine: Bool = false
     var _globalShaderMacro: ShaderMacroCollection = ShaderMacroCollection()
-    var _rootEntities: [Entity] = []
     var _sunLight: Light?
 
     private var _ambientLight: AmbientLight!

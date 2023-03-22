@@ -8,70 +8,119 @@ import Math
 
 /// A dynamic collider can act with self-defined movement or physical force.
 public class DynamicCollider: Collider {
-    private var _linearDamping: Float = 0
-    private var _angularDamping: Float = 0.05
-    private var _linearVelocity = Vector3()
-    private var _angularVelocity = Vector3()
-    private var _centerOfMass = Vector3()
-    private var _inertiaTensor = Vector3(1, 1, 1)
-    private var _maxAngularVelocity: Float = 100
-    private var _maxDepenetrationVelocity: Float = 1000
-    private var _solverIterations: Int = 4
-    private var _isKinematic: Bool = false
-    private var _constraints: DynamicColliderConstraints = []
-    private var _collisionDetectionMode: CollisionDetectionMode = .Discrete
-    private var _sleepThreshold: Float = 5e-3
-    private var _useGravity: Bool = true
     private var _density: Float = 1
 
     /// The linear damping of the dynamic collider.
+    @Serialized(default: 0)
     public var linearDamping: Float {
-        get {
-            _linearDamping
-        }
-        set {
-            if _linearDamping != newValue {
-                _linearDamping = newValue
-                (_nativeCollider as! PhysXDynamicCollider).setLinearDamping(newValue)
-            }
+        didSet {
+            (_nativeCollider as! PhysXDynamicCollider).setLinearDamping(linearDamping)
         }
     }
 
     /// The angular damping of the dynamic collider.
+    @Serialized(default: 0.05)
     public var angularDamping: Float {
-        get {
-            _angularDamping
-        }
-        set {
-            if _angularDamping != newValue {
-                _angularDamping = newValue
-                (_nativeCollider as! PhysXDynamicCollider).setAngularDamping(newValue)
-            }
+        didSet {
+            (_nativeCollider as! PhysXDynamicCollider).setAngularDamping(angularDamping)
         }
     }
 
     /// The linear velocity vector of the dynamic collider measured in world unit per second.
+    @Serialized(default: Vector3())
     public var linearVelocity: Vector3 {
-        get {
-            _linearVelocity
-        }
-        set {
-            _linearVelocity = newValue
-            (_nativeCollider as! PhysXDynamicCollider).setLinearVelocity(_linearVelocity)
+        didSet {
+            (_nativeCollider as! PhysXDynamicCollider).setLinearVelocity(linearVelocity)
         }
     }
 
     /// The angular velocity vector of the dynamic collider measured in radians per second.
+    @Serialized(default: Vector3())
     public var angularVelocity: Vector3 {
-        get {
-            _angularVelocity
-        }
-        set {
-            _angularVelocity = newValue
-            (_nativeCollider as! PhysXDynamicCollider).setAngularVelocity(_angularVelocity)
+        didSet {
+            (_nativeCollider as! PhysXDynamicCollider).setAngularVelocity(angularVelocity)
         }
     }
 
+    /// The center of mass relative to the transform's origin.
+    @Serialized(default: Vector3())
+    public var centerOfMass: Vector3 {
+        didSet {
+            (_nativeCollider as! PhysXDynamicCollider).setCenterOfMass(centerOfMass)
+        }
+    }
+
+    /// The diagonal inertia tensor of mass relative to the center of mass.
+    @Serialized(default: Vector3(1, 1, 1))
+    public var inertiaTensor: Vector3 {
+        didSet {
+            (_nativeCollider as! PhysXDynamicCollider).setInertiaTensor(inertiaTensor)
+        }
+    }
+
+    /// The maximum angular velocity of the collider measured in radians per second. (Default 7) range { 0, infinity }.
+    @Serialized(default: 100)
+    public var maxAngularVelocity: Float {
+        didSet {
+            (_nativeCollider as! PhysXDynamicCollider).setMaxAngularVelocity(maxAngularVelocity)
+        }
+    }
+
+    /// Maximum velocity of a collider when moving out of penetrating state.
+    @Serialized(default: 1000)
+    public var maxDepenetrationVelocity: Float {
+        didSet {
+            (_nativeCollider as! PhysXDynamicCollider).setMaxDepenetrationVelocity(maxDepenetrationVelocity)
+        }
+    }
+
+    /// The mass-normalized energy threshold, below which objects start going to sleep.
+    @Serialized(default: 5e-3)
+    public var sleepThreshold: Float {
+        didSet {
+            (_nativeCollider as! PhysXDynamicCollider).setSleepThreshold(sleepThreshold)
+        }
+    }
+
+    /// The solverIterations determines how accurately collider joints and collision contacts are resolved.
+    @Serialized(default: 4)
+    public var solverIterations: Int {
+        didSet {
+            (_nativeCollider as! PhysXDynamicCollider).setSolverIterations(solverIterations)
+        }
+    }
+
+    /// Controls whether physics affects the dynamic collider.
+    @Serialized(default: false)
+    public var isKinematic: Bool {
+        didSet {
+            (_nativeCollider as! PhysXDynamicCollider).setIsKinematic(isKinematic)
+        }
+    }
+
+    /// The colliders' collision detection mode.
+    @Serialized(default: .Discrete)
+    public var collisionDetectionMode: CollisionDetectionMode {
+        didSet {
+            (_nativeCollider as! PhysXDynamicCollider).setCollisionDetectionMode(collisionDetectionMode)
+        }
+    }
+
+    /// The particular rigid dynamic lock flag.
+    @Serialized(default: [])
+    public var constraints: DynamicColliderConstraints {
+        didSet {
+            (_nativeCollider as! PhysXDynamicCollider).setConstraints(constraints)
+        }
+    }
+
+    @Serialized(default: true)
+    public var useGravity: Bool {
+        didSet {
+            (_nativeCollider as! PhysXDynamicCollider).setUseGravity(useGravity)
+        }
+    }
+    
     /// The mass of the dynamic collider.
     public var mass: Float {
         get {
@@ -79,131 +128,6 @@ public class DynamicCollider: Collider {
         }
         set {
             (_nativeCollider as! PhysXDynamicCollider).setMass(newValue)
-        }
-    }
-
-    /// The center of mass relative to the transform's origin.
-    public var centerOfMass: Vector3 {
-        get {
-            _centerOfMass
-        }
-        set {
-            _centerOfMass = newValue
-            (_nativeCollider as! PhysXDynamicCollider).setCenterOfMass(_centerOfMass)
-        }
-    }
-
-    /// The diagonal inertia tensor of mass relative to the center of mass.
-    public var inertiaTensor: Vector3 {
-        get {
-            _inertiaTensor
-        }
-        set {
-            _inertiaTensor = newValue
-            (_nativeCollider as! PhysXDynamicCollider).setInertiaTensor(_inertiaTensor)
-        }
-    }
-
-    /// The maximum angular velocity of the collider measured in radians per second. (Default 7) range { 0, infinity }.
-    public var maxAngularVelocity: Float {
-        get {
-            _maxAngularVelocity
-        }
-        set {
-            if _maxAngularVelocity != newValue {
-                _maxAngularVelocity = newValue
-                (_nativeCollider as! PhysXDynamicCollider).setMaxAngularVelocity(newValue)
-            }
-        }
-    }
-
-    /// Maximum velocity of a collider when moving out of penetrating state.
-    public var maxDepenetrationVelocity: Float {
-        get {
-            _maxDepenetrationVelocity
-        }
-        set {
-            if _maxDepenetrationVelocity != newValue {
-                _maxDepenetrationVelocity = newValue
-                (_nativeCollider as! PhysXDynamicCollider).setMaxDepenetrationVelocity(newValue)
-            }
-        }
-    }
-
-    /// The mass-normalized energy threshold, below which objects start going to sleep.
-    public var sleepThreshold: Float {
-        get {
-            _sleepThreshold
-        }
-        set {
-            if _sleepThreshold != newValue {
-                _sleepThreshold = newValue
-                (_nativeCollider as! PhysXDynamicCollider).setSleepThreshold(newValue)
-            }
-        }
-    }
-
-    /// The solverIterations determines how accurately collider joints and collision contacts are resolved.
-    public var solverIterations: Int {
-        get {
-            _solverIterations
-        }
-        set {
-            if _solverIterations != newValue {
-                _solverIterations = newValue
-                (_nativeCollider as! PhysXDynamicCollider).setSolverIterations(newValue)
-            }
-        }
-    }
-
-    /// Controls whether physics affects the dynamic collider.
-    public var isKinematic: Bool {
-        get {
-            _isKinematic
-        }
-        set {
-            if _isKinematic != newValue {
-                _isKinematic = newValue
-                (_nativeCollider as! PhysXDynamicCollider).setIsKinematic(newValue)
-            }
-        }
-    }
-
-    /// The colliders' collision detection mode.
-    public var collisionDetectionMode: CollisionDetectionMode {
-        get {
-            _collisionDetectionMode
-        }
-        set {
-            if _collisionDetectionMode != newValue {
-                _collisionDetectionMode = newValue
-                (_nativeCollider as! PhysXDynamicCollider).setCollisionDetectionMode(newValue)
-            }
-        }
-    }
-
-    /// The particular rigid dynamic lock flag.
-    public var constraints: DynamicColliderConstraints {
-        get {
-            _constraints
-        }
-        set {
-            if (_constraints != newValue) {
-                _constraints = newValue
-                (_nativeCollider as! PhysXDynamicCollider).setConstraints(newValue)
-            }
-        }
-    }
-
-    public var useGravity: Bool {
-        get {
-            _useGravity
-        }
-        set {
-            if _useGravity != newValue {
-                _useGravity = newValue
-                (_nativeCollider as! PhysXDynamicCollider).setUseGravity(newValue)
-            }
         }
     }
     
