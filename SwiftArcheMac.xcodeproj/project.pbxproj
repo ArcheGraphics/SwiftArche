@@ -71,7 +71,6 @@
 		3E1F129729A78B3300F1002E /* PhysXConvexComposeApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E1F129629A78B3300F1002E /* PhysXConvexComposeApp.swift */; };
 		3E1F129929A7A49900F1002E /* PhysXConcaveDynamicApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E1F129829A7A49900F1002E /* PhysXConcaveDynamicApp.swift */; };
 		3E1F12AD29AC879E00F1002E /* Collision.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E1F12AC29AC879E00F1002E /* Collision.swift */; };
-		3E34226929C3E8BC0025C65A /* PropertyNameFormatterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EC0371B29321133002187DC /* PropertyNameFormatterTests.swift */; };
 		3E34226C29C3E8DF0025C65A /* SwiftArcheMacUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EC0372729321133002187DC /* SwiftArcheMacUITestsLaunchTests.swift */; };
 		3E34226D29C3E8DF0025C65A /* SwiftArcheMacUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EC0372529321133002187DC /* SwiftArcheMacUITests.swift */; };
 		3E34226F29C44AE60025C65A /* SceneDecodeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E34226E29C44AE60025C65A /* SceneDecodeTests.swift */; };
@@ -109,6 +108,8 @@
 		3E447F6929C9EB8000D2FB30 /* SerializableEncodable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E447F5029C9E71000D2FB30 /* SerializableEncodable.swift */; };
 		3E447F6A29C9EB8D00D2FB30 /* Transformable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E447F5229C9E71000D2FB30 /* Transformable.swift */; };
 		3E447F6C29C9F2AA00D2FB30 /* ClassInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E447F6B29C9F2AA00D2FB30 /* ClassInfo.swift */; };
+		3E5A22BA29CC786700808068 /* EmptyApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E5A22B929CC786700808068 /* EmptyApp.swift */; };
+		3E5A22BC29CC78BD00808068 /* USDTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E5A22BB29CC78BD00808068 /* USDTests.swift */; };
 		3E6B235E294220BC000AC29F /* FaceMorphApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E6B235D294220BC000AC29F /* FaceMorphApp.swift */; };
 		3E6B2360294224C1000AC29F /* FaceGUI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E6B235F294224C1000AC29F /* FaceGUI.swift */; };
 		3E6B23C329470F30000AC29F /* quad_shading.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3E6B23C229470F30000AC29F /* quad_shading.metal */; };
@@ -778,6 +779,8 @@
 		3E447F5E29C9E7FD00D2FB30 /* SerializedTransformableSwiftTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SerializedTransformableSwiftTests.swift; sourceTree = "<group>"; };
 		3E447F5F29C9E7FD00D2FB30 /* SerializedBasicSwiftTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SerializedBasicSwiftTests.swift; sourceTree = "<group>"; };
 		3E447F6B29C9F2AA00D2FB30 /* ClassInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClassInfo.swift; sourceTree = "<group>"; };
+		3E5A22B929CC786700808068 /* EmptyApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmptyApp.swift; sourceTree = "<group>"; };
+		3E5A22BB29CC78BD00808068 /* USDTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = USDTests.swift; sourceTree = "<group>"; };
 		3E6B235D294220BC000AC29F /* FaceMorphApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FaceMorphApp.swift; sourceTree = "<group>"; };
 		3E6B235F294224C1000AC29F /* FaceGUI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FaceGUI.swift; sourceTree = "<group>"; };
 		3E6B23A82946B3CA000AC29F /* libvox.flex.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libvox.flex.a; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -912,7 +915,6 @@
 		3EC0371029321132002187DC /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		3EC0371229321132002187DC /* SwiftArcheMac.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = SwiftArcheMac.entitlements; sourceTree = "<group>"; };
 		3EC0371729321133002187DC /* SwiftArcheMacTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SwiftArcheMacTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		3EC0371B29321133002187DC /* PropertyNameFormatterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PropertyNameFormatterTests.swift; sourceTree = "<group>"; };
 		3EC0372129321133002187DC /* SwiftArcheMacUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SwiftArcheMacUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		3EC0372529321133002187DC /* SwiftArcheMacUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftArcheMacUITests.swift; sourceTree = "<group>"; };
 		3EC0372729321133002187DC /* SwiftArcheMacUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftArcheMacUITestsLaunchTests.swift; sourceTree = "<group>"; };
@@ -1993,6 +1995,7 @@
 				3EC0371229321132002187DC /* SwiftArcheMac.entitlements */,
 				040F1DF6293784C3008BDC8D /* bridging.h */,
 				3EC0370429321131002187DC /* AppDelegate.swift */,
+				3E5A22B929CC786700808068 /* EmptyApp.swift */,
 				3EB32B7429322DB30019A4F3 /* PrimitiveApp.swift */,
 				43D8C50348EB9AC72BD7BF83 /* SkyboxApp.swift */,
 				43D8C888ABFCE2075E7AA5BE /* AtomicComputeApp.swift */,
@@ -2015,9 +2018,9 @@
 				3E447F5F29C9E7FD00D2FB30 /* SerializedBasicSwiftTests.swift */,
 				3E447F5D29C9E7FD00D2FB30 /* SerializedComplexSwiftTests.swift */,
 				3E447F5E29C9E7FD00D2FB30 /* SerializedTransformableSwiftTests.swift */,
-				3EC0371B29321133002187DC /* PropertyNameFormatterTests.swift */,
 				3E34226E29C44AE60025C65A /* SceneDecodeTests.swift */,
 				3E717DFB29C7B50B004FE1A0 /* PolymorphicDecodeTests.swift */,
+				3E5A22BB29CC78BD00808068 /* USDTests.swift */,
 			);
 			path = SwiftArcheMacTests;
 			sourceTree = "<group>";
@@ -3233,6 +3236,7 @@
 				3EB32B7529322DB30019A4F3 /* PrimitiveApp.swift in Sources */,
 				3E107648296545F700F751A5 /* ParticleSystemSolverApp.swift in Sources */,
 				3E6B235E294220BC000AC29F /* FaceMorphApp.swift in Sources */,
+				3E5A22BA29CC786700808068 /* EmptyApp.swift in Sources */,
 				3EC0370529321131002187DC /* AppDelegate.swift in Sources */,
 				3E8B00F329BDC47F00A70123 /* SkinningApp.swift in Sources */,
 				43D8C62B488D6837DDD5BBA8 /* SkyboxApp.swift in Sources */,
@@ -3277,6 +3281,7 @@
 				3E447F6929C9EB8000D2FB30 /* SerializableEncodable.swift in Sources */,
 				3E447F6629C9EB8000D2FB30 /* SerializedTransformable.swift in Sources */,
 				3E447F6729C9EB8000D2FB30 /* Serialized.swift in Sources */,
+				3E5A22BC29CC78BD00808068 /* USDTests.swift in Sources */,
 				3E447F6029C9E7FD00D2FB30 /* SerializedComplexSwiftTests.swift in Sources */,
 				3E717DFC29C7B50B004FE1A0 /* PolymorphicDecodeTests.swift in Sources */,
 				3E447F6529C9EB8000D2FB30 /* SerializableDecodable.swift in Sources */,
@@ -3287,7 +3292,6 @@
 				3E447F6A29C9EB8D00D2FB30 /* Transformable.swift in Sources */,
 				3E447F6829C9EB8000D2FB30 /* SerializedCodingKeys.swift in Sources */,
 				3E447F6329C9EB8000D2FB30 /* EncodableProperty.swift in Sources */,
-				3E34226929C3E8BC0025C65A /* PropertyNameFormatterTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
