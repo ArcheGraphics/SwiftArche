@@ -8,11 +8,11 @@
 #include "PxRigidActor.h"
 #include "PxShape.h"
 
-#include "PsIntrinsics.h"
-#include "PsAllocator.h"
-#include "PsInlineArray.h"
-#include "PsFoundation.h"
-#include "CmPhysXCommon.h"
+#include "foundation/PxIntrinsics.h"
+#include "foundation/PxAllocator.h"
+#include "foundation/PxInlineArray.h"
+
+using namespace physx;
 
 namespace vox {
     namespace {
@@ -131,9 +131,7 @@ namespace vox {
                     fd = shape->getSimulationFilterData();
                 }
                     break;
-
-                case PxActorType::eACTOR_COUNT:
-                case PxActorType::eACTOR_FORCE_DWORD:
+                default:
                     break;
             }
 
@@ -171,8 +169,7 @@ namespace vox {
                     }
                 }
                     break;
-                case PxActorType::eACTOR_COUNT:
-                case PxActorType::eACTOR_FORCE_DWORD:
+                default:
                     break;
             }
         }
@@ -217,7 +214,7 @@ namespace vox {
         }
 
         pairFlags = PxPairFlag::eCONTACT_DEFAULT | PxPairFlag::eNOTIFY_TOUCH_LOST
-        | PxPairFlag::eNOTIFY_TOUCH_PERSISTS | PxPairFlag::eNOTIFY_TOUCH_LOST;
+                | PxPairFlag::eNOTIFY_TOUCH_PERSISTS | PxPairFlag::eNOTIFY_TOUCH_LOST;
 
         return PxFilterFlags();
     }

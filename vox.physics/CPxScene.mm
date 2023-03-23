@@ -417,17 +417,6 @@ namespace {
                         triangle.color0, triangle.color1, triangle.color2);
         }
     }
-    
-    // Text
-    const PxU32 numTexts = debugRenderable.getNbTexts();
-    if (numTexts) {
-        const PxDebugText* PX_RESTRICT texts = debugRenderable.getTexts();
-        checkResizeText(numTexts);
-        for(PxU32 i=0; i<numTexts; i++) {
-            const PxDebugText& text = texts[i];
-            addText(transform(text.position), text.color, text.size, [[NSString alloc]initWithUTF8String:text.string]);
-        }
-    }
 }
 
 
