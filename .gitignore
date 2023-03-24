@@ -1,6 +1,7 @@
 assets
 glTF-Sample-Models
 .DS_Store
+third_party/USDInstall
 
 # Xcode
 #

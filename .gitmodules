@@ -22,3 +22,6 @@
 [submodule "third_party/physx"]
 	path = third_party/physx
 	url = https://github.com/o3de/PhysX.git
+[submodule "third_party/USD"]
+	path = third_party/USD
+	url = https://github.com/PixarAnimationStudios/USD.git
