@@ -4,6 +4,7 @@
     <mapping directory="$PROJECT_DIR$" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/assets" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/glTF-Sample-Models" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/third_party/USD" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/third_party/bvh" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/third_party/cgltf" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/third_party/ios-cmake" vcs="Git" />
