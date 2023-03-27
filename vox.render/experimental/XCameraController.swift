@@ -35,7 +35,7 @@ struct XCameraKeypoint {
 class XCameraController {
     /// The camera attached to this controller.
     var _attachedCamera: XCamera!
-    /// Current progress throught the keypoints.
+    /// Current progress through the keypoints.
     var _progress: Float = 0
     /// Storage for the keypoints.
     var _keypoints: [XCameraKeypoint] = []
@@ -149,6 +149,85 @@ class XCameraController {
         outInterp = _lightEnvInterp
         outA = _lightEnvA
         outB = _lightEnvB
+    }
+
+    func saveKeypoint(to file: String) {
+        if let path = getOrCreateApplicationSupportPath() {
+            let filename = String(format: "%@/%@.waypoints", path, file)
+
+            var data: String = ""
+
+            let length = _keypoints.count
+            assert(_distances.count == length)
+
+            for i in 0..<length {
+                data += String(format: "p %f %f %f\n", _keypoints[i].position.x, _keypoints[i].position.y, _keypoints[i].position.z)
+                data += String(format: "f %f %f %f\n", _keypoints[i].forward.x, _keypoints[i].forward.y, _keypoints[i].forward.z)
+                data += String(format: "u %f %f %f\n", _keypoints[i].up.x, _keypoints[i].up.y, _keypoints[i].up.z)
+                data += String(format: "le %u\n", _keypoints[i].lightEnv)
+                data += String(format: "t %f\n", _distances[i])
+                data += String(format: "x\n")
+            }
+            try? data.write(toFile: filename, atomically: false, encoding: .utf8)
+            logger.log(level: .info, "Written \(length) keypoints to \(filename)")
+        }
+    }
+
+    func loadKeypoint(from file: String) -> Bool {
+        // Start in app bundle, then look in app support path
+        let url = Bundle.main.url(forResource: file, withExtension: "waypoints")
+        if url == nil {
+            logger.error("Could not find resource \(file)")
+            return false
+        }
+
+        let filename = url?.path(percentEncoded: false)
+        let fileContents = try? String(contentsOfFile: filename!, encoding: .utf8)
+        let allLines = fileContents?.components(separatedBy: CharacterSet.newlines)
+
+        var kp = XCameraKeypoint()
+        _distances = []
+        if let allLines {
+            for line in allLines {
+                if line == "x" {
+                    _keypoints.append(kp)
+                    kp = XCameraKeypoint()
+                } else {
+                    let ks = line.components(separatedBy: " ")
+
+                    if ks[0] == "p" {
+                        kp.position.x = Float(ks[1])!
+                        kp.position.y = Float(ks[2])!
+                        kp.position.z = Float(ks[3])!
+                    } else if ks[0] == "f" {
+                        kp.forward.x = Float(ks[1])!
+                        kp.forward.y = Float(ks[2])!
+                        kp.forward.z = Float(ks[3])!
+                    } else if ks[0] == "u" {
+                        kp.up.x = Float(ks[1])!
+                        kp.up.y = Float(ks[2])!
+                        kp.up.z = Float(ks[3])!
+                    } else if ks[0] == "le" {
+                        kp.lightEnv = Int(ks[1])!
+                    } else if ks[0] == "t" {
+                        let t = Float(ks[1])!
+                        assert(_distances.count == 0 || t > _distances[_distances.count - 1])
+                        _distances.append(t)
+                    }
+                }
+            }
+        }
+
+        if _distances.count == _keypoints.count {
+            if _distances.count != 0 {
+                _totalDistance = _distances[_distances.count - 1]
+                _loadedDistances = true
+            }
+        } else {
+            updateDistances()
+        }
+
+        return true
     }
 
     // MARK: - Private
