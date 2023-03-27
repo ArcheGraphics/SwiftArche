@@ -11,6 +11,7 @@
 #include "../vox.shader/experimental/Config.h"
 //#include "../vox.shader/experimental/MeshTypes.h"
 #include "../vox.shader/experimental/ShaderTypes.h"
+#include "../vox.shader/experimental/MeshTypes.h"
 
 #include "../vox.physics/bridging.h"
 

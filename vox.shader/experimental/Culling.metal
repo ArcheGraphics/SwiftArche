@@ -6,6 +6,7 @@
 
 #import "ShaderCommon.h"
 #import "CullingShared.h"
+#import "MeshOperator.h"
 
 // Toggled to enable/disable occlusion culling.
 constant bool gUseOcclusionCulling  [[function_constant(XFunctionConstIndexUseOcclusionCulling)]];
@@ -52,12 +53,12 @@ struct XEncodeArguments
 static bool sphereInFrustum(constant XCameraParams & cameraParams, const XSphere sphere)
 {
     return (min(
-                min(sphere.distanceToPlane(cameraParams.worldFrustumPlanes[0]),
-                    min(sphere.distanceToPlane(cameraParams.worldFrustumPlanes[1]),
-                        sphere.distanceToPlane(cameraParams.worldFrustumPlanes[2]))),
-                min(sphere.distanceToPlane(cameraParams.worldFrustumPlanes[3]),
-                    min(sphere.distanceToPlane(cameraParams.worldFrustumPlanes[4]),
-                        sphere.distanceToPlane(cameraParams.worldFrustumPlanes[5]))))) >= 0.0f;
+                min(distanceToPlane(sphere, cameraParams.worldFrustumPlanes[0]),
+                    min(distanceToPlane(sphere, cameraParams.worldFrustumPlanes[1]),
+                        distanceToPlane(sphere, cameraParams.worldFrustumPlanes[2]))),
+                min(distanceToPlane(sphere, cameraParams.worldFrustumPlanes[3]),
+                    min(distanceToPlane(sphere, cameraParams.worldFrustumPlanes[4]),
+                        distanceToPlane(sphere, cameraParams.worldFrustumPlanes[5]))))) >= 0.0f;
 }
 
 // Generates an outcode for a clip space vertex.
@@ -82,13 +83,13 @@ static bool chunkOccluded(constant XFrameConstants & frameData,
 {
     const XBoundingBox3 worldBoundingBox = chunk.boundingBox;
 
-    XBoundingBox3 projBounds = XBoundingBox3::sEmpty();
+    XBoundingBox3 projBounds = sEmpty();
 
     // Frustum culling
     uint flags = 0xFF;
     for (uint i = 0; i < 8; ++i)
     {
-        float4 f = cameraParams.viewProjectionMatrix * float4(worldBoundingBox.GetCorner(i), 1.0f);
+        float4 f = cameraParams.viewProjectionMatrix * float4(GetCorner(worldBoundingBox, i), 1.0f);
 
         flags &= outcode(f);
 
@@ -106,7 +107,7 @@ static bool chunkOccluded(constant XFrameConstants & frameData,
         }
 #endif
 
-        projBounds.Encapsulate(fp);
+        Encapsulate(projBounds, fp);
     }
 
     if (flags)

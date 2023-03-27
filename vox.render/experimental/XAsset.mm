@@ -351,8 +351,8 @@ void getPixelFormatBlockDesc(MTLPixelFormat pixelFormat, NSUInteger *blockSize, 
         [NSKeyedUnarchiver setClass:[XMeshData class] forClassName:@"Mesh"];
 
         XMeshData *mesh = [NSKeyedUnarchiver unarchivedObjectOfClasses:allowedClasses
-                                                                 fromData:archivedData
-                                                                    error:&error];
+                                                              fromData:archivedData
+                                                                 error:&error];
 
         if (!mesh) {
             NSLog(@"Failed to decode mesh: %@", error);

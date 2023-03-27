@@ -1259,6 +1259,7 @@
 		3EF39B6729D133220083E20A /* XLightingEnvironment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XLightingEnvironment.swift; sourceTree = "<group>"; };
 		3EF39B6B29D15BFF0083E20A /* XAsset.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XAsset.h; sourceTree = "<group>"; };
 		3EF39B6C29D15BFF0083E20A /* XAsset.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = XAsset.mm; sourceTree = "<group>"; };
+		3EF39B6F29D161940083E20A /* MeshOperator.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MeshOperator.h; sourceTree = "<group>"; };
 		43D8C090F42BE8E48D6FC4E1 /* GridMaterial.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GridMaterial.swift; sourceTree = "<group>"; };
 		43D8C0A4A7B56D737C3F4FE2 /* PhysXCollisionDetectionApp.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhysXCollisionDetectionApp.swift; sourceTree = "<group>"; };
 		43D8C0CC365128B7B18E4074 /* EngineVisualizer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EngineVisualizer.swift; sourceTree = "<group>"; };
@@ -1746,6 +1747,7 @@
 			children = (
 				3E2AC86529CDA8B400A99391 /* Config.h */,
 				3E3E439729CDC28A00D41145 /* MeshTypes.h */,
+				3EF39B6F29D161940083E20A /* MeshOperator.h */,
 				3E3E438329CDC17F00D41145 /* ShaderTypes.h */,
 				3E3E438B29CDC17F00D41145 /* ShaderCommon.h */,
 				3E3E438429CDC17F00D41145 /* AmbientObscurance.metal */,
