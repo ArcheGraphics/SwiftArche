@@ -298,7 +298,7 @@ class CascadedShadowSubpass: GeometrySubpass {
             descriptor.width = Int(_shadowMapSize.z)
             descriptor.height = Int(_shadowMapSize.w)
             descriptor.pixelFormat = _shadowMapFormat
-            descriptor.usage = MTLTextureUsage(rawValue: MTLTextureUsage.renderTarget.rawValue | MTLTextureUsage.shaderRead.rawValue)
+            descriptor.usage = [.renderTarget, .shaderRead]
             descriptor.storageMode = .private
             _depthTexture = Engine.device.makeTexture(descriptor: descriptor)
         }

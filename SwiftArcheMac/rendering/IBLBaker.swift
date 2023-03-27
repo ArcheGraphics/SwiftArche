@@ -22,7 +22,7 @@ public class IBLBaker {
         descriptor.width = size
         descriptor.height = size
         descriptor.mipmapLevelCount = level;
-        descriptor.usage = MTLTextureUsage(rawValue: MTLTextureUsage.shaderRead.rawValue | MTLTextureUsage.shaderWrite.rawValue)
+        descriptor.usage = [.shaderRead, .shaderWrite]
         cubeMap = Engine.textureLoader.makeTexture(descriptor)
 
         descriptor = MTLTextureDescriptor()
@@ -31,7 +31,7 @@ public class IBLBaker {
         descriptor.width = cubeMap.width
         descriptor.height = cubeMap.height
         descriptor.mipmapLevelCount = cubeMap.mipmapLevelCount
-        descriptor.usage = MTLTextureUsage(rawValue: MTLTextureUsage.shaderRead.rawValue | MTLTextureUsage.shaderWrite.rawValue)
+        descriptor.usage = [.shaderRead, .shaderWrite]
         specularTexture = Engine.textureLoader.makeTexture(descriptor)
 
         // first 27 is parameter, the last is scale

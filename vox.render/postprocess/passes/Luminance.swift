@@ -41,7 +41,7 @@ public class Luminance: ComputePass {
         let width = Int(Float(width) * kLogLuminanceTargetScale)
         let height = Int(Float(height) * kLogLuminanceTargetScale)
         let desc = MTLTextureDescriptor.texture2DDescriptor(pixelFormat: .r16Float, width: width, height: height, mipmapped: true)
-        desc.usage = MTLTextureUsage(rawValue: MTLTextureUsage.shaderRead.rawValue | MTLTextureUsage.shaderWrite.rawValue)
+        desc.usage = [.shaderRead, .shaderWrite]
         desc.storageMode = .private
         _logLuminanceTexture = Engine.device.makeTexture(descriptor: desc)
         defaultShaderData.setImageView("output", _logLuminanceTexture)

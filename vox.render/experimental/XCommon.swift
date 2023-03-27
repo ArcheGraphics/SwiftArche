@@ -48,3 +48,19 @@ func getOrCreateApplicationSupportPath() -> String? {
 
     return asdPath
 }
+
+func newComputePipelineState(library: MTLLibrary, functionName: String, label: String,
+                             functionConstants: MTLFunctionConstantValues?) -> MTLComputePipelineState? {
+    let descriptor = MTLComputePipelineDescriptor()
+    descriptor.label = label
+
+    let functionDescriptor = MTLFunctionDescriptor()
+    functionDescriptor.name = functionName
+    if let functionConstants {
+        functionDescriptor.constantValues = functionConstants
+    }
+
+    descriptor.computeFunction = try? library.makeFunction(descriptor: functionDescriptor)
+    let result = try? library.device.makeComputePipelineState(descriptor: descriptor, options: MTLPipelineOption())
+    return result?.0
+}

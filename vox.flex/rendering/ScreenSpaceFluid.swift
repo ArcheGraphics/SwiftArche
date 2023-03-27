@@ -282,25 +282,23 @@ public class ScreenSpaceFluid: Script {
     
     func createTexture(_ width: Int, _ height: Int) {
         var desc = MTLTextureDescriptor.texture2DDescriptor(pixelFormat: .r16Float, width: width, height: height, mipmapped: false)
-        desc.usage = MTLTextureUsage(rawValue: MTLTextureUsage.shaderRead.rawValue | MTLTextureUsage.renderTarget.rawValue)
+        desc.usage = [.shaderRead, .renderTarget]
         desc.storageMode = .private
         thickTexture = Engine.device.makeTexture(descriptor: desc)
         
         desc = MTLTextureDescriptor.texture2DDescriptor(pixelFormat: .r32Float, width: width, height: height, mipmapped: false)
-        desc.usage = MTLTextureUsage(rawValue: MTLTextureUsage.shaderRead.rawValue
-                                     | MTLTextureUsage.shaderWrite.rawValue
-                                     | MTLTextureUsage.renderTarget.rawValue)
+        desc.usage = [.shaderRead, .shaderWrite, .renderTarget]
         desc.storageMode = .private
         depthTexture.append( Engine.device.makeTexture(descriptor: desc)!)
         depthTexture.append( Engine.device.makeTexture(descriptor: desc)!)
 
         desc = MTLTextureDescriptor.texture2DDescriptor(pixelFormat: .depth32Float, width: width, height: height, mipmapped: false)
-        desc.usage = MTLTextureUsage(rawValue: MTLTextureUsage.shaderRead.rawValue | MTLTextureUsage.renderTarget.rawValue)
+        desc.usage = [.shaderRead, .renderTarget]
         desc.storageMode = .private
         depthThickPassDesc.depthAttachment.texture = Engine.device.makeTexture(descriptor: desc)
         
         desc = MTLTextureDescriptor.texture2DDescriptor(pixelFormat: .rgba32Float, width: width, height: height, mipmapped: false)
-        desc.usage = MTLTextureUsage(rawValue: MTLTextureUsage.shaderRead.rawValue | MTLTextureUsage.shaderWrite.rawValue)
+        desc.usage = [.shaderRead, .shaderWrite]
         desc.storageMode = .private
         normalDepthTexture = Engine.device.makeTexture(descriptor: desc)
         

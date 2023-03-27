@@ -42,7 +42,7 @@ func createSpecularTexture(with cube: MTLTexture, format: MTLPixelFormat,
     descriptor.width = cube.width >> lodStart
     descriptor.height = cube.height >> lodStart
     descriptor.mipmapLevelCount = mipmapEnd - lodStart
-    descriptor.usage = MTLTextureUsage(rawValue: MTLTextureUsage.shaderRead.rawValue | MTLTextureUsage.shaderWrite.rawValue)
+    descriptor.usage = [.shaderRead, .shaderWrite]
     let specularTexture = Engine.textureLoader.makeTexture(descriptor)
 
     let function = Engine.library("app.shader").makeFunction(name: "build_specular")!
@@ -77,7 +77,7 @@ func createMetallicRoughnessTexture(with metallic: MTLTexture, and roughness: MT
     descriptor.pixelFormat = metallic.pixelFormat
     descriptor.width = metallic.width
     descriptor.height = metallic.height
-    descriptor.usage = MTLTextureUsage(rawValue: metallic.usage.rawValue | MTLTextureUsage.shaderWrite.rawValue)
+    descriptor.usage = [metallic.usage, .shaderWrite]
     let mergedTexture = Engine.textureLoader.makeTexture(descriptor)
 
     let function = Engine.library("app.shader").makeFunction(name: "build_metallicRoughness")
@@ -108,7 +108,7 @@ func createCubemap(with hdr: MTLTexture, size: Int, level: Int) -> MTLTexture {
     descriptor.width = size
     descriptor.height = size
     descriptor.mipmapLevelCount = level;
-    descriptor.usage = MTLTextureUsage(rawValue: MTLTextureUsage.shaderRead.rawValue | MTLTextureUsage.shaderWrite.rawValue)
+    descriptor.usage = [.shaderRead, .shaderWrite]
     let cubeMap = Engine.textureLoader.makeTexture(descriptor)
 
     let function = Engine.library("app.shader").makeFunction(name: "cubemap_generator")

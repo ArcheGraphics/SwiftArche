@@ -55,7 +55,7 @@ public class ImplicitTriangleMesh {
         desc.height = res.y
         desc.depth = res.z
         desc.textureType = .type3D
-        desc.usage = MTLTextureUsage(rawValue: MTLTextureUsage.shaderRead.rawValue | MTLTextureUsage.shaderWrite.rawValue)
+        desc.usage = [.shaderRead, .shaderWrite]
         desc.storageMode = .private
         sdf = Engine.device.makeTexture(descriptor: desc);
     }
