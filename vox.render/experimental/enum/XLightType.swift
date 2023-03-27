@@ -18,5 +18,5 @@ public struct XLightType: OptionSet {
     }
     
     /// Layer 0.
-    public static let LightForTransparent = Layer(rawValue: 0x1)
+    public static let LightForTransparent = XLightType(rawValue: 0x1)
 }
