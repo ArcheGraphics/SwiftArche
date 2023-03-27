@@ -15,3 +15,7 @@ public extension MTLResource {
         #endif
     }
 }
+
+extension MTLResourceUsage {
+    public static var readWrite = MTLResourceUsage(rawValue: (MTLResourceUsage.read.rawValue | MTLResourceUsage.write.rawValue))
+}

@@ -12,6 +12,7 @@
 //#include "../vox.shader/experimental/MeshTypes.h"
 #include "../vox.shader/experimental/ShaderTypes.h"
 #include "../vox.shader/experimental/MeshTypes.h"
+#include "../vox.shader/experimental/CullingShared.h"
 
 #include "../vox.physics/bridging.h"
 
