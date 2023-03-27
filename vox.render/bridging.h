@@ -18,3 +18,4 @@
 #include "loader/HDRLoader.h"
 #include "animation/ozz/bridging.h"
 #include "text/MTLFontAtlasProvider.h"
+#include "experimental/XAsset.h"

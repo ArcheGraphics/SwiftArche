@@ -509,6 +509,8 @@
 		3ED9BD1329568E2D00876ABC /* HashGridApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3ED9BD1229568E2D00876ABC /* HashGridApp.swift */; };
 		3EF39B6629D12E830083E20A /* XCommon.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EF39B6529D12E830083E20A /* XCommon.swift */; };
 		3EF39B6829D133220083E20A /* XLightingEnvironment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EF39B6729D133220083E20A /* XLightingEnvironment.swift */; };
+		3EF39B6D29D15BFF0083E20A /* XAsset.h in Headers */ = {isa = PBXBuildFile; fileRef = 3EF39B6B29D15BFF0083E20A /* XAsset.h */; };
+		3EF39B6E29D15BFF0083E20A /* XAsset.mm in Sources */ = {isa = PBXBuildFile; fileRef = 3EF39B6C29D15BFF0083E20A /* XAsset.mm */; };
 		43D8C033021F4B86E95953E6 /* IBLApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8CFAFE0E0B5772488FA13 /* IBLApp.swift */; };
 		43D8C1413D08147985256B8A /* PhysXJointBasicApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8C12DBC7510CB05B703F8 /* PhysXJointBasicApp.swift */; };
 		43D8C40438F0527739C7D662 /* AtomicComputeApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8C888ABFCE2075E7AA5BE /* AtomicComputeApp.swift */; };
@@ -1255,6 +1257,8 @@
 		3ED9BD1229568E2D00876ABC /* HashGridApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HashGridApp.swift; sourceTree = "<group>"; };
 		3EF39B6529D12E830083E20A /* XCommon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XCommon.swift; sourceTree = "<group>"; };
 		3EF39B6729D133220083E20A /* XLightingEnvironment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XLightingEnvironment.swift; sourceTree = "<group>"; };
+		3EF39B6B29D15BFF0083E20A /* XAsset.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XAsset.h; sourceTree = "<group>"; };
+		3EF39B6C29D15BFF0083E20A /* XAsset.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = XAsset.mm; sourceTree = "<group>"; };
 		43D8C090F42BE8E48D6FC4E1 /* GridMaterial.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GridMaterial.swift; sourceTree = "<group>"; };
 		43D8C0A4A7B56D737C3F4FE2 /* PhysXCollisionDetectionApp.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhysXCollisionDetectionApp.swift; sourceTree = "<group>"; };
 		43D8C0CC365128B7B18E4074 /* EngineVisualizer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EngineVisualizer.swift; sourceTree = "<group>"; };
@@ -1560,6 +1564,8 @@
 		3E2AC86429CDA7D000A99391 /* experimental */ = {
 			isa = PBXGroup;
 			children = (
+				3EF39B6B29D15BFF0083E20A /* XAsset.h */,
+				3EF39B6C29D15BFF0083E20A /* XAsset.mm */,
 				3EF39B6529D12E830083E20A /* XCommon.swift */,
 				3E3E437929CDC07B00D41145 /* XCamera.swift */,
 				3E3E439829CED2DB00D41145 /* XCameraController.swift */,
@@ -2835,6 +2841,7 @@
 				3EC0389D29321826002187DC /* bridging.h in Headers */,
 				3EC0390229321862002187DC /* GLTFTypes.h in Headers */,
 				3EC0390829321862002187DC /* GLTFAsset.h in Headers */,
+				3EF39B6D29D15BFF0083E20A /* XAsset.h in Headers */,
 				3EC0390129321862002187DC /* GLTFAssetReader.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -3552,6 +3559,7 @@
 				3E8B00E229BC314D00A70123 /* AnimationBlending.swift in Sources */,
 				3EBA3D4529B9A07400E5FB42 /* MTLFontAtlasCodableContainer.swift in Sources */,
 				3E3E437A29CDC07B00D41145 /* XCamera.swift in Sources */,
+				3EF39B6E29D15BFF0083E20A /* XAsset.mm in Sources */,
 				3EBA3D2729B9873B00E5FB42 /* MetalError.swift in Sources */,
 				3EC03980293218C3002187DC /* BufferView.swift in Sources */,
 				3EC0389F29321826002187DC /* Layer.swift in Sources */,
