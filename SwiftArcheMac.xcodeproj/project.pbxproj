@@ -511,6 +511,12 @@
 		3EF39B6829D133220083E20A /* XLightingEnvironment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EF39B6729D133220083E20A /* XLightingEnvironment.swift */; };
 		3EF39B6D29D15BFF0083E20A /* XAsset.h in Headers */ = {isa = PBXBuildFile; fileRef = 3EF39B6B29D15BFF0083E20A /* XAsset.h */; };
 		3EF39B6E29D15BFF0083E20A /* XAsset.mm in Sources */ = {isa = PBXBuildFile; fileRef = 3EF39B6C29D15BFF0083E20A /* XAsset.mm */; };
+		3EF39B7629D166C00083E20A /* XTextureManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 3EF39B7129D166C00083E20A /* XTextureManager.h */; };
+		3EF39B7729D166C00083E20A /* XMesh.h in Headers */ = {isa = PBXBuildFile; fileRef = 3EF39B7229D166C00083E20A /* XMesh.h */; };
+		3EF39B7829D166C00083E20A /* XMesh.mm in Sources */ = {isa = PBXBuildFile; fileRef = 3EF39B7329D166C00083E20A /* XMesh.mm */; };
+		3EF39B7929D166C00083E20A /* XTextureManager.mm in Sources */ = {isa = PBXBuildFile; fileRef = 3EF39B7429D166C00083E20A /* XTextureManager.mm */; };
+		3EF39B7A29D166C00083E20A /* XMaterial.h in Headers */ = {isa = PBXBuildFile; fileRef = 3EF39B7529D166C00083E20A /* XMaterial.h */; };
+		3EF39B7D29D167510083E20A /* XCommon.mm in Sources */ = {isa = PBXBuildFile; fileRef = 3EF39B7C29D167510083E20A /* XCommon.mm */; };
 		43D8C033021F4B86E95953E6 /* IBLApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8CFAFE0E0B5772488FA13 /* IBLApp.swift */; };
 		43D8C1413D08147985256B8A /* PhysXJointBasicApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8C12DBC7510CB05B703F8 /* PhysXJointBasicApp.swift */; };
 		43D8C40438F0527739C7D662 /* AtomicComputeApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8C888ABFCE2075E7AA5BE /* AtomicComputeApp.swift */; };
@@ -1260,6 +1266,13 @@
 		3EF39B6B29D15BFF0083E20A /* XAsset.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XAsset.h; sourceTree = "<group>"; };
 		3EF39B6C29D15BFF0083E20A /* XAsset.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = XAsset.mm; sourceTree = "<group>"; };
 		3EF39B6F29D161940083E20A /* MeshOperator.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MeshOperator.h; sourceTree = "<group>"; };
+		3EF39B7129D166C00083E20A /* XTextureManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XTextureManager.h; sourceTree = "<group>"; };
+		3EF39B7229D166C00083E20A /* XMesh.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XMesh.h; sourceTree = "<group>"; };
+		3EF39B7329D166C00083E20A /* XMesh.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = XMesh.mm; sourceTree = "<group>"; };
+		3EF39B7429D166C00083E20A /* XTextureManager.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = XTextureManager.mm; sourceTree = "<group>"; };
+		3EF39B7529D166C00083E20A /* XMaterial.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XMaterial.h; sourceTree = "<group>"; };
+		3EF39B7B29D167330083E20A /* XCommon.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = XCommon.h; sourceTree = "<group>"; };
+		3EF39B7C29D167510083E20A /* XCommon.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = XCommon.mm; sourceTree = "<group>"; };
 		43D8C090F42BE8E48D6FC4E1 /* GridMaterial.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GridMaterial.swift; sourceTree = "<group>"; };
 		43D8C0A4A7B56D737C3F4FE2 /* PhysXCollisionDetectionApp.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhysXCollisionDetectionApp.swift; sourceTree = "<group>"; };
 		43D8C0CC365128B7B18E4074 /* EngineVisualizer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EngineVisualizer.swift; sourceTree = "<group>"; };
@@ -1565,8 +1578,7 @@
 		3E2AC86429CDA7D000A99391 /* experimental */ = {
 			isa = PBXGroup;
 			children = (
-				3EF39B6B29D15BFF0083E20A /* XAsset.h */,
-				3EF39B6C29D15BFF0083E20A /* XAsset.mm */,
+				3EF39B7029D1664B0083E20A /* asset */,
 				3EF39B6529D12E830083E20A /* XCommon.swift */,
 				3E3E437929CDC07B00D41145 /* XCamera.swift */,
 				3E3E439829CED2DB00D41145 /* XCameraController.swift */,
@@ -2754,6 +2766,22 @@
 			path = "hash-grid";
 			sourceTree = "<group>";
 		};
+		3EF39B7029D1664B0083E20A /* asset */ = {
+			isa = PBXGroup;
+			children = (
+				3EF39B7B29D167330083E20A /* XCommon.h */,
+				3EF39B7C29D167510083E20A /* XCommon.mm */,
+				3EF39B6B29D15BFF0083E20A /* XAsset.h */,
+				3EF39B6C29D15BFF0083E20A /* XAsset.mm */,
+				3EF39B7529D166C00083E20A /* XMaterial.h */,
+				3EF39B7229D166C00083E20A /* XMesh.h */,
+				3EF39B7329D166C00083E20A /* XMesh.mm */,
+				3EF39B7129D166C00083E20A /* XTextureManager.h */,
+				3EF39B7429D166C00083E20A /* XTextureManager.mm */,
+			);
+			path = asset;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
@@ -2840,11 +2868,14 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3EF39B7A29D166C00083E20A /* XMaterial.h in Headers */,
 				3EC0389D29321826002187DC /* bridging.h in Headers */,
 				3EC0390229321862002187DC /* GLTFTypes.h in Headers */,
 				3EC0390829321862002187DC /* GLTFAsset.h in Headers */,
+				3EF39B7729D166C00083E20A /* XMesh.h in Headers */,
 				3EF39B6D29D15BFF0083E20A /* XAsset.h in Headers */,
 				3EC0390129321862002187DC /* GLTFAssetReader.h in Headers */,
+				3EF39B7629D166C00083E20A /* XTextureManager.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3553,6 +3584,7 @@
 				3EC03988293218CB002187DC /* PBRMaterial.swift in Sources */,
 				3E447F5629C9E71000D2FB30 /* SerializedCodingKeys.swift in Sources */,
 				3EC0393929321893002187DC /* ShadowType.swift in Sources */,
+				3EF39B7929D166C00083E20A /* XTextureManager.mm in Sources */,
 				3EC038EF2932184C002187DC /* PhysicsMaterialCombineMode.swift in Sources */,
 				3EC0398B293218CB002187DC /* UnlitMaterial.swift in Sources */,
 				3EF39B6629D12E830083E20A /* XCommon.swift in Sources */,
@@ -3651,6 +3683,7 @@
 				3EC038B629321835002187DC /* PhysXPhysics.swift in Sources */,
 				3EBA3D3529B99D3200E5FB42 /* MTLRegion+Extensions.swift in Sources */,
 				3EC039302932188D002187DC /* ShadowUtils.swift in Sources */,
+				3EF39B7D29D167510083E20A /* XCommon.mm in Sources */,
 				3EC038E329321845002187DC /* PhysXSpringJoint.swift in Sources */,
 				3EC038F22932184C002187DC /* HingeJointFlag.swift in Sources */,
 				3EBA3D1F29B97DD900E5FB42 /* MTLFontAtlasDescriptor.swift in Sources */,
@@ -3696,6 +3729,7 @@
 				3EC038B129321835002187DC /* PhysXPhysicsMaterial.swift in Sources */,
 				3EC0389529321826002187DC /* Canvas.swift in Sources */,
 				3EC0389B29321826002187DC /* CameraInfo.swift in Sources */,
+				3EF39B7829D166C00083E20A /* XMesh.mm in Sources */,
 				3EBA3D2929B99C4900E5FB42 /* MTL+Codable.swift in Sources */,
 				3E8B00FB29BDCA7A00A70123 /* SkinnedMesh.swift in Sources */,
 				3E447F5C29C9E71000D2FB30 /* DecodableProperty.swift in Sources */,

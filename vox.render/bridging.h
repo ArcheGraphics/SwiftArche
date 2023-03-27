@@ -19,4 +19,6 @@
 #include "loader/HDRLoader.h"
 #include "animation/ozz/bridging.h"
 #include "text/MTLFontAtlasProvider.h"
-#include "experimental/XAsset.h"
+#include "experimental/asset/XTextureManager.h"
+#include "experimental/asset/XMesh.h"
+#include "experimental/asset/XMaterial.h"
