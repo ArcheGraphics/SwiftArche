@@ -1096,7 +1096,7 @@ struct PendingBlit {
 #endif // SUPPORT_PAGE_ACCESS_COUNTERS
 
 - (void)makeResidentForEncoder:(nonnull id <MTLRenderCommandEncoder>)encoder {
-    [encoder useHeap:_heap stages:MTLRenderStageVertex];
+    [encoder useHeap:_heap];
 }
 
 #endif //SUPPORT_SPARSE_TEXTURES
