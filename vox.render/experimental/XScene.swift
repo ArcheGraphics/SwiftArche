@@ -113,39 +113,39 @@ class XScene: Codable {
 // MARK: - Codable
     enum CodingKeys: String, CodingKey {
         case center_offset
-        
+
         case mesh_filename
         case camera_position
         case camera_direction
         case camera_up
         case camera_keypoints_filename
         case sun_direction
-        
+
         case point_lights
         case spot_lights
-        
+
         case occluder_verts
         case occluder_indices
     }
-    
+
     func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encode(_centerOffset, forKey: .center_offset)
-        
+
         try container.encode(meshFilename, forKey: .mesh_filename)
         try container.encode(cameraPosition, forKey: .camera_position)
         try container.encode(cameraDirection, forKey: .camera_direction)
         try container.encode(cameraUp, forKey: .camera_up)
         try container.encode(cameraKeypointsFilename, forKey: .camera_keypoints_filename)
         try container.encode(sunDirection, forKey: .sun_direction)
-        
+
         try container.encode(_pointLights, forKey: .point_lights)
         try container.encode(_spotLights, forKey: .spot_lights)
 
         try container.encode(_occluderVerts, forKey: .occluder_verts)
         try container.encode(_occluderIndices, forKey: .occluder_indices)
     }
-    
+
     required init(from decoder: Decoder) throws {
         _device = Engine.device
         let container = try decoder.container(keyedBy: CodingKeys.self)
@@ -160,25 +160,25 @@ class XScene: Codable {
 
         _pointLights = try container.decode([XPointLightData].self, forKey: .point_lights)
         _spotLights = try container.decode([XSpotLightData].self, forKey: .spot_lights)
-        
+
         _occluderVerts = try container.decode([Vector3].self, forKey: .occluder_verts)
         for i in 0..<_occluderVerts.count {
-            var transformedVert = _occluderVerts[i];
-            let t             = transformedVert.z;
-            transformedVert.z   = transformedVert.y;
-            transformedVert.y   = t;
+            var transformedVert = _occluderVerts[i]
+            let t = transformedVert.z
+            transformedVert.z = transformedVert.y
+            transformedVert.y = t
 
-            transformedVert -= _centerOffset;
+            transformedVert -= _centerOffset
 
-            _occluderVertsTransformed.append(transformedVert);
+            _occluderVertsTransformed.append(transformedVert)
         }
         _occluderIndices = try container.decode([UInt16].self, forKey: .occluder_indices)
 
         let vertexBufferSize = MemoryLayout<Vector3>.stride * _occluderVertsTransformed.count
         occluderVertexBuffer = _device.makeBuffer(bytes: _occluderVerts, length: vertexBufferSize)
         occluderVertexBuffer.label = "Occluder Vertices"
-        
-        let indexBufferSize  = MemoryLayout<UInt16>.stride * _occluderIndices.count
+
+        let indexBufferSize = MemoryLayout<UInt16>.stride * _occluderIndices.count
         occluderIndexBuffer = _device.makeBuffer(bytes: _occluderIndices, length: indexBufferSize)
         occluderIndexBuffer.label = "Occluder Indices"
     }
@@ -214,14 +214,14 @@ extension XPointLightData: Codable {
             flags = 0
         }
     }
-    
+
     public func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encode(posSqrRadius.x, forKey: .position_x)
         try container.encode(posSqrRadius.y, forKey: .position_y)
         try container.encode(posSqrRadius.z, forKey: .position_z)
         try container.encode(posSqrRadius.w, forKey: .sqrt_radius)
-        
+
         try container.encode(color.x, forKey: .color_r)
         try container.encode(color.y, forKey: .color_g)
         try container.encode(color.z, forKey: .color_b)
@@ -236,18 +236,18 @@ extension XSpotLightData: Codable {
         case position_y
         case position_z
         case height
-        
+
         case direction_x
         case direction_y
         case direction_z
         case coneRad
-        
+
         case color_r
         case color_g
         case color_b
         case for_transparent
     }
-    
+
     public init(from decoder: Decoder) throws {
         self.init()
         let container = try decoder.container(keyedBy: CodingKeys.self)
@@ -255,7 +255,7 @@ extension XSpotLightData: Codable {
         posAndHeight.y = try container.decode(Float.self, forKey: .position_y)
         posAndHeight.z = try container.decode(Float.self, forKey: .position_z)
         posAndHeight.w = try container.decode(Float.self, forKey: .height)
-        
+
         dirAndOuterAngle.x = try container.decode(Float.self, forKey: .direction_x)
         dirAndOuterAngle.y = try container.decode(Float.self, forKey: .direction_y)
         dirAndOuterAngle.z = try container.decode(Float.self, forKey: .direction_z)
@@ -271,7 +271,7 @@ extension XSpotLightData: Codable {
             flags = 0
         }
     }
-    
+
     public func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encode(posAndHeight.x, forKey: .position_x)
@@ -283,7 +283,7 @@ extension XSpotLightData: Codable {
         try container.encode(dirAndOuterAngle.y, forKey: .direction_y)
         try container.encode(dirAndOuterAngle.z, forKey: .direction_z)
         try container.encode(dirAndOuterAngle.w, forKey: .coneRad)
-        
+
         try container.encode(colorAndInnerAngle.x, forKey: .color_r)
         try container.encode(colorAndInnerAngle.y, forKey: .color_g)
         try container.encode(colorAndInnerAngle.z, forKey: .color_b)
