@@ -89,6 +89,7 @@
 		3E3E439429CDC18000D41145 /* Resolve.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3E3E438829CDC17F00D41145 /* Resolve.metal */; };
 		3E3E439529CDC18000D41145 /* Simple.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3E3E438929CDC17F00D41145 /* Simple.metal */; };
 		3E3E439629CDC18000D41145 /* MeshRenderer.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3E3E438A29CDC17F00D41145 /* MeshRenderer.metal */; };
+		3E3E439929CED2DB00D41145 /* XCameraController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E3E439829CED2DB00D41145 /* XCameraController.swift */; };
 		3E43DC9B295BDDDC00732AC0 /* physics_helpers.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3E6B23B52946B3E5000AC29F /* physics_helpers.metal */; };
 		3E43DC9C295BDDDC00732AC0 /* sdf_shading.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3E6B23D529499B36000AC29F /* sdf_shading.metal */; };
 		3E43DC9D295BDDDC00732AC0 /* sdf_baker.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3E6B23D2294964B1000AC29F /* sdf_baker.metal */; };
@@ -797,6 +798,7 @@
 		3E3E438A29CDC17F00D41145 /* MeshRenderer.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; path = MeshRenderer.metal; sourceTree = "<group>"; };
 		3E3E438B29CDC17F00D41145 /* ShaderCommon.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ShaderCommon.h; sourceTree = "<group>"; };
 		3E3E439729CDC28A00D41145 /* MeshTypes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MeshTypes.h; sourceTree = "<group>"; };
+		3E3E439829CED2DB00D41145 /* XCameraController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XCameraController.swift; sourceTree = "<group>"; };
 		3E447F1829C807F700D2FB30 /* GridApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GridApp.swift; sourceTree = "<group>"; };
 		3E447F4D29C9E71000D2FB30 /* Serialized.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Serialized.swift; sourceTree = "<group>"; };
 		3E447F4E29C9E71000D2FB30 /* SerializedCodingKeys.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SerializedCodingKeys.swift; sourceTree = "<group>"; };
@@ -1555,6 +1557,7 @@
 			isa = PBXGroup;
 			children = (
 				3E3E437929CDC07B00D41145 /* XCamera.swift */,
+				3E3E439829CED2DB00D41145 /* XCameraController.swift */,
 			);
 			path = experimental;
 			sourceTree = "<group>";
@@ -3600,6 +3603,7 @@
 				3EBA3D4429B9A07400E5FB42 /* MTLFontAtlas.swift in Sources */,
 				3EC0392B29321885002187DC /* SkyBoxMaterial.swift in Sources */,
 				040F1E12293B4436008BDC8D /* PostprocessManager.swift in Sources */,
+				3E3E439929CED2DB00D41145 /* XCameraController.swift in Sources */,
 				3EC0398F293218D1002187DC /* TextureCoordinate.swift in Sources */,
 				3EC03948293218A3002187DC /* RenderTargetBlendState.swift in Sources */,
 				3EBA3D1529B85D6C00E5FB42 /* VisualizationParameter.swift in Sources */,

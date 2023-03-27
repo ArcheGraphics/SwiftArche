@@ -23,7 +23,7 @@ class PhysXCapsuleColliderShape: PhysXColliderShape {
         _halfHeight = height * 0.5
         super.init()
 
-        _axis = Quaternion(0, 0, PhysXColliderShape.halfSqrt, PhysXColliderShape.halfSqrt)
+        _axis = Quaternion(x: 0, y: 0, z: PhysXColliderShape.halfSqrt, w: PhysXColliderShape.halfSqrt)
         _physxRotation = _axis!
 
         _pxGeometry = CPxCapsuleGeometry(radius: _radius, halfHeight: _halfHeight)
@@ -75,13 +75,13 @@ class PhysXCapsuleColliderShape: PhysXColliderShape {
         _upAxis = ColliderShapeUpAxis(rawValue: upAxis)!
         switch (_upAxis) {
         case ColliderShapeUpAxis.X:
-            _axis = Quaternion(0, 0, 0, 1)
+            _axis = Quaternion(x: 0, y: 0, z: 0, w: 1)
             break
         case ColliderShapeUpAxis.Y:
-            _axis = Quaternion(0, 0, PhysXColliderShape.halfSqrt, PhysXColliderShape.halfSqrt)
+            _axis = Quaternion(x: 0, y: 0, z: PhysXColliderShape.halfSqrt, w: PhysXColliderShape.halfSqrt)
             break
         case ColliderShapeUpAxis.Z:
-            _axis = Quaternion(0, PhysXColliderShape.halfSqrt, 0, PhysXColliderShape.halfSqrt)
+            _axis = Quaternion(x: 0, y: PhysXColliderShape.halfSqrt, z: 0, w: PhysXColliderShape.halfSqrt)
             break
         }
 

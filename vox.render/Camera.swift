@@ -279,8 +279,7 @@ extension Camera {
         out.origin = _innerViewportToWorldPoint(point.x, point.y, 0.0, invViewProjMat)
         // Use the intersection of the far clipping plane as the origin point.
         out.direction = _innerViewportToWorldPoint(point.x, point.y, 1.0, invViewProjMat)
-        out.direction = out.direction - out.origin
-        _ = out.direction.normalize()
+        out.direction = (out.direction - out.origin).normalized
         return out
     }
 

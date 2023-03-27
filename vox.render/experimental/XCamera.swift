@@ -274,7 +274,7 @@ class XCamera {
     /// Rotates camera around axis updating many properties at once.
     func rotateOnAxis(_ inAxis: Vector3, radians inRadians: Float) {
         // Generate rotation matrix along inAxis.
-        let axis = inAxis.normalized()
+        let axis = inAxis.normalized
         let ct = cosf(inRadians)
         let st = sinf(inRadians)
         let ci = 1 - ct
@@ -286,22 +286,22 @@ class XCamera {
                 m31: x * z * ci + y * st, m32: y * z * ci - x * st, m33: ct + z * z * ci)
 
         // Apply to basis vectors.
-        // _direction = mat * _direction
-        // _up = mat * _up
+        _direction = mat * _direction
+        _up = mat * _up
         _cameraParamsDirty = true
     }
 
     /// Faces the camera towards a point with a given up vector.
     func face(point: Vector3, withUp up: Vector3) {
-        _direction = (point - _position).normalized()
-        let right = Vector3.cross(left: _direction, right: up).normalized()
+        _direction = (point - _position).normalized
+        let right = Vector3.cross(left: _direction, right: up).normalized
         _up = Vector3.cross(left: right, right: _direction)
     }
 
     /// Faces the camera towards a direction with a given up vector.
     func face(direction forward: Vector3, withUp up: Vector3) {
-        _direction = forward.normalized()
-        let right = Vector3.cross(left: _direction, right: up).normalized()
+        _direction = forward.normalized
+        let right = Vector3.cross(left: _direction, right: up).normalized
         _up = Vector3.cross(left: right, right: _direction)
     }
 
@@ -309,8 +309,8 @@ class XCamera {
     ///  creating a more defined basis, do not set axis independently, but use `rotate()` or `setBasis()`
     ///  functions to update all at once.
     private func orthogonalize(fromNewUp newUp: Vector3) {
-        _up = newUp.normalized()
-        let right = Vector3.cross(left: _direction, right: _up).normalized()
+        _up = newUp.normalized
+        let right = Vector3.cross(left: _direction, right: _up).normalized
         _direction = Vector3.cross(left: _up, right: right)
     }
 
@@ -318,8 +318,8 @@ class XCamera {
     ///  more defined basis, do not set axis independently, but use `rotate()` or `setBasis()` functions
     ///  to update all at once.
     private func orthogonalize(fromNewForward newForward: Vector3) {
-        _direction = newForward.normalized()
-        let right = Vector3.cross(left: _direction, right: _up).normalized()
+        _direction = newForward.normalized
+        let right = Vector3.cross(left: _direction, right: _up).normalized
         _up = Vector3.cross(left: right, right: _direction)
     }
 

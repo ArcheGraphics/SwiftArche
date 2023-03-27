@@ -321,13 +321,13 @@ public class EngineVisualizer: Script {
         var tempAxis = Quaternion()
         switch (shape.upAxis) {
         case ColliderShapeUpAxis.X:
-            tempAxis = Quaternion(0, 0, EngineVisualizer._halfSqrt, EngineVisualizer._halfSqrt)
+            tempAxis = Quaternion(x: 0, y: 0, z: EngineVisualizer._halfSqrt, w: EngineVisualizer._halfSqrt)
             break
         case ColliderShapeUpAxis.Y:
-            tempAxis = Quaternion(0, 0, 0, 1)
+            tempAxis = Quaternion(x: 0, y: 0, z: 0, w: 1)
             break
         case ColliderShapeUpAxis.Z:
-            tempAxis = Quaternion(EngineVisualizer._halfSqrt, 0, 0, EngineVisualizer._halfSqrt)
+            tempAxis = Quaternion(x: EngineVisualizer._halfSqrt, y: 0, z: 0, w: EngineVisualizer._halfSqrt)
         }
         var tempRotation = Quaternion.rotationYawPitchRoll(yaw: shape.rotation.x, pitch: shape.rotation.y, roll: shape.rotation.z)
         tempRotation *= tempAxis

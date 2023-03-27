@@ -29,8 +29,7 @@ fileprivate class Attractor: Script {
     }
 
     override func onPhysicsUpdate() {
-        var force = entity.transform.worldPosition
-        _ = force.normalize()
+        var force = entity.transform.worldPosition.normalized
         force *= -10
         collider.applyForce(force)
     }
@@ -131,8 +130,7 @@ class PhysXAttractorApp: NSViewController {
         _ = quatNegaFront90.rotateX(rad: MathUtil.degreeToRadian(90))
         _ = addPlane(rootEntity, Vector3(0, 0, 0), quatNegaFront90)
 
-        var quat = Quaternion(0, 0, 0.3, 0.7)
-        _ = quat.normalize()
+        let quat = Quaternion(x: 0, y: 0, z: 0.3, w: 0.7).normalized
         for i in 0..<4 {
             for j in 0..<4 {
                 for k in 0..<4 {

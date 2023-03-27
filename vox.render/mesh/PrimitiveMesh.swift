@@ -545,8 +545,7 @@ public class PrimitiveMesh {
 
                 let centerX = radius * cosU
                 let centerY = radius * sinU
-                normals[offset] = Vector3(position.x - centerX, position.y - centerY, position.z)
-                _ = normals[offset].normalize()
+                normals[offset] = Vector3(position.x - centerX, position.y - centerY, position.z).normalized
 
                 uvs[offset] = Vector2(Float(j / tubularSegments), Float(i / radialSegments))
                 offset += 1

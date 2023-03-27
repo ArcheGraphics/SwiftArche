@@ -129,7 +129,7 @@ class CascadedShadowSubpass: GeometrySubpass {
             let lightSide = Vector3(lightWorld.elements.columns.0[0], lightWorld.elements.columns.0[1], lightWorld.elements.columns.0[2])
             let lightUp = Vector3(lightWorld.elements.columns.1[0], lightWorld.elements.columns.1[1], lightWorld.elements.columns.1[2])
             let lightForward = Vector3(-lightWorld.elements.columns.2[0], -lightWorld.elements.columns.2[1], -lightWorld.elements.columns.2[2])
-            var cameraWorldForward = _camera.entity.transform.worldForward
+            let cameraWorldForward = _camera.entity.transform.worldForward.normalized
             _shadowSliceData.virtualCamera.forward = lightForward
 
             for j in 0..<shadowCascades {
@@ -137,7 +137,7 @@ class CascadedShadowSubpass: GeometrySubpass {
                         near: CascadedShadowSubpass._cascadesSplitDistance[j],
                         far: CascadedShadowSubpass._cascadesSplitDistance[j + 1],
                         camera: _camera,
-                        forward: cameraWorldForward.normalize(),
+                        forward: cameraWorldForward,
                         shadowSliceData: _shadowSliceData
                 )
                 ShadowUtils.getDirectionLightShadowCullPlanes(

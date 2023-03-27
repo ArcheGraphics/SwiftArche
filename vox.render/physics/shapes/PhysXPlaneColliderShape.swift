@@ -15,7 +15,7 @@ class PhysXPlaneColliderShape: PhysXColliderShape {
     init(_ uniqueID: UInt32, _ material: PhysXPhysicsMaterial) {
         super.init()
 
-        _axis = Quaternion(0, 0, PhysXColliderShape.halfSqrt, PhysXColliderShape.halfSqrt)
+        _axis = Quaternion(x: 0, y: 0, z: PhysXColliderShape.halfSqrt, w: PhysXColliderShape.halfSqrt)
         _physxRotation = _axis!
         _pxGeometry = CPxPlaneGeometry()
         _initialize(material._pxMaterial, uniqueID)

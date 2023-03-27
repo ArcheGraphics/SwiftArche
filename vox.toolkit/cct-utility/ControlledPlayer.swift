@@ -23,7 +23,7 @@ public class ControlledPlayer: Script {
         if inputManager.isKeyHeldDown() {
             var forward = camera.transform.worldForward
             forward.y = 0
-            _ = forward.normalize()
+            forward = forward.normalized
             var cross = Vector3(forward.z, 0, -forward.x)
 
             let animationSpeed: Float = 0.1

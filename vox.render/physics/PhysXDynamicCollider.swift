@@ -56,9 +56,8 @@ public struct DynamicColliderConstraints: OptionSet {
 class PhysXDynamicCollider: PhysXCollider {
     init(_ position: Vector3, _ rotation: Quaternion) {
         super.init()
-        var rotation = rotation
         _pxActor = PhysXPhysics._pxPhysics.createRigidDynamic(withPosition: position.internalValue,
-                rotation: rotation.normalize().internalValue)
+                rotation: rotation.normalized.internalValue)
     }
 
     func setLinearDamping(_ value: Float) {

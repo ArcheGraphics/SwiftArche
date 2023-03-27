@@ -45,7 +45,7 @@ class PhysXColliderShape {
         if (_axis != nil) {
             _physxRotation = _physxRotation * _axis!
         }
-        _ = _physxRotation.normalize()
+        _physxRotation = _physxRotation.normalized
         _setLocalPose()
     }
 

@@ -480,7 +480,7 @@ extension ModelMesh {
                 let w: Float = Vector3.dot(left: temp, right: n) > 0.0 ? 1 : -1
                 temp = n * Vector3.dot(left: t, right: n)
                 t -= temp
-                tangents[i] = Vector4(t.normalize(), w)
+                tangents[i] = Vector4(t.normalized, w)
             }
             setTangents(tangents: tangents)
         } else {

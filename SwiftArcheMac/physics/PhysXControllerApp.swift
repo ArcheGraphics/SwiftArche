@@ -51,7 +51,7 @@ class PlayerBehavior: ControllerBehavior {
             if !rigidBody.isKinematic {
                 var dir = hit.entity!.transform.worldPosition - hit.controller!.entity.transform.worldPosition
                 dir.y = 0
-                rigidBody.applyForceAtPosition(dir.normalized() * 10,
+                rigidBody.applyForceAtPosition(dir.normalized * 10,
                         hit.controller!.entity.transform.worldPosition,
                                                mode: .Impulse)
             }
@@ -100,8 +100,7 @@ class PhysXControllerApp: NSViewController {
     }
     
     func initialize(_ rootEntity: Entity) {
-        var quat = Quaternion(0, 0, 0.3, 0.7)
-        _ = quat.normalize()
+        let quat = Quaternion(x: 0, y: 0, z: 0.3, w: 0.7).normalized
         _ = addPlane(rootEntity, Vector3(30, 0.0, 30), Vector3(), Quaternion())
         for i in 0..<4 {
             for j in 0..<4 {

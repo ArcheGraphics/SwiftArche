@@ -37,8 +37,7 @@ extension Transform {
     public var worldForward: Vector3 {
         get {
             let e = worldMatrix.elements
-            var forward = Vector3(-e.columns.2[0], -e.columns.2[1], -e.columns.2[2])
-            return forward.normalize()
+            return Vector3(-e.columns.2[0], -e.columns.2[1], -e.columns.2[2]).normalized
         }
     }
 
@@ -46,8 +45,7 @@ extension Transform {
     public var worldRight: Vector3 {
         get {
             let e = worldMatrix.elements
-            var right = Vector3(e.columns.0[0], e.columns.0[1], e.columns.0[2])
-            return right.normalize()
+            return Vector3(e.columns.0[0], e.columns.0[1], e.columns.0[2]).normalized
         }
     }
 
@@ -55,8 +53,7 @@ extension Transform {
     public var worldUp: Vector3 {
         get {
             let e = worldMatrix.elements
-            var up = Vector3(e.columns.1[0], e.columns.1[1], e.columns.1[2])
-            return up.normalize()
+            return Vector3(e.columns.1[0], e.columns.1[1], e.columns.1[2]).normalized
         }
     }
 
@@ -187,7 +184,7 @@ extension Transform {
             _worldRotationQuaternion = newValue
             let parent = _getParentTransform()
             if (parent != nil) {
-                let invParentQuaternion = Quaternion.invert(a: parent!.worldRotationQuaternion)
+                let invParentQuaternion = parent!.worldRotationQuaternion.invert
                 _rotationQuaternion = invParentQuaternion * newValue
             } else {
                 _rotationQuaternion = newValue
@@ -326,7 +323,7 @@ extension Transform {
     ///   - angle: Rotate angle in degrees
     ///   - relativeToLocal: Relative to local space
     public func rotateByAxis(axis: Vector3, angle: Float, relativeToLocal: Bool = true) {
-        let _tempQuat0 = Quaternion.rotationAxisAngle(axis: axis, rad: angle * MathUtil.degreeToRadFactor)
+        let _tempQuat0 = Quaternion(axis: axis, rad: angle * MathUtil.degreeToRadFactor)
         _rotateByQuat(_tempQuat0, relativeToLocal)
     }
 
@@ -506,7 +503,7 @@ extension Transform {
     }
 
     private func _getScaleMatrix() -> Matrix3x3 {
-        let invRotation = Quaternion.invert(a: worldRotationQuaternion)
+        let invRotation = worldRotationQuaternion.invert
         let invRotationMat = Matrix3x3.rotationQuaternion(quaternion: invRotation)
         return invRotationMat * Matrix3x3(worldMatrix)
     }

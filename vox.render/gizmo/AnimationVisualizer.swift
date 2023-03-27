@@ -68,14 +68,14 @@ public class AnimationVisualizer: Script {
         let pos: [Vector3] = [Vector3(1.0, 0.0, 0.0), Vector3(kInter, 0.1, 0.1), Vector3(kInter, 0.1, -0.1),
                               Vector3(kInter, -0.1, -0.1), Vector3(kInter, -0.1, 0.1), Vector3(0.0, 0.0, 0.0)]
         let normals: [Vector3] = [
-            (pos[2] - pos[1]).cross(pos[2] - pos[0]).normalized(),
-            (pos[1] - pos[2]).cross(pos[1] - pos[5]).normalized(),
-            (pos[3] - pos[2]).cross(pos[3] - pos[0]).normalized(),
-            (pos[2] - pos[3]).cross(pos[2] - pos[5]).normalized(),
-            (pos[4] - pos[3]).cross(pos[4] - pos[0]).normalized(),
-            (pos[3] - pos[4]).cross(pos[3] - pos[5]).normalized(),
-            (pos[1] - pos[4]).cross(pos[1] - pos[0]).normalized(),
-            (pos[4] - pos[1]).cross(pos[4] - pos[5]).normalized(),
+            (pos[2] - pos[1]).cross(pos[2] - pos[0]).normalized,
+            (pos[1] - pos[2]).cross(pos[1] - pos[5]).normalized,
+            (pos[3] - pos[2]).cross(pos[3] - pos[0]).normalized,
+            (pos[2] - pos[3]).cross(pos[2] - pos[5]).normalized,
+            (pos[4] - pos[3]).cross(pos[4] - pos[0]).normalized,
+            (pos[3] - pos[4]).cross(pos[3] - pos[5]).normalized,
+            (pos[1] - pos[4]).cross(pos[1] - pos[0]).normalized,
+            (pos[4] - pos[1]).cross(pos[4] - pos[5]).normalized,
         ]
 
         let white = Color32(r: 255, g: 255, b: 255)

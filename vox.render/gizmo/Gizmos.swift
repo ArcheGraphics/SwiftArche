@@ -194,10 +194,10 @@ public class Gizmos {
     }
 
     public static func addArrow(posA: Vector3, posB: Vector3, color: Color32) {
-        let t0 = (posB - posA).normalized()
+        let t0 = (posB - posA).normalized
         let a = abs(t0.x) < 0.707 ? Vector3(1, 0, 0) : Vector3(0, 1, 0)
-        let t1 = Vector3.cross(left: t0, right: a).normalized()
-        let t2 = Vector3.cross(left: t0, right: t1).normalized()
+        let t1 = Vector3.cross(left: t0, right: a).normalized
+        let t2 = Vector3.cross(left: t0, right: t1).normalized
 
         addLine(p0: posA, p1: posB, color: color)
         addLine(p0: posB, p1: posB - t0 * 0.15 + t1 * 0.15, color: color)
@@ -518,7 +518,7 @@ extension Gizmos {
                 let z = cosj * sini
 
                 tempVertexBuffer[nbVerts] = Vector3(x, y, z)
-                tempNormalBuffer[nbVerts] = Vector3(x, y, z).normalized()
+                tempNormalBuffer[nbVerts] = Vector3(x, y, z).normalized
                 nbVerts += 1
             }
         }

@@ -21,11 +21,10 @@ class PhysXHingeJoint: PhysXJoint {
     }
 
     func setAxis(_ value: Vector3) {
-        var value = value
-        _ = value.normalize()
+        let value = value.normalized
         let angle = acos(Vector3.dot(left: Vector3(1, 0, 0), right: value))
         let xAxis = Vector3.cross(left: Vector3(1, 0, 0), right: value)
-        let axisRotationQuaternion = Quaternion.rotationAxisAngle(axis: xAxis, rad: angle)
+        let axisRotationQuaternion = Quaternion(axis: xAxis, rad: angle)
 
         _setLocalPose(0, _swingOffset, axisRotationQuaternion)
     }
