@@ -8,8 +8,12 @@
 
 #include "../vox.shader/macro_name.h"
 #include "../vox.shader/type_common.h"
+#include "../vox.shader/deferred/MainRenderer_shared.h"
+#include "../vox.shader/terrian/TerrainRenderer_define.h"
+#include "../vox.shader/terrian/VegetationRenderer_shared.h"
+#include "../vox.shader/particle/ParticleRenderer_shared.h"
+
 #include "../vox.shader/experimental/Config.h"
-//#include "../vox.shader/experimental/MeshTypes.h"
 #include "../vox.shader/experimental/ShaderTypes.h"
 #include "../vox.shader/experimental/MeshTypes.h"
 #include "../vox.shader/experimental/CullingShared.h"

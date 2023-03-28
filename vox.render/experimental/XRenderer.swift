@@ -17,12 +17,31 @@ struct XFrameViewData {
 /// Options for encoding rendering.
 enum XRenderMode {
     /// CPU encoding of draws with a `MTLRenderCommandEncoder`.
-    case RenderModeDirect
+    case Direct
     /// GPU encoding of draws with an `MTLIndirectCommandBuffer`.
-    case RenderModeIndirect
+    case Indirect
 }
 
 class XRenderer {
+    // Internal structure containing the data for each frame.
+    //  Multiple copies exist to allow updating while others are in flight.
+    struct AAPLFrameData {
+        // AAPLFrameConstants for this frame.
+        var frameDataBuffer: MTLBuffer
+        // Buffers for each view.
+        var viewData: [XFrameViewData] = .init(repeating: XFrameViewData(), count: Int(XConfig.NUM_VIEWS))
+        // ICBs and chunk cull information for each view.
+        var viewICBData: [XICBData] = .init(repeating: XICBData(), count: Int(XConfig.NUM_VIEWS))
+
+        // Lighting data
+        var pointLightsBuffer: MTLBuffer
+        var spotLightsBuffer: MTLBuffer
+        var lightParamsBuffer: MTLBuffer
+
+        var pointLightsCullingBuffer: MTLBuffer
+        var spotLightsCullingBuffer: MTLBuffer
+    };
+
     /// Initialization.
     init(with view: MTKView) {
     }

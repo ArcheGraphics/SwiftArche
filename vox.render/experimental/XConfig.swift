@@ -1,9 +1,8 @@
+//  Copyright (c) 2023 Feng Yang
 //
-//  XConfig.swift
-//  vox.render
-//
-//  Created by yangfengzz on 2023/3/27.
-//
+//  I am making my contributions/submissions to this project solely in my
+//  personal capacity and am not conveying any rights to any intellectual
+//  property of any third parties.
 
 import Foundation
 
@@ -26,7 +25,7 @@ enum XLightingMode {
     }
 }
 
-struct AAPLConfig {
+struct XConfig {
     var lightingMode: XLightingMode
 
     var renderMode: XRenderMode
@@ -75,9 +74,7 @@ struct AAPLConfig {
     static let HistoryPixelFormat: MTLPixelFormat = .bgra8Unorm_srgb
 
     static let GBufferPixelFormats: [MTLPixelFormat] = [
-//    #if SUPPORT_SINGLE_PASS_DEFERRED
         USE_RESOLVE_PASS != 0 ? LightingPixelFormat : .bgra8Unorm_srgb, // Lighting.
-//    #endif
         .rgba8Unorm_srgb, // Albedo/Alpha.
         .rgba16Float, // Nnormal.
         .rgba8Unorm_srgb, // Emissive.

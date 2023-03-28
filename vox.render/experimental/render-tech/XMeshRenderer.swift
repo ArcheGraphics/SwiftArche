@@ -202,7 +202,7 @@ class XMeshRenderer {
         let fragmentFunctionLCTransparentICBDebug = try? library.makeFunction(name: "fragmentForwardShader", constantValues: fc)
 
         let psd = MTLRenderPipelineDescriptor()
-        psd.sampleCount = sampleCount
+        psd.rasterSampleCount = sampleCount
         psd.vertexFunction = vertexFunction
         psd.vertexDescriptor = vd
         psd.colorAttachments[0].pixelFormat = lightingPixelFormat
