@@ -8,9 +8,9 @@ import Math
 
 class XDepthPyramid {
     /// Device from initialization.
-    var _device: MTLDevice
+    private var _device: MTLDevice
     /// Depth downsampling pipeline state.
-    var _pipelineState: MTLComputePipelineState
+    private var _pipelineState: MTLComputePipelineState
 
     /// Initializes this helper, pre-allocating objects from the device.
     init(with device: MTLDevice, library: MTLLibrary) {

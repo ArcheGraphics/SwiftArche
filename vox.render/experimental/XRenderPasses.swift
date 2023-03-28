@@ -10,19 +10,19 @@ import Foundation
 ///  These passes need to be handled by renderer implementations.
 enum XRenderPass {
     /// Depth only opaque geometry.
-    case RenderPassDepth
+    case Depth
     /// Depth only alpha-masked geometry.
-    case RenderPassDepthAlphaMasked
+    case DepthAlphaMasked
     /// G-buffer fill opaque geometry.
-    case RenderPassGBuffer
+    case GBuffer
     /// G-buffer fill alpha-masked geometry.
-    case RenderPassGBufferAlphaMasked
+    case GBufferAlphaMasked
     /// Forward render opaque geometry.
-    case RenderPassForward
+    case Forward
     /// Forward render alpha-masked geometry.
-    case RenderPassForwardAlphaMasked
+    case ForwardAlphaMasked
     /// Forward render transparent geometry.
-    case RenderPassForwardTransparent
+    case ForwardTransparent
 
-    case RenderPassCount
+    case Count
 };

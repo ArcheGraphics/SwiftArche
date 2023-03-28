@@ -32,26 +32,26 @@ struct LightCullResult {
 /// Encapsulates the state for culling lights.
 class XLightCuller {
     // Device from initialization.
-    var _device: MTLDevice
+    private var _device: MTLDevice
 
     // For Tiled Light Culling on TBDR Apple Silicon GPUs.
-    var _renderCullingPipelineState: MTLRenderPipelineState!
-    var _pipelineStateHierarchical: MTLRenderPipelineState!
-    var _pipelineStateClustering: MTLRenderPipelineState!
+    private var _renderCullingPipelineState: MTLRenderPipelineState!
+    private var _pipelineStateHierarchical: MTLRenderPipelineState!
+    private var _pipelineStateClustering: MTLRenderPipelineState!
 
-    var _initTilePipelineState: MTLRenderPipelineState!
-    var _depthBoundsTilePipelineState: MTLRenderPipelineState!
+    private var _initTilePipelineState: MTLRenderPipelineState!
+    private var _depthBoundsTilePipelineState: MTLRenderPipelineState!
 
     // For compute based light culling on tradional GPUs.
-    var _computeCullingPipelineState: MTLComputePipelineState!
+    private var _computeCullingPipelineState: MTLComputePipelineState!
 
     // Common culling kenrels used on both traditional and TBDR GPUs.
-    var _hierarchicalClusteredPipelineState: MTLComputePipelineState!
-    var _spotCoarseCullPipelineState: MTLComputePipelineState!
-    var _pointCoarseCullPipelineState: MTLComputePipelineState!
+    private var _hierarchicalClusteredPipelineState: MTLComputePipelineState!
+    private var _spotCoarseCullPipelineState: MTLComputePipelineState!
+    private var _pointCoarseCullPipelineState: MTLComputePipelineState!
 
-    var _lightCullingTileSize: Int
-    var _lightClusteringTileSize: Int
+    private var _lightCullingTileSize: Int
+    private var _lightClusteringTileSize: Int
 
 
     /// Initializes this culling object, allocating compute pipelines.
@@ -135,7 +135,61 @@ class XLightCuller {
     /// Initializes a LightCullResult object with buffers based on the view size and light counts.
     func createResultInstance(viewSize: MTLSize,
                               lightCount: simd_uint2) -> LightCullResult {
-        LightCullResult()
+        var inst = LightCullResult()
+
+        inst.tileCountX = divideRoundUp(numerator: viewSize.width, denominator: _lightCullingTileSize)
+        inst.tileCountY = divideRoundUp(numerator: viewSize.height, denominator: _lightCullingTileSize)
+
+        let tileCount = inst.tileCountX * inst.tileCountY
+
+        inst.pointLightIndicesBuffer = _device.makeBuffer(
+                length: tileCount * Int(MAX_LIGHTS_PER_TILE) * MemoryLayout<UInt8>.stride,
+                options: .storageModePrivate)
+        inst.pointLightIndicesBuffer.label = "Point Light Indices (1B/l x \(MAX_LIGHTS_PER_TILE) l/tile x \(tileCount) tiles)"
+
+        inst.pointLightIndicesTransparentBuffer = _device.makeBuffer(
+                length: tileCount * Int(MAX_LIGHTS_PER_TILE) * MemoryLayout<UInt8>.stride,
+                options: .storageModePrivate)
+        inst.pointLightIndicesTransparentBuffer.label = "Point Light Indices Transparent (1B/l x \(MAX_LIGHTS_PER_TILE) l/tile x \(tileCount) tiles)"
+
+        inst.spotLightIndicesBuffer = _device.makeBuffer(
+                length: tileCount * Int(MAX_LIGHTS_PER_TILE) * MemoryLayout<UInt8>.stride,
+                options: .storageModePrivate)
+        inst.spotLightIndicesBuffer.label = "Spot Light Indices (1B/l x \(MAX_LIGHTS_PER_TILE) l/tile x \(tileCount) tiles)"
+
+        inst.spotLightIndicesTransparentBuffer = _device.makeBuffer(
+                length: tileCount * Int(MAX_LIGHTS_PER_TILE) * MemoryLayout<UInt8>.stride,
+                options: .storageModePrivate)
+        inst.spotLightIndicesTransparentBuffer.label = "Spot Light Indices Transparent (1B/l x \(MAX_LIGHTS_PER_TILE) l/tile x \(tileCount) tiles)"
+
+        let pointLightCount = max(lightCount.x, 1)
+        let spotLightCount = max(lightCount.y, 1)
+        inst.pointLightXYCoarseCullIndicesBuffer = _device.makeBuffer(
+                length: Int(pointLightCount) * MemoryLayout<simd_ushort4>.stride,
+                options: .storageModePrivate)
+        inst.pointLightXYCoarseCullIndicesBuffer.label = "Point Light Coarse Cull XY (8B/l x \(pointLightCount) l)"
+
+        inst.spotLightXYCoarseCullIndicesBuffer = _device.makeBuffer(
+                length: Int(spotLightCount) * MemoryLayout<simd_ushort4>.stride,
+                options: .storageModePrivate)
+        inst.spotLightXYCoarseCullIndicesBuffer.label = "Spot Light Coarse Cull XY (8B/l x \(spotLightCount) l)"
+
+        inst.tileCountClusterX = divideRoundUp(numerator: viewSize.width, denominator: _lightCullingTileSize)
+        inst.tileCountClusterY = divideRoundUp(numerator: viewSize.height, denominator: _lightCullingTileSize)
+        let clusterCount = inst.tileCountClusterX * inst.tileCountClusterY * Int(LIGHT_CLUSTER_DEPTH)
+
+        inst.pointLightClusterIndicesBuffer = _device.makeBuffer(
+                length: clusterCount * Int(MAX_LIGHTS_PER_CLUSTER) * MemoryLayout<UInt8>.stride,
+                options: .storageModePrivate)
+        inst.pointLightClusterIndicesBuffer.label = "Point Light Cluster Indices (1B/l x \(MAX_LIGHTS_PER_CLUSTER) l/cluster x \(clusterCount) clusters)"
+
+
+        inst.spotLightClusterIndicesBuffer = _device.makeBuffer(
+                length: clusterCount * Int(MAX_LIGHTS_PER_CLUSTER) * MemoryLayout<UInt8>.stride,
+                options: .storageModePrivate)
+        inst.spotLightClusterIndicesBuffer.label = "Spot Light Cluster Indices (1B/l x \(MAX_LIGHTS_PER_CLUSTER) l/cluster x \(clusterCount) clusters)"
+
+        return inst
     }
 
     /// Coarsely culls a set of lights to calculate their XY bounds.
@@ -147,8 +201,42 @@ class XLightCuller {
                               spotLights: MTLBuffer,
                               frameDataBuffer: MTLBuffer,
                               cameraParamsBuffer: MTLBuffer,
-                              rrData: MTLBuffer?,
+                              rrMapData: MTLBuffer?,
                               nearPlane: Float) {
+        // The two dispatches in this encoder write to non-aliasing memory.
+        if let computeEncoder = commandBuffer.makeComputeCommandEncoder(dispatchType: .concurrent) {
+            computeEncoder.label = "LightCoarseCulling"
+            var nearPlane = nearPlane
+            computeEncoder.setComputePipelineState(_pointCoarseCullPipelineState)
+            computeEncoder.setBuffer(frameDataBuffer, offset: 0, index: Int(XBufferIndexFrameData.rawValue))
+            computeEncoder.setBuffer(cameraParamsBuffer, offset: 0, index: Int(XBufferIndexCameraParams.rawValue))
+            computeEncoder.setBytes(&nearPlane, length: MemoryLayout<Float>.stride, index: Int(XBufferIndexNearPlane.rawValue))
+            computeEncoder.setBuffer(rrMapData, offset: 0, index: Int(XBufferIndexRasterizationRateMap.rawValue))
+
+            if (pointLightCount > 0) {
+                var pointLightCount = pointLightCount
+                computeEncoder.setBuffer(pointLights, offset: 0, index: Int(XBufferIndexPointLights.rawValue))
+                computeEncoder.setBytes(&pointLightCount, length: MemoryLayout<Int>.stride,
+                        index: Int(XBufferIndexLightCount.rawValue))
+                computeEncoder.setBuffer(result.pointLightXYCoarseCullIndicesBuffer, offset: 0,
+                        index: Int(XBufferIndexPointLightCoarseCullingData.rawValue))
+                computeEncoder.dispatchThreadgroups(MTLSize(width: divideRoundUp(numerator: pointLightCount, denominator: 64), height: 1, depth: 1),
+                        threadsPerThreadgroup: MTLSize(width: 64, height: 1, depth: 1))
+            }
+
+            if (spotLightCount > 0) {
+                var spotLightCount = spotLightCount
+                computeEncoder.setComputePipelineState(_spotCoarseCullPipelineState)
+                computeEncoder.setBuffer(spotLights, offset: 0, index: Int(XBufferIndexSpotLights.rawValue))
+                computeEncoder.setBytes(&spotLightCount, length: MemoryLayout<Int>.stride,
+                        index: Int(XBufferIndexLightCount.rawValue))
+                computeEncoder.setBuffer(result.spotLightXYCoarseCullIndicesBuffer, offset: 0,
+                        index: Int(XBufferIndexSpotLightCoarseCullingData.rawValue))
+                computeEncoder.dispatchThreadgroups(MTLSize(width: divideRoundUp(numerator: spotLightCount, denominator: 64), height: 1, depth: 1),
+                        threadsPerThreadgroup: MTLSize(width: 64, height: 1, depth: 1))
+            }
+            computeEncoder.endEncoding()
+        }
     }
 
     /// Uses a traditional compute kernel to cull a set of lights based on depth,
@@ -160,14 +248,48 @@ class XLightCuller {
                                    spotLights: MTLBuffer,
                                    frameDataBuffer: MTLBuffer,
                                    cameraParamsBuffer: MTLBuffer,
-                                   rrData: MTLBuffer?,
-                                   depthTexture: MTLBuffer,
-                                   onCommandBuffer: MTLBuffer) {
+                                   rrMapData: MTLBuffer?,
+                                   depthTexture: MTLTexture,
+                                   commandBuffer: MTLCommandBuffer) {
+        if let encoder = commandBuffer.makeComputeCommandEncoder() {
+            encoder.label = "LightCulling"
+
+            encoder.setComputePipelineState(_computeCullingPipelineState)
+            encoder.setBuffer(result.pointLightIndicesBuffer, offset: 0,
+                    index: Int(XBufferIndexPointLightIndices.rawValue))
+            encoder.setBuffer(result.pointLightIndicesTransparentBuffer, offset: 0,
+                    index: Int(XBufferIndexTransparentPointLightIndices.rawValue))
+            encoder.setBuffer(result.spotLightIndicesBuffer, offset: 0,
+                    index: Int(XBufferIndexSpotLightIndices.rawValue))
+            encoder.setBuffer(result.spotLightIndicesTransparentBuffer, offset: 0,
+                    index: Int(XBufferIndexTransparentSpotLightIndices.rawValue))
+
+            encoder.setBuffer(frameDataBuffer, offset: 0, index: Int(XBufferIndexFrameData.rawValue))
+            encoder.setBuffer(cameraParamsBuffer, offset: 0, index: Int(XBufferIndexCameraParams.rawValue))
+            encoder.setBuffer(pointLights, offset: 0, index: Int(XBufferIndexPointLights.rawValue))
+            encoder.setBuffer(spotLights, offset: 0, index: Int(XBufferIndexSpotLights.rawValue))
+
+            var lightCount = [pointLightCount, spotLightCount]
+            encoder.setBytes(&lightCount, length: MemoryLayout<Int>.stride,
+                    index: Int(XBufferIndexLightCount.rawValue))
+            encoder.setTexture(depthTexture, index: 0)
+
+            encoder.setBuffer(rrMapData, offset: 0, index: Int(XBufferIndexRasterizationRateMap.rawValue))
+
+            encoder.setBuffer(result.pointLightXYCoarseCullIndicesBuffer, offset: 0,
+                    index: Int(XBufferIndexPointLightCoarseCullingData.rawValue))
+            encoder.setBuffer(result.spotLightXYCoarseCullIndicesBuffer, offset: 0,
+                    index: Int(XBufferIndexSpotLightCoarseCullingData.rawValue))
+
+            encoder.dispatchThreadgroups(MTLSize(width: result.tileCountX, height: result.tileCountY, depth: 1),
+                    threadsPerThreadgroup: MTLSize(width: 16, height: 16, depth: 1))
+
+            encoder.endEncoding()
+        }
     }
 
     /// Uses a tile shader to both cull and cluster a set of lights based on depth,
     ///  using coarse culled results for XY range.
-    #if SUPPORT_LIGHT_CULLING_TILE_SHADERS
     func executeTileCulling(result: inout LightCullResult,
                             clustered: Bool,
                             pointLightCount: Int,
@@ -176,11 +298,56 @@ class XLightCuller {
                             spotLights: MTLBuffer,
                             frameDataBuffer: MTLBuffer,
                             cameraParamsBuffer: MTLBuffer,
-                            rrData: MTLBuffer?,
+                            rrMapData: MTLBuffer?,
                             depthTexture: MTLTexture,
-                            onEncoder: MTLRenderCommandEncoder) {
+                            encoder: MTLRenderCommandEncoder) {
+        encoder.setRenderPipelineState(_initTilePipelineState)
+        encoder.dispatchThreadsPerTile(MTLSizeMake(1, 1, 1))
+
+        encoder.setTileBuffer(cameraParamsBuffer, offset: 0, index: Int(XBufferIndexCameraParams.rawValue))
+
+        encoder.setRenderPipelineState(_depthBoundsTilePipelineState)
+        encoder.dispatchThreadsPerTile(MTLSizeMake(Int(TILE_DEPTH_BOUNDS_DISPATCH_SIZE),
+                                                   Int(TILE_DEPTH_BOUNDS_DISPATCH_SIZE), 1))
+
+        encoder.setTileBuffer(result.pointLightIndicesBuffer, offset: 0,
+                index: Int(XBufferIndexPointLightIndices.rawValue))
+        encoder.setTileBuffer(result.pointLightIndicesTransparentBuffer, offset: 0,
+                index: Int(XBufferIndexTransparentPointLightIndices.rawValue))
+        encoder.setTileBuffer(result.spotLightIndicesBuffer, offset: 0,
+                index: Int(XBufferIndexSpotLightIndices.rawValue))
+        encoder.setTileBuffer(result.spotLightIndicesTransparentBuffer, offset: 0,
+                index: Int(XBufferIndexTransparentSpotLightIndices.rawValue))
+        encoder.setTileBuffer(frameDataBuffer, offset: 0, index: Int(XBufferIndexFrameData.rawValue))
+        encoder.setTileBuffer(pointLights, offset: 0, index: Int(XBufferIndexPointLights.rawValue))
+        encoder.setTileBuffer(spotLights, offset: 0, index: Int(XBufferIndexSpotLights.rawValue))
+
+        var lightCount = [pointLightCount, spotLightCount]
+        encoder.setTileBytes(&lightCount, length: MemoryLayout<Int>.stride * 2,
+                index: Int(XBufferIndexLightCount.rawValue))
+        encoder.setTileBuffer(result.pointLightXYCoarseCullIndicesBuffer, offset: 0,
+                index: Int(XBufferIndexPointLightCoarseCullingData.rawValue))
+        encoder.setTileBuffer(result.spotLightXYCoarseCullIndicesBuffer, offset: 0,
+                index: Int(XBufferIndexSpotLightCoarseCullingData.rawValue))
+
+        encoder.setTileBuffer(rrMapData, offset: 0, index: Int(XBufferIndexRasterizationRateMap.rawValue))
+
+        if (clustered) {
+            encoder.setRenderPipelineState(_pipelineStateHierarchical)
+            encoder.dispatchThreadsPerTile(MTLSizeMake(Int(TILE_SHADER_WIDTH), Int(TILE_SHADER_HEIGHT), 1))
+
+            encoder.setTileBuffer(result.pointLightClusterIndicesBuffer, offset: 0,
+                                  index: Int(XBufferIndexPointLightIndices.rawValue))
+            encoder.setTileBuffer(result.spotLightClusterIndicesBuffer, offset: 0,
+                                  index: Int(XBufferIndexSpotLightIndices.rawValue))
+
+            encoder.setRenderPipelineState(_pipelineStateClustering)
+            encoder.dispatchThreadsPerTile(MTLSizeMake(8, 8, 1))
+        } else {
+            encoder.setRenderPipelineState(_renderCullingPipelineState)
+            encoder.dispatchThreadsPerTile(MTLSizeMake(Int(TILE_SHADER_WIDTH), Int(TILE_SHADER_HEIGHT), 1))
+        }
     }
-    #endif
 
     // Executes traditional compute based light clustering.
     func executeTraditionalClustering(result: inout LightCullResult,
@@ -191,8 +358,42 @@ class XLightCuller {
                                       spotLights: MTLBuffer,
                                       frameDataBuffer: MTLBuffer,
                                       cameraParamsBuffer: MTLBuffer,
-                                      rrData: MTLBuffer?) {
+                                      rrMapData: MTLBuffer?) {
+        var lightCount = [pointLightCount, spotLightCount]
 
+        if let encoder = commandBuffer.makeComputeCommandEncoder() {
+            encoder.label = "LightClustering"
+
+            encoder.setBuffer(result.pointLightClusterIndicesBuffer, offset: 0,
+                              index: Int(XBufferIndexPointLightIndices.rawValue))
+            encoder.setBuffer(result.pointLightIndicesTransparentBuffer, offset: 0,
+                              index: Int(XBufferIndexTransparentPointLightIndices.rawValue))
+            encoder.setBuffer(result.spotLightClusterIndicesBuffer, offset: 0,
+                              index: Int(XBufferIndexSpotLightIndices.rawValue))
+            encoder.setBuffer(result.spotLightIndicesTransparentBuffer, offset: 0,
+                              index: Int(XBufferIndexTransparentSpotLightIndices.rawValue))
+
+            encoder.setBuffer(frameDataBuffer, offset: 0,
+                              index: Int(XBufferIndexFrameData.rawValue))
+            encoder.setBuffer(cameraParamsBuffer, offset: 0,
+                              index: Int(XBufferIndexCameraParams.rawValue))
+            encoder.setBuffer(pointLights, offset: 0,
+                              index: Int(XBufferIndexPointLights.rawValue))
+            encoder.setBuffer(spotLights, offset: 0,
+                              index: Int(XBufferIndexSpotLights.rawValue))
+
+            encoder.setBytes(&lightCount, length: MemoryLayout<Int>.stride * 2,
+                             index: Int(XBufferIndexLightCount.rawValue))
+            encoder.setBuffer(rrMapData, offset: 0, index: Int(XBufferIndexRasterizationRateMap.rawValue))
+            encoder.setBuffer(result.pointLightXYCoarseCullIndicesBuffer, offset: 0, index: 10)
+            encoder.setBuffer(result.spotLightXYCoarseCullIndicesBuffer, offset: 0, index: 11)
+
+            encoder.setComputePipelineState(_hierarchicalClusteredPipelineState)
+            encoder.dispatchThreadgroups(MTLSize(width: result.tileCountClusterX,
+                                                 height: result.tileCountClusterY, depth: 1),
+                    threadsPerThreadgroup: MTLSize(width: 1, height: 1, depth: Int(LIGHT_CLUSTER_DEPTH)))
+            encoder.endEncoding()
+        }
     }
 }
 

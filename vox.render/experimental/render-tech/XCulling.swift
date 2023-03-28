@@ -44,31 +44,31 @@ struct XICBData {
 
 class XCulling {
     // Device from initialization.
-    var _device: MTLDevice
+    private var _device: MTLDevice
 
     // Compute pipelines for updating MTLIndirectCommandBufferExecutionRange objects.
-    var _resetChunkExecutionRangeState: MTLComputePipelineState!
+    private var _resetChunkExecutionRangeState: MTLComputePipelineState!
 
     // Compute pipelines for culling indexed by AAPLRenderCullType.
-    var _encodeChunksState: [MTLComputePipelineState?] = .init(repeating: nil, count: Int(XRenderCullType.Count.rawValue))
-    var _encodeChunksState_AlphaMask: [MTLComputePipelineState?] = .init(repeating: nil, count: Int(XRenderCullType.Count.rawValue))
-    var _encodeChunksState_Transparent: [MTLComputePipelineState?] = .init(repeating: nil, count: Int(XRenderCullType.Count.rawValue))
+    private var _encodeChunksState: [MTLComputePipelineState?] = .init(repeating: nil, count: Int(XRenderCullType.Count.rawValue))
+    private var _encodeChunksState_AlphaMask: [MTLComputePipelineState?] = .init(repeating: nil, count: Int(XRenderCullType.Count.rawValue))
+    private var _encodeChunksState_Transparent: [MTLComputePipelineState?] = .init(repeating: nil, count: Int(XRenderCullType.Count.rawValue))
 
-    var _encodeChunksState_DepthOnly: [MTLComputePipelineState?] = .init(repeating: nil, count: Int(XRenderCullType.Count.rawValue))
-    var _encodeChunksState_DepthOnly_AlphaMask: [MTLComputePipelineState?] = .init(repeating: nil, count: Int(XRenderCullType.Count.rawValue))
+    private var _encodeChunksState_DepthOnly: [MTLComputePipelineState?] = .init(repeating: nil, count: Int(XRenderCullType.Count.rawValue))
+    private var _encodeChunksState_DepthOnly_AlphaMask: [MTLComputePipelineState?] = .init(repeating: nil, count: Int(XRenderCullType.Count.rawValue))
 
-    var _encodeChunksState_DepthOnly_Filtered: MTLComputePipelineState!
-    var _encodeChunksState_DepthOnly_AlphaMask_Filtered: MTLComputePipelineState!
+    private var _encodeChunksState_DepthOnly_Filtered: MTLComputePipelineState!
+    private var _encodeChunksState_DepthOnly_AlphaMask_Filtered: MTLComputePipelineState!
 
-    var _encodeChunksState_Both: [MTLComputePipelineState?] = .init(repeating: nil, count: Int(XRenderCullType.Count.rawValue))
-    var _encodeChunksState_Both_AlphaMask: [MTLComputePipelineState?] = .init(repeating: nil, count: Int(XRenderCullType.Count.rawValue))
+    private var _encodeChunksState_Both: [MTLComputePipelineState?] = .init(repeating: nil, count: Int(XRenderCullType.Count.rawValue))
+    private var _encodeChunksState_Both_AlphaMask: [MTLComputePipelineState?] = .init(repeating: nil, count: Int(XRenderCullType.Count.rawValue))
 
-    var _visualizeCullingState: MTLComputePipelineState!
-    var _visualizeCullingState_AlphaMask: MTLComputePipelineState!
-    var _visualizeCullingState_Transparent: MTLComputePipelineState!
+    private var _visualizeCullingState: MTLComputePipelineState!
+    private var _visualizeCullingState_AlphaMask: MTLComputePipelineState!
+    private var _visualizeCullingState_Transparent: MTLComputePipelineState!
 
     // Argument encoder for configuring AAPLEncodeArguments objects.
-    var _icbEncodeArgsEncoder: MTLArgumentEncoder!
+    private var _icbEncodeArgsEncoder: MTLArgumentEncoder!
 
     // Initializes this culling object, allocating compute pipelines and argument encoders.
     init(with device: MTLDevice,
