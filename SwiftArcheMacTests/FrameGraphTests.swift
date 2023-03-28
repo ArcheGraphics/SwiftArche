@@ -54,11 +54,13 @@ extension texture_description: ResourceRealize {
 
 typealias texture_2d_resource = Resource<texture_description>;
 
-class render_task_0_data {
+class render_task_0_data: RenderTaskDataType {
     var output: texture_2d_resource!
+    required init() {}
 }
 
-class render_task_data {
+class render_task_data: RenderTaskDataType {
     var input: texture_2d_resource!
     var output: texture_2d_resource!
-};
+    required init() {}
+}

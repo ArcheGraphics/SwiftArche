@@ -28,8 +28,8 @@ public class RenderTaskBase {
     }
 }
 
-public class RenderTask<data_type>: RenderTaskBase {
-    var data_: data_type!
+public class RenderTask<data_type: RenderTaskDataType>: RenderTaskBase {
+    var data_: data_type
     var setup_: (data_type, RenderTaskBuilder) -> Void
     var execute_: (data_type) -> Void
 
@@ -41,6 +41,7 @@ public class RenderTask<data_type>: RenderTaskBase {
          execute: @escaping (data_type) -> Void) {
         setup_ = setup
         execute_ = execute
+        data_ = data_type()
         super.init(name: name)
     }
 

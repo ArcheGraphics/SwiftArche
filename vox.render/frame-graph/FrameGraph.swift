@@ -19,8 +19,8 @@ public class FrameGraph {
     
     public init() {}
 
-    public func addRenderTask<data_type: AnyObject>(name: String, setup: @escaping (data_type, RenderTaskBuilder) -> Void,
-                                                    execute: @escaping (data_type) -> Void) -> RenderTask<data_type> {
+    public func addRenderTask<data_type: RenderTaskDataType>(name: String, setup: @escaping (data_type, RenderTaskBuilder) -> Void,
+                                                             execute: @escaping (data_type) -> Void) -> RenderTask<data_type> {
         render_tasks_.append(RenderTask<data_type>(name: name, setup: setup, execute: execute))
         let render_task = render_tasks_.last!
 
@@ -233,5 +233,18 @@ public class FrameGraph {
             stream += "} [color=gold]\n"
         }
         stream += "\n"
+        
+        for resource in resources_ {
+            stream += "\""
+            stream += resource.name
+            stream += "\" -> { "
+            for render_task in resource.readers_ {
+                stream += "\""
+                stream += render_task.name
+                stream += "\" "
+            }
+            stream += "} [color=firebrick]\n"
+        }
+        stream += "}"
     }
 }

@@ -11,6 +11,10 @@ public protocol ResourceRealize {
     func realize() -> actual_type?
 }
 
+public protocol RenderTaskDataType: AnyObject {
+    init()
+}
+
 //extension MTLTextureDescriptor: ResourceRealize {
 //    public typealias actual_type = MTLTexture
 //
