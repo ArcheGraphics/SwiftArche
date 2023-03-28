@@ -28,12 +28,12 @@ public class RenderTaskBase {
     }
 }
 
-class RenderTask<data_type>: RenderTaskBase {
+public class RenderTask<data_type>: RenderTaskBase {
     var data_: data_type!
     var setup_: (data_type, RenderTaskBuilder) -> Void
     var execute_: (data_type) -> Void
 
-    var data: data_type {
+    public var data: data_type {
         data_
     }
     
@@ -44,11 +44,11 @@ class RenderTask<data_type>: RenderTaskBase {
         super.init(name: name)
     }
 
-    override func setup(builder: RenderTaskBuilder) {
+    public override func setup(builder: RenderTaskBuilder) {
         setup_(data_, builder)
     }
 
-    override func execute() {
+    public override func execute() {
         execute_(data_)
     }
 }

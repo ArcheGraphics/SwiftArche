@@ -6,7 +6,7 @@
 
 import Metal
 
-class FrameGraph {
+public class FrameGraph {
     struct Step {
         var render_task: RenderTaskBase
         var realized_resources: [ResourceBase]
@@ -16,9 +16,11 @@ class FrameGraph {
     var render_tasks_: [RenderTaskBase] = []
     var resources_: [ResourceBase] = []
     var timeline_: [Step] = []
+    
+    public init() {}
 
-    func add_render_task<data_type>(name: String, setup: @escaping (data_type, RenderTaskBuilder) -> Void,
-                                    execute: @escaping (data_type) -> Void) -> RenderTask<data_type> {
+    public func addRenderTask<data_type: AnyObject>(name: String, setup: @escaping (data_type, RenderTaskBuilder) -> Void,
+                                                    execute: @escaping (data_type) -> Void) -> RenderTask<data_type> {
         render_tasks_.append(RenderTask<data_type>(name: name, setup: setup, execute: execute))
         let render_task = render_tasks_.last!
 
@@ -28,13 +30,13 @@ class FrameGraph {
         return render_task as! RenderTask<data_type>
     }
 
-    func add_retained_resource<description_type: ResourceRealize>(name: String, description: description_type,
-                                                                  actual: description_type.actual_type? = nil) -> Resource<description_type> {
+    public func addRetainedResource<description_type: ResourceRealize>(name: String, description: description_type,
+                                                                       actual: description_type.actual_type? = nil) -> Resource<description_type> {
         resources_.append(Resource<description_type>(name: name, description: description, actual: actual))
         return resources_.last as! Resource<description_type>
     }
 
-    func execute() {
+    public func execute() {
         for step in timeline_ {
             for resource in step.realized_resources {
                 resource.realize()
@@ -46,12 +48,12 @@ class FrameGraph {
         }
     }
 
-    func clear() {
+    public func clear() {
         render_tasks_ = []
         resources_ = []
     }
 
-    func compile() {
+    public func compile() {
         // Reference counting.
         for render_task in render_tasks_ {
             render_task.ref_count_ = render_task.creates_.count + render_task.writes_.count
@@ -157,4 +159,79 @@ class FrameGraph {
         }
     }
 
+    @discardableResult
+    public func exportGraphviz(filename: String) -> Bool {
+        let dir = try? FileManager.default.url(for: .documentDirectory,
+                in: .userDomainMask,
+                appropriateFor: nil, create: true)
+        let fileURL = dir?.appendingPathComponent(filename).appendingPathExtension("dot")
+
+
+        var text: String = ""
+        _exportGraphviz(stream: &text)
+
+        do {
+            try text.write(to: fileURL!, atomically: false, encoding: .utf8)
+            return true
+        } catch {
+            return false
+        }
+    }
+
+    private func _exportGraphviz(stream: inout String) {
+        stream += "digraph framegraph \n{\n"
+
+        stream += "rankdir = LR\n"
+        stream += "bgcolor = black\n\n"
+        stream += "node [shape=rectangle, fontname=\"helvetica\", fontsize=12]\n\n"
+
+        for render_task in render_tasks_ {
+            stream += "\""
+            stream += render_task.name
+            stream += "\" [label=\""
+            stream += render_task.name
+            stream += "\\nRefs: "
+            stream += String(render_task.ref_count_)
+            stream += "\", style=filled, fillcolor=darkorange]\n"
+        }
+        stream += "\n"
+
+        for resource in resources_ {
+            stream += "\""
+            stream += resource.name
+            stream += "\" [label=\""
+            stream += resource.name
+            stream += "\\nRefs: "
+            stream += String(resource.ref_count_)
+            stream += "\\nID: "
+            stream += String(resource.id)
+            stream += "\", style=filled, fillcolor= "
+            stream += resource.transient ? "skyblue" : "steelblue"
+            stream += "]\n"
+        }
+        stream += "\n"
+
+        for render_task in render_tasks_ {
+            stream += "\""
+            stream += render_task.name
+            stream += "\" -> { "
+            for resource in render_task.creates_ {
+                stream += "\""
+                stream += resource.name
+                stream += "\" "
+            }
+            stream += "} [color=seagreen]\n"
+
+            stream += "\""
+            stream += render_task.name
+            stream += "\" -> { "
+            for resource in render_task.writes_ {
+                stream += "\""
+                stream += resource.name
+                stream += "\" "
+            }
+            stream += "} [color=gold]\n"
+        }
+        stream += "\n"
+    }
 }

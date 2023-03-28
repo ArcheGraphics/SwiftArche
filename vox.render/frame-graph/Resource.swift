@@ -40,17 +40,17 @@ public class ResourceBase {
     }
 }
 
-class Resource<description_type: ResourceRealize>: ResourceBase {
-    typealias actual_type = description_type.actual_type
+public class Resource<description_type: ResourceRealize>: ResourceBase {
+    public typealias actual_type = description_type.actual_type
 
     var description_: description_type
     var actual_: actual_type?
 
-    var description: description_type {
+    public var description: description_type {
         description_
     }
 
-    var actual: actual_type? {
+    public var actual: actual_type? {
         actual_
     }
 
@@ -70,13 +70,13 @@ class Resource<description_type: ResourceRealize>: ResourceBase {
         super.init(name: name, creator: nil)
     }
 
-    override func realize() {
+    public override func realize() {
         if transient {
             actual_ = description_.realize()
         }
     }
 
-    override func derealize() {
+    public override func derealize() {
         if transient {
             actual_ = nil
         }

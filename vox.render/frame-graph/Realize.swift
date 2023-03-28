@@ -6,15 +6,15 @@
 
 import Metal
 
-protocol ResourceRealize {
+public protocol ResourceRealize {
     associatedtype actual_type
     func realize() -> actual_type?
 }
 
-extension MTLTextureDescriptor: ResourceRealize {
-    typealias actual_type = MTLTexture
-
-    func realize() -> actual_type? {
-        Engine.device.makeTexture(descriptor: self)
-    }
-}
+//extension MTLTextureDescriptor: ResourceRealize {
+//    public typealias actual_type = MTLTexture
+//
+//    public func realize() -> actual_type? {
+//        Engine.device.makeTexture(descriptor: self)
+//    }
+//}
