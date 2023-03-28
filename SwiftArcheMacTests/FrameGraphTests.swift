@@ -8,31 +8,58 @@ import XCTest
 import vox_render
 
 final class FrameGraphTests: XCTestCase {
-    func testExample() throws {
+    // Graphviz located in ~/Library/Containers/archegraphics.SwiftArcheMac/Data/Documents
+    func testSelfDefineFrameGraph() throws {
         let frameGraph = FrameGraph()
-        let render_task_0: RenderTask<render_task_0_data> =
+        
+        let backbuffer = Texture("render target")
+        let retained_resource = frameGraph.addRetainedResource(name: "swapchain", description: TextureDescription(name: "framebuffer"),
+                                                               actual: backbuffer)
+        
+        // MARK: - Pass
+        let render_task_0: RenderTask<RenderTaskData0> =
         frameGraph.addRenderTask(name: "Render Task 0") { data, builder in
             data.output = builder.write(resource: builder.read(resource: builder.create(name: "Resource 0",
-                                                                                        description: texture_description(name: "0"))));
+                                                                                        description: TextureDescription(name: "0"))));
         } execute: { data in
             if let actual1 = data.output.actual {
-                print(actual1)
+                print("Render Task 0 with \(actual1)")
             }
         }
+        
+        // MARK: - Pass
         let data_0 = render_task_0.data
+        var render_task: RenderTask<RenderTaskData>!
         for i in 1...4 {
-            let _: RenderTask<render_task_data> =
+            let internal_render_task: RenderTask<RenderTaskData> =
             frameGraph.addRenderTask(name: "Render Task \(i)") { data, builder in
                 data.input = builder.read(resource: data_0.output);
-                data.output = builder.write(resource: builder.create(name: "Resource \(i)", description: texture_description(name: String(i))))
+                data.output = builder.write(resource: builder.create(name: "Resource \(i)", description: TextureDescription(name: String(i))))
             } execute: { data in
                if let actual1 = data.input.actual,
                   let actual2 = data.output.actual {
-                   print(actual1)
-                   print(actual2)
+                   print("Render Task \(i) with \(actual1)")
+                   print("Render Task \(i) with \(actual2)")
                }
             }
-
+            
+            if i == 1 {
+                render_task = internal_render_task
+            }
+        }
+        
+        // MARK: - Pass
+        let data_final = render_task.data
+        let _: RenderTask<RenderTaskData> =
+        frameGraph.addRenderTask(name: "Final Render Task") { data, builder in
+            data.input = builder.read(resource: data_final.output);
+            data.output = builder.write(resource: retained_resource)
+        } execute: { data in
+           if let actual1 = data.input.actual,
+              let actual2 = data.output.actual {
+               print("Final Render Task with \(actual1)")
+               print("Final Render Task with \(actual2)")
+           }
         }
 
         frameGraph.compile();
@@ -42,25 +69,38 @@ final class FrameGraphTests: XCTestCase {
     }
 }
 
-struct texture_description {
-    var name: String
-}
-extension texture_description: ResourceRealize {
-    public typealias actual_type = String
-    public func realize() -> String? {
-        name
+class Texture {
+    var string: String
+    init(_ string: String) {
+        self.string = string
     }
 }
 
-typealias texture_2d_resource = Resource<texture_description>;
+extension Texture: CustomStringConvertible {
+    var description: String {
+        string
+    }
+}
 
-class render_task_0_data: RenderTaskDataType {
-    var output: texture_2d_resource!
+struct TextureDescription {
+    var name: String
+}
+extension TextureDescription: ResourceRealize {
+    public typealias actual_type = Texture
+    public func realize() -> Texture? {
+        Texture(name)
+    }
+}
+
+typealias Texture2DResource = Resource<TextureDescription>;
+
+class RenderTaskData0: RenderTaskDataType {
+    var output: Texture2DResource!
     required init() {}
 }
 
-class render_task_data: RenderTaskDataType {
-    var input: texture_2d_resource!
-    var output: texture_2d_resource!
+class RenderTaskData: RenderTaskDataType {
+    var input: Texture2DResource!
+    var output: Texture2DResource!
     required init() {}
 }
