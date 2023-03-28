@@ -6,7 +6,7 @@
 
 import Metal
 
-public class RenderTaskBuilder {
+public struct RenderTaskBuilder {
     private var framegraph_: FrameGraph
     private var render_task_: RenderTaskBase
 

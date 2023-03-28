@@ -60,7 +60,7 @@ class Resource<description_type: ResourceRealize>: ResourceBase {
         super.init(name: name, creator: creator)
     }
 
-    init(name: String, description: description_type, actual: actual_type? = nil) {
+    required init(name: String, description: description_type, actual: actual_type? = nil) {
         description_ = description
         if let actual {
             actual_ = actual
