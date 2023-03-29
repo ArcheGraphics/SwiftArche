@@ -28,44 +28,75 @@ public class DevicePipeline {
         shadowManager = ShadowManager(self)
     }
 
-    public func commit(fg: inout FrameGraph, with commandBuffer: MTLCommandBuffer) {
+    public func commit(fg: FrameGraph, with commandBuffer: MTLCommandBuffer) {
+        if let renderTarget = camera.renderTarget {
+            if let depthTexture = renderTarget.depthAttachment.texture {
+                fg.blackboard["camera_depth"] = fg.addRetainedResource(for: MTLTextureDescriptor.self,
+                                                                       name: "camera depthTexture",
+                                                                       description: MTLTextureDescriptor(),
+                                                                       actual: depthTexture)
+            }
+            for i in 0..<32 {
+                if let colorTexture = renderTarget.colorAttachments[i].texture {
+                    fg.blackboard["camera_color\(i)"] = fg.addRetainedResource(for: MTLTextureDescriptor.self,
+                                                                               name: "camera colorTexture\(i)",
+                                                                               description: MTLTextureDescriptor(),
+                                                                               actual: colorTexture)
+                }
+            }
+        }
+        
+        // shadow pass
         let scene = camera.scene
+        var enableShadow = false
         if (scene.castShadows && scene._sunLight?.shadowType != ShadowType.None) {
-            shadowManager.draw(fg: &fg, with: commandBuffer)
+            shadowManager.draw(fg: fg, with: commandBuffer)
+            enableShadow = true
         }
         
         let background = scene.background
         _changeBackground(background)
-
-        var renderContext: RenderCommandEncoderDescriptor?
-        if let renderTarget = camera.renderTarget {
-            renderContext = RenderCommandEncoderDescriptor(label: "pass for \(camera.entity.name)",
-                                                           renderTarget: renderTarget,
-                                                           commandBuffer: commandBuffer)
-        } else if let renderPassDescriptor = Engine.canvas!.currentRenderPassDescriptor {
-            renderContext = RenderCommandEncoderDescriptor(label: "forward pass",
-                                                           renderTarget: renderPassDescriptor,
-                                                           commandBuffer: commandBuffer)
-        }
         
-        if let renderContext {
+        // main forward pass
+        if let renderTarget = camera.renderTarget ?? Engine.canvas.currentRenderPassDescriptor {
             if background.mode == BackgroundMode.SolidColor {
                 let color = background.solidColor.toLinear()
-                renderContext.renderTarget.colorAttachments[0].clearColor = MTLClearColor(
+                renderTarget.colorAttachments[0].clearColor = MTLClearColor(
                         red: Double(color.r), green: Double(color.g), blue: Double(color.b), alpha: Double(color.a)
                 )
             }
             
-            fg.addRenderTask(for: RenderCommandEncoderData.self, name: "forward pass") { data, builder in
-                data.output = builder.write(resource: builder.create(name: "", description: renderContext))
-            } execute: { [self] builder in
-                if var encoder = builder.output.actual {
-                    _forwardSubpass.draw(pipeline: self, on: &encoder)
-                    if let background = _backgroundSubpass {
-                        background.draw(pipeline: self, on: &encoder)
+            fg.addRenderTask(for: RenderCommandEncoderData.self, name: "forward pass") { [unowned self] data, builder in
+                if camera.renderTarget != nil {
+                    for i in 0..<32 {
+                        if let resource = fg.blackboard["camera_color\(i)"] {
+                            data.colorOutput.append(builder.write(resource: resource as! Resource<MTLTextureDescriptor>))
+                        }
                     }
-                    encoder.endEncoding()
+                    if let depthResource = fg.blackboard["camera_depth"] as? Resource<MTLTextureDescriptor> {
+                        data.depthOutput = builder.write(resource: depthResource)
+                    }
+                } else {
+                    data.colorOutput.append(builder.write(resource: fg.blackboard["color"] as! Resource<MTLTextureDescriptor>))
+                    data.depthOutput = builder.write(resource: fg.blackboard["depth"]  as! Resource<MTLTextureDescriptor>)
                 }
+                
+                if enableShadow {
+                    data.inputShadow = builder.read(resource: fg.blackboard["shadow"] as! Resource<MTLTextureDescriptor>)
+                }
+            } execute: { [self] builder in
+                var encoder = RenderCommandEncoder(commandBuffer, renderTarget, "forward pass")
+
+                if enableShadow {
+                    let shadowMap = builder.inputShadow?.actual
+                    encoder.handle.setFragmentTexture(shadowMap, index: 11)
+                }
+                
+                _forwardSubpass.draw(pipeline: self, on: &encoder)
+                if let background = _backgroundSubpass {
+                    background.draw(pipeline: self, on: &encoder)
+                }
+                encoder.endEncoding()
             }
         }
     }
@@ -124,4 +155,11 @@ public class DevicePipeline {
             break
         }
     }
+}
+
+final class RenderCommandEncoderData: EmptyClassType {
+    var colorOutput: [Resource<MTLTextureDescriptor>] = []
+    var depthOutput: Resource<MTLTextureDescriptor>?
+    var inputShadow: Resource<MTLTextureDescriptor>?
+    required init() {}
 }

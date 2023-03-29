@@ -32,7 +32,7 @@ final class FrameGraphTests: XCTestCase {
         var render_task: RenderTask<RenderTaskData>!
         for i in 1...4 {
             let internal_render_task: RenderTask<RenderTaskData> =
-            frameGraph.addRenderTask(name: "Render Task \(i)") { data, builder in
+            frameGraph.addRenderTask(for: RenderTaskData.self, name: "Render Task \(i)") { data, builder in
                 data.input = builder.read(resource: data_0.output);
                 data.output = builder.write(resource: builder.create(name: "Resource \(i)", description: TextureDescription(name: String(i))))
             } execute: { data in
@@ -50,8 +50,7 @@ final class FrameGraphTests: XCTestCase {
         
         // MARK: - Pass
         let data_final = render_task.data
-        let _: RenderTask<RenderTaskData> =
-        frameGraph.addRenderTask(name: "Final Render Task") { data, builder in
+        frameGraph.addRenderTask(for: RenderTaskData.self, name: "Final Render Task") { data, builder in
             data.input = builder.read(resource: data_final.output);
             data.output = builder.write(resource: retained_resource)
         } execute: { data in

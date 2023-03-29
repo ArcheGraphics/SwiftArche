@@ -16,7 +16,6 @@ class CascadedShadowSubpass: GeometrySubpass {
     private static let _shadowMatricesProperty = "u_shadowMatrices"
     private static let _shadowMapSize = "u_shadowMapSize"
     private static let _shadowInfosProperty = "u_shadowInfo"
-    private static let _shadowTextureProperty = "u_shadowTexture"
     private static let _shadowSplitSpheresProperty = "u_shadowSplitSpheres"
 
     private static var _maxCascades: Int = 4
@@ -38,9 +37,9 @@ class CascadedShadowSubpass: GeometrySubpass {
     private var _shadowMatrices = [simd_float4x4](repeating: simd_float4x4(), count: CascadedShadowSubpass._maxCascades + 1)
     // strength, null, lightIndex
     private var _shadowInfos = SIMD3<Float>()
-    var _depthTexture: MTLTexture!
     private var _viewportOffsets: [Vector2] = [Vector2](repeatElement(Vector2(), count: 4))
-
+    private var _descriptor = MTLTextureDescriptor()
+    
     init(_ camera: Camera) {
         _camera = camera
         _shaderPass = ShaderPass(Engine.library(), "vertex_shadowmap", nil)
@@ -59,11 +58,6 @@ class CascadedShadowSubpass: GeometrySubpass {
 
         if (_existShadowMap) {
             _updateReceiversShaderData()
-            _camera.scene.shaderData.setImageView(CascadedShadowSubpass._shadowTextureProperty,
-                    ShadowManager._shadowSamplerProperty, _depthTexture)
-        } else {
-            _camera.scene.shaderData.setImageView(CascadedShadowSubpass._shadowTextureProperty,
-                    ShadowManager._shadowSamplerProperty, nil)
         }
     }
 
@@ -289,18 +283,12 @@ class CascadedShadowSubpass: GeometrySubpass {
         encoder.handle.setVertexBuffer(allocation.buffer, offset: allocation.offset, index: 3)
     }
 
-    func _getAvailableRenderTarget() {
-        if (_depthTexture == nil ||
-                _depthTexture.width != Int(_shadowMapSize.z) ||
-                _depthTexture.height != Int(_shadowMapSize.w) ||
-                _depthTexture.pixelFormat != _shadowMapFormat) {
-            let descriptor = MTLTextureDescriptor()
-            descriptor.width = Int(_shadowMapSize.z)
-            descriptor.height = Int(_shadowMapSize.w)
-            descriptor.pixelFormat = _shadowMapFormat
-            descriptor.usage = [.renderTarget, .shaderRead]
-            descriptor.storageMode = .private
-            _depthTexture = Engine.device.makeTexture(descriptor: descriptor)
-        }
+    func _getshadowMapDescriptor() -> MTLTextureDescriptor {
+        _descriptor.width = Int(_shadowMapSize.z)
+        _descriptor.height = Int(_shadowMapSize.w)
+        _descriptor.pixelFormat = _shadowMapFormat
+        _descriptor.usage = [.renderTarget, .shaderRead]
+        _descriptor.storageMode = .private
+        return _descriptor
     }
 }

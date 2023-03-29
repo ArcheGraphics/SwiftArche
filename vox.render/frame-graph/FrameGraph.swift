@@ -6,7 +6,7 @@
 
 import Metal
 
-public struct FrameGraph {
+public class FrameGraph {
     struct Step {
         var render_task: RenderTaskBase
         var realized_resources: [ResourceBase]
@@ -22,7 +22,7 @@ public struct FrameGraph {
     public init() {}
 
     @discardableResult
-    public mutating func addRenderTask<data_type: EmptyClassType>(for type: data_type.Type, name: String,
+    public func addRenderTask<data_type: EmptyClassType>(for type: data_type.Type, name: String,
                                                                   setup: @escaping (data_type, inout RenderTaskBuilder) -> Void,
                                                                   execute: @escaping (data_type) -> Void) -> RenderTask<data_type> {
         render_tasks_.append(RenderTask<data_type>(name: name, setup: setup, execute: execute))
@@ -35,7 +35,7 @@ public struct FrameGraph {
     }
 
     @discardableResult
-    public mutating func addRetainedResource<description_type: ResourceRealize>(for type: description_type.Type, name: String,
+    public func addRetainedResource<description_type: ResourceRealize>(for type: description_type.Type, name: String,
                                                                                 description: description_type,
                                                                                 actual: description_type.actual_type? = nil)
     -> Resource<description_type> {
@@ -55,12 +55,13 @@ public struct FrameGraph {
         }
     }
 
-    public mutating func clear() {
+    public func clear() {
         render_tasks_ = []
         resources_ = []
+        blackboard = [:]
     }
 
-    public mutating func compile() {
+    public func compile() {
         // Reference counting.
         for render_task in render_tasks_ {
             render_task.ref_count_ = render_task.creates_.count + render_task.writes_.count

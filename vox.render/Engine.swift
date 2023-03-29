@@ -30,6 +30,7 @@ public class Engine: NSObject {
     
     private let _inFlightSemaphore: DispatchSemaphore
     private var _frameCount: Int = 0
+    private let _fg = FrameGraph()
     
     // Current buffer index to fill with dynamic uniform data and set for the current frame
     private static var _currentBufferIndex: Int = 0
@@ -300,7 +301,10 @@ extension Engine: MTKViewDelegate {
         let cameras = scene._activeCameras
         if (cameras.count > 0) {
             if let commandBuffer = Engine.commandQueue.makeCommandBuffer(),
-               let currentDrawable = Engine.canvas.currentDrawable {
+               let currentDrawable = Engine.canvas.currentDrawable,
+               let renderPassDescriptor = Engine.canvas.currentRenderPassDescriptor,
+               let colorTexture = renderPassDescriptor.colorAttachments[0].texture,
+               let depthTexture = renderPassDescriptor.depthAttachment.texture {
                 // Add completion hander which signals inFlightSemaphore
                 // when Metal and the GPU has fully finished processing the commands encoded for this frame.
                 // This indicates when the dynamic buffers, written this frame, will no longer be needed by Metal and the GPU.
@@ -308,16 +312,21 @@ extension Engine: MTKViewDelegate {
                     self?._inFlightSemaphore.signal()
                 }
                 
-                var fg = FrameGraph()
+                _fg.blackboard["color"] = _fg.addRetainedResource(for: MTLTextureDescriptor.self, name: "colorTexture",
+                                                                  description: MTLTextureDescriptor(), actual: colorTexture)
+                _fg.blackboard["depth"] = _fg.addRetainedResource(for: MTLTextureDescriptor.self, name: "depthTexture",
+                                                                  description: MTLTextureDescriptor(), actual: depthTexture)
+                
                 for camera in cameras {
                     camera.update()
                     Engine._componentsManager.callCameraOnBeginRender(camera, commandBuffer)
-                    camera.devicePipeline.commit(fg: &fg, with: commandBuffer)
+                    camera.devicePipeline.commit(fg: _fg, with: commandBuffer)
                     Engine._componentsManager.callCameraOnEndRender(camera, commandBuffer)
                 }
                 
-                fg.compile()
-                fg.execute()
+                _fg.compile()
+                _fg.execute()
+                _fg.clear()
                 
                 scene.postprocess(commandBuffer)
 
