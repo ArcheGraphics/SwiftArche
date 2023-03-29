@@ -10,6 +10,11 @@ public class ShadowManager {
     private static let _shadowSamplerProperty = "u_shadowSampler"
     private static let _shadowTextureProperty = "u_shadowTexture"
 
+    final class ShadowRenderCommandEncoderData: EmptyClassType {
+        var depthOutput: Resource<MTLTextureDescriptor>?
+        required init() {}
+    }
+    
     private let _camera: Camera
     private let _cascadedShadowSubpass: CascadedShadowSubpass
     private var _passDescriptor = MTLRenderPassDescriptor()
@@ -58,7 +63,7 @@ public class ShadowManager {
             _cascadedShadowSubpass.draw(pipeline: _camera.devicePipeline, on: &encoder)
             encoder.endEncoding()
         }
-        fg.blackboard["shadow"] = task.data.depthOutput
+        fg.blackboard[BlackBoardType.shadow.rawValue] = task.data.depthOutput
     }
 
     private func _drawSpotShadowMap(with commandBuffer: MTLCommandBuffer) {
@@ -66,9 +71,4 @@ public class ShadowManager {
 
     private func _drawPointShadowMap(with commandBuffer: MTLCommandBuffer) {
     }
-}
-
-final class ShadowRenderCommandEncoderData: EmptyClassType {
-    var depthOutput: Resource<MTLTextureDescriptor>?
-    required init() {}
 }

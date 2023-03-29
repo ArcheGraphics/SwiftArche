@@ -14,6 +14,13 @@ public class DevicePipeline {
     static func _compareFromFarToNear(a: RenderElement, b: RenderElement) -> Bool {
         a.renderer.priority > b.renderer.priority || b.renderer._distanceForSort > a.renderer._distanceForSort
     }
+    
+    final class RenderCommandEncoderData: EmptyClassType {
+        var colorOutput: [Resource<MTLTextureDescriptor>] = []
+        var depthOutput: Resource<MTLTextureDescriptor>?
+        var inputShadow: Resource<MTLTextureDescriptor>?
+        required init() {}
+    }
 
     var camera: Camera
     var _opaqueQueue: [RenderElement] = []
@@ -30,19 +37,21 @@ public class DevicePipeline {
 
     public func commit(with commandBuffer: MTLCommandBuffer) {
         let fg = Engine.fg
+        var colorOutput: [Resource<MTLTextureDescriptor>] = []
+        var depthOutput: Resource<MTLTextureDescriptor>?
         if let renderTarget = camera.renderTarget {
             if let depthTexture = renderTarget.depthAttachment.texture {
-                fg.blackboard["camera_depth"] = fg.addRetainedResource(for: MTLTextureDescriptor.self,
-                                                                       name: "camera depthTexture",
-                                                                       description: MTLTextureDescriptor(),
-                                                                       actual: depthTexture)
+                colorOutput.append(fg.addRetainedResource(for: MTLTextureDescriptor.self,
+                                                          name: "camera depthTexture",
+                                                          description: MTLTextureDescriptor(),
+                                                          actual: depthTexture))
             }
             for i in 0..<32 {
                 if let colorTexture = renderTarget.colorAttachments[i].texture {
-                    fg.blackboard["camera_color\(i)"] = fg.addRetainedResource(for: MTLTextureDescriptor.self,
-                                                                               name: "camera colorTexture\(i)",
-                                                                               description: MTLTextureDescriptor(),
-                                                                               actual: colorTexture)
+                    depthOutput = fg.addRetainedResource(for: MTLTextureDescriptor.self,
+                                                         name: "camera colorTexture\(i)",
+                                                         description: MTLTextureDescriptor(),
+                                                         actual: colorTexture)
                 }
             }
         }
@@ -65,21 +74,20 @@ public class DevicePipeline {
             
             fg.addRenderTask(for: RenderCommandEncoderData.self, name: "forward pass") { [unowned self] data, builder in
                 if camera.renderTarget != nil {
-                    for i in 0..<32 {
-                        if let resource = fg.blackboard["camera_color\(i)"] {
-                            data.colorOutput.append(builder.write(resource: resource as! Resource<MTLTextureDescriptor>))
-                        }
-                    }
-                    if let depthResource = fg.blackboard["camera_depth"] as? Resource<MTLTextureDescriptor> {
-                        data.depthOutput = builder.write(resource: depthResource)
+                    data.colorOutput = colorOutput.map({ resource in
+                        builder.write(resource: resource)
+                    })
+                    if let depthOutput {
+                        data.depthOutput = builder.write(resource: depthOutput)
                     }
                 } else {
-                    data.colorOutput.append(builder.write(resource: fg.blackboard["color"] as! Resource<MTLTextureDescriptor>))
-                    data.depthOutput = builder.write(resource: fg.blackboard["depth"]  as! Resource<MTLTextureDescriptor>)
+                    data.colorOutput.append(builder.write(resource: fg.blackboard[BlackBoardType.color.rawValue] as! Resource<MTLTextureDescriptor>))
+                    data.depthOutput = builder.write(resource: fg.blackboard[BlackBoardType.depth.rawValue]  as! Resource<MTLTextureDescriptor>)
                 }
                 
-                if scene.castShadows && scene._sunLight?.shadowType != ShadowType.None {
-                    data.inputShadow = builder.read(resource: fg.blackboard["shadow"] as! Resource<MTLTextureDescriptor>)
+                if let sunLight = scene._sunLight,
+                   scene.castShadows && sunLight.shadowType != ShadowType.None {
+                    data.inputShadow = builder.read(resource: fg.blackboard[BlackBoardType.shadow.rawValue] as! Resource<MTLTextureDescriptor>)
                 }
             } execute: { [self] builder in
                 var encoder = RenderCommandEncoder(commandBuffer, renderTarget, "forward pass")
@@ -146,11 +154,4 @@ public class DevicePipeline {
             break
         }
     }
-}
-
-final class RenderCommandEncoderData: EmptyClassType {
-    var colorOutput: [Resource<MTLTextureDescriptor>] = []
-    var depthOutput: Resource<MTLTextureDescriptor>?
-    var inputShadow: Resource<MTLTextureDescriptor>?
-    required init() {}
 }

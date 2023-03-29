@@ -321,10 +321,12 @@ extension Engine: MTKViewDelegate {
                 }
                 
                 let fg = Engine._fg
-                fg.blackboard["color"] = fg.addRetainedResource(for: MTLTextureDescriptor.self, name: "colorTexture",
-                                                                description: MTLTextureDescriptor(), actual: colorTexture)
-                fg.blackboard["depth"] = fg.addRetainedResource(for: MTLTextureDescriptor.self, name: "depthTexture",
-                                                                description: MTLTextureDescriptor(), actual: depthTexture)
+                fg.blackboard[BlackBoardType.color.rawValue]
+                = fg.addRetainedResource(for: MTLTextureDescriptor.self, name: "colorTexture",
+                                         description: MTLTextureDescriptor(), actual: colorTexture)
+                fg.blackboard[BlackBoardType.depth.rawValue]
+                = fg.addRetainedResource(for: MTLTextureDescriptor.self, name: "depthTexture",
+                                         description: MTLTextureDescriptor(), actual: depthTexture)
                 
                 for camera in cameras {
                     camera.update()

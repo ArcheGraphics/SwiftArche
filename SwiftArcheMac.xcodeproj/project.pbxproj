@@ -522,6 +522,7 @@
 		3EF39BC529D434890083E20A /* ImplicitTriangleMaterial.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E6B23D929499E99000AC29F /* ImplicitTriangleMaterial.swift */; };
 		3EF39BC829D434890083E20A /* ParticlePointMaterial.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EABF5EA294C3B16009943C1 /* ParticlePointMaterial.swift */; };
 		3EF39BCC29D43F020083E20A /* GammaCorrection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EF39BCB29D43F020083E20A /* GammaCorrection.swift */; };
+		3EF39BCE29D454560083E20A /* BlackBoardType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EF39BCD29D454560083E20A /* BlackBoardType.swift */; };
 		43D8C033021F4B86E95953E6 /* IBLApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8CFAFE0E0B5772488FA13 /* IBLApp.swift */; };
 		43D8C1413D08147985256B8A /* PhysXJointBasicApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8C12DBC7510CB05B703F8 /* PhysXJointBasicApp.swift */; };
 		43D8C57503BAADE4FE366B56 /* GridMaterial.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8C090F42BE8E48D6FC4E1 /* GridMaterial.swift */; };
@@ -1308,6 +1309,7 @@
 		3EF39BBF29D3D0DF0083E20A /* Protocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Protocol.swift; sourceTree = "<group>"; };
 		3EF39BC329D424980083E20A /* MTLSamplerDescriptor+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MTLSamplerDescriptor+Extensions.swift"; sourceTree = "<group>"; };
 		3EF39BCB29D43F020083E20A /* GammaCorrection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GammaCorrection.swift; sourceTree = "<group>"; };
+		3EF39BCD29D454560083E20A /* BlackBoardType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlackBoardType.swift; sourceTree = "<group>"; };
 		43D8C090F42BE8E48D6FC4E1 /* GridMaterial.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GridMaterial.swift; sourceTree = "<group>"; };
 		43D8C0A4A7B56D737C3F4FE2 /* PhysXCollisionDetectionApp.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhysXCollisionDetectionApp.swift; sourceTree = "<group>"; };
 		43D8C0CC365128B7B18E4074 /* EngineVisualizer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EngineVisualizer.swift; sourceTree = "<group>"; };
@@ -2900,6 +2902,7 @@
 				3EF39BB629D2AB1C0083E20A /* RenderTask.swift */,
 				3EF39BAE29D298730083E20A /* Resource.swift */,
 				3EF39BB029D29D840083E20A /* Realize.swift */,
+				3EF39BCD29D454560083E20A /* BlackBoardType.swift */,
 			);
 			path = "frame-graph";
 			sourceTree = "<group>";
@@ -3747,6 +3750,7 @@
 				040F1DDD2934E89F008BDC8D /* GUIShader.swift in Sources */,
 				3EC039AF293218F0002187DC /* UpdateFlag.swift in Sources */,
 				3EF39BC429D424990083E20A /* MTLSamplerDescriptor+Extensions.swift in Sources */,
+				3EF39BCE29D454560083E20A /* BlackBoardType.swift in Sources */,
 				3E447F5B29C9E71000D2FB30 /* SerializableDecodable.swift in Sources */,
 				3EC038E829321845002187DC /* FixedJoint.swift in Sources */,
 				3EF39B9529D18C1B0083E20A /* XMeshRenderer.swift in Sources */,

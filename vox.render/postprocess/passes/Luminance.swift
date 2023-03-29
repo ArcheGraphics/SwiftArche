@@ -38,7 +38,7 @@ public class Luminance: ComputePass {
     
     public func compute(with commandBuffer: MTLCommandBuffer, label: String = "") -> LuminanceEncoderData {
         return Engine.fg.addRenderTask(for: LuminanceEncoderData.self, name: "luminance") { [self] data, builder in
-            let colorTex = Engine.fg.blackboard["color"] as! Resource<MTLTextureDescriptor>
+            let colorTex = Engine.fg.blackboard[BlackBoardType.color.rawValue] as! Resource<MTLTextureDescriptor>
             updateTexture(colorTex.actual!.width, colorTex.actual!.height)
             
             data.input = builder.read(resource: colorTex)

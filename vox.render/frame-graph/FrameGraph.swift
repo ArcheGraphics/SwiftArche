@@ -17,7 +17,7 @@ public class FrameGraph {
     var resources_: [ResourceBase] = []
     var timeline_: [Step] = []
     
-    public var blackboard: [String: ResourceBase] = [:]
+    public var blackboard: [Int: ResourceBase] = [:]
     
     public var shaderData = ShaderData()
     

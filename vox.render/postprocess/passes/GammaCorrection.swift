@@ -23,12 +23,12 @@ public class GammaCorrection: ComputePass {
     
     public func compute(with commandBuffer: MTLCommandBuffer,
                         luminance: Resource<MTLTextureDescriptor>? = nil, label: String = "") {
-        Engine.fg.addRenderTask(for: GammaEncoderData.self, name: "luminance") { [self] data, builder in
+        Engine.fg.addRenderTask(for: GammaEncoderData.self, name: "gamma correction") { [self] data, builder in
             if autoExposure {
                 data.luminance = builder.read(resource: luminance!)
             }
             
-            let colorTex = Engine.fg.blackboard["color"] as! Resource<MTLTextureDescriptor>
+            let colorTex = Engine.fg.blackboard[BlackBoardType.color.rawValue] as! Resource<MTLTextureDescriptor>
             data.input = builder.read(resource: colorTex)
             data.output = builder.write(resource: colorTex)
         } execute: { [self] builder in

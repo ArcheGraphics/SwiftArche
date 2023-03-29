@@ -21,12 +21,22 @@ fileprivate class GUI: Script {
         }
     }
 
+    private var autoExposure: Bool {
+        get {
+            scene.postprocessManager.autoExposure
+        }
+        set {
+            Engine.exportGraphviz = true
+            scene.postprocessManager.autoExposure = newValue
+        }
+    }
+    
     override func onGUI() {
         UIElement.Init()
 
         let postprocess = scene.postprocessManager
         ImGuiNewFrame()
-        ImGuiCheckbox("Auto Exposure ", &postprocess.autoExposure)
+        ImGuiCheckbox("Auto Exposure ", &autoExposure)
         if postprocess.autoExposure {
             ImGuiSliderFloat("Exposure Key", &scene.postprocessManager.exposureKey, 0.0, 1.0, nil, 1)
         } else {
