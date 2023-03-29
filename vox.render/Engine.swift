@@ -29,7 +29,7 @@ public class Engine: NSObject {
     static let _lightManager = LightManager()
     
     private let _inFlightSemaphore: DispatchSemaphore
-
+    private var _frameCount: Int = 0
     
     // Current buffer index to fill with dynamic uniform data and set for the current frame
     private static var _currentBufferIndex: Int = 0
@@ -330,6 +330,16 @@ extension Engine: MTKViewDelegate {
         } else {
             logger.debug("NO active camera.")
         }
+        
+        _frameCount += 1
+        if _frameCount > 50 {
+            garbageCollection()
+            _frameCount = 0
+        }
+    }
+    
+    func garbageCollection() {
+        Engine.resourceCache.garbageCollection(below: 10)
     }
     
     /// Called whenever the drawableSize of the view will change

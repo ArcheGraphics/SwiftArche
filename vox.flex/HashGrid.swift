@@ -55,7 +55,6 @@ public class HashGrid {
                                                            resolutionZ: _resolution.z,
                                                            gridSpacing: gridSpacing))
         
-        let resourceCache = Engine.sceneManager.activeScene?.postprocessManager.resourceCache
         _fillPass = ComputePass()
         _fillPass.shader.append(ShaderPass(Engine.library("flex.shader"), "fillHashGrid"))
         _fillPass.data.append(_shaderData)

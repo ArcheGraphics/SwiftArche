@@ -39,6 +39,6 @@ extension MTLTextureDescriptor: ResourceRealize {
     public typealias actual_type = MTLTexture
 
     public func realize() -> MTLTexture? {
-        nil
+        Engine.resourceCache.requestTexture(self)
     }
 }

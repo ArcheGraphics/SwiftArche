@@ -7,7 +7,6 @@
 import Metal
 
 public class PostprocessManager {
-    public var resourceCache: ResourceCache
     var _canvas: Canvas
     weak var _scene: Scene!
     var _shaderData: ShaderData
@@ -61,7 +60,6 @@ public class PostprocessManager {
     init(_ scene: Scene) {
         _scene = scene
         _canvas = Engine.canvas!
-        resourceCache = ResourceCache(Engine.device)
         _shaderData = scene.shaderData
         _shaderData.setData("u_postprocess", _postprocessData)
 

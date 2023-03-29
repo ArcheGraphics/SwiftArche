@@ -18,9 +18,7 @@ public class BitonicSort {
     
     public init() {
         indirectSortArgsBuffer = BufferView(device: Engine.device, count: 1,
-                                            stride: MemoryLayout<MTLDispatchThreadgroupsIndirectArguments>.stride)
-        let resourceCache = Engine.sceneManager.activeScene?.postprocessManager.resourceCache
-        
+                                            stride: MemoryLayout<MTLDispatchThreadgroupsIndirectArguments>.stride)        
         initSortArgsPass = ComputePass()
         initSortArgsPass.shader.append(ShaderPass(Engine.library("flex.shader"), "initSortArgs"))
         initSortArgsPass.threadsPerGridX = 1

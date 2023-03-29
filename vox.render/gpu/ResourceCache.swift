@@ -30,7 +30,16 @@ public class ResourceCache {
     }
     
     func garbageCollection(below threshold: Int) {
-        textures = textures.filter { element in
+        gc(&shader_modules, threshold: threshold)
+        gc(&graphics_pipelines, threshold: threshold)
+        gc(&compute_pipelines, threshold: threshold)
+        gc(&samplers, threshold: threshold)
+        gc(&textures, threshold: threshold)
+        gc(&depth_stencil_states, threshold: threshold)
+    }
+    
+    func gc<T>(_ contain: inout [Int: (resource: T, useCount: Int)], threshold: Int) -> Void {
+        contain = contain.filter { element in
             element.value.useCount > threshold
         }.mapValues({ element in
             var element = element
