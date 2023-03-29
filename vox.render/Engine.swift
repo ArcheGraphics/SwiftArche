@@ -69,6 +69,8 @@ public class Engine: NSObject {
         }
     }
     
+    public static var exportGraphviz: Bool = false
+    
     // MARK: - Public Method
     /// canvas
     public static var canvas: Canvas!
@@ -333,6 +335,10 @@ extension Engine: MTKViewDelegate {
                 
                 fg.compile()
                 fg.execute()
+                if Engine.exportGraphviz {
+                    fg.exportGraphviz(filename: "pipeline")
+                    Engine.exportGraphviz = false
+                }
                 fg.clear()
                 
                 scene.postprocess(commandBuffer)

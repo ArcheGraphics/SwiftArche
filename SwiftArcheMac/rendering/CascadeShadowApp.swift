@@ -132,6 +132,7 @@ fileprivate class GUI: Script {
         ImGuiNewFrame()
         ImGuiCheckbox("pause", &pause)
         ImGuiCheckbox("debugMode", &debugMode)
+        ImGuiCheckbox("export", &Engine.exportGraphviz)
         ImGuiSliderFloat("shadowBias", &directLight.shadowBias, 0.0, 1.0, nil, 1)
         ImGuiSliderFloat("shadowNormalBias", &directLight.shadowNormalBias, 0.0, 1.0, nil, 1)
         ImGuiSliderFloat("shadowStrength", &directLight.shadowStrength, 0.0, 1.0, nil, 1)
