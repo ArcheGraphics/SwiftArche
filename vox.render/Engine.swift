@@ -30,8 +30,10 @@ public class Engine: NSObject {
     
     private let _inFlightSemaphore: DispatchSemaphore
 
+    
     // Current buffer index to fill with dynamic uniform data and set for the current frame
     private static var _currentBufferIndex: Int = 0
+    private static var _resourceCache: ResourceCache!
     private static var _library: [String: MTLLibrary] = [:]
     private static var _settings: EngineSettings? = nil
     private static var _device: MTLDevice!
@@ -51,6 +53,12 @@ public class Engine: NSObject {
     static var currentBufferIndex: Int {
         get {
             _currentBufferIndex
+        }
+    }
+    
+    static var resourceCache: ResourceCache {
+        get {
+            _resourceCache
         }
     }
     
@@ -141,6 +149,7 @@ public class Engine: NSObject {
         Engine._commandQueue = commandQueue
         _inFlightSemaphore = DispatchSemaphore(value: Engine._maxFramesInFlight)
         Engine._bufferPools = [BufferPool](repeating: BufferPool(Engine._device, 256), count: Engine._maxFramesInFlight)
+        Engine._resourceCache = ResourceCache(device)
         
         super.init()
         _ = Engine.createShaderLibrary("vox.shader")

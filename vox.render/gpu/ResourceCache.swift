@@ -18,58 +18,91 @@ import Metal
 /// It can only be destroyed in bulk, single elements cannot be removed.
 public class ResourceCache {
     private var device: MTLDevice
-    var shader_modules: [Int: MTLFunction] = [:]
-    var graphics_pipelines: [Int: RenderPipelineState] = [:]
-    var compute_pipelines: [Int: ComputePipelineState] = [:]
-    var samplers: [Int: MTLSamplerState] = [:]
-    var depth_stencil_states: [Int: MTLDepthStencilState] = [:]
+    var shader_modules: [Int: (resource: MTLFunction, useCount: Int)] = [:]
+    var graphics_pipelines: [Int: (resource: RenderPipelineState, useCount: Int)] = [:]
+    var compute_pipelines: [Int: (resource: ComputePipelineState, useCount: Int)] = [:]
+    var samplers: [Int: (resource: MTLSamplerState, useCount: Int)] = [:]
+    var textures: [Int: (resource: MTLTexture, useCount: Int)] = [:]
+    var depth_stencil_states: [Int: (resource: MTLDepthStencilState, useCount: Int)] = [:]
 
     public init(_ device: MTLDevice) {
         self.device = device
+    }
+    
+    func garbageCollection(below threshold: Int) {
+        textures = textures.filter { element in
+            element.value.useCount > threshold
+        }.mapValues({ element in
+            var element = element
+            element.useCount = 0
+            return element
+        })
     }
 
     func requestGraphicsPipeline(_ pipelineDescriptor: MTLRenderPipelineDescriptor) -> RenderPipelineState {
         let hash = pipelineDescriptor.hash
         var pipelineState = graphics_pipelines[hash]
         if pipelineState == nil {
-            pipelineState = RenderPipelineState(device, pipelineDescriptor)
+            pipelineState = (RenderPipelineState(device, pipelineDescriptor), 0)
             graphics_pipelines[hash] = pipelineState
+        } else {
+            graphics_pipelines[hash]!.useCount += 1
         }
 
-        return pipelineState!
+        return pipelineState!.resource
     }
 
     func requestComputePipeline(_ pipelineDescriptor: MTLComputePipelineDescriptor) -> ComputePipelineState {
         let hash = pipelineDescriptor.hash
         var pipelineState = compute_pipelines[hash]
         if pipelineState == nil {
-            pipelineState = ComputePipelineState(device, pipelineDescriptor)
+            pipelineState = (ComputePipelineState(device, pipelineDescriptor), 0)
             compute_pipelines[hash] = pipelineState
+        } else {
+            compute_pipelines[hash]!.useCount += 1
         }
 
-        return pipelineState!
+        return pipelineState!.resource
     }
 
     func requestSamplers(_ descriptor: MTLSamplerDescriptor) -> MTLSamplerState {
         let hash = descriptor.hash
         var sampler = samplers[hash]
         if sampler == nil {
-            sampler = device.makeSamplerState(descriptor: descriptor)
+            sampler = (device.makeSamplerState(descriptor: descriptor)!, 0)
             samplers[hash] = sampler
+        } else {
+            samplers[hash]!.useCount += 1
         }
 
-        return sampler!
+        return sampler!.resource
+    }
+    
+    func requestTexture(_ descriptor: MTLTextureDescriptor) -> MTLTexture {
+        let hash = descriptor.hash
+        var texture = textures[hash]
+        if texture == nil {
+            let tex = device.makeTexture(descriptor: descriptor)
+            texture = (tex!, 0)
+            textures[hash] = texture
+        } else {
+            textures[hash]!.useCount += 1
+        }
+
+        return texture!.resource
     }
 
     func requestDepthStencilState(_ descriptor: MTLDepthStencilDescriptor) -> MTLDepthStencilState {
         let hash = descriptor.hash
         var state = depth_stencil_states[hash]
         if state == nil {
-            state = device.makeDepthStencilState(descriptor: descriptor)
+            state = (device.makeDepthStencilState(descriptor: descriptor)!, 0)
             depth_stencil_states[hash] = state
+        } else {
+            depth_stencil_states[hash]!.useCount += 1
         }
 
-        return state!
+        return state!.resource
     }
 
     func requestShaderModule(_ shaderPass: ShaderPass, _ macroInfo: ShaderMacroCollection) -> [MTLFunction] {
@@ -84,11 +117,12 @@ public class ResourceCache {
             if cacheFunction == nil {
                 let function = shaderPass.createProgram(shader, macroInfo)
                 if function != nil {
-                    shader_modules[hash] = function!
+                    shader_modules[hash] = (function!, 0)
                     functions.append(function!)
                 }
             } else {
-                functions.append(cacheFunction!)
+                shader_modules[hash]!.useCount += 1
+                functions.append(cacheFunction!.resource)
             }
         }
         return functions
@@ -100,5 +134,6 @@ public class ResourceCache {
         compute_pipelines = [:]
         depth_stencil_states = [:]
         samplers = [:]
+        textures = [:]
     }
 }

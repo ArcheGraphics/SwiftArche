@@ -108,7 +108,7 @@ class LineBatcher : Batcher {
     }
     
     // MARK: - Render
-    func prepare(_ encoder: MTLRenderCommandEncoder, _ cache: ResourceCache) {
+    func prepare(_ encoder: MTLRenderCommandEncoder) {
         var desc = MTLVertexAttributeDescriptor()
         desc.format = .float3
         desc.offset = 0
@@ -132,25 +132,25 @@ class LineBatcher : Batcher {
             _pipelineDescriptor.stencilAttachmentPixelFormat = format
         }
 
-        let functions = cache.requestShaderModule(_shaderPass, _shaderMacro)
+        let functions = Engine.resourceCache.requestShaderModule(_shaderPass, _shaderMacro)
         _pipelineDescriptor.vertexFunction = functions[0]
         _pipelineDescriptor.fragmentFunction = functions[1]
         _pipelineDescriptor.vertexDescriptor = _descriptor
         _shaderPass.renderState!._apply(_pipelineDescriptor, _depthStencilDescriptor, encoder, false)
 
-        _pso = cache.requestGraphicsPipeline(_pipelineDescriptor)
-        _depthStencilState = cache.requestDepthStencilState(_depthStencilDescriptor)
+        _pso = Engine.resourceCache.requestGraphicsPipeline(_pipelineDescriptor)
+        _depthStencilState = Engine.resourceCache.requestDepthStencilState(_depthStencilDescriptor)
     }
     
-    func drawBatcher(_ encoder: inout RenderCommandEncoder, _ camera: Camera, _ cache: ResourceCache) {
+    func drawBatcher(_ encoder: inout RenderCommandEncoder, _ camera: Camera) {
         encoder.handle.pushDebugGroup("Line Gizmo Subpass")
         if (_pso == nil) {
-            prepare(encoder.handle, cache)
+            prepare(encoder.handle)
         }
         encoder.handle.setDepthStencilState(_depthStencilState)
         encoder.handle.setFrontFacing(.clockwise)
         encoder.handle.setCullMode(.back)
-        encoder.bind(camera: camera, _pso, cache)
+        encoder.bind(camera: camera, _pso)
         
         if let pointBuffer = pointBuffer,
            let colorBuffer = colorBuffer {

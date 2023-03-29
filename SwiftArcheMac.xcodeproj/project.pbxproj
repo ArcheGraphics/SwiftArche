@@ -2080,6 +2080,7 @@
 				3EBA3D4229B99D9E00E5FB42 /* MTLTextureDescriptor+Serialization.swift */,
 				3EC92AE02939F97300423396 /* RenderCommandEncoder.swift */,
 				3EF39BC129D3D6730083E20A /* RenderCommandEncoderDescriptor.swift */,
+				3EC0395B293218BA002187DC /* ResourceCache.swift */,
 			);
 			path = gpu;
 			sourceTree = "<group>";
@@ -2513,7 +2514,6 @@
 				3EBA3D5C29B9D02700E5FB42 /* batcher */,
 				3EC0395A293218BA002187DC /* RenderPipelineState.swift */,
 				3EC03958293218BA002187DC /* ReflectionUniform.swift */,
-				3EC0395B293218BA002187DC /* ResourceCache.swift */,
 			);
 			path = rendering;
 			sourceTree = "<group>";

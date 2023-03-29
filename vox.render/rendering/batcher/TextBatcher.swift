@@ -186,26 +186,26 @@ class TextBatcher: Batcher {
         _descriptor.layouts[1].stride = MemoryLayout<Vector2>.stride
     }
 
-    func drawBatcher(_ encoder: inout RenderCommandEncoder, _ camera: Camera, _ cache: ResourceCache) {
+    func drawBatcher(_ encoder: inout RenderCommandEncoder, _ camera: Camera) {
         for i in 0..<currentBufferCount {
             if i < batcherBuffer.count && batcherBuffer[i].count != 0 {
                 let pipelineDescriptor = MTLRenderPipelineDescriptor()
                 let depthStencilDescriptor = MTLDepthStencilDescriptor()
                 prepare(pipelineDescriptor, depthStencilDescriptor)
                 
-                let functions = cache.requestShaderModule(batcherBuffer[i].shaderPass,
-                                                          batcherBuffer[i].material.shaderData._macroCollection)
+                let functions = Engine.resourceCache.requestShaderModule(batcherBuffer[i].shaderPass,
+                                                                         batcherBuffer[i].material.shaderData._macroCollection)
                 pipelineDescriptor.vertexFunction = functions[0]
                 pipelineDescriptor.fragmentFunction = functions[1]
                 pipelineDescriptor.vertexDescriptor = _descriptor
                 batcherBuffer[i].shaderPass.renderState!._apply(pipelineDescriptor,
                                                                 depthStencilDescriptor, encoder.handle, false)
                 
-                let pso = cache.requestGraphicsPipeline(pipelineDescriptor)
-                encoder.bind(depthStencilState: depthStencilDescriptor, cache)
-                encoder.bind(camera: camera, pso, cache)
-                encoder.bind(material: batcherBuffer[i].material, pso, cache)
-                encoder.bind(scene: camera.scene, pso, cache)
+                let pso = Engine.resourceCache.requestGraphicsPipeline(pipelineDescriptor)
+                encoder.bind(depthStencilState: depthStencilDescriptor)
+                encoder.bind(camera: camera, pso)
+                encoder.bind(material: batcherBuffer[i].material, pso)
+                encoder.bind(scene: camera.scene, pso)
                 
                 var color = batcherBuffer[i].color
                 encoder.handle.setFragmentBytes(&color, length: MemoryLayout<Color>.stride, index: 0)

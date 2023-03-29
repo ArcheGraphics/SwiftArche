@@ -27,50 +27,50 @@ public struct RenderCommandEncoder {
         handle.label = label
     }
 
-    public mutating func bind(depthStencilState: MTLDepthStencilDescriptor, _ cache: ResourceCache) {
-        let state = cache.requestDepthStencilState(depthStencilState)
+    public mutating func bind(depthStencilState: MTLDepthStencilDescriptor) {
+        let state = Engine.resourceCache.requestDepthStencilState(depthStencilState)
         if _uploadDepthStencilState !== state {
             handle.setDepthStencilState(state)
             _uploadDepthStencilState = state
         }
     }
 
-    public mutating func bind(camera: Camera, _ pso: RenderPipelineState, _ cache: ResourceCache) {
+    public mutating func bind(camera: Camera, _ pso: RenderPipelineState) {
         if _uploadPSO !== pso {
             _bind(pso: pso)
         }
         if _uploadCamera !== camera {
-            camera.shaderData.bindData(handle, pso.uniformBlock, cache)
+            camera.shaderData.bindData(handle, pso.uniformBlock)
             _uploadCamera = camera
         }
     }
 
-    public mutating func bind(material: Material, _ pso: RenderPipelineState, _ cache: ResourceCache) {
+    public mutating func bind(material: Material, _ pso: RenderPipelineState) {
         if _uploadPSO !== pso {
             _bind(pso: pso)
         }
         if _uploadMaterial !== material {
-            material.shaderData.bindData(handle, pso.uniformBlock, cache)
+            material.shaderData.bindData(handle, pso.uniformBlock)
             _uploadMaterial = material
         }
     }
 
-    public mutating func bind(renderer: Renderer, _ pso: RenderPipelineState, _ cache: ResourceCache) {
+    public mutating func bind(renderer: Renderer, _ pso: RenderPipelineState) {
         if _uploadPSO !== pso {
             _bind(pso: pso)
         }
         if _uploadRenderer !== renderer {
-            renderer.shaderData.bindData(handle, pso.uniformBlock, cache)
+            renderer.shaderData.bindData(handle, pso.uniformBlock)
             _uploadRenderer = renderer
         }
     }
 
-    public mutating func bind(scene: Scene, _ pso: RenderPipelineState, _ cache: ResourceCache) {
+    public mutating func bind(scene: Scene, _ pso: RenderPipelineState) {
         if _uploadPSO !== pso {
             _bind(pso: pso)
         }
         if _uploadScene !== scene {
-            scene.shaderData.bindData(handle, pso.uniformBlock, cache)
+            scene.shaderData.bindData(handle, pso.uniformBlock)
             _uploadScene = scene
         }
     }

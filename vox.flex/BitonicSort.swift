@@ -23,7 +23,6 @@ public class BitonicSort {
         
         initSortArgsPass = ComputePass()
         initSortArgsPass.shader.append(ShaderPass(Engine.library("flex.shader"), "initSortArgs"))
-        initSortArgsPass.resourceCache = resourceCache
         initSortArgsPass.threadsPerGridX = 1
         initSortArgsPass.threadsPerGridY = 1
         initSortArgsPass.threadsPerGridZ = 1
@@ -32,17 +31,14 @@ public class BitonicSort {
         
         preSortPass = ComputePass()
         preSortPass.shader.append(ShaderPass(Engine.library("flex.shader"), "preBitonicSort"))
-        preSortPass.resourceCache = resourceCache
         preSortPass.precompileAll()
         
         innerSortPass = ComputePass()
         innerSortPass.shader.append(ShaderPass(Engine.library("flex.shader"), "innerBitonicSort"))
-        innerSortPass.resourceCache = resourceCache
         innerSortPass.precompileAll()
         
         stepSortPass = ComputePass()
         stepSortPass.shader.append(ShaderPass(Engine.library("flex.shader"), "stepBitonicSort"))
-        stepSortPass.resourceCache = resourceCache
         stepSortPass.precompileAll()
     }
     

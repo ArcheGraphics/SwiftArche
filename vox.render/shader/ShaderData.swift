@@ -154,8 +154,7 @@ extension ShaderData {
 
 extension ShaderData {
     func bindData(_ commandEncoder: MTLComputeCommandEncoder,
-                  _ reflectionUniforms: [ReflectionUniform],
-                  _ resourceCache: ResourceCache) {
+                  _ reflectionUniforms: [ReflectionUniform]) {
         for uniform in reflectionUniforms {
             switch uniform.bindingType {
             case .buffer:
@@ -176,7 +175,7 @@ extension ShaderData {
                 break
             case .sampler:
                 if let sampler = _samplers[uniform.name] {
-                    commandEncoder.setSamplerState(resourceCache.requestSamplers(sampler), index: uniform.location)
+                    commandEncoder.setSamplerState(Engine.resourceCache.requestSamplers(sampler), index: uniform.location)
                 }
                 break
             default:
@@ -186,8 +185,7 @@ extension ShaderData {
     }
 
     func bindData(_ commandEncoder: MTLRenderCommandEncoder,
-                  _ reflectionUniforms: [ReflectionUniform],
-                  _ resourceCache: ResourceCache) {
+                  _ reflectionUniforms: [ReflectionUniform]) {
         for uniform in reflectionUniforms {
             switch uniform.bindingType {
             case .buffer:
@@ -229,10 +227,10 @@ extension ShaderData {
             case .sampler:
                 if let sampler = _samplers[uniform.name] {
                     if uniform.functionType == .vertex {
-                        commandEncoder.setVertexSamplerState(resourceCache.requestSamplers(sampler), index: uniform.location)
+                        commandEncoder.setVertexSamplerState(Engine.resourceCache.requestSamplers(sampler), index: uniform.location)
                     }
                     if uniform.functionType == .fragment {
-                        commandEncoder.setFragmentSamplerState(resourceCache.requestSamplers(sampler), index: uniform.location)
+                        commandEncoder.setFragmentSamplerState(Engine.resourceCache.requestSamplers(sampler), index: uniform.location)
                     }
                 }
                 break

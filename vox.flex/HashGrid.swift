@@ -57,27 +57,23 @@ public class HashGrid {
         
         let resourceCache = Engine.sceneManager.activeScene?.postprocessManager.resourceCache
         _fillPass = ComputePass()
-        _fillPass.resourceCache = resourceCache
         _fillPass.shader.append(ShaderPass(Engine.library("flex.shader"), "fillHashGrid"))
         _fillPass.data.append(_shaderData)
         _fillPass.threadsPerGridX = totalCount
         _fillPass.precompileAll()
         
         _initArgsPass = ComputePass()
-        _initArgsPass.resourceCache = resourceCache
         _initArgsPass.defaultShaderData.setData("args", _indirectArgsBuffer)
         _initArgsPass.shader.append(ShaderPass(Engine.library("flex.shader"), "initSortArgs"))
         _initArgsPass.data.append(_shaderData)
         _initArgsPass.precompileAll()
         
         _preparePass = ComputePass()
-        _preparePass.resourceCache = resourceCache
         _preparePass.shader.append(ShaderPass(Engine.library("flex.shader"), "prepareSortHash"))
         _preparePass.data.append(_shaderData)
         _preparePass.precompileAll()
         
         _buildPass = ComputePass()
-        _buildPass.resourceCache = resourceCache
         _buildPass.shader.append(ShaderPass(Engine.library("flex.shader"), "buildHashGrid"))
         _buildPass.data.append(_shaderData)
         _buildPass.precompileAll()

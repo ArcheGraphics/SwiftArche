@@ -27,8 +27,6 @@ open class ParticleSystemSolverBase: PhysicsAnimation {
     private var _dragCoefficient: Float = 1e-4
     private var _gravity = Vector3F(0, -9.8, 0)
 
-    public var resourceCache: ResourceCache
-
     /// the gravity.
     public var gravity: Vector3F {
         get {
@@ -67,7 +65,6 @@ open class ParticleSystemSolverBase: PhysicsAnimation {
                 _particleSystemData = ParticleSystemData(maxLength: ParticleSystemSolverBase.maxLength)
             }
             _emitter?.target = _particleSystemData
-            _emitter?.resourceCache = resourceCache
         }
     }
     
@@ -82,12 +79,10 @@ open class ParticleSystemSolverBase: PhysicsAnimation {
                 _particleSystemData = ParticleSystemData(maxLength: ParticleSystemSolverBase.maxLength)
             }
             _collider?.target = _particleSystemData
-            _collider?.resourceCache = resourceCache
         }
     }
     
     public required init() {
-        resourceCache = ResourceCache(Engine.device)
         super.init()
     }
 }

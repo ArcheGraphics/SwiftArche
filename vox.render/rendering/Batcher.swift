@@ -7,7 +7,7 @@
 import Metal
 
 public protocol Batcher {
-    func drawBatcher(_ encoder: inout RenderCommandEncoder, _ camera: Camera, _ cache: ResourceCache)
+    func drawBatcher(_ encoder: inout RenderCommandEncoder, _ camera: Camera)
     
     func flush()
 }

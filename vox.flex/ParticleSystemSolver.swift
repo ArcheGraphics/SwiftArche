@@ -47,7 +47,6 @@ open class ParticleSystemSolver: ParticleSystemSolverBase {
                 _particleSystemData?.radius = _radius
             }
             _emitter?.target = _particleSystemData
-            _emitter?.resourceCache = resourceCache
         }
     }
     
@@ -62,18 +61,15 @@ open class ParticleSystemSolver: ParticleSystemSolverBase {
     
     public override func initialize(_ commandBuffer: MTLCommandBuffer) {
         if let particleSystemData = particleSystemData {
-            _initArgsPass.resourceCache = resourceCache
             _initArgsPass.shader.append(ShaderPass(Engine.library("flex.shader"), "initSortArgs"))
             _initArgsPass.defaultShaderData.setData("args", _indirectArgsBuffer)
             _initArgsPass.defaultShaderData.setData("g_NumElements", particleSystemData.numberOfParticles)
             _initArgsPass.precompileAll()
             
             _timeIntegration.shader.append(ShaderPass(Engine.library("flex.shader"), "semiImplicitEuler"))
-            _timeIntegration.resourceCache = resourceCache
             _timeIntegration.data.append(particleSystemData)
             
             _accumulateExternalForces.shader.append(ShaderPass(Engine.library("flex.shader"), "gravityForce"))
-            _accumulateExternalForces.resourceCache = resourceCache
             _accumulateExternalForces.data.append(particleSystemData)
         }
         

@@ -9,7 +9,6 @@ import ImGui
 
 class GUIManager {
     private var _onGUIScripts: DisorderedArray<Script> = DisorderedArray()
-    private var _resourceCache: ResourceCache!
 
     init() {
         _ = ImGuiCreateContext(nil)
@@ -18,8 +17,6 @@ class GUIManager {
         ImGui_ImplMetal_Init(Engine.device)
         ImGui_ImplOSX_Init(Engine.canvas)
         
-        _resourceCache = ResourceCache(Engine.device)
-
         let shader = ShaderPass(Engine.library(), "vertex_text", "fragment_text")
         shader.setRenderQueueType(.Transparent)
         shader._renderState!.rasterState.cullMode = .front
@@ -67,16 +64,16 @@ class GUIManager {
                 || TriangleBatcher.ins.containData || TextBatcher.ins.containData {
                 var encoder = RenderCommandEncoder(commandBuffer, renderPassDescriptor, "gizmos")
                 if PointBatcher.ins.containData {
-                    PointBatcher.ins.drawBatcher(&encoder, camera, _resourceCache)
+                    PointBatcher.ins.drawBatcher(&encoder, camera)
                 }
                 if LineBatcher.ins.containData {
-                    LineBatcher.ins.drawBatcher(&encoder, camera, _resourceCache)
+                    LineBatcher.ins.drawBatcher(&encoder, camera)
                 }
                 if TriangleBatcher.ins.containData {
-                    TriangleBatcher.ins.drawBatcher(&encoder, camera, _resourceCache)
+                    TriangleBatcher.ins.drawBatcher(&encoder, camera)
                 }
                 if TextBatcher.ins.containData {
-                    TextBatcher.ins.drawBatcher(&encoder, camera, _resourceCache)
+                    TextBatcher.ins.drawBatcher(&encoder, camera)
                 }
                 encoder.endEncoding()
             }

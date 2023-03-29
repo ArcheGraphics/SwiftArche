@@ -19,13 +19,11 @@ public class DevicePipeline {
     var _opaqueQueue: [RenderElement] = []
     var _transparentQueue: [RenderElement] = []
     var _alphaTestQueue: [RenderElement] = []
-    var _resourceCache: ResourceCache
     var _backgroundSubpass: Subpass?
     var _forwardSubpass = ForwardSubpass()
     public var shadowManager: ShadowManager!
 
     public init(_ camera: Camera) {
-        _resourceCache = ResourceCache(Engine.device)
         self.camera = camera
         shadowManager = ShadowManager(self)
     }

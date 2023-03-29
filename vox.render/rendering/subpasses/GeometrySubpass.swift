@@ -27,7 +27,6 @@ open class GeometrySubpass: Subpass {
     }
 
     public func _drawElement(pipeline: DevicePipeline, on encoder: inout RenderCommandEncoder, _ element: RenderElement) {
-        let cache = pipeline._resourceCache
         let mesh = element.mesh
         let renderer = element.renderer
         let material = element.material
@@ -40,7 +39,7 @@ open class GeometrySubpass: Subpass {
         ShaderMacroCollection.unionCollection(material.shaderData._macroCollection,
                 renderer._globalShaderMacro, shaderMacro)
 
-        let functions = cache.requestShaderModule(element.shaderPass, shaderMacro)
+        let functions = Engine.resourceCache.requestShaderModule(element.shaderPass, shaderMacro)
         pipelineDescriptor.vertexFunction = functions[0]
         if functions.count == 2 {
             pipelineDescriptor.fragmentFunction = functions[1]
@@ -50,18 +49,18 @@ open class GeometrySubpass: Subpass {
             element.shaderPass.renderState!._apply(pipelineDescriptor, depthStencilDescriptor, encoder.handle,
                                                    renderer.entity.transform._isFrontFaceInvert())
             
-            let pso = cache.requestGraphicsPipeline(pipelineDescriptor)
-            encoder.bind(depthStencilState: depthStencilDescriptor, cache)
-            encoder.bind(camera: camera, pso, cache)
-            encoder.bind(material: material, pso, cache)
-            encoder.bind(renderer: renderer, pso, cache)
-            encoder.bind(scene: camera.scene, pso, cache)
+            let pso = Engine.resourceCache.requestGraphicsPipeline(pipelineDescriptor)
+            encoder.bind(depthStencilState: depthStencilDescriptor)
+            encoder.bind(camera: camera, pso)
+            encoder.bind(material: material, pso)
+            encoder.bind(renderer: renderer, pso)
+            encoder.bind(scene: camera.scene, pso)
             encoder.bind(mesh: mesh)
             encoder.draw(subMesh: element.subMesh!, with: mesh)
         }
     }
     
     public func _drawBatcher<B: Batcher>(pipeline: DevicePipeline, on encoder: inout RenderCommandEncoder, _ batcher: B) {
-        batcher.drawBatcher(&encoder, pipeline.camera, pipeline._resourceCache)
+        batcher.drawBatcher(&encoder, pipeline.camera)
     }
 }

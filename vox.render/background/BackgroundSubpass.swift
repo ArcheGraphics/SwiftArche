@@ -52,14 +52,14 @@ public class BackgroundSubpass: Subpass {
             _pipelineDescriptor.stencilAttachmentPixelFormat = format
         }
 
-        let functions = pipeline._resourceCache.requestShaderModule(_shader, _shaderMacro)
+        let functions = Engine.resourceCache.requestShaderModule(_shader, _shaderMacro)
         _pipelineDescriptor.vertexFunction = functions[0]
         _pipelineDescriptor.fragmentFunction = functions[1]
         _pipelineDescriptor.vertexDescriptor = _mesh._vertexDescriptor
         _shader.renderState!._apply(_pipelineDescriptor, _depthStencilDescriptor, encoder, false)
 
-        _pso = pipeline._resourceCache.requestGraphicsPipeline(_pipelineDescriptor)
-        _depthStencilState = pipeline._resourceCache.requestDepthStencilState(_depthStencilDescriptor)
+        _pso = Engine.resourceCache.requestGraphicsPipeline(_pipelineDescriptor)
+        _depthStencilState = Engine.resourceCache.requestDepthStencilState(_depthStencilDescriptor)
     }
 
     public override func draw(pipeline: DevicePipeline, on encoder: inout RenderCommandEncoder) {

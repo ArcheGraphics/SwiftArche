@@ -50,7 +50,6 @@ public class PostprocessManager {
             _autoExposure = newValue
             if newValue {
                 luminancePass = Luminance(_scene)
-                luminancePass!.resourceCache = resourceCache
                 _shaderData.enableMacro(IS_AUTO_EXPOSURE.rawValue)
             } else {
                 luminancePass = nil
@@ -67,13 +66,11 @@ public class PostprocessManager {
         _shaderData.setData("u_postprocess", _postprocessData)
 
         postProcessPass = ComputePass()
-        postProcessPass.resourceCache = resourceCache
         postProcessPass.shader.append(ShaderPass(Engine.library(), "postprocess_merge"))
         postProcessPass.data.append(_shaderData)
     }
 
     public func registerComputePass(_ pass: ComputePass) {
-        pass.resourceCache = resourceCache
         computePasses.append(pass)
     }
 

@@ -33,14 +33,14 @@ public class SkySubpass: Subpass {
             _pipelineDescriptor.stencilAttachmentPixelFormat = format
         }
 
-        let functions = pipeline._resourceCache.requestShaderModule(material.shader[0], _shaderMacro)
+        let functions = Engine.resourceCache.requestShaderModule(material.shader[0], _shaderMacro)
         _pipelineDescriptor.vertexFunction = functions[0]
         _pipelineDescriptor.fragmentFunction = functions[1]
         _pipelineDescriptor.vertexDescriptor = mesh._vertexDescriptor
         material.shader[0].renderState!._apply(_pipelineDescriptor, _depthStencilDescriptor, encoder, false)
 
-        _pso = pipeline._resourceCache.requestGraphicsPipeline(_pipelineDescriptor)
-        _depthStencilState = pipeline._resourceCache.requestDepthStencilState(_depthStencilDescriptor)
+        _pso = Engine.resourceCache.requestGraphicsPipeline(_pipelineDescriptor)
+        _depthStencilState = Engine.resourceCache.requestDepthStencilState(_depthStencilDescriptor)
     }
 
     public override func draw(pipeline: DevicePipeline, on encoder: inout RenderCommandEncoder) {
@@ -79,7 +79,7 @@ public class SkySubpass: Subpass {
 
         viewProjMatrix = projectionMatrix * viewProjMatrix
         encoder.handle.setVertexBytes(&viewProjMatrix, length: MemoryLayout<Matrix>.stride, index: 10)
-        encoder.bind(material: material, _pso, pipeline._resourceCache)
+        encoder.bind(material: material, _pso)
         encoder.bind(mesh: mesh)
         encoder.handle.setDepthStencilState(_depthStencilState)
         encoder.handle.setFrontFacing(.clockwise)
