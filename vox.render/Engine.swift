@@ -335,6 +335,7 @@ extension Engine: MTKViewDelegate {
                     Engine._componentsManager.callCameraOnEndRender(camera, commandBuffer)
                 }
                 scene.postprocess(commandBuffer)
+                Engine._guiManager.draw(commandBuffer)
 
                 fg.compile()
                 fg.execute()
@@ -342,11 +343,9 @@ extension Engine: MTKViewDelegate {
                     fg.exportGraphviz(filename: "pipeline")
                     Engine.exportGraphviz = false
                 }
-                fg.clear()                
+                fg.clear()
 
-#if os(macOS)
-                Engine._guiManager.draw(commandBuffer)
-#endif
+
                 commandBuffer.present(currentDrawable)
                 commandBuffer.commit()
             }

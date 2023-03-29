@@ -73,7 +73,7 @@ class TextBatcher: Batcher {
     }
 
     var containData: Bool {
-        currentBufferCount != 0
+        currentBufferCount != 1
     }
     
     func appendElement(_ curElement: RenderElement) {
