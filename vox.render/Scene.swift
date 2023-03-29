@@ -348,7 +348,7 @@ extension Scene {
     }
 
     func postprocess(_ commandBuffer: MTLCommandBuffer) {
-        _postprocessManager.render(commandBuffer)
+        _postprocessManager.compute(with: commandBuffer)
     }
 
     func _updateShaderData() {

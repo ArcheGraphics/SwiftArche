@@ -13,12 +13,13 @@ final class FrameGraphTests: XCTestCase {
         var frameGraph = FrameGraph()
         
         let backbuffer = Texture("render target")
-        let retained_resource = frameGraph.addRetainedResource(name: "swapchain", description: TextureDescription(name: "framebuffer"),
+        let retained_resource = frameGraph.addRetainedResource(for: TextureDescription.self, name: "swapchain",
+                                                               description: TextureDescription(name: "framebuffer"),
                                                                actual: backbuffer)
         
         // MARK: - Pass
         let render_task_0: RenderTask<RenderTaskData0> =
-        frameGraph.addRenderTask(name: "Render Task 0") { data, builder in
+        frameGraph.addRenderTask(for: RenderTaskData0.self, name: "Render Task 0") { data, builder in
             data.output = builder.write(resource: builder.read(resource: builder.create(name: "Resource 0",
                                                                                         description: TextureDescription(name: "0"))));
         } execute: { data in

@@ -9,56 +9,59 @@ import Metal
 public class Luminance: ComputePass {
     // Target for luminance calculation is fixed at 1/8 the number of pixels of native resolution.
     private let kLogLuminanceTargetScale: Float = 0.25
-    private var _logLuminanceTexture: MTLTexture!
-    private var _canvasChanged: Canvas?
-
-    var logLuminanceTexture: MTLTexture {
-        get {
-            _logLuminanceTexture
-        }
+    private var desc = MTLTextureDescriptor()
+    
+    public final class LuminanceEncoderData: EmptyClassType {
+        var input: Resource<MTLTextureDescriptor>?
+        var output: Resource<MTLTextureDescriptor>?
+        required public init() {}
     }
 
-    init(_ scene: Scene) {
-        super.init()
-
-        let canvas = Engine.canvas!
-        let flag = ListenerUpdateFlag()
-        flag.listener = resize
-        canvas.updateFlagManager.addFlag(flag: flag)
-        if let renderTarget = canvas.currentRenderPassDescriptor,
-           let texture = renderTarget.colorAttachments[0].texture {
-            createTexture(texture.width, texture.height)
-        }
-
+    override init(_ scene: Scene) {
+        super.init(scene)
         shader.append(ShaderPass(Engine.library(), "logLuminance"))
-    }
-
-    func resize(type: Int?, param: AnyObject?) -> Void {
-        _canvasChanged = (param as! Canvas) // wait update until next frame
-    }
-
-    func createTexture(_ width: Int, _ height: Int) {
-        let width = Int(Float(width) * kLogLuminanceTargetScale)
-        let height = Int(Float(height) * kLogLuminanceTargetScale)
-        let desc = MTLTextureDescriptor.texture2DDescriptor(pixelFormat: .r16Float, width: width, height: height, mipmapped: true)
+        desc = MTLTextureDescriptor.texture2DDescriptor(pixelFormat: .r16Float,
+                                                        width: 256, height: 256, mipmapped: true)
         desc.usage = [.shaderRead, .shaderWrite]
         desc.storageMode = .private
-        _logLuminanceTexture = Engine.device.makeTexture(descriptor: desc)
-        defaultShaderData.setImageView("output", _logLuminanceTexture)
+    }
+
+    func updateTexture(_ width: Int, _ height: Int) {
+        let width = Int(Float(width) * kLogLuminanceTargetScale)
+        let height = Int(Float(height) * kLogLuminanceTargetScale)
+        desc.width = width
+        desc.height = height
 
         threadsPerGridX = width
         threadsPerGridY = height
     }
     
-    public override func compute(commandEncoder: MTLComputeCommandEncoder, label: String = "") {
-        if let canvas = _canvasChanged {
-            if let renderTarget = canvas.currentRenderPassDescriptor,
-               let texture = renderTarget.colorAttachments[0].texture {
-                createTexture(texture.width, texture.height)
-                _canvasChanged = nil
+    public func compute(with commandBuffer: MTLCommandBuffer, label: String = "") -> LuminanceEncoderData {
+        return Engine.fg.addRenderTask(for: LuminanceEncoderData.self, name: "luminance") { [self] data, builder in
+            let colorTex = Engine.fg.blackboard["color"] as! Resource<MTLTextureDescriptor>
+            updateTexture(colorTex.actual!.width, colorTex.actual!.height)
+            
+            data.input = builder.read(resource: colorTex)
+            data.output = builder.write(resource: builder.create(name: "luminanceTex", description: desc))
+        } execute: { builder in
+            if let luminanceTex = builder.output?.actual {
+                if let commandEncoder = commandBuffer.makeComputeCommandEncoder() {
+                    commandEncoder.label = label
+                    Engine.fg.shaderData.enableMacro(IS_AUTO_EXPOSURE.rawValue)
+                    Engine.fg.shaderData.setImageView("input", builder.input?.actual)
+                    Engine.fg.shaderData.setImageView("output", luminanceTex)
+                    super.compute(commandEncoder: commandEncoder, label: label)
+                    commandEncoder.endEncoding()
+                }
+                
+                let blit = commandBuffer.makeBlitCommandEncoder()!
+                blit.generateMipmaps(for: luminanceTex)
+                blit.endEncoding()
             }
-        }
-        
-        super.compute(commandEncoder: commandEncoder, label: label)
+        }.data
+    }
+    
+    public override func compute(commandEncoder: MTLComputeCommandEncoder, label: String = "") {
+
     }
 }

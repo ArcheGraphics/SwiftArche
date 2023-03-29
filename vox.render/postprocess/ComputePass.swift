@@ -9,21 +9,17 @@ import Metal
 open class ComputePass {
     private var _pipelineDescriptor = MTLComputePipelineDescriptor()
     private var _precompilePSO: [ComputePipelineState] = []
+    private var _shaderData: [ShaderData] = []
 
     public var threadsPerGridX = 1
     public var threadsPerGridY = 1
     public var threadsPerGridZ = 1
 
     public var shader: [ShaderPass] = []
-    public var data: [ShaderData] = []
-    public var defaultShaderData: ShaderData {
-        get {
-            data[0]
-        }
-    }
 
-    public init() {
-        data.append(ShaderData())
+    public init(_ scene: Scene) {
+        _shaderData.append(scene.shaderData)
+        _shaderData.append(Engine.fg.shaderData)
     }
     
     /// generate PSO before calculation only work for shader without function constant values.
@@ -39,18 +35,18 @@ open class ComputePass {
 
     /// Compute function
     /// - Parameter commandEncoder: CommandEncoder to use to record compute commands
-    open func compute(commandEncoder: MTLComputeCommandEncoder, label: String = "") {
+    public func compute(commandEncoder: MTLComputeCommandEncoder, label: String = "") {
         commandEncoder.pushDebugGroup(label)
         if _precompilePSO.isEmpty {
             var compileMacros = ShaderMacroCollection()
-            for shaderData in data {
+            for shaderData in _shaderData {
                 ShaderMacroCollection.unionCollection(compileMacros, shaderData._macroCollection, &compileMacros)
             }
             
             for shaderPass in shader {
                 _pipelineDescriptor.computeFunction = Engine.resourceCache.requestShaderModule(shaderPass, compileMacros)[0]
                 let pipelineState = Engine.resourceCache.requestComputePipeline(_pipelineDescriptor)
-                for shaderData in data {
+                for shaderData in _shaderData {
                     shaderData.bindData(commandEncoder, pipelineState.uniformBlock)
                 }
                 commandEncoder.setComputePipelineState(pipelineState.handle)
@@ -62,7 +58,7 @@ open class ComputePass {
             }
         } else {
             for pipelineState in _precompilePSO {
-                for shaderData in data {
+                for shaderData in _shaderData {
                     shaderData.bindData(commandEncoder, pipelineState.uniformBlock)
                 }
                 commandEncoder.setComputePipelineState(pipelineState.handle)
@@ -78,19 +74,19 @@ open class ComputePass {
     
     /// Compute function
     /// - Parameter commandEncoder: CommandEncoder to use to record compute commands
-    open func compute(commandEncoder: MTLComputeCommandEncoder,
-                      threadgroupsPerGrid: MTLSize, threadsPerThreadgroup: MTLSize, label: String = "") {
+    public func compute(commandEncoder: MTLComputeCommandEncoder,
+                        threadgroupsPerGrid: MTLSize, threadsPerThreadgroup: MTLSize, label: String = "") {
         commandEncoder.pushDebugGroup(label)
         if _precompilePSO.isEmpty {
             var compileMacros = ShaderMacroCollection()
-            for shaderData in data {
+            for shaderData in _shaderData {
                 ShaderMacroCollection.unionCollection(compileMacros, shaderData._macroCollection, &compileMacros)
             }
             
             for shaderPass in shader {
                 _pipelineDescriptor.computeFunction = Engine.resourceCache.requestShaderModule(shaderPass, compileMacros)[0]
                 let pipelineState = Engine.resourceCache.requestComputePipeline(_pipelineDescriptor)
-                for shaderData in data {
+                for shaderData in _shaderData {
                     shaderData.bindData(commandEncoder, pipelineState.uniformBlock)
                 }
                 commandEncoder.setComputePipelineState(pipelineState.handle)
@@ -98,7 +94,7 @@ open class ComputePass {
             }
         } else {
             for pipelineState in _precompilePSO {
-                for shaderData in data {
+                for shaderData in _shaderData {
                     shaderData.bindData(commandEncoder, pipelineState.uniformBlock)
                 }
                 commandEncoder.setComputePipelineState(pipelineState.handle)
@@ -110,19 +106,19 @@ open class ComputePass {
     
     /// Compute function
     /// - Parameter commandEncoder: CommandEncoder to use to record compute commands
-    open func compute(commandEncoder: MTLComputeCommandEncoder,
-                      indirectBuffer: MTLBuffer, threadsPerThreadgroup: MTLSize, label: String = "") {
+    public func compute(commandEncoder: MTLComputeCommandEncoder,
+                        indirectBuffer: MTLBuffer, threadsPerThreadgroup: MTLSize, label: String = "") {
         commandEncoder.pushDebugGroup(label)
         if _precompilePSO.isEmpty {
             var compileMacros = ShaderMacroCollection()
-            for shaderData in data {
+            for shaderData in _shaderData {
                 ShaderMacroCollection.unionCollection(compileMacros, shaderData._macroCollection, &compileMacros)
             }
             
             for shaderPass in shader {
                 _pipelineDescriptor.computeFunction = Engine.resourceCache.requestShaderModule(shaderPass, compileMacros)[0]
                 let pipelineState = Engine.resourceCache.requestComputePipeline(_pipelineDescriptor)
-                for shaderData in data {
+                for shaderData in _shaderData {
                     shaderData.bindData(commandEncoder, pipelineState.uniformBlock)
                 }
                 commandEncoder.setComputePipelineState(pipelineState.handle)
@@ -131,7 +127,7 @@ open class ComputePass {
             }
         } else {
             for pipelineState in _precompilePSO {
-                for shaderData in data {
+                for shaderData in _shaderData {
                     shaderData.bindData(commandEncoder, pipelineState.uniformBlock)
                 }
                 commandEncoder.setComputePipelineState(pipelineState.handle)

@@ -12,19 +12,12 @@ public class HashGrid {
     var _resolution: SIMD3<UInt32> = SIMD3<UInt32>(1, 1, 1)
     var _sortedIndices: BufferView!
     let _indirectArgsBuffer: BufferView
-    let _shaderData: ShaderData
     
     let _fillPass: ComputePass
     let _initArgsPass: ComputePass
     let _preparePass: ComputePass
     let _buildPass: ComputePass
     let _sortPass: BitonicSort
-    
-    public var shaderData: ShaderData {
-        get {
-            _shaderData
-        }
-    }
     
     public static func builder() -> Builder {
         HashGrid.Builder()
@@ -38,7 +31,6 @@ public class HashGrid {
         _resolution.y = max(resolutionY, 1)
         _resolution.z = max(resolutionZ, 1)
         _gridSpacing = gridSpacing
-        _shaderData = ShaderData()
         
         _indirectArgsBuffer = BufferView(device: Engine.device, count: 1,
                                          stride: MemoryLayout<MTLDispatchThreadgroupsIndirectArguments>.stride)

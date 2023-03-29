@@ -332,16 +332,15 @@ extension Engine: MTKViewDelegate {
                     camera.devicePipeline.commit(with: commandBuffer)
                     Engine._componentsManager.callCameraOnEndRender(camera, commandBuffer)
                 }
-                
+                scene.postprocess(commandBuffer)
+
                 fg.compile()
                 fg.execute()
                 if Engine.exportGraphviz {
                     fg.exportGraphviz(filename: "pipeline")
                     Engine.exportGraphviz = false
                 }
-                fg.clear()
-                
-                scene.postprocess(commandBuffer)
+                fg.clear()                
 
 #if os(macOS)
                 Engine._guiManager.draw(commandBuffer)

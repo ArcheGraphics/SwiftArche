@@ -119,9 +119,7 @@ class ScreenSpaceSubpass: GeometrySubpass {
     var element: RenderElement!
     var pixelFormat: MTLPixelFormat = .invalid
     
-    override init() {
-        super.init()
-    }
+    init() {}
     
     override func prepare(_ pipelineDescriptor: MTLRenderPipelineDescriptor, _ depthStencilDescriptor: MTLDepthStencilDescriptor) {
         pipelineDescriptor.label = "Screen-Space Fluid Pipeline"
@@ -129,8 +127,8 @@ class ScreenSpaceSubpass: GeometrySubpass {
         pipelineDescriptor.depthAttachmentPixelFormat = .depth32Float
     }
     
-    override func drawElement(_ encoder: inout RenderCommandEncoder) {
-        super._drawElement(&encoder, element)
+    override func drawElement(pipeline: DevicePipeline, on encoder: inout RenderCommandEncoder) {
+        super._drawElement(pipeline: pipeline, on: &encoder, element)
     }
 }
 
@@ -143,7 +141,6 @@ public class ScreenSpaceFluid: Script {
     var depthMtl: DepthMaterial!
     var depthTexture: [MTLTexture] = []
     var depthThickPassDesc: MTLRenderPassDescriptor!
-    var renderPass: RenderPass!
     var subpass: ScreenSpaceSubpass!
     var camera: Camera!
     
@@ -251,14 +248,10 @@ public class ScreenSpaceFluid: Script {
         depthThickPassDesc.depthAttachment.loadAction = .clear
         depthThickPassDesc.colorAttachments[0].loadAction = .clear
         subpass = ScreenSpaceSubpass()
-        renderPass = RenderPass(camera.devicePipeline)
-        renderPass.addSubpass(subpass)
         
         smoothPass = ComputePass()
-        smoothPass.resourceCache = entity.scene.postprocessManager.resourceCache
         smoothPass.shader.append(ShaderPass(Engine.library("flex.shader"), "ssf_smoothDepth"))
         restoreNormalPass = ComputePass()
-        restoreNormalPass.resourceCache = entity.scene.postprocessManager.resourceCache
         restoreNormalPass.shader.append(ShaderPass(Engine.library("flex.shader"), "ssf_restoreNormal"))
 
         material = ScreenSpaceFluidMaterial("ssf")
