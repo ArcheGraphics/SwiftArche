@@ -32,7 +32,7 @@ public final class Scene: NSObject, Serializable {
     public var shadowTwoCascadeSplits: Float
     
     /// The splits of four cascade distribution.
-    @Serialized(default: Vector3(1.0 / 15, 3.0 / 15.0, 7.0 / 15.0))
+    @Serialized(default: Vector3(1.0 / 4, 1.0 / 4, 1.0 / 4))
     public var shadowFourCascadeSplits: Vector3
     
     /// Max Shadow distance.
@@ -41,13 +41,7 @@ public final class Scene: NSObject, Serializable {
     
     /// Number of cascades to use for directional light shadows.
     @Serialized(default: .NoCascades)
-    public var shadowCascades: ShadowCascadesMode {
-        didSet {
-            if shadowCascades != .NoCascades {
-                shaderData.enableMacro(CASCADED_COUNT.rawValue, (shadowCascades.rawValue, .int))
-            }
-        }
-    }
+    public var shadowCascades: ShadowCascadesMode
     
     @Serialized("rootEntities", default: [])
     var _rootEntities: [Entity]
@@ -375,9 +369,9 @@ extension Scene {
 
         // union scene and camera macro.
         ShaderMacroCollection.unionCollection(
-            Engine._macroCollection,
+                Engine._macroCollection,
                 shaderData._macroCollection,
-                _globalShaderMacro
+                &_globalShaderMacro
         )
     }
 

@@ -28,7 +28,8 @@ public class DevicePipeline {
         shadowManager = ShadowManager(self)
     }
 
-    public func commit(fg: FrameGraph, with commandBuffer: MTLCommandBuffer) {
+    public func commit(with commandBuffer: MTLCommandBuffer) {
+        let fg = Engine.fg
         if let renderTarget = camera.renderTarget {
             if let depthTexture = renderTarget.depthAttachment.texture {
                 fg.blackboard["camera_depth"] = fg.addRetainedResource(for: MTLTextureDescriptor.self,
@@ -46,14 +47,10 @@ public class DevicePipeline {
             }
         }
         
-        // shadow pass
-        let scene = camera.scene
-        var enableShadow = false
-        if (scene.castShadows && scene._sunLight?.shadowType != ShadowType.None) {
-            shadowManager.draw(fg: fg, with: commandBuffer)
-            enableShadow = true
-        }
+        // shadow pass automatic culled if not used
+        shadowManager.draw(with: commandBuffer)
         
+        let scene = camera.scene
         let background = scene.background
         _changeBackground(background)
         
@@ -81,17 +78,11 @@ public class DevicePipeline {
                     data.depthOutput = builder.write(resource: fg.blackboard["depth"]  as! Resource<MTLTextureDescriptor>)
                 }
                 
-                if enableShadow {
+                if scene.castShadows && scene._sunLight?.shadowType != ShadowType.None {
                     data.inputShadow = builder.read(resource: fg.blackboard["shadow"] as! Resource<MTLTextureDescriptor>)
                 }
             } execute: { [self] builder in
                 var encoder = RenderCommandEncoder(commandBuffer, renderTarget, "forward pass")
-
-                if enableShadow {
-                    let shadowMap = builder.inputShadow?.actual
-                    encoder.handle.setFragmentTexture(shadowMap, index: 11)
-                }
-                
                 _forwardSubpass.draw(pipeline: self, on: &encoder)
                 if let background = _backgroundSubpass {
                     background.draw(pipeline: self, on: &encoder)

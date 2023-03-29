@@ -19,6 +19,8 @@ public class FrameGraph {
     
     public var blackboard: [String: ResourceBase] = [:]
     
+    public var shaderData = ShaderData()
+    
     public init() {}
 
     @discardableResult
@@ -59,6 +61,7 @@ public class FrameGraph {
         render_tasks_ = []
         resources_ = []
         blackboard = [:]
+        shaderData.clear()
     }
 
     public func compile() {

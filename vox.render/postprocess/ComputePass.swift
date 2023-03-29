@@ -42,9 +42,9 @@ open class ComputePass {
     open func compute(commandEncoder: MTLComputeCommandEncoder, label: String = "") {
         commandEncoder.pushDebugGroup(label)
         if _precompilePSO.isEmpty {
-            let compileMacros = ShaderMacroCollection()
+            var compileMacros = ShaderMacroCollection()
             for shaderData in data {
-                ShaderMacroCollection.unionCollection(compileMacros, shaderData._macroCollection, compileMacros)
+                ShaderMacroCollection.unionCollection(compileMacros, shaderData._macroCollection, &compileMacros)
             }
             
             for shaderPass in shader {
@@ -82,9 +82,9 @@ open class ComputePass {
                       threadgroupsPerGrid: MTLSize, threadsPerThreadgroup: MTLSize, label: String = "") {
         commandEncoder.pushDebugGroup(label)
         if _precompilePSO.isEmpty {
-            let compileMacros = ShaderMacroCollection()
+            var compileMacros = ShaderMacroCollection()
             for shaderData in data {
-                ShaderMacroCollection.unionCollection(compileMacros, shaderData._macroCollection, compileMacros)
+                ShaderMacroCollection.unionCollection(compileMacros, shaderData._macroCollection, &compileMacros)
             }
             
             for shaderPass in shader {
@@ -114,9 +114,9 @@ open class ComputePass {
                       indirectBuffer: MTLBuffer, threadsPerThreadgroup: MTLSize, label: String = "") {
         commandEncoder.pushDebugGroup(label)
         if _precompilePSO.isEmpty {
-            let compileMacros = ShaderMacroCollection()
+            var compileMacros = ShaderMacroCollection()
             for shaderData in data {
-                ShaderMacroCollection.unionCollection(compileMacros, shaderData._macroCollection, compileMacros)
+                ShaderMacroCollection.unionCollection(compileMacros, shaderData._macroCollection, &compileMacros)
             }
             
             for shaderPass in shader {

@@ -169,7 +169,7 @@ public class Renderer: Component {
         ShaderMacroCollection.unionCollection(
                 renderPipeline.camera._globalShaderMacro,
                 shaderData._macroCollection,
-                _globalShaderMacro
+                &_globalShaderMacro
         )
     }
 

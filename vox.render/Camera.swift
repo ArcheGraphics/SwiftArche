@@ -374,7 +374,7 @@ extension Camera {
         ShaderMacroCollection.unionCollection(
                 scene._globalShaderMacro,
                 shaderData._macroCollection,
-                _globalShaderMacro
+                &_globalShaderMacro
         )
     }
 }

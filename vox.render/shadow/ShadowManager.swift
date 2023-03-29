@@ -7,7 +7,8 @@
 import Metal
 
 public class ShadowManager {
-    static let _shadowSamplerProperty = "u_shadowSampler"
+    private static let _shadowSamplerProperty = "u_shadowSampler"
+    private static let _shadowTextureProperty = "u_shadowTexture"
 
     private let _camera: Camera
     private let _cascadedShadowSubpass: CascadedShadowSubpass
@@ -29,21 +30,30 @@ public class ShadowManager {
         _passDescriptor.depthAttachment.storeAction = .store
     }
 
-    public func draw(fg: FrameGraph, with commandBuffer: MTLCommandBuffer) {
-        _camera.scene.shaderData.setSampler(ShadowManager._shadowSamplerProperty, _shadowSampler)
-        _drawDirectShadowMap(fg: fg, with: commandBuffer)
-        _drawSpotShadowMap(fg: fg, with: commandBuffer)
-        _drawPointShadowMap(fg: fg, with: commandBuffer)
+    public func draw(with commandBuffer: MTLCommandBuffer) {
+        _drawDirectShadowMap(with: commandBuffer)
+        _drawSpotShadowMap(with: commandBuffer)
+        _drawPointShadowMap(with: commandBuffer)
     }
 
-    private func _drawDirectShadowMap(fg: FrameGraph, with commandBuffer: MTLCommandBuffer) {
+    private func _drawDirectShadowMap(with commandBuffer: MTLCommandBuffer) {
+        let fg = Engine.fg
         _cascadedShadowSubpass._updateShadowSettings();
         let descriptor = _cascadedShadowSubpass._getshadowMapDescriptor()
         
         let task = fg.addRenderTask(for: ShadowRenderCommandEncoderData.self, name: "directShadowMap pass") { data, builder in
             data.depthOutput = builder.write(resource: builder.create(name: "direct shadow map", description: descriptor))
         } execute: { [self] builder in
-            _passDescriptor.depthAttachment.texture = builder.depthOutput!.actual
+            // setup pipeline state
+            let shadowMap = builder.depthOutput!.actual
+            let shaderData = Engine.fg.shaderData
+            shaderData.setImageView(ShadowManager._shadowTextureProperty,
+                    ShadowManager._shadowSamplerProperty, shadowMap)
+            shaderData.setSampler(ShadowManager._shadowSamplerProperty, _shadowSampler)
+            shaderData.enableMacro(CASCADED_COUNT.rawValue, (_camera.scene.shadowCascades.rawValue, .int))
+            
+            // render shadow map
+            _passDescriptor.depthAttachment.texture = shadowMap
             var encoder = RenderCommandEncoder(commandBuffer, _passDescriptor, "direct shadow pass")
             _cascadedShadowSubpass.draw(pipeline: _camera.devicePipeline, on: &encoder)
             encoder.endEncoding()
@@ -51,10 +61,10 @@ public class ShadowManager {
         fg.blackboard["shadow"] = task.data.depthOutput
     }
 
-    private func _drawSpotShadowMap(fg: FrameGraph, with commandBuffer: MTLCommandBuffer) {
+    private func _drawSpotShadowMap(with commandBuffer: MTLCommandBuffer) {
     }
 
-    private func _drawPointShadowMap(fg: FrameGraph, with commandBuffer: MTLCommandBuffer) {
+    private func _drawPointShadowMap(with commandBuffer: MTLCommandBuffer) {
     }
 }
 

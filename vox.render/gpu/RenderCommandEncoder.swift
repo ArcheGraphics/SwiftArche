@@ -10,6 +10,7 @@ public struct RenderCommandEncoder {
     public let descriptor: MTLRenderPassDescriptor
     public let handle: MTLRenderCommandEncoder
 
+    private var _uploadFrameGraph: FrameGraph?
     private var _uploadScene: Scene?
     private var _uploadCamera: Camera?
     private var _uploadRenderer: Renderer?
@@ -74,6 +75,16 @@ public struct RenderCommandEncoder {
             _uploadScene = scene
         }
     }
+    
+    public mutating func bind(fg: FrameGraph, _ pso: RenderPipelineState) {
+        if _uploadPSO !== pso {
+            _bind(pso: pso)
+        }
+        if _uploadFrameGraph !== fg {
+            fg.shaderData.bindData(handle, pso.uniformBlock)
+            _uploadFrameGraph = fg
+        }
+    }
 
     public mutating func bind(mesh: Mesh) {
         if _uploadMesh !== mesh {
@@ -110,6 +121,7 @@ public struct RenderCommandEncoder {
             _uploadRenderer = nil
             _uploadScene = nil
             _uploadMaterial = nil
+            _uploadFrameGraph = nil
         }
     }
 }

@@ -7,10 +7,6 @@
 import Metal
 
 open class GeometrySubpass: Subpass {
-    var shaderMacro = ShaderMacroCollection()
-    
-    public override init() {}
-
     open func drawElement(pipeline: DevicePipeline, on encoder: inout RenderCommandEncoder) {
         // rewrite by subclass
     }
@@ -35,9 +31,10 @@ open class GeometrySubpass: Subpass {
         let pipelineDescriptor = MTLRenderPipelineDescriptor()
         let depthStencilDescriptor = MTLDepthStencilDescriptor()
         prepare(pipelineDescriptor, depthStencilDescriptor)
-
+        
+        var shaderMacro = Engine.fg.shaderData._macroCollection
         ShaderMacroCollection.unionCollection(material.shaderData._macroCollection,
-                renderer._globalShaderMacro, shaderMacro)
+                renderer._globalShaderMacro, &shaderMacro)
 
         let functions = Engine.resourceCache.requestShaderModule(element.shaderPass, shaderMacro)
         pipelineDescriptor.vertexFunction = functions[0]
@@ -55,6 +52,7 @@ open class GeometrySubpass: Subpass {
             encoder.bind(material: material, pso)
             encoder.bind(renderer: renderer, pso)
             encoder.bind(scene: camera.scene, pso)
+            encoder.bind(fg: Engine.fg, pso)
             encoder.bind(mesh: mesh)
             encoder.draw(subMesh: element.subMesh!, with: mesh)
         }

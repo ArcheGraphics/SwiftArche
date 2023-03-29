@@ -534,6 +534,7 @@
 		3EF39BBD29D2CB850083E20A /* Realize.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EF39BB029D29D840083E20A /* Realize.swift */; };
 		3EF39BBE29D2CB850083E20A /* Resource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EF39BAE29D298730083E20A /* Resource.swift */; };
 		3EF39BC029D3D0E00083E20A /* Protocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EF39BBF29D3D0DF0083E20A /* Protocol.swift */; };
+		3EF39BC429D424990083E20A /* MTLSamplerDescriptor+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EF39BC329D424980083E20A /* MTLSamplerDescriptor+Extensions.swift */; };
 		43D8C033021F4B86E95953E6 /* IBLApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8CFAFE0E0B5772488FA13 /* IBLApp.swift */; };
 		43D8C1413D08147985256B8A /* PhysXJointBasicApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8C12DBC7510CB05B703F8 /* PhysXJointBasicApp.swift */; };
 		43D8C40438F0527739C7D662 /* AtomicComputeApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8C888ABFCE2075E7AA5BE /* AtomicComputeApp.swift */; };
@@ -1319,6 +1320,7 @@
 		3EF39BB629D2AB1C0083E20A /* RenderTask.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RenderTask.swift; sourceTree = "<group>"; };
 		3EF39BB829D2C57F0083E20A /* FrameGraphTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FrameGraphTests.swift; sourceTree = "<group>"; };
 		3EF39BBF29D3D0DF0083E20A /* Protocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Protocol.swift; sourceTree = "<group>"; };
+		3EF39BC329D424980083E20A /* MTLSamplerDescriptor+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MTLSamplerDescriptor+Extensions.swift"; sourceTree = "<group>"; };
 		43D8C090F42BE8E48D6FC4E1 /* GridMaterial.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GridMaterial.swift; sourceTree = "<group>"; };
 		43D8C0A4A7B56D737C3F4FE2 /* PhysXCollisionDetectionApp.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhysXCollisionDetectionApp.swift; sourceTree = "<group>"; };
 		43D8C0CC365128B7B18E4074 /* EngineVisualizer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EngineVisualizer.swift; sourceTree = "<group>"; };
@@ -2076,6 +2078,7 @@
 				3EBA3D3E29B99D8600E5FB42 /* MTLTexture+Serialization.swift */,
 				3EBA3D4029B99D9200E5FB42 /* MTLTextureDescriptor+Extensions.swift */,
 				3EBA3D4229B99D9E00E5FB42 /* MTLTextureDescriptor+Serialization.swift */,
+				3EF39BC329D424980083E20A /* MTLSamplerDescriptor+Extensions.swift */,
 				3EC92AE02939F97300423396 /* RenderCommandEncoder.swift */,
 				3EC0395B293218BA002187DC /* ResourceCache.swift */,
 			);
@@ -3770,6 +3773,7 @@
 				3EC0389329321826002187DC /* Engine.swift in Sources */,
 				040F1DDD2934E89F008BDC8D /* GUIShader.swift in Sources */,
 				3EC039AF293218F0002187DC /* UpdateFlag.swift in Sources */,
+				3EF39BC429D424990083E20A /* MTLSamplerDescriptor+Extensions.swift in Sources */,
 				3E447F5B29C9E71000D2FB30 /* SerializableDecodable.swift in Sources */,
 				3EC038E829321845002187DC /* FixedJoint.swift in Sources */,
 				3EF39B9529D18C1B0083E20A /* XMeshRenderer.swift in Sources */,

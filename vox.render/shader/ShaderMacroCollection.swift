@@ -10,7 +10,7 @@ extension MacroName: Hashable {
 }
 
 /// Shader macro collection.
-internal class ShaderMacroCollection {
+internal struct ShaderMacroCollection {
     internal var _value: [UInt16: (Int, MTLDataType)] = [:]
 
     /// Union of two macro collection.
@@ -18,10 +18,14 @@ internal class ShaderMacroCollection {
     ///   - left: input macro collection
     ///   - right: input macro collection
     ///   - result: union output macro collection
-    static func unionCollection(_ left: ShaderMacroCollection, _ right: ShaderMacroCollection, _ result: ShaderMacroCollection) {
+    static func unionCollection(_ left: ShaderMacroCollection, _ right: ShaderMacroCollection, _ result: inout ShaderMacroCollection) {
         result._value = left._value.merging(right._value) { l, r in
             r
         }
+    }
+    
+    mutating func clear() {
+        _value = [:]
     }
 }
 

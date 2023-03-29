@@ -30,7 +30,6 @@ public class Engine: NSObject {
     
     private let _inFlightSemaphore: DispatchSemaphore
     private var _frameCount: Int = 0
-    private let _fg = FrameGraph()
     
     // Current buffer index to fill with dynamic uniform data and set for the current frame
     private static var _currentBufferIndex: Int = 0
@@ -49,7 +48,8 @@ public class Engine: NSObject {
     // The semaphore used to control GPU-CPU synchronization of frames.
     private static var _textureLoader: TextureLoader!
     private static var _isPaused: Bool = true;
-    
+    private static let _fg = FrameGraph()
+
     /// buffer index
     static var currentBufferIndex: Int {
         get {
@@ -60,6 +60,12 @@ public class Engine: NSObject {
     static var resourceCache: ResourceCache {
         get {
             _resourceCache
+        }
+    }
+    
+    static var fg: FrameGraph {
+        get {
+            _fg
         }
     }
     
@@ -312,21 +318,22 @@ extension Engine: MTKViewDelegate {
                     self?._inFlightSemaphore.signal()
                 }
                 
-                _fg.blackboard["color"] = _fg.addRetainedResource(for: MTLTextureDescriptor.self, name: "colorTexture",
-                                                                  description: MTLTextureDescriptor(), actual: colorTexture)
-                _fg.blackboard["depth"] = _fg.addRetainedResource(for: MTLTextureDescriptor.self, name: "depthTexture",
-                                                                  description: MTLTextureDescriptor(), actual: depthTexture)
+                let fg = Engine._fg
+                fg.blackboard["color"] = fg.addRetainedResource(for: MTLTextureDescriptor.self, name: "colorTexture",
+                                                                description: MTLTextureDescriptor(), actual: colorTexture)
+                fg.blackboard["depth"] = fg.addRetainedResource(for: MTLTextureDescriptor.self, name: "depthTexture",
+                                                                description: MTLTextureDescriptor(), actual: depthTexture)
                 
                 for camera in cameras {
                     camera.update()
                     Engine._componentsManager.callCameraOnBeginRender(camera, commandBuffer)
-                    camera.devicePipeline.commit(fg: _fg, with: commandBuffer)
+                    camera.devicePipeline.commit(with: commandBuffer)
                     Engine._componentsManager.callCameraOnEndRender(camera, commandBuffer)
                 }
                 
-                _fg.compile()
-                _fg.execute()
-                _fg.clear()
+                fg.compile()
+                fg.execute()
+                fg.clear()
                 
                 scene.postprocess(commandBuffer)
 

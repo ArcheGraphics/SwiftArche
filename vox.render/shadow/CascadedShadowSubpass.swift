@@ -262,7 +262,7 @@ class CascadedShadowSubpass: GeometrySubpass {
             _shadowMatrices[i] = simd_float4x4()
         }
 
-        let shaderData = scene.shaderData
+        let shaderData = Engine.fg.shaderData
         shaderData.setDynamicData(CascadedShadowSubpass._shadowMatricesProperty, _shadowMatrices)
         shaderData.setDynamicData(CascadedShadowSubpass._shadowInfosProperty, _shadowInfos)
         shaderData.setDynamicData(CascadedShadowSubpass._shadowSplitSpheresProperty, _splitBoundSpheres)
@@ -274,7 +274,7 @@ class CascadedShadowSubpass: GeometrySubpass {
         let virtualCamera = shadowSliceData.virtualCamera
         let shadowBias = ShadowUtils.getShadowBias(light: light, projectionMatrix: virtualCamera.projectionMatrix, shadowResolution: _shadowTileResolution)
 
-        let shaderData = _camera.scene.shaderData
+        let shaderData = Engine.fg.shaderData
         shaderData.setDynamicData(CascadedShadowSubpass._lightShadowBiasProperty, shadowBias)
         shaderData.setDynamicData(CascadedShadowSubpass._lightDirectionProperty, light.direction)
 

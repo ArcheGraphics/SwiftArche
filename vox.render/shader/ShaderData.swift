@@ -25,6 +25,15 @@ open class ShaderData {
         ShaderData._defaultSamplerDesc.tAddressMode = .repeat
     }
     
+    public func clear() {
+        _shaderDynamicBuffers = [[String: BufferView]](repeating: [:], count: Engine._maxFramesInFlight)
+        _shaderBuffers = [:]
+        _shaderBufferFunctors = [:]
+        _imageViews = [:]
+        _samplers = [:]
+        _macroCollection.clear()
+    }
+    
     public func getData(_ property: String) -> BufferView? {
         _shaderBuffers[property]
     }
