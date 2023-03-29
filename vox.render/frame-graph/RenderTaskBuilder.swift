@@ -15,7 +15,7 @@ public struct RenderTaskBuilder {
         render_task_ = render_task
     }
 
-    public func create<description_type: ResourceRealize>(name: String, description: description_type) -> Resource<description_type> {
+    public mutating func create<description_type: ResourceRealize>(name: String, description: description_type) -> Resource<description_type> {
         typealias resource_type = Resource<description_type>
         framegraph_.resources_.append(resource_type(name: name, creator: render_task_, description: description));
         let resource = framegraph_.resources_.last!

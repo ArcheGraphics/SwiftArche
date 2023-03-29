@@ -10,7 +10,7 @@ import vox_render
 final class FrameGraphTests: XCTestCase {
     // Graphviz located in ~/Library/Containers/archegraphics.SwiftArcheMac/Data/Documents
     func testSelfDefineFrameGraph() throws {
-        let frameGraph = FrameGraph()
+        var frameGraph = FrameGraph()
         
         let backbuffer = Texture("render target")
         let retained_resource = frameGraph.addRetainedResource(name: "swapchain", description: TextureDescription(name: "framebuffer"),
@@ -94,12 +94,12 @@ extension TextureDescription: ResourceRealize {
 
 typealias Texture2DResource = Resource<TextureDescription>;
 
-class RenderTaskData0: RenderTaskDataType {
+class RenderTaskData0: EmptyClassType {
     var output: Texture2DResource!
     required init() {}
 }
 
-class RenderTaskData: RenderTaskDataType {
+class RenderTaskData: EmptyClassType {
     var input: Texture2DResource!
     var output: Texture2DResource!
     required init() {}

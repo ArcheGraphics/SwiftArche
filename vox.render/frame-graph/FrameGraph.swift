@@ -6,7 +6,7 @@
 
 import Metal
 
-public class FrameGraph {
+public struct FrameGraph {
     struct Step {
         var render_task: RenderTaskBase
         var realized_resources: [ResourceBase]
@@ -19,18 +19,18 @@ public class FrameGraph {
     
     public init() {}
 
-    public func addRenderTask<data_type: RenderTaskDataType>(name: String, setup: @escaping (data_type, RenderTaskBuilder) -> Void,
-                                                             execute: @escaping (data_type) -> Void) -> RenderTask<data_type> {
+    public mutating func addRenderTask<data_type: EmptyClassType>(name: String, setup: @escaping (data_type, inout RenderTaskBuilder) -> Void,
+                                                                  execute: @escaping (data_type) -> Void) -> RenderTask<data_type> {
         render_tasks_.append(RenderTask<data_type>(name: name, setup: setup, execute: execute))
         let render_task = render_tasks_.last!
 
-        let builder = RenderTaskBuilder(framegraph: self, render_task: render_task)
-        render_task.setup(builder: builder)
+        var builder = RenderTaskBuilder(framegraph: self, render_task: render_task)
+        render_task.setup(builder: &builder)
 
         return render_task as! RenderTask<data_type>
     }
 
-    public func addRetainedResource<description_type: ResourceRealize>(name: String, description: description_type,
+    public mutating func addRetainedResource<description_type: ResourceRealize>(name: String, description: description_type,
                                                                        actual: description_type.actual_type? = nil) -> Resource<description_type> {
         resources_.append(Resource<description_type>(name: name, description: description, actual: actual))
         return resources_.last as! Resource<description_type>
@@ -48,12 +48,12 @@ public class FrameGraph {
         }
     }
 
-    public func clear() {
+    public mutating func clear() {
         render_tasks_ = []
         resources_ = []
     }
 
-    public func compile() {
+    public mutating func compile() {
         // Reference counting.
         for render_task in render_tasks_ {
             render_task.ref_count_ = render_task.creates_.count + render_task.writes_.count

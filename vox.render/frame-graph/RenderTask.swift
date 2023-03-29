@@ -21,23 +21,23 @@ public class RenderTaskBase {
         ref_count_ = 0
     }
 
-    open func setup(builder: RenderTaskBuilder) {
+    open func setup(builder: inout RenderTaskBuilder) {
     }
 
     open func execute() {
     }
 }
 
-public class RenderTask<data_type: RenderTaskDataType>: RenderTaskBase {
+public class RenderTask<data_type: EmptyClassType>: RenderTaskBase {
     var data_: data_type
-    var setup_: (data_type, RenderTaskBuilder) -> Void
+    var setup_: (data_type, inout RenderTaskBuilder) -> Void
     var execute_: (data_type) -> Void
 
     public var data: data_type {
         data_
     }
     
-    init(name: String, setup: @escaping (data_type, RenderTaskBuilder) -> Void,
+    init(name: String, setup: @escaping (data_type, inout RenderTaskBuilder) -> Void,
          execute: @escaping (data_type) -> Void) {
         setup_ = setup
         execute_ = execute
@@ -45,8 +45,8 @@ public class RenderTask<data_type: RenderTaskDataType>: RenderTaskBase {
         super.init(name: name)
     }
 
-    public override func setup(builder: RenderTaskBuilder) {
-        setup_(data_, builder)
+    public override func setup(builder: inout RenderTaskBuilder) {
+        setup_(data_, &builder)
     }
 
     public override func execute() {

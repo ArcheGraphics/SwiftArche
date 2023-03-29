@@ -545,6 +545,7 @@
 		3EF39BBC29D2CB850083E20A /* FrameGraph.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EF39BB229D2AAAE0083E20A /* FrameGraph.swift */; };
 		3EF39BBD29D2CB850083E20A /* Realize.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EF39BB029D29D840083E20A /* Realize.swift */; };
 		3EF39BBE29D2CB850083E20A /* Resource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EF39BAE29D298730083E20A /* Resource.swift */; };
+		3EF39BC029D3D0E00083E20A /* Protocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EF39BBF29D3D0DF0083E20A /* Protocol.swift */; };
 		43D8C033021F4B86E95953E6 /* IBLApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8CFAFE0E0B5772488FA13 /* IBLApp.swift */; };
 		43D8C1413D08147985256B8A /* PhysXJointBasicApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8C12DBC7510CB05B703F8 /* PhysXJointBasicApp.swift */; };
 		43D8C40438F0527739C7D662 /* AtomicComputeApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8C888ABFCE2075E7AA5BE /* AtomicComputeApp.swift */; };
@@ -1330,6 +1331,7 @@
 		3EF39BB429D2AACB0083E20A /* RenderTaskBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RenderTaskBuilder.swift; sourceTree = "<group>"; };
 		3EF39BB629D2AB1C0083E20A /* RenderTask.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RenderTask.swift; sourceTree = "<group>"; };
 		3EF39BB829D2C57F0083E20A /* FrameGraphTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FrameGraphTests.swift; sourceTree = "<group>"; };
+		3EF39BBF29D3D0DF0083E20A /* Protocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Protocol.swift; sourceTree = "<group>"; };
 		43D8C090F42BE8E48D6FC4E1 /* GridMaterial.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GridMaterial.swift; sourceTree = "<group>"; };
 		43D8C0A4A7B56D737C3F4FE2 /* PhysXCollisionDetectionApp.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhysXCollisionDetectionApp.swift; sourceTree = "<group>"; };
 		43D8C0CC365128B7B18E4074 /* EngineVisualizer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EngineVisualizer.swift; sourceTree = "<group>"; };
@@ -2448,6 +2450,7 @@
 				3EC039A7293218F0002187DC /* UpdateFlag.swift */,
 				3EC039A8293218F0002187DC /* UpdateFlagManager.swift */,
 				3EC039A9293218F0002187DC /* Util.swift */,
+				3EF39BBF29D3D0DF0083E20A /* Protocol.swift */,
 			);
 			path = base;
 			sourceTree = "<group>";
@@ -3775,6 +3778,7 @@
 				040F1DC0293392FA008BDC8D /* WheelManager.swift in Sources */,
 				3E8B00DE29BC1D7700A70123 /* CAnimationClip.mm in Sources */,
 				3E447F5A29C9E71000D2FB30 /* Transformable.swift in Sources */,
+				3EF39BC029D3D0E00083E20A /* Protocol.swift in Sources */,
 				3EC038F12932184C002187DC /* ControllerNonWalkableMode.swift in Sources */,
 				3EC0389829321826002187DC /* Scene.swift in Sources */,
 				3EC038E929321845002187DC /* JointMotor.swift in Sources */,
