@@ -13,7 +13,6 @@ public class GammaCorrection: ComputePass {
         var input: Resource<MTLTextureDescriptor>?
         var luminance: Resource<MTLTextureDescriptor>?
         var output: Resource<MTLTextureDescriptor>?
-        required init() {}
     }
 
     override init(_ scene: Scene) {

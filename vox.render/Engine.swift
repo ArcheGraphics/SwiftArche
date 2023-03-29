@@ -63,7 +63,7 @@ public class Engine: NSObject {
         }
     }
     
-    static var fg: FrameGraph {
+    public static var fg: FrameGraph {
         get {
             _fg
         }

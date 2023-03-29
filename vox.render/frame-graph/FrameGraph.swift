@@ -25,8 +25,8 @@ public class FrameGraph {
 
     @discardableResult
     public func addRenderTask<data_type: EmptyClassType>(for type: data_type.Type, name: String,
-                                                                  setup: @escaping (data_type, inout RenderTaskBuilder) -> Void,
-                                                                  execute: @escaping (data_type) -> Void) -> RenderTask<data_type> {
+                                                         setup: @escaping (data_type, inout RenderTaskBuilder) -> Void,
+                                                         execute: @escaping (data_type) -> Void) -> RenderTask<data_type> {
         render_tasks_.append(RenderTask<data_type>(name: name, setup: setup, execute: execute))
         let render_task = render_tasks_.last!
 
@@ -35,11 +35,19 @@ public class FrameGraph {
 
         return render_task as! RenderTask<data_type>
     }
+    
+    public func addMoveTask<src_type: ResourceRealize, dst_type: ResourceRealize>(src: Resource<src_type>, dst: Resource<dst_type>) {
+        addRenderTask(for: EmptyClass.self, name: "move") { data, builder in
+            _ = builder.read(resource: src)
+            _ = builder.write(resource: dst)
+        } execute: { data in
+        }
+    }
 
     @discardableResult
     public func addRetainedResource<description_type: ResourceRealize>(for type: description_type.Type, name: String,
-                                                                                description: description_type,
-                                                                                actual: description_type.actual_type? = nil)
+                                                                       description: description_type,
+                                                                       actual: description_type.actual_type? = nil)
     -> Resource<description_type> {
         resources_.append(Resource<description_type>(name: name, description: description, actual: actual))
         return resources_.last as! Resource<description_type>

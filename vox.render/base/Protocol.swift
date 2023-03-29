@@ -9,3 +9,7 @@ import Metal
 public protocol EmptyClassType: AnyObject {
     init()
 }
+
+public class EmptyClass: EmptyClassType {
+    required public init() {}
+}

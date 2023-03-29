@@ -9,23 +9,35 @@ import vox_render
 import Math
 import vox_toolkit
 
-fileprivate class AtomicMaterial: BaseMaterial {
+fileprivate class AtmoicScript: Script {
+    var atomicCounter: ComputePass!
     private var _atomicBuffer: BufferView
 
-    init() {
+    required init() {
         _atomicBuffer = BufferView(device: Engine.device, count: 1, stride: MemoryLayout<UInt32>.stride)
         super.init()
-        atomicBuffer = _atomicBuffer
-        shader.append(ShaderPass(Engine.library("app.shader"), "vertex_atomic", "fragment_atomic"))
     }
-
-    var atomicBuffer: BufferView {
-        get {
+    
+    final class AtomicEncoderData: EmptyClassType {
+        var output: Resource<MTLBufferDescriptor>?
+    }
+    
+    override func onBeginRender(_ camera: Camera, _ commandBuffer: MTLCommandBuffer) {
+        let fg = Engine.fg
+        let atomicResource = fg.addRetainedResource(for: MTLBufferDescriptor.self, name: "atomicBuffer",
+                                                    description: MTLBufferDescriptor(count: 1, stride: MemoryLayout<UInt32>.stride),
+                                                    actual: _atomicBuffer)
+        fg.shaderData.setBufferFunctor("u_atomic") { [self] in
             _atomicBuffer
         }
-        set {
-            shaderData.setBufferFunctor("u_atomic") { [self] in
-                _atomicBuffer
+        
+        fg.addRenderTask(for: AtomicEncoderData.self, name: "atomic") { data, builder in
+            data.output = builder.write(resource: atomicResource)
+        } execute: { [self] builder in
+            let buffer = builder.output!.actual!
+            if let commandEncoder = commandBuffer.makeComputeCommandEncoder() {
+                atomicCounter.compute(commandEncoder: commandEncoder)
+                commandEncoder.endEncoding()
             }
         }
     }
@@ -53,17 +65,19 @@ class AtomicComputeApp: NSViewController {
         let cubeEntity = rootEntity.createChild()
         let renderer = cubeEntity.addComponent(MeshRenderer.self)
         renderer.mesh = PrimitiveMesh.createCuboid(width: 0.1, height: 0.1, depth: 0.1)
-        let material = AtomicMaterial()
+        let material = BaseMaterial()
+        material.shader.append(ShaderPass(Engine.library("app.shader"), "vertex_atomic", "fragment_atomic"))
         renderer.setMaterial(material)
-
-        let atomicCounter = ComputePass()
+        
+        let atomicCounter = ComputePass(scene)
         atomicCounter.threadsPerGridX = 2
         atomicCounter.threadsPerGridY = 2
         atomicCounter.threadsPerGridZ = 2
         atomicCounter.shader.append(ShaderPass(Engine.library("app.shader"), "compute_atomic"))
-        atomicCounter.data.append(renderer.getMaterial()!.shaderData)
-        scene.postprocessManager.registerComputePass(atomicCounter)
-
+        
+        let atomicScript = cameraEntity.addComponent(AtmoicScript.self)
+        atomicScript.atomicCounter = atomicCounter
+        
         Engine.run()
     }
     
