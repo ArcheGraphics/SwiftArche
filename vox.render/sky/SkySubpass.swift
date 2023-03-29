@@ -25,9 +25,7 @@ public class SkySubpass: Subpass {
         super.init()
     }
 
-    func prepare(_ encoder: MTLRenderCommandEncoder) {
-        let pipeline = _renderPass.pipeline!
-
+    func prepare(pipeline: DevicePipeline, on encoder: MTLRenderCommandEncoder) {
         _pipelineDescriptor.label = "Skybox Pipeline"
         _pipelineDescriptor.colorAttachments[0].pixelFormat = Canvas.colorPixelFormat
         _pipelineDescriptor.depthAttachmentPixelFormat = Canvas.depthPixelFormat
@@ -45,7 +43,7 @@ public class SkySubpass: Subpass {
         _depthStencilState = pipeline._resourceCache.requestDepthStencilState(_depthStencilDescriptor)
     }
 
-    public override func draw(_ encoder: inout RenderCommandEncoder) {
+    public override func draw(pipeline: DevicePipeline, on encoder: inout RenderCommandEncoder) {
         if (material == nil) {
             logger.warning("The material of sky is not defined.")
             return
@@ -57,10 +55,9 @@ public class SkySubpass: Subpass {
 
         encoder.handle.pushDebugGroup("SkyBox")
         if (_pso == nil) {
-            prepare(encoder.handle)
+            prepare(pipeline: pipeline, on: encoder.handle)
         }
 
-        let pipeline = _renderPass.pipeline!
         let camera = pipeline.camera
 
         // MARK: - Infinity Projection Matrix

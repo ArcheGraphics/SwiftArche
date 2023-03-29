@@ -10,7 +10,6 @@ public class ShadowManager {
     static let _shadowSamplerProperty = "u_shadowSampler"
 
     private let _camera: Camera
-    private var _renderPass: RenderPass
     private let _cascadedShadowSubpass: CascadedShadowSubpass
     private var _descriptor = MTLRenderPassDescriptor()
     private let _shadowSampler = MTLSamplerDescriptor()
@@ -18,8 +17,6 @@ public class ShadowManager {
     init(_ pipeline: DevicePipeline) {
         _camera = pipeline.camera
         _cascadedShadowSubpass = CascadedShadowSubpass(_camera)
-        _renderPass = RenderPass(pipeline)
-        _renderPass.addSubpass(_cascadedShadowSubpass)
 
         _shadowSampler.compareFunction = .less
         _shadowSampler.minFilter = .linear
@@ -29,25 +26,36 @@ public class ShadowManager {
         _shadowSampler.tAddressMode = .clampToEdge
     }
 
-    public func draw(_ commandBuffer: MTLCommandBuffer) {
+    public func draw(fg: inout FrameGraph, with commandBuffer: MTLCommandBuffer) {
         _camera.scene.shaderData.setSampler(ShadowManager._shadowSamplerProperty, _shadowSampler)
-        _drawDirectShadowMap(commandBuffer)
-        _drawSpotShadowMap(commandBuffer)
-        _drawPointShadowMap(commandBuffer)
+        _drawDirectShadowMap(fg: &fg, with: commandBuffer)
+        _drawSpotShadowMap(fg: &fg, with: commandBuffer)
+        _drawPointShadowMap(fg: &fg, with: commandBuffer)
     }
 
-    private func _drawDirectShadowMap(_ commandBuffer: MTLCommandBuffer) {
+    private func _drawDirectShadowMap(fg: inout FrameGraph, with commandBuffer: MTLCommandBuffer) {
         _cascadedShadowSubpass._updateShadowSettings();
         _cascadedShadowSubpass._getAvailableRenderTarget()
         _descriptor.depthAttachment.texture = _cascadedShadowSubpass._depthTexture
         _descriptor.depthAttachment.loadAction = .clear
         _descriptor.depthAttachment.storeAction = .store
-        _renderPass.draw(commandBuffer, _descriptor, "shadowMap")
+        
+        let renderContext = RenderCommandEncoderDescriptor(label: "direct light shadow",
+                                                           renderTarget: _descriptor,
+                                                           commandBuffer: commandBuffer)
+        fg.addRenderTask(for: RenderCommandEncoderData.self, name: "directShadowMap pass") { data, builder in
+            data.output = builder.write(resource: builder.create(name: "", description: renderContext))
+        } execute: { [self] builder in
+            if var encoder = builder.output.actual {
+                _cascadedShadowSubpass.draw(pipeline: _camera.devicePipeline, on: &encoder)
+                encoder.endEncoding()
+            }
+        }
     }
 
-    private func _drawSpotShadowMap(_ commandBuffer: MTLCommandBuffer) {
+    private func _drawSpotShadowMap(fg: inout FrameGraph, with commandBuffer: MTLCommandBuffer) {
     }
 
-    private func _drawPointShadowMap(_ commandBuffer: MTLCommandBuffer) {
+    private func _drawPointShadowMap(fg: inout FrameGraph, with commandBuffer: MTLCommandBuffer) {
     }
 }

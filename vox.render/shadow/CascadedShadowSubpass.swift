@@ -53,9 +53,9 @@ class CascadedShadowSubpass: GeometrySubpass {
         pipelineDescriptor.depthAttachmentPixelFormat = _shadowMapFormat
     }
 
-    override func drawElement(_ encoder: inout RenderCommandEncoder) {
+    override func drawElement(pipeline: DevicePipeline, on encoder: inout RenderCommandEncoder) {
         _existShadowMap = false
-        _renderDirectShadowMap(&encoder)
+        _renderDirectShadowMap(pipeline: pipeline, on: &encoder)
 
         if (_existShadowMap) {
             _updateReceiversShaderData()
@@ -112,7 +112,7 @@ class CascadedShadowSubpass: GeometrySubpass {
         }
     }
 
-    private func _renderDirectShadowMap(_ encoder: inout RenderCommandEncoder) {
+    private func _renderDirectShadowMap(pipeline: DevicePipeline, on encoder: inout RenderCommandEncoder) {
         let shadowCascades = _camera.scene.shadowCascades.rawValue
         let bufferBlock = Engine.requestBufferBlock(minimum_size: 4 * 256)
 
@@ -197,12 +197,12 @@ class CascadedShadowSubpass: GeometrySubpass {
                         width: Int(_shadowTileResolution - 2), height: Int(_shadowTileResolution - 2)))
                 for i in 0..<pipeline._opaqueQueue.count {
                     pipeline._opaqueQueue[i].shaderPass = _shaderPass
-                    super._drawElement(&encoder, pipeline._opaqueQueue[i])
+                    super._drawElement(pipeline: pipeline, on: &encoder, pipeline._opaqueQueue[i])
                 }
 
                 for i in 0..<pipeline._alphaTestQueue.count {
                     pipeline._alphaTestQueue[i].shaderPass = _shaderPass
-                    super._drawElement(&encoder, pipeline._alphaTestQueue[i])
+                    super._drawElement(pipeline: pipeline, on: &encoder, pipeline._alphaTestQueue[i])
                 }
             }
             _existShadowMap = true

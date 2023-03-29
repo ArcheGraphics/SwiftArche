@@ -299,12 +299,17 @@ extension Engine: MTKViewDelegate {
                     self?._inFlightSemaphore.signal()
                 }
                 
+                var fg = FrameGraph()
                 for camera in cameras {
                     camera.update()
                     Engine._componentsManager.callCameraOnBeginRender(camera, commandBuffer)
-                    camera.devicePipeline.commit(commandBuffer)
+                    camera.devicePipeline.commit(fg: &fg, with: commandBuffer)
                     Engine._componentsManager.callCameraOnEndRender(camera, commandBuffer)
                 }
+                
+                fg.compile()
+                fg.execute()
+                
                 scene.postprocess(commandBuffer)
 
 #if os(macOS)

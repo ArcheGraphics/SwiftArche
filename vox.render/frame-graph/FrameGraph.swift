@@ -17,9 +17,13 @@ public struct FrameGraph {
     var resources_: [ResourceBase] = []
     var timeline_: [Step] = []
     
+    public var blackboard: [String: ResourceBase] = [:]
+    
     public init() {}
 
-    public mutating func addRenderTask<data_type: EmptyClassType>(name: String, setup: @escaping (data_type, inout RenderTaskBuilder) -> Void,
+    @discardableResult
+    public mutating func addRenderTask<data_type: EmptyClassType>(for type: data_type.Type, name: String,
+                                                                  setup: @escaping (data_type, inout RenderTaskBuilder) -> Void,
                                                                   execute: @escaping (data_type) -> Void) -> RenderTask<data_type> {
         render_tasks_.append(RenderTask<data_type>(name: name, setup: setup, execute: execute))
         let render_task = render_tasks_.last!
@@ -30,8 +34,11 @@ public struct FrameGraph {
         return render_task as! RenderTask<data_type>
     }
 
-    public mutating func addRetainedResource<description_type: ResourceRealize>(name: String, description: description_type,
-                                                                       actual: description_type.actual_type? = nil) -> Resource<description_type> {
+    @discardableResult
+    public mutating func addRetainedResource<description_type: ResourceRealize>(for type: description_type.Type, name: String,
+                                                                                description: description_type,
+                                                                                actual: description_type.actual_type? = nil)
+    -> Resource<description_type> {
         resources_.append(Resource<description_type>(name: name, description: description, actual: actual))
         return resources_.last as! Resource<description_type>
     }

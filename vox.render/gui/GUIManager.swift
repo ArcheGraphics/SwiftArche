@@ -8,7 +8,6 @@ import Metal
 import ImGui
 
 class GUIManager {
-    private var _renderPass: RenderPass!
     private var _onGUIScripts: DisorderedArray<Script> = DisorderedArray()
     private var _resourceCache: ResourceCache!
 

@@ -44,9 +44,7 @@ public class BackgroundSubpass: Subpass {
         _mesh = _createPlane()
     }
 
-    func prepare(_ encoder: MTLRenderCommandEncoder) {
-        let pipeline = _renderPass.pipeline!
-
+    func prepare(pipeline: DevicePipeline, on encoder: MTLRenderCommandEncoder) {
         _pipelineDescriptor.label = "Background Pipeline"
         _pipelineDescriptor.colorAttachments[0].pixelFormat = Canvas.colorPixelFormat
         _pipelineDescriptor.depthAttachmentPixelFormat = Canvas.depthPixelFormat
@@ -64,10 +62,10 @@ public class BackgroundSubpass: Subpass {
         _depthStencilState = pipeline._resourceCache.requestDepthStencilState(_depthStencilDescriptor)
     }
 
-    public override func draw(_ encoder: inout RenderCommandEncoder) {
+    public override func draw(pipeline: DevicePipeline, on encoder: inout RenderCommandEncoder) {
         encoder.handle.pushDebugGroup("Background")
         if (_pso == nil) {
-            prepare(encoder.handle)
+            prepare(pipeline: pipeline, on: encoder.handle)
         }
 
         encoder.handle.setRenderPipelineState(_pso.handle)

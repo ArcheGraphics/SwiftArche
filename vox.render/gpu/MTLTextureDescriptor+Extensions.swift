@@ -33,5 +33,12 @@ public extension MTLTextureDescriptor {
 
         return copy
     }
+}
 
+extension MTLTextureDescriptor: ResourceRealize {
+    public typealias actual_type = MTLTexture
+
+    public func realize() -> MTLTexture? {
+        nil
+    }
 }

@@ -17,8 +17,7 @@ public class ForwardSubpass: GeometrySubpass {
         }
     }
 
-    public override func drawElement(_ encoder: inout RenderCommandEncoder) {
-        let pipeline = _renderPass.pipeline!
+    public override func drawElement(pipeline: DevicePipeline, on encoder: inout RenderCommandEncoder) {
         pipeline._opaqueQueue.removeAll()
         pipeline._alphaTestQueue.removeAll()
         pipeline._transparentQueue.removeAll()
@@ -32,29 +31,29 @@ public class ForwardSubpass: GeometrySubpass {
             if element.renderer is TextRenderer {
                 TextBatcher.ins.appendElement(element)
             } else {
-                super._drawElement(&encoder, element)
+                super._drawElement(pipeline: pipeline, on: &encoder, element)
             }
         }
-        super._drawBatcher(&encoder, TextBatcher.ins)
+        super._drawBatcher(pipeline: pipeline, on: &encoder, TextBatcher.ins)
         
         // alphaTest
         for element in pipeline._alphaTestQueue {
             if element.renderer is TextRenderer {
                 TextBatcher.ins.appendElement(element)
             } else {
-                super._drawElement(&encoder, element)
+                super._drawElement(pipeline: pipeline, on: &encoder, element)
             }
         }
-        super._drawBatcher(&encoder, TextBatcher.ins)
+        super._drawBatcher(pipeline: pipeline, on: &encoder, TextBatcher.ins)
 
         // transparent
         for element in pipeline._transparentQueue {
             if element.renderer is TextRenderer {
                 TextBatcher.ins.appendElement(element)
             } else {
-                super._drawElement(&encoder, element)
+                super._drawElement(pipeline: pipeline, on: &encoder, element)
             }
         }
-        super._drawBatcher(&encoder, TextBatcher.ins)
+        super._drawBatcher(pipeline: pipeline, on: &encoder, TextBatcher.ins)
     }
 }

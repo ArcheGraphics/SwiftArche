@@ -11,7 +11,7 @@ open class GeometrySubpass: Subpass {
     
     public override init() {}
 
-    open func drawElement(_ encoder: inout RenderCommandEncoder) {
+    open func drawElement(pipeline: DevicePipeline, on encoder: inout RenderCommandEncoder) {
         // rewrite by subclass
     }
 
@@ -20,14 +20,13 @@ open class GeometrySubpass: Subpass {
         // rewrite by subclass
     }
 
-    open override func draw(_ encoder: inout RenderCommandEncoder) {
+    open override func draw(pipeline: DevicePipeline, on encoder: inout RenderCommandEncoder) {
         encoder.handle.pushDebugGroup("Draw Element")
-        drawElement(&encoder)
+        drawElement(pipeline: pipeline, on: &encoder)
         encoder.handle.popDebugGroup()
     }
 
-    public func _drawElement(_ encoder: inout RenderCommandEncoder, _ element: RenderElement) {
-        let pipeline = _renderPass.pipeline!
+    public func _drawElement(pipeline: DevicePipeline, on encoder: inout RenderCommandEncoder, _ element: RenderElement) {
         let cache = pipeline._resourceCache
         let mesh = element.mesh
         let renderer = element.renderer
@@ -62,8 +61,7 @@ open class GeometrySubpass: Subpass {
         }
     }
     
-    public func _drawBatcher<B: Batcher>(_ encoder: inout RenderCommandEncoder, _ batcher: B) {
-        let pipeline = _renderPass.pipeline!
+    public func _drawBatcher<B: Batcher>(pipeline: DevicePipeline, on encoder: inout RenderCommandEncoder, _ batcher: B) {
         batcher.drawBatcher(&encoder, pipeline.camera, pipeline._resourceCache)
     }
 }
