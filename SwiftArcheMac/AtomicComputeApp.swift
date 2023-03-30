@@ -31,9 +31,9 @@ fileprivate class AtmoicScript: Script {
             _atomicBuffer
         }
         
-        fg.addRenderTask(for: AtomicEncoderData.self, name: "atomic") { data, builder in
+        fg.addRenderTask(for: AtomicEncoderData.self, name: "atomic", commandBuffer: commandBuffer) { data, builder in
             data.output = builder.write(resource: atomicResource)
-        } execute: { [self] builder in
+        } execute: { [self] builder, commandBuffer in
             let buffer = builder.output!.actual!
             if let commandEncoder = commandBuffer.makeComputeCommandEncoder() {
                 atomicCounter.compute(commandEncoder: commandEncoder)

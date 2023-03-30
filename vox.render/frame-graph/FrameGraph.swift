@@ -24,10 +24,11 @@ public class FrameGraph {
     public init() {}
 
     @discardableResult
-    public func addRenderTask<data_type: EmptyClassType>(for type: data_type.Type, name: String,
+    public func addRenderTask<data_type: EmptyClassType>(for type: data_type.Type, name: String, commandBuffer: MTLCommandBuffer,
                                                          setup: @escaping (data_type, inout RenderTaskBuilder) -> Void,
-                                                         execute: @escaping (data_type) -> Void) -> RenderTask<data_type> {
-        render_tasks_.append(RenderTask<data_type>(name: name, setup: setup, execute: execute))
+                                                         execute: @escaping (data_type, MTLCommandBuffer) -> Void) -> RenderTask<data_type> {
+        render_tasks_.append(RenderTask<data_type>(name: name, commandBuffer: commandBuffer,
+                                                   setup: setup, execute: execute))
         let render_task = render_tasks_.last!
 
         var builder = RenderTaskBuilder(framegraph: self, render_task: render_task)
@@ -37,11 +38,7 @@ public class FrameGraph {
     }
     
     public func addMoveTask<src_type: ResourceRealize, dst_type: ResourceRealize>(src: Resource<src_type>, dst: Resource<dst_type>) {
-        addRenderTask(for: EmptyClass.self, name: "move") { data, builder in
-            _ = builder.read(resource: src)
-            _ = builder.write(resource: dst)
-        } execute: { data in
-        }
+        dst.writers_ = src.writers_
     }
 
     @discardableResult

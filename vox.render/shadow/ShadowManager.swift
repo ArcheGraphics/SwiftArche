@@ -46,9 +46,10 @@ public class ShadowManager {
         _cascadedShadowSubpass._updateShadowSettings();
         let descriptor = _cascadedShadowSubpass._getshadowMapDescriptor()
         
-        let task = fg.addRenderTask(for: ShadowRenderCommandEncoderData.self, name: "directShadowMap pass") { data, builder in
+        let task = fg.addRenderTask(for: ShadowRenderCommandEncoderData.self, name: "directShadowMap pass",
+                                    commandBuffer: commandBuffer) { data, builder in
             data.depthOutput = builder.write(resource: builder.create(name: "direct shadow map", description: descriptor))
-        } execute: { [self] builder in
+        } execute: { [self] builder, commandBuffer in
             // setup pipeline state
             let shadowMap = builder.depthOutput!.actual
             let shaderData = Engine.fg.shaderData

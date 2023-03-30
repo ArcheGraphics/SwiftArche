@@ -63,13 +63,14 @@ class GUIManager {
     func draw(_ commandBuffer: MTLCommandBuffer) {
         callScriptOnGUI()
         
-        Engine.fg.addRenderTask(for: GUIEncoderData.self, name: "gizmo") { data, builder in
+        Engine.fg.addRenderTask(for: GUIEncoderData.self, name: "gizmo",
+                                commandBuffer: commandBuffer) { data, builder in
             if PointBatcher.ins.containData || LineBatcher.ins.containData
                 || TriangleBatcher.ins.containData || TextBatcher.ins.containData {
                 let colorTex = Engine.fg.blackboard[BlackBoardType.color.rawValue] as! Resource<MTLTextureDescriptor>
                 data.output = builder.write(resource: colorTex)
             }
-        } execute: { builder in
+        } execute: { builder, commandBuffer in
             let canvas = Engine.canvas!
             if let camera = Camera.mainCamera,
                let renderPassDescriptor = canvas.currentRenderPassDescriptor {
@@ -93,12 +94,13 @@ class GUIManager {
         }
 #if os(macOS)
         // GUI
-        Engine.fg.addRenderTask(for: GUIEncoderData.self, name: "gui") { data, builder in
+        Engine.fg.addRenderTask(for: GUIEncoderData.self, name: "gui",
+                                commandBuffer: commandBuffer) { data, builder in
             if ImGuiGetDrawData() != nil {
                 let colorTex = Engine.fg.blackboard[BlackBoardType.color.rawValue] as! Resource<MTLTextureDescriptor>
                 data.output = builder.write(resource: colorTex)
             }
-        } execute: { builder in
+        } execute: { builder, commandBuffer in
             let canvas = Engine.canvas!
             if let drawData = ImGuiGetDrawData(),
                let renderPassDescriptor = canvas.currentRenderPassDescriptor {

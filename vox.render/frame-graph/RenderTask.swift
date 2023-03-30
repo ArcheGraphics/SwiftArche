@@ -10,6 +10,7 @@ public class RenderTaskBase {
     var creates_: [ResourceBase] = []
     var reads_: [ResourceBase] = []
     var writes_: [ResourceBase] = []
+    var events_: [EventWrapper] = []
     var ref_count_: Int
 
     public var name: String
@@ -30,18 +31,21 @@ public class RenderTaskBase {
 
 public class RenderTask<data_type: EmptyClassType>: RenderTaskBase {
     var data_: data_type
+    var commandBuffer_: MTLCommandBuffer
     var setup_: (data_type, inout RenderTaskBuilder) -> Void
-    var execute_: (data_type) -> Void
+    var execute_: (data_type, MTLCommandBuffer) -> Void
 
     public var data: data_type {
         data_
     }
     
-    init(name: String, setup: @escaping (data_type, inout RenderTaskBuilder) -> Void,
-         execute: @escaping (data_type) -> Void) {
+    init(name: String, commandBuffer: MTLCommandBuffer,
+         setup: @escaping (data_type, inout RenderTaskBuilder) -> Void,
+         execute: @escaping (data_type, MTLCommandBuffer) -> Void) {
         setup_ = setup
         execute_ = execute
         data_ = data_type()
+        commandBuffer_ = commandBuffer
         super.init(name: name)
     }
 
@@ -50,6 +54,27 @@ public class RenderTask<data_type: EmptyClassType>: RenderTaskBase {
     }
 
     public override func execute() {
-        execute_(data_)
+        // wait for resource ready
+        for event in events_ {
+            event.wait(for: commandBuffer_)
+        }
+        
+        execute_(data_, commandBuffer_)
+        
+        // signal for resource ready
+        for event in events_ {
+            event.signal(for: commandBuffer_)
+        }
+        
+        // this pass is the first one
+        if events_.isEmpty {
+            events_.append(EventWrapper(with: commandBuffer_.device))
+        }
+        // transport events to next pass
+        for write in writes_ {
+            for nextTask in write.readers_ {
+                nextTask.events_.append(contentsOf: events_)
+            }
+        }
     }
 }

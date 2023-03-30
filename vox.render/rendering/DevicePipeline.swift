@@ -72,7 +72,8 @@ public class DevicePipeline {
                 )
             }
             
-            fg.addRenderTask(for: RenderCommandEncoderData.self, name: "forward pass") { [unowned self] data, builder in
+            fg.addRenderTask(for: RenderCommandEncoderData.self, name: "forward pass", commandBuffer: commandBuffer) {
+                [unowned self] data, builder in
                 if camera.renderTarget != nil {
                     data.colorOutput = colorOutput.map({ resource in
                         builder.write(resource: resource)
@@ -89,7 +90,7 @@ public class DevicePipeline {
                    scene.castShadows && sunLight.shadowType != ShadowType.None {
                     data.inputShadow = builder.read(resource: fg.blackboard[BlackBoardType.shadow.rawValue] as! Resource<MTLTextureDescriptor>)
                 }
-            } execute: { [self] builder in
+            } execute: { [self] builder, commandBuffer in
                 var encoder = RenderCommandEncoder(commandBuffer, renderTarget, "forward pass")
                 _forwardSubpass.draw(pipeline: self, on: &encoder)
                 if let background = _backgroundSubpass {
