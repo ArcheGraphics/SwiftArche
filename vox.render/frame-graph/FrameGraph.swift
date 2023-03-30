@@ -22,15 +22,10 @@ public class FrameGraph {
     
     public var shaderData = ShaderData()
     
-    public init() {
-        let device = Engine.device
-        let textureDescriptor = MTLTextureDescriptor.texture2DDescriptor(pixelFormat: .rgba8Unorm, width: 1920, height: 1080, mipmapped: false)
-        let sizeAndAlignRequirement = device.heapTextureSizeAndAlign(descriptor: textureDescriptor)
-        let sizeAligned = alignUp(size: sizeAndAlignRequirement.size, align: sizeAndAlignRequirement.align)
-        
+    public init(size: Int) {
         let heapDesc = MTLHeapDescriptor()
         heapDesc.storageMode = .private
-        heapDesc.size = sizeAligned * 4 // init for G-Buffer
+        heapDesc.size = size
         heapPool_.append(Engine.device.makeHeap(descriptor: heapDesc)!)
     }
 
@@ -294,6 +289,7 @@ public class FrameGraph {
         stream += "}"
     }
     
+    // TODO: Optimize for less memory fragment
     private func _mergeHeap() {
         if heapPool_.count > 1 {
             var totalSize: Int = 0

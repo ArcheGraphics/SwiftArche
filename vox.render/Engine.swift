@@ -48,7 +48,7 @@ public class Engine: NSObject {
     // The semaphore used to control GPU-CPU synchronization of frames.
     private static var _textureLoader: TextureLoader!
     private static var _isPaused: Bool = true;
-    private static let _fg = FrameGraph()
+    private static var _fg: FrameGraph!
 
     /// buffer index
     static var currentBufferIndex: Int {
@@ -159,6 +159,12 @@ public class Engine: NSObject {
         _inFlightSemaphore = DispatchSemaphore(value: Engine._maxFramesInFlight)
         Engine._bufferPools = [BufferPool](repeating: BufferPool(Engine._device, 256), count: Engine._maxFramesInFlight)
         Engine._resourceCache = ResourceCache(device)
+        
+        // alloc init framegraph heap size for G-Buffer, which can be adjusted by default render pipeline configure.
+        let textureDescriptor = MTLTextureDescriptor.texture2DDescriptor(pixelFormat: .rgba8Unorm, width: 1920, height: 1080, mipmapped: false)
+        let sizeAndAlignRequirement = device.heapTextureSizeAndAlign(descriptor: textureDescriptor)
+        let sizeAligned = alignUp(size: sizeAndAlignRequirement.size, align: sizeAndAlignRequirement.align)
+        Engine._fg = FrameGraph(size: sizeAligned * 4)
         
         super.init()
         _ = Engine.createShaderLibrary("vox.shader")
@@ -320,7 +326,7 @@ extension Engine: MTKViewDelegate {
                     self?._inFlightSemaphore.signal()
                 }
                 
-                let fg = Engine._fg
+                let fg = Engine.fg
                 fg.blackboard[BlackBoardType.color.rawValue]
                 = fg.addRetainedResource(for: MTLTextureDescriptor.self, name: "colorTexture",
                                          description: MTLTextureDescriptor(), actual: colorTexture)
