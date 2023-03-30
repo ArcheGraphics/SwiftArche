@@ -19,9 +19,20 @@ public struct MTLBufferDescriptor {
 }
 
 extension MTLBufferDescriptor: ResourceRealize {
-    public typealias actual_type = BufferView
+    public typealias actual_type = MTLBuffer
+    
+    public var size: Int {
+        let sizeAndAlign = Engine.device.heapBufferSizeAndAlign(length: stride * count, options: options)
+        return alignUp(size: sizeAndAlign.size, align: sizeAndAlign.align)
+    }
 
-    public func realize() -> BufferView? {
-        BufferView(device: Engine.device, count: count, stride: stride, label: label, options: options)
+    public func realize(with heap: MTLHeap?) -> MTLBuffer? {
+        let buffer = heap!.makeBuffer(length: stride * count, options: options)
+        buffer?.label = label
+        return buffer
+    }
+    
+    public func derealize(resource: MTLBuffer) {
+        resource.makeAliasable()
     }
 }

@@ -7,11 +7,6 @@
 import Foundation
 import Metal
 
-/// Aligns a value to the next multiple of the alignment.
-func alignUp(value: Int, alignment: Int) -> Int {
-    (value + (alignment - 1)) & ~(alignment - 1)
-}
-
 /// Divides a value, rounding up.
 func divideRoundUp(numerator: Int, denominator: Int) -> Int {
     (numerator + denominator - 1) / denominator

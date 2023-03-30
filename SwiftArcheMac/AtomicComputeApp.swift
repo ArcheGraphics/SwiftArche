@@ -11,10 +11,10 @@ import vox_toolkit
 
 fileprivate class AtmoicScript: Script {
     var atomicCounter: ComputePass!
-    private var _atomicBuffer: BufferView
+    private var _atomicBuffer: MTLBuffer
 
     required init() {
-        _atomicBuffer = BufferView(device: Engine.device, count: 1, stride: MemoryLayout<UInt32>.stride)
+        _atomicBuffer = Engine.device.makeBuffer(length: MemoryLayout<UInt32>.stride)!
         super.init()
     }
     

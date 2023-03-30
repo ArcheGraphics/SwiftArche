@@ -8,5 +8,7 @@ import Metal
 
 public protocol ResourceRealize {
     associatedtype actual_type
-    func realize() -> actual_type?
+    func realize(with heap: MTLHeap?) -> actual_type?
+    func derealize(resource: actual_type)
+    var size: Int { get }
 }

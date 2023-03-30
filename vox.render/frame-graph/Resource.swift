@@ -33,10 +33,15 @@ public class ResourceBase {
         ResourceBase.idGenerator = id_
     }
 
-    open func realize() {
+    open func realize(with heap: MTLHeap) -> Bool {
+        true
     }
 
     open func derealize() {
+    }
+    
+    open var size: Int {
+        0
     }
 }
 
@@ -65,20 +70,28 @@ public class Resource<description_type: ResourceRealize>: ResourceBase {
         if let actual {
             actual_ = actual
         } else {
-            actual_ = description.realize()!
+            actual_ = description.realize(with: nil)!
         }
         super.init(name: name, creator: nil)
     }
 
-    public override func realize() {
+    public override func realize(with heap: MTLHeap) -> Bool {
         if transient {
-            actual_ = description_.realize()
+            actual_ = description_.realize(with: heap)
+            return actual_ != nil
+        } else {
+            return true
         }
     }
 
     public override func derealize() {
-        if transient {
+        if let actual, transient {
+            description_.derealize(resource: actual)
             actual_ = nil
         }
+    }
+    
+    public override var size: Int {
+        description_.size
     }
 }

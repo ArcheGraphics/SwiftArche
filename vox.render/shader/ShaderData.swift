@@ -9,7 +9,7 @@ import Metal
 open class ShaderData {
     private var _shaderDynamicBuffers: [[String: BufferView]] = []
     private var _shaderBuffers: [String: BufferView] = [:]
-    private var _shaderBufferFunctors: [String: () -> BufferView] = [:]
+    private var _shaderBufferFunctors: [String: () -> MTLBuffer] = [:]
     private var _imageViews: [String: MTLTexture] = [:]
     private var _samplers: [String: MTLSamplerDescriptor] = [:]
     static private var _defaultSamplerDesc: MTLSamplerDescriptor = MTLSamplerDescriptor()
@@ -38,7 +38,7 @@ open class ShaderData {
         _shaderBuffers[property]
     }
 
-    public func setBufferFunctor(_ property: String, _ functor: @escaping () -> BufferView) {
+    public func setBufferFunctor(_ property: String, _ functor: @escaping () -> MTLBuffer) {
         _shaderBufferFunctors[property] = functor
     }
 
@@ -174,7 +174,7 @@ extension ShaderData {
                     commandEncoder.setBuffer(buffer.buffer, offset: 0, index: uniform.location)
                 }
                 if let bufferFunctor = _shaderBufferFunctors[uniform.name] {
-                    commandEncoder.setBuffer(bufferFunctor().buffer, offset: 0, index: uniform.location)
+                    commandEncoder.setBuffer(bufferFunctor(), offset: 0, index: uniform.location)
                 }
                 break
             case .texture:
@@ -216,10 +216,10 @@ extension ShaderData {
                 }
                 if let bufferFunctor = _shaderBufferFunctors[uniform.name] {
                     if uniform.functionType == .vertex {
-                        commandEncoder.setVertexBuffer(bufferFunctor().buffer, offset: 0, index: uniform.location)
+                        commandEncoder.setVertexBuffer(bufferFunctor(), offset: 0, index: uniform.location)
                     }
                     if uniform.functionType == .fragment {
-                        commandEncoder.setFragmentBuffer(bufferFunctor().buffer, offset: 0, index: uniform.location)
+                        commandEncoder.setFragmentBuffer(bufferFunctor(), offset: 0, index: uniform.location)
                     }
                 }
                 break

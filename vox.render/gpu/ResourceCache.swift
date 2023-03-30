@@ -22,30 +22,10 @@ public class ResourceCache {
     var graphics_pipelines: [Int: (resource: RenderPipelineState, useCount: Int)] = [:]
     var compute_pipelines: [Int: (resource: ComputePipelineState, useCount: Int)] = [:]
     var samplers: [Int: (resource: MTLSamplerState, useCount: Int)] = [:]
-    var textures: [Int: (resource: MTLTexture, useCount: Int)] = [:]
     var depth_stencil_states: [Int: (resource: MTLDepthStencilState, useCount: Int)] = [:]
 
     public init(_ device: MTLDevice) {
         self.device = device
-    }
-    
-    func garbageCollection(below threshold: Int) {
-        gc(&shader_modules, threshold: threshold)
-        gc(&graphics_pipelines, threshold: threshold)
-        gc(&compute_pipelines, threshold: threshold)
-        gc(&samplers, threshold: threshold)
-        gc(&textures, threshold: threshold)
-        gc(&depth_stencil_states, threshold: threshold)
-    }
-    
-    func gc<T>(_ contain: inout [Int: (resource: T, useCount: Int)], threshold: Int) -> Void {
-        contain = contain.filter { element in
-            element.value.useCount > threshold
-        }.mapValues({ element in
-            var element = element
-            element.useCount = 0
-            return element
-        })
     }
 
     func requestGraphicsPipeline(_ pipelineDescriptor: MTLRenderPipelineDescriptor) -> RenderPipelineState {
@@ -85,20 +65,6 @@ public class ResourceCache {
         }
 
         return sampler!.resource
-    }
-    
-    func requestTexture(_ descriptor: MTLTextureDescriptor) -> MTLTexture {
-        let hash = descriptor.hash
-        var texture = textures[hash]
-        if texture == nil {
-            let tex = device.makeTexture(descriptor: descriptor)
-            texture = (tex!, 0)
-            textures[hash] = texture
-        } else {
-            textures[hash]!.useCount += 1
-        }
-
-        return texture!.resource
     }
 
     func requestDepthStencilState(_ descriptor: MTLDepthStencilDescriptor) -> MTLDepthStencilState {
@@ -143,6 +109,23 @@ public class ResourceCache {
         compute_pipelines = [:]
         depth_stencil_states = [:]
         samplers = [:]
-        textures = [:]
+    }
+    
+    func garbageCollection(below threshold: Int) {
+        gc(&shader_modules, threshold: threshold)
+        gc(&graphics_pipelines, threshold: threshold)
+        gc(&compute_pipelines, threshold: threshold)
+        gc(&samplers, threshold: threshold)
+        gc(&depth_stencil_states, threshold: threshold)
+    }
+    
+    func gc<T>(_ contain: inout [Int: (resource: T, useCount: Int)], threshold: Int) -> Void {
+        contain = contain.filter { element in
+            element.value.useCount > threshold
+        }.mapValues({ element in
+            var element = element
+            element.useCount = 0
+            return element
+        })
     }
 }

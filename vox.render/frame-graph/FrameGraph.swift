@@ -15,16 +15,28 @@ public class FrameGraph {
 
     var render_tasks_: [RenderTaskBase] = []
     var resources_: [ResourceBase] = []
-    var timeline_: [Step] = []
+    private var timeline_: [Step] = []
+    private var heapPool_: [MTLHeap] = []
     
     public var blackboard: [Int: ResourceBase] = [:]
     
     public var shaderData = ShaderData()
     
-    public init() {}
+    public init() {
+        let device = Engine.device
+        let textureDescriptor = MTLTextureDescriptor.texture2DDescriptor(pixelFormat: .rgba8Unorm, width: 1920, height: 1080, mipmapped: false)
+        let sizeAndAlignRequirement = device.heapTextureSizeAndAlign(descriptor: textureDescriptor)
+        let sizeAligned = alignUp(size: sizeAndAlignRequirement.size, align: sizeAndAlignRequirement.align)
+        
+        let heapDesc = MTLHeapDescriptor()
+        heapDesc.storageMode = .private
+        heapDesc.size = sizeAligned * 4 // init for G-Buffer
+        heapPool_.append(Engine.device.makeHeap(descriptor: heapDesc)!)
+    }
 
     @discardableResult
-    public func addRenderTask<data_type: EmptyClassType>(for type: data_type.Type, name: String, commandBuffer: MTLCommandBuffer,
+    public func addRenderTask<data_type: EmptyClassType>(for type: data_type.Type, name: String,
+                                                         commandBuffer: MTLCommandBuffer,
                                                          setup: @escaping (data_type, inout RenderTaskBuilder) -> Void,
                                                          execute: @escaping (data_type, MTLCommandBuffer) -> Void) -> RenderTask<data_type> {
         render_tasks_.append(RenderTask<data_type>(name: name, commandBuffer: commandBuffer,
@@ -53,7 +65,24 @@ public class FrameGraph {
     public func execute() {
         for step in timeline_ {
             for resource in step.realized_resources {
-                resource.realize()
+                var realized = false
+                for heap in heapPool_ {
+                    if resource.realize(with: heap) {
+                        realized = true
+                        break
+                    }
+                }
+                
+                // if not big enough locate create new one
+                if !realized {
+                    let heapDesc = MTLHeapDescriptor()
+                    heapDesc.storageMode = .private
+                    heapDesc.size = resource.size * 2
+                    let heap = Engine.device.makeHeap(descriptor: heapDesc)!
+                    heapPool_.append(heap)
+                    let result = resource.realize(with: heap)
+                    assert(result == true)
+                }
             }
             step.render_task.execute()
             for resource in step.derealized_resources {
@@ -67,6 +96,7 @@ public class FrameGraph {
         resources_ = []
         blackboard = [:]
         shaderData.clear()
+        _mergeHeap()
     }
 
     public func compile() {
@@ -262,5 +292,19 @@ public class FrameGraph {
             stream += "} [color=firebrick]\n"
         }
         stream += "}"
+    }
+    
+    private func _mergeHeap() {
+        if heapPool_.count > 1 {
+            var totalSize: Int = 0
+            for heap in heapPool_ {
+                totalSize += heap.size
+            }
+            
+            let heapDesc = MTLHeapDescriptor()
+            heapDesc.storageMode = .private
+            heapDesc.size = totalSize * 2
+            heapPool_ = [Engine.device.makeHeap(descriptor: heapDesc)!]
+        }
     }
 }
