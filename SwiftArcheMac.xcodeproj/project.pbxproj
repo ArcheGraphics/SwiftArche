@@ -111,6 +111,8 @@
 		3E447F6C29C9F2AA00D2FB30 /* ClassInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E447F6B29C9F2AA00D2FB30 /* ClassInfo.swift */; };
 		3E5A22BA29CC786700808068 /* EmptyApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E5A22B929CC786700808068 /* EmptyApp.swift */; };
 		3E5A22BC29CC78BD00808068 /* USDTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E5A22BB29CC78BD00808068 /* USDTests.swift */; };
+		3E5C391329D6D2E20026E999 /* ModelLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E5C391229D6D2E20026E999 /* ModelLoader.swift */; };
+		3E5C391529D6D5190026E999 /* MDLVertexDescriptor+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E5C391429D6D5190026E999 /* MDLVertexDescriptor+Extensions.swift */; };
 		3E5FC0E229D5CCDE00FF2E7E /* EventWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E5FC0E129D5CCDE00FF2E7E /* EventWrapper.swift */; };
 		3E5FC0E529D6390900FF2E7E /* FrameData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E5FC0E429D6390900FF2E7E /* FrameData.swift */; };
 		3E5FC0E629D6645E00FF2E7E /* AtomicComputeApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8C888ABFCE2075E7AA5BE /* AtomicComputeApp.swift */; };
@@ -836,6 +838,8 @@
 		3E447F6B29C9F2AA00D2FB30 /* ClassInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClassInfo.swift; sourceTree = "<group>"; };
 		3E5A22B929CC786700808068 /* EmptyApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmptyApp.swift; sourceTree = "<group>"; };
 		3E5A22BB29CC78BD00808068 /* USDTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = USDTests.swift; sourceTree = "<group>"; };
+		3E5C391229D6D2E20026E999 /* ModelLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelLoader.swift; sourceTree = "<group>"; };
+		3E5C391429D6D5190026E999 /* MDLVertexDescriptor+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MDLVertexDescriptor+Extensions.swift"; sourceTree = "<group>"; };
 		3E5FC0E129D5CCDE00FF2E7E /* EventWrapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventWrapper.swift; sourceTree = "<group>"; };
 		3E5FC0E429D6390900FF2E7E /* FrameData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FrameData.swift; sourceTree = "<group>"; };
 		3E6B235D294220BC000AC29F /* FaceMorphApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FaceMorphApp.swift; sourceTree = "<group>"; };
@@ -1616,6 +1620,7 @@
 		3E1BAC7F29D6D17C000ADE2A /* loader */ = {
 			isa = PBXGroup;
 			children = (
+				3E5C391229D6D2E20026E999 /* ModelLoader.swift */,
 				3EC038FA29321862002187DC /* TextureLoader.swift */,
 				040F1E0C293AAFC7008BDC8D /* HDRLoader.h */,
 				040F1E0A293AAFB1008BDC8D /* HDRLoader.m */,
@@ -2088,6 +2093,7 @@
 				3EBA3D4029B99D9200E5FB42 /* MTLTextureDescriptor+Extensions.swift */,
 				3EBA3D4229B99D9E00E5FB42 /* MTLTextureDescriptor+Serialization.swift */,
 				3EF39BD029D45FD90083E20A /* MTLBufferDescriptor.swift */,
+				3E5C391429D6D5190026E999 /* MDLVertexDescriptor+Extensions.swift */,
 				3EC92AE02939F97300423396 /* RenderCommandEncoder.swift */,
 				3EC0395B293218BA002187DC /* ResourceCache.swift */,
 				3E6D2F00293E13DF00B63F73 /* BufferPool.swift */,
@@ -3783,6 +3789,8 @@
 				3EC03979293218C3002187DC /* IndexBufferBinding.swift in Sources */,
 				3EC038B029321835002187DC /* PhysXStaticCollider.swift in Sources */,
 				3EC03977293218C3002187DC /* MeshRenderer.swift in Sources */,
+				3E5C391329D6D2E20026E999 /* ModelLoader.swift in Sources */,
+				3E5C391529D6D5190026E999 /* MDLVertexDescriptor+Extensions.swift in Sources */,
 				3EF39B6829D133220083E20A /* XLightingEnvironment.swift in Sources */,
 				3EC0397E293218C3002187DC /* BlendShapeFrame.swift in Sources */,
 				3EC038C92932183D002187DC /* PhysXColliderShape.swift in Sources */,

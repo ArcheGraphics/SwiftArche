@@ -25,6 +25,13 @@ public struct BufferView {
     public var buffer: MTLBuffer {
         _buffer
     }
+    
+    /// Initializes the buffer with zeros, the buffer is given an appropriate length based on the provided element count.
+    public init(buffer: MTLBuffer, count: Int, stride: Int) {
+        _buffer = buffer
+        _count = count
+        _stride = stride
+    }
 
     /// Initializes the buffer with zeros, the buffer is given an appropriate length based on the provided element count.
     public init(device: MTLDevice, count: Int, stride: Int, label: String? = nil, options: MTLResourceOptions = []) {
