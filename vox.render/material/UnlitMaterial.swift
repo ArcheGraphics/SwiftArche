@@ -32,8 +32,12 @@ public class UnlitMaterial: BaseMaterial {
         set {
             _baseTexture = newValue
             if let newValue = newValue {
-                shaderData.setImageView(UnlitMaterial._baseTextureProp, UnlitMaterial._baseSamplerProp,
-                                        newValue.makeTextureView(pixelFormat: .bgra8Unorm_srgb))
+                if let srgbFormat = newValue.pixelFormat.toSRGB {
+                    shaderData.setImageView(UnlitMaterial._baseTextureProp, UnlitMaterial._baseSamplerProp,
+                                            newValue.makeTextureView(pixelFormat: srgbFormat))
+                } else {
+                    shaderData.setImageView(UnlitMaterial._baseTextureProp, UnlitMaterial._baseSamplerProp, newValue)
+                }
                 shaderData.enableMacro(HAS_BASE_TEXTURE.rawValue)
             } else {
                 shaderData.setImageView(UnlitMaterial._baseTextureProp, UnlitMaterial._baseSamplerProp, nil)

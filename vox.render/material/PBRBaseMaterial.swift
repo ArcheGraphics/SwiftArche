@@ -57,8 +57,12 @@ public class PBRBaseMaterial: BaseMaterial {
         set {
             _baseTexture = newValue
             if let newValue = newValue {
-                shaderData.setImageView(PBRBaseMaterial._baseTextureProp, PBRBaseMaterial._baseSamplerProp,
-                                        newValue.makeTextureView(pixelFormat: .bgra8Unorm_srgb))
+                if let srgbFormat = newValue.pixelFormat.toSRGB {
+                    shaderData.setImageView(PBRBaseMaterial._baseTextureProp, PBRBaseMaterial._baseSamplerProp,
+                                            newValue.makeTextureView(pixelFormat: srgbFormat))
+                } else {
+                    shaderData.setImageView(PBRBaseMaterial._baseTextureProp, PBRBaseMaterial._baseSamplerProp, newValue)
+                }
                 shaderData.enableMacro(HAS_BASE_TEXTURE.rawValue)
             } else {
                 shaderData.setImageView(PBRBaseMaterial._baseTextureProp, PBRBaseMaterial._baseSamplerProp, nil)
@@ -123,8 +127,12 @@ public class PBRBaseMaterial: BaseMaterial {
         set {
             _emissiveTexture = newValue
             if let newValue = newValue {
-                shaderData.setImageView(PBRBaseMaterial._emissiveTextureProp, PBRBaseMaterial._emissiveSamplerProp,
-                                        newValue.makeTextureView(pixelFormat: .bgra8Unorm_srgb))
+                if let srgbFormat = newValue.pixelFormat.toSRGB {
+                    shaderData.setImageView(PBRBaseMaterial._emissiveTextureProp, PBRBaseMaterial._emissiveSamplerProp,
+                                            newValue.makeTextureView(pixelFormat: srgbFormat))
+                } else {
+                    shaderData.setImageView(PBRBaseMaterial._emissiveTextureProp, PBRBaseMaterial._emissiveSamplerProp, newValue)
+                }
                 shaderData.enableMacro(HAS_EMISSIVE_TEXTURE.rawValue)
             } else {
                 shaderData.setImageView(PBRBaseMaterial._emissiveTextureProp, PBRBaseMaterial._emissiveSamplerProp, nil)

@@ -165,6 +165,65 @@ public extension MTLPixelFormat {
         }
         #endif
     }
+    
+    var toSRGB: MTLPixelFormat? {
+        switch self {
+        case .r8Unorm_srgb, .r8Unorm:
+            return .r8Unorm_srgb
+        case .rg8Unorm_srgb, .rg8Unorm:
+            return .rg8Unorm_srgb
+        case .rgba8Unorm_srgb, .rgba8Unorm:
+            return .rgba8Unorm_srgb
+        case .bgra8Unorm_srgb, .bgra8Unorm:
+            return .bgra8Unorm_srgb
+        case .astc_4x4_srgb:
+            return .astc_4x4_srgb
+        case .astc_5x4_srgb:
+            return .astc_5x4_srgb
+        case .astc_5x5_srgb:
+            return .astc_5x5_srgb
+        case .astc_6x5_srgb:
+            return .astc_6x5_srgb
+        case .astc_6x6_srgb:
+            return .astc_6x6_srgb
+        case .astc_8x5_srgb:
+            return .astc_8x5_srgb
+        case .astc_8x6_srgb:
+            return .astc_8x6_srgb
+        case .astc_8x8_srgb:
+            return .astc_8x8_srgb
+        case .astc_10x5_srgb:
+            return .astc_10x5_srgb
+        case .astc_10x6_srgb:
+            return .astc_10x6_srgb
+        case .astc_10x8_srgb:
+            return .astc_10x8_srgb
+        case .astc_10x10_srgb:
+            return .astc_10x10_srgb
+        case .bc1_rgba_srgb, .bc1_rgba:
+            return .bc1_rgba_srgb
+        case .bc2_rgba_srgb, .bc2_rgba:
+            return .bc2_rgba_srgb
+        case .bc3_rgba_srgb, .bc3_rgba:
+            return .bc3_rgba_srgb
+        case .bc7_rgbaUnorm_srgb, .bc7_rgbaUnorm:
+            return .bc7_rgbaUnorm_srgb
+        case .pvrtc_rgb_2bpp_srgb, .pvrtc_rgb_2bpp:
+            return .pvrtc_rgb_2bpp_srgb
+        case .pvrtc_rgb_4bpp_srgb, .pvrtc_rgb_4bpp:
+            return .pvrtc_rgb_4bpp_srgb
+        case .pvrtc_rgba_2bpp_srgb, .pvrtc_rgba_2bpp:
+            return .pvrtc_rgba_2bpp_srgb
+        case .pvrtc_rgba_4bpp_srgb, .pvrtc_rgba_4bpp:
+            return .pvrtc_rgba_4bpp_srgb
+        case .bgr10_xr_srgb, .bgr10_xr:
+            return .bgr10_xr_srgb
+        case .etc2_rgb8a1_srgb, .etc2_rgb8a1:
+            return .etc2_rgb8a1_srgb
+        default:
+            return nil
+        }
+    }
 
     var isExtendedRange: Bool {
         #if os(iOS) && !targetEnvironment(macCatalyst)
