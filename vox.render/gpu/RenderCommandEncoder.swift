@@ -81,7 +81,7 @@ public struct RenderCommandEncoder {
             _bind(pso: pso)
         }
         if _uploadFrameGraph !== fg {
-            fg.shaderData.bindData(handle, pso.uniformBlock)
+            fg.frameData.bindData(handle, pso.uniformBlock)
             _uploadFrameGraph = fg
         }
     }

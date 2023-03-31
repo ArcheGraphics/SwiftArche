@@ -57,7 +57,7 @@ class CascadedShadowSubpass: GeometrySubpass {
         _renderDirectShadowMap(pipeline: pipeline, on: &encoder)
 
         if (_existShadowMap) {
-            _updateReceiversShaderData()
+            _updateReceiversShaderData(with: Engine.requestBufferBlock(minimum_size: 4 * 256))
         }
     }
 
@@ -248,7 +248,7 @@ class CascadedShadowSubpass: GeometrySubpass {
         sqrt((radius * radius) / denominator)
     }
 
-    private func _updateReceiversShaderData() {
+    private func _updateReceiversShaderData(with bufferBlock: BufferBlock) {
         let scene = _camera.scene
         let shadowCascades = scene.shadowCascades.rawValue
         if shadowCascades > 1 {
@@ -262,28 +262,44 @@ class CascadedShadowSubpass: GeometrySubpass {
             _shadowMatrices[i] = simd_float4x4()
         }
 
-        let shaderData = Engine.fg.shaderData
-        shaderData.setDynamicData(CascadedShadowSubpass._shadowMatricesProperty, _shadowMatrices)
-        shaderData.setDynamicData(CascadedShadowSubpass._shadowInfosProperty, _shadowInfos)
-        shaderData.setDynamicData(CascadedShadowSubpass._shadowSplitSpheresProperty, _splitBoundSpheres)
-        shaderData.setDynamicData(CascadedShadowSubpass._shadowMapSize, _shadowMapSize)
+        let frameData = Engine.fg.frameData
+        var allocation = bufferBlock.allocate(MemoryLayout<[simd_float4x4]>.stride * _shadowMatrices.count)!
+        allocation.update(_shadowMatrices)
+        frameData.setData(CascadedShadowSubpass._shadowMatricesProperty, allocation)
+        
+        allocation = bufferBlock.allocate(MemoryLayout<SIMD3<Float>>.stride)!
+        allocation.update(_shadowInfos)
+        frameData.setData(CascadedShadowSubpass._shadowInfosProperty, allocation)
+        
+        allocation = bufferBlock.allocate(MemoryLayout<Float>.stride * _splitBoundSpheres.count)!
+        allocation.update(_splitBoundSpheres)
+        frameData.setData(CascadedShadowSubpass._shadowSplitSpheresProperty, allocation)
+        
+        allocation = bufferBlock.allocate(MemoryLayout<Vector4>.stride)!
+        allocation.update(_shadowMapSize)
+        frameData.setData(CascadedShadowSubpass._shadowMapSize, allocation)
     }
 
     private func _updateSingleShadowCasterShaderData(_ encoder: inout RenderCommandEncoder, _ bufferBlock: BufferBlock,
                                                      _ light: DirectLight, _ shadowSliceData: ShadowSliceData) {
         let virtualCamera = shadowSliceData.virtualCamera
-        let shadowBias = ShadowUtils.getShadowBias(light: light, projectionMatrix: virtualCamera.projectionMatrix, shadowResolution: _shadowTileResolution)
+        let frameData = Engine.fg.frameData
 
-        let shaderData = Engine.fg.shaderData
-        shaderData.setDynamicData(CascadedShadowSubpass._lightShadowBiasProperty, shadowBias)
-        shaderData.setDynamicData(CascadedShadowSubpass._lightDirectionProperty, light.direction)
+        var allocation = bufferBlock.allocate(MemoryLayout<Vector2>.stride)!
+        allocation.update(ShadowUtils.getShadowBias(light: light, projectionMatrix: virtualCamera.projectionMatrix,
+                                                    shadowResolution: _shadowTileResolution))
+        frameData.setData(CascadedShadowSubpass._lightShadowBiasProperty, allocation)
+        
+        allocation = bufferBlock.allocate(MemoryLayout<Vector3>.stride)!
+        allocation.update(light.direction)
+        frameData.setData(CascadedShadowSubpass._lightDirectionProperty, allocation)
 
-        let allocation = bufferBlock.allocate(MemoryLayout<Matrix>.size)!
+        allocation = bufferBlock.allocate(MemoryLayout<Matrix>.stride)!
         allocation.update(shadowSliceData.virtualCamera.viewProjectionMatrix)
-        encoder.handle.setVertexBuffer(allocation.buffer, offset: allocation.offset, index: 3)
+        frameData.setData(CascadedShadowSubpass._lightViewProjMatProperty, allocation)
     }
 
-    func _getshadowMapDescriptor() -> MTLTextureDescriptor {
+    func _getShadowMapDescriptor() -> MTLTextureDescriptor {
         _descriptor.width = Int(_shadowMapSize.z)
         _descriptor.height = Int(_shadowMapSize.w)
         _descriptor.pixelFormat = _shadowMapFormat

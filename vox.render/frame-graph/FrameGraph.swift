@@ -20,7 +20,7 @@ public class FrameGraph {
     
     public var blackboard: [Int: ResourceBase] = [:]
     
-    public var shaderData = ShaderData()
+    public var frameData = FrameData()
     
     public init(size: Int) {
         let heapDesc = MTLHeapDescriptor()
@@ -90,7 +90,7 @@ public class FrameGraph {
         render_tasks_ = []
         resources_ = []
         blackboard = [:]
-        shaderData.clear()
+        frameData.clear()
         _mergeHeap()
     }
 

@@ -28,7 +28,7 @@ fileprivate class AtmoicScript: Script {
                                                     description: MTLBufferDescriptor(count: 1, stride: MemoryLayout<UInt32>.stride),
                                                     actual: _atomicBuffer)
         fg.shaderData.setBufferFunctor("u_atomic") { [self] in
-            _atomicBuffer
+            BufferView(buffer: _atomicBuffer, count: 1, stride: MemoryLayout<UInt32>.stride, offset: 0)
         }
         
         fg.addRenderTask(for: AtomicEncoderData.self, name: "atomic", commandBuffer: commandBuffer) { data, builder in

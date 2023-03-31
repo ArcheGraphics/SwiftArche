@@ -15,21 +15,15 @@ public struct BufferView {
     private let _stride: Int
 
     public var stride: Int {
-        get {
-            _stride
-        }
+        _stride
     }
 
     public var count: Int {
-        get {
-            _count
-        }
+        _count
     }
 
     public var buffer: MTLBuffer {
-        get {
-            _buffer
-        }
+        _buffer
     }
 
     /// Initializes the buffer with zeros, the buffer is given an appropriate length based on the provided element count.

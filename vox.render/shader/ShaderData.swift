@@ -9,7 +9,7 @@ import Metal
 open class ShaderData {
     private var _shaderDynamicBuffers: [[String: BufferView]] = []
     private var _shaderBuffers: [String: BufferView] = [:]
-    private var _shaderBufferFunctors: [String: () -> MTLBuffer] = [:]
+    private var _shaderBufferFunctors: [String: () -> BufferView] = [:]
     private var _imageViews: [String: MTLTexture] = [:]
     private var _samplers: [String: MTLSamplerDescriptor] = [:]
     static private var _defaultSamplerDesc: MTLSamplerDescriptor = MTLSamplerDescriptor()
@@ -38,7 +38,7 @@ open class ShaderData {
         _shaderBuffers[property]
     }
 
-    public func setBufferFunctor(_ property: String, _ functor: @escaping () -> MTLBuffer) {
+    public func setBufferFunctor(_ property: String, _ functor: @escaping () -> BufferView) {
         _shaderBufferFunctors[property] = functor
     }
 
@@ -167,14 +167,15 @@ extension ShaderData {
         for uniform in reflectionUniforms {
             switch uniform.bindingType {
             case .buffer:
-                if let buffer = _shaderBuffers[uniform.name] {
-                    commandEncoder.setBuffer(buffer.buffer, offset: 0, index: uniform.location)
+                if let bufferView = _shaderBuffers[uniform.name] {
+                    commandEncoder.setBuffer(bufferView.buffer, offset: 0, index: uniform.location)
                 }
-                if let buffer = _shaderDynamicBuffers[Engine.currentBufferIndex][uniform.name] {
-                    commandEncoder.setBuffer(buffer.buffer, offset: 0, index: uniform.location)
+                if let bufferView = _shaderDynamicBuffers[Engine.currentBufferIndex][uniform.name] {
+                    commandEncoder.setBuffer(bufferView.buffer, offset: 0, index: uniform.location)
                 }
                 if let bufferFunctor = _shaderBufferFunctors[uniform.name] {
-                    commandEncoder.setBuffer(bufferFunctor(), offset: 0, index: uniform.location)
+                    let bufferView = bufferFunctor()
+                    commandEncoder.setBuffer(bufferView.buffer, offset: 0, index: uniform.location)
                 }
                 break
             case .texture:
@@ -198,28 +199,29 @@ extension ShaderData {
         for uniform in reflectionUniforms {
             switch uniform.bindingType {
             case .buffer:
-                if let buffer = _shaderBuffers[uniform.name] {
+                if let bufferView = _shaderBuffers[uniform.name] {
                     if uniform.functionType == .vertex {
-                        commandEncoder.setVertexBuffer(buffer.buffer, offset: 0, index: uniform.location)
+                        commandEncoder.setVertexBuffer(bufferView.buffer, offset: 0, index: uniform.location)
                     }
                     if uniform.functionType == .fragment {
-                        commandEncoder.setFragmentBuffer(buffer.buffer, offset: 0, index: uniform.location)
+                        commandEncoder.setFragmentBuffer(bufferView.buffer, offset: 0, index: uniform.location)
                     }
                 }
-                if let buffer = _shaderDynamicBuffers[Engine.currentBufferIndex][uniform.name] {
+                if let bufferView = _shaderDynamicBuffers[Engine.currentBufferIndex][uniform.name] {
                     if uniform.functionType == .vertex {
-                        commandEncoder.setVertexBuffer(buffer.buffer, offset: 0, index: uniform.location)
+                        commandEncoder.setVertexBuffer(bufferView.buffer, offset: 0, index: uniform.location)
                     }
                     if uniform.functionType == .fragment {
-                        commandEncoder.setFragmentBuffer(buffer.buffer, offset: 0, index: uniform.location)
+                        commandEncoder.setFragmentBuffer(bufferView.buffer, offset: 0, index: uniform.location)
                     }
                 }
                 if let bufferFunctor = _shaderBufferFunctors[uniform.name] {
+                    let bufferView = bufferFunctor()
                     if uniform.functionType == .vertex {
-                        commandEncoder.setVertexBuffer(bufferFunctor(), offset: 0, index: uniform.location)
+                        commandEncoder.setVertexBuffer(bufferView.buffer, offset: 0, index: uniform.location)
                     }
                     if uniform.functionType == .fragment {
-                        commandEncoder.setFragmentBuffer(bufferFunctor(), offset: 0, index: uniform.location)
+                        commandEncoder.setFragmentBuffer(bufferView.buffer, offset: 0, index: uniform.location)
                     }
                 }
                 break

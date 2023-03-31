@@ -38,10 +38,10 @@ public class GammaCorrection: ComputePass {
                 threadsPerGridX = colorTex.width
                 threadsPerGridY = colorTex.height
 
-                Engine.fg.shaderData.setImageView("framebufferInput", builder.input?.actual)
-                Engine.fg.shaderData.setImageView("framebufferOutput", builder.output?.actual)
+                Engine.fg.frameData.setImageView("framebufferInput", builder.input?.actual)
+                Engine.fg.frameData.setImageView("framebufferOutput", builder.output?.actual)
                 if autoExposure {
-                    Engine.fg.shaderData.setImageView("logLuminanceIn", builder.luminance?.actual)
+                    Engine.fg.frameData.setImageView("logLuminanceIn", builder.luminance?.actual)
                 }
                 compute(commandEncoder: commandEncoder, label: label)
                 commandEncoder.endEncoding()

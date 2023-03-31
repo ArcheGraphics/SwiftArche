@@ -9,7 +9,7 @@ import Metal
 public struct MTLBufferDescriptor {
     public var count: Int
     public var stride: Int
-    public var options: MTLResourceOptions = []
+    public var options: MTLResourceOptions = [.storageModePrivate]
     public var label: String? = nil
     
     public init(count: Int, stride: Int) {

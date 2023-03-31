@@ -9,7 +9,7 @@ import Metal
 open class ComputePass {
     private var _pipelineDescriptor = MTLComputePipelineDescriptor()
     private var _precompilePSO: [ComputePipelineState] = []
-    private var _shaderData: [ShaderData] = []
+    private var _passData: (ShaderData, FrameData)
 
     public var threadsPerGridX = 1
     public var threadsPerGridY = 1
@@ -18,8 +18,7 @@ open class ComputePass {
     public var shader: [ShaderPass] = []
 
     public init(_ scene: Scene) {
-        _shaderData.append(scene.shaderData)
-        _shaderData.append(Engine.fg.shaderData)
+        _passData = (scene.shaderData, Engine.fg.frameData)
     }
     
     /// generate PSO before calculation only work for shader without function constant values.
@@ -39,16 +38,14 @@ open class ComputePass {
         commandEncoder.pushDebugGroup(label)
         if _precompilePSO.isEmpty {
             var compileMacros = ShaderMacroCollection()
-            for shaderData in _shaderData {
-                ShaderMacroCollection.unionCollection(compileMacros, shaderData._macroCollection, &compileMacros)
-            }
+            ShaderMacroCollection.unionCollection(compileMacros, _passData.0._macroCollection, &compileMacros)
+            ShaderMacroCollection.unionCollection(compileMacros, _passData.1._macroCollection, &compileMacros)
             
             for shaderPass in shader {
                 _pipelineDescriptor.computeFunction = Engine.resourceCache.requestShaderModule(shaderPass, compileMacros)[0]
                 let pipelineState = Engine.resourceCache.requestComputePipeline(_pipelineDescriptor)
-                for shaderData in _shaderData {
-                    shaderData.bindData(commandEncoder, pipelineState.uniformBlock)
-                }
+                _passData.0.bindData(commandEncoder, pipelineState.uniformBlock)
+                _passData.1.bindData(commandEncoder, pipelineState.uniformBlock)
                 commandEncoder.setComputePipelineState(pipelineState.handle)
                 
                 let nWidth = min(threadsPerGridX, pipelineState.handle.threadExecutionWidth)
@@ -58,9 +55,8 @@ open class ComputePass {
             }
         } else {
             for pipelineState in _precompilePSO {
-                for shaderData in _shaderData {
-                    shaderData.bindData(commandEncoder, pipelineState.uniformBlock)
-                }
+                _passData.0.bindData(commandEncoder, pipelineState.uniformBlock)
+                _passData.1.bindData(commandEncoder, pipelineState.uniformBlock)
                 commandEncoder.setComputePipelineState(pipelineState.handle)
                 
                 let nWidth = min(threadsPerGridX, pipelineState.handle.threadExecutionWidth)
@@ -79,24 +75,21 @@ open class ComputePass {
         commandEncoder.pushDebugGroup(label)
         if _precompilePSO.isEmpty {
             var compileMacros = ShaderMacroCollection()
-            for shaderData in _shaderData {
-                ShaderMacroCollection.unionCollection(compileMacros, shaderData._macroCollection, &compileMacros)
-            }
+            ShaderMacroCollection.unionCollection(compileMacros, _passData.0._macroCollection, &compileMacros)
+            ShaderMacroCollection.unionCollection(compileMacros, _passData.1._macroCollection, &compileMacros)
             
             for shaderPass in shader {
                 _pipelineDescriptor.computeFunction = Engine.resourceCache.requestShaderModule(shaderPass, compileMacros)[0]
                 let pipelineState = Engine.resourceCache.requestComputePipeline(_pipelineDescriptor)
-                for shaderData in _shaderData {
-                    shaderData.bindData(commandEncoder, pipelineState.uniformBlock)
-                }
+                _passData.0.bindData(commandEncoder, pipelineState.uniformBlock)
+                _passData.1.bindData(commandEncoder, pipelineState.uniformBlock)
                 commandEncoder.setComputePipelineState(pipelineState.handle)
                 commandEncoder.dispatchThreadgroups(threadgroupsPerGrid, threadsPerThreadgroup: threadsPerThreadgroup)
             }
         } else {
             for pipelineState in _precompilePSO {
-                for shaderData in _shaderData {
-                    shaderData.bindData(commandEncoder, pipelineState.uniformBlock)
-                }
+                _passData.0.bindData(commandEncoder, pipelineState.uniformBlock)
+                _passData.1.bindData(commandEncoder, pipelineState.uniformBlock)
                 commandEncoder.setComputePipelineState(pipelineState.handle)
                 commandEncoder.dispatchThreadgroups(threadgroupsPerGrid, threadsPerThreadgroup: threadsPerThreadgroup)
             }
@@ -111,25 +104,22 @@ open class ComputePass {
         commandEncoder.pushDebugGroup(label)
         if _precompilePSO.isEmpty {
             var compileMacros = ShaderMacroCollection()
-            for shaderData in _shaderData {
-                ShaderMacroCollection.unionCollection(compileMacros, shaderData._macroCollection, &compileMacros)
-            }
+            ShaderMacroCollection.unionCollection(compileMacros, _passData.0._macroCollection, &compileMacros)
+            ShaderMacroCollection.unionCollection(compileMacros, _passData.1._macroCollection, &compileMacros)
             
             for shaderPass in shader {
                 _pipelineDescriptor.computeFunction = Engine.resourceCache.requestShaderModule(shaderPass, compileMacros)[0]
                 let pipelineState = Engine.resourceCache.requestComputePipeline(_pipelineDescriptor)
-                for shaderData in _shaderData {
-                    shaderData.bindData(commandEncoder, pipelineState.uniformBlock)
-                }
+                _passData.0.bindData(commandEncoder, pipelineState.uniformBlock)
+                _passData.1.bindData(commandEncoder, pipelineState.uniformBlock)
                 commandEncoder.setComputePipelineState(pipelineState.handle)
                 commandEncoder.dispatchThreadgroups(indirectBuffer: indirectBuffer,
                                                     indirectBufferOffset: 0, threadsPerThreadgroup: threadsPerThreadgroup)
             }
         } else {
             for pipelineState in _precompilePSO {
-                for shaderData in _shaderData {
-                    shaderData.bindData(commandEncoder, pipelineState.uniformBlock)
-                }
+                _passData.0.bindData(commandEncoder, pipelineState.uniformBlock)
+                _passData.1.bindData(commandEncoder, pipelineState.uniformBlock)
                 commandEncoder.setComputePipelineState(pipelineState.handle)
                 commandEncoder.dispatchThreadgroups(indirectBuffer: indirectBuffer,
                                                     indirectBufferOffset: 0, threadsPerThreadgroup: threadsPerThreadgroup)

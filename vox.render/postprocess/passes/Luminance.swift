@@ -48,9 +48,9 @@ public class Luminance: ComputePass {
             if let luminanceTex = builder.output?.actual {
                 if let commandEncoder = commandBuffer.makeComputeCommandEncoder() {
                     commandEncoder.label = label
-                    Engine.fg.shaderData.enableMacro(IS_AUTO_EXPOSURE.rawValue)
-                    Engine.fg.shaderData.setImageView("input", builder.input?.actual)
-                    Engine.fg.shaderData.setImageView("output", luminanceTex)
+                    Engine.fg.frameData.enableMacro(IS_AUTO_EXPOSURE.rawValue)
+                    Engine.fg.frameData.setImageView("input", builder.input?.actual)
+                    Engine.fg.frameData.setImageView("output", luminanceTex)
                     super.compute(commandEncoder: commandEncoder, label: label)
                     commandEncoder.endEncoding()
                 }

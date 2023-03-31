@@ -32,7 +32,7 @@ open class GeometrySubpass: Subpass {
         let depthStencilDescriptor = MTLDepthStencilDescriptor()
         prepare(pipelineDescriptor, depthStencilDescriptor)
         
-        var shaderMacro = Engine.fg.shaderData._macroCollection
+        var shaderMacro = Engine.fg.frameData._macroCollection
         ShaderMacroCollection.unionCollection(material.shaderData._macroCollection,
                 renderer._globalShaderMacro, &shaderMacro)
 
