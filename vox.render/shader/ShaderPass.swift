@@ -7,7 +7,7 @@
 import Metal
 
 /// Shader pass
-public class ShaderPass {
+public class ShaderPass: ShaderPart {
     internal var _library: MTLLibrary!
     internal var _shaders: [String]
     internal var _renderState: RenderState? = nil
@@ -23,15 +23,22 @@ public class ShaderPass {
         _library = library
     }
     
-    public init(_ library: MTLLibrary, _ vertexSource: String, _ fragmentSource: String?) {
+    public init(_ library: MTLLibrary, _ vertexSource: String, _ fragmentSource: String?,
+                tags: [String: ShaderProperty] = ["pipelineStage" : .String(PipelineStage.Forward.rawValue)]) {
         if fragmentSource == nil {
             _shaders = [vertexSource]
         } else {
             _shaders = [vertexSource, fragmentSource!]
         }
+        super.init()
+
         _library = library
         _renderState = RenderState()
         setBlendMode(.Normal)
+        
+        for tag in tags {
+            setTag(by: tag.key, with: tag.value)
+        }
     }
 
     /// Set the blend mode of shader pass render state.
