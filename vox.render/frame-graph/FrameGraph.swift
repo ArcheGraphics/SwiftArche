@@ -113,12 +113,14 @@ public class FrameGraph {
         }
         while !unreferenced_resources.isEmpty {
             if let unreferenced_resource = unreferenced_resources.popLast() {
-                if let creator = unreferenced_resource.creator_ {
+                if let creator_functor = unreferenced_resource.creator_ {
+                    let creator = creator_functor()
                     if (creator.ref_count_ > 0) {
                         creator.ref_count_ -= 1
                     }
                     if (creator.ref_count_ == 0 && !creator.cull_immune) {
-                        for read_resource in creator.reads_ {
+                        for read_resource_functor in creator.reads_ {
+                            let read_resource = read_resource_functor()
                             if (read_resource.ref_count_ > 0) {
                                 read_resource.ref_count_ -= 1
                             }
@@ -129,12 +131,14 @@ public class FrameGraph {
                     }
                 }
 
-                for writer in unreferenced_resource.writers_ {
+                for writer_functor in unreferenced_resource.writers_ {
+                    let writer = writer_functor()
                     if (writer.ref_count_ > 0) {
                         writer.ref_count_ -= 1
                     }
                     if (writer.ref_count_ == 0 && !writer.cull_immune) {
-                        for read_resource in writer.reads_ {
+                        for read_resource_functor in writer.reads_ {
+                            let read_resource = read_resource_functor()
                             if (read_resource.ref_count_ > 0) {
                                 read_resource.ref_count_ -= 1
                             }
@@ -157,7 +161,8 @@ public class FrameGraph {
 
             var realized_resources: [ResourceBase] = []
             var derealized_resources: [ResourceBase] = []
-            for resource in render_task.creates_ {
+            for resource_functor in render_task.creates_ {
+                let resource = resource_functor()
                 realized_resources.append(resource)
                 if (resource.readers_.isEmpty && resource.writers_.isEmpty) {
                     derealized_resources.append(resource)
@@ -167,7 +172,8 @@ public class FrameGraph {
 
             var reads_writes = render_task.reads_
             reads_writes.append(contentsOf: render_task.writes_)
-            for resource in reads_writes {
+            for resource_functor in reads_writes {
+                let resource = resource_functor()
                 if !resource.transient {
                     continue
                 }
@@ -176,7 +182,11 @@ public class FrameGraph {
                 var last_index: Int = 0
                 if !resource.readers_.isEmpty {
                     let index = render_tasks_.firstIndex { iteratee in
-                        iteratee === resource.readers_.last
+                        if let last = resource.readers_.last {
+                            return iteratee === last()
+                        } else {
+                            return false
+                        }
                     }
                     if let index {
                         valid = true
@@ -185,7 +195,11 @@ public class FrameGraph {
                 }
                 if resource.writers_.isEmpty {
                     let index = render_tasks_.firstIndex { iteratee in
-                        iteratee === resource.writers_.last
+                        if let last = resource.writers_.last {
+                            return iteratee === last()
+                        } else {
+                            return false
+                        }
                     }
                     if let index {
                         valid = true
@@ -259,7 +273,7 @@ public class FrameGraph {
             stream += "\" -> { "
             for resource in render_task.creates_ {
                 stream += "\""
-                stream += resource.name
+                stream += resource().name
                 stream += "\" "
             }
             stream += "} [color=seagreen]\n"
@@ -269,7 +283,7 @@ public class FrameGraph {
             stream += "\" -> { "
             for resource in render_task.writes_ {
                 stream += "\""
-                stream += resource.name
+                stream += resource().name
                 stream += "\" "
             }
             stream += "} [color=gold]\n"
@@ -282,7 +296,7 @@ public class FrameGraph {
             stream += "\" -> { "
             for render_task in resource.readers_ {
                 stream += "\""
-                stream += render_task.name
+                stream += render_task().name
                 stream += "\" "
             }
             stream += "} [color=firebrick]\n"

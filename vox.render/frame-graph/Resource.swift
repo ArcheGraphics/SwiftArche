@@ -10,10 +10,16 @@ public class ResourceBase {
     private static var idGenerator: Int = 0
 
     var id_: Int
-    var creator_: FrameTaskBase?
-    var readers_: [FrameTaskBase] = []
-    var writers_: [FrameTaskBase] = []
+    var creator_: (()->FrameTaskBase)?
+    var readers_: [()->FrameTaskBase] = []
+    var writers_: [()->FrameTaskBase] = []
     var ref_count_: Int
+    
+    deinit {
+        creator_ = nil
+        readers_ = []
+        writers_ = []
+    }
 
     public var name: String
 
@@ -25,7 +31,7 @@ public class ResourceBase {
         creator_ != nil
     }
 
-    public init(name: String, creator: FrameTaskBase?) {
+    public init(name: String, creator: (()->FrameTaskBase)?) {
         self.name = name
         creator_ = creator
         ref_count_ = 0
@@ -50,6 +56,10 @@ public class Resource<description_type: ResourceRealize>: ResourceBase {
 
     var description_: description_type
     var actual_: actual_type?
+    
+    deinit {
+        actual_ = nil
+    }
 
     public var description: description_type {
         description_
@@ -59,7 +69,7 @@ public class Resource<description_type: ResourceRealize>: ResourceBase {
         actual_
     }
 
-    required init(name: String, creator: FrameTaskBase, description: description_type) {
+    required init(name: String, creator: @escaping ()->FrameTaskBase, description: description_type) {
         description_ = description
         actual_ = nil
         super.init(name: name, creator: creator)

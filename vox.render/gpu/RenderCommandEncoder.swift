@@ -7,7 +7,6 @@
 import Metal
 
 public struct RenderCommandEncoder {
-    public let descriptor: MTLRenderPassDescriptor
     public let handle: MTLRenderCommandEncoder
 
     private var _uploadFrameGraph: FrameGraph?
@@ -20,7 +19,6 @@ public struct RenderCommandEncoder {
     private var _uploadDepthStencilState: MTLDepthStencilState?
 
     init(_ commandBuffer: MTLCommandBuffer, _ descriptor: MTLRenderPassDescriptor, _ label: String = "") {
-        self.descriptor = descriptor
         guard let encoder = commandBuffer.makeRenderCommandEncoder(descriptor: descriptor) else {
             fatalError("Render command encoder failed")
         }

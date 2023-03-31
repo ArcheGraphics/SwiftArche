@@ -7,9 +7,9 @@
 import Metal
 
 public class FrameTaskBase {
-    var creates_: [ResourceBase] = []
-    var reads_: [ResourceBase] = []
-    var writes_: [ResourceBase] = []
+    var creates_: [()->ResourceBase] = []
+    var reads_: [()->ResourceBase] = []
+    var writes_: [()->ResourceBase] = []
     var events_: [EventWrapper] = []
     var ref_count_: Int
 
@@ -21,6 +21,13 @@ public class FrameTaskBase {
         self.cull_immune = false
         ref_count_ = 0
     }
+    
+    deinit {
+        creates_ = []
+        reads_ = []
+        writes_ = []
+        events_ = []
+    }
 
     open func setup(builder: inout FrameTaskBuilder) {
     }
@@ -31,7 +38,7 @@ public class FrameTaskBase {
 
 public class FrameTask<data_type: EmptyClassType>: FrameTaskBase {
     var data_: data_type
-    var commandBuffer_: MTLCommandBuffer?
+    weak var commandBuffer_: MTLCommandBuffer?
     var setup_: (data_type, inout FrameTaskBuilder) -> Void
     var execute_: (data_type, MTLCommandBuffer?) -> Void
 
@@ -47,6 +54,10 @@ public class FrameTask<data_type: EmptyClassType>: FrameTaskBase {
         data_ = data_type()
         commandBuffer_ = commandBuffer
         super.init(name: name)
+    }
+    
+    deinit {
+        commandBuffer_ = nil
     }
 
     public override func setup(builder: inout FrameTaskBuilder) {
@@ -75,8 +86,8 @@ public class FrameTask<data_type: EmptyClassType>: FrameTaskBase {
             }
             // transport events to next pass
             for write in writes_ {
-                for nextTask in write.readers_ {
-                    nextTask.events_.append(contentsOf: events_)
+                for nextTask in write().readers_ {
+                    nextTask().events_.append(contentsOf: events_)
                 }
             }
         }
