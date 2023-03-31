@@ -111,6 +111,7 @@
 		3E5A22BC29CC78BD00808068 /* USDTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E5A22BB29CC78BD00808068 /* USDTests.swift */; };
 		3E5FC0E229D5CCDE00FF2E7E /* EventWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E5FC0E129D5CCDE00FF2E7E /* EventWrapper.swift */; };
 		3E5FC0E529D6390900FF2E7E /* FrameData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E5FC0E429D6390900FF2E7E /* FrameData.swift */; };
+		3E5FC0E629D6645E00FF2E7E /* AtomicComputeApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8C888ABFCE2075E7AA5BE /* AtomicComputeApp.swift */; };
 		3E6B235E294220BC000AC29F /* FaceMorphApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E6B235D294220BC000AC29F /* FaceMorphApp.swift */; };
 		3E6B2360294224C1000AC29F /* FaceGUI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E6B235F294224C1000AC29F /* FaceGUI.swift */; };
 		3E6B23C329470F30000AC29F /* quad_shading.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3E6B23C229470F30000AC29F /* quad_shading.metal */; };
@@ -2075,6 +2076,8 @@
 				3EF39BD029D45FD90083E20A /* MTLBufferDescriptor.swift */,
 				3EC92AE02939F97300423396 /* RenderCommandEncoder.swift */,
 				3EC0395B293218BA002187DC /* ResourceCache.swift */,
+				3E6D2F00293E13DF00B63F73 /* BufferPool.swift */,
+				3EC03973293218C3002187DC /* BufferView.swift */,
 				3E5FC0E129D5CCDE00FF2E7E /* EventWrapper.swift */,
 			);
 			path = gpu;
@@ -2483,8 +2486,6 @@
 		3EC0386B29321707002187DC /* mesh */ = {
 			isa = PBXGroup;
 			children = (
-				3E6D2F00293E13DF00B63F73 /* BufferPool.swift */,
-				3EC03973293218C3002187DC /* BufferView.swift */,
 				3EC0396C293218C3002187DC /* IndexBufferBinding.swift */,
 				3EC0396E293218C3002187DC /* SubMesh.swift */,
 				3EC0396D293218C3002187DC /* Mesh.swift */,
@@ -3481,6 +3482,7 @@
 				43D8C645AB2BDFD62E330B9C /* PhysXRaycast.swift in Sources */,
 				3EBA3D0F29B84C0100E5FB42 /* GizmosApp.swift in Sources */,
 				43D8CE4CE0A0E392D06A3B25 /* PhysXUtils.swift in Sources */,
+				3E5FC0E629D6645E00FF2E7E /* AtomicComputeApp.swift in Sources */,
 				43D8CC8E6EC814867725CBD1 /* PhysXDebug.swift in Sources */,
 				E63B1AB88F741EC4FFD734F6 /* InputCastApp.swift in Sources */,
 				3E8B00EF29BDBF6600A70123 /* AnimationBlendApp.swift in Sources */,

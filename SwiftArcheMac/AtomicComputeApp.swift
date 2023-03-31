@@ -11,24 +11,24 @@ import vox_toolkit
 
 fileprivate class AtmoicScript: Script {
     var atomicCounter: ComputePass!
-    private var _atomicBuffer: MTLBuffer
+    private var _atomicBuffer: BufferView
 
     required init() {
-        _atomicBuffer = Engine.device.makeBuffer(length: MemoryLayout<UInt32>.stride)!
+        _atomicBuffer = BufferView(device: Engine.device, count: 1, stride: MemoryLayout<UInt32>.stride)
         super.init()
     }
     
     final class AtomicEncoderData: EmptyClassType {
-        var output: Resource<MTLBufferDescriptor>?
+        var output: Resource<RetainedBufferDescriptor>?
     }
     
     override func onBeginRender(_ camera: Camera, _ commandBuffer: MTLCommandBuffer) {
         let fg = Engine.fg
-        let atomicResource = fg.addRetainedResource(for: MTLBufferDescriptor.self, name: "atomicBuffer",
-                                                    description: MTLBufferDescriptor(count: 1, stride: MemoryLayout<UInt32>.stride),
+        let atomicResource = fg.addRetainedResource(for: RetainedBufferDescriptor.self, name: "atomicBuffer",
+                                                    description: RetainedBufferDescriptor(count: 1, stride: MemoryLayout<UInt32>.stride),
                                                     actual: _atomicBuffer)
-        fg.shaderData.setBufferFunctor("u_atomic") { [self] in
-            BufferView(buffer: _atomicBuffer, count: 1, stride: MemoryLayout<UInt32>.stride, offset: 0)
+        camera.scene.shaderData.setBufferFunctor("u_atomic") { [self] in
+            _atomicBuffer
         }
         
         fg.addRenderTask(for: AtomicEncoderData.self, name: "atomic", commandBuffer: commandBuffer) { data, builder in

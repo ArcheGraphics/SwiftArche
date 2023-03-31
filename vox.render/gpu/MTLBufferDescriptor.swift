@@ -36,3 +36,32 @@ extension MTLBufferDescriptor: ResourceRealize {
         resource.makeAliasable()
     }
 }
+
+// MARK: - RetainedBufferDescriptor
+public struct RetainedBufferDescriptor {
+    public var count: Int
+    public var stride: Int
+    public var options: MTLResourceOptions = [.storageModePrivate]
+    public var label: String? = nil
+    
+    public init(count: Int, stride: Int) {
+        self.count = count
+        self.stride = stride
+    }
+}
+
+extension RetainedBufferDescriptor: ResourceRealize {
+    public typealias actual_type = BufferView
+    
+    public var size: Int {
+        let sizeAndAlign = Engine.device.heapBufferSizeAndAlign(length: stride * count, options: options)
+        return alignUp(size: sizeAndAlign.size, align: sizeAndAlign.align)
+    }
+
+    public func realize(with heap: MTLHeap?) -> BufferView? {
+        return nil
+    }
+    
+    public func derealize(resource: BufferView) {
+    }
+}

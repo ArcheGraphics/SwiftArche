@@ -49,6 +49,13 @@ public struct BufferAllocation {
             }
         }
     }
+    
+    public func update<T>(_ array: [T], offset: Int = 0) {
+        let byteCount = array.count * MemoryLayout<T>.size
+        if byteCount + offset <= _size {
+            _buffer.contents().advanced(by: _baseOffset + offset).copyMemory(from: array, byteCount: byteCount)
+        }
+    }
 }
 
 //// Helper class which handles multiple allocation from the same underlying device buffer.
@@ -73,12 +80,11 @@ public class BufferBlock {
     }
 
     /// An usable view on a portion of the underlying buffer
-    public func allocate(_ size: Int) -> BufferAllocation? {
+    public func allocate(_ size: Int) -> BufferAllocation {
         let aligned_offset = (_offset + _alignment - 1) & ~(_alignment - 1)
 
         if (aligned_offset + size > _buffer.length) {
-            // No more space available from the underlying buffer, return empty allocation
-            return nil
+            fatalError("No more space available from the underlying buffer")
         }
         // Move the current offset and return an allocation
         _offset = aligned_offset + size

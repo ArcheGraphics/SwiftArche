@@ -57,7 +57,7 @@ class CascadedShadowSubpass: GeometrySubpass {
         _renderDirectShadowMap(pipeline: pipeline, on: &encoder)
 
         if (_existShadowMap) {
-            _updateReceiversShaderData(with: Engine.requestBufferBlock(minimum_size: 4 * 256))
+            _updateReceiversShaderData(with: Engine.requestBufferBlock(minimum_size: 5 * 256))
         }
     }
 
@@ -263,19 +263,19 @@ class CascadedShadowSubpass: GeometrySubpass {
         }
 
         let frameData = Engine.fg.frameData
-        var allocation = bufferBlock.allocate(MemoryLayout<[simd_float4x4]>.stride * _shadowMatrices.count)!
+        var allocation = bufferBlock.allocate(MemoryLayout<simd_float4x4>.stride * _shadowMatrices.count)
         allocation.update(_shadowMatrices)
         frameData.setData(CascadedShadowSubpass._shadowMatricesProperty, allocation)
         
-        allocation = bufferBlock.allocate(MemoryLayout<SIMD3<Float>>.stride)!
+        allocation = bufferBlock.allocate(MemoryLayout<SIMD3<Float>>.stride)
         allocation.update(_shadowInfos)
         frameData.setData(CascadedShadowSubpass._shadowInfosProperty, allocation)
         
-        allocation = bufferBlock.allocate(MemoryLayout<Float>.stride * _splitBoundSpheres.count)!
+        allocation = bufferBlock.allocate(MemoryLayout<Float>.stride * _splitBoundSpheres.count)
         allocation.update(_splitBoundSpheres)
         frameData.setData(CascadedShadowSubpass._shadowSplitSpheresProperty, allocation)
         
-        allocation = bufferBlock.allocate(MemoryLayout<Vector4>.stride)!
+        allocation = bufferBlock.allocate(MemoryLayout<Vector4>.stride)
         allocation.update(_shadowMapSize)
         frameData.setData(CascadedShadowSubpass._shadowMapSize, allocation)
     }
@@ -285,16 +285,16 @@ class CascadedShadowSubpass: GeometrySubpass {
         let virtualCamera = shadowSliceData.virtualCamera
         let frameData = Engine.fg.frameData
 
-        var allocation = bufferBlock.allocate(MemoryLayout<Vector2>.stride)!
+        var allocation = bufferBlock.allocate(MemoryLayout<Vector2>.stride)
         allocation.update(ShadowUtils.getShadowBias(light: light, projectionMatrix: virtualCamera.projectionMatrix,
                                                     shadowResolution: _shadowTileResolution))
         frameData.setData(CascadedShadowSubpass._lightShadowBiasProperty, allocation)
         
-        allocation = bufferBlock.allocate(MemoryLayout<Vector3>.stride)!
+        allocation = bufferBlock.allocate(MemoryLayout<Vector3>.stride)
         allocation.update(light.direction)
         frameData.setData(CascadedShadowSubpass._lightDirectionProperty, allocation)
 
-        allocation = bufferBlock.allocate(MemoryLayout<Matrix>.stride)!
+        allocation = bufferBlock.allocate(MemoryLayout<Matrix>.stride)
         allocation.update(shadowSliceData.virtualCamera.viewProjectionMatrix)
         frameData.setData(CascadedShadowSubpass._lightViewProjMatProperty, allocation)
     }
