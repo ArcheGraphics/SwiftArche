@@ -52,6 +52,8 @@
 		3E1076552966CF7D00F751A5 /* capsule_ray_marching.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3E1076542966CF7D00F751A5 /* capsule_ray_marching.metal */; };
 		3E1412F929B5969C00099BF1 /* ControllerBehavior.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E1412F829B5969C00099BF1 /* ControllerBehavior.swift */; };
 		3E1412FB29B5A6BD00099BF1 /* ControllerColliderHit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E1412FA29B5A6BD00099BF1 /* ControllerColliderHit.swift */; };
+		3E1BAC7D29D6CEC6000ADE2A /* GLTFModelIO.h in Headers */ = {isa = PBXBuildFile; fileRef = 3E1BAC7B29D6CEC6000ADE2A /* GLTFModelIO.h */; };
+		3E1BAC7E29D6CEC6000ADE2A /* GLTFModelIO.m in Sources */ = {isa = PBXBuildFile; fileRef = 3E1BAC7C29D6CEC6000ADE2A /* GLTFModelIO.m */; };
 		3E1F129329A762FC00F1002E /* VHACD_ConvexCompose.mm in Sources */ = {isa = PBXBuildFile; fileRef = 3E1F129229A762FC00F1002E /* VHACD_ConvexCompose.mm */; };
 		3E1F129529A7641200F1002E /* ConvexCompose.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E1F129429A7641200F1002E /* ConvexCompose.swift */; };
 		3E1F129729A78B3300F1002E /* PhysXConvexComposeApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E1F129629A78B3300F1002E /* PhysXConvexComposeApp.swift */; };
@@ -709,6 +711,8 @@
 		3E10765C2967DBD600F751A5 /* ray_marching.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ray_marching.h; sourceTree = "<group>"; };
 		3E1412F829B5969C00099BF1 /* ControllerBehavior.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ControllerBehavior.swift; sourceTree = "<group>"; };
 		3E1412FA29B5A6BD00099BF1 /* ControllerColliderHit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ControllerColliderHit.swift; sourceTree = "<group>"; };
+		3E1BAC7B29D6CEC6000ADE2A /* GLTFModelIO.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GLTFModelIO.h; sourceTree = "<group>"; };
+		3E1BAC7C29D6CEC6000ADE2A /* GLTFModelIO.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GLTFModelIO.m; sourceTree = "<group>"; };
 		3E1F129029A7618600F1002E /* bridging.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = bridging.h; sourceTree = "<group>"; };
 		3E1F129129A762F000F1002E /* VHACD_ConvexCompose.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VHACD_ConvexCompose.h; sourceTree = "<group>"; };
 		3E1F129229A762FC00F1002E /* VHACD_ConvexCompose.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = VHACD_ConvexCompose.mm; sourceTree = "<group>"; };
@@ -1609,6 +1613,16 @@
 			path = sdf;
 			sourceTree = "<group>";
 		};
+		3E1BAC7F29D6D17C000ADE2A /* loader */ = {
+			isa = PBXGroup;
+			children = (
+				3EC038FA29321862002187DC /* TextureLoader.swift */,
+				040F1E0C293AAFC7008BDC8D /* HDRLoader.h */,
+				040F1E0A293AAFB1008BDC8D /* HDRLoader.m */,
+			);
+			path = loader;
+			sourceTree = "<group>";
+		};
 		3E1F129A29AC3BCB00F1002E /* cct-utility */ = {
 			isa = PBXGroup;
 			children = (
@@ -2369,7 +2383,8 @@
 				3EC0386729321551002187DC /* base */,
 				3EF39BAD29D297210083E20A /* frame-graph */,
 				3EBA3D2529B9872D00E5FB42 /* gpu */,
-				3EC0387029321739002187DC /* loader */,
+				3EC0387029321739002187DC /* gltf */,
+				3E1BAC7F29D6D17C000ADE2A /* loader */,
 				3EC0386D29321718002187DC /* shader */,
 				3EC0386A29321700002187DC /* material */,
 				3EC0386B29321707002187DC /* mesh */,
@@ -2548,7 +2563,7 @@
 			path = sky;
 			sourceTree = "<group>";
 		};
-		3EC0387029321739002187DC /* loader */ = {
+		3EC0387029321739002187DC /* gltf */ = {
 			isa = PBXGroup;
 			children = (
 				3EC0387E293217CF002187DC /* parser */,
@@ -2556,15 +2571,14 @@
 				3EC038FD29321862002187DC /* GLTFAsset.m */,
 				3EC038F829321862002187DC /* GLTFAssetReader.h */,
 				3EC038FE29321862002187DC /* GLTFAssetReader.m */,
+				3EC038F929321862002187DC /* GLTFTypes.h */,
+				3E1BAC7B29D6CEC6000ADE2A /* GLTFModelIO.h */,
+				3E1BAC7C29D6CEC6000ADE2A /* GLTFModelIO.m */,
+				3EC038FC29321862002187DC /* GLTFUtil.swift */,
 				3EC0390029321862002187DC /* GLTFLoader.swift */,
 				3EC038FB29321862002187DC /* GLTFResource.swift */,
-				3EC038F929321862002187DC /* GLTFTypes.h */,
-				3EC038FC29321862002187DC /* GLTFUtil.swift */,
-				3EC038FA29321862002187DC /* TextureLoader.swift */,
-				040F1E0C293AAFC7008BDC8D /* HDRLoader.h */,
-				040F1E0A293AAFB1008BDC8D /* HDRLoader.m */,
 			);
-			path = loader;
+			path = gltf;
 			sourceTree = "<group>";
 		};
 		3EC0387129321740002187DC /* physics */ = {
@@ -3000,6 +3014,7 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3E1BAC7D29D6CEC6000ADE2A /* GLTFModelIO.h in Headers */,
 				3EF39B7A29D166C00083E20A /* XMaterial.h in Headers */,
 				3EC0389D29321826002187DC /* bridging.h in Headers */,
 				3EC0390229321862002187DC /* GLTFTypes.h in Headers */,
@@ -3689,6 +3704,7 @@
 				3EBA3D1629B8891300E5FB42 /* WireframePrimitive.swift in Sources */,
 				3EC038E229321845002187DC /* PhysXTolerancesScale.swift in Sources */,
 				3EC03964293218BA002187DC /* ResourceCache.swift in Sources */,
+				3E1BAC7E29D6CEC6000ADE2A /* GLTFModelIO.m in Sources */,
 				3E8B00D929BC09F500A70123 /* CAnimatorBlending.mm in Sources */,
 				3EC0392329321872002187DC /* KHR_materials_pbrSpecularGlossiness.swift in Sources */,
 				3EC0390929321862002187DC /* GLTFLoader.swift in Sources */,

@@ -65,20 +65,20 @@ class MaterialParser: Parser {
                     }
                 }
 
-                if let emissiveTexture = gltfMaterial.emissiveTexture,
-                    let samplers = glTFResource.samplers {
-                    pbrMtl.emissiveTexture = glTFResource.textures![emissiveTexture.index]
-                    if let sampler = samplers[emissiveTexture.index] {
-                        pbrMtl.setEmissiveSampler(value: sampler)
-                    }
-                    KHR_texture_transform.parseEngineResource(emissiveTexture.transform, pbrMtl, context)
-                }
-                pbrMtl.emissiveColor = Color(
-                        Color.linearToGammaSpace(value: gltfMaterial.emissiveFactor.x),
-                        Color.linearToGammaSpace(value: gltfMaterial.emissiveFactor.y),
-                        Color.linearToGammaSpace(value: gltfMaterial.emissiveFactor.z),
-                        1
-                )
+//                if let emissiveTexture = gltfMaterial.emissive,
+//                    let samplers = glTFResource.samplers {
+//                    pbrMtl.emissiveTexture = glTFResource.textures![emissiveTexture.index]
+//                    if let sampler = samplers[emissiveTexture.index] {
+//                        pbrMtl.setEmissiveSampler(value: sampler)
+//                    }
+//                    KHR_texture_transform.parseEngineResource(emissiveTexture.transform, pbrMtl, context)
+//                }
+//                pbrMtl.emissiveColor = Color(
+//                        Color.linearToGammaSpace(value: gltfMaterial.emissiveFactor.x),
+//                        Color.linearToGammaSpace(value: gltfMaterial.emissiveFactor.y),
+//                        Color.linearToGammaSpace(value: gltfMaterial.emissiveFactor.z),
+//                        1
+//                )
 
                 if let normalTexture = gltfMaterial.normalTexture,
                    let samplers = glTFResource.samplers {

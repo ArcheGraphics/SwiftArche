@@ -463,7 +463,6 @@ static dispatch_queue_t _loaderQueue;
     params.texture = self.asset.textures[textureIndex];
     params.scale = tv->scale;
     params.texCoord = tv->texcoord;
-    params.index = textureIndex;
     if (tv->has_transform) {
         GLTFTextureTransform *transform = [GLTFTextureTransform new];
         transform.offset = (simd_float2) {tv->transform.offset[0], tv->transform.offset[1]};
@@ -485,21 +484,27 @@ static dispatch_queue_t _loaderQueue;
     for (int i = 0; i < gltf->materials_count; ++i) {
         cgltf_material *m = gltf->materials + i;
         GLTFMaterial *material = [GLTFMaterial new];
-        material.index = i;
         if (m->normal_texture.texture) {
             material.normalTexture = [self textureParamsFromTextureView:&m->normal_texture];
         }
         if (m->occlusion_texture.texture) {
             material.occlusionTexture = [self textureParamsFromTextureView:&m->occlusion_texture];
         }
-        if (m->emissive_texture.texture) {
-            material.emissiveTexture = [self textureParamsFromTextureView:&m->emissive_texture];
-        }
+        material.emissive = [GLTFEmissiveParams new];
         float *emissive = m->emissive_factor;
-        material.emissiveFactor = (simd_float3) {emissive[0], emissive[1], emissive[2]};
+        material.emissive.emissiveFactor = (simd_float3) {emissive[0], emissive[1], emissive[2]};
+        if (m->emissive_texture.texture) {
+            material.emissive.emissiveTexture = [self textureParamsFromTextureView:&m->emissive_texture];
+        }
+        if (m->has_emissive_strength) {
+            material.emissive.emissiveStrength = m->emissive_strength.emissive_strength;
+        }
         material.alphaMode = GLTFAlphaModeFromMode(m->alpha_mode);
         material.alphaCutoff = m->alpha_cutoff;
         material.doubleSided = (BOOL) m->double_sided;
+        if (m->has_ior) {
+            material.indexOfRefraction = @(m->ior.ior);
+        }
         if (m->has_pbr_metallic_roughness) {
             GLTFPBRMetallicRoughnessParams *pbr = [GLTFPBRMetallicRoughnessParams new];
             float *baseColor = m->pbr_metallic_roughness.base_color_factor;
@@ -528,6 +533,38 @@ static dispatch_queue_t _loaderQueue;
             }
             material.specularGlossiness = pbr;
         }
+        if (m->has_specular) {
+            GLTFSpecularParams *specular = [GLTFSpecularParams new];
+            specular.specularFactor = m->specular.specular_factor;
+            if (m->specular.specular_texture.texture) {
+                specular.specularTexture = [self textureParamsFromTextureView:&m->specular.specular_texture];
+            }
+            const cgltf_float *specularColorFactor = m->specular.specular_color_factor;
+            specular.specularColorFactor = (simd_float3) {specularColorFactor[0], specularColorFactor[1], specularColorFactor[2]};
+            if (m->specular.specular_color_texture.texture) {
+                specular.specularColorTexture = [self textureParamsFromTextureView:&m->specular.specular_color_texture];
+            }
+            material.specular = specular;
+        }
+        if (m->has_transmission) {
+            GLTFTransmissionParams *transmission = [GLTFTransmissionParams new];
+            transmission.transmissionFactor = m->transmission.transmission_factor;
+            if (transmission.transmissionTexture.texture) {
+                transmission.transmissionTexture = [self textureParamsFromTextureView:&m->transmission.transmission_texture];
+            }
+            material.transmission = transmission;
+        }
+        if (m->has_volume) {
+            GLTFVolumeParams *volume = [GLTFVolumeParams new];
+            volume.thicknessFactor = m->volume.thickness_factor;
+            if (m->volume.thickness_texture.texture) {
+                volume.thicknessTexture = [self textureParamsFromTextureView:&m->volume.thickness_texture];
+            }
+            volume.attenuationDistance = m->volume.attenuation_distance;
+            const float *attenuationColor = m->volume.attenuation_color;
+            volume.attenuationColor = (simd_float3) {attenuationColor[0], attenuationColor[1], attenuationColor[2]};
+            material.volume = volume;
+        }
         if (m->has_clearcoat) {
             GLTFClearcoatParams *clearcoat = [GLTFClearcoatParams new];
             clearcoat.clearcoatFactor = m->clearcoat.clearcoat_factor;
@@ -543,10 +580,36 @@ static dispatch_queue_t _loaderQueue;
             }
             material.clearcoat = clearcoat;
         }
+        if (m->has_sheen) {
+            GLTFSheenParams *sheen = [GLTFSheenParams new];
+            const cgltf_float *sheenColorFactor = m->sheen.sheen_color_factor;
+            sheen.sheenColorFactor = (simd_float3) {sheenColorFactor[0], sheenColorFactor[1], sheenColorFactor[2]};
+            if (m->sheen.sheen_color_texture.texture) {
+                sheen.sheenColorTexture = [self textureParamsFromTextureView:&m->sheen.sheen_color_texture];
+            }
+            sheen.sheenRoughnessFactor = m->sheen.sheen_roughness_factor;
+            if (m->sheen.sheen_roughness_texture.texture) {
+                sheen.sheenRoughnessTexture = [self textureParamsFromTextureView:&m->sheen.sheen_roughness_texture];
+            }
+            material.sheen = sheen;
+        }
+        if (m->has_iridescence) {
+            GLTFIridescence *iridesence = [GLTFIridescence new];
+            iridesence.iridescenceFactor = m->iridescence.iridescence_factor;
+            if (m->iridescence.iridescence_texture.texture) {
+                iridesence.iridescenceTexture = [self textureParamsFromTextureView:&m->iridescence.iridescence_texture];
+            }
+            iridesence.iridescenceIndexOfRefraction = m->iridescence.iridescence_ior;
+            iridesence.iridescenceThicknessMinimum = m->iridescence.iridescence_thickness_min;
+            iridesence.iridescenceThicknessMaximum = m->iridescence.iridescence_thickness_max;
+            if (m->iridescence.iridescence_thickness_texture.texture) {
+                iridesence.iridescenceThicknessTexture = [self textureParamsFromTextureView:&m->iridescence.iridescence_thickness_texture];
+            }
+            material.iridescence = iridesence;
+        }
         if (m->unlit) {
             material.unlit = YES;
         }
-        // TODO: sheen
         material.name = m->name ? [NSString stringWithUTF8String:m->name]
                 : [self.nameGenerator nextUniqueNameWithPrefix:@"Material"];
         material.extensions = GLTFConvertExtensions(m->extensions, m->extensions_count, nil);
@@ -868,8 +931,12 @@ static dispatch_queue_t _loaderQueue;
 - (BOOL)validateRequiredExtensions:(NSError **)error {
     NSArray *supportedExtensions = @[
             @"KHR_draco_mesh_compression",
+            @"KHR_emissive_strength",
+            @"KHR_materials_ior",
             @"KHR_lights_punctual",
             @"KHR_materials_clearcoat",
+            @"KHR_materials_specular",
+            @"KHR_materials_transmission",
             @"KHR_materials_unlit",
             @"KHR_texture_transform",
     ];

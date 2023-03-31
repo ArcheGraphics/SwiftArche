@@ -465,14 +465,79 @@ NSData *GLTFCreateImageDataFromDataURI(NSString *uriData) {
 
 @end
 
+@implementation GLTFSpecularParams
+
+- (instancetype)init {
+    if (self = [super init]) {
+        _specularFactor = 1.0f;
+        _specularColorFactor = (simd_float3) {1.0f, 1.0f, 1.0f};
+    }
+    return self;
+}
+
+@end
+
+@implementation GLTFEmissiveParams
+
+- (instancetype)init {
+    if (self = [super init]) {
+        _emissiveFactor = (simd_float3) {0.0f, 0.0f, 0.0f};
+        _emissiveStrength = 1.0f;
+    }
+    return self;
+}
+
+@end
+
+@implementation GLTFTransmissionParams
+@end
+
+@implementation GLTFVolumeParams
+
+- (instancetype)init {
+    if (self = [super init]) {
+        _thicknessFactor = 0.0f;
+        _attenuationDistance = FLT_MAX;
+        _attenuationColor = (simd_float3) {1.0f, 1.0f, 1.0f};
+    }
+    return self;
+}
+
+@end
+
 @implementation GLTFClearcoatParams
+@end
+
+@implementation GLTFSheenParams
+
+- (instancetype)init {
+    if (self = [super init]) {
+        _sheenColorFactor = (simd_float3) {0.0f, 0.0f, 0.0f};
+        _sheenRoughnessFactor = 0.0f;
+    }
+    return self;
+}
+
+@end
+
+@implementation GLTFIridescence
+
+- (instancetype)init {
+    if (self = [super init]) {
+        _iridescenceFactor = 0.0f;
+        _iridescenceIndexOfRefraction = 1.3f;
+        _iridescenceThicknessMinimum = 100.0f;
+        _iridescenceThicknessMaximum = 400.0f;
+    }
+    return self;
+}
+
 @end
 
 @implementation GLTFMaterial
 
 - (instancetype)init {
     if (self = [super init]) {
-        _emissiveFactor = (simd_float3) {0.0f, 0.0f, 0.0f};
         _alphaMode = GLTFAlphaModeOpaque;
         _alphaCutoff = 0.5f;
         _doubleSided = NO;
