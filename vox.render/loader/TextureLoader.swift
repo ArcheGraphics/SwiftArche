@@ -25,8 +25,10 @@ public class TextureLoader {
                             textureLoaderOptions: [MTKTextureLoader.Option: Any] = [:]) throws -> MTLTexture? {
         var textureLoaderOptions = textureLoaderOptions
         if textureLoaderOptions.isEmpty {
+            let usage: MTLTextureUsage = [MTLTextureUsage.pixelFormatView, MTLTextureUsage.shaderRead]
             textureLoaderOptions = [.origin: MTKTextureLoader.Origin.topLeft,
-                                    .generateMipmaps: NSNumber(booleanLiteral: true)]
+                                    .generateMipmaps: NSNumber(booleanLiteral: true),
+                                    .textureUsage: NSNumber(value: usage.rawValue)]
         }
         let texture = try textureLoader.newTexture(name: name, scaleFactor: scaleFactor,
                 bundle: bundle, options: textureLoaderOptions)
@@ -42,8 +44,10 @@ public class TextureLoader {
     public func loadTexture(with url: URL, _ textureLoaderOptions: [MTKTextureLoader.Option: Any] = [:]) throws -> MTLTexture? {
         var textureLoaderOptions = textureLoaderOptions
         if textureLoaderOptions.isEmpty {
+            let usage: MTLTextureUsage = [MTLTextureUsage.pixelFormatView, MTLTextureUsage.shaderRead]
             textureLoaderOptions = [.origin: MTKTextureLoader.Origin.topLeft,
-                                    .generateMipmaps: NSNumber(booleanLiteral: true)]
+                                    .generateMipmaps: NSNumber(booleanLiteral: true),
+                                    .textureUsage: NSNumber(value: usage.rawValue)]
         }
         let texture = try textureLoader.newTexture(URL: url, options: textureLoaderOptions)
         return texture
@@ -58,8 +62,10 @@ public class TextureLoader {
     public func loadTexture(with texture: MDLTexture, _ textureLoaderOptions: [MTKTextureLoader.Option: Any] = [:]) throws -> MTLTexture? {
         var textureLoaderOptions = textureLoaderOptions
         if textureLoaderOptions.isEmpty {
+            let usage: MTLTextureUsage = [MTLTextureUsage.pixelFormatView, MTLTextureUsage.shaderRead]
             textureLoaderOptions = [.origin: MTKTextureLoader.Origin.topLeft,
-                                    .generateMipmaps: NSNumber(booleanLiteral: true)]
+                                    .generateMipmaps: NSNumber(booleanLiteral: true),
+                                    .textureUsage: NSNumber(value: usage.rawValue)]
         }
         let texture = try? textureLoader.newTexture(texture: texture, options: textureLoaderOptions)
         return texture

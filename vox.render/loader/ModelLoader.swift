@@ -39,17 +39,17 @@ public class ModelLoader {
     
     static func load(mdlMesh: MDLMesh, parent: Entity?, for resource: ModelResource) {
         mdlMesh.addTangentBasis(forTextureCoordinateAttributeNamed: MDLVertexAttributeTextureCoordinate,
-                                tangentAttributeNamed: MDLVertexAttributeTangent,
-                                bitangentAttributeNamed: MDLVertexAttributeBitangent)
+                                tangentAttributeNamed: MDLVertexAttributeNormal,
+                                bitangentAttributeNamed: MDLVertexAttributeTangent)
         let mtkMesh = try! MTKMesh(mesh: mdlMesh, device: Engine.device)
         
         // alloc entity
         var entity: Entity
         if let parent {
             entity = parent.createChild(mdlMesh.name)
-            resource.sceneRoots.append(entity)
         } else {
             entity = Entity(mdlMesh.name)
+            resource.sceneRoots.append(entity)
         }
         resource.entities.append(entity)
         
@@ -57,30 +57,29 @@ public class ModelLoader {
         if let transform = mdlMesh.transform {
             entity.transform.localMatrix = Matrix(transform.matrix)
         }
-
-        // alloc mesh
-        let mesh = Mesh()
-        mesh._vertexDescriptor = MTKMetalVertexDescriptorFromModelIO(mdlMesh.vertexDescriptor)!
-        for (index, vertexBuffer) in mtkMesh.vertexBuffers.enumerated() {
-            mesh._vertexBufferBindings[index] = BufferView(buffer: vertexBuffer.buffer,
-                                                           count: vertexBuffer.buffer.length, stride: 1)
-        }
-        let renderer = entity.addComponent(MeshRenderer.self)
-        renderer.mesh = mesh
         
-        // alloc material
-        var subCount = 0
         zip(mdlMesh.submeshes!, mtkMesh.submeshes).forEach { (mdlSubmesh, mtkSubmesh: MTKSubmesh) in
+            // alloc mesh
+            let mesh = Mesh()
+            mesh._vertexDescriptor = MTKMetalVertexDescriptorFromModelIO(mdlMesh.vertexDescriptor)!
+            for (index, vertexBuffer) in mtkMesh.vertexBuffers.enumerated() {
+                mesh._vertexBufferBindings[index] = BufferView(buffer: vertexBuffer.buffer,
+                                                               count: vertexBuffer.buffer.length, stride: 1)
+            }
+            let renderer = entity.addComponent(MeshRenderer.self)
+            renderer.mesh = mesh
+            
+            // alloc submesh
             let mdlSubmesh = mdlSubmesh as! MDLSubmesh
             mesh.addSubMesh(0, mtkSubmesh.indexCount, mtkSubmesh.primitiveType)
             mesh._indexBufferBinding = IndexBufferBinding(BufferView(buffer: mtkSubmesh.indexBuffer.buffer,
                                                                      count: mtkSubmesh.indexBuffer.length,
                                                                      stride: 1), mtkSubmesh.indexType)
+            // alloc material
             let mat = PBRMaterial()
             loadMaterial(mat, mdlSubmesh.material)
             resource.materials.append(mat)
-            renderer.setMaterial(subCount, mat)
-            subCount += 1
+            renderer.setMaterial(0, mat)
         }
     }
     
@@ -109,7 +108,6 @@ public class ModelLoader {
 
         if let baseColor = material?.property(with: .baseColor),
            baseColor.type == .float3 {
-            let color = pbr.baseColor
             pbr.baseColor = Color(baseColor.float3Value.x, baseColor.float3Value.y, baseColor.float3Value.z, 1.0)
         }
         if let roughness = material?.property(with: .roughness),

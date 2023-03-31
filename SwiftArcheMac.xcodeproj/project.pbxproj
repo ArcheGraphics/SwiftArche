@@ -113,6 +113,7 @@
 		3E5A22BC29CC78BD00808068 /* USDTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E5A22BB29CC78BD00808068 /* USDTests.swift */; };
 		3E5C391329D6D2E20026E999 /* ModelLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E5C391229D6D2E20026E999 /* ModelLoader.swift */; };
 		3E5C391529D6D5190026E999 /* MDLVertexDescriptor+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E5C391429D6D5190026E999 /* MDLVertexDescriptor+Extensions.swift */; };
+		3E5C391929D710830026E999 /* ModelLoaderApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E5C391829D710830026E999 /* ModelLoaderApp.swift */; };
 		3E5FC0E229D5CCDE00FF2E7E /* EventWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E5FC0E129D5CCDE00FF2E7E /* EventWrapper.swift */; };
 		3E5FC0E529D6390900FF2E7E /* FrameData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E5FC0E429D6390900FF2E7E /* FrameData.swift */; };
 		3E5FC0E629D6645E00FF2E7E /* AtomicComputeApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8C888ABFCE2075E7AA5BE /* AtomicComputeApp.swift */; };
@@ -840,6 +841,7 @@
 		3E5A22BB29CC78BD00808068 /* USDTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = USDTests.swift; sourceTree = "<group>"; };
 		3E5C391229D6D2E20026E999 /* ModelLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelLoader.swift; sourceTree = "<group>"; };
 		3E5C391429D6D5190026E999 /* MDLVertexDescriptor+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MDLVertexDescriptor+Extensions.swift"; sourceTree = "<group>"; };
+		3E5C391829D710830026E999 /* ModelLoaderApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelLoaderApp.swift; sourceTree = "<group>"; };
 		3E5FC0E129D5CCDE00FF2E7E /* EventWrapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventWrapper.swift; sourceTree = "<group>"; };
 		3E5FC0E429D6390900FF2E7E /* FrameData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FrameData.swift; sourceTree = "<group>"; };
 		3E6B235D294220BC000AC29F /* FaceMorphApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FaceMorphApp.swift; sourceTree = "<group>"; };
@@ -1926,6 +1928,7 @@
 				3E6D2F10293F1AAB00B63F73 /* GLTFLoaderUtils.swift */,
 				3E6B235D294220BC000AC29F /* FaceMorphApp.swift */,
 				3E6B235F294224C1000AC29F /* FaceGUI.swift */,
+				3E5C391829D710830026E999 /* ModelLoaderApp.swift */,
 			);
 			path = loader;
 			sourceTree = "<group>";
@@ -3479,6 +3482,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3E5C391929D710830026E999 /* ModelLoaderApp.swift in Sources */,
 				3EC92A3E29358C9600423396 /* PBRApp.swift in Sources */,
 				3E6D2F0D293F137300B63F73 /* GLTFViewerApp.swift in Sources */,
 				3EACA08F29A4925900F08BB2 /* PhysXMeshColliderApp.swift in Sources */,
