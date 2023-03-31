@@ -11,7 +11,7 @@ public class SubShader: ShaderPart {
     public private(set) var passes: [ShaderPass]
     
     /// Create a sub shader.
-    init(name: String, passes: [ShaderPass], tags: [String : ShaderProperty]?) {
+    init(name: String, passes: [ShaderPass], tags: [String : ShaderProperty]? = nil) {
         self.passes = passes
         super.init()
         

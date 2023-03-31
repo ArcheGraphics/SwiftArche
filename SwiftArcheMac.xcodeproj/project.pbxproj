@@ -118,6 +118,7 @@
 		3E5C391D29D72CE10026E999 /* ShaderTagKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E5C391C29D72CE10026E999 /* ShaderTagKey.swift */; };
 		3E5C391F29D72EA30026E999 /* ShaderPart.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E5C391E29D72EA30026E999 /* ShaderPart.swift */; };
 		3E5C392129D732760026E999 /* SubShader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E5C392029D732760026E999 /* SubShader.swift */; };
+		3E5C392329D734B90026E999 /* Shader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E5C392229D734B90026E999 /* Shader.swift */; };
 		3E5FC0E229D5CCDE00FF2E7E /* EventWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E5FC0E129D5CCDE00FF2E7E /* EventWrapper.swift */; };
 		3E5FC0E529D6390900FF2E7E /* FrameData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E5FC0E429D6390900FF2E7E /* FrameData.swift */; };
 		3E5FC0E629D6645E00FF2E7E /* AtomicComputeApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8C888ABFCE2075E7AA5BE /* AtomicComputeApp.swift */; };
@@ -850,6 +851,7 @@
 		3E5C391C29D72CE10026E999 /* ShaderTagKey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShaderTagKey.swift; sourceTree = "<group>"; };
 		3E5C391E29D72EA30026E999 /* ShaderPart.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShaderPart.swift; sourceTree = "<group>"; };
 		3E5C392029D732760026E999 /* SubShader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubShader.swift; sourceTree = "<group>"; };
+		3E5C392229D734B90026E999 /* Shader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Shader.swift; sourceTree = "<group>"; };
 		3E5FC0E129D5CCDE00FF2E7E /* EventWrapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventWrapper.swift; sourceTree = "<group>"; };
 		3E5FC0E429D6390900FF2E7E /* FrameData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FrameData.swift; sourceTree = "<group>"; };
 		3E6B235D294220BC000AC29F /* FaceMorphApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FaceMorphApp.swift; sourceTree = "<group>"; };
@@ -2558,6 +2560,7 @@
 				3E5C391E29D72EA30026E999 /* ShaderPart.swift */,
 				3EC0393A2932189C002187DC /* ShaderPass.swift */,
 				3E5C392029D732760026E999 /* SubShader.swift */,
+				3E5C392229D734B90026E999 /* Shader.swift */,
 			);
 			path = shader;
 			sourceTree = "<group>";
@@ -3843,6 +3846,7 @@
 				3E447F5529C9E71000D2FB30 /* Serialized.swift in Sources */,
 				3EC0397D293218C3002187DC /* ModelMesh.swift in Sources */,
 				3EBA3D2F29B99D0500E5FB42 /* MTLOrigin+Extensions.swift in Sources */,
+				3E5C392329D734B90026E999 /* Shader.swift in Sources */,
 				3EC039192932186A002187DC /* Parser.swift in Sources */,
 				3EC03989293218CB002187DC /* PBRBaseMaterial.swift in Sources */,
 				3EACA08929A4604600F08BB2 /* PhysXMeshColliderShape.swift in Sources */,
