@@ -46,23 +46,25 @@ public class ShadowManager {
         _cascadedShadowSubpass._updateShadowSettings();
         let mapDesc = _cascadedShadowSubpass._getShadowMapDescriptor()
         
-        let task = fg.addRenderTask(for: ShadowRenderCommandEncoderData.self, name: "directShadowMap pass",
+        let task = fg.addFrameTask(for: ShadowRenderCommandEncoderData.self, name: "directShadowMap pass",
                                     commandBuffer: commandBuffer) { data, builder in
             data.depthOutput = builder.write(resource: builder.create(name: "direct shadow map", description: mapDesc))
         } execute: { [self] builder, commandBuffer in
-            // setup pipeline state
-            let shadowMap = builder.depthOutput!.actual
-            let frameData = Engine.fg.frameData
-            frameData.setImageView(ShadowManager._shadowTextureProperty,
-                    ShadowManager._shadowSamplerProperty, shadowMap)
-            frameData.setSampler(ShadowManager._shadowSamplerProperty, _shadowSampler)
-            frameData.enableMacro(CASCADED_COUNT.rawValue, (_camera.scene.shadowCascades.rawValue, .int))
-            
-            // render shadow map
-            _passDescriptor.depthAttachment.texture = shadowMap
-            var encoder = RenderCommandEncoder(commandBuffer, _passDescriptor, "direct shadow pass")
-            _cascadedShadowSubpass.draw(pipeline: _camera.devicePipeline, on: &encoder)
-            encoder.endEncoding()
+            if let commandBuffer {
+                // setup pipeline state
+                let shadowMap = builder.depthOutput!.actual
+                let frameData = Engine.fg.frameData
+                frameData.setImageView(ShadowManager._shadowTextureProperty,
+                                       ShadowManager._shadowSamplerProperty, shadowMap)
+                frameData.setSampler(ShadowManager._shadowSamplerProperty, _shadowSampler)
+                frameData.enableMacro(CASCADED_COUNT.rawValue, (_camera.scene.shadowCascades.rawValue, .int))
+                
+                // render shadow map
+                _passDescriptor.depthAttachment.texture = shadowMap
+                var encoder = RenderCommandEncoder(commandBuffer, _passDescriptor, "direct shadow pass")
+                _cascadedShadowSubpass.draw(pipeline: _camera.devicePipeline, on: &encoder)
+                encoder.endEncoding()
+            }
         }
         fg.blackboard[BlackBoardType.shadow.rawValue] = task.data.depthOutput
     }

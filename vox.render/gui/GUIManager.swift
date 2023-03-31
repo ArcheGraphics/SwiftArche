@@ -63,57 +63,59 @@ class GUIManager {
     func draw(_ commandBuffer: MTLCommandBuffer) {
         callScriptOnGUI()
         
-        Engine.fg.addRenderTask(for: GUIEncoderData.self, name: "gizmo",
-                                commandBuffer: commandBuffer) { data, builder in
-            if PointBatcher.ins.containData || LineBatcher.ins.containData
-                || TriangleBatcher.ins.containData || TextBatcher.ins.containData {
+        if PointBatcher.ins.containData || LineBatcher.ins.containData
+            || TriangleBatcher.ins.containData || TextBatcher.ins.containData {
+            Engine.fg.addFrameTask(for: GUIEncoderData.self, name: "gizmo",
+                                   commandBuffer: commandBuffer) { data, builder in
                 let colorTex = Engine.fg.blackboard[BlackBoardType.color.rawValue] as! Resource<MTLTextureDescriptor>
                 data.output = builder.write(resource: colorTex)
-            }
-        } execute: { builder, commandBuffer in
-            let canvas = Engine.canvas!
-            if let camera = Camera.mainCamera,
-               let renderPassDescriptor = canvas.currentRenderPassDescriptor {
-                renderPassDescriptor.colorAttachments[0].loadAction = .load
-                var encoder = RenderCommandEncoder(commandBuffer, renderPassDescriptor, "gizmos")
-                if PointBatcher.ins.containData {
-                    PointBatcher.ins.drawBatcher(&encoder, camera)
+            } execute: { builder, commandBuffer in
+                let canvas = Engine.canvas!
+                if let commandBuffer,
+                   let camera = Camera.mainCamera,
+                   let renderPassDescriptor = canvas.currentRenderPassDescriptor {
+                    renderPassDescriptor.colorAttachments[0].loadAction = .load
+                    var encoder = RenderCommandEncoder(commandBuffer, renderPassDescriptor, "gizmos")
+                    if PointBatcher.ins.containData {
+                        PointBatcher.ins.drawBatcher(&encoder, camera)
+                    }
+                    if LineBatcher.ins.containData {
+                        LineBatcher.ins.drawBatcher(&encoder, camera)
+                    }
+                    if TriangleBatcher.ins.containData {
+                        TriangleBatcher.ins.drawBatcher(&encoder, camera)
+                    }
+                    if TextBatcher.ins.containData {
+                        TextBatcher.ins.drawBatcher(&encoder, camera)
+                    }
+                    encoder.endEncoding()
+                    renderPassDescriptor.colorAttachments[0].loadAction = .clear
                 }
-                if LineBatcher.ins.containData {
-                    LineBatcher.ins.drawBatcher(&encoder, camera)
-                }
-                if TriangleBatcher.ins.containData {
-                    TriangleBatcher.ins.drawBatcher(&encoder, camera)
-                }
-                if TextBatcher.ins.containData {
-                    TextBatcher.ins.drawBatcher(&encoder, camera)
-                }
-                encoder.endEncoding()
-                renderPassDescriptor.colorAttachments[0].loadAction = .clear
             }
         }
 #if os(macOS)
         // GUI
-        Engine.fg.addRenderTask(for: GUIEncoderData.self, name: "gui",
-                                commandBuffer: commandBuffer) { data, builder in
-            if ImGuiGetDrawData() != nil {
-                let colorTex = Engine.fg.blackboard[BlackBoardType.color.rawValue] as! Resource<MTLTextureDescriptor>
-                data.output = builder.write(resource: colorTex)
-            }
-        } execute: { builder, commandBuffer in
-            let canvas = Engine.canvas!
-            if let drawData = ImGuiGetDrawData(),
-               let renderPassDescriptor = canvas.currentRenderPassDescriptor {
-                renderPassDescriptor.colorAttachments[0].loadAction = .load
-                let encoder = RenderCommandEncoder(commandBuffer, renderPassDescriptor, "ImGui")
-                encoder.handle.pushDebugGroup("ImGui")
-                ImGui_ImplMetal_NewFrame(renderPassDescriptor)
-                ImGui_ImplOSX_NewFrame(canvas)
-                
-                ImGui_ImplMetal_RenderDrawData(drawData.pointee, commandBuffer, encoder.handle)
-                encoder.handle.popDebugGroup()
-                encoder.handle.endEncoding()
-                renderPassDescriptor.colorAttachments[0].loadAction = .clear
+        if ImGuiGetDrawData() != nil {
+            Engine.fg.addFrameTask(for: GUIEncoderData.self, name: "gui",
+                                    commandBuffer: commandBuffer) { data, builder in
+                    let colorTex = Engine.fg.blackboard[BlackBoardType.color.rawValue] as! Resource<MTLTextureDescriptor>
+                    data.output = builder.write(resource: colorTex)
+            } execute: { builder, commandBuffer in
+                let canvas = Engine.canvas!
+                if let commandBuffer,
+                   let drawData = ImGuiGetDrawData(),
+                   let renderPassDescriptor = canvas.currentRenderPassDescriptor {
+                    renderPassDescriptor.colorAttachments[0].loadAction = .load
+                    let encoder = RenderCommandEncoder(commandBuffer, renderPassDescriptor, "ImGui")
+                    encoder.handle.pushDebugGroup("ImGui")
+                    ImGui_ImplMetal_NewFrame(renderPassDescriptor)
+                    ImGui_ImplOSX_NewFrame(canvas)
+                    
+                    ImGui_ImplMetal_RenderDrawData(drawData.pointee, commandBuffer, encoder.handle)
+                    encoder.handle.popDebugGroup()
+                    encoder.handle.endEncoding()
+                    renderPassDescriptor.colorAttachments[0].loadAction = .clear
+                }
             }
         }
 #endif

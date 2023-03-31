@@ -512,11 +512,11 @@
 		3EF39BAF29D298730083E20A /* Resource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EF39BAE29D298730083E20A /* Resource.swift */; };
 		3EF39BB129D29D840083E20A /* Realize.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EF39BB029D29D840083E20A /* Realize.swift */; };
 		3EF39BB329D2AAAE0083E20A /* FrameGraph.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EF39BB229D2AAAE0083E20A /* FrameGraph.swift */; };
-		3EF39BB529D2AACB0083E20A /* RenderTaskBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EF39BB429D2AACB0083E20A /* RenderTaskBuilder.swift */; };
-		3EF39BB729D2AB1C0083E20A /* RenderTask.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EF39BB629D2AB1C0083E20A /* RenderTask.swift */; };
+		3EF39BB529D2AACB0083E20A /* FrameTaskBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EF39BB429D2AACB0083E20A /* FrameTaskBuilder.swift */; };
+		3EF39BB729D2AB1C0083E20A /* FrameTask.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EF39BB629D2AB1C0083E20A /* FrameTask.swift */; };
 		3EF39BB929D2C57F0083E20A /* FrameGraphTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EF39BB829D2C57F0083E20A /* FrameGraphTests.swift */; };
-		3EF39BBA29D2CB850083E20A /* RenderTaskBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EF39BB429D2AACB0083E20A /* RenderTaskBuilder.swift */; };
-		3EF39BBB29D2CB850083E20A /* RenderTask.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EF39BB629D2AB1C0083E20A /* RenderTask.swift */; };
+		3EF39BBA29D2CB850083E20A /* FrameTaskBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EF39BB429D2AACB0083E20A /* FrameTaskBuilder.swift */; };
+		3EF39BBB29D2CB850083E20A /* FrameTask.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EF39BB629D2AB1C0083E20A /* FrameTask.swift */; };
 		3EF39BBC29D2CB850083E20A /* FrameGraph.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EF39BB229D2AAAE0083E20A /* FrameGraph.swift */; };
 		3EF39BBD29D2CB850083E20A /* Realize.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EF39BB029D29D840083E20A /* Realize.swift */; };
 		3EF39BBE29D2CB850083E20A /* Resource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EF39BAE29D298730083E20A /* Resource.swift */; };
@@ -1308,8 +1308,8 @@
 		3EF39BAE29D298730083E20A /* Resource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Resource.swift; sourceTree = "<group>"; };
 		3EF39BB029D29D840083E20A /* Realize.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Realize.swift; sourceTree = "<group>"; };
 		3EF39BB229D2AAAE0083E20A /* FrameGraph.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FrameGraph.swift; sourceTree = "<group>"; };
-		3EF39BB429D2AACB0083E20A /* RenderTaskBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RenderTaskBuilder.swift; sourceTree = "<group>"; };
-		3EF39BB629D2AB1C0083E20A /* RenderTask.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RenderTask.swift; sourceTree = "<group>"; };
+		3EF39BB429D2AACB0083E20A /* FrameTaskBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FrameTaskBuilder.swift; sourceTree = "<group>"; };
+		3EF39BB629D2AB1C0083E20A /* FrameTask.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FrameTask.swift; sourceTree = "<group>"; };
 		3EF39BB829D2C57F0083E20A /* FrameGraphTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FrameGraphTests.swift; sourceTree = "<group>"; };
 		3EF39BBF29D3D0DF0083E20A /* Protocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Protocol.swift; sourceTree = "<group>"; };
 		3EF39BCB29D43F020083E20A /* GammaCorrection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GammaCorrection.swift; sourceTree = "<group>"; };
@@ -2905,8 +2905,8 @@
 			children = (
 				3E5FC0E429D6390900FF2E7E /* FrameData.swift */,
 				3EF39BB229D2AAAE0083E20A /* FrameGraph.swift */,
-				3EF39BB429D2AACB0083E20A /* RenderTaskBuilder.swift */,
-				3EF39BB629D2AB1C0083E20A /* RenderTask.swift */,
+				3EF39BB429D2AACB0083E20A /* FrameTaskBuilder.swift */,
+				3EF39BB629D2AB1C0083E20A /* FrameTask.swift */,
 				3EF39BAE29D298730083E20A /* Resource.swift */,
 				3EF39BB029D29D840083E20A /* Realize.swift */,
 				3EF39BCD29D454560083E20A /* BlackBoardType.swift */,
@@ -3505,7 +3505,7 @@
 				3E447F6729C9EB8000D2FB30 /* Serialized.swift in Sources */,
 				3E5A22BC29CC78BD00808068 /* USDTests.swift in Sources */,
 				3E447F6029C9E7FD00D2FB30 /* SerializedComplexSwiftTests.swift in Sources */,
-				3EF39BBB29D2CB850083E20A /* RenderTask.swift in Sources */,
+				3EF39BBB29D2CB850083E20A /* FrameTask.swift in Sources */,
 				3E717DFC29C7B50B004FE1A0 /* PolymorphicDecodeTests.swift in Sources */,
 				3EF39BBD29D2CB850083E20A /* Realize.swift in Sources */,
 				3E447F6529C9EB8000D2FB30 /* SerializableDecodable.swift in Sources */,
@@ -3516,7 +3516,7 @@
 				3EF39BBE29D2CB850083E20A /* Resource.swift in Sources */,
 				3E447F6229C9E7FD00D2FB30 /* SerializedBasicSwiftTests.swift in Sources */,
 				3E447F6A29C9EB8D00D2FB30 /* Transformable.swift in Sources */,
-				3EF39BBA29D2CB850083E20A /* RenderTaskBuilder.swift in Sources */,
+				3EF39BBA29D2CB850083E20A /* FrameTaskBuilder.swift in Sources */,
 				3E447F6829C9EB8000D2FB30 /* SerializedCodingKeys.swift in Sources */,
 				3EF39BB929D2C57F0083E20A /* FrameGraphTests.swift in Sources */,
 				3E447F6329C9EB8000D2FB30 /* EncodableProperty.swift in Sources */,
@@ -3663,7 +3663,7 @@
 				3EC03967293218BA002187DC /* ComputePass.swift in Sources */,
 				3EF39B8129D16B2F0083E20A /* XScene.swift in Sources */,
 				3EC039AA293218F0002187DC /* BoolUpdateFlag.swift in Sources */,
-				3EF39BB529D2AACB0083E20A /* RenderTaskBuilder.swift in Sources */,
+				3EF39BB529D2AACB0083E20A /* FrameTaskBuilder.swift in Sources */,
 				3EBA3D4329B99D9E00E5FB42 /* MTLTextureDescriptor+Serialization.swift in Sources */,
 				3EC03A022932192D002187DC /* Background.swift in Sources */,
 				3EB32B8D293239170019A4F3 /* InputManager.swift in Sources */,
@@ -3848,7 +3848,7 @@
 				3EF39BCC29D43F020083E20A /* GammaCorrection.swift in Sources */,
 				3E8B00E529BC358200A70123 /* CAnimator.mm in Sources */,
 				3EBA3D3729B99D5600E5FB42 /* MTLResource+Extensions.swift in Sources */,
-				3EF39BB729D2AB1C0083E20A /* RenderTask.swift in Sources */,
+				3EF39BB729D2AB1C0083E20A /* FrameTask.swift in Sources */,
 				3EC039AD293218F0002187DC /* Time.swift in Sources */,
 				3EC039322932188D002187DC /* ShadowManager.swift in Sources */,
 				3EC03947293218A3002187DC /* RasterState.swift in Sources */,

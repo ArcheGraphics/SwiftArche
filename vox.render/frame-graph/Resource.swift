@@ -10,9 +10,9 @@ public class ResourceBase {
     private static var idGenerator: Int = 0
 
     var id_: Int
-    var creator_: RenderTaskBase?
-    var readers_: [RenderTaskBase] = []
-    var writers_: [RenderTaskBase] = []
+    var creator_: FrameTaskBase?
+    var readers_: [FrameTaskBase] = []
+    var writers_: [FrameTaskBase] = []
     var ref_count_: Int
 
     public var name: String
@@ -25,7 +25,7 @@ public class ResourceBase {
         creator_ != nil
     }
 
-    public init(name: String, creator: RenderTaskBase?) {
+    public init(name: String, creator: FrameTaskBase?) {
         self.name = name
         creator_ = creator
         ref_count_ = 0
@@ -59,7 +59,7 @@ public class Resource<description_type: ResourceRealize>: ResourceBase {
         actual_
     }
 
-    required init(name: String, creator: RenderTaskBase, description: description_type) {
+    required init(name: String, creator: FrameTaskBase, description: description_type) {
         description_ = description
         actual_ = nil
         super.init(name: name, creator: creator)

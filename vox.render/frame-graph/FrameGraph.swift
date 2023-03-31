@@ -8,12 +8,12 @@ import Metal
 
 public class FrameGraph {
     struct Step {
-        var render_task: RenderTaskBase
+        var render_task: FrameTaskBase
         var realized_resources: [ResourceBase]
         var derealized_resources: [ResourceBase]
     }
 
-    var render_tasks_: [RenderTaskBase] = []
+    var render_tasks_: [FrameTaskBase] = []
     var resources_: [ResourceBase] = []
     private var timeline_: [Step] = []
     private var heapPool_: [MTLHeap] = []
@@ -30,22 +30,23 @@ public class FrameGraph {
     }
 
     @discardableResult
-    public func addRenderTask<data_type: EmptyClassType>(for type: data_type.Type, name: String,
-                                                         commandBuffer: MTLCommandBuffer,
-                                                         setup: @escaping (data_type, inout RenderTaskBuilder) -> Void,
-                                                         execute: @escaping (data_type, MTLCommandBuffer) -> Void) -> RenderTask<data_type> {
-        render_tasks_.append(RenderTask<data_type>(name: name, commandBuffer: commandBuffer,
+    public func addFrameTask<data_type: EmptyClassType>(for type: data_type.Type, name: String,
+                                                         commandBuffer: MTLCommandBuffer?,
+                                                         setup: @escaping (data_type, inout FrameTaskBuilder) -> Void,
+                                                         execute: @escaping (data_type, MTLCommandBuffer?) -> Void) -> FrameTask<data_type> {
+        render_tasks_.append(FrameTask<data_type>(name: name, commandBuffer: commandBuffer,
                                                    setup: setup, execute: execute))
         let render_task = render_tasks_.last!
 
-        var builder = RenderTaskBuilder(framegraph: self, render_task: render_task)
+        var builder = FrameTaskBuilder(framegraph: self, render_task: render_task)
         render_task.setup(builder: &builder)
 
-        return render_task as! RenderTask<data_type>
+        return render_task as! FrameTask<data_type>
     }
     
     public func addMoveTask<src_type: ResourceRealize, dst_type: ResourceRealize>(src: Resource<src_type>, dst: Resource<dst_type>) {
-        dst.writers_ = src.writers_
+        dst.readers_ = src.readers_
+        src.readers_ = []
     }
 
     @discardableResult

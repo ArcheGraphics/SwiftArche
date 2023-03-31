@@ -37,7 +37,7 @@ public class Luminance: ComputePass {
     }
     
     public func compute(with commandBuffer: MTLCommandBuffer, label: String = "") -> LuminanceEncoderData {
-        return Engine.fg.addRenderTask(for: LuminanceEncoderData.self, name: "luminance", commandBuffer: commandBuffer) {
+        return Engine.fg.addFrameTask(for: LuminanceEncoderData.self, name: "luminance", commandBuffer: commandBuffer) {
             [self] data, builder in
             let colorTex = Engine.fg.blackboard[BlackBoardType.color.rawValue] as! Resource<MTLTextureDescriptor>
             updateTexture(colorTex.actual!.width, colorTex.actual!.height)
@@ -45,7 +45,8 @@ public class Luminance: ComputePass {
             data.input = builder.read(resource: colorTex)
             data.output = builder.write(resource: builder.create(name: "luminanceTex", description: desc))
         } execute: { builder, commandBuffer in
-            if let luminanceTex = builder.output?.actual {
+            if let commandBuffer,
+               let luminanceTex = builder.output?.actual {
                 if let commandEncoder = commandBuffer.makeComputeCommandEncoder() {
                     commandEncoder.label = label
                     Engine.fg.frameData.enableMacro(IS_AUTO_EXPOSURE.rawValue)

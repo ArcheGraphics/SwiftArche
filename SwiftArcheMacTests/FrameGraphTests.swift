@@ -10,7 +10,7 @@ import vox_render
 final class FrameGraphTests: XCTestCase {
     // Graphviz located in ~/Library/Containers/archegraphics.SwiftArcheMac/Data/Documents
     func testSelfDefineFrameGraph() throws {
-        var frameGraph = FrameGraph()
+        var frameGraph = FrameGraph(size: 0)
         
         let backbuffer = Texture("render target")
         let retained_resource = frameGraph.addRetainedResource(for: TextureDescription.self, name: "swapchain",
@@ -18,11 +18,11 @@ final class FrameGraphTests: XCTestCase {
                                                                actual: backbuffer)
         
         // MARK: - Pass
-        let render_task_0: RenderTask<RenderTaskData0> =
-        frameGraph.addRenderTask(for: RenderTaskData0.self, name: "Render Task 0") { data, builder in
+        let render_task_0: FrameTask<FrameTaskData0> =
+        frameGraph.addFrameTask(for: FrameTaskData0.self, name: "Render Task 0", commandBuffer: nil) { data, builder in
             data.output = builder.write(resource: builder.read(resource: builder.create(name: "Resource 0",
                                                                                         description: TextureDescription(name: "0"))));
-        } execute: { data in
+        } execute: { data, commandBuffer in
             if let actual1 = data.output.actual {
                 print("Render Task 0 with \(actual1)")
             }
@@ -30,13 +30,13 @@ final class FrameGraphTests: XCTestCase {
         
         // MARK: - Pass
         let data_0 = render_task_0.data
-        var render_task: RenderTask<RenderTaskData>!
+        var render_task: FrameTask<FrameTaskData>!
         for i in 1...4 {
-            let internal_render_task: RenderTask<RenderTaskData> =
-            frameGraph.addRenderTask(for: RenderTaskData.self, name: "Render Task \(i)") { data, builder in
+            let internal_render_task: FrameTask<FrameTaskData> =
+            frameGraph.addFrameTask(for: FrameTaskData.self, name: "Render Task \(i)", commandBuffer: nil) { data, builder in
                 data.input = builder.read(resource: data_0.output);
                 data.output = builder.write(resource: builder.create(name: "Resource \(i)", description: TextureDescription(name: String(i))))
-            } execute: { data in
+            } execute: { data, commandBuffer in
                if let actual1 = data.input.actual,
                   let actual2 = data.output.actual {
                    print("Render Task \(i) with \(actual1)")
@@ -51,10 +51,10 @@ final class FrameGraphTests: XCTestCase {
         
         // MARK: - Pass
         let data_final = render_task.data
-        frameGraph.addRenderTask(for: RenderTaskData.self, name: "Final Render Task") { data, builder in
+        frameGraph.addFrameTask(for: FrameTaskData.self, name: "Final Render Task", commandBuffer: nil) { data, builder in
             data.input = builder.read(resource: data_final.output);
             data.output = builder.write(resource: retained_resource)
-        } execute: { data in
+        } execute: { data, commandBuffer in
            if let actual1 = data.input.actual,
               let actual2 = data.output.actual {
                print("Final Render Task with \(actual1)")
@@ -87,19 +87,24 @@ struct TextureDescription {
 }
 extension TextureDescription: ResourceRealize {
     public typealias actual_type = Texture
-    public func realize() -> Texture? {
+    
+    func realize(with heap: MTLHeap?) -> Texture? {
         Texture(name)
     }
+    
+    func derealize(resource: Texture) {}
+    
+    var size: Int { 0 }
 }
 
 typealias Texture2DResource = Resource<TextureDescription>;
 
-class RenderTaskData0: EmptyClassType {
+class FrameTaskData0: EmptyClassType {
     var output: Texture2DResource!
     required init() {}
 }
 
-class RenderTaskData: EmptyClassType {
+class FrameTaskData: EmptyClassType {
     var input: Texture2DResource!
     var output: Texture2DResource!
     required init() {}

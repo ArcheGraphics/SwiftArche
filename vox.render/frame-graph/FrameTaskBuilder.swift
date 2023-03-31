@@ -6,11 +6,11 @@
 
 import Metal
 
-public struct RenderTaskBuilder {
+public struct FrameTaskBuilder {
     private var framegraph_: FrameGraph
-    private var render_task_: RenderTaskBase
+    private var render_task_: FrameTaskBase
 
-    init(framegraph: FrameGraph, render_task: RenderTaskBase) {
+    init(framegraph: FrameGraph, render_task: FrameTaskBase) {
         framegraph_ = framegraph
         render_task_ = render_task
     }
