@@ -177,9 +177,9 @@ fileprivate class CSSMVisualMaterial: BaseMaterial {
         }
     }
     
-    public override init(_ name: String = "shadowmap mat") {
-        super.init(name)
-        shader.append(ShaderPass(Engine.library("app.shader"), "vertex_unlit", "shadowMap_visual"))
+    public init(_ name: String = "shadowmap mat") {
+        super.init(shader: Shader.create(in: Engine.library("app.shader"), vertexSource: "vertex_unlit",
+                                         fragmentSource: "shadowMap_visual"), name)
         shaderData.enableMacro(NEED_WORLDPOS.rawValue)
         shaderData.setData(CSSMVisualMaterial._baseColorProp, _baseColor)
     }
@@ -232,7 +232,7 @@ class CascadeShadowApp: NSViewController {
         planeMaterial.baseColor = Color(1.0, 0.2, 0, 1.0)
         planeMaterial.roughness = 0.8
         planeMaterial.metallic = 0.2
-        planeMaterial.shader[0].setRenderFace(RenderFace.Double)
+        planeMaterial.setRenderFace(at: 0, .Double)
         gui.planeMaterial = planeMaterial
 
         planeRenderer.setMaterial(planeMaterial)

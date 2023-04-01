@@ -35,7 +35,7 @@ public class ShadowManager {
         _passDescriptor.depthAttachment.storeAction = .store
     }
 
-    public func draw(with commandBuffer: MTLCommandBuffer) {
+    func draw(with commandBuffer: MTLCommandBuffer, context: RenderContext) {
         _drawDirectShadowMap(with: commandBuffer)
         _drawSpotShadowMap(with: commandBuffer)
         _drawPointShadowMap(with: commandBuffer)

@@ -65,7 +65,7 @@ class PhysXAttractorApp: NSViewController {
                   _ rotation: Quaternion) -> Entity {
         let mtl = PBRMaterial()
         mtl.baseColor = Color(0.03179807202597362, 0.3939682161541871, 0.41177952549087604, 1)
-        mtl.shader[0].setRenderFace(RenderFace.Double)
+        mtl.setRenderFace(at: 0, .Double)
         let planeEntity = rootEntity.createChild()
         planeEntity.layer = Layer.Layer1
 

@@ -8,24 +8,49 @@ import Metal
 
 /// Material.
 open class Material {
+    var _shader: Shader
+
     /// Name.
     public var name: String = ""
     /// Shader data.
     public var shaderData: ShaderData
+    /// Render states.
+    public var renderStates: [RenderState] = []
 
     /// Shader used by the material.
-    public var shader: [ShaderPass] = []
+    public var shader: Shader {
+        get {
+            _shader
+        }
+        set {
+            _shader = newValue
+            let lastStatesCount = renderStates.count
 
-    public func getRenderState(_ index: Int) -> RenderState {
-        shader[index].renderState!
+            var maxPassCount = 0
+            let subShaders = shader.subShaders
+            for i in 0..<subShaders.count {
+                maxPassCount = max(subShaders[i].passes.count, maxPassCount)
+            }
+
+            if (lastStatesCount < maxPassCount) {
+                for _ in lastStatesCount..<maxPassCount {
+                    renderStates.append(RenderState())
+                }
+            } else {
+                renderStates = renderStates.dropLast(renderStates.count - maxPassCount)
+            }
+        }
     }
 
     /// Create a material instance.
     /// - Parameters:
     ///   - device: Metal Device
     ///   - name: Material name
-    public init(_ name: String = "") {
+    public init(shader: Shader, _ name: String = "") {
+        _shader = shader
         shaderData = ShaderData()
         self.name = name
+        
+        self.shader = _shader
     }
 }

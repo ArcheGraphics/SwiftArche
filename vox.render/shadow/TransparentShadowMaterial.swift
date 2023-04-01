@@ -20,9 +20,9 @@ public class TransparentShadowMaterial: BaseMaterial {
         }
     }
     
-    public override init(_ name: String = "transparent shadow") {
-        super.init(name)
-        shader.append(ShaderPass(Engine.library(), "vertex_unlit_worldPos", "fragment_transparent_shadow"))
+    public init(_ name: String = "transparent shadow") {
+        super.init(shader: Shader.create(in: Engine.library(), vertexSource: "vertex_unlit_worldPos",
+                                         fragmentSource: "fragment_transparent_shadow"), name)
         isTransparent = true
         shaderData.enableMacro(NEED_WORLDPOS.rawValue)
         shaderData.setData(TransparentShadowMaterial._baseColorProp, _baseColor)

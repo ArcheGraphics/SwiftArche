@@ -8,11 +8,11 @@ import Metal
 
 public class DevicePipeline {
     static func _compareFromNearToFar(a: RenderElement, b: RenderElement) -> Bool {
-        a.renderer.priority > b.renderer.priority || a.renderer._distanceForSort > b.renderer._distanceForSort
+        a.data.renderer.priority > b.data.renderer.priority || a.data.renderer._distanceForSort > b.data.renderer._distanceForSort
     }
 
     static func _compareFromFarToNear(a: RenderElement, b: RenderElement) -> Bool {
-        a.renderer.priority > b.renderer.priority || b.renderer._distanceForSort > a.renderer._distanceForSort
+        a.data.renderer.priority > b.data.renderer.priority || b.data.renderer._distanceForSort > a.data.renderer._distanceForSort
     }
     
     final class RenderCommandEncoderData: EmptyClassType {
@@ -23,6 +23,7 @@ public class DevicePipeline {
     }
 
     var camera: Camera
+    var context = RenderContext()
     var _opaqueQueue: [RenderElement] = []
     var _transparentQueue: [RenderElement] = []
     var _alphaTestQueue: [RenderElement] = []
@@ -36,6 +37,9 @@ public class DevicePipeline {
     }
 
     public func commit(with commandBuffer: MTLCommandBuffer) {
+        context.replacementShader = camera._replacementShader
+        context.replacementTag = camera._replacementSubShaderTag
+        
         let fg = Engine.fg
         var colorOutput: [Resource<MTLTextureDescriptor>] = []
         var depthOutput: Resource<MTLTextureDescriptor>?
@@ -56,13 +60,15 @@ public class DevicePipeline {
             }
         }
         
+        context.pipelineStageTagValue = PipelineStage.ShadowCaster
         // shadow pass automatic culled if not used
-        shadowManager.draw(with: commandBuffer)
+        shadowManager.draw(with: commandBuffer, context: context)
         
         let scene = camera.scene
         let background = scene.background
         _changeBackground(background)
         
+        context.pipelineStageTagValue = PipelineStage.Forward
         // main forward pass
         if let renderTarget = camera.renderTarget ?? Engine.canvas.currentRenderPassDescriptor {
             if background.mode == BackgroundMode.SolidColor {
@@ -141,20 +147,56 @@ public class DevicePipeline {
             renderer._prepareRender(cameraInfo, self)
         }
     }
+    
+    /// Push render data to render queue.
+    /// - Parameters:
+    ///   - context: Render context
+    ///   - data: Render data
+    func pushRenderData(_ data: RenderData) {
+        let material = data.material
+        let renderStates = material.renderStates
+        let materialSubShader = material.shader.subShaders[0]
+        let replacementShader = context.replacementShader
 
-    /// Push a render element to the render queue.
-    /// - Parameter element: Render element
-    func pushPrimitive(_ element: RenderElement) {
-        switch element.shaderPass.renderState!.renderQueueType {
-        case .AlphaTest:
-            _alphaTestQueue.append(element)
-            break
-        case .Opaque:
-            _opaqueQueue.append(element)
-            break
-        case .Transparent:
-            _transparentQueue.append(element)
-            break
+      if let replacementShader {
+          let replacementSubShaders = replacementShader.subShaders
+          let replacementTagKey = context.replacementTag
+          if let replacementTagKey {
+              for i in 0..<replacementSubShaders.count {
+                  let subShader = replacementSubShaders[i];
+                  if subShader.tagsMap[replacementTagKey] == materialSubShader.tagsMap[replacementTagKey] {
+                      pushRenderDataWihShader(data, subShader.passes, renderStates);
+                      break;
+                  }
+              }
+          } else {
+              pushRenderDataWihShader(data, replacementSubShaders[0].passes, renderStates);
+          }
+      } else {
+          pushRenderDataWihShader(data, materialSubShader.passes, renderStates);
+      }
+    }
+    
+    private func pushRenderDataWihShader(_ element: RenderData,
+                                         _ shaderPasses: [ShaderPass],
+                                         _ renderStates: [RenderState]) {
+        let pipelineStage = context.pipelineStageTagValue
+        for i in 0..<shaderPasses.count {
+          let shaderPass = shaderPasses[i]
+            if (shaderPass.tagsMap[ShaderTagKey.pipelineStage.rawValue] == pipelineStage) {
+                let renderElement = RenderElement(data: element, shaderPass: shaderPass, renderState: renderStates[i]);
+                switch (renderElement.renderState.renderQueueType) {
+                case RenderQueueType.Transparent:
+                    _transparentQueue.append(renderElement)
+                    break;
+                case RenderQueueType.AlphaTest:
+                    _alphaTestQueue.append(renderElement)
+                    break;
+                case RenderQueueType.Opaque:
+                    _opaqueQueue.append(renderElement)
+                    break;
+                }
+            }
         }
     }
 }

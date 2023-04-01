@@ -23,9 +23,10 @@ open class GeometrySubpass: Subpass {
     }
 
     public func _drawElement(pipeline: DevicePipeline, on encoder: inout RenderCommandEncoder, _ element: RenderElement) {
-        let mesh = element.mesh
-        let renderer = element.renderer
-        let material = element.material
+        let meshRenderData = element.data as! MeshRenderData
+        let mesh = meshRenderData.mesh
+        let renderer = meshRenderData.renderer
+        let material = meshRenderData.material
         let camera = pipeline.camera
 
         let pipelineDescriptor = MTLRenderPipelineDescriptor()
@@ -41,21 +42,19 @@ open class GeometrySubpass: Subpass {
         if functions.count == 2 {
             pipelineDescriptor.fragmentFunction = functions[1]
         }
-        if let mesh {
-            pipelineDescriptor.vertexDescriptor = mesh._vertexDescriptor
-            element.shaderPass.renderState!._apply(pipelineDescriptor, depthStencilDescriptor, encoder.handle,
-                                                   renderer.entity.transform._isFrontFaceInvert())
-            
-            let pso = Engine.resourceCache.requestGraphicsPipeline(pipelineDescriptor)
-            encoder.bind(depthStencilState: depthStencilDescriptor)
-            encoder.bind(camera: camera, pso)
-            encoder.bind(material: material, pso)
-            encoder.bind(renderer: renderer, pso)
-            encoder.bind(scene: camera.scene, pso)
-            encoder.bind(fg: Engine.fg, pso)
-            encoder.bind(mesh: mesh)
-            encoder.draw(subMesh: element.subMesh!, with: mesh)
-        }
+        pipelineDescriptor.vertexDescriptor = mesh._vertexDescriptor
+        element.renderState._apply(pipelineDescriptor, depthStencilDescriptor, encoder.handle,
+                                   renderer.entity.transform._isFrontFaceInvert())
+        
+        let pso = Engine.resourceCache.requestGraphicsPipeline(pipelineDescriptor)
+        encoder.bind(depthStencilState: depthStencilDescriptor)
+        encoder.bind(camera: camera, pso)
+        encoder.bind(material: material, pso)
+        encoder.bind(renderer: renderer, pso)
+        encoder.bind(scene: camera.scene, pso)
+        encoder.bind(fg: Engine.fg, pso)
+        encoder.bind(mesh: mesh)
+        encoder.draw(subMesh: meshRenderData.subMesh, with: mesh)
     }
     
     public func _drawBatcher<B: Batcher>(pipeline: DevicePipeline, on encoder: inout RenderCommandEncoder, _ batcher: B) {

@@ -109,9 +109,9 @@ class MaterialParser: Parser {
 
             mtl.name = gltfMaterial.name ?? ""
             if gltfMaterial.isDoubleSided {
-                mtl.shader[0].setRenderFace(.Double)
+                mtl.setRenderFace(at: 0, .Double)
             } else {
-                mtl.shader[0].setRenderFace(.Front)
+                mtl.setRenderFace(at: 0, .Front)
             }
 
             switch gltfMaterial.alphaMode {

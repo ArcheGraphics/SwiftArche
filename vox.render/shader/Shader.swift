@@ -7,8 +7,7 @@
 import Metal
 
 /// Shader for rendering.
-public class Shader {
-    public private(set) var name: String
+public struct Shader {
     public private(set) var subShaders: [SubShader]
     
     /// Create a shader.
@@ -17,10 +16,10 @@ public class Shader {
     ///   - vertexSource: Vertex source code
     ///   - fragmentSource: Fragment source code
     /// - Returns: Shader
-    public static func create(in library: MTLLibrary, name: String,
+    public static func create(in library: MTLLibrary,
                               vertexSource: String, fragmentSource: String?)-> Shader {
         let shaderPass = ShaderPass(library, vertexSource, fragmentSource)
-        return Shader(name: name, subShaders: [SubShader(name: "Default", passes: [shaderPass])])
+        return Shader(subShaders: [SubShader(name: "Default", passes: [shaderPass])])
     }
 
     /// Create a shader.
@@ -28,9 +27,9 @@ public class Shader {
     ///   - name: Name of the shader
     ///   - computeSource: Vertex source code
     /// - Returns: Shader
-    public static func create(in library: MTLLibrary, name: String, computeSource: String)-> Shader {
+    public static func create(in library: MTLLibrary, computeSource: String)-> Shader {
         let shaderPass = ShaderPass(library, computeSource)
-        return Shader(name: name, subShaders: [SubShader(name: "Default", passes: [shaderPass])])
+        return Shader(subShaders: [SubShader(name: "Default", passes: [shaderPass])])
     }
     
     /// Create a shader.
@@ -38,8 +37,8 @@ public class Shader {
     ///   - name: Name of the shader
     ///   - shaderPasses: Shader passes
     /// - Returns: Shader
-    public static func create(name: String, shaderPasses: [ShaderPass])-> Shader {
-        return Shader(name: name, subShaders: [SubShader(name: "Default", passes: shaderPasses)])
+    public static func create(shaderPasses: [ShaderPass])-> Shader {
+        return Shader(subShaders: [SubShader(name: "Default", passes: shaderPasses)])
     }
 
     /// Create a shader.
@@ -47,12 +46,11 @@ public class Shader {
     ///   - name: Name of the shader
     ///   - subShaders: Sub shaders
     /// - Returns: Shader
-    public static func create(name: String, subShaders: [SubShader])-> Shader {
-        return Shader(name: name, subShaders: subShaders)
+    public static func create(subShaders: [SubShader])-> Shader {
+        return Shader(subShaders: subShaders)
     }
     
-    private init(name: String, subShaders: [SubShader]) {
-        self.name = name;
+    private init(subShaders: [SubShader]) {
         self.subShaders = subShaders;
     }
 }

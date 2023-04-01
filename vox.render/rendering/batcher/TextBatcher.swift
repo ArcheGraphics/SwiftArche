@@ -18,7 +18,6 @@ class TextBatcher: Batcher {
         var indices: BufferView?
         var count: Int = 0
         var material: Material!
-        var shaderPass: ShaderPass!
         var color: Color = Color()
         var texture: MTLTexture!
         
@@ -99,8 +98,8 @@ class TextBatcher: Batcher {
     }
     
     func canBatch(preElement: RenderElement, curElement: RenderElement) -> Bool {
-        let preRenderer = preElement.renderer as! TextRenderer
-        let curRenderer = curElement.renderer as! TextRenderer
+        let preRenderer = preElement.data.renderer as! TextRenderer
+        let curRenderer = curElement.data.renderer as! TextRenderer
         
         // Compare mask
         if (!checkBatchWithMask(preRenderer, curRenderer)) {
@@ -112,12 +111,12 @@ class TextBatcher: Batcher {
         }
         
         // Compare texture
-        if (preElement.texture !== curElement.texture) {
+        if (preElement.data as! TextRenderData).texture !== (curElement.data as! TextRenderData).texture {
             return false
         }
 
         // Compare material
-        return preElement.material === curElement.material
+        return preElement.data.material === curElement.data.material
     }
     
     func checkBatchWithMask(_ left: TextRenderer, _ right: TextRenderer) -> Bool {
@@ -125,10 +124,10 @@ class TextBatcher: Batcher {
     }
     
     func _addBatchData(_ element: RenderElement, at currentBufferIndex: Int) {
-        let textRenderer = element.renderer as! TextRenderer
+        let textRenderer = element.data.renderer as! TextRenderer
         _addBatchData(textRenderer.worldVertice, textRenderer.texCoords, textRenderer.indices,
                       textRenderer.color, textRenderer.fontAtlas!.fontAtlasTexture,
-                      element.material, at: currentBufferIndex)
+                      element.data.material, at: currentBufferIndex)
     }
     
     func _addBatchData(_ vertices: [Vector3], _ texCoords: [Vector2],
@@ -138,7 +137,6 @@ class TextBatcher: Batcher {
             var batcherData = BatcherData(device: Engine.device)
             batcherData.color = color
             batcherData.material = material
-            batcherData.shaderPass = material.shader[0]
             batcherData.texture = fontAtlas
             
             batcherData.verticeArray.append(contentsOf: vertices)
@@ -149,7 +147,6 @@ class TextBatcher: Batcher {
         } else {
             batcherBuffer[currentBufferIndex].color = color
             batcherBuffer[currentBufferIndex].material = material
-            batcherBuffer[currentBufferIndex].shaderPass = material.shader[0]
             batcherBuffer[currentBufferIndex].texture = fontAtlas
             let offset = batcherBuffer[currentBufferIndex].verticeArray.count
             batcherBuffer[currentBufferIndex].verticeArray.append(contentsOf: vertices)
@@ -193,13 +190,13 @@ class TextBatcher: Batcher {
                 let depthStencilDescriptor = MTLDepthStencilDescriptor()
                 prepare(pipelineDescriptor, depthStencilDescriptor)
                 
-                let functions = Engine.resourceCache.requestShaderModule(batcherBuffer[i].shaderPass,
+                let functions = Engine.resourceCache.requestShaderModule(batcherBuffer[i].material.shader.subShaders[0].passes[0],
                                                                          batcherBuffer[i].material.shaderData._macroCollection)
                 pipelineDescriptor.vertexFunction = functions[0]
                 pipelineDescriptor.fragmentFunction = functions[1]
                 pipelineDescriptor.vertexDescriptor = _descriptor
-                batcherBuffer[i].shaderPass.renderState!._apply(pipelineDescriptor,
-                                                                depthStencilDescriptor, encoder.handle, false)
+                batcherBuffer[i].material.renderStates[0]._apply(pipelineDescriptor,
+                                                                 depthStencilDescriptor, encoder.handle, false)
                 
                 let pso = Engine.resourceCache.requestGraphicsPipeline(pipelineDescriptor)
                 encoder.bind(depthStencilState: depthStencilDescriptor)

@@ -48,7 +48,7 @@ class GltfViewerApp: NSViewController {
         shadowMtl.baseColor = Color(0.6, 0.6, 0.6, 1.0)
         shadowMtl.roughness = 1
         shadowMtl.metallic = 0
-        shadowMtl.shader[0].setRenderFace(.Double)
+        shadowMtl.setRenderFace(at: 0, .Double)
         shadowPlane.setMaterial(shadowMtl)
         shadowPlane.castShadows = false
         

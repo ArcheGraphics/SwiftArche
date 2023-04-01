@@ -25,6 +25,31 @@ open class BaseMaterial: Material {
     private var _alphaCutoff: Float = 0
     private var _isTransparent: Bool = false
 
+    public override var shader: Shader {
+        get {
+            _shader
+        }
+        set {
+            _shader = newValue
+            let lastStatesCount = renderStates.count
+
+            var maxPassCount = 0
+            let subShaders = shader.subShaders
+            for i in 0..<subShaders.count {
+                maxPassCount = max(subShaders[i].passes.count, maxPassCount)
+            }
+
+            if (lastStatesCount < maxPassCount) {
+                for i in lastStatesCount..<maxPassCount {
+                    renderStates.append(RenderState())
+                    setBlendMode(at: i, BlendMode.Normal)
+                }
+            } else {
+                renderStates = renderStates.dropLast(renderStates.count - maxPassCount)
+            }
+        }
+    }
+
     public var isTransparent: Bool {
         get {
             _isTransparent
@@ -32,12 +57,12 @@ open class BaseMaterial: Material {
         set {
             _isTransparent = newValue
             if newValue {
-                for pass in shader {
-                    pass.setRenderQueueType(RenderQueueType.Transparent)
+                for i in 0..<renderStates.count {
+                    setRenderQueueType(at: i, RenderQueueType.Transparent)
                 }
             } else {
-                for pass in shader {
-                    pass.setRenderQueueType(_alphaCutoff > 0 ? RenderQueueType.AlphaTest : RenderQueueType.Opaque)
+                for i in 0..<renderStates.count {
+                    setRenderQueueType(at: i, _alphaCutoff > 0 ? RenderQueueType.AlphaTest : RenderQueueType.Opaque)
                 }
             }
         }
@@ -52,20 +77,83 @@ open class BaseMaterial: Material {
             shaderData.setData(BaseMaterial._alphaCutoffProp, newValue)
             if newValue > 0 {
                 shaderData.enableMacro(NEED_ALPHA_CUTOFF.rawValue)
-                for pass in shader {
-                    pass.setRenderQueueType(_isTransparent ? RenderQueueType.Transparent : RenderQueueType.AlphaTest)
+                for i in 0..<renderStates.count {
+                    setRenderQueueType(at: i, _isTransparent ? RenderQueueType.Transparent : RenderQueueType.AlphaTest)
                 }
             } else {
                 shaderData.disableMacro(NEED_ALPHA_CUTOFF.rawValue)
-                for pass in shader {
-                    pass.setRenderQueueType(_isTransparent ? RenderQueueType.Transparent : RenderQueueType.Opaque)
+                for i in 0..<renderStates.count {
+                    setRenderQueueType(at: i, _isTransparent ? RenderQueueType.Transparent : RenderQueueType.Opaque)
                 }
             }
         }
     }
-    
-    public override init(_ name: String = "") {
-        super.init()
+
+    public override init(shader: Shader, _ name: String = "") {
+        super.init(shader: shader)
         shaderData.setData(BaseMaterial._alphaCutoffProp, 0)
+    }
+
+    /// Set if is transparent of the shader pass render state.
+    /// - Parameters:
+    ///   - passIndex: Shader pass index
+    ///   - type: RenderQueueType
+    func setRenderQueueType(at passIndex: Int, _ type: RenderQueueType) {
+        assert(renderStates.count > passIndex)
+        let renderState = renderStates[passIndex]
+        renderState.renderQueueType = type
+        switch type {
+        case RenderQueueType.Transparent:
+            renderState.blendState.targetBlendState.enabled = true
+            renderState.depthState.writeEnabled = false
+            break
+        case RenderQueueType.Opaque, RenderQueueType.AlphaTest:
+            renderState.blendState.targetBlendState.enabled = false
+            renderState.depthState.writeEnabled = true
+        }
+    }
+
+    /// Set the blend mode of shader pass render state.
+    ///   - passIndex: Shader pass index
+    /// - Parameter blendMode: Blend mode
+    public func setBlendMode(at passIndex: Int, _ blendMode: BlendMode) {
+        assert(renderStates.count > passIndex)
+        let target = renderStates[passIndex].blendState.targetBlendState
+        switch (blendMode) {
+        case BlendMode.Normal:
+            target.sourceColorBlendFactor = .sourceAlpha
+            target.destinationColorBlendFactor = .oneMinusSourceAlpha
+            target.sourceAlphaBlendFactor = .one
+            target.destinationAlphaBlendFactor = .oneMinusSourceAlpha
+            target.colorBlendOperation = .add
+            target.alphaBlendOperation = .add
+            break
+        case BlendMode.Additive:
+            target.sourceColorBlendFactor = .sourceAlpha
+            target.destinationColorBlendFactor = .one
+            target.sourceAlphaBlendFactor = .one
+            target.destinationAlphaBlendFactor = .oneMinusSourceAlpha
+            target.colorBlendOperation = .add
+            target.alphaBlendOperation = .add
+            break
+        }
+    }
+
+    /// Set the render face of shader pass render state.
+    ///   - passIndex: Shader pass index
+    /// - Parameter renderFace: Render face
+    public func setRenderFace(at passIndex: Int, _ renderFace: RenderFace) {
+        assert(renderStates.count > passIndex)
+        switch (renderFace) {
+        case RenderFace.Front:
+            renderStates[passIndex].rasterState.cullMode = .back
+            break
+        case RenderFace.Back:
+            renderStates[passIndex].rasterState.cullMode = .front
+            break
+        case RenderFace.Double:
+            renderStates[passIndex].rasterState.cullMode = .none
+            break
+        }
     }
 }

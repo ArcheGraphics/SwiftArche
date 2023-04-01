@@ -65,8 +65,8 @@ class AtomicComputeApp: NSViewController {
         let cubeEntity = rootEntity.createChild()
         let renderer = cubeEntity.addComponent(MeshRenderer.self)
         renderer.mesh = PrimitiveMesh.createCuboid(width: 0.1, height: 0.1, depth: 0.1)
-        let material = BaseMaterial()
-        material.shader.append(ShaderPass(Engine.library("app.shader"), "vertex_atomic", "fragment_atomic"))
+        let material = BaseMaterial(shader: Shader.create(in: Engine.library("app.shader"), vertexSource: "vertex_atomic",
+                                                          fragmentSource: "fragment_atomic"))
         renderer.setMaterial(material)
         
         let atomicCounter = ComputePass(scene)

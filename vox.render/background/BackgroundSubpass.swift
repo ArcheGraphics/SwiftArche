@@ -14,7 +14,7 @@ public class BackgroundSubpass: Subpass {
     private let _shaderMacro = ShaderMacroCollection()
     private let _depthStencilDescriptor = MTLDepthStencilDescriptor()
     private let _pipelineDescriptor = MTLRenderPipelineDescriptor()
-    private let _shader: ShaderPass
+    private let _material: Material
     private var _pso: RenderPipelineState!
     private var _depthStencilState: MTLDepthStencilState!
 
@@ -38,8 +38,9 @@ public class BackgroundSubpass: Subpass {
     /// Constructor of Background.
     public override init() {
         _canvas = Engine.canvas
-        _shader = ShaderPass(Engine.library(), "vertex_background", "fragment_background")
-        _shader.renderState!.depthState.compareFunction = MTLCompareFunction.lessEqual
+        _material = Material(shader: Shader.create(in: Engine.library(), vertexSource: "vertex_background",
+                                                   fragmentSource: "fragment_background"))
+        _material.renderStates[0].depthState.compareFunction = MTLCompareFunction.lessEqual
         super.init()
         _mesh = _createPlane()
     }
@@ -52,11 +53,11 @@ public class BackgroundSubpass: Subpass {
             _pipelineDescriptor.stencilAttachmentPixelFormat = format
         }
 
-        let functions = Engine.resourceCache.requestShaderModule(_shader, _shaderMacro)
+        let functions = Engine.resourceCache.requestShaderModule(_material.shader.subShaders[0].passes[0], _shaderMacro)
         _pipelineDescriptor.vertexFunction = functions[0]
         _pipelineDescriptor.fragmentFunction = functions[1]
         _pipelineDescriptor.vertexDescriptor = _mesh._vertexDescriptor
-        _shader.renderState!._apply(_pipelineDescriptor, _depthStencilDescriptor, encoder, false)
+        _material.renderStates[0]._apply(_pipelineDescriptor, _depthStencilDescriptor, encoder, false)
 
         _pso = Engine.resourceCache.requestGraphicsPipeline(_pipelineDescriptor)
         _depthStencilState = Engine.resourceCache.requestDepthStencilState(_depthStencilDescriptor)

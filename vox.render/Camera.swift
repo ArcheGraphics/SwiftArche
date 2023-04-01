@@ -54,7 +54,9 @@ public final class Camera: Component {
     private var _lastAspectSize: Vector2 = Vector2(0, 0)
     private var _invViewProjMat: Matrix = Matrix()
     private var _inverseProjectionMatrix: Matrix = Matrix()
-
+    var _replacementShader: Shader?
+    var _replacementSubShaderTag: String?
+    
     /// Near clip plane - the closest point to the camera when rendering occurs.
     @Serialized(default: 0.1)
     public var nearClipPlane: Float {
@@ -222,6 +224,24 @@ public final class Camera: Component {
 }
 
 extension Camera {
+    /// Set the replacement shader.
+    /// - Parameters:
+    ///   - shader: Replacement shader
+    ///   - replacementTagName: Sub shader tag name
+    /// - Remark:
+    /// If replacementTagName is not specified, the first sub shader will be replaced.
+    /// If replacementTagName is specified, the replacement shader will find the first sub shader which has the same tag value get by replacementTagKey.
+    public func setReplacementShader(with shader: Shader, replacementTagName: String? = nil) {
+        _replacementShader = shader
+        _replacementSubShaderTag = replacementTagName
+    }
+    
+    /// Reset and clear the replacement shader.
+    public func resetReplacementShader() {
+        _replacementShader = nil
+        _replacementSubShaderTag = nil
+    }
+    
     /// Restore the automatic calculation of projection matrix through fieldOfView, nearClipPlane and farClipPlane.
     public func resetProjectionMatrix() {
         _isProjMatSetting = false

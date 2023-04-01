@@ -23,11 +23,10 @@ class GUIManager {
         ImGui_ImplMetal_Init(Engine.device)
         ImGui_ImplOSX_Init(Engine.canvas)
 #endif
-        let shader = ShaderPass(Engine.library(), "vertex_text", "fragment_text")
-        shader.setRenderQueueType(.Transparent)
-        shader._renderState!.rasterState.cullMode = .front
-        let material = Material("default text")
-        material.shader.append(shader)
+        let material = BaseMaterial(shader: Shader.create(in: Engine.library(), vertexSource: "vertex_text",
+                                                          fragmentSource: "fragment_text"),  "default text")
+        material.isTransparent = true
+        material.renderStates[0].rasterState.cullMode = .front
         TextRenderer._defaultMaterial = material
     }
     

@@ -20,7 +20,7 @@ class TriangleBatcher : Batcher {
     private let _pipelineDescriptor = MTLRenderPipelineDescriptor()
     private var _pso: RenderPipelineState!
     private var _depthStencilState: MTLDepthStencilState!
-    private var _shaderPass: ShaderPass!
+    private var _material: Material!
     private let _descriptor = MTLVertexDescriptor()
 
     static var ins: TriangleBatcher {
@@ -133,7 +133,8 @@ class TriangleBatcher : Batcher {
         _descriptor.attributes[Int(Normal.rawValue)] = desc
         _descriptor.layouts[2].stride = MemoryLayout<Vector3>.stride
         
-        _shaderPass = ShaderPass(Engine.library(), "vertex_triangle_gizmos", "fragment_triangle_gizmos")
+        _material = Material(shader: Shader.create(in: Engine.library(), vertexSource: "vertex_triangle_gizmos",
+                                                   fragmentSource: "fragment_triangle_gizmos"))
 
         _pipelineDescriptor.label = "Triangle Gizmo Pipeline"
         _pipelineDescriptor.colorAttachments[0].pixelFormat = Canvas.colorPixelFormat
@@ -142,11 +143,11 @@ class TriangleBatcher : Batcher {
             _pipelineDescriptor.stencilAttachmentPixelFormat = format
         }
 
-        let functions = Engine.resourceCache.requestShaderModule(_shaderPass, _shaderMacro)
+        let functions = Engine.resourceCache.requestShaderModule(_material.shader.subShaders[0].passes[0], _shaderMacro)
         _pipelineDescriptor.vertexFunction = functions[0]
         _pipelineDescriptor.fragmentFunction = functions[1]
         _pipelineDescriptor.vertexDescriptor = _descriptor
-        _shaderPass.renderState!._apply(_pipelineDescriptor, _depthStencilDescriptor, encoder, false)
+        _material.renderStates[0]._apply(_pipelineDescriptor, _depthStencilDescriptor, encoder, false)
 
         _pso = Engine.resourceCache.requestGraphicsPipeline(_pipelineDescriptor)
         _depthStencilState = Engine.resourceCache.requestDepthStencilState(_depthStencilDescriptor)

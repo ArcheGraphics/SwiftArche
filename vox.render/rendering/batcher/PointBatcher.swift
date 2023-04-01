@@ -18,7 +18,7 @@ class PointBatcher : Batcher {
     private let _pipelineDescriptor = MTLRenderPipelineDescriptor()
     private var _pso: RenderPipelineState!
     private var _depthStencilState: MTLDepthStencilState!
-    private var _shaderPass: ShaderPass!
+    private var _material: Material!
     private let _descriptor = MTLVertexDescriptor()
 
     static var ins: PointBatcher {
@@ -89,8 +89,9 @@ class PointBatcher : Batcher {
         _descriptor.attributes[Int(Color_0.rawValue)] = desc
         _descriptor.layouts[1].stride = MemoryLayout<Color32>.stride
         
-        _shaderPass = ShaderPass(Engine.library(), "vertex_point_gizmos", "fragment_point_gizmos")
-
+        _material = BaseMaterial(shader: Shader.create(in: Engine.library(),
+                                                       vertexSource: "vertex_point_gizmos",
+                                                       fragmentSource: "fragment_point_gizmos"))
         _pipelineDescriptor.label = "Point Gizmo Pipeline"
         _pipelineDescriptor.colorAttachments[0].pixelFormat = Canvas.colorPixelFormat
         _pipelineDescriptor.depthAttachmentPixelFormat = Canvas.depthPixelFormat
@@ -98,11 +99,11 @@ class PointBatcher : Batcher {
             _pipelineDescriptor.stencilAttachmentPixelFormat = format
         }
 
-        let functions = Engine.resourceCache.requestShaderModule(_shaderPass, _shaderMacro)
+        let functions = Engine.resourceCache.requestShaderModule(_material.shader.subShaders[0].passes[0], _shaderMacro)
         _pipelineDescriptor.vertexFunction = functions[0]
         _pipelineDescriptor.fragmentFunction = functions[1]
         _pipelineDescriptor.vertexDescriptor = _descriptor
-        _shaderPass.renderState!._apply(_pipelineDescriptor, _depthStencilDescriptor, encoder, false)
+        _material.renderStates[0]._apply(_pipelineDescriptor, _depthStencilDescriptor, encoder, false)
 
         _pso = Engine.resourceCache.requestGraphicsPipeline(_pipelineDescriptor)
         _depthStencilState = Engine.resourceCache.requestDepthStencilState(_depthStencilDescriptor)

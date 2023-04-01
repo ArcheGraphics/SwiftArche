@@ -83,9 +83,9 @@ public class MeshRenderer: Renderer {
                     material = nil
                 }
                 if (material != nil) {
-                    for j in 0..<material!.shader.count {
-                        devicePipeline.pushPrimitive(RenderElement(self, mesh!, subMeshes[i], material!, material!.shader[j]))
-                    }
+                    let renderData = MeshRenderData(renderer: self, material: material!,
+                                                    mesh: mesh!, subMesh: subMeshes[i])
+                    devicePipeline.pushRenderData(renderData)
                 }
             }
         }

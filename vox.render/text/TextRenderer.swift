@@ -90,7 +90,8 @@ public class TextRenderer: Renderer {
         }
         if let fontAtlas {
             let mtl = _materials[0]!
-            devicePipeline.pushPrimitive(RenderElement(self, fontAtlas.fontAtlasTexture, mtl, mtl.shader[0]))
+            let renderData = TextRenderData(self, mtl, fontAtlas.fontAtlasTexture)
+            devicePipeline.pushRenderData(renderData)            
         }
     }
 
