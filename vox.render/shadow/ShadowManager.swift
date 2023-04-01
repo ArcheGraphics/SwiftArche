@@ -35,7 +35,7 @@ public class ShadowManager {
         _passDescriptor.depthAttachment.storeAction = .store
     }
 
-    func draw(with commandBuffer: MTLCommandBuffer, context: RenderContext) {
+    func draw(with commandBuffer: MTLCommandBuffer) {
         _drawDirectShadowMap(with: commandBuffer)
         _drawSpotShadowMap(with: commandBuffer)
         _drawPointShadowMap(with: commandBuffer)
@@ -62,6 +62,7 @@ public class ShadowManager {
                 // render shadow map
                 _passDescriptor.depthAttachment.texture = shadowMap
                 var encoder = RenderCommandEncoder(commandBuffer, _passDescriptor, "direct shadow pass")
+                _camera.devicePipeline.context.pipelineStageTagValue = PipelineStage.ShadowCaster
                 _cascadedShadowSubpass.draw(pipeline: _camera.devicePipeline, on: &encoder)
                 encoder.endEncoding()
             }

@@ -60,15 +60,13 @@ public class DevicePipeline {
             }
         }
         
-        context.pipelineStageTagValue = PipelineStage.ShadowCaster
         // shadow pass automatic culled if not used
-        shadowManager.draw(with: commandBuffer, context: context)
+        shadowManager.draw(with: commandBuffer)
         
         let scene = camera.scene
         let background = scene.background
         _changeBackground(background)
         
-        context.pipelineStageTagValue = PipelineStage.Forward
         // main forward pass
         if let renderTarget = camera.renderTarget ?? Engine.canvas.currentRenderPassDescriptor {
             if background.mode == BackgroundMode.SolidColor {
@@ -99,6 +97,7 @@ public class DevicePipeline {
             } execute: { [self] builder, commandBuffer in
                 if let commandBuffer {
                     var encoder = RenderCommandEncoder(commandBuffer, renderTarget, "forward pass")
+                    context.pipelineStageTagValue = PipelineStage.Forward
                     _forwardSubpass.draw(pipeline: self, on: &encoder)
                     if let background = _backgroundSubpass {
                         background.draw(pipeline: self, on: &encoder)

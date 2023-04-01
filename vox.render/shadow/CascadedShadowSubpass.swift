@@ -22,7 +22,6 @@ class CascadedShadowSubpass: GeometrySubpass {
     private static var _cascadesSplitDistance: [Float] = [Float](repeating: 0, count: CascadedShadowSubpass._maxCascades + 1)
 
     private let _camera: Camera
-    private var _shaderPass: ShaderPass
 
     private var _shadowMapResolution: UInt32 = 0
     private var _shadowMapSize: Vector4 = Vector4()
@@ -42,7 +41,6 @@ class CascadedShadowSubpass: GeometrySubpass {
     
     init(_ camera: Camera) {
         _camera = camera
-        _shaderPass = ShaderPass(Engine.library(), "vertex_shadowmap", nil)
         _shadowSliceData.virtualCamera.isOrthographic = true
         super.init()
     }
@@ -190,12 +188,10 @@ class CascadedShadowSubpass: GeometrySubpass {
                 encoder.handle.setScissorRect(MTLScissorRect(x: Int(_viewportOffsets[j].x + 1), y: Int(_viewportOffsets[j].y + 1),
                         width: Int(_shadowTileResolution - 2), height: Int(_shadowTileResolution - 2)))
                 for i in 0..<pipeline._opaqueQueue.count {
-                    pipeline._opaqueQueue[i].shaderPass = _shaderPass
                     super._drawElement(pipeline: pipeline, on: &encoder, pipeline._opaqueQueue[i])
                 }
 
                 for i in 0..<pipeline._alphaTestQueue.count {
-                    pipeline._alphaTestQueue[i].shaderPass = _shaderPass
                     super._drawElement(pipeline: pipeline, on: &encoder, pipeline._alphaTestQueue[i])
                 }
             }

@@ -290,9 +290,7 @@ public class PBRBaseMaterial: BaseMaterial {
     }
 
     public init(_ name: String = "pbr") {
-        super.init(shader: Shader.create(in: Engine.library(),
-                                         vertexSource: "vertex_pbr",
-                                         fragmentSource: "fragment_pbr"), name)
+        super.init(shader: ShaderFactory.pbr, name)
 
         shaderData.enableMacro(NEED_WORLDPOS.rawValue)
         shaderData.enableMacro(NEED_TILINGOFFSET.rawValue)

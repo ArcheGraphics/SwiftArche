@@ -58,9 +58,7 @@ public class UnlitMaterial: BaseMaterial {
     }
 
     public init(_ name: String = "unlit mat") {
-        super.init(shader: Shader.create(in: Engine.library(),
-                                         vertexSource: "vertex_unlit",
-                                         fragmentSource: "fragment_unlit"), name)
+        super.init(shader: ShaderFactory.unlit, name)
 
         shaderData.enableMacro(OMIT_NORMAL.rawValue)
         shaderData.enableMacro(NEED_TILINGOFFSET.rawValue)

@@ -20,9 +20,9 @@ public class SkyBoxMaterial: Material {
             if newValue != _equirectangular {
                 _equirectangular = newValue
                 if newValue {
-                    shader = Shader.create(in: Engine.library(), vertexSource: "vertex_skybox", fragmentSource: "fragment_skyboxHDR")
+                    shader = ShaderFactory.skyboxHDR
                 } else {
-                    shader = Shader.create(in: Engine.library(), vertexSource: "vertex_skybox", fragmentSource: "fragment_skybox")
+                    shader = ShaderFactory.skybox
                 }
             }
         }
@@ -40,7 +40,6 @@ public class SkyBoxMaterial: Material {
     }
 
     public init(_ name: String = "skybox mat") {
-        super.init(shader: Shader.create(in: Engine.library(), vertexSource: "vertex_skybox",
-                                         fragmentSource: "fragment_skybox"), name)
+        super.init(shader: ShaderFactory.skybox, name)
     }
 }
