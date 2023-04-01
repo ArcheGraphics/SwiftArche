@@ -58,6 +58,7 @@ public class RenderPipelineState {
                 shaderUniform.location = aug.index
                 shaderUniform.functionType = .vertex
                 shaderUniform.bindingType = aug.type
+                shaderUniform.group = Engine.resourceCache.uniformNameMap[aug.name]
                 uniformBlock.append(shaderUniform)
             }
         }
@@ -71,6 +72,7 @@ public class RenderPipelineState {
                 shaderUniform.location = aug.index
                 shaderUniform.functionType = .fragment
                 shaderUniform.bindingType = aug.type
+                shaderUniform.group = Engine.resourceCache.uniformNameMap[aug.name]
                 uniformBlock.append(shaderUniform)
             }
         }

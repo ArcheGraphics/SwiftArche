@@ -48,7 +48,7 @@ open class Material {
     ///   - name: Material name
     public init(shader: Shader, _ name: String = "") {
         _shader = shader
-        shaderData = ShaderData()
+        shaderData = ShaderData(group: .Material)
         self.name = name
         
         self.shader = _shader

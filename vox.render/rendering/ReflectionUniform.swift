@@ -12,4 +12,5 @@ struct ReflectionUniform {
     var location: Int!
     var functionType: MTLFunctionType!
     var bindingType: MTLBindingType!
+    var group: ShaderDataGroup!
 }

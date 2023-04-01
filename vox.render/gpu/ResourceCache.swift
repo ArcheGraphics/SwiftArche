@@ -23,9 +23,15 @@ public class ResourceCache {
     var compute_pipelines: [Int: (resource: ComputePipelineState, useCount: Int)] = [:]
     var samplers: [Int: (resource: MTLSamplerState, useCount: Int)] = [:]
     var depth_stencil_states: [Int: (resource: MTLDepthStencilState, useCount: Int)] = [:]
-
+    var uniformNameMap: [String: ShaderDataGroup] = [:]
+    
     public init(_ device: MTLDevice) {
         self.device = device
+    }
+    
+    func setUniformName(with name: String, group: ShaderDataGroup) {
+        // can upgrade to make warn if exits
+        uniformNameMap[name] = group
     }
 
     func requestGraphicsPipeline(_ pipelineDescriptor: MTLRenderPipelineDescriptor) -> RenderPipelineState {

@@ -50,6 +50,7 @@ class ComputePipelineState {
                 shaderUniform.location = aug.index
                 shaderUniform.functionType = .kernel
                 shaderUniform.bindingType = aug.type
+                shaderUniform.group = Engine.resourceCache.uniformNameMap[aug.name]
                 uniformBlock.append(shaderUniform)
             }
         }

@@ -119,6 +119,7 @@
 		3E5C392729D7AD610026E999 /* RenderContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E5C392629D7AD610026E999 /* RenderContext.swift */; };
 		3E5C392929D7AD910026E999 /* ShaderTagKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E5C392829D7AD910026E999 /* ShaderTagKey.swift */; };
 		3E5C392B29D7B25E0026E999 /* RenderData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E5C392A29D7B25E0026E999 /* RenderData.swift */; };
+		3E5C392F29D7C9710026E999 /* ShaderDataGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E5C392E29D7C9710026E999 /* ShaderDataGroup.swift */; };
 		3E5FC0E229D5CCDE00FF2E7E /* EventWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E5FC0E129D5CCDE00FF2E7E /* EventWrapper.swift */; };
 		3E5FC0E529D6390900FF2E7E /* FrameData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E5FC0E429D6390900FF2E7E /* FrameData.swift */; };
 		3E5FC0E629D6645E00FF2E7E /* AtomicComputeApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8C888ABFCE2075E7AA5BE /* AtomicComputeApp.swift */; };
@@ -850,6 +851,7 @@
 		3E5C392629D7AD610026E999 /* RenderContext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RenderContext.swift; sourceTree = "<group>"; };
 		3E5C392829D7AD910026E999 /* ShaderTagKey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShaderTagKey.swift; sourceTree = "<group>"; };
 		3E5C392A29D7B25E0026E999 /* RenderData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RenderData.swift; sourceTree = "<group>"; };
+		3E5C392E29D7C9710026E999 /* ShaderDataGroup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShaderDataGroup.swift; sourceTree = "<group>"; };
 		3E5FC0E129D5CCDE00FF2E7E /* EventWrapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventWrapper.swift; sourceTree = "<group>"; };
 		3E5FC0E429D6390900FF2E7E /* FrameData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FrameData.swift; sourceTree = "<group>"; };
 		3E6B235D294220BC000AC29F /* FaceMorphApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FaceMorphApp.swift; sourceTree = "<group>"; };
@@ -2658,6 +2660,7 @@
 				3EC0394C293218AA002187DC /* RenderFace.swift */,
 				3EC0394E293218AA002187DC /* RenderQueueType.swift */,
 				3E5C392829D7AD910026E999 /* ShaderTagKey.swift */,
+				3E5C392E29D7C9710026E999 /* ShaderDataGroup.swift */,
 			);
 			path = enums;
 			sourceTree = "<group>";
@@ -3829,6 +3832,7 @@
 				3EBA3D4429B9A07400E5FB42 /* MTLFontAtlas.swift in Sources */,
 				3EC0392B29321885002187DC /* SkyBoxMaterial.swift in Sources */,
 				040F1E12293B4436008BDC8D /* PostprocessManager.swift in Sources */,
+				3E5C392F29D7C9710026E999 /* ShaderDataGroup.swift in Sources */,
 				3E3E439929CED2DB00D41145 /* XCameraController.swift in Sources */,
 				3EC0398F293218D1002187DC /* TextureCoordinate.swift in Sources */,
 				3EC03948293218A3002187DC /* RenderTargetBlendState.swift in Sources */,

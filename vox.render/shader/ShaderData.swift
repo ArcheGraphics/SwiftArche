@@ -14,8 +14,12 @@ open class ShaderData {
     private var _samplers: [String: MTLSamplerDescriptor] = [:]
     static private var _defaultSamplerDesc: MTLSamplerDescriptor = MTLSamplerDescriptor()
     internal var _macroCollection = ShaderMacroCollection()
-
-    public init() {
+    var group: ShaderDataGroup
+    var resourceCache: ResourceCache
+    
+    init(group: ShaderDataGroup) {
+        self.group = group
+        resourceCache = Engine.resourceCache
         _shaderDynamicBuffers = [[String: BufferView]](repeating: [:], count: Engine._maxFramesInFlight)
         ShaderData._defaultSamplerDesc.magFilter = .linear
         ShaderData._defaultSamplerDesc.minFilter = .linear
@@ -39,14 +43,17 @@ open class ShaderData {
     }
 
     public func setBufferFunctor(_ property: String, _ functor: @escaping () -> BufferView) {
+        resourceCache.setUniformName(with: property, group: group)
         _shaderBufferFunctors[property] = functor
     }
 
     public func setData(_ property: String, _ value: BufferView) {
+        resourceCache.setUniformName(with: property, group: group)
         _shaderBuffers[property] = value
     }
 
     public func setData<T>(_ property: String, _ data: T) {
+        resourceCache.setUniformName(with: property, group: group)
         let value = _shaderBuffers.first { (key: String, value: BufferView) in
             key == property
         }
@@ -58,6 +65,7 @@ open class ShaderData {
     }
 
     public func setData<T>(_ property: String, _ data: [T]) {
+        resourceCache.setUniformName(with: property, group: group)
         let value = _shaderBuffers.first { (key: String, value: BufferView) in
             key == property
         }
@@ -80,6 +88,9 @@ open class ShaderData {
     }
 
     public func setImageView(_ textureName: String, _ samplerName: String, _ value: MTLTexture?) {
+        resourceCache.setUniformName(with: textureName, group: group)
+        resourceCache.setUniformName(with: samplerName, group: group)
+
         if value != nil {
             _imageViews[textureName] = value
             let sampler = _samplers.firstIndex { (key: String, value: MTLSamplerDescriptor) in
@@ -95,6 +106,8 @@ open class ShaderData {
     }
 
     public func setImageView(_ name: String, _ value: MTLTexture?) {
+        resourceCache.setUniformName(with: name, group: group)
+
         if value != nil {
             _imageViews[name] = value
         } else {
@@ -103,6 +116,8 @@ open class ShaderData {
     }
 
     public func setSampler(_ name: String, _ value: MTLSamplerDescriptor?) {
+        resourceCache.setUniformName(with: name, group: group)
+
         if value != nil {
             _samplers[name] = value
         } else {
@@ -113,10 +128,12 @@ open class ShaderData {
 
 extension ShaderData {
     public func setDynamicData(_ property: String, _ value: BufferView) {
+        resourceCache.setUniformName(with: property, group: group)
         _shaderDynamicBuffers[Engine.currentBufferIndex][property] = value
     }
 
     public func setDynamicData<T>(_ property: String, _ data: T) {
+        resourceCache.setUniformName(with: property, group: group)
         let value = _shaderDynamicBuffers[Engine.currentBufferIndex].first { (key: String, value: BufferView) in
             key == property
         }
@@ -128,6 +145,7 @@ extension ShaderData {
     }
 
     public func setDynamicData<T>(_ property: String, _ data: [T]) {
+        resourceCache.setUniformName(with: property, group: group)
         let value = _shaderDynamicBuffers[Engine.currentBufferIndex].first { (key: String, value: BufferView) in
             key == property
         }
@@ -165,6 +183,10 @@ extension ShaderData {
     func bindData(_ commandEncoder: MTLComputeCommandEncoder,
                   _ reflectionUniforms: [ReflectionUniform]) {
         for uniform in reflectionUniforms {
+            if uniform.group != group {
+                continue
+            }
+            
             switch uniform.bindingType {
             case .buffer:
                 if let bufferView = _shaderBuffers[uniform.name] {
@@ -185,7 +207,7 @@ extension ShaderData {
                 break
             case .sampler:
                 if let sampler = _samplers[uniform.name] {
-                    commandEncoder.setSamplerState(Engine.resourceCache.requestSamplers(sampler), index: uniform.location)
+                    commandEncoder.setSamplerState(resourceCache.requestSamplers(sampler), index: uniform.location)
                 }
                 break
             default:
@@ -197,6 +219,10 @@ extension ShaderData {
     func bindData(_ commandEncoder: MTLRenderCommandEncoder,
                   _ reflectionUniforms: [ReflectionUniform]) {
         for uniform in reflectionUniforms {
+            if uniform.group != group {
+                continue
+            }
+            
             switch uniform.bindingType {
             case .buffer:
                 if let bufferView = _shaderBuffers[uniform.name] {

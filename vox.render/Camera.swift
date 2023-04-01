@@ -205,7 +205,7 @@ public final class Camera: Component {
     /// Create the Camera component.
     /// - Parameter entity: Entity
     required init() {
-        shaderData = ShaderData()
+        shaderData = ShaderData(group: .Camera)
 
         super.init()
         devicePipeline = DevicePipeline(self)

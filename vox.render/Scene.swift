@@ -17,7 +17,7 @@ public final class Scene: NSObject, Serializable {
     /// The background of the scene.
     public var background: Background = Background()
     /// Scene-related shader data.
-    public var shaderData: ShaderData = ShaderData()
+    public var shaderData: ShaderData = ShaderData(group: .Scene)
 
     /// If cast shadows.
     @Serialized(default: true)

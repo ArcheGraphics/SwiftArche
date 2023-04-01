@@ -12,8 +12,11 @@ open class FrameData {
     private var _samplers: [String: MTLSamplerDescriptor] = [:]
     static private var _defaultSamplerDesc: MTLSamplerDescriptor = MTLSamplerDescriptor()
     internal var _macroCollection = ShaderMacroCollection()
+    var group: ShaderDataGroup = .Frame
+    var resourceCache: ResourceCache
 
     public init() {
+        resourceCache = Engine.resourceCache
         FrameData._defaultSamplerDesc.magFilter = .linear
         FrameData._defaultSamplerDesc.minFilter = .linear
         FrameData._defaultSamplerDesc.mipFilter = .linear
@@ -34,10 +37,14 @@ open class FrameData {
     }
 
     public func setData(_ property: String, _ value: BufferAllocation) {
+        resourceCache.setUniformName(with: property, group: group)
         _shaderBuffers[property] = value
     }
 
     public func setImageView(_ textureName: String, _ samplerName: String, _ value: MTLTexture?) {
+        resourceCache.setUniformName(with: textureName, group: group)
+        resourceCache.setUniformName(with: samplerName, group: group)
+
         if value != nil {
             _imageViews[textureName] = value
             let sampler = _samplers.firstIndex { (key: String, value: MTLSamplerDescriptor) in
@@ -53,6 +60,8 @@ open class FrameData {
     }
 
     public func setImageView(_ name: String, _ value: MTLTexture?) {
+        resourceCache.setUniformName(with: name, group: group)
+
         if value != nil {
             _imageViews[name] = value
         } else {
@@ -61,6 +70,8 @@ open class FrameData {
     }
 
     public func setSampler(_ name: String, _ value: MTLSamplerDescriptor?) {
+        resourceCache.setUniformName(with: name, group: group)
+
         if value != nil {
             _samplers[name] = value
         } else {
@@ -95,6 +106,10 @@ extension FrameData {
     func bindData(_ commandEncoder: MTLComputeCommandEncoder,
                   _ reflectionUniforms: [ReflectionUniform]) {
         for uniform in reflectionUniforms {
+            if uniform.group != group {
+                continue
+            }
+            
             switch uniform.bindingType {
             case .buffer:
                 if let bufferAlloc = _shaderBuffers[uniform.name] {
@@ -120,6 +135,10 @@ extension FrameData {
     func bindData(_ commandEncoder: MTLRenderCommandEncoder,
                   _ reflectionUniforms: [ReflectionUniform]) {
         for uniform in reflectionUniforms {
+            if uniform.group != group {
+                continue
+            }
+            
             switch uniform.bindingType {
             case .buffer:
                 if let bufferAlloc = _shaderBuffers[uniform.name] {

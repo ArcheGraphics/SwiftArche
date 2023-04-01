@@ -77,7 +77,7 @@ public class Renderer: Component {
     }
 
     required init() {
-        shaderData = ShaderData()
+        shaderData = ShaderData(group: .Renderer)
         super.init()
         shaderData.enableMacro(NEED_RECEIVE_SHADOWS.rawValue)
     }
