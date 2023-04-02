@@ -397,6 +397,10 @@ extension Camera {
                 &_globalShaderMacro
         )
     }
+    
+    public func commit(with commandBuffer: MTLCommandBuffer, frameBuffer: MTLRenderPassDescriptor) {
+        devicePipeline.commit(with: commandBuffer, frameBuffer: renderTarget ?? frameBuffer)
+    }
 }
 
 extension Camera {

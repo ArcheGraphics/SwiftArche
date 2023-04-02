@@ -36,29 +36,21 @@ public class DevicePipeline {
         shadowManager = ShadowManager(self)
     }
 
-    public func commit(with commandBuffer: MTLCommandBuffer) {
+    public func commit(with commandBuffer: MTLCommandBuffer, frameBuffer: MTLRenderPassDescriptor) {
         context.replacementShader = camera._replacementShader
         context.replacementTag = camera._replacementSubShaderTag
         
         let fg = Engine.fg
-        var colorOutput: [Resource<MTLTextureDescriptor>] = []
-        var depthOutput: Resource<MTLTextureDescriptor>?
-        if let renderTarget = camera.renderTarget {
-            if let depthTexture = renderTarget.depthAttachment.texture {
-                colorOutput.append(fg.addRetainedResource(for: MTLTextureDescriptor.self,
-                                                          name: "camera depthTexture",
-                                                          description: MTLTextureDescriptor(),
-                                                          actual: depthTexture))
-            }
-            for i in 0..<32 {
-                if let colorTexture = renderTarget.colorAttachments[i].texture {
-                    depthOutput = fg.addRetainedResource(for: MTLTextureDescriptor.self,
-                                                         name: "camera colorTexture\(i)",
-                                                         description: MTLTextureDescriptor(),
-                                                         actual: colorTexture)
-                }
-            }
-        }
+        
+        let colorTexture = frameBuffer.colorAttachments[0].texture
+        fg.blackboard[BlackBoardType.color.rawValue]
+        = fg.addRetainedResource(for: MTLTextureDescriptor.self, name: "colorTexture",
+                                 description: MTLTextureDescriptor(), actual: colorTexture)
+        
+        let depthTexture = frameBuffer.depthAttachment.texture
+        fg.blackboard[BlackBoardType.depth.rawValue]
+        = fg.addRetainedResource(for: MTLTextureDescriptor.self, name: "depthTexture",
+                                 description: MTLTextureDescriptor(), actual: depthTexture)
         
         // shadow pass automatic culled if not used
         shadowManager.draw(with: commandBuffer)
@@ -68,42 +60,30 @@ public class DevicePipeline {
         _changeBackground(background)
         
         // main forward pass
-        if let renderTarget = camera.renderTarget ?? Engine.canvas.currentRenderPassDescriptor {
-            if background.mode == BackgroundMode.SolidColor {
-                let color = background.solidColor.toLinear()
-                renderTarget.colorAttachments[0].clearColor = MTLClearColor(
-                        red: Double(color.r), green: Double(color.g), blue: Double(color.b), alpha: Double(color.a)
-                )
-            }
+        fg.addFrameTask(for: RenderCommandEncoderData.self, name: "forward pass", commandBuffer: commandBuffer) { data, builder in
+            data.colorOutput.append(builder.write(resource: fg.blackboard[BlackBoardType.color.rawValue] as! Resource<MTLTextureDescriptor>))
+            data.depthOutput = builder.write(resource: fg.blackboard[BlackBoardType.depth.rawValue]  as! Resource<MTLTextureDescriptor>)
             
-            fg.addFrameTask(for: RenderCommandEncoderData.self, name: "forward pass", commandBuffer: commandBuffer) {
-                [unowned self] data, builder in
-                if camera.renderTarget != nil {
-                    data.colorOutput = colorOutput.map({ resource in
-                        builder.write(resource: resource)
-                    })
-                    if let depthOutput {
-                        data.depthOutput = builder.write(resource: depthOutput)
-                    }
-                } else {
-                    data.colorOutput.append(builder.write(resource: fg.blackboard[BlackBoardType.color.rawValue] as! Resource<MTLTextureDescriptor>))
-                    data.depthOutput = builder.write(resource: fg.blackboard[BlackBoardType.depth.rawValue]  as! Resource<MTLTextureDescriptor>)
+            if let sunLight = scene._sunLight,
+               scene.castShadows && sunLight.shadowType != ShadowType.None {
+                data.inputShadow = builder.read(resource: fg.blackboard[BlackBoardType.shadow.rawValue] as! Resource<MTLTextureDescriptor>)
+            }
+        } execute: { [self] builder, commandBuffer in
+            if let commandBuffer {
+                if background.mode == BackgroundMode.SolidColor,
+                   let colorAttachment = frameBuffer.colorAttachments[0] {
+                    let color = background.solidColor.toLinear()
+                    let clearColor = MTLClearColor(red: Double(color.r), green: Double(color.g), blue: Double(color.b), alpha: Double(color.a))
+                    colorAttachment.clearColor = clearColor
                 }
+                var encoder = RenderCommandEncoder(commandBuffer, frameBuffer, "forward pass")
+                context.pipelineStageTagValue = PipelineStage.Forward
+                _forwardSubpass.draw(pipeline: self, on: &encoder)
                 
-                if let sunLight = scene._sunLight,
-                   scene.castShadows && sunLight.shadowType != ShadowType.None {
-                    data.inputShadow = builder.read(resource: fg.blackboard[BlackBoardType.shadow.rawValue] as! Resource<MTLTextureDescriptor>)
+                if let background = _backgroundSubpass {
+                    background.draw(pipeline: self, on: &encoder)
                 }
-            } execute: { [self] builder, commandBuffer in
-                if let commandBuffer {
-                    var encoder = RenderCommandEncoder(commandBuffer, renderTarget, "forward pass")
-                    context.pipelineStageTagValue = PipelineStage.Forward
-                    _forwardSubpass.draw(pipeline: self, on: &encoder)
-                    if let background = _backgroundSubpass {
-                        background.draw(pipeline: self, on: &encoder)
-                    }
-                    encoder.endEncoding()
-                }
+                encoder.endEncoding()
             }
         }
     }

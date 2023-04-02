@@ -316,9 +316,7 @@ extension Engine: MTKViewDelegate {
         if (cameras.count > 0) {
             if let commandBuffer = Engine.commandQueue.makeCommandBuffer(),
                let currentDrawable = Engine.canvas.currentDrawable,
-               let renderPassDescriptor = Engine.canvas.currentRenderPassDescriptor,
-               let colorTexture = renderPassDescriptor.colorAttachments[0].texture,
-               let depthTexture = renderPassDescriptor.depthAttachment.texture {
+               let renderPassDescriptor = Engine.canvas.currentRenderPassDescriptor {
                 // Add completion hander which signals inFlightSemaphore
                 // when Metal and the GPU has fully finished processing the commands encoded for this frame.
                 // This indicates when the dynamic buffers, written this frame, will no longer be needed by Metal and the GPU.
@@ -327,17 +325,10 @@ extension Engine: MTKViewDelegate {
                 }
                 
                 let fg = Engine.fg
-                fg.blackboard[BlackBoardType.color.rawValue]
-                = fg.addRetainedResource(for: MTLTextureDescriptor.self, name: "colorTexture",
-                                         description: MTLTextureDescriptor(), actual: colorTexture)
-                fg.blackboard[BlackBoardType.depth.rawValue]
-                = fg.addRetainedResource(for: MTLTextureDescriptor.self, name: "depthTexture",
-                                         description: MTLTextureDescriptor(), actual: depthTexture)
-                
                 for camera in cameras {
                     camera.update()
                     Engine._componentsManager.callCameraOnBeginRender(camera, commandBuffer)
-                    camera.devicePipeline.commit(with: commandBuffer)
+                    camera.commit(with: commandBuffer, frameBuffer: renderPassDescriptor)
                     Engine._componentsManager.callCameraOnEndRender(camera, commandBuffer)
                 }
                 scene.postprocess(commandBuffer)
