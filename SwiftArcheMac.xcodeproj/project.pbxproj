@@ -121,6 +121,11 @@
 		3E5C392B29D7B25E0026E999 /* RenderData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E5C392A29D7B25E0026E999 /* RenderData.swift */; };
 		3E5C392F29D7C9710026E999 /* ShaderDataGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E5C392E29D7C9710026E999 /* ShaderDataGroup.swift */; };
 		3E5C393129D7CF390026E999 /* ShaderFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E5C393029D7CF390026E999 /* ShaderFactory.swift */; };
+		3E5C393729D9B09F0026E999 /* TerrainData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E5C393629D9B09F0026E999 /* TerrainData.swift */; };
+		3E5C393829D9B1B50026E999 /* TerrainRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EF39B9729D281880083E20A /* TerrainRenderer.swift */; };
+		3E5C393B29D9B3DB0026E999 /* TerrainHabitatType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E5C393A29D9B3DB0026E999 /* TerrainHabitatType.swift */; };
+		3E5C393D29D9B4310026E999 /* TerrainHabitat_MemberIds.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E5C393C29D9B4310026E999 /* TerrainHabitat_MemberIds.swift */; };
+		3E5C393F29D9B56E0026E999 /* TerrainParams_MemberIds.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E5C393E29D9B56E0026E999 /* TerrainParams_MemberIds.swift */; };
 		3E5FC0E229D5CCDE00FF2E7E /* EventWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E5FC0E129D5CCDE00FF2E7E /* EventWrapper.swift */; };
 		3E5FC0E529D6390900FF2E7E /* FrameData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E5FC0E429D6390900FF2E7E /* FrameData.swift */; };
 		3E5FC0E629D6645E00FF2E7E /* AtomicComputeApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8C888ABFCE2075E7AA5BE /* AtomicComputeApp.swift */; };
@@ -854,6 +859,10 @@
 		3E5C392A29D7B25E0026E999 /* RenderData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RenderData.swift; sourceTree = "<group>"; };
 		3E5C392E29D7C9710026E999 /* ShaderDataGroup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShaderDataGroup.swift; sourceTree = "<group>"; };
 		3E5C393029D7CF390026E999 /* ShaderFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShaderFactory.swift; sourceTree = "<group>"; };
+		3E5C393629D9B09F0026E999 /* TerrainData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TerrainData.swift; sourceTree = "<group>"; };
+		3E5C393A29D9B3DB0026E999 /* TerrainHabitatType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TerrainHabitatType.swift; sourceTree = "<group>"; };
+		3E5C393C29D9B4310026E999 /* TerrainHabitat_MemberIds.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TerrainHabitat_MemberIds.swift; sourceTree = "<group>"; };
+		3E5C393E29D9B56E0026E999 /* TerrainParams_MemberIds.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TerrainParams_MemberIds.swift; sourceTree = "<group>"; };
 		3E5FC0E129D5CCDE00FF2E7E /* EventWrapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventWrapper.swift; sourceTree = "<group>"; };
 		3E5FC0E429D6390900FF2E7E /* FrameData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FrameData.swift; sourceTree = "<group>"; };
 		3E6B235D294220BC000AC29F /* FaceMorphApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FaceMorphApp.swift; sourceTree = "<group>"; };
@@ -1868,6 +1877,16 @@
 				3E447F1829C807F700D2FB30 /* GridApp.swift */,
 			);
 			path = toolkit;
+			sourceTree = "<group>";
+		};
+		3E5C393929D9B3D30026E999 /* enum */ = {
+			isa = PBXGroup;
+			children = (
+				3E5C393A29D9B3DB0026E999 /* TerrainHabitatType.swift */,
+				3E5C393C29D9B4310026E999 /* TerrainHabitat_MemberIds.swift */,
+				3E5C393E29D9B56E0026E999 /* TerrainParams_MemberIds.swift */,
+			);
+			path = enum;
 			sourceTree = "<group>";
 		};
 		3E6B23A92946B3CA000AC29F /* vox.flex */ = {
@@ -2905,7 +2924,9 @@
 		3EF39B9629D2812D0083E20A /* terrian */ = {
 			isa = PBXGroup;
 			children = (
+				3E5C393929D9B3D30026E999 /* enum */,
 				3EF39B9729D281880083E20A /* TerrainRenderer.swift */,
+				3E5C393629D9B09F0026E999 /* TerrainData.swift */,
 			);
 			path = terrian;
 			sourceTree = "<group>";
@@ -3706,6 +3727,7 @@
 				3EC03967293218BA002187DC /* ComputePass.swift in Sources */,
 				3EF39B8129D16B2F0083E20A /* XScene.swift in Sources */,
 				3EC039AA293218F0002187DC /* BoolUpdateFlag.swift in Sources */,
+				3E5C393D29D9B4310026E999 /* TerrainHabitat_MemberIds.swift in Sources */,
 				3EF39BB529D2AACB0083E20A /* FrameTaskBuilder.swift in Sources */,
 				3EBA3D4329B99D9E00E5FB42 /* MTLTextureDescriptor+Serialization.swift in Sources */,
 				3EC03A022932192D002187DC /* Background.swift in Sources */,
@@ -3754,6 +3776,7 @@
 				3EC038B329321835002187DC /* Collider.swift in Sources */,
 				3EBA3D3329B99D2400E5FB42 /* MTLPixelFormat+Extensions.swift in Sources */,
 				3EC03988293218CB002187DC /* PBRMaterial.swift in Sources */,
+				3E5C393729D9B09F0026E999 /* TerrainData.swift in Sources */,
 				3E447F5629C9E71000D2FB30 /* SerializedCodingKeys.swift in Sources */,
 				3EC0393929321893002187DC /* ShadowType.swift in Sources */,
 				3EF39B7929D166C00083E20A /* XTextureManager.mm in Sources */,
@@ -3801,6 +3824,7 @@
 				3EBA3D3F29B99D8600E5FB42 /* MTLTexture+Serialization.swift in Sources */,
 				3EC03966293218BA002187DC /* Subpass.swift in Sources */,
 				3E5C392729D7AD610026E999 /* RenderContext.swift in Sources */,
+				3E5C393B29D9B3DB0026E999 /* TerrainHabitatType.swift in Sources */,
 				3EC0389329321826002187DC /* Engine.swift in Sources */,
 				040F1DDD2934E89F008BDC8D /* GUIShader.swift in Sources */,
 				3EC039AF293218F0002187DC /* UpdateFlag.swift in Sources */,
@@ -3810,6 +3834,7 @@
 				3EF39B9529D18C1B0083E20A /* XMeshRenderer.swift in Sources */,
 				3EC0399B293218DA002187DC /* Light.swift in Sources */,
 				3EC039A1293218E9002187DC /* ColorSpace.swift in Sources */,
+				3E5C393829D9B1B50026E999 /* TerrainRenderer.swift in Sources */,
 				3EC03979293218C3002187DC /* IndexBufferBinding.swift in Sources */,
 				3EC038B029321835002187DC /* PhysXStaticCollider.swift in Sources */,
 				3EC03977293218C3002187DC /* MeshRenderer.swift in Sources */,
@@ -3907,6 +3932,7 @@
 				3EC038C52932183D002187DC /* ColliderShape.swift in Sources */,
 				3E8B00E029BC2ABF00A70123 /* AnimationClip.swift in Sources */,
 				3EC039B1293218F0002187DC /* Util.swift in Sources */,
+				3E5C393F29D9B56E0026E999 /* TerrainParams_MemberIds.swift in Sources */,
 				3EC038E429321845002187DC /* PhysXConfigurableJoint.swift in Sources */,
 				3EC038B229321835002187DC /* HitResult.swift in Sources */,
 				3EC039A0293218E9002187DC /* CameraClearFlags.swift in Sources */,
