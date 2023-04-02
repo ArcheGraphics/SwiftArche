@@ -90,7 +90,7 @@ public class TextRenderer: Renderer {
         }
         if let fontAtlas {
             let mtl = _materials[0]!
-            let renderData = TextRenderData(self, mtl, fontAtlas.fontAtlasTexture)
+            let renderData = TextRenderData(renderer: self, material: mtl, texture: fontAtlas.fontAtlasTexture)
             devicePipeline.pushRenderData(renderData)            
         }
     }

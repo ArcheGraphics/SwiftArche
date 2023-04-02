@@ -28,31 +28,19 @@ public class ForwardSubpass: GeometrySubpass {
 
         // opaque
         for element in pipeline._opaqueQueue {
-            if element.data.renderer is TextRenderer {
-                TextBatcher.ins.appendElement(element)
-            } else {
-                super._drawElement(pipeline: pipeline, on: &encoder, element)
-            }
+            super._drawElement(pipeline: pipeline, on: &encoder, element)
         }
         super._drawBatcher(pipeline: pipeline, on: &encoder, TextBatcher.ins)
         
         // alphaTest
         for element in pipeline._alphaTestQueue {
-            if element.data.renderer is TextRenderer {
-                TextBatcher.ins.appendElement(element)
-            } else {
-                super._drawElement(pipeline: pipeline, on: &encoder, element)
-            }
+            super._drawElement(pipeline: pipeline, on: &encoder, element)
         }
         super._drawBatcher(pipeline: pipeline, on: &encoder, TextBatcher.ins)
 
         // transparent
         for element in pipeline._transparentQueue {
-            if element.data.renderer is TextRenderer {
-                TextBatcher.ins.appendElement(element)
-            } else {
-                super._drawElement(pipeline: pipeline, on: &encoder, element)
-            }
+            super._drawElement(pipeline: pipeline, on: &encoder, element)
         }
         super._drawBatcher(pipeline: pipeline, on: &encoder, TextBatcher.ins)
     }

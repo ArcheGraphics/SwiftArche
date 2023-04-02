@@ -21,9 +21,21 @@ open class GeometrySubpass: Subpass {
         drawElement(pipeline: pipeline, on: &encoder)
         encoder.handle.popDebugGroup()
     }
-
+    
     public func _drawElement(pipeline: DevicePipeline, on encoder: inout RenderCommandEncoder, _ element: RenderElement) {
-        let meshRenderData = element.data as! MeshRenderData
+        switch element.data.renderType {
+        case .Mesh:
+            _drawMesh(pipeline: pipeline, on: &encoder, renderState: element.renderState,
+                      shaderPass: element.shaderPass, meshRenderData: element.data as! MeshRenderData)
+        case .Text:
+            TextBatcher.ins.appendElement(element)
+        case .Terrian:
+            break
+        }
+    }
+
+    public func _drawMesh(pipeline: DevicePipeline, on encoder: inout RenderCommandEncoder,
+                          renderState: RenderState, shaderPass: ShaderPass, meshRenderData: MeshRenderData) {
         let mesh = meshRenderData.mesh
         let renderer = meshRenderData.renderer
         let material = meshRenderData.material
@@ -37,14 +49,14 @@ open class GeometrySubpass: Subpass {
         ShaderMacroCollection.unionCollection(material.shaderData._macroCollection,
                 renderer._globalShaderMacro, &shaderMacro)
 
-        let functions = Engine.resourceCache.requestShaderModule(element.shaderPass, shaderMacro)
+        let functions = Engine.resourceCache.requestShaderModule(shaderPass, shaderMacro)
         pipelineDescriptor.vertexFunction = functions[0]
         if functions.count == 2 {
             pipelineDescriptor.fragmentFunction = functions[1]
         }
         pipelineDescriptor.vertexDescriptor = mesh._vertexDescriptor
-        element.renderState._apply(pipelineDescriptor, depthStencilDescriptor, encoder.handle,
-                                   renderer.entity.transform._isFrontFaceInvert())
+        renderState._apply(pipelineDescriptor, depthStencilDescriptor, encoder.handle,
+                           renderer.entity.transform._isFrontFaceInvert())
         
         let pso = Engine.resourceCache.requestGraphicsPipeline(pipelineDescriptor)
         encoder.bind(depthStencilState: depthStencilDescriptor)

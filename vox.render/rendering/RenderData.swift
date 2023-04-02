@@ -6,13 +6,22 @@
 
 import Foundation
 
+public enum RenderType {
+    case Mesh
+    case Terrian
+    case Text
+}
+
 public protocol RenderData {
     var renderer: Renderer {get set}
     var material: Material {get set}
     var multiRenderData: Bool {get set}
+    var renderType: RenderType {get}
 }
 
 public struct MeshRenderData: RenderData {
+    public var renderType: RenderType = .Mesh
+    
     public var renderer: Renderer
     public var material: Material
     public var multiRenderData: Bool = false
@@ -29,6 +38,8 @@ public struct MeshRenderData: RenderData {
 }
 
 public struct TextRenderData: RenderData {
+    public var renderType: RenderType = .Text
+
     public var renderer: Renderer
     public var material: Material
     public var multiRenderData: Bool = true
@@ -37,7 +48,7 @@ public struct TextRenderData: RenderData {
     public var texture: MTLTexture?
     
     /// 2D Sprite Element
-    public init(_ renderer: Renderer, _ material: Material, _ texture: MTLTexture) {
+    public init(renderer: Renderer, material: Material, texture: MTLTexture) {
         self.renderer = renderer
         self.texture = texture
         self.material = material
