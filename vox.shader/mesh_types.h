@@ -12,7 +12,7 @@
 typedef struct {
     simd_float3 min;
     simd_float3 max;
-} XBoundingBox3;
+} MetalBoundingBox3;
 
 /// 3-dimensional floating point sphere, usable in both Metal Shading Language and C++.
 typedef struct {
@@ -25,19 +25,19 @@ typedef struct {
             float radius;
         };
     };
-} XSphere;
+} MetalSphere;
 
 /// Metadata describing a chunk of an XSubMesh, usable in both metal and C.
-struct XMeshChunk {
+struct MetalMeshChunk {
     /// Sphere that bounds geometry in this chunk.
-    XBoundingBox3 boundingBox;
+    MetalBoundingBox3 boundingBox;
     /// xyz = average angle; w = cos(maxphi)
     simd_float4 normalDistribution;
     /// Only used for debugging the clustering;
     ///   xyz = cluster mean in obj space; w = unused
     simd_float4 clusterMean;
     /// Sphere that bounds geometry in this chunk.
-    XSphere boundingSphere;
+    MetalSphere boundingSphere;
     /// Index of the material in the materials array for GPU access. Duplicated from XSubMesh.
     uint32_t materialIndex;
     /// Offset in mesh index buffer to the indices for this. chunk.
@@ -49,13 +49,13 @@ struct XMeshChunk {
 /// A SubMesh represents a group of chunks that share a material.
 ///  The indices for the chunks in this submesh are contiguous in the index
 ///  buffer.
-struct XSubMesh {
+struct MetalSubMesh {
     /// Material index for this submesh.
     uint32_t materialIndex;
     /// Combined bounding box for the chunks in this submesh.
-    XBoundingBox3 boundingBox;
+    MetalBoundingBox3 boundingBox;
     /// Combined bounding sphere for the chunks in this. submesh.
-    XSphere boundingSphere;
+    MetalSphere boundingSphere;
     /// Offset in mesh index buffer to the indices for this. submesh.
     unsigned int indexBegin;
     /// Number of indices for this submesh in mesh index. buffer.

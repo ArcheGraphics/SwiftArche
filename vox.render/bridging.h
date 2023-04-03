@@ -6,14 +6,11 @@
 
 #pragma once
 
+#include "../vox.shader/config.h"
 #include "../vox.shader/macro_name.h"
 #include "../vox.shader/type_common.h"
+#include "../vox.shader/mesh_types.h"
 #include "../vox.shader/terrian/TerrainRenderer_define.h"
-
-#include "../vox.shader/experimental/Config.h"
-#include "../vox.shader/experimental/ShaderTypes.h"
-#include "../vox.shader/experimental/MeshTypes.h"
-#include "../vox.shader/experimental/CullingShared.h"
 
 #include "../vox.physics/bridging.h"
 

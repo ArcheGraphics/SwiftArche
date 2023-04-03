@@ -66,5 +66,24 @@ typedef enum {
     FOG_MODE =                           65499,
     
     // Postprocess
-    IS_AUTO_EXPOSURE =                   65498
+    IS_AUTO_EXPOSURE =                   65498,
+    
+    // modern render
+    IS_TRANSPARENT =                     65497,
+    TILE_SIZE_COUNT =                    65496,
+    DISPATCH_SIZE_COUNT =                65495,
+    NEED_DEBUG_VIEW =                    65494,
+    NEED_LIGHT_CLUSTER =                 65493,
+    NEED_RASTERIZATION_RATE =            65492,
+    NEED_SINGLE_PASS_DEFERRED =          65491,
+    LIGHT_CULLING_TILE_SIZE_COUNT =      65490,
+    LIGHT_CLUSTERING_TILE_SIZE_COUNT =   65489,
+    NEED_OCCLUSION_CULLING =             65488,
+    NEED_ENCODE_ALPHA_MASK =             65487,
+    NEED_ENCODE_TO_DEPTH_ONLY =          65486,
+    NEED_ENCODE_TO_MAIN =                65485,
+    NEED_VISUALIZE_CULLING =             65484,
+    NEED_PACK_COMMANDS =                 65483,
+    NEED_FILTERED_CULLING =              65482,
+    NEED_TAA =                           65481
 } MacroName;

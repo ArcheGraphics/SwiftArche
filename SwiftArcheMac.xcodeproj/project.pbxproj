@@ -65,17 +65,6 @@
 		3E37FD1F29B079250050169C /* HandleConstraint2D.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E37FD1E29B079250050169C /* HandleConstraint2D.swift */; };
 		3E37FD2129B07A7B0050169C /* HandleOrientation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E37FD2029B07A7B0050169C /* HandleOrientation.swift */; };
 		3E37FD8229B1C0270050169C /* RaycastHit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E37FD3C29B0AC610050169C /* RaycastHit.swift */; };
-		3E3E438C29CDC18000D41145 /* ScatterVolume.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3E3E437D29CDC17E00D41145 /* ScatterVolume.metal */; };
-		3E3E438D29CDC18000D41145 /* Debug.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3E3E437F29CDC17E00D41145 /* Debug.metal */; };
-		3E3E438E29CDC18000D41145 /* Culling.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3E3E438029CDC17F00D41145 /* Culling.metal */; };
-		3E3E438F29CDC18000D41145 /* DepthPyramid.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3E3E438229CDC17F00D41145 /* DepthPyramid.metal */; };
-		3E3E439029CDC18000D41145 /* AmbientObscurance.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3E3E438429CDC17F00D41145 /* AmbientObscurance.metal */; };
-		3E3E439129CDC18000D41145 /* LightCulling.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3E3E438529CDC17F00D41145 /* LightCulling.metal */; };
-		3E3E439229CDC18000D41145 /* Lighting.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3E3E438629CDC17F00D41145 /* Lighting.metal */; };
-		3E3E439329CDC18000D41145 /* Sky.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3E3E438729CDC17F00D41145 /* Sky.metal */; };
-		3E3E439429CDC18000D41145 /* Resolve.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3E3E438829CDC17F00D41145 /* Resolve.metal */; };
-		3E3E439529CDC18000D41145 /* Simple.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3E3E438929CDC17F00D41145 /* Simple.metal */; };
-		3E3E439629CDC18000D41145 /* MeshRenderer.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3E3E438A29CDC17F00D41145 /* MeshRenderer.metal */; };
 		3E43DC9B295BDDDC00732AC0 /* physics_helpers.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3E6B23B52946B3E5000AC29F /* physics_helpers.metal */; };
 		3E43DC9C295BDDDC00732AC0 /* sdf_shading.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3E6B23D529499B36000AC29F /* sdf_shading.metal */; };
 		3E43DC9D295BDDDC00732AC0 /* sdf_baker.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3E6B23D2294964B1000AC29F /* sdf_baker.metal */; };
@@ -124,6 +113,10 @@
 		3E5C393B29D9B3DB0026E999 /* TerrainHabitatType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E5C393A29D9B3DB0026E999 /* TerrainHabitatType.swift */; };
 		3E5C393D29D9B4310026E999 /* TerrainHabitat_MemberIds.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E5C393C29D9B4310026E999 /* TerrainHabitat_MemberIds.swift */; };
 		3E5C393F29D9B56E0026E999 /* TerrainParams_MemberIds.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E5C393E29D9B56E0026E999 /* TerrainParams_MemberIds.swift */; };
+		3E5C394129DA92CE0026E999 /* simple_shading.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3E3E438929CDC17F00D41145 /* simple_shading.metal */; };
+		3E5C394229DA941B0026E999 /* pbr_deferred.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3E3E438A29CDC17F00D41145 /* pbr_deferred.metal */; };
+		3E5C394529DA9BDA0026E999 /* lighting.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3E3E438629CDC17F00D41145 /* lighting.metal */; };
+		3E5C394629DA9D7F0026E999 /* debug.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3E3E437F29CDC17E00D41145 /* debug.metal */; };
 		3E5FC0E229D5CCDE00FF2E7E /* EventWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E5FC0E129D5CCDE00FF2E7E /* EventWrapper.swift */; };
 		3E5FC0E529D6390900FF2E7E /* FrameData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E5FC0E429D6390900FF2E7E /* FrameData.swift */; };
 		3E5FC0E629D6645E00FF2E7E /* AtomicComputeApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8C888ABFCE2075E7AA5BE /* AtomicComputeApp.swift */; };
@@ -138,7 +131,6 @@
 		3E6D2F03293E336500B63F73 /* FogMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E6D2F02293E336500B63F73 /* FogMode.swift */; };
 		3E6D2F06293ED76300B63F73 /* light_sprite.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3E6D2F04293ED76300B63F73 /* light_sprite.metal */; };
 		3E6D2F07293ED76300B63F73 /* cluster_visual.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3E6D2F05293ED76300B63F73 /* cluster_visual.metal */; };
-		3E6D2F0A293ED78300B63F73 /* cluster_compute.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3E6D2F09293ED78300B63F73 /* cluster_compute.metal */; };
 		3E6D2F0D293F137300B63F73 /* GLTFViewerApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E6D2F0C293F137300B63F73 /* GLTFViewerApp.swift */; };
 		3E6D2F0F293F14FD00B63F73 /* glTF-Sample-Models in Resources */ = {isa = PBXBuildFile; fileRef = 3E6D2F0E293F14FD00B63F73 /* glTF-Sample-Models */; };
 		3E6D2F11293F1AAB00B63F73 /* GLTFLoaderUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E6D2F10293F1AAB00B63F73 /* GLTFLoaderUtils.swift */; };
@@ -498,12 +490,6 @@
 		3ED9BCFD29529D0700876ABC /* inner_bitonic_sort.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3ED9BCFC29529D0700876ABC /* inner_bitonic_sort.metal */; };
 		3ED9BCFF2952A13F00876ABC /* step_bitonic_sort.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3ED9BCFE2952A13F00876ABC /* step_bitonic_sort.metal */; };
 		3EF39B8829D181060083E20A /* RenderConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EF39B8729D181060083E20A /* RenderConfig.swift */; };
-		3EF39BA429D284040083E20A /* VegetationRenderer.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3EF39B9A29D284030083E20A /* VegetationRenderer.metal */; };
-		3EF39BA529D284050083E20A /* ParticleRenderer.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3EF39B9B29D284030083E20A /* ParticleRenderer.metal */; };
-		3EF39BA629D284050083E20A /* MainRenderer.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3EF39B9C29D284030083E20A /* MainRenderer.metal */; };
-		3EF39BA729D284050083E20A /* TerrainRenderer.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3EF39B9E29D284030083E20A /* TerrainRenderer.metal */; };
-		3EF39BA829D284050083E20A /* TerrainRendererUtilities.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3EF39BA029D284040083E20A /* TerrainRendererUtilities.metal */; };
-		3EF39BA929D284050083E20A /* MainRendererUtilities.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3EF39BA329D284040083E20A /* MainRendererUtilities.metal */; };
 		3EF39BAF29D298730083E20A /* Resource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EF39BAE29D298730083E20A /* Resource.swift */; };
 		3EF39BB129D29D840083E20A /* Realize.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EF39BB029D29D840083E20A /* Realize.swift */; };
 		3EF39BB329D2AAAE0083E20A /* FrameGraph.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EF39BB229D2AAAE0083E20A /* FrameGraph.swift */; };
@@ -711,7 +697,7 @@
 		3E1F129629A78B3300F1002E /* PhysXConvexComposeApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhysXConvexComposeApp.swift; sourceTree = "<group>"; };
 		3E1F129829A7A49900F1002E /* PhysXConcaveDynamicApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhysXConcaveDynamicApp.swift; sourceTree = "<group>"; };
 		3E1F12AC29AC879E00F1002E /* Collision.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Collision.swift; sourceTree = "<group>"; };
-		3E2AC86529CDA8B400A99391 /* Config.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Config.h; sourceTree = "<group>"; };
+		3E2AC86529CDA8B400A99391 /* config.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = config.h; sourceTree = "<group>"; };
 		3E34226E29C44AE60025C65A /* SceneDecodeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDecodeTests.swift; sourceTree = "<group>"; };
 		3E37FCE529AEE9A70050169C /* CPXHelper.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CPXHelper.h; sourceTree = "<group>"; };
 		3E37FD0229AF743E0050169C /* ActionResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActionResult.swift; sourceTree = "<group>"; };
@@ -794,23 +780,19 @@
 		3E37FDE729B238040050169C /* VertexEditing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VertexEditing.swift; sourceTree = "<group>"; };
 		3E37FDEA29B239510050169C /* UVEditing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UVEditing.swift; sourceTree = "<group>"; };
 		3E3E437929CDC07B00D41145 /* XCamera.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XCamera.swift; sourceTree = "<group>"; };
-		3E3E437C29CDC17E00D41145 /* LightingCommon.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LightingCommon.h; sourceTree = "<group>"; };
 		3E3E437D29CDC17E00D41145 /* ScatterVolume.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; path = ScatterVolume.metal; sourceTree = "<group>"; };
-		3E3E437E29CDC17E00D41145 /* CullingShared.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CullingShared.h; sourceTree = "<group>"; };
-		3E3E437F29CDC17E00D41145 /* Debug.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; path = Debug.metal; sourceTree = "<group>"; };
+		3E3E437F29CDC17E00D41145 /* debug.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; path = debug.metal; sourceTree = "<group>"; };
 		3E3E438029CDC17F00D41145 /* Culling.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; path = Culling.metal; sourceTree = "<group>"; };
 		3E3E438129CDC17F00D41145 /* LightCullingShared.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LightCullingShared.h; sourceTree = "<group>"; };
 		3E3E438229CDC17F00D41145 /* DepthPyramid.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; path = DepthPyramid.metal; sourceTree = "<group>"; };
-		3E3E438329CDC17F00D41145 /* ShaderTypes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ShaderTypes.h; sourceTree = "<group>"; };
 		3E3E438429CDC17F00D41145 /* AmbientObscurance.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; path = AmbientObscurance.metal; sourceTree = "<group>"; };
 		3E3E438529CDC17F00D41145 /* LightCulling.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; path = LightCulling.metal; sourceTree = "<group>"; };
-		3E3E438629CDC17F00D41145 /* Lighting.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; path = Lighting.metal; sourceTree = "<group>"; };
+		3E3E438629CDC17F00D41145 /* lighting.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; path = lighting.metal; sourceTree = "<group>"; };
 		3E3E438729CDC17F00D41145 /* Sky.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; path = Sky.metal; sourceTree = "<group>"; };
 		3E3E438829CDC17F00D41145 /* Resolve.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; path = Resolve.metal; sourceTree = "<group>"; };
-		3E3E438929CDC17F00D41145 /* Simple.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; path = Simple.metal; sourceTree = "<group>"; };
-		3E3E438A29CDC17F00D41145 /* MeshRenderer.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; path = MeshRenderer.metal; sourceTree = "<group>"; };
-		3E3E438B29CDC17F00D41145 /* ShaderCommon.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ShaderCommon.h; sourceTree = "<group>"; };
-		3E3E439729CDC28A00D41145 /* MeshTypes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MeshTypes.h; sourceTree = "<group>"; };
+		3E3E438929CDC17F00D41145 /* simple_shading.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; path = simple_shading.metal; sourceTree = "<group>"; };
+		3E3E438A29CDC17F00D41145 /* pbr_deferred.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; path = pbr_deferred.metal; sourceTree = "<group>"; };
+		3E3E439729CDC28A00D41145 /* mesh_types.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = mesh_types.h; sourceTree = "<group>"; };
 		3E3E439829CED2DB00D41145 /* XCameraController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XCameraController.swift; sourceTree = "<group>"; };
 		3E447F1829C807F700D2FB30 /* GridApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GridApp.swift; sourceTree = "<group>"; };
 		3E447F4D29C9E71000D2FB30 /* Serialized.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Serialized.swift; sourceTree = "<group>"; };
@@ -841,6 +823,8 @@
 		3E5C393A29D9B3DB0026E999 /* TerrainHabitatType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TerrainHabitatType.swift; sourceTree = "<group>"; };
 		3E5C393C29D9B4310026E999 /* TerrainHabitat_MemberIds.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TerrainHabitat_MemberIds.swift; sourceTree = "<group>"; };
 		3E5C393E29D9B56E0026E999 /* TerrainParams_MemberIds.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TerrainParams_MemberIds.swift; sourceTree = "<group>"; };
+		3E5C394329DA96B00026E999 /* culling_shared.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = culling_shared.h; sourceTree = "<group>"; };
+		3E5C394429DA97E50026E999 /* lighting_common.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = lighting_common.h; sourceTree = "<group>"; };
 		3E5FC0E129D5CCDE00FF2E7E /* EventWrapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventWrapper.swift; sourceTree = "<group>"; };
 		3E5FC0E429D6390900FF2E7E /* FrameData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FrameData.swift; sourceTree = "<group>"; };
 		3E6B235D294220BC000AC29F /* FaceMorphApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FaceMorphApp.swift; sourceTree = "<group>"; };
@@ -1283,7 +1267,7 @@
 		3EF39B6729D133220083E20A /* XLightingEnvironment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XLightingEnvironment.swift; sourceTree = "<group>"; };
 		3EF39B6B29D15BFF0083E20A /* XAsset.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XAsset.h; sourceTree = "<group>"; };
 		3EF39B6C29D15BFF0083E20A /* XAsset.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = XAsset.mm; sourceTree = "<group>"; };
-		3EF39B6F29D161940083E20A /* MeshOperator.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MeshOperator.h; sourceTree = "<group>"; };
+		3EF39B6F29D161940083E20A /* mesh_operator.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = mesh_operator.h; sourceTree = "<group>"; };
 		3EF39B7129D166C00083E20A /* XTextureManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XTextureManager.h; sourceTree = "<group>"; };
 		3EF39B7229D166C00083E20A /* XMesh.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XMesh.h; sourceTree = "<group>"; };
 		3EF39B7329D166C00083E20A /* XMesh.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = XMesh.mm; sourceTree = "<group>"; };
@@ -1305,14 +1289,11 @@
 		3EF39B9729D281880083E20A /* TerrainRenderer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TerrainRenderer.swift; sourceTree = "<group>"; };
 		3EF39B9A29D284030083E20A /* VegetationRenderer.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; path = VegetationRenderer.metal; sourceTree = "<group>"; };
 		3EF39B9B29D284030083E20A /* ParticleRenderer.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; path = ParticleRenderer.metal; sourceTree = "<group>"; };
-		3EF39B9C29D284030083E20A /* MainRenderer.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; path = MainRenderer.metal; sourceTree = "<group>"; };
 		3EF39B9D29D284030083E20A /* TerrainRenderer_shared.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TerrainRenderer_shared.h; sourceTree = "<group>"; };
 		3EF39B9E29D284030083E20A /* TerrainRenderer.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; path = TerrainRenderer.metal; sourceTree = "<group>"; };
-		3EF39B9F29D284030083E20A /* MainRenderer_shared.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MainRenderer_shared.h; sourceTree = "<group>"; };
 		3EF39BA029D284040083E20A /* TerrainRendererUtilities.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; path = TerrainRendererUtilities.metal; sourceTree = "<group>"; };
 		3EF39BA129D284040083E20A /* VegetationRenderer_shared.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VegetationRenderer_shared.h; sourceTree = "<group>"; };
 		3EF39BA229D284040083E20A /* ParticleRenderer_shared.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ParticleRenderer_shared.h; sourceTree = "<group>"; };
-		3EF39BA329D284040083E20A /* MainRendererUtilities.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; path = MainRendererUtilities.metal; sourceTree = "<group>"; };
 		3EF39BAC29D289900083E20A /* TerrainRenderer_define.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TerrainRenderer_define.h; sourceTree = "<group>"; };
 		3EF39BAE29D298730083E20A /* Resource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Resource.swift; sourceTree = "<group>"; };
 		3EF39BB029D29D840083E20A /* Realize.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Realize.swift; sourceTree = "<group>"; };
@@ -1825,24 +1806,13 @@
 		3E3E437B29CDC0FD00D41145 /* experimental */ = {
 			isa = PBXGroup;
 			children = (
-				3E2AC86529CDA8B400A99391 /* Config.h */,
-				3E3E439729CDC28A00D41145 /* MeshTypes.h */,
-				3EF39B6F29D161940083E20A /* MeshOperator.h */,
-				3E3E438329CDC17F00D41145 /* ShaderTypes.h */,
-				3E3E438B29CDC17F00D41145 /* ShaderCommon.h */,
 				3E3E438429CDC17F00D41145 /* AmbientObscurance.metal */,
 				3E3E438029CDC17F00D41145 /* Culling.metal */,
-				3E3E437E29CDC17E00D41145 /* CullingShared.h */,
-				3E3E437F29CDC17E00D41145 /* Debug.metal */,
 				3E3E438229CDC17F00D41145 /* DepthPyramid.metal */,
 				3E3E438529CDC17F00D41145 /* LightCulling.metal */,
 				3E3E438129CDC17F00D41145 /* LightCullingShared.h */,
-				3E3E438629CDC17F00D41145 /* Lighting.metal */,
-				3E3E437C29CDC17E00D41145 /* LightingCommon.h */,
-				3E3E438A29CDC17F00D41145 /* MeshRenderer.metal */,
 				3E3E438829CDC17F00D41145 /* Resolve.metal */,
 				3E3E437D29CDC17E00D41145 /* ScatterVolume.metal */,
-				3E3E438929CDC17F00D41145 /* Simple.metal */,
 				3E3E438729CDC17F00D41145 /* Sky.metal */,
 			);
 			path = experimental;
@@ -2350,17 +2320,20 @@
 		3EC0383329321473002187DC /* vox.shader */ = {
 			isa = PBXGroup;
 			children = (
-				3EF39BAB29D284EB0083E20A /* deferred */,
 				3EF39B9929D283360083E20A /* terrian */,
 				3EF39BAA29D284470083E20A /* particle */,
 				3E3E437B29CDC0FD00D41145 /* experimental */,
 				3EC0383929321483002187DC /* shadow */,
+				3E2AC86529CDA8B400A99391 /* config.h */,
 				3EC0384829321496002187DC /* type_common.h */,
 				3EC0383A29321494002187DC /* macro_name.h */,
 				3EC0384929321496002187DC /* function_constant.h */,
+				3E3E439729CDC28A00D41145 /* mesh_types.h */,
+				3EF39B6F29D161940083E20A /* mesh_operator.h */,
 				3EC0383E29321495002187DC /* function_common.h */,
 				3EC0384229321495002187DC /* function_common.metal */,
 				3EC0384429321495002187DC /* shader_common.h */,
+				3E3E438929CDC17F00D41145 /* simple_shading.metal */,
 				3EC0384529321496002187DC /* normal_shading.h */,
 				3EC0383B29321495002187DC /* normal_shading.metal */,
 				3E6D2F08293ED78300B63F73 /* cluster_compute.h */,
@@ -2371,6 +2344,8 @@
 				3EC0383D29321495002187DC /* background_shading.metal */,
 				3EC0383C29321495002187DC /* pbr_shading.h */,
 				3EC0384029321495002187DC /* pbr_shading.metal */,
+				3E5C394329DA96B00026E999 /* culling_shared.h */,
+				3EF39BAB29D284EB0083E20A /* deferred */,
 				040F1E13293B86AC008BDC8D /* luminance.metal */,
 				3EC92AC72939A1ED00423396 /* postprocess_merge.metal */,
 				3EBA3D0C29B83EDD00E5FB42 /* gizmos.metal */,
@@ -2934,9 +2909,10 @@
 		3EF39BAB29D284EB0083E20A /* deferred */ = {
 			isa = PBXGroup;
 			children = (
-				3EF39B9F29D284030083E20A /* MainRenderer_shared.h */,
-				3EF39B9C29D284030083E20A /* MainRenderer.metal */,
-				3EF39BA329D284040083E20A /* MainRendererUtilities.metal */,
+				3E5C394429DA97E50026E999 /* lighting_common.h */,
+				3E3E438A29CDC17F00D41145 /* pbr_deferred.metal */,
+				3E3E438629CDC17F00D41145 /* lighting.metal */,
+				3E3E437F29CDC17E00D41145 /* debug.metal */,
 			);
 			path = deferred;
 			sourceTree = "<group>";
@@ -3620,37 +3596,23 @@
 			files = (
 				3EBA3D5529B9C23500E5FB42 /* text.metal in Sources */,
 				3EC0384F29321496002187DC /* function_common.metal in Sources */,
-				3E3E438F29CDC18000D41145 /* DepthPyramid.metal in Sources */,
-				3E3E438C29CDC18000D41145 /* ScatterVolume.metal in Sources */,
 				3EC0385229321496002187DC /* unlit_shading.metal in Sources */,
 				3EC0385129321496002187DC /* skybox_shading.metal in Sources */,
-				3EF39BA729D284050083E20A /* TerrainRenderer.metal in Sources */,
-				3E3E439029CDC18000D41145 /* AmbientObscurance.metal in Sources */,
-				3E3E439429CDC18000D41145 /* Resolve.metal in Sources */,
-				3E3E439129CDC18000D41145 /* LightCulling.metal in Sources */,
 				3EBA3D0D29B83EDD00E5FB42 /* gizmos.metal in Sources */,
 				3EC0384E29321496002187DC /* ar_shading.metal in Sources */,
-				3E3E438D29CDC18000D41145 /* Debug.metal in Sources */,
-				3EF39BA829D284050083E20A /* TerrainRendererUtilities.metal in Sources */,
-				3EF39BA429D284040083E20A /* VegetationRenderer.metal in Sources */,
 				3EBA3D5129B9A69700E5FB42 /* quantize_distance_field.metal in Sources */,
 				040F1E27293C727D008BDC8D /* transparent_shadow.metal in Sources */,
 				3EC03856293214A2002187DC /* shadowmap.metal in Sources */,
-				3E6D2F0A293ED78300B63F73 /* cluster_compute.metal in Sources */,
-				3EF39BA629D284050083E20A /* MainRenderer.metal in Sources */,
-				3E3E439229CDC18000D41145 /* Lighting.metal in Sources */,
 				3EC0384B29321496002187DC /* background_shading.metal in Sources */,
-				3E3E439329CDC18000D41145 /* Sky.metal in Sources */,
 				3EC0384A29321496002187DC /* normal_shading.metal in Sources */,
+				3E5C394129DA92CE0026E999 /* simple_shading.metal in Sources */,
 				3EC03857293214A2002187DC /* shadow_shading.metal in Sources */,
-				3E3E439529CDC18000D41145 /* Simple.metal in Sources */,
+				3E5C394629DA9D7F0026E999 /* debug.metal in Sources */,
 				3EC0384D29321496002187DC /* pbr_shading.metal in Sources */,
 				3EC92AC82939A1ED00423396 /* postprocess_merge.metal in Sources */,
-				3EF39BA529D284050083E20A /* ParticleRenderer.metal in Sources */,
-				3E3E438E29CDC18000D41145 /* Culling.metal in Sources */,
+				3E5C394529DA9BDA0026E999 /* lighting.metal in Sources */,
 				040F1E14293B86AC008BDC8D /* luminance.metal in Sources */,
-				3E3E439629CDC18000D41145 /* MeshRenderer.metal in Sources */,
-				3EF39BA929D284050083E20A /* MainRendererUtilities.metal in Sources */,
+				3E5C394229DA941B0026E999 /* pbr_deferred.metal in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -52,6 +52,7 @@ public struct RenderCullType: OptionSet {
 }
 
 // MARK: - Render Config with hardware support
+// FIXME: - Must modify config in vox.shader by correspoding change
 public struct RenderConfig {
     public static var supportMaterialUpdates: Bool {
         true

@@ -151,26 +151,26 @@ void PBRShading::addDirectionalDirectLightRadiance(DirectLightData directionalLi
 
 void PBRShading::addPointDirectLightRadiance(PointLightData pointLight) {
     
-    float3 lVector = pointLight.position - geometry.position;
+    float3 lVector = pointLight.posSqrRadius.xyz - geometry.position;
     float3 direction = normalize(lVector);
     float lightDistance = length(lVector);
     float3 color = pointLight.color;
-    color *= clamp(1.0 - pow(lightDistance/pointLight.distance, 4.0), 0.0, 1.0);
+    color *= clamp(1.0 - pow(lightDistance, 4) / pow(pointLight.posSqrRadius.w, 2.0), 0.0, 1.0);
     
     addDirectRadiance(direction, color);
 }
 
 void PBRShading::addSpotDirectLightRadiance(SpotLightData spotLight) {
-    float3 lVector = spotLight.position - geometry.position;
+    float3 lVector = spotLight.boundingSphere.xyz - geometry.position;
     float3 direction = normalize(lVector);
     
     float lightDistance = length(lVector);
-    float angleCos = dot(direction, -spotLight.direction);
+    float angleCos = dot(direction, -spotLight.dirAndOuterAngle.xyz);
     
-    float spotEffect = smoothstep(spotLight.penumbraCos, spotLight.angleCos, angleCos);
-    float decayEffect = clamp(1.0 - pow(lightDistance/spotLight.distance, 4.0), 0.0, 1.0);
+    float spotEffect = smoothstep(spotLight.dirAndOuterAngle.w, spotLight.colorAndInnerAngle.w, angleCos);
+    float decayEffect = clamp(1.0 - pow(lightDistance/spotLight.boundingSphere.w, 4.0), 0.0, 1.0);
     
-    float3 color = spotLight.color;
+    float3 color = spotLight.colorAndInnerAngle.xyz;
     color *= spotEffect * decayEffect;
     
     addDirectRadiance(direction, color);

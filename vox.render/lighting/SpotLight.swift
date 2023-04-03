@@ -45,12 +45,10 @@ public class SpotLight: Light {
     }
 
     internal func _appendData(_ lightIndex: Int) {
-        SpotLight._combinedData[lightIndex].color = _getLightColor()
-        SpotLight._combinedData[lightIndex].position = entity.transform.worldPosition.internalValue
-        SpotLight._combinedData[lightIndex].direction = direction.internalValue
-        SpotLight._combinedData[lightIndex].distance = distance
-        SpotLight._combinedData[lightIndex].angleCos = cos(angle)
-        SpotLight._combinedData[lightIndex].penumbraCos = cos(angle + penumbra)
+        SpotLight._combinedData[lightIndex].colorAndInnerAngle = SIMD4<Float>(_getLightColor(), cos(angle))
+        SpotLight._combinedData[lightIndex].boundingSphere = SIMD4<Float>(entity.transform.worldPosition.internalValue, distance)
+        SpotLight._combinedData[lightIndex].dirAndOuterAngle = SIMD4<Float>(direction.internalValue, cos(angle + penumbra))
+        // TODO: Shader Culling
     }
 
     override func _onEnable() {

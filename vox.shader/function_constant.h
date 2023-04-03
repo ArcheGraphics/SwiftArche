@@ -81,3 +81,25 @@ DeclIntMacro(fogMode, FOG_MODE)
 constant bool hasFog = fogMode != 0;
 
 DeclBoolMacro(isAutoExposure, IS_AUTO_EXPOSURE)
+
+// MARK: - Modern Render
+
+DeclBoolMacro(isTransparent, IS_TRANSPARENT)
+DeclIntMacro(tileSize, TILE_SIZE_COUNT)
+DeclIntMacro(dispatchSize, DISPATCH_SIZE_COUNT)
+DeclBoolMacro(needDebugView, NEED_DEBUG_VIEW)
+DeclBoolMacro(needLightCluster, NEED_LIGHT_CLUSTER)
+DeclBoolMacro(needRasterizationRate, NEED_RASTERIZATION_RATE)
+DeclBoolMacro(needSinglePassDeferred, NEED_SINGLE_PASS_DEFERRED)
+constant bool needTraditionalDeferred = !needSinglePassDeferred;
+
+DeclIntMacro(lightCullingTileSize, LIGHT_CULLING_TILE_SIZE_COUNT)
+DeclIntMacro(lightClusteringTileSize, LIGHT_CLUSTERING_TILE_SIZE_COUNT)
+DeclBoolMacro(needOcclusionCulling, NEED_OCCLUSION_CULLING)
+DeclBoolMacro(needEncodeAlphaMask, NEED_ENCODE_ALPHA_MASK)
+DeclBoolMacro(needEncodeToDepthOnly, NEED_ENCODE_TO_DEPTH_ONLY)
+DeclBoolMacro(needEncodeToMain, NEED_ENCODE_TO_MAIN)
+DeclBoolMacro(needVisualizeCulling, NEED_VISUALIZE_CULLING)
+DeclBoolMacro(needPackCommands, NEED_PACK_COMMANDS)
+DeclBoolMacro(needFilteredCulling, NEED_FILTERED_CULLING)
+DeclBoolMacro(needTAA, NEED_TAA)
