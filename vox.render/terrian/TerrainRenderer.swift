@@ -114,12 +114,12 @@ public class TerrainRenderer: Renderer {
         _tessellationScale = 25.0
         _visiblePatchIndicesBfr
                 = Engine.device.makeBuffer(length: MemoryLayout<UInt32>.stride
-                                           * Int(TERRAIN_PATCHES) * Int(TERRAIN_PATCHES),
+                * Int(TERRAIN_PATCHES) * Int(TERRAIN_PATCHES),
                 options: .storageModePrivate)!
 
         _visiblePatchesTessFactorBfr
                 = Engine.device.makeBuffer(length: MemoryLayout<MTLQuadTessellationFactorsHalf>.stride
-                                           * Int(TERRAIN_PATCHES) * Int(TERRAIN_PATCHES),
+                * Int(TERRAIN_PATCHES) * Int(TERRAIN_PATCHES),
                 options: .storageModePrivate)!
 
         super.init()
@@ -130,7 +130,7 @@ public class TerrainRenderer: Renderer {
                 computeEncoder.setTexture(_srcTex, index: 0)
                 computeEncoder.setTexture(_dstTex, index: 1)
                 computeEncoder.dispatchThreads(MTLSizeMake(heightMapWidth, heightMapHeight, 1),
-                                               threadsPerThreadgroup: threadsPerThreadgroup)
+                        threadsPerThreadgroup: threadsPerThreadgroup)
 
                 computeEncoder.endEncoding()
                 commandBuffer.commit()
@@ -165,6 +165,40 @@ public class TerrainRenderer: Renderer {
                 blit.endEncoding()
             }
             commandBuffer.commit()
+        }
+    }
+
+    func computeTesselationFactors(with commandBuffer: MTLCommandBuffer) {
+        if let computeEncoder = commandBuffer.makeComputeCommandEncoder() {
+            computeEncoder.setBuffer(_visiblePatchesTessFactorBfr, offset: 0, index: 0)
+            computeEncoder.setBuffer(_visiblePatchIndicesBfr, offset: 0, index: 2)
+            computeEncoder.setBytes(&_tessellationScale, length: MemoryLayout<Float>.stride, index: 3)
+            computeEncoder.setTexture(terrainHeight, index: 0)
+
+            let threadsPerThreadgroup = MTLSize(width: 16, height: 16, depth: 1)
+            computeEncoder.dispatchThreadgroups(MTLSizeMake(2, 2, 1),
+                    threadsPerThreadgroup: threadsPerThreadgroup)
+            computeEncoder.endEncoding()
+        }
+    }
+
+    func computeUpdateHeightMap(with commandBuffer: MTLCommandBuffer,
+                                mouseBuffer: MTLBuffer) {
+        if let computeEncoder = commandBuffer.makeComputeCommandEncoder() {
+            computeEncoder.setTexture(terrainHeight, index: 0)
+            computeEncoder.setBuffer(mouseBuffer, offset: 0, index: 0)
+            computeEncoder.dispatchThreads(MTLSizeMake(terrainHeight.width / 8, terrainHeight.height / 8, 1),
+                    threadsPerThreadgroup: MTLSizeMake(8, 8, 1))
+            computeEncoder.endEncoding()
+        }
+
+        generateTerrainNormalMap(with: commandBuffer)
+        generateTerrainPropertiesMap(with: commandBuffer)
+
+        if let blit = commandBuffer.makeBlitCommandEncoder() {
+            blit.generateMipmaps(for: terrainNormalMap)
+            blit.generateMipmaps(for: terrainPropertiesMap)
+            blit.endEncoding()
         }
     }
 

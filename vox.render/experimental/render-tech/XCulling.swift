@@ -6,23 +6,7 @@
 
 import Math
 
-// Options for types of culling to apply.
-public struct XRenderCullType: OptionSet {
-    public let rawValue: UInt32
 
-    // this initializer is required, but it's also automatically
-    // synthesized if `rawValue` is the only member, so writing it
-    // here is optional:
-    public init(rawValue: UInt32) {
-        self.rawValue = rawValue
-    }
-
-    public static let None = XRenderCullType([])
-    public static let Frustum = XRenderCullType(rawValue: 1)
-    public static let FrustumDepth = XRenderCullType(rawValue: 2)
-    public static let Count = XRenderCullType(rawValue: 3)
-    public static let Visualization = XRenderCullType(rawValue: XRenderCullType.FrustumDepth.rawValue | 0x10000)
-}
 
 struct XICBData {
     // Default indirect command buffers.

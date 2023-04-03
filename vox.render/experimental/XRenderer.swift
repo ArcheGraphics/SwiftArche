@@ -14,14 +14,6 @@ struct XFrameViewData {
     var cullParamBuffer: MTLBuffer!
 }
 
-/// Options for encoding rendering.
-enum XRenderMode {
-    /// CPU encoding of draws with a `MTLRenderCommandEncoder`.
-    case Direct
-    /// GPU encoding of draws with an `MTLIndirectCommandBuffer`.
-    case Indirect
-}
-
 class XRenderer {
     // Internal structure containing the data for each frame.
     //  Multiple copies exist to allow updating while others are in flight.

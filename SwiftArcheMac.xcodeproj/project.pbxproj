@@ -65,7 +65,6 @@
 		3E37FD1F29B079250050169C /* HandleConstraint2D.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E37FD1E29B079250050169C /* HandleConstraint2D.swift */; };
 		3E37FD2129B07A7B0050169C /* HandleOrientation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E37FD2029B07A7B0050169C /* HandleOrientation.swift */; };
 		3E37FD8229B1C0270050169C /* RaycastHit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E37FD3C29B0AC610050169C /* RaycastHit.swift */; };
-		3E3E437A29CDC07B00D41145 /* XCamera.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E3E437929CDC07B00D41145 /* XCamera.swift */; };
 		3E3E438C29CDC18000D41145 /* ScatterVolume.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3E3E437D29CDC17E00D41145 /* ScatterVolume.metal */; };
 		3E3E438D29CDC18000D41145 /* Debug.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3E3E437F29CDC17E00D41145 /* Debug.metal */; };
 		3E3E438E29CDC18000D41145 /* Culling.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3E3E438029CDC17F00D41145 /* Culling.metal */; };
@@ -77,7 +76,6 @@
 		3E3E439429CDC18000D41145 /* Resolve.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3E3E438829CDC17F00D41145 /* Resolve.metal */; };
 		3E3E439529CDC18000D41145 /* Simple.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3E3E438929CDC17F00D41145 /* Simple.metal */; };
 		3E3E439629CDC18000D41145 /* MeshRenderer.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3E3E438A29CDC17F00D41145 /* MeshRenderer.metal */; };
-		3E3E439929CED2DB00D41145 /* XCameraController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E3E439829CED2DB00D41145 /* XCameraController.swift */; };
 		3E43DC9B295BDDDC00732AC0 /* physics_helpers.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3E6B23B52946B3E5000AC29F /* physics_helpers.metal */; };
 		3E43DC9C295BDDDC00732AC0 /* sdf_shading.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3E6B23D529499B36000AC29F /* sdf_shading.metal */; };
 		3E43DC9D295BDDDC00732AC0 /* sdf_baker.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3E6B23D2294964B1000AC29F /* sdf_baker.metal */; };
@@ -499,27 +497,7 @@
 		3ED9BCFB2952968700876ABC /* pre_bitonic_sort.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3ED9BCFA2952968700876ABC /* pre_bitonic_sort.metal */; };
 		3ED9BCFD29529D0700876ABC /* inner_bitonic_sort.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3ED9BCFC29529D0700876ABC /* inner_bitonic_sort.metal */; };
 		3ED9BCFF2952A13F00876ABC /* step_bitonic_sort.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3ED9BCFE2952A13F00876ABC /* step_bitonic_sort.metal */; };
-		3EF39B6629D12E830083E20A /* XCommon.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EF39B6529D12E830083E20A /* XCommon.swift */; };
-		3EF39B6829D133220083E20A /* XLightingEnvironment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EF39B6729D133220083E20A /* XLightingEnvironment.swift */; };
-		3EF39B6D29D15BFF0083E20A /* XAsset.h in Headers */ = {isa = PBXBuildFile; fileRef = 3EF39B6B29D15BFF0083E20A /* XAsset.h */; };
-		3EF39B6E29D15BFF0083E20A /* XAsset.mm in Sources */ = {isa = PBXBuildFile; fileRef = 3EF39B6C29D15BFF0083E20A /* XAsset.mm */; };
-		3EF39B7629D166C00083E20A /* XTextureManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 3EF39B7129D166C00083E20A /* XTextureManager.h */; };
-		3EF39B7729D166C00083E20A /* XMesh.h in Headers */ = {isa = PBXBuildFile; fileRef = 3EF39B7229D166C00083E20A /* XMesh.h */; };
-		3EF39B7829D166C00083E20A /* XMesh.mm in Sources */ = {isa = PBXBuildFile; fileRef = 3EF39B7329D166C00083E20A /* XMesh.mm */; };
-		3EF39B7929D166C00083E20A /* XTextureManager.mm in Sources */ = {isa = PBXBuildFile; fileRef = 3EF39B7429D166C00083E20A /* XTextureManager.mm */; };
-		3EF39B7A29D166C00083E20A /* XMaterial.h in Headers */ = {isa = PBXBuildFile; fileRef = 3EF39B7529D166C00083E20A /* XMaterial.h */; };
-		3EF39B7D29D167510083E20A /* XCommon.mm in Sources */ = {isa = PBXBuildFile; fileRef = 3EF39B7C29D167510083E20A /* XCommon.mm */; };
-		3EF39B7F29D16AC30083E20A /* XRenderPasses.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EF39B7E29D16AC30083E20A /* XRenderPasses.swift */; };
-		3EF39B8129D16B2F0083E20A /* XScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EF39B8029D16B2F0083E20A /* XScene.swift */; };
-		3EF39B8429D171080083E20A /* XLightType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EF39B8329D171080083E20A /* XLightType.swift */; };
-		3EF39B8629D17C110083E20A /* XRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EF39B8529D17C110083E20A /* XRenderer.swift */; };
-		3EF39B8829D181060083E20A /* XConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EF39B8729D181060083E20A /* XConfig.swift */; };
-		3EF39B8B29D181F10083E20A /* XDepthPyramid.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EF39B8A29D181F10083E20A /* XDepthPyramid.swift */; };
-		3EF39B8D29D182A70083E20A /* XCulling.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EF39B8C29D182A70083E20A /* XCulling.swift */; };
-		3EF39B8F29D186C10083E20A /* XLightCuller.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EF39B8E29D186C10083E20A /* XLightCuller.swift */; };
-		3EF39B9129D18A890083E20A /* XAmbientObscurance.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EF39B9029D18A890083E20A /* XAmbientObscurance.swift */; };
-		3EF39B9329D18B1B0083E20A /* XScatterVolume.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EF39B9229D18B1B0083E20A /* XScatterVolume.swift */; };
-		3EF39B9529D18C1B0083E20A /* XMeshRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EF39B9429D18C1B0083E20A /* XMeshRenderer.swift */; };
+		3EF39B8829D181060083E20A /* RenderConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EF39B8729D181060083E20A /* RenderConfig.swift */; };
 		3EF39BA429D284040083E20A /* VegetationRenderer.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3EF39B9A29D284030083E20A /* VegetationRenderer.metal */; };
 		3EF39BA529D284050083E20A /* ParticleRenderer.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3EF39B9B29D284030083E20A /* ParticleRenderer.metal */; };
 		3EF39BA629D284050083E20A /* MainRenderer.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3EF39B9C29D284030083E20A /* MainRenderer.metal */; };
@@ -1317,7 +1295,7 @@
 		3EF39B8029D16B2F0083E20A /* XScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XScene.swift; sourceTree = "<group>"; };
 		3EF39B8329D171080083E20A /* XLightType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XLightType.swift; sourceTree = "<group>"; };
 		3EF39B8529D17C110083E20A /* XRenderer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XRenderer.swift; sourceTree = "<group>"; };
-		3EF39B8729D181060083E20A /* XConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XConfig.swift; sourceTree = "<group>"; };
+		3EF39B8729D181060083E20A /* RenderConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RenderConfig.swift; sourceTree = "<group>"; };
 		3EF39B8A29D181F10083E20A /* XDepthPyramid.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XDepthPyramid.swift; sourceTree = "<group>"; };
 		3EF39B8C29D182A70083E20A /* XCulling.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XCulling.swift; sourceTree = "<group>"; };
 		3EF39B8E29D186C10083E20A /* XLightCuller.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XLightCuller.swift; sourceTree = "<group>"; };
@@ -1673,7 +1651,6 @@
 				3EF39B8029D16B2F0083E20A /* XScene.swift */,
 				3EF39B8929D181BC0083E20A /* render-tech */,
 				3EF39B8529D17C110083E20A /* XRenderer.swift */,
-				3EF39B8729D181060083E20A /* XConfig.swift */,
 			);
 			path = experimental;
 			sourceTree = "<group>";
@@ -2418,6 +2395,7 @@
 			isa = PBXGroup;
 			children = (
 				3EC0388E29321826002187DC /* bridging.h */,
+				3EF39B8729D181060083E20A /* RenderConfig.swift */,
 				3E717DF829C7B29D004FE1A0 /* codable */,
 				3EC03868293216F1002187DC /* enums */,
 				3EC0386729321551002187DC /* base */,
@@ -3064,14 +3042,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				3E1BAC7D29D6CEC6000ADE2A /* GLTFModelIO.h in Headers */,
-				3EF39B7A29D166C00083E20A /* XMaterial.h in Headers */,
 				3EC0389D29321826002187DC /* bridging.h in Headers */,
 				3EC0390229321862002187DC /* GLTFTypes.h in Headers */,
 				3EC0390829321862002187DC /* GLTFAsset.h in Headers */,
-				3EF39B7729D166C00083E20A /* XMesh.h in Headers */,
-				3EF39B6D29D15BFF0083E20A /* XAsset.h in Headers */,
 				3EC0390129321862002187DC /* GLTFAssetReader.h in Headers */,
-				3EF39B7629D166C00083E20A /* XTextureManager.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3700,11 +3674,9 @@
 				3EC0389729321826002187DC /* Camera.swift in Sources */,
 				3EBA3D2B29B99CB200E5FB42 /* MTLDevice+Extensions.swift in Sources */,
 				3EB32B912932391F0019A4F3 /* PointerManager.swift in Sources */,
-				3EF39B8F29D186C10083E20A /* XLightCuller.swift in Sources */,
 				3EC03960293218BA002187DC /* DevicePipeline.swift in Sources */,
 				3EACA08B29A46CE300F08BB2 /* MeshColliderShape.swift in Sources */,
 				3EC0390729321862002187DC /* GLTFAssetReader.m in Sources */,
-				3EF39B8D29D182A70083E20A /* XCulling.swift in Sources */,
 				3EC038DF29321845002187DC /* JointLimits.swift in Sources */,
 				3EC038E729321845002187DC /* SpringJoint.swift in Sources */,
 				3EBA3D1729B8891300E5FB42 /* EngineVisualizer.swift in Sources */,
@@ -3718,14 +3690,12 @@
 				3EBA3D3929B99D6100E5FB42 /* MTLSize+Extensions.swift in Sources */,
 				3EC038E629321845002187DC /* PhysXJoint.swift in Sources */,
 				3EF39BAF29D298730083E20A /* Resource.swift in Sources */,
-				3EF39B7F29D16AC30083E20A /* XRenderPasses.swift in Sources */,
 				3EBA3D5E29B9D05A00E5FB42 /* TextBatcher.swift in Sources */,
 				3EC03949293218A3002187DC /* BlendState.swift in Sources */,
 				3E5C392B29D7B25E0026E999 /* RenderData.swift in Sources */,
 				040F1DE32934ED68008BDC8D /* GUIManager.swift in Sources */,
 				3EC0399D293218DF002187DC /* DiffuseMode.swift in Sources */,
 				3EC03967293218BA002187DC /* ComputePass.swift in Sources */,
-				3EF39B8129D16B2F0083E20A /* XScene.swift in Sources */,
 				3EC039AA293218F0002187DC /* BoolUpdateFlag.swift in Sources */,
 				3E5C393D29D9B4310026E999 /* TerrainHabitat_MemberIds.swift in Sources */,
 				3EF39BB529D2AACB0083E20A /* FrameTaskBuilder.swift in Sources */,
@@ -3765,7 +3735,6 @@
 				3EC038F02932184C002187DC /* ColliderShapeUpAxis.swift in Sources */,
 				3EC0390629321862002187DC /* GLTFAsset.m in Sources */,
 				3EC0394A293218A3002187DC /* RenderState.swift in Sources */,
-				3EF39B8629D17C110083E20A /* XRenderer.swift in Sources */,
 				040F1DD92934E6F6008BDC8D /* imgui_impl_osx.swift in Sources */,
 				3EC038CA2932183D002187DC /* CapsuleColliderShape.swift in Sources */,
 				3EC0393D2932189D002187DC /* ShaderPass.swift in Sources */,
@@ -3779,17 +3748,12 @@
 				3E5C393729D9B09F0026E999 /* TerrainData.swift in Sources */,
 				3E447F5629C9E71000D2FB30 /* SerializedCodingKeys.swift in Sources */,
 				3EC0393929321893002187DC /* ShadowType.swift in Sources */,
-				3EF39B7929D166C00083E20A /* XTextureManager.mm in Sources */,
 				3EC038EF2932184C002187DC /* PhysicsMaterialCombineMode.swift in Sources */,
 				3EC0398B293218CB002187DC /* UnlitMaterial.swift in Sources */,
-				3EF39B6629D12E830083E20A /* XCommon.swift in Sources */,
 				3EC038B729321835002187DC /* StaticCollider.swift in Sources */,
 				3EC03946293218A3002187DC /* DepthState.swift in Sources */,
 				3E8B00E229BC314D00A70123 /* AnimationBlending.swift in Sources */,
 				3EBA3D4529B9A07400E5FB42 /* MTLFontAtlasCodableContainer.swift in Sources */,
-				3E3E437A29CDC07B00D41145 /* XCamera.swift in Sources */,
-				3EF39B9129D18A890083E20A /* XAmbientObscurance.swift in Sources */,
-				3EF39B6E29D15BFF0083E20A /* XAsset.mm in Sources */,
 				3EBA3D2729B9873B00E5FB42 /* MetalError.swift in Sources */,
 				3EC03980293218C3002187DC /* BufferView.swift in Sources */,
 				3EC0389F29321826002187DC /* Layer.swift in Sources */,
@@ -3831,7 +3795,6 @@
 				3EF39BCE29D454560083E20A /* BlackBoardType.swift in Sources */,
 				3E447F5B29C9E71000D2FB30 /* SerializableDecodable.swift in Sources */,
 				3EC038E829321845002187DC /* FixedJoint.swift in Sources */,
-				3EF39B9529D18C1B0083E20A /* XMeshRenderer.swift in Sources */,
 				3EC0399B293218DA002187DC /* Light.swift in Sources */,
 				3EC039A1293218E9002187DC /* ColorSpace.swift in Sources */,
 				3E5C393829D9B1B50026E999 /* TerrainRenderer.swift in Sources */,
@@ -3840,13 +3803,11 @@
 				3EC03977293218C3002187DC /* MeshRenderer.swift in Sources */,
 				3E5C391329D6D2E20026E999 /* ModelLoader.swift in Sources */,
 				3E5C391529D6D5190026E999 /* MDLVertexDescriptor+Extensions.swift in Sources */,
-				3EF39B6829D133220083E20A /* XLightingEnvironment.swift in Sources */,
 				3EC0397E293218C3002187DC /* BlendShapeFrame.swift in Sources */,
 				3EC038C92932183D002187DC /* PhysXColliderShape.swift in Sources */,
 				3EC038C82932183D002187DC /* SphereColliderShape.swift in Sources */,
 				3EC03999293218DA002187DC /* LightManager.swift in Sources */,
 				3EC0392529321872002187DC /* KHR_lights_punctual.swift in Sources */,
-				3EF39B8429D171080083E20A /* XLightType.swift in Sources */,
 				3EC0393E2932189D002187DC /* ShaderData.swift in Sources */,
 				3EC03976293218C3002187DC /* BlendShape.swift in Sources */,
 				040F1DDB2934E772008BDC8D /* imgui_impl_metal.swift in Sources */,
@@ -3861,12 +3822,11 @@
 				3EC0392B29321885002187DC /* SkyBoxMaterial.swift in Sources */,
 				040F1E12293B4436008BDC8D /* PostprocessManager.swift in Sources */,
 				3E5C392F29D7C9710026E999 /* ShaderDataGroup.swift in Sources */,
-				3E3E439929CED2DB00D41145 /* XCameraController.swift in Sources */,
 				3EC0398F293218D1002187DC /* TextureCoordinate.swift in Sources */,
 				3EC03948293218A3002187DC /* RenderTargetBlendState.swift in Sources */,
 				3EBA3D1529B85D6C00E5FB42 /* VisualizationParameter.swift in Sources */,
 				3EC92AE12939F97300423396 /* RenderCommandEncoder.swift in Sources */,
-				3EF39B8829D181060083E20A /* XConfig.swift in Sources */,
+				3EF39B8829D181060083E20A /* RenderConfig.swift in Sources */,
 				3EC038C62932183D002187DC /* PhysXPlaneColliderShape.swift in Sources */,
 				3EBA3D5B29B9CB2F00E5FB42 /* TextUtils.swift in Sources */,
 				3EC039162932186A002187DC /* EntityParser.swift in Sources */,
@@ -3889,14 +3849,12 @@
 				3EC038C42932183D002187DC /* PhysXBoxColliderShape.swift in Sources */,
 				3EC03A052932192D002187DC /* BackgroundTextureFillMode.swift in Sources */,
 				3E8B00F929BDC8F600A70123 /* CSkin.mm in Sources */,
-				3EF39B8B29D181F10083E20A /* XDepthPyramid.swift in Sources */,
 				3EBA3D2D29B99CEF00E5FB42 /* MTLDevice+Features.swift in Sources */,
 				3EC0390429321862002187DC /* GLTFResource.swift in Sources */,
 				3EC038B629321835002187DC /* PhysXPhysics.swift in Sources */,
 				3EBA3D3529B99D3200E5FB42 /* MTLRegion+Extensions.swift in Sources */,
 				3EF39BB129D29D840083E20A /* Realize.swift in Sources */,
 				3EC039302932188D002187DC /* ShadowUtils.swift in Sources */,
-				3EF39B7D29D167510083E20A /* XCommon.mm in Sources */,
 				3EC038E329321845002187DC /* PhysXSpringJoint.swift in Sources */,
 				3EC038F22932184C002187DC /* HingeJointFlag.swift in Sources */,
 				3EBA3D1F29B97DD900E5FB42 /* MTLFontAtlasDescriptor.swift in Sources */,
@@ -3911,7 +3869,6 @@
 				3EC038E029321845002187DC /* PhysXTranslationalJoint.swift in Sources */,
 				3EC0390329321862002187DC /* TextureLoader.swift in Sources */,
 				3EC0390529321862002187DC /* GLTFUtil.swift in Sources */,
-				3EF39B9329D18B1B0083E20A /* XScatterVolume.swift in Sources */,
 				3EF39BD129D45FD90083E20A /* MTLBufferDescriptor.swift in Sources */,
 				3EC92ADF2939C6A000423396 /* Extensions.swift in Sources */,
 				3EC039B0293218F0002187DC /* UpdateFlagManager.swift in Sources */,
@@ -3946,7 +3903,6 @@
 				3EC038B129321835002187DC /* PhysXPhysicsMaterial.swift in Sources */,
 				3EC0389529321826002187DC /* Canvas.swift in Sources */,
 				3EC0389B29321826002187DC /* CameraInfo.swift in Sources */,
-				3EF39B7829D166C00083E20A /* XMesh.mm in Sources */,
 				3E5C393129D7CF390026E999 /* ShaderFactory.swift in Sources */,
 				3EBA3D2929B99C4900E5FB42 /* MTL+Codable.swift in Sources */,
 				3E8B00FB29BDCA7A00A70123 /* SkinnedMesh.swift in Sources */,
