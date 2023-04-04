@@ -7,14 +7,14 @@
 import Math
 import vox_render
 
-class ControlFreePointer : IControlInput {
-    private static var _deltaType: DeltaType = DeltaType.Moving
-    private static var _handlerType: ControlHandlerType = ControlHandlerType.None
+class ControlFreePointer: IControlInput {
+    private static var _deltaType: DeltaType = .Moving
+    private static var _handlerType: ControlHandlerType = .None
     private static var _frameIndex: Int = 0
     private static var _lastUsefulFrameIndex: Int = -1
-    static func onUpdateHandler(_ input: InputManager, callback: (ControlHandlerType)->Void) {
+    static func onUpdateHandler(_ input: InputManager, callback: (ControlHandlerType) -> Void) {
         _frameIndex += 1
-        
+
         let pointers = input.pointers
         for pointer in pointers {
             if pointer.type == .leftMouseDown {
@@ -29,25 +29,24 @@ class ControlFreePointer : IControlInput {
             }
         }
     }
-    
+
     static func onUpdateDelta(_ control: FreeControl, _ outDelta: inout Vector3) {
-        switch (_deltaType) {
+        switch _deltaType {
         case DeltaType.Moving:
-            if (_lastUsefulFrameIndex == _frameIndex - 1) {
+            if _lastUsefulFrameIndex == _frameIndex - 1 {
                 let pointer = control.input.pointers[0]
                 outDelta = Vector3(Float(pointer.deltaX), Float(pointer.deltaY), outDelta.z)
             } else {
                 outDelta = Vector3(0, 0, outDelta.z)
             }
-            break
         default:
             break
         }
         _lastUsefulFrameIndex = _frameIndex
     }
-    
+
     private static func _updateType(_ handlerType: ControlHandlerType, _ deltaType: DeltaType) {
-        if (_handlerType != handlerType || _deltaType != deltaType) {
+        if _handlerType != handlerType || _deltaType != deltaType {
             _handlerType = handlerType
             _deltaType = deltaType
             _lastUsefulFrameIndex = -1

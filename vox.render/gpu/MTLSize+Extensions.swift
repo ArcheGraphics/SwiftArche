@@ -9,8 +9,8 @@ import Metal
 public extension MTLSize {
     init(repeating value: Int) {
         self.init(width: value,
-                height: value,
-                depth: value)
+                  height: value,
+                  depth: value)
     }
 
     func clamped(to size: MTLSize) -> MTLSize {
@@ -22,15 +22,15 @@ public extension MTLSize {
     static let one = MTLSize(repeating: 1)
     static let zero = MTLSize(repeating: 0)
 
-    static func ==(lhs: MTLSize, rhs: MTLSize) -> Bool {
+    static func == (lhs: MTLSize, rhs: MTLSize) -> Bool {
         lhs.width == rhs.width
-                && lhs.height == rhs.height
-                && lhs.depth == rhs.depth
+            && lhs.height == rhs.height
+            && lhs.depth == rhs.depth
     }
 
-    static func !=(lhs: MTLSize, rhs: MTLSize) -> Bool {
+    static func != (lhs: MTLSize, rhs: MTLSize) -> Bool {
         lhs.width != rhs.width
-                || lhs.height != rhs.height
-                || lhs.depth != rhs.depth
+            || lhs.height != rhs.height
+            || lhs.depth != rhs.depth
     }
 }

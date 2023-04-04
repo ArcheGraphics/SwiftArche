@@ -7,15 +7,15 @@
 import Math
 import vox_render
 
-class ControlWheel : IControlInput {
-    static func onUpdateHandler(_ input: InputManager, callback: (ControlHandlerType)->Void) {
-        if (input.wheelDelta.x == 0 && input.wheelDelta.y == 0 && input.wheelDelta.z == 0) {
+class ControlWheel: IControlInput {
+    static func onUpdateHandler(_ input: InputManager, callback: (ControlHandlerType) -> Void) {
+        if input.wheelDelta.x == 0 && input.wheelDelta.y == 0 && input.wheelDelta.z == 0 {
             callback(ControlHandlerType.None)
         } else {
             callback(ControlHandlerType.ZOOM)
         }
     }
-    
+
     static func onUpdateDelta(_ control: OrbitControl, _ outDelta: inout Vector3) {
         outDelta = control.input.wheelDelta
     }

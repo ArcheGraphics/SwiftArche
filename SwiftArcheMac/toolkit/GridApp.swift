@@ -5,12 +5,12 @@
 //  property of any third parties.
 
 import Cocoa
-import vox_render
-import Math
-import vox_toolkit
 import ImGui
+import Math
+import vox_render
+import vox_toolkit
 
-fileprivate class GUI: Script {
+private class GUI: Script {
     var control: GridControl!
     var speedScale: Float = 8
 
@@ -26,8 +26,8 @@ fileprivate class GUI: Script {
         // Rendering
         ImGuiRender()
     }
-    
-    override func onUpdate(_ deltaTime: Float) {
+
+    override func onUpdate(_: Float) {
         control.distance = control.camera!.entity.transform.worldPosition.lengthSquared() / speedScale
     }
 }
@@ -48,32 +48,31 @@ class GridApp: NSViewController {
         scene.background.solidColor = Color(0, 0, 0, 1)
         let hdr = Engine.textureLoader.loadHDR(with: "assets/kloppenheim_06_4k.hdr")!
         iblBaker.bake(scene, with: hdr, size: 256, level: 3)
-        
+
         let rootEntity = scene.createRootEntity()
         let cameraEntity = rootEntity.createChild()
         cameraEntity.transform.position = Vector3(5, 5, 5)
         cameraEntity.transform.lookAt(targetPosition: Vector3())
         let camera = cameraEntity.addComponent(Camera.self)
         cameraEntity.addComponent(OrbitControl.self)
-        
+
         let gui = rootEntity.addComponent(GUI.self)
         let gridControl = rootEntity.addComponent(GridControl.self)
         gridControl.camera = camera
         gui.control = gridControl
-        
+
         let cubeEntity = rootEntity.createChild()
         let renderer = cubeEntity.addComponent(MeshRenderer.self)
         renderer.mesh = PrimitiveMesh.createCuboid()
         let material = PBRMaterial()
         material.baseColor = Color(0.7, 0.0, 0.0)
         renderer.setMaterial(material)
-        
+
         Engine.run()
     }
-    
+
     override func viewDidDisappear() {
         super.viewDidDisappear()
         Engine.destroy()
     }
 }
-

@@ -5,26 +5,26 @@
 //  property of any third parties.
 
 import Cocoa
-import vox_render
 import Math
+import vox_render
 import vox_toolkit
 
-fileprivate class GeometryGenerator: Script {
+private class GeometryGenerator: Script {
     var quat: Quaternion = Quaternion(x: 0, y: 0, z: 0.3, w: 0.7).normalized
 
-    override func onUpdate(_ deltaTime: Float) {
+    override func onUpdate(_: Float) {
         let inputManager = Engine.inputManager
-        if (inputManager.isPointerTrigger(.rightMouseDown)) {
-            if (Float.random(in: 0...1) > 0.5) {
-                _ = addSphere(entity, 0.5, Vector3(floor(Float.random(in: 0...6)) - 2.5, 5, floor(Float.random(in: 0...6)) - 2.5), quat)
+        if inputManager.isPointerTrigger(.rightMouseDown) {
+            if Float.random(in: 0 ... 1) > 0.5 {
+                _ = addSphere(entity, 0.5, Vector3(floor(Float.random(in: 0 ... 6)) - 2.5, 5, floor(Float.random(in: 0 ... 6)) - 2.5), quat)
             } else {
-                _ = addCapsule(entity, 0.5, 2.0, Vector3(floor(Float.random(in: 0...6)) - 2.5, 5, floor(Float.random(in: 0...6)) - 2.5), quat)
+                _ = addCapsule(entity, 0.5, 2.0, Vector3(floor(Float.random(in: 0 ... 6)) - 2.5, 5, floor(Float.random(in: 0 ... 6)) - 2.5), quat)
             }
         }
     }
 }
 
-fileprivate class Raycast: Script {
+private class Raycast: Script {
     var camera: Camera!
     var ray = Ray()
 
@@ -32,15 +32,15 @@ fileprivate class Raycast: Script {
         camera = entity.getComponent(Camera.self)
     }
 
-    override func onUpdate(_ deltaTime: Float) {
+    override func onUpdate(_: Float) {
         let inputManager = Engine.inputManager
         let pointers = inputManager.pointers
-        if (!pointers.isEmpty && inputManager.isPointerTrigger(.leftMouseDown)) {
+        if !pointers.isEmpty && inputManager.isPointerTrigger(.leftMouseDown) {
             _ = camera.screenPointToRay(pointers[0].screenPoint(Engine.canvas), ray)
 
             if let hit = Engine.physicsManager.raycast(ray, distance: Float.greatestFiniteMagnitude, layerMask: Layer.Layer0) {
                 let mtl = PBRMaterial()
-                mtl.baseColor = Color(Float.random(in: 0...1), Float.random(in: 0...1), Float.random(in: 0...1), 1.0)
+                mtl.baseColor = Color(Float.random(in: 0 ... 1), Float.random(in: 0 ... 1), Float.random(in: 0 ... 1), 1.0)
                 mtl.metallic = 0.0
                 mtl.roughness = 0.5
 
@@ -57,23 +57,20 @@ class PhysXRaycastApp: NSViewController {
     var canvas: Canvas!
     var engine: Engine!
     var iblBaker: IBLBaker!
-    
+
     func initialize(_ rootEntity: Entity) {
         let quat = Quaternion(x: 0, y: 0, z: 0.3, w: 0.7).normalized
         _ = addPlane(rootEntity, Vector3(30, 0.0, 30), Vector3(), Quaternion())
-        for i in 0..<8 {
-            for j in 0..<8 {
-                let random = Int(floor(Float.random(in: 0...3))) % 3
-                switch (random) {
+        for i in 0 ..< 8 {
+            for j in 0 ..< 8 {
+                let random = Int(floor(Float.random(in: 0 ... 3))) % 3
+                switch random {
                 case 0:
-                    _ = addBox(rootEntity, Vector3(1, 1, 1), Vector3(Float(-4 + i), floor(Float.random(in: 0...6)) + 1, Float(-4 + j)), quat)
-                    break
+                    _ = addBox(rootEntity, Vector3(1, 1, 1), Vector3(Float(-4 + i), floor(Float.random(in: 0 ... 6)) + 1, Float(-4 + j)), quat)
                 case 1:
-                    _ = addSphere(rootEntity, 0.5, Vector3(floor(Float.random(in: 0...16)) - 4, 5, floor(Float.random(in: 0...16)) - 4), quat)
-                    break
+                    _ = addSphere(rootEntity, 0.5, Vector3(floor(Float.random(in: 0 ... 16)) - 4, 5, floor(Float.random(in: 0 ... 16)) - 4), quat)
                 case 2:
-                    _ = addCapsule(rootEntity, 0.5, 2.0, Vector3(floor(Float.random(in: 0...16)) - 4, 5, floor(Float.random(in: 0...16)) - 4), quat)
-                    break
+                    _ = addCapsule(rootEntity, 0.5, 2.0, Vector3(floor(Float.random(in: 0 ... 16)) - 4, 5, floor(Float.random(in: 0 ... 16)) - 4), quat)
                 default:
                     break
                 }
@@ -87,7 +84,7 @@ class PhysXRaycastApp: NSViewController {
         canvas.setParentView(view)
         engine = Engine(canvas: canvas)
         iblBaker = IBLBaker()
-        
+
         let scene = Engine.sceneManager.activeScene!
         scene.shadowDistance = 50
         let hdr = Engine.textureLoader.loadHDR(with: "assets/kloppenheim_06_4k.hdr")!
@@ -109,15 +106,14 @@ class PhysXRaycastApp: NSViewController {
         let directLight = light.addComponent(DirectLight.self)
         directLight.shadowType = .SoftLow
         directLight.shadowStrength = 1
-        
+
         initialize(rootEntity)
 
         Engine.run()
     }
-    
+
     override func viewDidDisappear() {
         super.viewDidDisappear()
         Engine.destroy()
     }
 }
-

@@ -9,13 +9,13 @@ import Metal
 public extension MTLResource {
     var isAccessibleOnCPU: Bool {
         #if (os(iOS) && !targetEnvironment(macCatalyst)) || os(tvOS)
-        return storageMode == .shared
+            return storageMode == .shared
         #elseif os(macOS) || (os(iOS) && targetEnvironment(macCatalyst))
-        return storageMode == .managed || storageMode == .shared
+            return storageMode == .managed || storageMode == .shared
         #endif
     }
 }
 
-extension MTLResourceUsage {
-    public static var readWrite = MTLResourceUsage(rawValue: (MTLResourceUsage.read.rawValue | MTLResourceUsage.write.rawValue))
+public extension MTLResourceUsage {
+    static var readWrite = MTLResourceUsage(rawValue: MTLResourceUsage.read.rawValue | MTLResourceUsage.write.rawValue)
 }

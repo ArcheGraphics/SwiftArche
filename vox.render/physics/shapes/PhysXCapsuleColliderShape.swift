@@ -10,7 +10,7 @@ import Math
 class PhysXCapsuleColliderShape: PhysXColliderShape {
     var _radius: Float
     var _halfHeight: Float
-    private var _upAxis: ColliderShapeUpAxis = ColliderShapeUpAxis.Y
+    private var _upAxis: ColliderShapeUpAxis = .Y
 
     /// Init PhysXCollider and alloc PhysX objects.
     /// - Parameters:
@@ -33,59 +33,50 @@ class PhysXCapsuleColliderShape: PhysXColliderShape {
 
     func setRadius(_ value: Float) {
         _radius = value
-        switch (_upAxis) {
+        switch _upAxis {
         case ColliderShapeUpAxis.X:
             (_pxGeometry as! CPxCapsuleGeometry).radius = _radius * max(_scale.y, _scale.z)
-            break
         case ColliderShapeUpAxis.Y:
             (_pxGeometry as! CPxCapsuleGeometry).radius = _radius * max(_scale.x, _scale.z)
-            break
         case ColliderShapeUpAxis.Z:
             (_pxGeometry as! CPxCapsuleGeometry).radius = _radius * max(_scale.x, _scale.y)
-            break
         }
         _pxShape.setGeometry(_pxGeometry)
 
-        for i in 0..<_controllers.count {
+        for i in 0 ..< _controllers.count {
             (_controllers.get(i)!._pxController as! CPxCapsuleController).setRadius(value)
         }
     }
 
     func setHeight(_ value: Float) {
         _halfHeight = value * 0.5
-        switch (_upAxis) {
+        switch _upAxis {
         case ColliderShapeUpAxis.X:
             (_pxGeometry as! CPxCapsuleGeometry).halfHeight = _halfHeight * _scale.x
-            break
         case ColliderShapeUpAxis.Y:
             (_pxGeometry as! CPxCapsuleGeometry).halfHeight = _halfHeight * _scale.y
-            break
         case ColliderShapeUpAxis.Z:
             (_pxGeometry as! CPxCapsuleGeometry).halfHeight = _halfHeight * _scale.z
-            break
         }
         _pxShape.setGeometry(_pxGeometry)
 
-        for i in 0..<_controllers.count {
+        for i in 0 ..< _controllers.count {
             (_controllers.get(i)!._pxController as! CPxCapsuleController).setHeight(value)
         }
     }
 
     func setUpAxis(_ upAxis: Int) {
         _upAxis = ColliderShapeUpAxis(rawValue: upAxis)!
-        switch (_upAxis) {
+        switch _upAxis {
         case ColliderShapeUpAxis.X:
             _axis = Quaternion(x: 0, y: 0, z: 0, w: 1)
-            break
         case ColliderShapeUpAxis.Y:
             _axis = Quaternion(x: 0, y: 0, z: PhysXColliderShape.halfSqrt, w: PhysXColliderShape.halfSqrt)
-            break
         case ColliderShapeUpAxis.Z:
             _axis = Quaternion(x: 0, y: PhysXColliderShape.halfSqrt, z: 0, w: PhysXColliderShape.halfSqrt)
-            break
         }
 
-        if (_rotation != nil) {
+        if _rotation != nil {
             _physxRotation = Quaternion.rotationYawPitchRoll(yaw: _rotation!.x, pitch: _rotation!.y, roll: _rotation!.z)
             _physxRotation = _physxRotation * _axis!
         } else {
@@ -98,19 +89,16 @@ class PhysXCapsuleColliderShape: PhysXColliderShape {
         _scale = scale
         _setLocalPose()
 
-        switch (_upAxis) {
+        switch _upAxis {
         case ColliderShapeUpAxis.X:
             (_pxGeometry as! CPxCapsuleGeometry).radius = _radius * max(scale.y, scale.z)
             (_pxGeometry as! CPxCapsuleGeometry).halfHeight = _halfHeight * scale.x
-            break
         case ColliderShapeUpAxis.Y:
             (_pxGeometry as! CPxCapsuleGeometry).radius = _radius * max(scale.x, scale.z)
             (_pxGeometry as! CPxCapsuleGeometry).halfHeight = _halfHeight * scale.y
-            break
         case ColliderShapeUpAxis.Z:
             (_pxGeometry as! CPxCapsuleGeometry).radius = _radius * max(scale.x, scale.y)
             (_pxGeometry as! CPxCapsuleGeometry).halfHeight = _halfHeight * scale.z
-            break
         }
         _pxShape.setGeometry(_pxGeometry)
     }

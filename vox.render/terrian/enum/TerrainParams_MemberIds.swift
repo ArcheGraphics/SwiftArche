@@ -6,7 +6,7 @@
 
 import Foundation
 
-public enum TerrainParams_MemberIds : UInt32 {
+public enum TerrainParams_MemberIds: UInt32 {
     case ambientOcclusionScale = 37
     case ambientOcclusionContrast
     case ambientLightScale

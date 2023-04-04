@@ -7,11 +7,11 @@
 import Metal
 import vox_render
 
-open class ParticleCollider : ComputePass {
+open class ParticleCollider: ComputePass {
     static let colliderProperty = "u_collider"
     var _target: ParticleSystemData?
     var _colliderData: ColliderData
-    
+
     public var frictionCoefficient: Float {
         get {
             _colliderData.frictionCoefficient
@@ -21,7 +21,7 @@ open class ParticleCollider : ComputePass {
             defaultShaderData.setData(ParticleCollider.colliderProperty, _colliderData)
         }
     }
-    
+
     /// The restitution coefficient.
     public var restitutionCoefficient: Float {
         get {
@@ -32,7 +32,7 @@ open class ParticleCollider : ComputePass {
             defaultShaderData.setData(ParticleCollider.colliderProperty, _colliderData)
         }
     }
-    
+
     public var target: ParticleSystemData? {
         get {
             _target
@@ -46,13 +46,13 @@ open class ParticleCollider : ComputePass {
             }
         }
     }
-    
-    public override init() {
+
+    override public init() {
         _colliderData = ColliderData(radius: 1e-3, restitutionCoefficient: 0, frictionCoefficient: 0, count: 0)
         super.init()
-        
+
         defaultShaderData.setData(ParticleCollider.colliderProperty, _colliderData)
     }
-    
-    open func update(commandEncoder: MTLComputeCommandEncoder, indirectBuffer: MTLBuffer, threadsPerThreadgroup: MTLSize) {}
+
+    open func update(commandEncoder _: MTLComputeCommandEncoder, indirectBuffer _: MTLBuffer, threadsPerThreadgroup _: MTLSize) {}
 }

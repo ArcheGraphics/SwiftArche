@@ -4,11 +4,11 @@
 //  personal capacity and am not conveying any rights to any intellectual
 //  property of any third parties.
 
-import vox_render
 import Math
+import vox_render
 
 /// Functions for picking mesh elements in a view. Can either render a texture to test, or cast a ray. Prefer this over calling SelectionPickerRenderer directly.
-public class SelectionPicker {
+public enum SelectionPicker {
     /// Pick the vertex indexes contained within a rect.
     /// - Parameters:
     ///   - cam: cam
@@ -17,11 +17,12 @@ public class SelectionPicker {
     ///   - options: Culling options.
     ///   - pixelsPerPoint: Scale the render texture to match rect coordinates. Generally you'll just pass in EditorGUIUtility.pointsPerPixel.
     /// - Returns: A dictionary of ProBuilderMesh and sharedIndexes that are in the selection rect. To get triangle indexes access the pb.sharedIndexes[index] array.
-    public static func PickVerticesInRect(cam: Camera,
-                                          rect: Rect,
-                                          selectable: [ProBuilderMesh],
-                                          options: PickerOptions,
-                                          pixelsPerPoint: Float = 1) -> Dictionary<ProBuilderMesh, Set<Int>> {
+    public static func PickVerticesInRect(cam _: Camera,
+                                          rect _: Rect,
+                                          selectable _: [ProBuilderMesh],
+                                          options _: PickerOptions,
+                                          pixelsPerPoint _: Float = 1) -> [ProBuilderMesh: Set<Int>]
+    {
         [:]
     }
 }

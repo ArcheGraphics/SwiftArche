@@ -9,7 +9,7 @@ import Metal
 public class PostprocessManager {
     private static let _manualExposureValueProperty = "u_manualExposureValue"
     private static let _exposureKeyProperty = "u_exposureKey"
-    
+
     var _canvas: Canvas
     weak var _scene: Scene!
     var _shaderData: ShaderData
@@ -43,20 +43,20 @@ public class PostprocessManager {
         _scene = scene
         _canvas = Engine.canvas!
         _shaderData = scene.shaderData
-        
+
         var desc = MTLArgumentDescriptor()
         desc.index = 0
         desc.dataType = .float
         desc.access = .readOnly
         _shaderData.registerArgumentDescriptor(with: PostprocessManager._manualExposureValueProperty, descriptor: desc)
-        
+
         desc = MTLArgumentDescriptor()
         desc.index = 1
         desc.dataType = .float
         desc.access = .readOnly
         _shaderData.registerArgumentDescriptor(with: PostprocessManager._exposureKeyProperty, descriptor: desc)
         _shaderData.createArgumentBuffer(with: "u_postprocess")
-        
+
         _shaderData.setData(with: PostprocessManager._manualExposureValueProperty, data: manualExposure)
         _shaderData.setData(with: PostprocessManager._exposureKeyProperty, data: exposureKey)
 

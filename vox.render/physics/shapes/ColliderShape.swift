@@ -13,19 +13,15 @@ public class ColliderShape: Serializable, Polymorphic {
     var _id: UInt32
     var _collider: Collider?
     var _nativeShape: PhysXColliderShape!
-    
+
     /// Collider owner of this shape.
     public var collider: Collider? {
-        get {
-            _collider
-        }
+        _collider
     }
 
     /// Unique id for this shape.
     public var id: UInt32 {
-        get {
-            _id
-        }
+        _id
     }
 
     @Serialized(default: false)
@@ -34,7 +30,7 @@ public class ColliderShape: Serializable, Polymorphic {
             _nativeShape.setVisualize(isVisualize)
         }
     }
-    
+
     /// Whether raycast can select it.
     @Serialized(default: true)
     public var isSceneQuery: Bool

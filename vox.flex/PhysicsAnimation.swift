@@ -15,45 +15,43 @@ import vox_render
 ///
 open class PhysicsAnimation: Script {
     var _currentTime: Float = 0.0
-    
+
     public var isUsingFixedSubTimeSteps: Bool = true
     public var numberOfFixedSubTimeSteps: UInt = 1
-    
+
     public var currentTime: Float {
-        get {
-            _currentTime
-        }
+        _currentTime
     }
-    
-    public override func onUpdate(_ timeIntervalInSeconds: Float) {
+
+    override public func onUpdate(_ timeIntervalInSeconds: Float) {
 //        let scope = Engine.createCaptureScope(name: "bitonic")
 //        scope.begin()
         if let commandBuffer = Engine.commandQueue.makeCommandBuffer() {
             commandBuffer.label = "physics animation"
             if isUsingFixedSubTimeSteps {
                 logger.info("Using fixed sub-timesteps: \(numberOfFixedSubTimeSteps)")
-                
+
                 // Perform fixed time-stepping
                 let actualTimeInterval = timeIntervalInSeconds / Float(numberOfFixedSubTimeSteps)
-                for _ in 0..<numberOfFixedSubTimeSteps {
+                for _ in 0 ..< numberOfFixedSubTimeSteps {
                     logger.info("Begin onAdvanceTimeStep: \(actualTimeInterval) (1/\(1.0 / actualTimeInterval)) seconds")
                     onAdvanceTimeStep(commandBuffer, actualTimeInterval)
                 }
                 _currentTime += actualTimeInterval
             } else {
                 logger.info("Using adaptive sub-timesteps")
-                
+
                 // Perform adaptive time-stepping
                 var remainingTime = timeIntervalInSeconds
-                while (remainingTime > Float.leastNonzeroMagnitude) {
+                while remainingTime > Float.leastNonzeroMagnitude {
                     let numSteps = numberOfSubTimeSteps(remainingTime)
                     let actualTimeInterval = remainingTime / Float(numSteps)
-                    
+
                     logger.info("Number of remaining sub-timesteps: \(numSteps)")
                     logger.info("Begin onAdvanceTimeStep: \(actualTimeInterval) (1/\(1.0 / actualTimeInterval)) seconds")
-                    
+
                     onAdvanceTimeStep(commandBuffer, actualTimeInterval)
-                    
+
                     remainingTime -= actualTimeInterval
                     _currentTime += actualTimeInterval
                 }
@@ -62,9 +60,9 @@ open class PhysicsAnimation: Script {
         }
 //        scope.end()
     }
-    
-    open func initialize(_ commandBuffer: MTLCommandBuffer) {}
-    
+
+    open func initialize(_: MTLCommandBuffer) {}
+
     /// Called when a single time-step should be advanced.
     ///
     /// When Animation::update function is called, this class will internally
@@ -74,8 +72,8 @@ open class PhysicsAnimation: Script {
     /// implement this function for its own physics model.
     ///
     /// - Parameter timeIntervalInSeconds: The time interval in seconds
-    open func onAdvanceTimeStep(_ commandBuffer: MTLCommandBuffer, _ timeIntervalInSeconds: Float) {}
-    
+    open func onAdvanceTimeStep(_: MTLCommandBuffer, _: Float) {}
+
     /// Returns the required number of sub-timesteps for given time interval.
     ///
     /// The required number of sub-timestep can be different depending on the
@@ -85,7 +83,7 @@ open class PhysicsAnimation: Script {
     ///
     /// - Parameter timeIntervalInSeconds: The time interval in seconds.
     /// - Returns: The required number of sub-timesteps.
-    open func numberOfSubTimeSteps(_ timeIntervalInSeconds: Float) -> UInt {
+    open func numberOfSubTimeSteps(_: Float) -> UInt {
         numberOfFixedSubTimeSteps
     }
 }

@@ -4,12 +4,12 @@
 //  personal capacity and am not conveying any rights to any intellectual
 //  property of any third parties.
 
+import Math
 import Metal
 import MetalKit
-import Math
 
 public class TextureLoader {
-    public let textureLoader: MTKTextureLoader = MTKTextureLoader(device: Engine.device)
+    public let textureLoader: MTKTextureLoader = .init(device: Engine.device)
 
     /// configure a texture descriptor and create a texture using that descriptor.
     /// - Parameter descriptor: Texture descriptor
@@ -22,7 +22,8 @@ public class TextureLoader {
     }
 
     public func loadTexture(with name: String, scaleFactor: CGFloat = 1.0, bundle: Bundle? = nil,
-                            textureLoaderOptions: [MTKTextureLoader.Option: Any] = [:]) throws -> MTLTexture? {
+                            textureLoaderOptions: [MTKTextureLoader.Option: Any] = [:]) throws -> MTLTexture?
+    {
         var textureLoaderOptions = textureLoaderOptions
         if textureLoaderOptions.isEmpty {
             let usage: MTLTextureUsage = [MTLTextureUsage.pixelFormatView, MTLTextureUsage.shaderRead]
@@ -31,7 +32,7 @@ public class TextureLoader {
                                     .textureUsage: NSNumber(value: usage.rawValue)]
         }
         let texture = try textureLoader.newTexture(name: name, scaleFactor: scaleFactor,
-                bundle: bundle, options: textureLoaderOptions)
+                                                   bundle: bundle, options: textureLoaderOptions)
         return texture
     }
 

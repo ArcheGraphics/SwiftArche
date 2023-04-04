@@ -4,12 +4,12 @@
 //  personal capacity and am not conveying any rights to any intellectual
 //  property of any third parties.
 
-import UIKit
 import ARKit
-import vox_render
 import Math
+import UIKit
+import vox_render
 
-fileprivate class ARScript: Script {
+private class ARScript: Script {
     private var _rTri: Float = 0
     private var _cubeEntity: Entity?
 
@@ -66,17 +66,16 @@ class PrimitiveApp: UIViewController {
         Engine.run()
     }
 
-    override func viewWillAppear(_ animated: Bool) {
+    override func viewWillAppear(_: Bool) {
         Engine.arManager?.run()
     }
 
-    override func viewWillDisappear(_ animated: Bool) {
+    override func viewWillDisappear(_: Bool) {
         Engine.arManager?.pause()
     }
-    
+
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
         Engine.destroy()
     }
 }
-

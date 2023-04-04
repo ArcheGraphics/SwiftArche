@@ -6,19 +6,19 @@
 
 import Math
 
-class LineBatcher : Batcher {
+class LineBatcher: Batcher {
     static var _ins: LineBatcher!
     var pointBuffer: BufferView!
     var colorBuffer: BufferView!
-    
+
     var indirectPointBuffer: BufferView?
     var indirectColorBuffer: BufferView?
     var indirectIndicesBuffer: BufferView?
     var indicesCount: Int = 0
-    
+
     var maxVerts: Int = 0
     var numVerts: Int = 0
-    
+
     private let _shaderMacro = ShaderMacroCollection()
     private let _depthStencilDescriptor = MTLDepthStencilDescriptor()
     private let _pipelineDescriptor = MTLRenderPipelineDescriptor()
@@ -33,23 +33,23 @@ class LineBatcher : Batcher {
         }
         return _ins
     }
-    
+
     var containData: Bool {
         numVerts != 0 || indicesCount > 0
     }
-    
+
     func addLine(p0: Vector3, p1: Vector3, color: Color32) {
         checkResizePoint(count: numVerts + 2)
         addVert(p0, color32: color)
         addVert(p1, color32: color)
     }
-    
+
     func addLine(p0: Vector3, p1: Vector3, color0: Color32, color1: Color32) {
         checkResizePoint(count: numVerts + 2)
         addVert(p0, color32: color0)
         addVert(p1, color32: color1)
     }
-    
+
     func addLines(indicesCount: Int, positions: [Vector3], indices: [UInt32], colors: [Color32]) {
         self.indicesCount = indicesCount
         if indicesCount > 0 {
@@ -58,13 +58,13 @@ class LineBatcher : Batcher {
             } else {
                 indirectPointBuffer = BufferView(array: positions)
             }
-            
+
             if indirectIndicesBuffer?.count ?? 0 > indices.count {
                 indirectIndicesBuffer!.assign(with: indices)
             } else {
                 indirectIndicesBuffer = BufferView(array: indices)
             }
-            
+
             if indirectColorBuffer?.count ?? 0 > colors.count {
                 indirectColorBuffer!.assign(with: colors)
             } else {
@@ -72,7 +72,7 @@ class LineBatcher : Batcher {
             }
         }
     }
-    
+
     func checkResizePoint(count: Int) {
         if count > maxVerts {
             maxVerts = Int(ceil(Float(count) * 1.2))
@@ -83,7 +83,8 @@ class LineBatcher : Batcher {
             if let pointBuffer = pointBuffer,
                let colorBuffer = colorBuffer,
                let commandBuffer = Engine.commandQueue.makeCommandBuffer(),
-               let blit = commandBuffer.makeBlitCommandEncoder() {
+               let blit = commandBuffer.makeBlitCommandEncoder()
+            {
                 blit.copy(from: pointBuffer.buffer, sourceOffset: 0, to: newPointBuffer.buffer,
                           destinationOffset: 0, size: pointBuffer.count * pointBuffer.stride)
                 blit.copy(from: colorBuffer.buffer, sourceOffset: 0, to: newColorBuffer.buffer,
@@ -96,18 +97,20 @@ class LineBatcher : Batcher {
             colorBuffer = newColorBuffer
         }
     }
-    
+
     func addVert(_ p0: Vector3, color32: Color32) {
         if maxVerts > numVerts,
            let pointBuffer = pointBuffer,
-           let colorBuffer = colorBuffer {
+           let colorBuffer = colorBuffer
+        {
             pointBuffer.assign(p0, at: numVerts)
             colorBuffer.assign(color32, at: numVerts)
             numVerts += 1
         }
     }
-    
+
     // MARK: - Render
+
     func prepare(_ encoder: MTLRenderCommandEncoder) {
         var desc = MTLVertexAttributeDescriptor()
         desc.format = .float3
@@ -122,14 +125,14 @@ class LineBatcher : Batcher {
         desc.bufferIndex = 1
         _descriptor.attributes[Int(Color_0.rawValue)] = desc
         _descriptor.layouts[1].stride = MemoryLayout<Color32>.stride
-        
+
         _material = BaseMaterial()
         _material.shader = Shader.create(in: Engine.library(), vertexSource: "vertex_line_gizmos",
                                          fragmentSource: "fragment_line_gizmos")
         _pipelineDescriptor.label = "Line Gizmo Pipeline"
         _pipelineDescriptor.colorAttachments[0].pixelFormat = Canvas.colorPixelFormat
         _pipelineDescriptor.depthAttachmentPixelFormat = Canvas.depthPixelFormat
-        if let format = Canvas.stencilPixelFormat  {
+        if let format = Canvas.stencilPixelFormat {
             _pipelineDescriptor.stencilAttachmentPixelFormat = format
         }
 
@@ -142,29 +145,31 @@ class LineBatcher : Batcher {
         _pso = Engine.resourceCache.requestGraphicsPipeline(_pipelineDescriptor)
         _depthStencilState = Engine.resourceCache.requestDepthStencilState(_depthStencilDescriptor)
     }
-    
+
     func drawBatcher(_ encoder: inout RenderCommandEncoder, _ camera: Camera) {
         encoder.handle.pushDebugGroup("Line Gizmo Subpass")
-        if (_pso == nil) {
+        if _pso == nil {
             prepare(encoder.handle)
         }
         encoder.handle.setDepthStencilState(_depthStencilState)
         encoder.handle.setFrontFacing(.clockwise)
         encoder.handle.setCullMode(.back)
         encoder.bind(camera: camera, _pso)
-        
+
         if let pointBuffer = pointBuffer,
-           let colorBuffer = colorBuffer {
+           let colorBuffer = colorBuffer
+        {
             encoder.handle.setVertexBuffer(pointBuffer.buffer, offset: 0, index: 0)
             encoder.handle.setVertexBuffer(colorBuffer.buffer, offset: 0, index: 1)
             encoder.handle.drawPrimitives(type: .line, vertexStart: 0,
                                           vertexCount: numVerts, instanceCount: 1)
         }
-        
+
         if indicesCount > 0,
            let indirectPointBuffer,
            let indirectColorBuffer,
-           let indirectIndicesBuffer {
+           let indirectIndicesBuffer
+        {
             encoder.handle.setVertexBuffer(indirectPointBuffer.buffer, offset: 0, index: 0)
             encoder.handle.setVertexBuffer(indirectColorBuffer.buffer, offset: 0, index: 1)
             encoder.handle.drawIndexedPrimitives(type: .line, indexCount: indicesCount, indexType: .uint32,
@@ -173,7 +178,7 @@ class LineBatcher : Batcher {
         encoder.handle.popDebugGroup()
         flush()
     }
-    
+
     func flush() {
         numVerts = 0
         indicesCount = 0

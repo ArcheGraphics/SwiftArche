@@ -7,17 +7,18 @@
 import Metal
 
 public class ForwardSubpass: GeometrySubpass {
-    public override func prepare(_ pipelineDescriptor: MTLRenderPipelineDescriptor,
-                                 _ depthStencilDescriptor: MTLDepthStencilDescriptor) {
+    override public func prepare(_ pipelineDescriptor: MTLRenderPipelineDescriptor,
+                                 _: MTLDepthStencilDescriptor)
+    {
         pipelineDescriptor.label = "Forward Pipeline"
         pipelineDescriptor.colorAttachments[0].pixelFormat = Canvas.colorPixelFormat
         pipelineDescriptor.depthAttachmentPixelFormat = Canvas.depthPixelFormat
-        if let format = Canvas.stencilPixelFormat  {
+        if let format = Canvas.stencilPixelFormat {
             pipelineDescriptor.stencilAttachmentPixelFormat = format
         }
     }
 
-    public override func drawElement(pipeline: DevicePipeline, on encoder: inout RenderCommandEncoder) {
+    override public func drawElement(pipeline: DevicePipeline, on encoder: inout RenderCommandEncoder) {
         pipeline._opaqueQueue.removeAll()
         pipeline._alphaTestQueue.removeAll()
         pipeline._transparentQueue.removeAll()
@@ -31,7 +32,7 @@ public class ForwardSubpass: GeometrySubpass {
             super._drawElement(pipeline: pipeline, on: &encoder, element)
         }
         super._drawBatcher(pipeline: pipeline, on: &encoder, TextBatcher.ins)
-        
+
         // alphaTest
         for element in pipeline._alphaTestQueue {
             super._drawElement(pipeline: pipeline, on: &encoder, element)

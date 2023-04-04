@@ -5,8 +5,8 @@
 //  property of any third parties.
 
 import Cocoa
-import vox_render
 import Math
+import vox_render
 import vox_toolkit
 
 class ClickScript: Script {
@@ -17,8 +17,8 @@ class ClickScript: Script {
         material = (renderer.getMaterial() as! PBRMaterial)
     }
 
-    override func onPointerCast(_ hitResult: HitResult, _ type: UInt) {
-        material.baseColor = Color(Float.random(in: 0...1), Float.random(in: 0...1), Float.random(in: 0...1), 1.0)
+    override func onPointerCast(_: HitResult, _: UInt) {
+        material.baseColor = Color(Float.random(in: 0 ... 1), Float.random(in: 0 ... 1), Float.random(in: 0 ... 1), 1.0)
     }
 }
 
@@ -26,7 +26,7 @@ class InputCastApp: NSViewController {
     var canvas: Canvas!
     var engine: Engine!
     var iblBaker: IBLBaker!
-    
+
     func createBox(_ rootEntity: Entity, _ x: Float, _ y: Float, _ z: Float) -> Entity {
         // create box test entity
         let cubeSize: Float = 2.0
@@ -52,11 +52,11 @@ class InputCastApp: NSViewController {
         canvas.setParentView(view)
         engine = Engine(canvas: canvas)
         iblBaker = IBLBaker()
-        
+
         let scene = Engine.sceneManager.activeScene!
         let hdr = Engine.textureLoader.loadHDR(with: "assets/kloppenheim_06_4k.hdr")!
         iblBaker.bake(scene, with: hdr, size: 256, level: 3)
-        
+
         let rootEntity = scene.createRootEntity()
         let cameraEntity = rootEntity.createChild()
         cameraEntity.transform.position = Vector3(5, 5, 5)
@@ -72,10 +72,9 @@ class InputCastApp: NSViewController {
 
         Engine.run()
     }
-    
+
     override func viewDidDisappear() {
         super.viewDidDisappear()
         Engine.destroy()
     }
 }
-

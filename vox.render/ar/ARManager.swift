@@ -17,9 +17,7 @@ public class ARManager: NSObject {
 
     public var camera: Camera? = nil
     public var session: ARSession {
-        get {
-            _session
-        }
+        _session
     }
 
     public init(_ device: MTLDevice) {
@@ -30,12 +28,13 @@ public class ARManager: NSObject {
         capturedImageTextureCache = textureCache
         _session.delegate = self
     }
-    
+
     public func run(_ configuration: ARConfiguration = ARWorldTrackingConfiguration(),
-                    options: ARSession.RunOptions = []) {
+                    options _: ARSession.RunOptions = [])
+    {
         session.run(configuration)
     }
-    
+
     public func pause() {
         session.pause()
     }
@@ -68,9 +67,9 @@ public class ARManager: NSObject {
                                                                         zFar: CGFloat(camera!.farClipPlane)))
 
             let elements = _onUpdateScripts._elements
-            for i in 0..<_onUpdateScripts.count {
+            for i in 0 ..< _onUpdateScripts.count {
                 let element = elements[i]!
-                if (element._started) {
+                if element._started {
                     element.onARUpdate(deltaTime, currentFrame)
                 }
             }
@@ -81,7 +80,7 @@ public class ARManager: NSObject {
         // Create two textures (Y and CbCr) from the provided frame's captured image
         let pixelBuffer = frame.capturedImage
 
-        if (CVPixelBufferGetPlaneCount(pixelBuffer) < 2) {
+        if CVPixelBufferGetPlaneCount(pixelBuffer) < 2 {
             return
         }
 
@@ -110,7 +109,7 @@ extension ARManager: ARSessionDelegate {
     /// - Parameters:
     ///   - session: The session being run.
     ///   - frame: The frame that has been updated.
-    public func session(_ session: ARSession, didUpdate frame: ARFrame) {
+    public func session(_: ARSession, didUpdate frame: ARFrame) {
         updateCapturedImageTextures(frame: frame)
     }
 
@@ -118,37 +117,32 @@ extension ARManager: ARSessionDelegate {
     /// - Parameters:
     ///   - session: The session being run.
     ///   - anchors: An array of added anchors.
-    public func session(_ session: ARSession, didAdd anchors: [ARAnchor]) {
-    }
+    public func session(_: ARSession, didAdd _: [ARAnchor]) {}
 
     /// This is called when anchors are updated.
     /// - Parameters:
     ///   - session: The session being run.
     ///   - anchors: An array of updated anchors.
-    public func session(_ session: ARSession, didUpdate anchors: [ARAnchor]) {
-    }
+    public func session(_: ARSession, didUpdate _: [ARAnchor]) {}
 
     /// This is called when anchors are removed from the session.
     /// - Parameters:
     ///   - session: The session being run.
     ///   - anchors: An array of removed anchors.
-    public func session(_ session: ARSession, didRemove anchors: [ARAnchor]) {
-    }
+    public func session(_: ARSession, didRemove _: [ARAnchor]) {}
 
     ///  This is called when a session fails.
     /// - Parameters:
     ///   - session: The session that failed.
     ///   - error: The error being reported (see ARError.h).
     /// - Remark: On failure the session will be paused.
-    public func session(_ session: ARSession, didFailWithError error: Error) {
-    }
+    public func session(_: ARSession, didFailWithError _: Error) {}
 
     /// This is called when the camera’s tracking state has changed.
     /// - Parameters:
     ///   - session: The session being run.
     ///   - camera: The camera that changed tracking states.
-    public func session(_ session: ARSession, cameraDidChangeTrackingState camera: ARCamera) {
-    }
+    public func session(_: ARSession, cameraDidChangeTrackingState _: ARCamera) {}
 
     /// This is called when a session is interrupted.
     /// - Remark: A session will be interrupted and no longer able to track when
@@ -157,8 +151,7 @@ extension ARManager: ARSessionDelegate {
     /// multiple foreground applications (see AVCaptureSessionInterruptionReason).
     /// No additional frame updates will be delivered until the interruption has ended.
     /// - Parameter session: The session that was interrupted.
-    public func sessionWasInterrupted(_ session: ARSession) {
-    }
+    public func sessionWasInterrupted(_: ARSession) {}
 
     /// This is called when a session interruption has ended.
     /// - Remark: A session will continue running from the last known state once
@@ -166,8 +159,7 @@ extension ARManager: ARSessionDelegate {
     /// To avoid this, some applications may want to reset tracking (see ARSessionRunOptions)
     /// or attempt to relocalize (see `-[ARSessionObserver sessionShouldAttemptRelocalization:]`).
     /// - Parameter session: The session that was interrupted.
-    public func sessionInterruptionEnded(_ session: ARSession) {
-    }
+    public func sessionInterruptionEnded(_: ARSession) {}
 
     /// This is called after a session resumes from a pause or interruption to determine
     /// whether or not the session should attempt to relocalize.
@@ -180,7 +172,7 @@ extension ARManager: ARSessionDelegate {
     /// - Parameter session: The session to relocalize.
     /// - Returns: Return YES to begin relocalizing.
     @available(iOS 11.3, macCatalyst 13.1, *)
-    public func sessionShouldAttemptRelocalization(_ session: ARSession) -> Bool {
+    public func sessionShouldAttemptRelocalization(_: ARSession) -> Bool {
         true
     }
 
@@ -188,8 +180,7 @@ extension ARManager: ARSessionDelegate {
     /// - Parameters:
     ///   - session: The session being run.
     ///   - audioSampleBuffer: The captured audio sample buffer.
-    public func session(_ session: ARSession, didOutputAudioSampleBuffer audioSampleBuffer: CMSampleBuffer) {
-    }
+    public func session(_: ARSession, didOutputAudioSampleBuffer _: CMSampleBuffer) {}
 
     /// This is called when the session generated new collaboration data.
     /// - Remark: This data should be sent to all participants.
@@ -197,8 +188,7 @@ extension ARManager: ARSessionDelegate {
     ///   - session: The session that produced world tracking collaboration data.
     ///   - data: Collaboration data to be sent to participants.
     @available(iOS 13.0, macCatalyst 13.1, *)
-    public func session(_ session: ARSession, didOutputCollaborationData data: ARSession.CollaborationData) {
-    }
+    public func session(_: ARSession, didOutputCollaborationData _: ARSession.CollaborationData) {}
 
     ///
     /// This is called when geo tracking status changes.
@@ -206,7 +196,5 @@ extension ARManager: ARSessionDelegate {
     ///   - session: The session being run.
     ///   - geoTrackingStatus: Latest geo tracking status.
     @available(iOS 14.0, *)
-    public func session(_ session: ARSession, didChange geoTrackingStatus: ARGeoTrackingStatus) {
-    }
+    public func session(_: ARSession, didChange _: ARGeoTrackingStatus) {}
 }
-

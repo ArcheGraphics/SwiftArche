@@ -4,8 +4,8 @@
 //  personal capacity and am not conveying any rights to any intellectual
 //  property of any third parties.
 
-import Metal
 import Math
+import Metal
 
 public class PBRSpecularMaterial: PBRBaseMaterial {
     /// Specular color.
@@ -36,13 +36,13 @@ public class PBRSpecularMaterial: PBRBaseMaterial {
             }
         }
     }
-    
+
     public var specularGlossinessSampler: MTLSamplerDescriptor? {
         didSet {
             shaderData.setSampler(with: PBRSpecularMaterial._specularGlossinessSamplerProp, sampler: specularGlossinessSampler)
         }
     }
-    
+
     public required init() {
         super.init()
         shaderData.setData(with: PBRSpecularMaterial._specularProp, data: specularColor.toLinear())

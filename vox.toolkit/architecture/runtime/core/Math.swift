@@ -4,14 +4,14 @@
 //  personal capacity and am not conveying any rights to any intellectual
 //  property of any third parties.
 
-import vox_render
 import Math
+import vox_render
 
 /// A collection of math functions that are useful when working with 3d meshes.
-public class Math {
+public enum Math {
     /// Pi / 2.
     public static let phi: Float = 1.618033988749895
-    
+
     /// Epsilon to use when comparing vertex positions for equality.
     static let k_FltCompareEpsilon: Float = 0.0001
 
@@ -40,8 +40,9 @@ public class Math {
     ///   - origin: The center point of the ellipse
     ///   - tangent: Out: the resulting at the computed position
     /// - Returns: a point on the circumference of an ellipse.
-    internal static func PointInEllipseCircumference(xRadius: Float, yRadius: Float, angleInDegrees: Float,
-                                                     origin: Vector2, tangent: inout Vector2) -> Vector2 {
+    internal static func PointInEllipseCircumference(xRadius _: Float, yRadius _: Float, angleInDegrees _: Float,
+                                                     origin _: Vector2, tangent _: inout Vector2) -> Vector2
+    {
         Vector2()
     }
 
@@ -53,14 +54,15 @@ public class Math {
     ///   - origin: The center point of the ellipse
     ///   - tangent: Out: the resulting at the computed position
     /// - Returns: a point on the circumference of an ellipse.
-    internal static func PointInEllipseCircumferenceWithConstantAngle(xRadius: Float, yRadius: Float,
-                                                                      angleInDegrees: Float, origin: Vector2,
-                                                                      tangent: inout Vector2) -> Vector2 {
+    internal static func PointInEllipseCircumferenceWithConstantAngle(xRadius _: Float, yRadius _: Float,
+                                                                      angleInDegrees _: Float, origin _: Vector2,
+                                                                      tangent _: inout Vector2) -> Vector2
+    {
         Vector2()
     }
 
     /// Provided a radius, latitudinal and longitudinal angle, return a position.
-    internal static func PointInSphere(radius: Float, latitudeAngle: Float, longitudeAngle: Float) -> Vector3 {
+    internal static func PointInSphere(radius _: Float, latitudeAngle _: Float, longitudeAngle _: Float) -> Vector3 {
         Vector3()
     }
 
@@ -69,7 +71,7 @@ public class Math {
     ///   - a: The direction from which to rotate.
     ///   - b: The direction to rotate towards.
     /// - Returns: A signed angle in degrees from direction a to direction b.
-    internal static func SignedAngle(a: Vector2, b: Vector2) -> Float {
+    internal static func SignedAngle(a _: Vector2, b _: Vector2) -> Float {
         0
     }
 
@@ -78,10 +80,9 @@ public class Math {
     ///   - a: First point.
     ///   - b: Second point.
     /// - Returns: Squared distance
-    public static func SqrDistance(a: Vector3, b: Vector3) -> Float {
+    public static func SqrDistance(a _: Vector3, b _: Vector3) -> Float {
         0
     }
-
 
     /// Get the area of a triangle.
     /// - Remark:
@@ -91,16 +92,16 @@ public class Math {
     ///   - y: Second vertex position of the triangle.
     ///   - z: Third vertex position of the triangle.
     /// - Returns: The area of the triangle.
-    public static func TriangleArea(x: Vector3, y: Vector3, z: Vector3) -> Float {
+    public static func TriangleArea(x _: Vector3, y _: Vector3, z _: Vector3) -> Float {
         0
     }
 
     /// Returns the Area of a polygon.
-    internal static func PolygonArea(vertices: [Vector3], indexes: [Int]) -> Float {
+    internal static func PolygonArea(vertices _: [Vector3], indexes _: [Int]) -> Float {
         0
     }
 
-    internal static func Perpendicular(value: Vector2) -> Vector2 {
+    internal static func Perpendicular(value _: Vector2) -> Vector2 {
         Vector2()
     }
 
@@ -110,11 +111,11 @@ public class Math {
     ///   - lineStart: First point of the line segment.
     ///   - lineEnd: Second point of the line segment.
     /// - Returns: The reflected point.
-    public static func ReflectPoint(point: Vector2, lineStart: Vector2, lineEnd: Vector2) -> Vector2 {
+    public static func ReflectPoint(point _: Vector2, lineStart _: Vector2, lineEnd _: Vector2) -> Vector2 {
         Vector2()
     }
 
-    internal static func SqrDistanceRayPoint(ray: Ray, point: Vector3) -> Float {
+    internal static func SqrDistanceRayPoint(ray _: Ray, point _: Vector3) -> Float {
         0
     }
 
@@ -126,7 +127,7 @@ public class Math {
     ///   - lineStart: Line start.
     ///   - lineEnd: Line end.
     /// - Returns: The distance from point to the nearest point on a line segment.
-    public static func DistancePointLineSegment(point: Vector2, lineStart: Vector2, lineEnd: Vector2) -> Float {
+    public static func DistancePointLineSegment(point _: Vector2, lineStart _: Vector2, lineEnd _: Vector2) -> Float {
         0
     }
 
@@ -138,7 +139,7 @@ public class Math {
     ///   - lineStart: Line start.
     ///   - lineEnd: Line end.
     /// - Returns: The distance from point to the nearest point on a line segment.
-    public static func DistancePointLineSegment(point: Vector3, lineStart: Vector3, lineEnd: Vector3) -> Float {
+    public static func DistancePointLineSegment(point _: Vector3, lineStart _: Vector3, lineEnd _: Vector3) -> Float {
         0
     }
 
@@ -146,23 +147,23 @@ public class Math {
     /// - Parameters:
     ///   - a: First ray.
     ///   - b: Second ray.
-    public static func GetNearestPointRayRay(a: Ray, b: Ray) -> Vector3 {
+    public static func GetNearestPointRayRay(a _: Ray, b _: Ray) -> Vector3 {
         Vector3()
     }
 
-    internal static func GetNearestPointRayRay(ao: Vector3, ad: Vector3, bo: Vector3, bd: Vector3) -> Vector3 {
+    internal static func GetNearestPointRayRay(ao _: Vector3, ad _: Vector3, bo _: Vector3, bd _: Vector3) -> Vector3 {
         Vector3()
     }
 
     // http://stackoverflow.com/questions/563198/how-do-you-detect-where-two-line-segments-intersect
     // Returns 1 if the lines intersect, otherwise 0. In addition, if the lines
     // intersect the intersection point may be stored in the intersect var
-    internal static func GetLineSegmentIntersect(p0: Vector2, p1: Vector2, p2: Vector2, p3: Vector2, intersect: inout Vector2) -> Bool {
+    internal static func GetLineSegmentIntersect(p0 _: Vector2, p1 _: Vector2, p2 _: Vector2, p3 _: Vector2, intersect _: inout Vector2) -> Bool {
         false
     }
 
     /// True or false lines, do lines intersect.
-    internal static func GetLineSegmentIntersect(p0: Vector2, p1: Vector2, p2: Vector2, p3: Vector2) -> Bool {
+    internal static func GetLineSegmentIntersect(p0 _: Vector2, p1 _: Vector2, p2 _: Vector2, p3 _: Vector2) -> Bool {
         false
     }
 
@@ -172,29 +173,29 @@ public class Math {
     ///   - point: point
     ///   - indexes: If present these indexes make up the border of polygon. If not, polygon is assumed to be in correct order.
     /// - Returns: True if the polygon contains point. False otherwise.
-    internal static func PointInPolygon(_ polygon: [Vector2], point: Vector2, indexes: [Int]? = nil) -> Bool {
+    internal static func PointInPolygon(_: [Vector2], point _: Vector2, indexes _: [Int]? = nil) -> Bool {
         false
     }
 
     /// Is the point within a polygon?
     /// - Remark:
     /// Assumes polygon has already been tested with AABB
-    internal static func PointInPolygon(positions: [Vector2], polyBounds: Bounds2D, edges: [Edge], point: Vector2) -> Bool {
+    internal static func PointInPolygon(positions _: [Vector2], polyBounds _: Bounds2D, edges _: [Edge], point _: Vector2) -> Bool {
         false
     }
 
     /// Is the 2d point within a 2d polygon? This overload is provided as a convenience for 2d arrays coming from cam.WorldToScreenPoint (which includes a Z value).
     /// - Remark:
     /// Assumes polygon has already been tested with AABB
-    internal static func PointInPolygon(positions: [Vector3], polyBounds: Bounds2D, edges: [Edge], point: Vector2) -> Bool {
+    internal static func PointInPolygon(positions _: [Vector3], polyBounds _: Bounds2D, edges _: [Edge], point _: Vector2) -> Bool {
         false
     }
 
-    internal static func RectIntersectsLineSegment(rect: Rect, a: Vector2, b: Vector2) -> Bool {
+    internal static func RectIntersectsLineSegment(rect _: Rect, a _: Vector2, b _: Vector2) -> Bool {
         false
     }
 
-    internal static func RectIntersectsLineSegment(rect: Rect, a: Vector3, b: Vector3) -> Bool {
+    internal static func RectIntersectsLineSegment(rect _: Rect, a _: Vector3, b _: Vector3) -> Bool {
         false
     }
 
@@ -210,19 +211,21 @@ public class Math {
     ///   - OutDistance: If triangle is intersected, this is the distance of intersection point from ray origin. Zero if not intersected.
     ///   - OutPoint: If triangle is intersected, this is the point of collision. Zero if not intersected.
     /// - Returns: True if ray intersects, false if not.
-    public static func RayIntersectsTriangle(InRay: Ray, InTriangleA: Vector3, InTriangleB: Vector3, InTriangleC: Vector3,
-                                             OutDistance: inout Float, OutPoint: inout  Vector3) -> Bool {
+    public static func RayIntersectsTriangle(InRay _: Ray, InTriangleA _: Vector3, InTriangleB _: Vector3, InTriangleC _: Vector3,
+                                             OutDistance _: inout Float, OutPoint _: inout Vector3) -> Bool
+    {
         false
     }
 
     /// Non-allocating version of Ray / Triangle intersection.
-    internal static func RayIntersectsTriangle2(origin: Vector3,
-                                                dir: Vector3,
-                                                vert0: Vector3,
-                                                vert1: Vector3,
-                                                vert2: Vector3,
-                                                distance: inout Float,
-                                                normal: inout Vector3) -> Bool {
+    internal static func RayIntersectsTriangle2(origin _: Vector3,
+                                                dir _: Vector3,
+                                                vert0 _: Vector3,
+                                                vert1 _: Vector3,
+                                                vert2 _: Vector3,
+                                                distance _: inout Float,
+                                                normal _: inout Vector3) -> Bool
+    {
         false
     }
 
@@ -230,7 +233,7 @@ public class Math {
     /// Equivalent to: `1f / cos(x)`.
     /// - Parameter x: The radian to calculate the secant of.
     /// - Returns: The secant of radian x.
-    public static func Secant(_ x: Float) -> Float {
+    public static func Secant(_: Float) -> Float {
         0
     }
 
@@ -241,12 +244,12 @@ public class Math {
     ///   - p1: Second point of the triangle.
     ///   - p2: Third point of the triangle.
     /// - Returns: Normal
-    public static func Normal(p0: Vector3, p1: Vector3, p2: Vector3) -> Vector3 {
+    public static func Normal(p0 _: Vector3, p1 _: Vector3, p2 _: Vector3) -> Vector3 {
         Vector3()
     }
 
     /// Calculate the normal of a set of vertices. If indexes is null or not divisible by 3, the first 3 positions are used.  If indexes is valid, an average of each set of 3 is taken.
-    internal static func Normal(vertices: [Vertex], indexes: [Int]? = nil) -> Vector3 {
+    internal static func Normal(vertices _: [Vertex], indexes _: [Int]? = nil) -> Vector3 {
         Vector3()
     }
 
@@ -255,7 +258,7 @@ public class Math {
     ///   - mesh: The mesh that the target face belongs to.
     ///   - face: The face to calculate a normal for.
     /// - Returns: A normal that most closely matches the face orientation in model corrdinates.
-    public static func Normal(mesh: ProBuilderMesh, face: Face) -> Vector3 {
+    public static func Normal(mesh _: ProBuilderMesh, face _: Face) -> Vector3 {
         Vector3()
     }
 
@@ -264,51 +267,50 @@ public class Math {
     ///   - mesh: The mesh that the target face belongs to.
     ///   - face: The face to calculate normal information for.
     /// - Returns: The normal, bitangent, and tangent for the face.
-    public static func NormalTangentBitangent(mesh: ProBuilderMesh, face: Face) -> Normal {
+    public static func NormalTangentBitangent(mesh _: ProBuilderMesh, face _: Face) -> Normal {
         vox_toolkit.Normal()
     }
 
     /// Is the direction within epsilon of Up, Down, Left, Right, Forward, or Backwards?
-    internal static func IsCardinalAxis(v: Vector3, epsilon: Float = Float.leastNonzeroMagnitude) -> Bool {
+    internal static func IsCardinalAxis(v _: Vector3, epsilon _: Float = Float.leastNonzeroMagnitude) -> Bool {
         false
     }
 
     /// Return the largest axis in a Vector3.
-    internal static func LargestValue(v: Vector3) -> Float {
+    internal static func LargestValue(v _: Vector3) -> Float {
         0
     }
 
     /// Return the largest axis in a Vector2.
-    internal static func LargestValue(v: Vector2) -> Float {
+    internal static func LargestValue(v _: Vector2) -> Float {
         0
     }
 
     /// The smallest X and Y value found in an array of Vector2. May or may not belong to the same Vector2.
-    internal static func SmallestVector2(_ v: [Vector2]) -> Vector2 {
+    internal static func SmallestVector2(_: [Vector2]) -> Vector2 {
         Vector2()
     }
-    
+
     /// The smallest X and Y value found in an array of Vector2. May or may not belong to the same Vector2.
     /// - Parameters:
     ///   - v: v
     ///   - indexes: Indexes of v array to test.
     /// - Returns: smallestVector2
-    internal static func SmallestVector2(v: [Vector2], indexes: [Int]) -> Vector2 {
+    internal static func SmallestVector2(v _: [Vector2], indexes _: [Int]) -> Vector2 {
         Vector2()
     }
 
     /// The largest X and Y value in an array.  May or may not belong to the same Vector2.
-    internal static func LargestVector2(_ v: [Vector2]) -> Vector2 {
+    internal static func LargestVector2(_: [Vector2]) -> Vector2 {
         Vector2()
     }
 
-    internal static func LargestVector2(_ v: [Vector2], indexes: [Int]) -> Vector2 {
+    internal static func LargestVector2(_: [Vector2], indexes _: [Int]) -> Vector2 {
         Vector2()
     }
-
 
     /// Creates an AABB with a set of vertices.
-    internal static func GetBounds(positions: [Vector3], indices: [Int]? = nil) -> BoundingBox {
+    internal static func GetBounds(positions _: [Vector3], indices _: [Int]? = nil) -> BoundingBox {
         BoundingBox()
     }
 
@@ -317,7 +319,7 @@ public class Math {
     ///   - array: The array
     ///   - indexes: If provided the average is the sum of all points contained in the indexes array. If not, the entire v array is used.
     /// - Returns: Average Vector3 of passed vertex array.
-    public static func Average(array: [Vector2], indexes: [Int]? = nil) -> Vector2 {
+    public static func Average(array _: [Vector2], indexes _: [Int]? = nil) -> Vector2 {
         Vector2()
     }
 
@@ -326,7 +328,7 @@ public class Math {
     ///   - array: The array.
     ///   - indexes: If provided the average is the sum of all points contained in the indexes array. If not, the entire v array is used.
     /// - Returns: Average Vector3 of passed vertex array.
-    public static func Average(array: [Vector3], indexes: [Int]? = nil) -> Vector3 {
+    public static func Average(array _: [Vector3], indexes _: [Int]? = nil) -> Vector3 {
         Vector3()
     }
 
@@ -335,11 +337,11 @@ public class Math {
     ///   - array: The array.
     ///   - indexes: If provided the average is the sum of all points contained in the indexes array. If not, the entire v array is used.
     /// - Returns: Average Vector4 of passed vertex array.
-    public static func Average(array: [Vector4], indexes: [Int]? = nil) -> Vector4 {
+    public static func Average(array _: [Vector4], indexes _: [Int]? = nil) -> Vector4 {
         Vector4()
     }
 
-    internal static func InvertScaleVector(_ scaleVector: Vector3) -> Vector3 {
+    internal static func InvertScaleVector(_: Vector3) -> Vector3 {
         Vector3()
     }
 
@@ -349,18 +351,15 @@ public class Math {
     ///   - lowerBound: The lowest value that the clamped value can be.
     ///   - upperBound: The highest value that the clamped value can be.
     /// - Returns: A value clamped with the range of lowerBound and upperBound.
-    public static func Clamp(value: Int, lowerBound: Int, upperBound: Int) -> Int {
+    public static func Clamp(value _: Int, lowerBound _: Int, upperBound _: Int) -> Int {
         0
     }
 
-
     /// Non-allocating cross product.
-    internal static func Cross(a: Vector3, b: Vector3, res: inout Vector3) {
-    }
+    internal static func Cross(a _: Vector3, b _: Vector3, res _: inout Vector3) {}
 
     /// Vector subtraction without allocating a new vector.
-    internal static func Subtract(a: Vector3, b: Vector3, res: inout Vector3) {
-    }
+    internal static func Subtract(a _: Vector3, b _: Vector3, res _: inout Vector3) {}
 
     internal static func IsNumber(_ value: Float) -> Bool {
         return !(value.isInfinite || value.isNaN)
@@ -379,7 +378,7 @@ public class Math {
     }
 
     internal static func MakeNonZero(_ value: Float, _ min: Float = 0.0001) -> Float {
-        if (value.isNaN || value.isInfinite || MathUtil.abs(value) < min) {
+        if value.isNaN || value.isInfinite || MathUtil.abs(value) < min {
             return min * MathUtil.sign(value)
         }
         return value
@@ -391,7 +390,7 @@ public class Math {
     ///   - b: Second Vector2 value.
     ///   - delta: The maximum difference between components allowed.
     /// - Returns: True if a and b components are respectively within delta distance of one another.
-    internal static func Approx2(a: Vector2, b: Vector2, delta: Float = Float.leastNonzeroMagnitude) -> Bool {
+    internal static func Approx2(a _: Vector2, b _: Vector2, delta _: Float = Float.leastNonzeroMagnitude) -> Bool {
         false
     }
 
@@ -401,7 +400,7 @@ public class Math {
     ///   - b: Second Vector3 value.
     ///   - delta: The maximum difference between components allowed.
     /// - Returns: True if a and b components are respectively within delta distance of one another.
-    internal static func Approx3(a: Vector3, b: Vector3, delta: Float = Float.leastNonzeroMagnitude) -> Bool {
+    internal static func Approx3(a _: Vector3, b _: Vector3, delta _: Float = Float.leastNonzeroMagnitude) -> Bool {
         false
     }
 
@@ -411,7 +410,7 @@ public class Math {
     ///   - b: Second Vector4 value.
     ///   - delta: The maximum difference between components allowed.
     /// - Returns: True if a and b components are respectively within delta distance of one another.
-    internal static func Approx4(a: Vector4, b: Vector4, delta: Float = Float.leastNonzeroMagnitude) -> Bool {
+    internal static func Approx4(a _: Vector4, b _: Vector4, delta _: Float = Float.leastNonzeroMagnitude) -> Bool {
         false
     }
 
@@ -421,7 +420,7 @@ public class Math {
     ///   - b: Second Color value.
     ///   - delta: The maximum difference between components allowed.
     /// - Returns: True if a and b components are respectively within delta distance of one another.
-    internal static func ApproxC(a: Color, b: Color, delta: Float = Float.leastNonzeroMagnitude) -> Bool {
+    internal static func ApproxC(a _: Color, b _: Color, delta _: Float = Float.leastNonzeroMagnitude) -> Bool {
         false
     }
 
@@ -431,7 +430,7 @@ public class Math {
     ///   - b: Second float value.
     ///   - delta: The maximum difference between components allowed.
     /// - Returns: True if a and b components are respectively within delta distance of one another.
-    internal static func Approx(a: Float, b: Float, delta: Float = Float.leastNonzeroMagnitude) -> Bool {
+    internal static func Approx(a _: Float, b _: Float, delta _: Float = Float.leastNonzeroMagnitude) -> Bool {
         false
     }
 }
@@ -442,17 +441,17 @@ extension Vector2 {
     ///   - origin: Vector2 original point.
     ///   - theta: The pivot to rotate around.
     /// - Returns: How far to rotate in degrees.
-    internal static func RotateAroundPoint(origin: Vector2, theta: Float) -> Vector2 {
+    internal static func RotateAroundPoint(origin _: Vector2, theta _: Float) -> Vector2 {
         Vector2()
     }
 
     /// Scales a Vector2 using origin as the pivot point.
-    public static func ScaleAroundPoint(origin: Vector2, scale: Vector2) -> Vector2 {
+    public static func ScaleAroundPoint(origin _: Vector2, scale _: Vector2) -> Vector2 {
         Vector2()
     }
 
     /// Component-wise division.
-    internal static func DivideBy(o: Vector2) -> Vector2 {
+    internal static func DivideBy(o _: Vector2) -> Vector2 {
         Vector2()
     }
 }

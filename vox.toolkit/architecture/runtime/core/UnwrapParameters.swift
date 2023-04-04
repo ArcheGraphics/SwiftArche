@@ -4,8 +4,8 @@
 //  personal capacity and am not conveying any rights to any intellectual
 //  property of any third parties.
 
-import vox_render
 import Math
+import vox_render
 
 /// Store UV2 unwrapping parameters.
 public final class UnwrapParameters {
@@ -74,12 +74,10 @@ public final class UnwrapParameters {
 
     /// Copy constructor.
     /// - Parameter other: The UnwrapParameters to copy properties from.
-    public init(other: UnwrapParameters) {
-    }
+    public init(other _: UnwrapParameters) {}
 
     /// <summary>
     /// Reset the unwrap parameters to default values.
     /// </summary>
-    public func Reset() {
-    }
+    public func Reset() {}
 }

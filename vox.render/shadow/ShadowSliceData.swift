@@ -8,7 +8,7 @@ import Math
 
 class ShadowSliceData {
     var resolution: UInt32 = 0
-    var virtualCamera: CameraInfo = CameraInfo()
+    var virtualCamera: CameraInfo = .init()
     var cullPlanes: [Plane] = [
         Plane(Vector3()),
         Plane(Vector3()),
@@ -19,11 +19,11 @@ class ShadowSliceData {
         Plane(Vector3()),
         Plane(Vector3()),
         Plane(Vector3()),
-        Plane(Vector3())
+        Plane(Vector3()),
     ]
     var cullPlaneCount: Int = 0
 
     // bounding sphere
-    var splitBoundSphere: BoundingSphere = BoundingSphere(Vector3(), 0.0)
+    var splitBoundSphere: BoundingSphere = .init(Vector3(), 0.0)
     var sphereCenterZ: Float = 0
 }

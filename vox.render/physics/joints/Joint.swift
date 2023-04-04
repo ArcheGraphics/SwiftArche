@@ -23,7 +23,7 @@ public class Joint: Component {
             _connectedCollider.collider
         }
         set {
-            if (_connectedCollider.collider !== newValue) {
+            if _connectedCollider.collider !== newValue {
                 _connectedCollider.collider = newValue
                 _nativeJoint.setConnectedCollider(newValue!._nativeCollider)
             }
@@ -48,7 +48,7 @@ public class Joint: Component {
             _connectedCollider.massScale
         }
         set {
-            if (newValue != _connectedCollider.massScale) {
+            if newValue != _connectedCollider.massScale {
                 _connectedCollider.massScale = newValue
                 _nativeJoint.setConnectedMassScale(newValue)
             }
@@ -61,7 +61,7 @@ public class Joint: Component {
             _connectedCollider.inertiaScale
         }
         set {
-            if (newValue != _connectedCollider.inertiaScale) {
+            if newValue != _connectedCollider.inertiaScale {
                 _connectedCollider.inertiaScale = newValue
                 _nativeJoint.setConnectedInertiaScale(newValue)
             }
@@ -74,7 +74,7 @@ public class Joint: Component {
             _collider.massScale
         }
         set {
-            if (newValue != _collider.massScale) {
+            if newValue != _collider.massScale {
                 _collider.massScale = newValue
                 _nativeJoint.setMassScale(newValue)
             }
@@ -87,7 +87,7 @@ public class Joint: Component {
             _collider.inertiaScale
         }
         set {
-            if (newValue != _collider.inertiaScale) {
+            if newValue != _collider.inertiaScale {
                 _collider.inertiaScale = newValue
                 _nativeJoint.setInertiaScale(newValue)
             }
@@ -100,7 +100,7 @@ public class Joint: Component {
             _force
         }
         set {
-            if (newValue != _force) {
+            if newValue != _force {
                 _force = newValue
                 _nativeJoint.setBreakForce(newValue)
             }
@@ -113,7 +113,7 @@ public class Joint: Component {
             _torque
         }
         set {
-            if (newValue != _torque) {
+            if newValue != _torque {
                 _torque = newValue
                 _nativeJoint.setBreakTorque(newValue)
             }

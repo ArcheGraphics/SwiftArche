@@ -4,8 +4,8 @@
 //  personal capacity and am not conveying any rights to any intellectual
 //  property of any third parties.
 
-import vox_render
 import Math
+import vox_render
 
 struct Triangle {
     var m_A: Int
@@ -15,27 +15,19 @@ struct Triangle {
     var m_C: Int
 
     public var a: Int {
-        get {
-            m_A
-        }
+        m_A
     }
 
     public var b: Int {
-        get {
-            m_B
-        }
+        m_B
     }
 
     public var c: Int {
-        get {
-            m_C
-        }
+        m_C
     }
 
     public var indices: [Int] {
-        get {
-            [m_A, m_B, m_C]
-        }
+        [m_A, m_B, m_C]
     }
 
     public init(a: Int, b: Int, c: Int) {
@@ -46,21 +38,19 @@ struct Triangle {
 
     public func IsAdjacent(other: Triangle) -> Bool {
         other.ContainsEdge(Edge(a, b))
-                || other.ContainsEdge(Edge(b, c))
-                || other.ContainsEdge(Edge(c, a))
+            || other.ContainsEdge(Edge(b, c))
+            || other.ContainsEdge(Edge(c, a))
     }
 
     func ContainsEdge(_ edge: Edge) -> Bool {
-        if (Edge(a, b) == edge) {
+        if Edge(a, b) == edge {
             return true
         }
-        if (Edge(b, c) == edge) {
+        if Edge(b, c) == edge {
             return true
         }
         return Edge(c, a) == edge
     }
 }
 
-extension Triangle: Hashable {
-    
-}
+extension Triangle: Hashable {}

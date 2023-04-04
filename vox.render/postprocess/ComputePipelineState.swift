@@ -13,22 +13,18 @@ class ComputePipelineState {
     var uniformBlock: [ReflectionUniform] = []
 
     var handle: MTLComputePipelineState {
-        get {
-            return _handle!
-        }
+        return _handle!
     }
 
     var reflection: MTLComputePipelineReflection {
-        get {
-            return _reflection!
-        }
+        return _reflection!
     }
 
     init(_ device: MTLDevice, _ descriptor: MTLComputePipelineDescriptor) {
         do {
             _handle = try device.makeComputePipelineState(descriptor: descriptor,
-                    options: MTLPipelineOption.argumentInfo, reflection: &_reflection)
-        } catch let error {
+                                                          options: MTLPipelineOption.argumentInfo, reflection: &_reflection)
+        } catch {
             fatalError(error.localizedDescription)
         }
 
@@ -43,7 +39,7 @@ class ComputePipelineState {
 
         let count = _reflection.bindings.count
         if count != 0 {
-            for i in 0..<count {
+            for i in 0 ..< count {
                 let aug = _reflection.bindings[i]
                 var shaderUniform = ReflectionUniform()
                 shaderUniform.name = aug.name
@@ -56,4 +52,3 @@ class ComputePipelineState {
         }
     }
 }
-

@@ -5,23 +5,23 @@
 //  property of any third parties.
 
 import Cocoa
-import vox_render
-import Math
-import vox_toolkit
 import ImGui
+import Math
+import vox_render
+import vox_toolkit
 
 class SkinningApp: NSViewController {
     var canvas: Canvas!
     var engine: Engine!
     var iblBaker: IBLBaker!
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
         canvas = Canvas(frame: view.frame)
         canvas.setParentView(view)
         engine = Engine(canvas: canvas)
         iblBaker = IBLBaker()
-        
+
         let scene = Engine.sceneManager.activeScene!
         let hdr = Engine.textureLoader.loadHDR(with: "assets/kloppenheim_06_4k.hdr")!
         iblBaker.bake(scene, with: hdr, size: 256, level: 3)
@@ -44,7 +44,7 @@ class SkinningApp: NSViewController {
                                   withExtension: "ozz",
                                   subdirectory: "assets/Animation")!
         animator.loadSkeleton(url)
-        
+
         url = Bundle.main.url(forResource: "ruby_animation",
                               withExtension: "ozz",
                               subdirectory: "assets/Animation")!
@@ -53,8 +53,8 @@ class SkinningApp: NSViewController {
         let animationBlending = AnimationBlending()
         animationBlending.addChild(state: baseSampler)
         animator.rootState = animationBlending
-        
-        let material = PBRMaterial();
+
+        let material = PBRMaterial()
         material.baseColor = Color(0.4, 0.6, 0.6, 0.6)
         material.isTransparent = true
         url = Bundle.main.url(forResource: "ruby_mesh",
@@ -62,7 +62,7 @@ class SkinningApp: NSViewController {
                               subdirectory: "assets/Animation")!
         let skinnedMesh = SkinnedMesh()
         skinnedMesh.loadSkin(url)
-        for i in 0..<skinnedMesh.skinCount {
+        for i in 0 ..< skinnedMesh.skinCount {
             let renderer = characterEntity.addComponent(SkinnedMeshRenderer.self)
             renderer.setMaterial(material)
             renderer.mesh = skinnedMesh
@@ -73,7 +73,7 @@ class SkinningApp: NSViewController {
 
         Engine.run()
     }
-    
+
     override func viewDidDisappear() {
         super.viewDidDisappear()
         Engine.destroy()

@@ -11,8 +11,8 @@ public class PlaneColliderShape: ColliderShape {
     public required init() {
         super.init()
         _nativeShape = PhysXPhysics.createPlaneColliderShape(
-                _id,
-                material._nativeMaterial
+            _id,
+            material._nativeMaterial
         )
     }
 }

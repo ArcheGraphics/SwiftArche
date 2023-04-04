@@ -44,22 +44,21 @@ public extension MTLRegion {
         let maxY = min(maxY, region.maxY)
         let maxZ = min(maxZ, region.maxZ)
 
-        guard ox < maxX && oy < maxY && oz < maxZ
+        guard ox < maxX, oy < maxY, oz < maxZ
         else {
             return nil
         }
 
         return MTLRegion(origin: .init(x: ox,
-                y: oy,
-                z: oz),
-                size: .init(width: maxX - ox + 1,
-                        height: maxY - oy + 1,
-                        depth: maxZ - oz + 1))
-
+                                       y: oy,
+                                       z: oz),
+                         size: .init(width: maxX - ox + 1,
+                                     height: maxY - oy + 1,
+                                     depth: maxZ - oz + 1))
     }
 
-    static func ==(lhs: MTLRegion, rhs: MTLRegion) -> Bool {
+    static func == (lhs: MTLRegion, rhs: MTLRegion) -> Bool {
         lhs.origin == rhs.origin
-                && lhs.size == rhs.size
+            && lhs.size == rhs.size
     }
 }

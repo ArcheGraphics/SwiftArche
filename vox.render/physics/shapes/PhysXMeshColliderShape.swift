@@ -20,27 +20,23 @@ class PhysXMeshColliderShape: PhysXColliderShape {
         _initialize(material._pxMaterial, uniqueID)
         _setLocalPose()
     }
-    
+
     var position: [Vector3] {
-        get {
-            var valueInternal = [simd_float3](repeating: simd_float3(), count: Int((_pxGeometry as! CPxMeshGeometry).positionCount()))
-            (_pxGeometry as! CPxMeshGeometry).getPosition(&valueInternal)
-            
-            var value: [Vector3] = []
-            value.reserveCapacity(valueInternal.count)
-            for v in valueInternal {
-                value.append(Vector3(v))
-            }
-            return value
+        var valueInternal = [simd_float3](repeating: simd_float3(), count: Int((_pxGeometry as! CPxMeshGeometry).positionCount()))
+        (_pxGeometry as! CPxMeshGeometry).getPosition(&valueInternal)
+
+        var value: [Vector3] = []
+        value.reserveCapacity(valueInternal.count)
+        for v in valueInternal {
+            value.append(Vector3(v))
         }
+        return value
     }
-    
+
     var wireframeIndices: [UInt32] {
-        get {
-            var value = [UInt32](repeating: 0, count: Int((_pxGeometry as! CPxMeshGeometry).indicesCount()))
-            (_pxGeometry as! CPxMeshGeometry).getWireframeIndices(&value)
-            return value
-        }
+        var value = [UInt32](repeating: 0, count: Int((_pxGeometry as! CPxMeshGeometry).indicesCount()))
+        (_pxGeometry as! CPxMeshGeometry).getWireframeIndices(&value)
+        return value
     }
 
     func createConvexMesh(_ points: inout [Vector3]) {
@@ -70,13 +66,13 @@ class PhysXMeshColliderShape: PhysXColliderShape {
         _initialize(_pxMaterial, _id)
         _setLocalPose()
     }
-    
+
     func setCookParamter(_ param: UInt8) {
         (_pxGeometry as! CPxMeshGeometry).setCookParameter(PhysXPhysics._pxPhysics, value: param)
         _initialize(_pxMaterial, _id)
         _setLocalPose()
     }
-    
+
     func cookConvexHull(_ convexHull: inout ConvexHull) {
         (_pxGeometry as! CPxMeshGeometry).createConvexMesh(PhysXPhysics._pxPhysics,
                                                            points: &convexHull.points,
@@ -91,7 +87,7 @@ class PhysXMeshColliderShape: PhysXColliderShape {
     override func setWorldScale(_ scale: Vector3) {
         _scale = scale
         _setLocalPose()
-        
+
         (_pxGeometry as! CPxMeshGeometry).setScaleWith(scale.x, hy: scale.y, hz: scale.z)
         _pxShape.setGeometry(_pxGeometry)
     }

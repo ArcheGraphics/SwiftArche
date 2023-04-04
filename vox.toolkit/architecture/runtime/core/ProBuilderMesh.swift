@@ -4,8 +4,8 @@
 //  personal capacity and am not conveying any rights to any intellectual
 //  property of any third parties.
 
-import vox_render
 import Math
+import vox_render
 
 /// This component is responsible for storing all the data necessary for editing and compiling UnityEngine.Mesh objects.
 public final class ProBuilderMesh: Script {
@@ -40,7 +40,7 @@ public final class ProBuilderMesh: Script {
 
     var m_CacheValid: CacheValidState = []
 
-    var m_SharedVertexLookup: Dictionary<Int, Int> = [:]
+    var m_SharedVertexLookup: [Int: Int] = [:]
 
     var m_SharedTextures: [SharedVertex] = []
 
@@ -105,7 +105,7 @@ public final class ProBuilderMesh: Script {
     /// Check if the mesh contains the requested arrays.
     /// - Parameter channels: A flag containing the array types that a ProBuilder mesh stores.
     /// - Returns: True if all arrays in the flag are present, false if not.
-    public func HasArrays(channels: MeshArrays) -> Bool {
+    public func HasArrays(channels _: MeshArrays) -> Bool {
         false
     }
 
@@ -129,25 +129,19 @@ public final class ProBuilderMesh: Script {
         }
     }
 
-    internal func InvalidateSharedVertexLookup() {
-    }
+    internal func InvalidateSharedVertexLookup() {}
 
-    internal func InvalidateSharedTextureLookup() {
-    }
+    internal func InvalidateSharedTextureLookup() {}
 
-    internal func InvalidateFaces() {
-    }
+    internal func InvalidateFaces() {}
 
-    internal func InvalidateCaches() {
-    }
+    internal func InvalidateCaches() {}
 
     internal var sharedVerticesInternal: [SharedVertex] {
         get {
             []
         }
-        set {
-
-        }
+        set {}
     }
 
     /// ProBuilder makes the assumption that no @"UnityEngine.ProBuilder.Face" references a vertex used by another.
@@ -161,18 +155,14 @@ public final class ProBuilderMesh: Script {
         get {
             []
         }
-        set {
-
-        }
+        set {}
     }
 
     internal var sharedVertexLookup: [Int: Int] {
         get {
             [:]
         }
-        set {
-
-        }
+        set {}
     }
 
     /// <summary>
@@ -182,37 +172,29 @@ public final class ProBuilderMesh: Script {
     /// The new sharedIndexes array.
     /// </param>
     /// <seealso cref="sharedVertices"/>
-    internal func SetSharedVertices(indexes: [(Int, Int)]) {
-
-    }
+    internal func SetSharedVertices(indexes _: [(Int, Int)]) {}
 
     internal var sharedTextures: [SharedVertex] {
         get {
             []
         }
-        set {
-        }
+        set {}
     }
 
     internal var sharedTextureLookup: [Int: Int] {
         get {
             [:]
         }
-        set {
-        }
+        set {}
     }
 
-    internal func SetSharedTextures(indexes: [(Int, Int)]) {
-
-    }
+    internal func SetSharedTextures(indexes _: [(Int, Int)]) {}
 
     internal var positionsInternal: [Vector3] {
         get {
             []
         }
-        set {
-
-        }
+        set {}
     }
 
     /// The vertex positions that make up this mesh.
@@ -220,23 +202,19 @@ public final class ProBuilderMesh: Script {
         get {
             []
         }
-        set {
-
-        }
+        set {}
     }
 
     /// Creates a new array of vertices with values from a @"UnityEngine.ProBuilder.ProBuilderMesh" component.
     /// - Parameter indexes: An optional list of indexes pointing to the mesh attribute indexes to include in the returned Vertex array.
     /// - Returns: An array of vertices.
-    public func GetVertices(indexes: [Int]? = nil) -> [Vertex] {
+    public func GetVertices(indexes _: [Int]? = nil) -> [Vertex] {
         []
     }
 
     /// Get a list of vertices from a @"UnityEngine.ProBuilder.ProBuilderMesh" component.
     /// - Parameter vertices: The list that will be filled by the method.
-    internal func GetVerticesInList(vertices: [Vertex]) {
-
-    }
+    internal func GetVerticesInList(vertices _: [Vertex]) {}
 
     /// Set the vertex element arrays on this mesh.
     /// - Parameters:
@@ -244,15 +222,11 @@ public final class ProBuilderMesh: Script {
     ///   - applyMesh: An optional parameter that will apply elements to the MeshFilter.sharedMesh.
     ///   Note that this should only be used when the mesh is in its original state, not optimized
     ///   (meaning it won't affect triangles which can be modified by Optimize).
-    public func SetVertices(_ vertices: [Vertex], applyMesh: Bool = false) {
-
-    }
+    public func SetVertices(_: [Vertex], applyMesh _: Bool = false) {}
 
     /// The mesh normals.
     public var normals: [Vector3] {
-        get {
-            []
-        }
+        []
     }
 
     internal var normalsInternal: [Vector3] {
@@ -278,9 +252,7 @@ public final class ProBuilderMesh: Script {
         get {
             []
         }
-        set {
-
-        }
+        set {}
     }
 
     /// Vertex colors array for this mesh. When setting, the value must match the length of positions.
@@ -288,9 +260,7 @@ public final class ProBuilderMesh: Script {
         get {
             []
         }
-        set {
-
-        }
+        set {}
     }
 
     /// Get an array of Color values from the mesh.
@@ -306,9 +276,7 @@ public final class ProBuilderMesh: Script {
         get {
             []
         }
-        set {
-
-        }
+        set {}
     }
 
     internal var tangentsInternal: [Vector4] {
@@ -358,20 +326,16 @@ public final class ProBuilderMesh: Script {
         get {
             []
         }
-        set {
-
-        }
+        set {}
     }
 
     /// Copy values in a UV channel to uvs.
     /// - Parameters:
     ///   - channel: The index of the UV channel to fetch values from. The valid range is `{0, 1, 2, 3}`.
     ///   - uvs: A list that will be cleared and populated with the UVs copied from this mesh.
-    public func GetUVs(channel: Int, uvs: [Vector4]) {
+    public func GetUVs(channel _: Int, uvs _: [Vector4]) {}
 
-    }
-
-    internal func GetUVs(channel: Int) -> [Vector2] {
+    internal func GetUVs(channel _: Int) -> [Vector2] {
         []
     }
 
@@ -381,66 +345,48 @@ public final class ProBuilderMesh: Script {
     /// - Parameters:
     ///   - channel: The index of the UV channel to fetch values from. The valid range is `{0, 1, 2, 3}`.
     ///   - uvs: The new UV values.
-    public func SetUVs(channel: Int, uvs: [Vector4]) {
-
-    }
+    public func SetUVs(channel _: Int, uvs _: [Vector4]) {}
 
     /// How many faces does this mesh have?
     public var faceCount: Int {
-        get {
-            0
-        }
+        0
     }
 
     /// How many vertices are in the positions array.
     public var vertexCount: Int {
-        get {
-            0
-        }
+        0
     }
 
     /// How many edges compose this mesh.
     public var edgeCount: Int {
-        get {
-            0
-        }
+        0
     }
 
     /// How many vertex indexes make up this mesh.
     public var indexCount: Int {
-        get {
-            0
-        }
+        0
     }
 
     /// How many triangles make up this mesh.
     public var triangleCount: Int {
-        get {
-            0
-        }
+        0
     }
 
     internal var mesh: Mesh? {
         get {
             nil
         }
-        set {
-
-        }
+        set {}
     }
 
     internal var id: Int {
-        get {
-            0
-        }
+        0
     }
 
     /// Ensure that the UnityEngine.Mesh is in sync with the ProBuilderMesh.
     /// A flag describing the state of the synchronicity between the MeshFilter.sharedMesh and ProBuilderMesh components.
     public var meshSyncState: MeshSyncState {
-        get {
-            MeshSyncState.Null
-        }
+        MeshSyncState.Null
     }
 
     internal var meshFormatVersion: Int {
@@ -448,30 +394,23 @@ public final class ProBuilderMesh: Script {
     }
 
     // MARK: - Functions
+
     static var s_CachedHashSet: Set<Int> = Set()
 
-    public override func onAwake() {
+    override public func onAwake() {}
 
-    }
+    func Reset() {}
 
-    func Reset() {
-    }
+    override public func onDestroy() {}
 
-    public override func onDestroy() {
-
-    }
-
-    func IncrementVersionIndex() {
-    }
+    func IncrementVersionIndex() {}
 
     /// Reset all the attribute arrays on this object.
-    public func Clear() {
-    }
+    public func Clear() {}
 
-    internal func EnsureMeshFilterIsAssigned() {
-    }
+    internal func EnsureMeshFilterIsAssigned() {}
 
-    internal static func CreateInstanceWithPoints(positions: [Vector3]) -> ProBuilderMesh {
+    internal static func CreateInstanceWithPoints(positions _: [Vector3]) -> ProBuilderMesh {
         let entity = Entity()
         return entity.addComponent(ProBuilderMesh.self)
     }
@@ -489,7 +428,7 @@ public final class ProBuilderMesh: Script {
     ///   - positions: Vertex positions array.
     ///   - faces: Faces array.
     /// - Returns: A reference to the new ProBuilderMesh component.
-    public static func Create<T: Sequence<Vector3>, U: Sequence<Face>>(positions: T, faces: U) -> ProBuilderMesh {
+    public static func Create<T: Sequence<Vector3>, U: Sequence<Face>>(positions _: T, faces _: U) -> ProBuilderMesh {
         let entity = Entity()
         return entity.addComponent(ProBuilderMesh.self)
     }
@@ -502,88 +441,71 @@ public final class ProBuilderMesh: Script {
     ///   - sharedTextures: Optional SharedVertex[] defines coincident texture coordinates (UV0).
     ///   - materials: Optional array of materials that will be assigned to the MeshRenderer.
     /// - Returns: GameObject
-    public static func Create(vertices: [Vertex],
-                              faces: [Face],
-                              sharedVertices: [SharedVertex]? = nil,
-                              sharedTextures: [SharedVertex]? = nil,
-                              materials: [Material]? = nil) -> ProBuilderMesh {
+    public static func Create(vertices _: [Vertex],
+                              faces _: [Face],
+                              sharedVertices _: [SharedVertex]? = nil,
+                              sharedTextures _: [SharedVertex]? = nil,
+                              materials _: [Material]? = nil) -> ProBuilderMesh
+    {
         let entity = Entity()
         return entity.addComponent(ProBuilderMesh.self)
     }
 
-    internal func GeometryWithPoints(_ points: [Vector3]) {
-    }
+    internal func GeometryWithPoints(_: [Vector3]) {}
 
     /// Clear all mesh attributes and reinitialize with new positions and face collections.
     /// - Parameters:
     ///   - vertices: Vertex positions array.
     ///   - faces: Faces array.
-    public func RebuildWithPositionsAndFaces<T: Sequence<Vector3>, U: Sequence<Face>>(vertices: T, faces: U) {
-    }
+    public func RebuildWithPositionsAndFaces<T: Sequence<Vector3>, U: Sequence<Face>>(vertices _: T, faces _: U) {}
 
     /// Wraps <see cref="ToMesh"/> and <see cref="Refresh"/>.
-    internal func Rebuild() {
-    }
+    internal func Rebuild() {}
 
     /// Rebuild the mesh positions and submeshes. If vertex count matches new positions array the existing attributes are kept,
     /// otherwise the mesh is cleared. UV2 is the exception, it is always cleared.
     /// - Parameter preferredTopology: Triangles and Quads are supported.
-    public func ToMesh(preferredTopology: MTLPrimitiveType = .triangle) {
-    }
+    public func ToMesh(preferredTopology _: MTLPrimitiveType = .triangle) {}
 
     /// Ensure that the UnityEngine.Mesh associated with this object is unique
-    internal func MakeUnique() {
-    }
+    internal func MakeUnique() {}
 
     /// Copy mesh data from another mesh to self.
-    public func CopyFrom(other: ProBuilderMesh) {
-    }
+    public func CopyFrom(other _: ProBuilderMesh) {}
 
     /// Recalculates mesh attributes: normals, collisions, UVs, tangents, and colors.
     /// - Parameter mask: Optionally pass a mask to define what components are updated (UV and collisions are expensive to rebuild, and can usually be deferred til completion of task).
-    public func Refresh(mask: RefreshMask = RefreshMask.All) {
+    public func Refresh(mask _: RefreshMask = RefreshMask.All) {}
 
-    }
-
-    internal func EnsureMeshColliderIsAssigned() {
-
-    }
-
+    internal func EnsureMeshColliderIsAssigned() {}
 
     /// Returns a new unused texture group id.
     /// Will be greater than or equal to i.
-    internal func GetUnusedTextureGroup(i: Int = 1) -> Int {
+    internal func GetUnusedTextureGroup(i _: Int = 1) -> Int {
         0
     }
 
-    static func IsValidTextureGroup(group: Int) -> Bool {
+    static func IsValidTextureGroup(group _: Int) -> Bool {
         false
     }
 
-
     /// Returns a new unused element group.
     /// Will be greater than or equal to i.
-    internal func UnusedElementGroup(i: Int = 1) -> Int {
+    internal func UnusedElementGroup(i _: Int = 1) -> Int {
         0
     }
 
-    public func RefreshUV<T: Sequence<Face>>(facesToRefresh: T) {
-    }
+    public func RefreshUV<T: Sequence<Face>>(facesToRefresh _: T) {}
 
+    internal func SetGroupUV(settings _: AutoUnwrapSettings, group _: Int) {}
 
-    internal func SetGroupUV(settings: AutoUnwrapSettings, group: Int) {
-    }
-
-
-    func RefreshColors() {
-    }
+    func RefreshColors() {}
 
     /// Set the vertex colors for a @"UnityEngine.ProBuilder.Face".
     /// - Parameters:
     ///   - face: The target face.
     ///   - color: The color to set this face's referenced vertices to.
-    public func SetFaceColor(face: Face, color: Color) {
-    }
+    public func SetFaceColor(face _: Face, color _: Color) {}
 
     /// Set the material for a collection of faces.
     /// - Remark:
@@ -591,31 +513,27 @@ public final class ProBuilderMesh: Script {
     /// - Parameters:
     ///   - faces: The faces to apply the material to.
     ///   - material: The material to apply.
-    public func SetMaterial<T: Sequence<Face>>(faces: T, material: Material) {
-    }
+    public func SetMaterial<T: Sequence<Face>>(faces _: T, material _: Material) {}
 
-    func RefreshNormals() {
-    }
+    func RefreshNormals() {}
 
-
-    func RefreshTangents() {
-    }
+    func RefreshTangents() {}
 
     /// Find the index of a vertex index (triangle) in an IntArray[]. The index returned is called the common index, or shared index in some cases.
     /// - Parameter vertex: Aids in removing duplicate vertex indexes.
     /// - Returns: The common (or shared) index.
-    internal func GetSharedVertexHandle(vertex: Int) -> Int {
+    internal func GetSharedVertexHandle(vertex _: Int) -> Int {
         0
     }
 
-    internal func GetSharedVertexHandles<T: Sequence<Int>>(vertices: T) -> Set<Int> {
+    internal func GetSharedVertexHandles<T: Sequence<Int>>(vertices _: T) -> Set<Int> {
         Set()
     }
 
     /// Get a list of vertices that are coincident to any of the vertices in the passed vertices parameter.
     /// - Parameter vertices: A collection of indexes relative to the mesh positions.
     /// - Returns: A list of all vertices that share a position with any of the passed vertices.
-    public func GetCoincidentVertices<T: Sequence<Int>>(vertices: T) -> [Int] {
+    public func GetCoincidentVertices<T: Sequence<Int>>(vertices _: T) -> [Int] {
         []
     }
 
@@ -623,49 +541,40 @@ public final class ProBuilderMesh: Script {
     /// - Parameters:
     ///   - faces: A collection of faces to gather vertices from.
     ///   - coincident: A list to be cleared and populated with any vertices that are coincident.
-    public func GetCoincidentVertices<T: Sequence<Face>>(faces: T, coincident: [Int]) {
-    }
+    public func GetCoincidentVertices<T: Sequence<Face>>(faces _: T, coincident _: [Int]) {}
 
     /// Populate a list of vertices that are coincident to any of the vertices in the passed vertices parameter.
     /// - Parameters:
     ///   - edges: A collection of edges to gather vertices from.
     ///   - coincident: A list to be cleared and populated with any vertices that are coincident.
-    public func GetCoincidentVertices<T: Sequence<Edge>>(edges: T, coincident: [Int]) {
-    }
+    public func GetCoincidentVertices<T: Sequence<Edge>>(edges _: T, coincident _: [Int]) {}
 
     /// Populate a list of vertices that are coincident to any of the vertices in the passed vertices parameter.
     /// - Parameters:
     ///   - vertices: A collection of indexes relative to the mesh positions.
     ///   - coincident: A list to be cleared and populated with any vertices that are coincident.
-    public func GetCoincidentVertices<T: Sequence<Int>>(vertices: T, coincident: [Int]) {
-    }
+    public func GetCoincidentVertices<T: Sequence<Int>>(vertices _: T, coincident _: [Int]) {}
 
     /// Populate a list with all the vertices that are coincident to the requested vertex.
     /// - Parameters:
     ///   - vertex: An index relative to a positions array.
     ///   - coincident: A list to be populated with all coincident vertices.
-    public func GetCoincidentVertices(_ vertex: Int, coincident: [Int]) {
-    }
+    public func GetCoincidentVertices(_: Int, coincident _: [Int]) {}
 
     /// Sets the passed vertices as being considered coincident by the ProBuilderMesh.
     /// - Remark:
     /// Note that it is up to the caller to ensure that the passed vertices are indeed sharing a position.
     /// - Parameter vertices: Returns a list of vertices to be associated as coincident.
-    public func SetVerticesCoincident<T: Sequence<Int>>(vertices: T) {
-    }
+    public func SetVerticesCoincident<T: Sequence<Int>>(vertices _: T) {}
 
-    internal func SetTexturesCoincident<T: Sequence<Int>>(vertices: T) {
-    }
+    internal func SetTexturesCoincident<T: Sequence<Int>>(vertices _: T) {}
 
+    internal func AddToSharedVertex(_: Int, vertex _: Int) {}
 
-    internal func AddToSharedVertex(_ sharedVertexHandle: Int, vertex: Int) {
-    }
-
-
-    internal func AddSharedVertex(_ vertex: SharedVertex) {
-    }
+    internal func AddSharedVertex(_: SharedVertex) {}
 
     // MARK: - Selection
+
     var m_IsSelectable = true
 
     // Serialized for undo in the editor
@@ -691,56 +600,41 @@ public final class ProBuilderMesh: Script {
 
     /// Get the number of faces that are currently selected on this object.
     public var selectedFaceCount: Int {
-        get {
-            m_SelectedFaces.count
-        }
+        m_SelectedFaces.count
     }
 
     /// Get the number of selected vertex indexes.
     public var selectedVertexCount: Int {
-        get {
-            m_SelectedVertices.count
-        }
+        m_SelectedVertices.count
     }
 
     /// Get the number of selected edges.
     public var selectedEdgeCount: Int {
-        get {
-            m_SelectedEdges.count
-        }
+        m_SelectedEdges.count
     }
 
     internal var selectedSharedVerticesCount: Int {
-        get {
-            CacheSelection()
-            return m_SelectedSharedVerticesCount
-        }
+        CacheSelection()
+        return m_SelectedSharedVerticesCount
     }
 
     internal var selectedCoincidentVertexCount: Int {
-        get {
-            CacheSelection()
-            return m_SelectedCoincidentVertexCount
-        }
+        CacheSelection()
+        return m_SelectedCoincidentVertexCount
     }
 
     internal var selectedSharedVertices: any Sequence<Int> {
-        get {
-            CacheSelection()
-            return m_SelectedSharedVertices
-        }
+        CacheSelection()
+        return m_SelectedSharedVertices
     }
 
     /// All selected vertices and their coincident neighbors.
     internal var selectedCoincidentVertices: [Int] {
-        get {
-            CacheSelection()
-            return m_SelectedCoincidentVertices
-        }
+        CacheSelection()
+        return m_SelectedCoincidentVertices
     }
 
-    func CacheSelection() {
-    }
+    func CacheSelection() {}
 
     /// Get a copy of the selected face array.
     public func GetSelectedFaces() -> [Face] {
@@ -749,31 +643,24 @@ public final class ProBuilderMesh: Script {
 
     /// A collection of the currently selected faces by their index in the @"UnityEngine.ProBuilder.ProBuilderMesh.faces" array.
     public var selectedFaceIndexes: [Int] {
-        get {
-            m_SelectedFaces
-        }
+        m_SelectedFaces
     }
 
     /// A collection of the currently selected vertices by their index in the @"UnityEngine.ProBuilder.ProBuilderMesh.positions" array.
     public var selectedVertices: [Int] {
-        get {
-            m_SelectedVertices
-        }
+        m_SelectedVertices
     }
 
     /// A collection of the currently selected edges.
     public var selectedEdges: [Edge] {
-        get {
-            m_SelectedEdges
-        }
+        m_SelectedEdges
     }
 
     internal var selectedFacesInternal: [Face] {
         get {
             GetSelectedFaces()
         }
-        set {
-        }
+        set {}
     }
 
     internal var selectedFaceIndicesInternal: [Int] {
@@ -815,35 +702,26 @@ public final class ProBuilderMesh: Script {
         0
     }
 
-    internal func AddToFaceSelection(at index: Int) {
-    }
+    internal func AddToFaceSelection(at _: Int) {}
 
     /// Set the face selection for this mesh. Also sets the vertex and edge selection to match.
     /// - Parameter selected: The new face selection.
-    public func SetSelectedFaces<T: Sequence<Face>>(_ selected: T) {
+    public func SetSelectedFaces<T: Sequence<Face>>(_: T) {}
 
-    }
-
-    internal func SetSelectedFaces<T: Sequence<Int>>(_ selected: T) {
-
-    }
+    internal func SetSelectedFaces<T: Sequence<Int>>(_: T) {}
 
     /// Set the edge selection for this mesh. Also sets the face and vertex selection to match.
     /// - Parameter edges: The new edge selection.
-    public func SetSelectedEdges<T: Sequence<Edge>>(_ edges: T) {
-    }
+    public func SetSelectedEdges<T: Sequence<Edge>>(_: T) {}
 
     /// Sets the selected vertices array. Clears SelectedFaces and SelectedEdges arrays.
     /// - Parameter vertices: The new vertex selection.
-    public func SetSelectedVertices<T: Sequence<Int>>(_ vertices: T) {
-    }
+    public func SetSelectedVertices<T: Sequence<Int>>(_: T) {}
 
     /// Removes face at index in SelectedFaces array, and updates the SelectedTriangles and SelectedEdges arrays to match.
-    internal func RemoveFromFaceSelectionAtIndex(_ index: Int) {
-    }
+    internal func RemoveFromFaceSelectionAtIndex(_: Int) {}
 
     /// Clears selected face, edge, and vertex arrays. You do not need to call this when setting an individual array,
     /// as the setter methods will handle updating the associated caches.
-    public func ClearSelection() {
-    }
+    public func ClearSelection() {}
 }

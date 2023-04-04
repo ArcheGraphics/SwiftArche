@@ -4,18 +4,18 @@
 //  personal capacity and am not conveying any rights to any intellectual
 //  property of any third parties.
 
-import vox_render
 import Math
+import vox_render
 
-public class OrbitControl : Script {
+public class OrbitControl: Script {
     var canvas: Canvas!
     var input: InputManager!
     var inputDevices: [IControlInput.Type] = [ControlPointer.self, ControlKeyboard.self, ControlWheel.self]
     var camera: Camera!
     var cameraTransform: Transform!
-    
+
     /** Whether to automatically rotate the camera, the default is false. */
-    public  var autoRotate: Bool = false
+    public var autoRotate: Bool = false
     /** The radian of automatic rotation per second. */
     public var autoRotateSpeed: Float = .pi
     /** Whether to enable camera damping, the default is true. */
@@ -46,32 +46,32 @@ public class OrbitControl : Script {
     public var minAzimuthAngle: Float = -.greatestFiniteMagnitude
     /** The maximum radian in the horizontal direction, the default is positive infinity.  */
     public var maxAzimuthAngle: Float = .greatestFiniteMagnitude
-    
+
     private var _enableKeys: Bool = true
-    private var _up: Vector3 = Vector3(0, 1, 0)
-    private var _target: Vector3 = Vector3()
+    private var _up: Vector3 = .init(0, 1, 0)
+    private var _target: Vector3 = .init()
     private var _atTheBack: Bool = false
-    private var _spherical: Spherical = Spherical()
-    private var _sphericalDelta: Spherical = Spherical()
-    private var _sphericalDump: Spherical = Spherical()
+    private var _spherical: Spherical = .init()
+    private var _sphericalDelta: Spherical = .init()
+    private var _sphericalDump: Spherical = .init()
     private var _zoomFrag: Float = 0
     private var _scale: Float = 1
-    private var _panOffset: Vector3 = Vector3()
+    private var _panOffset: Vector3 = .init()
     private var _enableHandler: Int = ControlHandlerType.All.rawValue
-    
+
     /// Return whether to enable keyboard.
-    public var enableKeys:Bool {
+    public var enableKeys: Bool {
         get {
             _enableKeys
         }
         set {
-            if (_enableKeys != newValue) {
+            if _enableKeys != newValue {
                 _enableKeys = newValue
-                if (newValue) {
+                if newValue {
                     inputDevices.append(ControlKeyboard.self)
                 } else {
-                    for i in 0..<inputDevices.count {
-                        if (inputDevices[i] == ControlKeyboard.self) {
+                    for i in 0 ..< inputDevices.count {
+                        if inputDevices[i] == ControlKeyboard.self {
                             inputDevices.remove(at: i)
                             break
                         }
@@ -80,7 +80,7 @@ public class OrbitControl : Script {
             }
         }
     }
-    
+
     /// Return up vector.
     public var up: Vector3 {
         get {
@@ -92,9 +92,9 @@ public class OrbitControl : Script {
             _atTheBack = false
         }
     }
-    
+
     /// Return target position.
-    public var target:Vector3 {
+    public var target: Vector3 {
         get {
             _target
         }
@@ -103,130 +103,129 @@ public class OrbitControl : Script {
             _atTheBack = false
         }
     }
-    
+
     /// Return Whether to enable rotation, the default is true.
-    public var enableRotate:Bool {
+    public var enableRotate: Bool {
         get {
             (_enableHandler & ControlHandlerType.ROTATE.rawValue) != 0
         }
         set {
-            if (newValue) {
+            if newValue {
                 _enableHandler |= ControlHandlerType.ROTATE.rawValue
             } else {
                 _enableHandler &= ~ControlHandlerType.ROTATE.rawValue
             }
         }
     }
-    
+
     /// Whether to enable camera damping, the default is true.
-    public var enableZoom:Bool {
+    public var enableZoom: Bool {
         get {
             (_enableHandler & ControlHandlerType.ZOOM.rawValue) != 0
         }
         set {
-            if (newValue) {
+            if newValue {
                 _enableHandler |= ControlHandlerType.ZOOM.rawValue
             } else {
                 _enableHandler &= ~ControlHandlerType.ZOOM.rawValue
             }
         }
     }
-    
+
     /// Whether to enable translation, the default is true.
-    public var enablePan:Bool {
+    public var enablePan: Bool {
         get {
             (_enableHandler & ControlHandlerType.PAN.rawValue) != 0
         }
         set {
-            if (newValue) {
+            if newValue {
                 _enableHandler |= ControlHandlerType.PAN.rawValue
             } else {
                 _enableHandler &= ~ControlHandlerType.PAN.rawValue
             }
         }
     }
-    
-    public override func onStart() {
+
+    override public func onStart() {
         input = Engine.inputManager
         canvas = Engine.canvas
     }
-    
-    public override func onAwake() {
+
+    override public func onAwake() {
         camera = entity.getComponent(Camera.self)
         cameraTransform = entity.transform
         _spherical.setYAxis(_up)
         _atTheBack = false
     }
-    
-    public override func onUpdate(_ deltaTime: Float) {
+
+    override public func onUpdate(_ deltaTime: Float) {
         /** Update _sphericalDelta, _scale and _panOffset. */
         _updateInputDelta(deltaTime)
         /** Update camera's transform. */
         _updateTransform()
     }
-    
+
     private func _updateInputDelta(_ deltaTime: Float) {
         var delta = Vector3()
-        var curHandlerType:Int = ControlHandlerType.None.rawValue
+        var curHandlerType: Int = ControlHandlerType.None.rawValue
         for handler in inputDevices {
             handler.onUpdateHandler(input) { handlerType in
-                if ((handlerType.rawValue & _enableHandler) != 0) {
+                if (handlerType.rawValue & _enableHandler) != 0 {
                     curHandlerType |= handlerType.rawValue
                     handler.onUpdateDelta(self, &delta)
-                    switch (handlerType) {
+                    switch handlerType {
                     case ControlHandlerType.ROTATE:
                         _rotate(delta)
-                        break
                     case ControlHandlerType.ZOOM:
                         _zoom(delta)
-                        break
                     case ControlHandlerType.PAN:
                         _pan(delta)
-                        break
                     default:
                         break
                     }
                 }
             }
         }
-        if (enableDamping) {
-            if ((_enableHandler & ControlHandlerType.ZOOM.rawValue) != 0
-                && curHandlerType ^ ControlHandlerType.ZOOM.rawValue != 0) {
+        if enableDamping {
+            if (_enableHandler & ControlHandlerType.ZOOM.rawValue) != 0
+                && curHandlerType ^ ControlHandlerType.ZOOM.rawValue != 0
+            {
                 _zoomFrag *= 1 - zoomFactor
             }
-            if ((_enableHandler & ControlHandlerType.ROTATE.rawValue) != 0
-                && curHandlerType ^ ControlHandlerType.ROTATE.rawValue != 0) {
+            if (_enableHandler & ControlHandlerType.ROTATE.rawValue) != 0
+                && curHandlerType ^ ControlHandlerType.ROTATE.rawValue != 0
+            {
                 _sphericalDump.theta *= 1 - dampingFactor
                 _sphericalDelta.theta = _sphericalDump.theta
                 _sphericalDump.phi *= 1 - dampingFactor
                 _sphericalDelta.phi = _sphericalDump.phi
             }
         }
-        if (curHandlerType == ControlHandlerType.None.rawValue && autoRotate) {
+        if curHandlerType == ControlHandlerType.None.rawValue && autoRotate {
             let rotateAngle = (autoRotateSpeed / 1000) * deltaTime
             _sphericalDelta.theta -= rotateAngle
         }
     }
-    
+
     private func _rotate(_ delta: Vector3) {
         let radianLeft = ((2 * Float.pi * delta.x) / Float(canvas.bounds.width)) * rotateSpeed
         _sphericalDelta.theta -= radianLeft
         let radianUp = ((2 * Float.pi * delta.y) / Float(canvas.bounds.height)) * rotateSpeed
         _sphericalDelta.phi -= radianUp
-        if (enableDamping) {
+        if enableDamping {
             _sphericalDump.theta = -radianLeft
             _sphericalDump.phi = -radianUp
         }
     }
-    
+
     private func _zoom(_ delta: Vector3) {
-        if (delta.y > 0) {
+        if delta.y > 0 {
             _scale /= pow(0.95, zoomSpeed)
-        } else if (delta.y < 0) {
+        } else if delta.y < 0 {
             _scale *= pow(0.95, zoomSpeed)
         }
     }
-    
+
     private func _pan(_ delta: Vector3) {
         let height = Float(canvas.bounds.height)
         let targetDistance = Vector3.distance(left: cameraTransform.position, right: target) * (camera.fieldOfView / 2) * (Float.pi / 180)
@@ -239,7 +238,7 @@ public class OrbitControl : Script {
         panOffset.z += worldMatrix.elements.columns.0[2] * distanceLeft + worldMatrix.elements.columns.1[2] * distanceUp
         _panOffset = Vector3(panOffset)
     }
-    
+
     private func _updateTransform() {
         var _tempVec3 = cameraTransform.position - target
         _ = _spherical.setFromVec3(_tempVec3, atTheBack: _atTheBack)
@@ -248,7 +247,7 @@ public class OrbitControl : Script {
         _spherical.theta = max(minAzimuthAngle, min(maxAzimuthAngle, _spherical.theta))
         _spherical.phi = max(minPolarAngle, min(maxPolarAngle, _spherical.phi))
         _ = _spherical.makeSafe()
-        if (_scale != 1) {
+        if _scale != 1 {
             _zoomFrag = _spherical.radius * (_scale - 1)
         }
         _spherical.radius += _zoomFrag

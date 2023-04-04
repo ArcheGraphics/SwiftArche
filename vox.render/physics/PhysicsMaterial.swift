@@ -12,11 +12,11 @@ public class PhysicsMaterial: Serializable {
 
     public required init() {
         _nativeMaterial = PhysXPhysics.createPhysicsMaterial(
-                staticFriction,
-                dynamicFriction,
-                bounciness,
-                bounceCombine.rawValue,
-                frictionCombine.rawValue
+            staticFriction,
+            dynamicFriction,
+            bounciness,
+            bounceCombine.rawValue,
+            frictionCombine.rawValue
         )
     }
 

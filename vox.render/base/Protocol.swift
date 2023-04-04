@@ -11,5 +11,5 @@ public protocol EmptyClassType: AnyObject {
 }
 
 public class EmptyClass: EmptyClassType {
-    required public init() {}
+    public required init() {}
 }

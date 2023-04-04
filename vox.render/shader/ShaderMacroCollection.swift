@@ -6,8 +6,7 @@
 
 import Metal
 
-extension MacroName: Hashable {
-}
+extension MacroName: Hashable {}
 
 /// Shader macro collection.
 internal struct ShaderMacroCollection {
@@ -19,18 +18,18 @@ internal struct ShaderMacroCollection {
     ///   - right: input macro collection
     ///   - result: union output macro collection
     static func unionCollection(_ left: ShaderMacroCollection, _ right: ShaderMacroCollection, _ result: inout ShaderMacroCollection) {
-        result._value = left._value.merging(right._value) { l, r in
+        result._value = left._value.merging(right._value) { _, r in
             r
         }
     }
-    
+
     mutating func clear() {
         _value = [:]
     }
 }
 
 extension ShaderMacroCollection: Hashable {
-    static func ==(lhs: ShaderMacroCollection, rhs: ShaderMacroCollection) -> Bool {
+    static func == (lhs: ShaderMacroCollection, rhs: ShaderMacroCollection) -> Bool {
         var lhs_hasher = Hasher()
         var rhs_hasher = Hasher()
 
@@ -42,11 +41,11 @@ extension ShaderMacroCollection: Hashable {
 
     func hash(into hasher: inout Hasher) {
         _value.sorted { l, r in
-                    l.key < r.key
-                }
-                .forEach { (key: UInt16, value: (Int, MTLDataType)) in
-                    hasher.combine(key)
-                    hasher.combine(value.0)
-                }
+            l.key < r.key
+        }
+        .forEach { (key: UInt16, value: (Int, MTLDataType)) in
+            hasher.combine(key)
+            hasher.combine(value.0)
+        }
     }
 }

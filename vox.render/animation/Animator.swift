@@ -49,7 +49,7 @@ public class Animator: Component {
             _nativeAnimator.localToModelTo = Int32(newValue)
         }
     }
-    
+
     public required init() {
         super.init()
     }
@@ -57,7 +57,7 @@ public class Animator: Component {
     override func _onDestroy() {
         _nativeAnimator.destroy()
     }
-    
+
     @discardableResult
     public func loadSkeleton(_ url: URL) -> Bool {
         _nativeAnimator.loadSkeleton(url.path(percentEncoded: false))
@@ -73,7 +73,7 @@ public class Animator: Component {
             }
         }
     }
-    
+
     /// Computes the bounding box of _skeleton. This is the box that encloses all skeleton's joints in model space.
     func computeSkeletonBounds() -> BoundingBox {
         var min = SIMD3<Float>()
@@ -100,11 +100,11 @@ public class Animator: Component {
         }
     }
 
-    internal override func _onEnable() {
+    override internal func _onEnable() {
         Engine._componentsManager.addOnUpdateAnimations(self)
     }
 
-    internal override func _onDisable() {
+    override internal func _onDisable() {
         Engine._componentsManager.removeOnUpdateAnimations(self)
     }
 }

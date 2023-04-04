@@ -9,7 +9,7 @@ import Math
 /// Directional light.
 public class DirectLight: Light {
     private static let _directLightProperty = "u_directLight"
-    private static var _combinedData: [DirectLightData] = [DirectLightData](repeating: DirectLightData(), count: Light._maxLight)
+    private static var _combinedData: [DirectLightData] = .init(repeating: DirectLightData(), count: Light._maxLight)
 
     static func _updateShaderData(_ shaderData: ShaderData) {
         shaderData.setData(with: DirectLight._directLightProperty, array: DirectLight._combinedData)
@@ -17,16 +17,12 @@ public class DirectLight: Light {
 
     /// Get direction.
     public var direction: Vector3 {
-        get {
-            entity.transform.worldForward
-        }
+        entity.transform.worldForward
     }
 
     /// Get the opposite direction of the directional light direction.
     public var reverseDirection: Vector3 {
-        get {
-            direction * -1
-        }
+        direction * -1
     }
 
     func _appendData(_ lightIndex: Int) {

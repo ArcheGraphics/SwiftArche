@@ -15,51 +15,45 @@ public class Transform: Component {
     private var _rotationQuaternion: Quaternion
     @Serialized("scale", default: Vector3(1, 1, 1))
     private var _scale: Vector3
-    
-    private var _rotation: Vector3 = Vector3()
-    private var _worldPosition: Vector3 = Vector3()
-    private var _worldRotation: Vector3 = Vector3()
-    private var _worldRotationQuaternion: Quaternion = Quaternion()
-    private var _lossyWorldScale: Vector3 = Vector3(1, 1, 1)
-    private var _localMatrix: Matrix = Matrix()
-    private var _worldMatrix: Matrix = Matrix()
+
+    private var _rotation: Vector3 = .init()
+    private var _worldPosition: Vector3 = .init()
+    private var _worldRotation: Vector3 = .init()
+    private var _worldRotationQuaternion: Quaternion = .init()
+    private var _lossyWorldScale: Vector3 = .init(1, 1, 1)
+    private var _localMatrix: Matrix = .init()
+    private var _worldMatrix: Matrix = .init()
     private var _isParentDirty: Bool = true
     private var _parentTransformCache: Transform? = nil
     private var _dirtyFlag: Int = TransformModifyFlags.WmWpWeWqWs.rawValue
 
-    var _updateFlagManager: UpdateFlagManager = UpdateFlagManager()
+    var _updateFlagManager: UpdateFlagManager = .init()
 }
 
-//MARK: - Get/Set Property
+// MARK: - Get/Set Property
 
-extension Transform {
+public extension Transform {
     /// Get the forward direction in world space.
-    public var worldForward: Vector3 {
-        get {
-            let e = worldMatrix.elements
-            return Vector3(-e.columns.2[0], -e.columns.2[1], -e.columns.2[2]).normalized
-        }
+    var worldForward: Vector3 {
+        let e = worldMatrix.elements
+        return Vector3(-e.columns.2[0], -e.columns.2[1], -e.columns.2[2]).normalized
     }
 
     /// Get the right direction in world space.
-    public var worldRight: Vector3 {
-        get {
-            let e = worldMatrix.elements
-            return Vector3(e.columns.0[0], e.columns.0[1], e.columns.0[2]).normalized
-        }
+    var worldRight: Vector3 {
+        let e = worldMatrix.elements
+        return Vector3(e.columns.0[0], e.columns.0[1], e.columns.0[2]).normalized
     }
 
     /// Get the up direction in world space.
-    public var worldUp: Vector3 {
-        get {
-            let e = worldMatrix.elements
-            return Vector3(e.columns.1[0], e.columns.1[1], e.columns.1[2]).normalized
-        }
+    var worldUp: Vector3 {
+        let e = worldMatrix.elements
+        return Vector3(e.columns.1[0], e.columns.1[1], e.columns.1[2]).normalized
     }
 
     /// Local position.
     /// - Remark: Need to re-assign after modification to ensure that the modification takes effect.
-    public var position: Vector3 {
+    var position: Vector3 {
         get {
             _position
         }
@@ -72,10 +66,10 @@ extension Transform {
 
     /// World position.
     /// - Remark:  Need to re-assign after modification to ensure that the modification takes effect.
-    public var worldPosition: Vector3 {
+    var worldPosition: Vector3 {
         get {
-            if (_isContainDirtyFlag(TransformModifyFlags.WorldPosition.rawValue)) {
-                if (_getParentTransform() != nil) {
+            if _isContainDirtyFlag(TransformModifyFlags.WorldPosition.rawValue) {
+                if _getParentTransform() != nil {
                     _worldPosition = worldMatrix.getTranslation()
                 } else {
                     _worldPosition = _position
@@ -87,7 +81,7 @@ extension Transform {
         set {
             _worldPosition = newValue
             let parent = _getParentTransform()
-            if (parent != nil) {
+            if parent != nil {
                 let _tempMat41 = Matrix.invert(a: parent!.worldMatrix)
                 _position = Vector3.transformCoordinate(v: newValue, m: _tempMat41)
             } else {
@@ -98,13 +92,12 @@ extension Transform {
         }
     }
 
-
     /// Local rotation, defining the rotation value in degrees.
     /// Rotations are performed around the Y axis, the X axis, and the Z axis, in that order.
     /// - Remark: Need to re-assign after modification to ensure that the modification takes effect
-    public var rotation: Vector3 {
+    var rotation: Vector3 {
         get {
-            if (_isContainDirtyFlag(TransformModifyFlags.LocalEuler.rawValue)) {
+            if _isContainDirtyFlag(TransformModifyFlags.LocalEuler.rawValue) {
                 _rotation = _rotationQuaternion.toEuler()
                 _rotation *= MathUtil.radToDegreeFactor // radians to degrees
                 _setDirtyFlagFalse(TransformModifyFlags.LocalEuler.rawValue)
@@ -122,9 +115,9 @@ extension Transform {
     /// World rotation, defining the rotation value in degrees.
     /// Rotations are performed around the Y axis, the X axis, and the Z axis, in that order.
     /// - Remark: Need to re-assign after modification to ensure that the modification takes effect.
-    public var worldRotation: Vector3 {
+    var worldRotation: Vector3 {
         get {
-            if (_isContainDirtyFlag(TransformModifyFlags.WorldEuler.rawValue)) {
+            if _isContainDirtyFlag(TransformModifyFlags.WorldEuler.rawValue) {
                 _worldRotation = worldRotationQuaternion.toEuler()
                 _worldRotation *= MathUtil.radToDegreeFactor // Radian to angle
                 _setDirtyFlagFalse(TransformModifyFlags.WorldEuler.rawValue)
@@ -134,9 +127,9 @@ extension Transform {
         set {
             _worldRotation = newValue
             _worldRotationQuaternion = Quaternion.rotationEuler(
-                    x: MathUtil.degreeToRadian(newValue.x),
-                    y: MathUtil.degreeToRadian(newValue.y),
-                    z: MathUtil.degreeToRadian(newValue.z)
+                x: MathUtil.degreeToRadian(newValue.x),
+                y: MathUtil.degreeToRadian(newValue.y),
+                z: MathUtil.degreeToRadian(newValue.z)
             )
             worldRotationQuaternion = _worldRotationQuaternion
             _setDirtyFlagFalse(TransformModifyFlags.WorldEuler.rawValue)
@@ -145,13 +138,13 @@ extension Transform {
 
     /// Local rotation, defining the rotation by using a unit quaternion.
     /// - Remark: Need to re-assign after modification to ensure that the modification takes effect.
-    public var rotationQuaternion: Quaternion {
+    var rotationQuaternion: Quaternion {
         get {
-            if (_isContainDirtyFlag(TransformModifyFlags.LocalQuat.rawValue)) {
+            if _isContainDirtyFlag(TransformModifyFlags.LocalQuat.rawValue) {
                 _rotationQuaternion = Quaternion.rotationEuler(
-                        x: MathUtil.degreeToRadian(_rotation.x),
-                        y: MathUtil.degreeToRadian(_rotation.y),
-                        z: MathUtil.degreeToRadian(_rotation.z)
+                    x: MathUtil.degreeToRadian(_rotation.x),
+                    y: MathUtil.degreeToRadian(_rotation.y),
+                    z: MathUtil.degreeToRadian(_rotation.z)
                 )
                 _setDirtyFlagFalse(TransformModifyFlags.LocalQuat.rawValue)
             }
@@ -167,11 +160,11 @@ extension Transform {
 
     /// World rotation, defining the rotation by using a unit quaternion.
     /// - Remark: Need to re-assign after modification to ensure that the modification takes effect.
-    public var worldRotationQuaternion: Quaternion {
+    var worldRotationQuaternion: Quaternion {
         get {
-            if (_isContainDirtyFlag(TransformModifyFlags.WorldQuat.rawValue)) {
+            if _isContainDirtyFlag(TransformModifyFlags.WorldQuat.rawValue) {
                 let parent = _getParentTransform()
-                if (parent != nil) {
+                if parent != nil {
                     _worldRotationQuaternion = parent!.worldRotationQuaternion * rotationQuaternion
                 } else {
                     _worldRotationQuaternion = rotationQuaternion
@@ -183,7 +176,7 @@ extension Transform {
         set {
             _worldRotationQuaternion = newValue
             let parent = _getParentTransform()
-            if (parent != nil) {
+            if parent != nil {
                 let invParentQuaternion = parent!.worldRotationQuaternion.invert
                 _rotationQuaternion = invParentQuaternion * newValue
             } else {
@@ -194,10 +187,9 @@ extension Transform {
         }
     }
 
-
     /// Local scaling.
     /// - Remark: Need to re-assign after modification to ensure that the modification takes effect.
-    public var scale: Vector3 {
+    var scale: Vector3 {
         get {
             _scale
         }
@@ -211,27 +203,25 @@ extension Transform {
     /// Local lossy scaling.
     /// - Remark: The value obtained may not be correct under certain conditions(for example, the parent node has scaling,
     /// and the child node has a rotation), the scaling will be tilted. Vector3 cannot be used to correctly represent the scaling. Must use Matrix3x3.
-    public var lossyWorldScale: Vector3 {
-        get {
-            if (_isContainDirtyFlag(TransformModifyFlags.WorldScale.rawValue)) {
-                if (_getParentTransform() != nil) {
-                    let scaleMat = _getScaleMatrix()
-                    let e = scaleMat.elements
-                    _lossyWorldScale = Vector3(e.columns.0[0], e.columns.1[1], e.columns.2[2])
-                } else {
-                    _lossyWorldScale = _scale
-                }
-                _setDirtyFlagFalse(TransformModifyFlags.WorldScale.rawValue)
+    var lossyWorldScale: Vector3 {
+        if _isContainDirtyFlag(TransformModifyFlags.WorldScale.rawValue) {
+            if _getParentTransform() != nil {
+                let scaleMat = _getScaleMatrix()
+                let e = scaleMat.elements
+                _lossyWorldScale = Vector3(e.columns.0[0], e.columns.1[1], e.columns.2[2])
+            } else {
+                _lossyWorldScale = _scale
             }
-            return _lossyWorldScale
+            _setDirtyFlagFalse(TransformModifyFlags.WorldScale.rawValue)
         }
+        return _lossyWorldScale
     }
 
     /// Local matrix.
     /// - Remark: Need to re-assign after modification to ensure that the modification takes effect.
-    public var localMatrix: Matrix {
+    var localMatrix: Matrix {
         get {
-            if (_isContainDirtyFlag(TransformModifyFlags.LocalMatrix.rawValue)) {
+            if _isContainDirtyFlag(TransformModifyFlags.LocalMatrix.rawValue) {
                 _localMatrix = Matrix.affineTransformation(scale: _scale, rotation: rotationQuaternion, translation: _position)
                 _setDirtyFlagFalse(TransformModifyFlags.LocalMatrix.rawValue)
             }
@@ -251,11 +241,11 @@ extension Transform {
 
     /// World matrix.
     /// - Remark: Need to re-assign after modification to ensure that the modification takes effect.
-    public var worldMatrix: Matrix {
+    var worldMatrix: Matrix {
         get {
-            if (_isContainDirtyFlag(TransformModifyFlags.WorldMatrix.rawValue)) {
+            if _isContainDirtyFlag(TransformModifyFlags.WorldMatrix.rawValue) {
                 let parent = _getParentTransform()
-                if (parent != nil) {
+                if parent != nil {
                     _worldMatrix = parent!.worldMatrix * localMatrix
                 } else {
                     _worldMatrix = localMatrix
@@ -267,7 +257,7 @@ extension Transform {
         set {
             _worldMatrix = newValue
             let parent = _getParentTransform()
-            if (parent != nil) {
+            if parent != nil {
                 _localMatrix = Matrix.invert(a: parent!.worldMatrix) * newValue
             } else {
                 _localMatrix = newValue
@@ -278,14 +268,14 @@ extension Transform {
     }
 }
 
-//MARK: - Public Methods
+// MARK: - Public Methods
 
-extension Transform {
+public extension Transform {
     /// Translate along the passed Vector3.
     /// - Parameters:
     ///   - translation: Direction and distance of translation
     ///   - relativeToLocal: Relative to local space
-    public func translate(_ translation: Vector3, _ relativeToLocal: Bool = true) {
+    func translate(_ translation: Vector3, _ relativeToLocal: Bool = true) {
         _translate(translation, relativeToLocal)
     }
 
@@ -295,7 +285,7 @@ extension Transform {
     ///   - y: Translate direction and distance along y axis
     ///   - z: Translate direction and distance along z axis
     ///   - relativeToLocal: Relative to local space
-    public func translate(_ x: Float, _ y: Float, _ z: Float, _ relativeToLocal: Bool = true) {
+    func translate(_ x: Float, _ y: Float, _ z: Float, _ relativeToLocal: Bool = true) {
         _translate(Vector3(x, y, z), relativeToLocal)
     }
 
@@ -303,7 +293,7 @@ extension Transform {
     /// - Parameters:
     ///   - rotation: Euler angle in degrees
     ///   - relativeToLocal: Relative to local space
-    public func rotate(_ rotation: Vector3, _ relativeToLocal: Bool = true) {
+    func rotate(_ rotation: Vector3, _ relativeToLocal: Bool = true) {
         _rotateXYZ(rotation.x, rotation.y, rotation.z, relativeToLocal)
     }
 
@@ -313,7 +303,7 @@ extension Transform {
     ///   - y: Rotation along y axis, in degrees
     ///   - z: Rotation along z axis, in degrees
     ///   - relativeToLocal: Relative to local space
-    public func rotate(_ x: Float, _ y: Float, _ z: Float, _ relativeToLocal: Bool = true) {
+    func rotate(_ x: Float, _ y: Float, _ z: Float, _ relativeToLocal: Bool = true) {
         _rotateXYZ(x, y, z, relativeToLocal)
     }
 
@@ -322,7 +312,7 @@ extension Transform {
     ///   - axis: Rotate axis
     ///   - angle: Rotate angle in degrees
     ///   - relativeToLocal: Relative to local space
-    public func rotateByAxis(axis: Vector3, angle: Float, relativeToLocal: Bool = true) {
+    func rotateByAxis(axis: Vector3, angle: Float, relativeToLocal: Bool = true) {
         let _tempQuat0 = Quaternion(axis: axis, rad: angle * MathUtil.degreeToRadFactor)
         _rotateByQuat(_tempQuat0, relativeToLocal)
     }
@@ -331,22 +321,22 @@ extension Transform {
     /// - Parameters:
     ///   - targetPosition: Target world position
     ///   - worldUp: Up direction in world space, default is Vector3(0, 1, 0)
-    public func lookAt(targetPosition: Vector3, worldUp: Vector3? = nil) {
+    func lookAt(targetPosition: Vector3, worldUp: Vector3? = nil) {
         var zAxis = worldPosition - targetPosition
         var axisLen = zAxis.length()
-        if (axisLen <= MathUtil.zeroTolerance) {
+        if axisLen <= MathUtil.zeroTolerance {
             // The current position and the target position are almost the same.
             return
         }
         zAxis /= axisLen
         var xAxis = Vector3()
-        if (worldUp != nil) {
+        if worldUp != nil {
             xAxis = Vector3.cross(left: worldUp!, right: zAxis)
         } else {
             xAxis = Vector3(zAxis.z, 0, -zAxis.x)
         }
         axisLen = xAxis.length()
-        if (axisLen <= MathUtil.zeroTolerance) {
+        if axisLen <= MathUtil.zeroTolerance {
             // @todo:
             // 1.worldUp is（0,0,0）
             // 2.worldUp is parallel to zAxis
@@ -372,14 +362,14 @@ extension Transform {
 
     /// Register world transform change flag.
     /// - Returns: Change flag
-    public func registerWorldChangeFlag() -> BoolUpdateFlag {
+    func registerWorldChangeFlag() -> BoolUpdateFlag {
         let flag = BoolUpdateFlag()
         _updateFlagManager.addFlag(flag: flag)
         return flag
     }
 }
 
-//MARK: - Private Methods
+// MARK: - Private Methods
 
 extension Transform {
     internal func _parentChange() {
@@ -399,15 +389,14 @@ extension Transform {
         return isInvert
     }
 
-
     /// Get worldMatrix: Will trigger the worldMatrix update of itself and all parent entities.
     /// Get worldPosition: Will trigger the worldMatrix, local position update of itself and the worldMatrix update of all parent entities.
     /// In summary, any update of related variables will cause the dirty mark of one of the full process (worldMatrix or worldRotationQuaternion) to be false.
     private func _updateWorldPositionFlag() {
-        if (!_isContainDirtyFlags(TransformModifyFlags.WmWp.rawValue)) {
+        if !_isContainDirtyFlags(TransformModifyFlags.WmWp.rawValue) {
             _worldAssociatedChange(TransformModifyFlags.WmWp.rawValue)
             let nodeChildren = _entity._children
-            for i in 0..<nodeChildren.count {
+            for i in 0 ..< nodeChildren.count {
                 nodeChildren[i].transform._updateWorldPositionFlag()
             }
         }
@@ -419,10 +408,10 @@ extension Transform {
     /// Get worldRotation: Will trigger the world rotation(in euler and quaternion) update of itself and world rotation(in quaternion) update of all parent entities.
     /// In summary, any update of related variables will cause the dirty mark of one of the full process (worldMatrix or worldRotationQuaternion) to be false.
     private func _updateWorldRotationFlag() {
-        if (!_isContainDirtyFlags(TransformModifyFlags.WmWeWq.rawValue)) {
+        if !_isContainDirtyFlags(TransformModifyFlags.WmWeWq.rawValue) {
             _worldAssociatedChange(TransformModifyFlags.WmWeWq.rawValue)
             let nodeChildren = _entity._children
-            for i in 0..<nodeChildren.count {
+            for i in 0 ..< nodeChildren.count {
                 nodeChildren[i].transform._updateWorldPositionAndRotationFlag() // Rotation update of parent entity will trigger world position and rotation update of all child entity.
             }
         }
@@ -434,10 +423,10 @@ extension Transform {
     /// Get worldRotation: Will trigger the world rotation(in euler and quaternion) update of itself and world rotation(in quaternion) update of all parent entities.
     /// In summary, any update of related variables will cause the dirty mark of one of the full process (worldMatrix or worldRotationQuaternion) to be false.
     private func _updateWorldPositionAndRotationFlag() {
-        if (!_isContainDirtyFlags(TransformModifyFlags.WmWpWeWq.rawValue)) {
+        if !_isContainDirtyFlags(TransformModifyFlags.WmWpWeWq.rawValue) {
             _worldAssociatedChange(TransformModifyFlags.WmWpWeWq.rawValue)
             let nodeChildren = _entity._children
-            for i in 0..<nodeChildren.count {
+            for i in 0 ..< nodeChildren.count {
                 nodeChildren[i].transform._updateWorldPositionAndRotationFlag()
             }
         }
@@ -448,10 +437,10 @@ extension Transform {
     /// Get worldScale: Will trigger the scaling update of itself and all parent entities.
     /// In summary, any update of related variables will cause the dirty mark of one of the full process (worldMatrix) to be false.
     private func _updateWorldScaleFlag() {
-        if (!_isContainDirtyFlags(TransformModifyFlags.WmWs.rawValue)) {
+        if !_isContainDirtyFlags(TransformModifyFlags.WmWs.rawValue) {
             _worldAssociatedChange(TransformModifyFlags.WmWs.rawValue)
             let nodeChildren = _entity._children
-            for i in 0..<nodeChildren.count {
+            for i in 0 ..< nodeChildren.count {
                 nodeChildren[i].transform._updateWorldPositionAndScaleFlag()
             }
         }
@@ -462,10 +451,10 @@ extension Transform {
     /// Get worldScale: Will trigger the scaling update of itself and all parent entities.
     /// In summary, any update of related variables will cause the dirty mark of one of the full process (worldMatrix) to be false.
     private func _updateWorldPositionAndScaleFlag() {
-        if (!_isContainDirtyFlags(TransformModifyFlags.WmWpWs.rawValue)) {
+        if !_isContainDirtyFlags(TransformModifyFlags.WmWpWs.rawValue) {
             _worldAssociatedChange(TransformModifyFlags.WmWpWs.rawValue)
             let nodeChildren = _entity._children
-            for i in 0..<nodeChildren.count {
+            for i in 0 ..< nodeChildren.count {
                 nodeChildren[i].transform._updateWorldPositionAndScaleFlag()
             }
         }
@@ -473,24 +462,24 @@ extension Transform {
 
     /// Update all world transform property dirty flag, the principle is the same as above.
     private func _updateAllWorldFlag() {
-        if (!_isContainDirtyFlags(TransformModifyFlags.WmWpWeWqWs.rawValue)) {
+        if !_isContainDirtyFlags(TransformModifyFlags.WmWpWeWqWs.rawValue) {
             _worldAssociatedChange(TransformModifyFlags.WmWpWeWqWs.rawValue)
             let nodeChildren = _entity._children
-            for i in 0..<nodeChildren.count {
+            for i in 0 ..< nodeChildren.count {
                 nodeChildren[i].transform._updateAllWorldFlag()
             }
         }
     }
 
     private func _getParentTransform() -> Transform? {
-        if (!_isParentDirty) {
+        if !_isParentDirty {
             return _parentTransformCache
         }
-        var parentCache: Transform? = nil
+        var parentCache: Transform?
         var parent = _entity.parent
-        while (parent != nil) {
+        while parent != nil {
             let transform = parent!.transform
-            if (transform != nil) {
+            if transform != nil {
                 parentCache = transform
                 break
             } else {
@@ -530,7 +519,7 @@ extension Transform {
     }
 
     private func _rotateByQuat(_ rotateQuat: Quaternion, _ relativeToLocal: Bool) {
-        if (relativeToLocal) {
+        if relativeToLocal {
             _rotationQuaternion = rotationQuaternion * rotateQuat
             rotationQuaternion = _rotationQuaternion
         } else {
@@ -540,7 +529,7 @@ extension Transform {
     }
 
     private func _translate(_ translation: Vector3, _ relativeToLocal: Bool = true) {
-        if (relativeToLocal) {
+        if relativeToLocal {
             _worldPosition += Vector3.transformByQuat(v: translation, quaternion: worldRotationQuaternion)
         } else {
             _worldPosition += translation
@@ -555,7 +544,7 @@ extension Transform {
     }
 }
 
-//MARK: - Dirty flag of transform.
+// MARK: - Dirty flag of transform.
 
 enum TransformModifyFlags: Int {
     case LocalEuler = 0x1
@@ -572,11 +561,11 @@ enum TransformModifyFlags: Int {
     /// WorldMatrix | WorldEuler | WorldQuat
     case WmWeWq = 0x98
     /// WorldMatrix | WorldPosition | WorldEuler | WorldQuat
-    case WmWpWeWq = 0x9c
+    case WmWpWeWq = 0x9C
     /// WorldMatrix | WorldScale
-    case WmWs = 0xa0
+    case WmWs = 0xA0
     /// WorldMatrix | WorldPosition | WorldScale
-    case WmWpWs = 0xa4
+    case WmWpWs = 0xA4
     /// WorldMatrix | WorldPosition | WorldEuler | WorldQuat | WorldScale
-    case WmWpWeWqWs = 0xbc
+    case WmWpWeWqWs = 0xBC
 }

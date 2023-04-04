@@ -4,8 +4,8 @@
 //  personal capacity and am not conveying any rights to any intellectual
 //  property of any third parties.
 
-import vox_render
 import Metal
+import vox_render
 
 public class IBLBaker {
     public var hdr: MTLTexture!
@@ -21,7 +21,7 @@ public class IBLBaker {
         descriptor.pixelFormat = .rgba16Float
         descriptor.width = size
         descriptor.height = size
-        descriptor.mipmapLevelCount = level;
+        descriptor.mipmapLevelCount = level
         descriptor.usage = MTLTextureUsage(rawValue: MTLTextureUsage.shaderRead.rawValue | MTLTextureUsage.shaderWrite.rawValue)
         cubeMap = Engine.textureLoader.makeTexture(descriptor)
 
@@ -38,11 +38,11 @@ public class IBLBaker {
         shBuffer = BufferView(device: Engine.device, count: 3 * 9 + 1, stride: MemoryLayout<Float>.stride)
 
         if let commandBuffer = Engine.commandQueue.makeCommandBuffer() {
-            _createCubemap(commandBuffer);
-            _createSpecularTexture(commandBuffer);
-            _createSphericalHarmonicsCoefficients(commandBuffer);
+            _createCubemap(commandBuffer)
+            _createSpecularTexture(commandBuffer)
+            _createSphericalHarmonicsCoefficients(commandBuffer)
             commandBuffer.addCompletedHandler { [specularTexture, shBuffer] _ in
-                let ambientLight = AmbientLight();
+                let ambientLight = AmbientLight()
                 ambientLight.specularTexture = specularTexture
                 ambientLight.diffuseSphericalHarmonics = shBuffer
                 ambientLight.diffuseMode = DiffuseMode.SphericalHarmonics
@@ -58,18 +58,18 @@ public class IBLBaker {
         if let commandEncoder = commandBuffer.makeComputeCommandEncoder() {
             commandEncoder.setComputePipelineState(pipelineState)
             commandEncoder.setTexture(cubeMap, index: 0)
-            for lod in 0..<specularTexture.mipmapLevelCount {
+            for lod in 0 ..< specularTexture.mipmapLevelCount {
                 let textureView = specularTexture.makeTextureView(pixelFormat: specularTexture.pixelFormat, textureType: .typeCube,
-                        levels: lod..<lod + 1, slices: 0..<6)
+                                                                  levels: lod ..< lod + 1, slices: 0 ..< 6)
                 commandEncoder.setTexture(textureView, index: 1)
-                var roughness: Float = Float(lod) / Float(specularTexture.mipmapLevelCount - 1)  // linear
+                var roughness: Float = .init(lod) / Float(specularTexture.mipmapLevelCount - 1) // linear
                 commandEncoder.setBytes(&roughness, length: MemoryLayout<Float>.stride, index: 0)
 
                 let size = Int(specularTexture.width)
                 let w = pipelineState.threadExecutionWidth
                 let h = pipelineState.maxTotalThreadsPerThreadgroup / w
                 commandEncoder.dispatchThreads(MTLSizeMake(size, size, 6),
-                        threadsPerThreadgroup: MTLSizeMake(w, h, 1))
+                                               threadsPerThreadgroup: MTLSizeMake(w, h, 1))
             }
             commandEncoder.endEncoding()
         }
@@ -86,7 +86,7 @@ public class IBLBaker {
             let w = pipelineState.threadExecutionWidth
             let h = pipelineState.maxTotalThreadsPerThreadgroup / w
             commandEncoder.dispatchThreads(MTLSizeMake(9, 6, 1),
-                    threadsPerThreadgroup: MTLSizeMake(w, h, 1))
+                                           threadsPerThreadgroup: MTLSizeMake(w, h, 1))
             commandEncoder.endEncoding()
         }
     }
@@ -102,7 +102,7 @@ public class IBLBaker {
             let w = pipelineState.threadExecutionWidth
             let h = pipelineState.maxTotalThreadsPerThreadgroup / w
             commandEncoder.dispatchThreads(MTLSizeMake(cubeMap.width, cubeMap.height, 6),
-                    threadsPerThreadgroup: MTLSizeMake(w, h, 1))
+                                           threadsPerThreadgroup: MTLSizeMake(w, h, 1))
             commandEncoder.endEncoding()
         }
 

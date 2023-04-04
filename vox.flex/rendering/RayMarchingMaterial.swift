@@ -9,10 +9,10 @@ import vox_render
 
 /// ray marching Material.
 public class RayMarchingMaterial: BaseMaterial {
-    static private var _rayMarchingProperty = "u_rayMarching"
+    private static var _rayMarchingProperty = "u_rayMarching"
     private var _capsuleColliderShapes: ParticleCapsuleCollider?
     private var _rayMarchingData: RayMarchingData
-    
+
     public var color: Vector3F {
         get {
             _rayMarchingData.color
@@ -22,7 +22,7 @@ public class RayMarchingMaterial: BaseMaterial {
             shaderData.setData(RayMarchingMaterial._rayMarchingProperty, _rayMarchingData)
         }
     }
-    
+
     public var direction: Vector3F {
         get {
             _rayMarchingData.direction
@@ -32,7 +32,7 @@ public class RayMarchingMaterial: BaseMaterial {
             shaderData.setData(RayMarchingMaterial._rayMarchingProperty, _rayMarchingData)
         }
     }
-    
+
     public var iteration: UInt32 {
         get {
             _rayMarchingData.iteration
@@ -42,7 +42,7 @@ public class RayMarchingMaterial: BaseMaterial {
             shaderData.setData(RayMarchingMaterial._rayMarchingProperty, _rayMarchingData)
         }
     }
-    
+
     public var tol: Float {
         get {
             _rayMarchingData.tol
@@ -52,7 +52,7 @@ public class RayMarchingMaterial: BaseMaterial {
             shaderData.setData(RayMarchingMaterial._rayMarchingProperty, _rayMarchingData)
         }
     }
-    
+
     public var capsuleColliderShapes: ParticleCapsuleCollider? {
         get {
             _capsuleColliderShapes
@@ -65,8 +65,8 @@ public class RayMarchingMaterial: BaseMaterial {
             }
         }
     }
-    
-    public override init(_ name: String = "ray marching mat") {
+
+    override public init(_ name: String = "ray marching mat") {
         _rayMarchingData = RayMarchingData(color: Vector3(1, 1, 1), iteration: 32, direction: Vector3(0, 1, 0), tol: 0.001)
         super.init(name)
         shader.append(ShaderPass(Engine.library("flex.shader"), "vertex_rayMarching", "fragment_rayMarching"))

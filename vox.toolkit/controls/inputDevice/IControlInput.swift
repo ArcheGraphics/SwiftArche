@@ -9,12 +9,12 @@ import vox_render
 
 protocol IControlInput {
     static func onUpdateHandler(_ input: InputManager, callback: (ControlHandlerType) -> Void)
-    
+
     static func onUpdateDelta(_ control: OrbitControl, _ outDelta: inout Vector3)
     static func onUpdateDelta(_ control: FreeControl, _ outDelta: inout Vector3)
 }
 
 extension IControlInput {
-    static func onUpdateDelta(_ control: OrbitControl, _ outDelta: inout Vector3) {}
-    static func onUpdateDelta(_ control: FreeControl, _ outDelta: inout Vector3) {}
+    static func onUpdateDelta(_: OrbitControl, _: inout Vector3) {}
+    static func onUpdateDelta(_: FreeControl, _: inout Vector3) {}
 }

@@ -6,47 +6,49 @@
 
 import simd
 
-extension matrix_float4x4 {
-    // MARK:- Basic getters
+public extension matrix_float4x4 {
+    // MARK: - Basic getters
+
     /// Returns true if this matrix is a square matrix.
-    public var isSquare: Bool {
+    var isSquare: Bool {
         true
     }
 
     /// Returns number of rows of this matrix.
-    public var rows: size_t {
+    var rows: size_t {
         4
     }
 
     /// Returns number of columns of this matrix.
-    public var cols: size_t {
+    var cols: size_t {
         4
     }
 
     /// Returns 3x3 part of this matrix.
-    public var matrix3: matrix_float3x3 {
+    var matrix3: matrix_float3x3 {
         matrix_float3x3([SIMD3<Float>(columns.0[0], columns.0[1], columns.0[2]),
                          SIMD3<Float>(columns.1[0], columns.1[1], columns.1[2]),
                          SIMD3<Float>(columns.2[0], columns.2[1], columns.2[2])])
     }
 
-    // MARK:- Complex getters
+    // MARK: - Complex getters
+
     /// Returns sum of all elements.
-    public var sum: Float {
+    var sum: Float {
         reduce_add(columns.0)
-                + reduce_add(columns.1)
-                + reduce_add(columns.2)
-                + reduce_add(columns.3)
+            + reduce_add(columns.1)
+            + reduce_add(columns.2)
+            + reduce_add(columns.3)
     }
 
     /// Returns average of all elements.
     /// - Returns: average
-    public var avg: Float {
+    var avg: Float {
         sum / 16
     }
 
     /// Returns minimum among all elements.
-    public var min: Float {
+    var min: Float {
         Math.absminn(x: [reduce_min(columns.0),
                          reduce_min(columns.1),
                          reduce_min(columns.2),
@@ -54,7 +56,7 @@ extension matrix_float4x4 {
     }
 
     /// Returns maximum among all elements.
-    public var max: Float {
+    var max: Float {
         Math.absmaxn(x: [reduce_max(columns.0),
                          reduce_max(columns.1),
                          reduce_max(columns.2),
@@ -62,7 +64,7 @@ extension matrix_float4x4 {
     }
 
     /// Returns absolute minimum among all elements.
-    public var absmin: Float {
+    var absmin: Float {
         let min = [Math.absminn(x: [columns.0[0], columns.0[1], columns.0[2], columns.0[3]]),
                    Math.absminn(x: [columns.1[0], columns.1[1], columns.1[2], columns.1[3]]),
                    Math.absminn(x: [columns.2[0], columns.2[1], columns.2[2], columns.2[3]]),
@@ -71,7 +73,7 @@ extension matrix_float4x4 {
     }
 
     /// Returns absolute maximum among all elements.
-    public var absmax: Float {
+    var absmax: Float {
         let max = [Math.absmaxn(x: [columns.0[0], columns.0[1], columns.0[2], columns.0[3]]),
                    Math.absmaxn(x: [columns.1[0], columns.1[1], columns.1[2], columns.1[3]]),
                    Math.absmaxn(x: [columns.2[0], columns.2[1], columns.2[2], columns.2[3]]),
@@ -80,21 +82,21 @@ extension matrix_float4x4 {
     }
 
     /// Returns sum of all diagonal elements.
-    public var trace: Float {
+    var trace: Float {
         columns.0[0] + columns.1[1]
-                + columns.2[2] + columns.3[3]
+            + columns.2[2] + columns.3[3]
     }
 
     /// Returns diagonal part of this matrix.
-    public var diagonal: matrix_float4x4 {
+    var diagonal: matrix_float4x4 {
         matrix_float4x4(diagonal: SIMD4<Float>(columns.0[0],
-                columns.1[1],
-                columns.2[2],
-                columns.3[3]))
+                                               columns.1[1],
+                                               columns.2[2],
+                                               columns.3[3]))
     }
 
     /// Returns off-diagonal part of this matrix.
-    public var offDiagonal: matrix_float4x4 {
+    var offDiagonal: matrix_float4x4 {
         matrix_float4x4(rows: [SIMD4<Float>(0, columns.0[1], columns.0[2], columns.0[3]),
                                SIMD4<Float>(columns.1[0], 0, columns.1[2], columns.1[3]),
                                SIMD4<Float>(columns.2[0], columns.2[1], 0, columns.2[3]),
@@ -102,7 +104,7 @@ extension matrix_float4x4 {
     }
 
     /// Returns strictly lower triangle part of this matrix.
-    public var strictLowerTri: matrix_float4x4 {
+    var strictLowerTri: matrix_float4x4 {
         matrix_float4x4(rows: [SIMD4<Float>(0, 0, 0, 0),
                                SIMD4<Float>(columns.1[0], 0, 0, 0),
                                SIMD4<Float>(columns.2[0], columns.2[1], 0, 0),
@@ -110,7 +112,7 @@ extension matrix_float4x4 {
     }
 
     /// Returns strictly upper triangle part of this matrix.
-    public var strictUpperTri: matrix_float4x4 {
+    var strictUpperTri: matrix_float4x4 {
         matrix_float4x4(rows: [SIMD4<Float>(0, columns.0[1], columns.0[2], columns.0[3]),
                                SIMD4<Float>(0, 0, columns.1[2], columns.1[3]),
                                SIMD4<Float>(0, 0, 0, columns.2[3]),
@@ -118,7 +120,7 @@ extension matrix_float4x4 {
     }
 
     /// Returns lower triangle part of this matrix (including the diagonal).
-    public var lowerTri: matrix_float4x4 {
+    var lowerTri: matrix_float4x4 {
         matrix_float4x4(rows: [SIMD4<Float>(columns.0[0], 0, 0, 0),
                                SIMD4<Float>(columns.1[0], columns.1[1], 0, 0),
                                SIMD4<Float>(columns.2[0], columns.2[1], columns.2[2], 0),
@@ -126,7 +128,7 @@ extension matrix_float4x4 {
     }
 
     /// Returns upper triangle part of this matrix (including the diagonal).
-    public var upperTri: matrix_float4x4 {
+    var upperTri: matrix_float4x4 {
         matrix_float4x4(rows: [SIMD4<Float>(columns.0[0], columns.0[1], columns.0[2], columns.0[3]),
                                SIMD4<Float>(0, columns.1[1], columns.1[2], columns.1[3]),
                                SIMD4<Float>(0, 0, columns.2[2], columns.2[3]),
@@ -134,14 +136,14 @@ extension matrix_float4x4 {
     }
 
     /// Returns Frobenius norm.
-    public var frobeniusNorm: Float {
+    var frobeniusNorm: Float {
         sqrt(length_squared(columns.0)
-                + length_squared(columns.1)
-                + length_squared(columns.2)
-                + length_squared(columns.3))
+            + length_squared(columns.1)
+            + length_squared(columns.2)
+            + length_squared(columns.3))
     }
 
-    public static func makeTranslationMatrix(t: SIMD3<Float>) -> matrix_float4x4 {
+    static func makeTranslationMatrix(t: SIMD3<Float>) -> matrix_float4x4 {
         matrix_float4x4(rows: [SIMD4<Float>(1, 0, 0, t.x),
                                SIMD4<Float>(0, 1, 0, t.y),
                                SIMD4<Float>(0, 0, 1, t.z),
@@ -151,20 +153,20 @@ extension matrix_float4x4 {
     /// Makes rotation matrix.
     /// - Warning: Input angle should be radian.
     /// - Returns: new matrix
-    public static func makeRotationMatrix(axis: SIMD3<Float>, rad: Float) -> matrix_float4x4 {
+    static func makeRotationMatrix(axis: SIMD3<Float>, rad: Float) -> matrix_float4x4 {
         let rotation = matrix_float3x3.makeRotationMatrix(axis: axis, rad: rad)
         return matrix_float4x4(rows: [SIMD4<Float>(rotation.columns.0[0],
-                rotation.columns.0[1],
-                rotation.columns.0[2],
-                rotation.columns.0[3]),
-            SIMD4<Float>(rotation.columns.1[0],
-                    rotation.columns.1[1],
-                    rotation.columns.1[2],
-                    rotation.columns.1[3]),
-            SIMD4<Float>(rotation.columns.2[0],
-                    rotation.columns.2[1],
-                    rotation.columns.2[2],
-                    rotation.columns.2[3]),
-            SIMD4<Float>(0, 0, 0, 1)])
+                                                   rotation.columns.0[1],
+                                                   rotation.columns.0[2],
+                                                   rotation.columns.0[3]),
+                                      SIMD4<Float>(rotation.columns.1[0],
+                                                   rotation.columns.1[1],
+                                                   rotation.columns.1[2],
+                                                   rotation.columns.1[3]),
+                                      SIMD4<Float>(rotation.columns.2[0],
+                                                   rotation.columns.2[1],
+                                                   rotation.columns.2[2],
+                                                   rotation.columns.2[3]),
+                                      SIMD4<Float>(0, 0, 0, 1)])
     }
 }

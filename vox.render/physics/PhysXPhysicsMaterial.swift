@@ -26,11 +26,13 @@ class PhysXPhysicsMaterial {
          _ dynamicFriction: Float,
          _ bounciness: Float,
          _ frictionCombine: CombineMode,
-         _ bounceCombine: CombineMode) {
+         _ bounceCombine: CombineMode)
+    {
         _pxMaterial = PhysXPhysics._pxPhysics.createMaterial(
-                withStaticFriction: staticFriction,
-                dynamicFriction: dynamicFriction,
-                restitution: bounciness)
+            withStaticFriction: staticFriction,
+            dynamicFriction: dynamicFriction,
+            restitution: bounciness
+        )
 
         _pxMaterial.setFrictionCombineMode(Int32(frictionCombine.rawValue))
         _pxMaterial.setRestitutionCombineMode(Int32(bounceCombine.rawValue))

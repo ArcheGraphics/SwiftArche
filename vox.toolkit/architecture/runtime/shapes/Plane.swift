@@ -4,19 +4,17 @@
 //  personal capacity and am not conveying any rights to any intellectual
 //  property of any third parties.
 
-import vox_render
 import Math
+import vox_render
 
 public class Plane: Shape {
     var m_HeightSegments = 1
 
     var m_WidthSegments = 1
 
-    public func CopyShape(_ shape: Shape) {
+    public func CopyShape(_: Shape) {}
 
-    }
-
-    public func RebuildMesh(_ mesh: ProBuilderMesh, size: Vector3, rotation: Quaternion) -> Bounds {
+    public func RebuildMesh(_: ProBuilderMesh, size _: Vector3, rotation _: Quaternion) -> Bounds {
         Bounds()
     }
 }

@@ -4,9 +4,9 @@
 //  personal capacity and am not conveying any rights to any intellectual
 //  property of any third parties.
 
-import MetalKit
-import Metal
 import Logging
+import Metal
+import MetalKit
 
 public let logger = Logger(label: "com.arche.main")
 
@@ -14,6 +14,7 @@ public extension CodingUserInfoKey {
     static var polymorphicTypes: CodingUserInfoKey {
         CodingUserInfoKey(rawValue: "com.codable.polymophicTypes")!
     }
+
     static var colliderShapeTypes: CodingUserInfoKey {
         CodingUserInfoKey(rawValue: "com.codable.colliderShapeTypes")!
     }
@@ -24,13 +25,13 @@ public class Engine: NSObject {
     static let _maxFramesInFlight = 3
     static var _bufferPools: [BufferPool] = []
     static var _commandQueue: MTLCommandQueue!
-    static let _macroCollection: ShaderMacroCollection = ShaderMacroCollection()
-    static let _componentsManager: ComponentsManager = ComponentsManager()
+    static let _macroCollection: ShaderMacroCollection = .init()
+    static let _componentsManager: ComponentsManager = .init()
     static let _lightManager = LightManager()
-    
+
     private let _inFlightSemaphore: DispatchSemaphore
     private var _frameCount: Int = 0
-    
+
     // Current buffer index to fill with dynamic uniform data and set for the current frame
     private static var _currentBufferIndex: Int = 0
     private static var _resourceCache: ResourceCache!
@@ -40,97 +41,76 @@ public class Engine: NSObject {
     private static var _sceneManager: SceneManager!
     private static var _physicsManager: PhysicsManager!
     private static var _inputManager: InputManager!
-#if os(iOS)
-    private static var _arManager: ARManager?
-#else
-    static var _guiManager: GUIManager!
-#endif
+    #if os(iOS)
+        private static var _arManager: ARManager?
+    #else
+        static var _guiManager: GUIManager!
+    #endif
     // The semaphore used to control GPU-CPU synchronization of frames.
     private static var _textureLoader: TextureLoader!
-    private static var _isPaused: Bool = true;
+    private static var _isPaused: Bool = true
     private static var _fg: FrameGraph!
 
     /// buffer index
     static var currentBufferIndex: Int {
-        get {
-            _currentBufferIndex
-        }
+        _currentBufferIndex
     }
-    
+
     static var resourceCache: ResourceCache {
-        get {
-            _resourceCache
-        }
+        _resourceCache
     }
-    
+
     public static var fg: FrameGraph {
-        get {
-            _fg
-        }
+        _fg
     }
-    
+
     public static var exportGraphviz: Bool = false
-    
+
     // MARK: - Public Method
+
     /// canvas
     public static var canvas: Canvas!
 
     /// Settings of Engine.
     public static var settings: EngineSettings? {
-        get {
-            _settings
-        }
+        _settings
     }
 
     /// Get the Metal device.
     public static var device: MTLDevice {
-        get {
-            _device
-        }
+        _device
     }
-    
+
     public static var commandQueue: MTLCommandQueue {
-        get {
-            _commandQueue
-        }
+        _commandQueue
     }
 
     /// Get the texture loader.
     public static var textureLoader: TextureLoader {
-        get {
-            _textureLoader
-        }
+        _textureLoader
     }
 
     /// Get the scene manager.
     public static var sceneManager: SceneManager {
-        get {
-            _sceneManager
-        }
+        _sceneManager
     }
 
     /// Get the physics manager.
     public static var physicsManager: PhysicsManager {
-        get {
-            _physicsManager
-        }
+        _physicsManager
     }
 
     /// Get the input manager.
     public static var inputManager: InputManager {
-        get {
-            _inputManager
-        }
+        _inputManager
     }
 
-#if os(iOS)
-    /// Get the ar manager.
-    public static var arManager: ARManager? {
-        get {
+    #if os(iOS)
+        /// Get the ar manager.
+        public static var arManager: ARManager? {
             _arManager
         }
-    }
-#endif
+    #endif
 
     /// Whether the engine is paused.
     public static var isPaused: Bool {
@@ -159,13 +139,13 @@ public class Engine: NSObject {
         _inFlightSemaphore = DispatchSemaphore(value: Engine._maxFramesInFlight)
         Engine._bufferPools = [BufferPool](repeating: BufferPool(Engine._device, 256), count: Engine._maxFramesInFlight)
         Engine._resourceCache = ResourceCache(device)
-        
+
         // alloc init framegraph heap size for G-Buffer, which can be adjusted by default render pipeline configure.
         let textureDescriptor = MTLTextureDescriptor.texture2DDescriptor(pixelFormat: .rgba8Unorm, width: 1920, height: 1080, mipmapped: false)
         let sizeAndAlignRequirement = device.heapTextureSizeAndAlign(descriptor: textureDescriptor)
         let sizeAligned = alignUp(size: sizeAndAlignRequirement.size, align: sizeAndAlignRequirement.align)
         Engine._fg = FrameGraph(size: sizeAligned * 4)
-        
+
         super.init()
         _ = Engine.createShaderLibrary("vox.shader")
         Engine._physicsManager = PhysicsManager()
@@ -179,20 +159,20 @@ public class Engine: NSObject {
         canvas.inputManager = Engine._inputManager
         Engine._textureLoader = TextureLoader()
 
-#if os(macOS)
-        Engine._guiManager = GUIManager()
-#endif
+        #if os(macOS)
+            Engine._guiManager = GUIManager()
+        #endif
     }
 
-#if os(iOS)
-    public static func initArSession() {
-        _arManager = ARManager(device)
-        let scene = _sceneManager.activeScene!
-        scene.background.mode = .AR
-        scene.background.ar = ARSubpass()
-    }
-#endif
-    
+    #if os(iOS)
+        public static func initArSession() {
+            _arManager = ARManager(device)
+            let scene = _sceneManager.activeScene!
+            scene.background.mode = .AR
+            scene.background.ar = ARSubpass()
+        }
+    #endif
+
     public static func createCaptureScope(name: String) -> MTLCaptureScope {
         let scope = MTLCaptureManager.shared().makeCaptureScope(device: device)
         scope.label = name
@@ -201,12 +181,12 @@ public class Engine: NSObject {
         captureDescriptor.destination = .developerTools
         do {
             try MTLCaptureManager.shared().startCapture(with: captureDescriptor)
-        } catch let error {
+        } catch {
             fatalError("Error creating capture scope \(name), error \(error)")
         }
         return scope
     }
-    
+
     public static func createShaderLibrary(_ name: String) -> MTLLibrary {
         // Load all the shader files with a metal file extension in the project
         let libraryURL = Bundle.main.url(forResource: name, withExtension: "metallib")!
@@ -214,11 +194,11 @@ public class Engine: NSObject {
             let library = try device.makeLibrary(URL: libraryURL)
             _library[name] = library
             return library
-        } catch let error {
+        } catch {
             fatalError("Error creating metal library \(name), error \(error)")
         }
     }
-    
+
     public static func library(_ name: String = "vox.shader") -> MTLLibrary {
         if let library = _library[name] {
             return library
@@ -226,27 +206,27 @@ public class Engine: NSObject {
             return createShaderLibrary(name)
         }
     }
-    
+
     public static func requestBufferBlock(minimum_size: Int) -> BufferBlock {
         _bufferPools[_currentBufferIndex].requestBufferBlock(minimum_size: minimum_size)
     }
-    
+
     /// Execution engine loop.
     public static func run() {
         isPaused = false
     }
-    
+
     public static func destroy() {
         sceneManager.destroy()
         physicsManager.destroy()
-#if os(macOS)
-        _guiManager.destroy()
-#endif
+        #if os(macOS)
+            _guiManager.destroy()
+        #endif
     }
-    
+
     public static func makeDecoder() -> JSONDecoder {
         let decoder = JSONDecoder()
-        
+
         let scriptClass = ClassInfo.getSubclass(Script.self)
         var componentList: [Polymorphic.Type] = [
             Transform.self,
@@ -254,7 +234,7 @@ public class Engine: NSObject {
             Light.self,
             StaticCollider.self,
             DynamicCollider.self,
-            FixedJoint.self
+            FixedJoint.self,
         ]
         componentList.append(contentsOf: scriptClass.map { info in
             info.classObject as! Polymorphic.Type
@@ -264,7 +244,7 @@ public class Engine: NSObject {
             SphereColliderShape.self,
             CapsuleColliderShape.self,
             BoxColliderShape.self,
-            PlaneColliderShape.self
+            PlaneColliderShape.self,
         ]
 
         return decoder
@@ -272,11 +252,12 @@ public class Engine: NSObject {
 }
 
 // MARK: - Main Loop
+
 extension Engine: MTKViewDelegate {
     /// Update the engine loop manually. If you call Engine.run(), you generally don't need to call this function.
     func update() {
-        Time.tick();
-        let deltaTime = Time.deltaTime;
+        Time.tick()
+        let deltaTime = Time.deltaTime
 
         if !Engine._isPaused {
             // Wait to ensure only maxFramesInFlight are getting processed by any stage in the Metal
@@ -284,10 +265,10 @@ extension Engine: MTKViewDelegate {
             _inFlightSemaphore.wait()
             Engine._currentBufferIndex = (Engine._currentBufferIndex + 1) % Engine._maxFramesInFlight
             Engine._bufferPools[Engine._currentBufferIndex].reset()
-            
+
             let scene = Engine._sceneManager._activeScene
             let componentsManager = Engine._componentsManager
-            if (scene != nil) {
+            if scene != nil {
                 scene!._activeCameras.sort { camera1, camera2 in
                     camera1.priority > camera2.priority
                 }
@@ -305,25 +286,26 @@ extension Engine: MTKViewDelegate {
     }
 
     func _render(_ scene: Scene) {
-#if os(iOS)
-        Engine.arManager?.update(Time.deltaTime)
-#endif
+        #if os(iOS)
+            Engine.arManager?.update(Time.deltaTime)
+        #endif
         Engine._componentsManager.callRendererOnUpdate(Time.deltaTime)
 
         scene._updateShaderData()
 
         let cameras = scene._activeCameras
-        if (cameras.count > 0) {
+        if cameras.count > 0 {
             if let commandBuffer = Engine.commandQueue.makeCommandBuffer(),
                let currentDrawable = Engine.canvas.currentDrawable,
-               let renderPassDescriptor = Engine.canvas.currentRenderPassDescriptor {
+               let renderPassDescriptor = Engine.canvas.currentRenderPassDescriptor
+            {
                 // Add completion hander which signals inFlightSemaphore
                 // when Metal and the GPU has fully finished processing the commands encoded for this frame.
                 // This indicates when the dynamic buffers, written this frame, will no longer be needed by Metal and the GPU.
                 commandBuffer.addCompletedHandler { [weak self] _ in
                     self?._inFlightSemaphore.signal()
                 }
-                
+
                 let fg = Engine.fg
                 for camera in cameras {
                     camera.update()
@@ -342,39 +324,38 @@ extension Engine: MTKViewDelegate {
                 }
                 fg.clear()
 
-
                 commandBuffer.present(currentDrawable)
                 commandBuffer.commit()
             }
         } else {
             logger.debug("NO active camera.")
         }
-        
+
         _frameCount += 1
         if _frameCount > 50 {
             garbageCollection()
             _frameCount = 0
         }
     }
-    
+
     func garbageCollection() {
         Engine.resourceCache.garbageCollection(below: 10)
     }
-    
+
     /// Called whenever the drawableSize of the view will change
     /// - Remark: Delegate can recompute view and projection matrices or regenerate any buffers
     /// to be compatible with the new view size or resolution
     /// - Parameters:
     ///   - view: MTKView which called this method
     ///   - size: New drawable size in pixels
-    public func mtkView(_ view: MTKView, drawableSizeWillChange size: CGSize) {
+    public func mtkView(_: MTKView, drawableSizeWillChange size: CGSize) {
         Engine.canvas.dispatchResize(size)
     }
 
     /// Called on the delegate when it is asked to render into the view
     /// - Remark: Called on the delegate when it is asked to render into the view
     /// - Parameter view:  MTKView which called this method
-    public func draw(in view: MTKView) {
+    public func draw(in _: MTKView) {
         update()
     }
 }

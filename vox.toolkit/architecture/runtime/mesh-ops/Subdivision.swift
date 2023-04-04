@@ -4,15 +4,15 @@
 //  personal capacity and am not conveying any rights to any intellectual
 //  property of any third parties.
 
-import vox_render
 import Math
+import vox_render
 
 /// Subdivide a ProBuilder mesh.
 class Subdivision {
     /// Subdivide all faces on the mesh.
     /// - Remark:
     /// More accurately, this inserts a vertex at the center of each face and connects each edge at it's center.
-    public static func Subdivide(pb: ProBuilderMesh) -> ActionResult {
+    public static func Subdivide(pb _: ProBuilderMesh) -> ActionResult {
         ActionResult.Success
     }
 
@@ -21,7 +21,7 @@ class Subdivision {
     ///   - pb: pb
     ///   - faces: The faces to be affected by subdivision.
     /// - Returns: The faces created as a result of the subdivision.
-    public static func Subdivide(pb: ProBuilderMesh, faces: [Face]) -> [Face] {
+    public static func Subdivide(pb _: ProBuilderMesh, faces _: [Face]) -> [Face] {
         []
     }
 }

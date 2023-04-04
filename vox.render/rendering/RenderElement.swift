@@ -11,7 +11,7 @@ public struct RenderElement {
     public var data: RenderData
     public var shaderPass: ShaderPass
     public var renderState: RenderState
-    
+
     init(data: RenderData, shaderPass: ShaderPass, renderState: RenderState) {
         self.data = data
         self.shaderPass = shaderPass

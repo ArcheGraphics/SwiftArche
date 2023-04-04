@@ -10,12 +10,12 @@ import Math
 /// Entity, be used as components container.
 public final class Entity: NSObject, Codable {
     private var _layer: Layer = .Layer0
-    
+
     /// The name of entity.
     public var name: String
     /// Transform component.
     public var transform: Transform!
-    
+
     /// The layer the entity belongs to.
     public var layer: Layer {
         get {
@@ -54,7 +54,7 @@ public final class Entity: NSObject, Codable {
         transform = addComponent(Transform.self)
         _inverseWorldMatFlag = transform.registerWorldChangeFlag()
     }
-    
+
     deinit {
         destroy()
     }
@@ -68,7 +68,7 @@ public final class Entity: NSObject, Codable {
             v.destroy()
         }
 
-        if (_isRoot) {
+        if _isRoot {
             _scene._removeFromEntityList(self)
             _isRoot = false
         } else {
@@ -76,7 +76,7 @@ public final class Entity: NSObject, Codable {
         }
     }
 
-    private var _invModelMatrix: Matrix = Matrix()
+    private var _invModelMatrix: Matrix = .init()
     private var _inverseWorldMatFlag: BoolUpdateFlag!
 
     /// Whether to activate locally.
@@ -85,15 +85,15 @@ public final class Entity: NSObject, Codable {
             _isActive
         }
         set {
-            if (newValue != _isActive) {
+            if newValue != _isActive {
                 _isActive = newValue
-                if (newValue) {
+                if newValue {
                     let parent = _parent
-                    if (parent?._isActiveInHierarchy ?? false || (_isRoot && _scene._isActiveInEngine)) {
+                    if parent?._isActiveInHierarchy ?? false || (_isRoot && _scene._isActiveInEngine) {
                         _processActive()
                     }
                 } else {
-                    if (_isActiveInHierarchy) {
+                    if _isActiveInHierarchy {
                         _processInActive()
                     }
                 }
@@ -103,9 +103,7 @@ public final class Entity: NSObject, Codable {
 
     /// Whether it is active in the hierarchy.
     public var isActiveInHierarchy: Bool {
-        get {
-            _isActiveInHierarchy
-        }
+        _isActiveInHierarchy
     }
 
     /// The parent entity.
@@ -120,23 +118,17 @@ public final class Entity: NSObject, Codable {
 
     /// The children entities
     public var children: [Entity] {
-        get {
-            _children
-        }
+        _children
     }
 
     /// Number of the children entities
     public var childCount: Int {
-        get {
-            _children.count
-        }
+        _children.count
     }
 
     /// The scene the entity belongs to.
     public var scene: Scene {
-        get {
-            _scene
-        }
+        _scene
     }
 
     public var siblingIndex: Int {
@@ -144,7 +136,7 @@ public final class Entity: NSObject, Codable {
             _siblingIndex
         }
         set {
-            if (_siblingIndex == -1) {
+            if _siblingIndex == -1 {
                 fatalError("The entity ${this.name} is not in the hierarchy")
             }
 
@@ -159,12 +151,12 @@ public final class Entity: NSObject, Codable {
     /// Add component based on the component type.
     /// - Returns: The component which has been added.
     @discardableResult
-    public func addComponent<T: Component>(_ type: T.Type) -> T {
-        //todo ComponentsDependencies._addCheck(this, type)
+    public func addComponent<T: Component>(_: T.Type) -> T {
+        // todo ComponentsDependencies._addCheck(this, type)
         let component = T()
         component.entity = self
         _components.append(PolymorphicValue(wrappedValue: component))
-        if (_isActiveInHierarchy) {
+        if _isActiveInHierarchy {
             component._setActive(true)
         }
         return component
@@ -172,10 +164,10 @@ public final class Entity: NSObject, Codable {
 
     /// Get component which match the type.
     /// - Returns: The first component which match type.
-    public func getComponent<T: Component>(_ type: T.Type) -> T? {
-        for i in 0..<_components.count {
+    public func getComponent<T: Component>(_: T.Type) -> T? {
+        for i in 0 ..< _components.count {
             let component = _components[i].wrappedValue
-            if (component is T) {
+            if component is T {
                 return (component as! T)
             }
         }
@@ -185,11 +177,11 @@ public final class Entity: NSObject, Codable {
     /// Get components which match the type.
     /// - Parameter results: The components which match type.
     /// - Returns: The components which match type.
-    public func getComponents<T: Component>(_ type: T.Type) -> [T] {
+    public func getComponents<T: Component>(_: T.Type) -> [T] {
         var results: [T] = []
-        for i in 0..<_components.count {
+        for i in 0 ..< _components.count {
             let component = _components[i].wrappedValue
-            if (component is T) {
+            if component is T {
                 results.append(component as! T)
             }
         }
@@ -199,7 +191,7 @@ public final class Entity: NSObject, Codable {
     /// Get the components which match the type of the entity and it's children.
     /// - Parameter results: The components collection.
     /// - Returns:  The components collection which match the type.
-    public func getComponentsIncludeChildren<T: Component>(_ type: T.Type) -> [T] {
+    public func getComponentsIncludeChildren<T: Component>(_: T.Type) -> [T] {
         var results: [T] = []
         _getComponentsInChildren(&results)
         return results
@@ -208,7 +200,7 @@ public final class Entity: NSObject, Codable {
     /// Add child entity.
     /// - Parameter child: The child entity which want to be added.
     public func addChild(_ child: Entity) {
-        if (child._isRoot) {
+        if child._isRoot {
             child._scene._removeFromEntityList(child)
             child._isRoot = false
 
@@ -216,11 +208,11 @@ public final class Entity: NSObject, Codable {
             child._parent = self
 
             let newScene = _scene
-            if (child._scene !== newScene) {
+            if child._scene !== newScene {
                 Entity._traverseSetOwnerScene(child, newScene)
             }
 
-            if (_isActiveInHierarchy) {
+            if _isActiveInHierarchy {
                 if !child._isActiveInHierarchy && child._isActive {
                     child._processActive()
                 }
@@ -237,7 +229,7 @@ public final class Entity: NSObject, Codable {
     }
 
     public func addChild(_ index: Int, _ child: Entity) {
-        if (child._isRoot) {
+        if child._isRoot {
             child._scene._removeFromEntityList(child)
             child._isRoot = false
 
@@ -245,11 +237,11 @@ public final class Entity: NSObject, Codable {
             child._parent = self
 
             let newScene = _scene
-            if (child._scene !== newScene) {
+            if child._scene !== newScene {
                 Entity._traverseSetOwnerScene(child, newScene)
             }
 
-            if (_isActiveInHierarchy) {
+            if _isActiveInHierarchy {
                 if !child._isActiveInHierarchy && child._isActive {
                     child._processActive()
                 }
@@ -281,14 +273,14 @@ public final class Entity: NSObject, Codable {
     /// - Parameter name: The name of the entity which want to be found.
     /// - Returns: The component which be found.
     public func findByName(_ name: String) -> Entity? {
-        if (self.name == name) {
-          return self
+        if self.name == name {
+            return self
         }
         for child in _children {
-          let target = child.findByName(name)
-          if target != nil {
-            return target
-          }
+            let target = child.findByName(name)
+            if target != nil {
+                return target
+            }
         }
         return nil
     }
@@ -340,15 +332,15 @@ public final class Entity: NSObject, Codable {
         cloneEntity.transform.localMatrix = transform.localMatrix
 
         let children = _children
-        for i in 0..<_children.count {
+        for i in 0 ..< _children.count {
             let child = children[i]
             cloneEntity.addChild(child.clone())
         }
 
         let components = _components
-        for i in 0..<components.count {
+        for i in 0 ..< components.count {
             let sourceComp = components[i].wrappedValue
-            if (!(sourceComp is Transform)) {
+            if !(sourceComp is Transform) {
                 // todo
                 // let targetComp = cloneEntity.addComponent(<new (entity: Entity) => Component>sourceComp.constructor)
                 // ComponentCloner.cloneComponent(sourceComp, targetComp)
@@ -357,22 +349,23 @@ public final class Entity: NSObject, Codable {
 
         return cloneEntity
     }
-    
+
     // MARK: - Codable
+
     enum CodingKeys: String, CodingKey {
         case name
         case children
         case component
     }
-    
+
     func addComponent<T: Component>(_ component: T) {
         component.entity = self
         _components.append(PolymorphicValue(wrappedValue: component))
-        if (_isActiveInHierarchy) {
+        if _isActiveInHierarchy {
             component._setActive(true)
         }
     }
-    
+
     public required init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         name = try container.decode(String.self, forKey: .name)
@@ -380,7 +373,7 @@ public final class Entity: NSObject, Codable {
 
         _children = try container.decode([Entity].self, forKey: .children)
         let components = try container.decode([PolymorphicValue<Component>].self, forKey: .component)
-        for i in 0..<components.count {
+        for i in 0 ..< components.count {
             let component = components[i]
             addComponent(component.wrappedValue)
             if i == 0 {
@@ -389,7 +382,7 @@ public final class Entity: NSObject, Codable {
             }
         }
     }
-    
+
     public func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encode(name, forKey: .name)
@@ -398,21 +391,21 @@ public final class Entity: NSObject, Codable {
     }
 }
 
-//MARK: - Internal Methods
+// MARK: - Internal Methods
 
 extension Entity {
-    internal func _removeComponent(_ component: Component) {
+    func _removeComponent(_ component: Component) {
         _components.removeAll { value in
             value.wrappedValue === component
         }
     }
 
-    internal func _addScript(_ script: Script) {
+    func _addScript(_ script: Script) {
         script._entityScriptsIndex = _scripts.count
         _scripts.add(script)
     }
 
-    internal func _removeScript(_ script: Script) {
+    func _removeScript(_ script: Script) {
         let replaced = _scripts.deleteByIndex(script._entityScriptsIndex)
         if replaced != nil {
             replaced!._entityScriptsIndex = script._entityScriptsIndex
@@ -420,11 +413,11 @@ extension Entity {
         script._entityScriptsIndex = -1
     }
 
-    internal func _removeFromParent() {
+    func _removeFromParent() {
         let oldParent = _parent
-        if (oldParent != nil) {
+        if oldParent != nil {
             oldParent!._children.remove(at: _siblingIndex)
-            for index in _siblingIndex..<oldParent!._children.count {
+            for index in _siblingIndex ..< oldParent!._children.count {
                 oldParent!._children[index]._siblingIndex = oldParent!._children[index]._siblingIndex - 1
             }
             _parent = nil
@@ -432,8 +425,8 @@ extension Entity {
         }
     }
 
-    internal func _processActive() {
-        if (!_activeChangedComponents.isEmpty) {
+    func _processActive() {
+        if !_activeChangedComponents.isEmpty {
             fatalError("Note: can't set the 'main inActive entity' active in hierarchy, if the operation is in main inActive entity or it's children script's onDisable Event.")
         }
         _activeChangedComponents = Engine._componentsManager.getActiveChangedTempList()
@@ -441,8 +434,8 @@ extension Entity {
         _setActiveComponents(true)
     }
 
-    internal func _processInActive() {
-        if (!_activeChangedComponents.isEmpty) {
+    func _processInActive() {
+        if !_activeChangedComponents.isEmpty {
             fatalError("Note: can't set the 'main active entity' inActive in hierarchy, if the operation is in main active entity or it's children script's onEnable Event.")
         }
         _activeChangedComponents = Engine._componentsManager.getActiveChangedTempList()
@@ -451,21 +444,21 @@ extension Entity {
     }
 }
 
-//MARK: - Private Methods
+// MARK: - Private Methods
 
 extension Entity {
     private func _addToChildrenList(_ index: Int?, _ child: Entity) {
         let childCount = _children.count
-        if (index == nil) {
+        if index == nil {
             child._siblingIndex = childCount
             _children.append(child)
         } else {
-            if (index! < 0 || index! > childCount) {
+            if index! < 0 || index! > childCount {
                 fatalError()
             }
             child._siblingIndex = index!
             _children[index!] = child
-            for i in index! + 1..<childCount + 1 {
+            for i in index! + 1 ..< childCount + 1 {
                 _children[i]._siblingIndex = _children[i]._siblingIndex + 1
             }
         }
@@ -473,19 +466,19 @@ extension Entity {
 
     private func _setParent(_ parent: Entity?, _ siblingIndex: Int? = nil) {
         let oldParent = _parent
-        if (parent !== oldParent) {
+        if parent !== oldParent {
             _removeFromParent()
             _parent = parent
-            if (parent != nil) {
+            if parent != nil {
                 parent!._addToChildrenList(siblingIndex, self)
 
                 let parentScene = parent!._scene
-                if (_scene !== parentScene) {
+                if _scene !== parentScene {
                     Entity._traverseSetOwnerScene(self, parentScene)
                 }
 
-                if (parent!._isActiveInHierarchy) {
-                    if !_isActiveInHierarchy && _isActive {
+                if parent!._isActiveInHierarchy {
+                    if !_isActiveInHierarchy, _isActive {
                         _processActive()
                     }
                 } else {
@@ -497,7 +490,7 @@ extension Entity {
                 if _isActiveInHierarchy {
                     _processInActive()
                 }
-                if (oldParent != nil) {
+                if oldParent != nil {
                     Entity._traverseSetOwnerScene(self, nil)
                 }
             }
@@ -508,7 +501,7 @@ extension Entity {
     private func _getComponentsInChildren<T: Component>(_ results: inout [T]) {
         for componentWrapper in _components {
             let component = componentWrapper.wrappedValue
-            if (component is T) {
+            if component is T {
                 results.append(component as! T)
             }
         }
@@ -559,19 +552,19 @@ extension Entity {
 
     private func _setSiblingIndex(_ sibling: inout [Entity], _ target: Int) {
         let target = Swift.min(target, sibling.count - 1)
-        if (target < 0) {
+        if target < 0 {
             fatalError()
         }
-        if (_siblingIndex != target) {
+        if _siblingIndex != target {
             let oldIndex = _siblingIndex
-            if (target < oldIndex) {
-                for i in target...oldIndex {
+            if target < oldIndex {
+                for i in target ... oldIndex {
                     let child = i == target ? self : sibling[i - 1]
                     sibling[i] = child
                     child._siblingIndex = i
                 }
             } else {
-                for i in oldIndex...target {
+                for i in oldIndex ... target {
                     let child = i == target ? self : sibling[i + 1]
                     sibling[i] = child
                     child._siblingIndex = i
@@ -581,14 +574,14 @@ extension Entity {
     }
 }
 
-//MARK: - Static Methods
+// MARK: - Static Methods
 
 extension Entity {
-    internal static func _findChildByName(_ root: [Entity], _ name: String) -> [Entity] {
+    static func _findChildByName(_ root: [Entity], _ name: String) -> [Entity] {
         var result: [Entity] = []
         for entity in root {
             for child in entity._children {
-                if (child.name == name) {
+                if child.name == name {
                     result.append(child)
                 }
             }
@@ -596,7 +589,7 @@ extension Entity {
         return result
     }
 
-    internal static func _traverseSetOwnerScene(_ entity: Entity, _ scene: Scene?) {
+    static func _traverseSetOwnerScene(_ entity: Entity, _ scene: Scene?) {
         entity._scene = scene
         for child in entity._children {
             _traverseSetOwnerScene(child, scene)

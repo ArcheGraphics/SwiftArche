@@ -6,24 +6,24 @@
 
 import Foundation
 
-final public class MTLFontAtlasCodableContainer: Codable {
+public final class MTLFontAtlasCodableContainer: Codable {
     private let fontName: String
     private let fontSize: CGFloat
     private let glyphDescriptors: [GlyphDescriptor]
     private let fontAtlasTextureCodableBox: MTLTextureCodableBox
 
     public init(fontAtlas: MTLFontAtlas) throws {
-        self.fontName = fontAtlas.font.fontName
-        self.fontSize = fontAtlas.font.pointSize
-        self.glyphDescriptors = fontAtlas.glyphDescriptors
-        self.fontAtlasTextureCodableBox = try fontAtlas.fontAtlasTexture.codable()
+        fontName = fontAtlas.font.fontName
+        fontSize = fontAtlas.font.pointSize
+        glyphDescriptors = fontAtlas.glyphDescriptors
+        fontAtlasTextureCodableBox = try fontAtlas.fontAtlasTexture.codable()
     }
 
     public func fontAtlas(device: MTLDevice) throws -> MTLFontAtlas {
-        return try .init(font: .init(name: self.fontName,
-                                     size: self.fontSize)!,
-                         glyphDescriptors: self.glyphDescriptors,
-                         fontAtlasTexture: self.fontAtlasTextureCodableBox
-                                               .texture(device: device))
+        return try .init(font: .init(name: fontName,
+                                     size: fontSize)!,
+                         glyphDescriptors: glyphDescriptors,
+                         fontAtlasTexture: fontAtlasTextureCodableBox
+                             .texture(device: device))
     }
 }

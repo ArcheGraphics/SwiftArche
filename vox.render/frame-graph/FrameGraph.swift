@@ -17,11 +17,11 @@ public class FrameGraph {
     var resources_: [ResourceBase] = []
     private var timeline_: [Step] = []
     private var heapPool_: [MTLHeap] = []
-    
+
     public var blackboard: [Int: ResourceBase] = [:]
-    
+
     public var frameData = FrameData()
-    
+
     public init(size: Int) {
         let heapDesc = MTLHeapDescriptor()
         heapDesc.storageMode = .private
@@ -30,12 +30,13 @@ public class FrameGraph {
     }
 
     @discardableResult
-    public func addFrameTask<data_type: EmptyClassType>(for type: data_type.Type, name: String,
-                                                         commandBuffer: MTLCommandBuffer?,
-                                                         setup: @escaping (data_type, inout FrameTaskBuilder) -> Void,
-                                                         execute: @escaping (data_type, MTLCommandBuffer?) -> Void) -> FrameTask<data_type> {
+    public func addFrameTask<data_type: EmptyClassType>(for _: data_type.Type, name: String,
+                                                        commandBuffer: MTLCommandBuffer?,
+                                                        setup: @escaping (data_type, inout FrameTaskBuilder) -> Void,
+                                                        execute: @escaping (data_type, MTLCommandBuffer?) -> Void) -> FrameTask<data_type>
+    {
         render_tasks_.append(FrameTask<data_type>(name: name, commandBuffer: commandBuffer,
-                                                   setup: setup, execute: execute))
+                                                  setup: setup, execute: execute))
         let render_task = render_tasks_.last!
 
         var builder = FrameTaskBuilder(framegraph: self, render_task: render_task)
@@ -43,17 +44,18 @@ public class FrameGraph {
 
         return render_task as! FrameTask<data_type>
     }
-    
+
     public func addMoveTask<src_type: ResourceRealize, dst_type: ResourceRealize>(src: Resource<src_type>, dst: Resource<dst_type>) {
         dst.readers_ = src.readers_
         src.readers_ = []
     }
 
     @discardableResult
-    public func addRetainedResource<description_type: ResourceRealize>(for type: description_type.Type, name: String,
+    public func addRetainedResource<description_type: ResourceRealize>(for _: description_type.Type, name: String,
                                                                        description: description_type,
                                                                        actual: description_type.actual_type? = nil)
-    -> Resource<description_type> {
+        -> Resource<description_type>
+    {
         resources_.append(Resource<description_type>(name: name, description: description, actual: actual))
         return resources_.last as! Resource<description_type>
     }
@@ -68,7 +70,7 @@ public class FrameGraph {
                         break
                     }
                 }
-                
+
                 // if not big enough locate create new one
                 if !realized {
                     let heapDesc = MTLHeapDescriptor()
@@ -107,7 +109,7 @@ public class FrameGraph {
         // Culling via flood fill from unreferenced resources.
         var unreferenced_resources: [ResourceBase] = []
         for resource in resources_ {
-            if resource.ref_count_ == 0 && resource.transient {
+            if resource.ref_count_ == 0, resource.transient {
                 unreferenced_resources.append(resource)
             }
         }
@@ -115,16 +117,16 @@ public class FrameGraph {
             if let unreferenced_resource = unreferenced_resources.popLast() {
                 if let creator_functor = unreferenced_resource.creator_ {
                     let creator = creator_functor()
-                    if (creator.ref_count_ > 0) {
+                    if creator.ref_count_ > 0 {
                         creator.ref_count_ -= 1
                     }
-                    if (creator.ref_count_ == 0 && !creator.cull_immune) {
+                    if creator.ref_count_ == 0, !creator.cull_immune {
                         for read_resource_functor in creator.reads_ {
                             let read_resource = read_resource_functor()
-                            if (read_resource.ref_count_ > 0) {
+                            if read_resource.ref_count_ > 0 {
                                 read_resource.ref_count_ -= 1
                             }
-                            if (read_resource.ref_count_ == 0 && read_resource.transient) {
+                            if read_resource.ref_count_ == 0, read_resource.transient {
                                 unreferenced_resources.append(read_resource)
                             }
                         }
@@ -133,16 +135,16 @@ public class FrameGraph {
 
                 for writer_functor in unreferenced_resource.writers_ {
                     let writer = writer_functor()
-                    if (writer.ref_count_ > 0) {
+                    if writer.ref_count_ > 0 {
                         writer.ref_count_ -= 1
                     }
-                    if (writer.ref_count_ == 0 && !writer.cull_immune) {
+                    if writer.ref_count_ == 0, !writer.cull_immune {
                         for read_resource_functor in writer.reads_ {
                             let read_resource = read_resource_functor()
-                            if (read_resource.ref_count_ > 0) {
+                            if read_resource.ref_count_ > 0 {
                                 read_resource.ref_count_ -= 1
                             }
-                            if (read_resource.ref_count_ == 0 && read_resource.transient) {
+                            if read_resource.ref_count_ == 0, read_resource.transient {
                                 unreferenced_resources.append(read_resource)
                             }
                         }
@@ -155,7 +157,7 @@ public class FrameGraph {
         // Timeline computation.
         timeline_ = []
         for render_task in render_tasks_ {
-            if render_task.ref_count_ == 0 && !render_task.cull_immune {
+            if render_task.ref_count_ == 0, !render_task.cull_immune {
                 continue
             }
 
@@ -164,11 +166,10 @@ public class FrameGraph {
             for resource_functor in render_task.creates_ {
                 let resource = resource_functor()
                 realized_resources.append(resource)
-                if (resource.readers_.isEmpty && resource.writers_.isEmpty) {
+                if resource.readers_.isEmpty, resource.writers_.isEmpty {
                     derealized_resources.append(resource)
                 }
             }
-
 
             var reads_writes = render_task.reads_
             reads_writes.append(contentsOf: render_task.writes_)
@@ -179,7 +180,7 @@ public class FrameGraph {
                 }
 
                 var valid = false
-                var last_index: Int = 0
+                var last_index = 0
                 if !resource.readers_.isEmpty {
                     let index = render_tasks_.firstIndex { iteratee in
                         if let last = resource.readers_.last {
@@ -206,24 +207,23 @@ public class FrameGraph {
                         last_index = max(last_index, index)
                     }
                 }
-                if (valid && render_tasks_[last_index] === render_task) {
+                if valid, render_tasks_[last_index] === render_task {
                     derealized_resources.append(resource)
                 }
             }
             timeline_.append(Step(render_task: render_task, realized_resources: realized_resources,
-                    derealized_resources: derealized_resources))
+                                  derealized_resources: derealized_resources))
         }
     }
 
     @discardableResult
     public func exportGraphviz(filename: String) -> Bool {
         let dir = try? FileManager.default.url(for: .documentDirectory,
-                in: .userDomainMask,
-                appropriateFor: nil, create: true)
+                                               in: .userDomainMask,
+                                               appropriateFor: nil, create: true)
         let fileURL = dir?.appendingPathComponent(filename).appendingPathExtension("dot")
 
-
-        var text: String = ""
+        var text = ""
         _exportGraphviz(stream: &text)
 
         do {
@@ -289,7 +289,7 @@ public class FrameGraph {
             stream += "} [color=gold]\n"
         }
         stream += "\n"
-        
+
         for resource in resources_ {
             stream += "\""
             stream += resource.name
@@ -303,7 +303,7 @@ public class FrameGraph {
         }
         stream += "}"
     }
-    
+
     // TODO: Optimize for less memory fragment
     private func _mergeHeap() {
         if heapPool_.count > 1 {
@@ -311,7 +311,7 @@ public class FrameGraph {
             for heap in heapPool_ {
                 totalSize += heap.size
             }
-            
+
             let heapDesc = MTLHeapDescriptor()
             heapDesc.storageMode = .private
             heapDesc.size = totalSize * 2

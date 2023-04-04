@@ -4,8 +4,8 @@
 //  personal capacity and am not conveying any rights to any intellectual
 //  property of any third parties.
 
-import vox_render
 import Math
+import vox_render
 
 final class ProBuilderShape: Script {
     var m_Shape: Shape = Cube()
@@ -53,17 +53,14 @@ final class ProBuilderShape: Script {
         get {
             Vector3()
         }
-        set {
-
-        }
+        set {}
     }
 
     public var size: Vector3 {
         get {
             m_Size
         }
-        set {
-        }
+        set {}
     }
 
     public var rotation: Quaternion {
@@ -77,16 +74,12 @@ final class ProBuilderShape: Script {
 
     var m_EditionBounds = Bounds()
     public var editionBounds: Bounds {
-        get {
-            Bounds()
-        }
+        Bounds()
     }
 
     var m_ShapeBox = Bounds()
     public var shapeBox: Bounds {
-        get {
-            m_ShapeBox
-        }
+        m_ShapeBox
     }
 
     public var isEditable: Bool {
@@ -95,37 +88,25 @@ final class ProBuilderShape: Script {
 
     /// Reference to the <see cref="ProBuilderMesh"/> that this component is creating.
     public var mesh: ProBuilderMesh? {
-        get {
-            m_Mesh
-        }
+        m_Mesh
     }
 
-    func OnValidate() {
-    }
+    func OnValidate() {}
 
-    internal func UpdateComponent() {
-    }
+    internal func UpdateComponent() {}
 
-    internal func UpdateBounds(_ bounds: Bounds) {
-    }
+    internal func UpdateBounds(_: Bounds) {}
 
-    internal func Rebuild(bounds: Bounds, rotation: Quaternion, cornerPivot: Vector3) {
-    }
+    internal func Rebuild(bounds _: Bounds, rotation _: Quaternion, cornerPivot _: Vector3) {}
 
-    func Rebuild() {
-    }
+    func Rebuild() {}
 
-    internal func SetShape(_ shape: Shape, location: PivotLocation) {
-    }
+    internal func SetShape(_: Shape, location _: PivotLocation) {}
 
     /// Rotates the Shape by a given quaternion while respecting the bounds
-    internal func RotateInsideBounds(deltaRotation: Quaternion) {
-    }
+    internal func RotateInsideBounds(deltaRotation _: Quaternion) {}
 
-    func ResetPivot(mesh: ProBuilderMesh, size: Vector3, rotation: Quaternion) {
-    }
+    func ResetPivot(mesh _: ProBuilderMesh, size _: Vector3, rotation _: Quaternion) {}
 
-
-    func RebuildPivot(mesh: ProBuilderMesh, size: Vector3, rotation: Quaternion) {
-    }
+    func RebuildPivot(mesh _: ProBuilderMesh, size _: Vector3, rotation _: Quaternion) {}
 }

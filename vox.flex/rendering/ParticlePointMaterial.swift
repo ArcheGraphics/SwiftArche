@@ -15,7 +15,7 @@ public class ParticlePointMaterial: BaseMaterial {
     var _pointScale: Float = 0
     var _pointRadius: Float = 0
     var _highlightIndex: UInt32 = 0
-    
+
     public var pointScale: Float {
         get {
             _pointScale
@@ -25,7 +25,7 @@ public class ParticlePointMaterial: BaseMaterial {
             shaderData.setData(ParticlePointMaterial.scaleProperty, _pointScale)
         }
     }
-    
+
     public var pointRadius: Float {
         get {
             _pointRadius
@@ -35,7 +35,7 @@ public class ParticlePointMaterial: BaseMaterial {
             shaderData.setData(ParticlePointMaterial.radiusProperty, _pointRadius)
         }
     }
-    
+
     public var highlightIndex: UInt32 {
         get {
             _highlightIndex
@@ -46,7 +46,7 @@ public class ParticlePointMaterial: BaseMaterial {
         }
     }
 
-    public override init(_ name: String = "particle point mat") {
+    override public init(_ name: String = "particle point mat") {
         super.init(name)
         shader.append(ShaderPass(Engine.library("flex.shader"), "vertex_particle", "fragment_particle"))
 

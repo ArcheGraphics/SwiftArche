@@ -4,10 +4,10 @@
 //  personal capacity and am not conveying any rights to any intellectual
 //  property of any third parties.
 
-import ImGui
 import Cocoa
+import ImGui
 
-public class UIElement {
+public enum UIElement {
     public static func Init() {
         let canvas = Engine.canvas!
         let deltaTime = Time.deltaTime
@@ -22,21 +22,21 @@ public class UIElement {
     public static func selection(_ title: String, _ names: [String], _ selected: inout Int) {
         // Simple selection popup (if you want to show the current selection inside the Button itself,
         // you may want to build a string using the "###" operator to preserve a constant ID with a variable label)
-        if (ImGuiButton("Select \(title) ..", ImVec2(x: 0, y: 0))) {
+        if ImGuiButton("Select \(title) ..", ImVec2(x: 0, y: 0)) {
             ImGuiOpenPopup(title + "select_popup", 0)
         }
         ImGuiSameLine(0, -1)
-        ImGuiTextUnformatted(selected == -1 ? "<None>" : names[selected]);
-        if (ImGuiBeginPopup(title + "select_popup", 0)) {
-            for i in 0..<names.count {
-                if (ImGuiSelectable(names[i], false, 0, ImVec2(x: 0, y: 0))) {
+        ImGuiTextUnformatted(selected == -1 ? "<None>" : names[selected])
+        if ImGuiBeginPopup(title + "select_popup", 0) {
+            for i in 0 ..< names.count {
+                if ImGuiSelectable(names[i], false, 0, ImVec2(x: 0, y: 0)) {
                     selected = i
                 }
             }
             ImGuiEndPopup()
         }
     }
-    
+
     public static func frameRate() {
         let io = ImGuiGetIO()!
         let avg: Float = (1000.0 / io.pointee.Framerate)

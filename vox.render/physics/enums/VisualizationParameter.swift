@@ -9,10 +9,12 @@ import Foundation
 /// Debug visualization parameters.
 public enum VisualizationParameter: UInt32 {
     // MARK: - RigidBody-related parameters
+
     /// Visualize the world axes.
     case WorldAxes = 1
-    
+
     // MARK: - Body visualizations
+
     /// Visualize a bodies axes.
     case BodyAxes = 2
     /// Visualize a body's mass axes.
@@ -23,6 +25,7 @@ public enum VisualizationParameter: UInt32 {
     case BodyAngVelocity = 5
 
     // MARK: - Contact visualisations
+
     /// Visualize contact points. Will enable contact information.
     case ContactPoint = 6
     /// Visualize contact normals. Will enable contact information.

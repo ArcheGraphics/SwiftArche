@@ -4,8 +4,8 @@
 //  personal capacity and am not conveying any rights to any intellectual
 //  property of any third parties.
 
-import vox_render
 import Math
+import vox_render
 
 // This should not be public until there is something meaningful that can be done with it. However it has been
 // public in the past, so we can't change it until the next major version increment.
@@ -135,15 +135,15 @@ public class SceneSelection {
 }
 
 extension SceneSelection: Hashable {
-    public static func ==(lhs: SceneSelection, rhs: SceneSelection) -> Bool {
+    public static func == (lhs: SceneSelection, rhs: SceneSelection) -> Bool {
         if lhs === rhs {
             return true
         }
         return (lhs.gameObject == rhs.gameObject)
-                && (lhs.mesh == rhs.mesh)
-                && (lhs.vertexes == rhs.vertexes)
-                && (lhs.edges == rhs.edges)
-                && (lhs.faces == rhs.faces)
+            && (lhs.mesh == rhs.mesh)
+            && (lhs.vertexes == rhs.vertexes)
+            && (lhs.edges == rhs.edges)
+            && (lhs.faces == rhs.faces)
     }
 
     public func hash(into hasher: inout Hasher) {
@@ -152,7 +152,7 @@ extension SceneSelection: Hashable {
         }
 
         if let mesh {
-            // TODO: 
+            // TODO:
         }
 
         if !vertexes.isEmpty {

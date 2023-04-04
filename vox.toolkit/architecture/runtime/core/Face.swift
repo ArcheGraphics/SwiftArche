@@ -4,8 +4,8 @@
 //  personal capacity and am not conveying any rights to any intellectual
 //  property of any third parties.
 
-import vox_render
 import Math
+import vox_render
 
 /// A face is composed of a set of triangles, and a material.
 ///
@@ -61,7 +61,7 @@ public final class Face {
             m_Indexes
         }
         set {
-            if (m_Indexes.count % 3 != 0) {
+            if m_Indexes.count % 3 != 0 {
                 fatalError("Face indexes must be a multiple of 3.")
             }
             m_Indexes = newValue
@@ -71,9 +71,7 @@ public final class Face {
 
     /// The triangle indexes that make up this face.
     public var indexes: [Int] {
-        get {
-            m_Indexes
-        }
+        m_Indexes
     }
 
     /// Set the triangles that compose this face.
@@ -81,7 +79,7 @@ public final class Face {
     public func SetIndexes<T>(indices: T) where T: Sequence<Int> {
         let array = [Int](indices)
         let len = array.count
-        if (len % 3 != 0) {
+        if len % 3 != 0 {
             fatalError("Face indexes must be a multiple of 3.")
         }
         m_Indexes = array
@@ -94,29 +92,21 @@ public final class Face {
 
     /// Returns a reference to the cached distinct indexes (each vertex index is only referenced once in m_DistinctIndexes).
     internal var distinctIndexesInternal: [Int]? {
-        get {
-            return m_DistinctIndexes == nil ? CacheDistinctIndexes() : m_DistinctIndexes
-        }
+        return m_DistinctIndexes == nil ? CacheDistinctIndexes() : m_DistinctIndexes
     }
 
     /// A collection of the vertex indexes that the indexes array references, made distinct.
     public var distinctIndexes: [Int]? {
-        get {
-            distinctIndexesInternal
-        }
+        distinctIndexesInternal
     }
 
     internal var edgesInternal: [Edge]? {
-        get {
-            return m_Edges == nil ? CacheEdges() : m_Edges
-        }
+        return m_Edges == nil ? CacheEdges() : m_Edges
     }
 
     /// Get the perimeter edges that commpose this face.
     public var edges: [Edge]? {
-        get {
-            edgesInternal
-        }
+        edgesInternal
     }
 
     /// What smoothing group this face belongs to, if any. This is used to calculate vertex normals.
@@ -176,7 +166,8 @@ public final class Face {
     }
 
     internal init(triangles: [Int], m: Material, u: AutoUnwrapSettings, smoothing: Int,
-                  texture: Int, element: Int, manualUVs: Bool) {
+                  texture: Int, element: Int, manualUVs: Bool)
+    {
         SetIndexes(indices: triangles)
         m_Uv = u
         m_Material = m
@@ -188,7 +179,8 @@ public final class Face {
     }
 
     internal init(triangles: [Int], submeshIndex: Int, u: AutoUnwrapSettings, smoothing: Int,
-                  texture: Int, element: Int, manualUVs: Bool) {
+                  texture: Int, element: Int, manualUVs: Bool)
+    {
         SetIndexes(indices: triangles)
         m_Uv = u
         m_SmoothingGroup = smoothing
@@ -197,7 +189,7 @@ public final class Face {
         manualUV = manualUVs
         m_SubmeshIndex = submeshIndex
     }
-    
+
     /// Deep copy constructor.
     /// - Parameter other: The Face from which to copy properties.
     public init(other: Face) {
@@ -206,11 +198,9 @@ public final class Face {
 
     /// Copies values from other to this face.
     /// - Parameter other: The Face from which to copy properties.
-    public func CopyFrom(other: Face) {
-    }
+    public func CopyFrom(other _: Face) {}
 
-    internal func InvalidateCache() {
-    }
+    internal func InvalidateCache() {}
 
     func CacheEdges() -> [Edge] {
         []
@@ -221,7 +211,7 @@ public final class Face {
     }
 
     /// Test if a triangle is contained within the triangles array of this face.
-    public func Contains(a: Int, b: Int, c: Int) -> Bool {
+    public func Contains(a _: Int, b _: Int, c _: Int) -> Bool {
         false
     }
 
@@ -238,8 +228,7 @@ public final class Face {
 
     /// Add offset to each value in the indexes array.
     /// - Parameter offset: The value to add to each index.
-    public func ShiftIndexes(offset: Int) {
-    }
+    public func ShiftIndexes(offset _: Int) {}
 
     /// Find the smallest value in the triangles array.
     /// - Returns: The smallest value in the indexes array.
@@ -252,33 +241,25 @@ public final class Face {
     /// // sets the indexes array to `{0, 1, 2}`.
     /// new Face(3,4,5).ShiftIndexesToZero()
     /// ```
-    public func ShiftIndexesToZero() {
-    }
+    public func ShiftIndexesToZero() {}
 
     /// Reverse the order of the triangle array. This has the effect of reversing the direction that this face renders.
-    public func Reverse() {
-    }
+    public func Reverse() {}
 
-    internal static func GetIndices(faces: [Face], indices: [Int]) {
-    }
+    internal static func GetIndices(faces _: [Face], indices _: [Int]) {}
 
-    internal static func GetDistinctIndices(faces: [Face], indices: [Int]) {
-    }
+    internal static func GetDistinctIndices(faces _: [Face], indices _: [Int]) {}
 
     /// Advance to the next connected edge given a source edge and the index connect.
-    internal func TryGetNextEdge(source: Edge, index: Int, nextEdge: inout Edge, nextIndex: inout Int) -> Bool {
+    internal func TryGetNextEdge(source _: Edge, index _: Int, nextEdge _: inout Edge, nextIndex _: inout Int) -> Bool {
         false
     }
 }
 
 extension Face: Hashable {
-    public func hash(into hasher: inout Hasher) {
+    public func hash(into _: inout Hasher) {}
 
-    }
-
-    public static func ==(lhs: Face, rhs: Face) -> Bool {
+    public static func == (_: Face, _: Face) -> Bool {
         false
     }
-
-
 }

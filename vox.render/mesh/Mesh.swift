@@ -4,36 +4,32 @@
 //  personal capacity and am not conveying any rights to any intellectual
 //  property of any third parties.
 
-import Metal
 import Math
+import Metal
 
 public class Mesh {
     /// Name.
     public var name: String = ""
     /// The bounding volume of the mesh.
-    public var bounds: BoundingBox = BoundingBox()
+    public var bounds: BoundingBox = .init()
 
     var _instanceCount: Int = 1
-    var _vertexBufferBindings =  [BufferView?](Array(repeating: nil, count: 31))
+    var _vertexBufferBindings = [BufferView?](Array(repeating: nil, count: 31))
     var _indexBufferBinding: IndexBufferBinding?
     public var _vertexDescriptor = MTLVertexDescriptor()
     var _subMeshes: [SubMesh] = []
-    var _updateFlagManager: UpdateFlagManager = UpdateFlagManager()
+    var _updateFlagManager: UpdateFlagManager = .init()
 
     /// First sub-mesh. Rendered using the first material.
     public var subMesh: SubMesh? {
-        get {
-            _subMeshes.first
-        }
+        _subMeshes.first
     }
 
     /// A collection of sub-mesh, each sub-mesh can be rendered with an independent material.
     public var subMeshes: [SubMesh] {
-        get {
-            _subMeshes
-        }
+        _subMeshes
     }
-    
+
     public init() {}
 
     /// Add sub-mesh, each sub-mesh can correspond to an independent material.

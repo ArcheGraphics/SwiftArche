@@ -4,8 +4,8 @@
 //  personal capacity and am not conveying any rights to any intellectual
 //  property of any third parties.
 
-import vox_render
 import Math
+import vox_render
 
 /// Defines associations between vertex positions that are coincident. The indexes stored in this collection correspond to the ProBuilderMesh.positions array.
 /// Coincident vertices are vertices that despite sharing the same coordinate position, are separate entries in the vertex array.
@@ -14,9 +14,7 @@ public final class SharedVertex {
     var m_Vertices: [Int] = []
 
     internal var arrayInternal: [Int] {
-        get {
-            m_Vertices;
-        }
+        m_Vertices
     }
 
     /// Create a new SharedVertex from an int array.

@@ -57,7 +57,7 @@ class PhysXDynamicCollider: PhysXCollider {
     init(_ position: Vector3, _ rotation: Quaternion) {
         super.init()
         _pxActor = PhysXPhysics._pxPhysics.createRigidDynamic(withPosition: position.internalValue,
-                rotation: rotation.normalized.internalValue)
+                                                              rotation: rotation.normalized.internalValue)
     }
 
     func setLinearDamping(_ value: Float) {
@@ -79,14 +79,14 @@ class PhysXDynamicCollider: PhysXCollider {
     func setMass(_ value: Float) {
         (_pxActor as! CPxRigidDynamic).setMass(value)
     }
-    
+
     func getMass() -> Float {
         (_pxActor as! CPxRigidDynamic).getMass()
     }
 
     func setCenterOfMass(_ value: Vector3) {
         (_pxActor as! CPxRigidDynamic).setCMassLocalPose(value.internalValue,
-                rotation: simd_quatf(ix: 0, iy: 0, iz: 0, r: 1))
+                                                         rotation: simd_quatf(ix: 0, iy: 0, iz: 0, r: 1))
     }
 
     func setInertiaTensor(_ value: Vector3) {
@@ -110,26 +110,22 @@ class PhysXDynamicCollider: PhysXCollider {
     }
 
     func setCollisionDetectionMode(_ value: CollisionDetectionMode) {
-        switch (value) {
+        switch value {
         case CollisionDetectionMode.Continuous:
             (_pxActor as! CPxRigidDynamic).setRigidBodyFlag(eENABLE_CCD, value: true)
-            break
         case CollisionDetectionMode.ContinuousDynamic:
             (_pxActor as! CPxRigidDynamic).setRigidBodyFlag(eENABLE_CCD_FRICTION, value: true)
-            break
         case CollisionDetectionMode.ContinuousSpeculative:
             (_pxActor as! CPxRigidDynamic).setRigidBodyFlag(eENABLE_SPECULATIVE_CCD, value: true)
-            break
         case CollisionDetectionMode.Discrete:
             (_pxActor as! CPxRigidDynamic).setRigidBodyFlag(eENABLE_CCD, value: false)
             (_pxActor as! CPxRigidDynamic).setRigidBodyFlag(eENABLE_CCD_FRICTION, value: false)
             (_pxActor as! CPxRigidDynamic).setRigidBodyFlag(eENABLE_SPECULATIVE_CCD, value: false)
-            break
         }
     }
 
     func setIsKinematic(_ value: Bool) {
-        if (value) {
+        if value {
             (_pxActor as! CPxRigidDynamic).setRigidBodyFlag(eKINEMATIC, value: true)
         } else {
             (_pxActor as! CPxRigidDynamic).setRigidBodyFlag(eKINEMATIC, value: false)
@@ -139,7 +135,7 @@ class PhysXDynamicCollider: PhysXCollider {
     func setUseGravity(_ value: Bool) {
         (_pxActor as! CPxRigidDynamic).setUseGravity(value)
     }
-    
+
     func setDensity(_ value: Float) {
         (_pxActor as! CPxRigidDynamic).setDensity(value)
     }

@@ -4,8 +4,8 @@
 //  personal capacity and am not conveying any rights to any intellectual
 //  property of any third parties.
 
-import vox_render
 import Math
+import vox_render
 
 /// Holds information about a single vertex, and provides methods for averaging between many.
 /// - Remark: All values are optional. Where not present a default value will be substituted if necessary.
@@ -109,9 +109,7 @@ public final class Vertex {
     }
 
     internal var attributes: MeshArrays {
-        get {
-            m_Attributes
-        }
+        m_Attributes
     }
 
     /// Find if a vertex attribute has been set.
@@ -194,29 +192,25 @@ public final class Vertex {
     }
 
     /// Initialize a Vertex with no values.
-    public init() {
-    }
+    public init() {}
 
     /// Compare the equality of vertex values. Uses the @"UnityEngine.ProBuilder.Math" Approx functions to compare float values.
     /// - Parameter other: The vertex to compare.
     /// - Returns: True if all values are the same (within float.Epsilon).
-    public func Equals(other: Vertex) -> Bool {
+    public func Equals(other _: Vertex) -> Bool {
         false
     }
 
-    public func Equals(other: Vertex, mask: Attributes) -> Bool {
+    public func Equals(other _: Vertex, mask _: Attributes) -> Bool {
         false
     }
 
     /// Copy constructor.
     /// - Parameter vertex: The Vertex to copy field data from.
-    public init(_ vertex: Vertex) {
-
-    }
+    public init(_: Vertex) {}
 
     /// Normalize all vector values in place.
-    public func Normalize() {
-    }
+    public func Normalize() {}
 
     /// Allocate and fill all attribute arrays. This method will fill all arrays, regardless of whether or not real data populates the values (check what attributes a Vertex contains with HasAttribute()).
     /// - Remark:
@@ -232,16 +226,16 @@ public final class Vertex {
     ///   - uv3: A new array of the vertex uv3 values.
     ///   - uv4: A new array of the vertex uv4 values.
     public static func GetArrays(
-            vertices: [Vertex],
-            position: inout [Vector3],
-            color: inout [Color],
-            uv0: inout [Vector2],
-            normal: inout [Vector3],
-            tangent: inout [Vector4],
-            uv2: inout [Vector2],
-            uv3: inout [Vector4],
-            uv4: inout [Vector4]) {
-    }
+        vertices _: [Vertex],
+        position _: inout [Vector3],
+        color _: inout [Color],
+        uv0 _: inout [Vector2],
+        normal _: inout [Vector3],
+        tangent _: inout [Vector4],
+        uv2 _: inout [Vector2],
+        uv3 _: inout [Vector4],
+        uv4 _: inout [Vector4]
+    ) {}
 
     /// Allocate and fill the requested attribute arrays.
     /// - Remark:
@@ -258,32 +252,30 @@ public final class Vertex {
     ///   - uv4: A new array of the vertex uv4 values if requested by the attributes parameter, or null.
     ///   - attributes: A flag with the MeshAttributes requested.
     public static func GetArrays(
-            vertices: [Vertex],
-            position: inout [Vector3],
-            color: inout [Color],
-            uv0: inout [Vector2],
-            normal: inout [Vector3],
-            tangent: inout [Vector4],
-            uv2: inout [Vector2],
-            uv3: inout [Vector4],
-            uv4: inout [Vector4],
-            attributes: Attributes) {
-    }
+        vertices _: [Vertex],
+        position _: inout [Vector3],
+        color _: inout [Color],
+        uv0 _: inout [Vector2],
+        normal _: inout [Vector3],
+        tangent _: inout [Vector4],
+        uv2 _: inout [Vector2],
+        uv3 _: inout [Vector4],
+        uv4 _: inout [Vector4],
+        attributes _: Attributes
+    ) {}
 
     /// Replace mesh values with vertex array. Mesh is cleared during this function, so be sure to set the triangles after calling.
     /// - Parameters:
     ///   - mesh: The target mesh.
     ///   - vertices: The vertices to replace the mesh attributes with.
-    public static func SetMesh(_ mesh: ModelMesh, vertices: [Vertex]) {
-
-    }
+    public static func SetMesh(_: ModelMesh, vertices _: [Vertex]) {}
 
     /// Average all vertices to a single vertex.
     /// - Parameters:
     ///   - vertices: A list of vertices.
     ///   - indexes: If indexes is null, all vertices will be averaged. If indexes is provided, only the vertices referenced by the indexes array are averaged.
     /// - Returns: An averaged vertex value.
-    public static func Average(vertices: [Vertex], indexes: [Int]? = nil) -> Vertex {
+    public static func Average(vertices _: [Vertex], indexes _: [Int]? = nil) -> Vertex {
         Vertex()
     }
 
@@ -293,22 +285,20 @@ public final class Vertex {
     ///   - y: Right parameter.
     ///   - weight: The weight of the interpolation. 0 is fully x, 1 is fully y.
     /// - Returns: A new vertex interpolated by weight between x and y.
-    public static func Mix(_ x: Vertex, and y: Vertex, weight: Float) -> Vertex {
+    public static func Mix(_: Vertex, and _: Vertex, weight _: Float) -> Vertex {
         Vertex()
     }
 }
 
 extension Vertex: Hashable {
-    public func hash(into hasher: inout Hasher) {
+    public func hash(into _: inout Hasher) {}
 
-    }
-
-    public static func ==(lhs: Vertex, rhs: Vertex) -> Bool {
+    public static func == (lhs: Vertex, rhs: Vertex) -> Bool {
         lhs.Equals(other: rhs)
     }
 }
 
-extension Vertex {
+public extension Vertex {
     /// Addition is performed component-wise for every property.
     /// - Remark:
     /// Color, normal, and tangent values are not normalized within this function. If you are expecting unit vectors, make sure to normalize these properties.
@@ -316,18 +306,18 @@ extension Vertex {
     ///   - a: Left side addition parameter.
     ///   - b: Right side addition parameter.
     /// - Returns: A new Vertex with the sum of a + b.
-    public static func +(a: Vertex, b: Vertex) -> Vertex {
+    static func + (a: Vertex, b: Vertex) -> Vertex {
         Add(a, b)
     }
 
     /// Addition is performed component-wise for every property.
     /// - Remark:
-    ///Color, normal, and tangent values are not normalized within this function. If you are expecting unit vectors, make sure to normalize these properties.
+    /// Color, normal, and tangent values are not normalized within this function. If you are expecting unit vectors, make sure to normalize these properties.
     /// - Parameters:
     ///   - a: Left side addition parameter.
     ///   - b: Right side addition parameter.
     /// - Returns: A new Vertex with the sum of a + b.
-    public static func Add(_ a: Vertex, _ b: Vertex) -> Vertex {
+    static func Add(_ a: Vertex, _ b: Vertex) -> Vertex {
         let v = Vertex(a)
         v.Add(b)
         return v
@@ -337,13 +327,10 @@ extension Vertex {
     /// - Remark:
     /// Color, normal, and tangent values are not normalized within this function. If you are expecting unit vectors, make sure to normalize these properties.
     /// - Parameter b: Right side addition parameter.
-    public func Add(_ b: Vertex) {
-
-    }
+    func Add(_: Vertex) {}
 }
 
-
-extension Vertex {
+public extension Vertex {
     /// Subtraction is performed component-wise for every property.
     /// - Remark:
     /// Color, normal, and tangent values are not normalized within this function. If you are expecting unit vectors, make sure to normalize these properties.
@@ -351,7 +338,7 @@ extension Vertex {
     ///   - a: Left side subtraction parameter.
     ///   - b: Right side subtraction parameter.
     /// - Returns: A new Vertex with the sum of a - b.
-    public static func -(a: Vertex, b: Vertex) -> Vertex {
+    static func - (a: Vertex, b: Vertex) -> Vertex {
         Subtract(a, b)
     }
 
@@ -362,7 +349,7 @@ extension Vertex {
     ///   - a: Left side subtraction parameter.
     ///   - b: Right side subtraction parameter.
     /// - Returns: A new Vertex with the sum of a - b.
-    public static func Subtract(_ a: Vertex, _ b: Vertex) -> Vertex {
+    static func Subtract(_ a: Vertex, _ b: Vertex) -> Vertex {
         let c = Vertex(a)
         c.Subtract(b)
         return c
@@ -372,12 +359,10 @@ extension Vertex {
     /// - Remark:
     /// Color, normal, and tangent values are not normalized within this function. If you are expecting unit vectors, make sure to normalize these properties.
     /// - Parameter b: Right side subtraction parameter.
-    public func Subtract(_ b: Vertex) {
-
-    }
+    func Subtract(_: Vertex) {}
 }
 
-extension Vertex {
+public extension Vertex {
     /// Multiplication is performed component-wise for every property.
     /// - Remark:
     /// Color, normal, and tangent values are not normalized within this function. If you are expecting unit vectors, make sure to normalize these properties.
@@ -385,7 +370,7 @@ extension Vertex {
     ///   - a: Left side multiplication parameter.
     ///   - value: Right side multiplication parameter.
     /// - Returns: A new Vertex with the sum of a * b.
-    public static func *(a: Vertex, value: Float) -> Vertex {
+    static func * (a: Vertex, value: Float) -> Vertex {
         return Multiply(a, value)
     }
 
@@ -394,7 +379,7 @@ extension Vertex {
     ///   - a: Left side multiplication parameter.
     ///   - value: Right side multiplication parameter.
     /// - Returns: A new Vertex with the sum of a * b.
-    public static func Multiply(_ a: Vertex, _ value: Float) -> Vertex {
+    static func Multiply(_ a: Vertex, _ value: Float) -> Vertex {
         let v = Vertex(a)
         v.Multiply(value)
         return v
@@ -404,11 +389,10 @@ extension Vertex {
     /// - Remark:
     /// Color, normal, and tangent values are not normalized within this function. If you are expecting unit vectors, make sure to normalize these properties.
     /// - Parameter value: Right side multiplication parameter.
-    public func Multiply(_ value: Float) {
-    }
+    func Multiply(_: Float) {}
 }
 
-extension Vertex {
+public extension Vertex {
     /// Division is performed component-wise for every property.
     /// - Remark:
     /// Color, normal, and tangent values are not normalized within this function. If you are expecting unit vectors, make sure to normalize these properties.
@@ -416,7 +400,7 @@ extension Vertex {
     ///   - a: Left side division parameter.
     ///   - value: Right side division parameter.
     /// - Returns: A new Vertex with the sum of a / b.
-    public static func /(a: Vertex, value: Float) -> Vertex {
+    static func / (a: Vertex, value: Float) -> Vertex {
         return Divide(a, value)
     }
 
@@ -427,7 +411,7 @@ extension Vertex {
     ///   - a: Left side division parameter.
     ///   - value: Right side division parameter.
     /// - Returns: A new Vertex with the sum of a / b.
-    public static func Divide(_ a: Vertex, _ value: Float) -> Vertex {
+    static func Divide(_ a: Vertex, _ value: Float) -> Vertex {
         let v = Vertex(a)
         v.Divide(value)
         return v
@@ -437,9 +421,7 @@ extension Vertex {
     /// - Remark:
     /// Color, normal, and tangent values are not normalized within this function. If you are expecting unit vectors, make sure to normalize these properties.
     /// - Parameter value: Right side Division parameter.
-    public func Divide(_ value: Float) {
-
-    }
+    func Divide(_: Float) {}
 }
 
 extension Vertex: CustomStringConvertible {

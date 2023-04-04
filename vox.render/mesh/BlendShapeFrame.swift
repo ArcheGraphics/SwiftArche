@@ -26,12 +26,13 @@ public class BlendShapeFrame {
     init(_ weight: Float,
          _ deltaPositions: [Vector3],
          _ deltaNormals: [Vector3]? = nil,
-         _ deltaTangents: [Vector3]? = nil) {
-        if (deltaNormals != nil && deltaNormals!.count != deltaPositions.count) {
+         _ deltaTangents: [Vector3]? = nil)
+    {
+        if deltaNormals != nil, deltaNormals!.count != deltaPositions.count {
             fatalError("deltaNormals length must same with deltaPositions length.")
         }
 
-        if (deltaTangents != nil && deltaTangents!.count != deltaPositions.count) {
+        if deltaTangents != nil, deltaTangents!.count != deltaPositions.count {
             fatalError("deltaTangents length must same with deltaPositions length.")
         }
 

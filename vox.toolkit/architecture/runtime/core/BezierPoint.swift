@@ -4,9 +4,8 @@
 //  personal capacity and am not conveying any rights to any intellectual
 //  property of any third parties.
 
-import vox_render
 import Math
-
+import vox_render
 
 /// How bezier handles behave when being manipulated in the scene view.
 enum BezierTangentMode {
@@ -20,7 +19,6 @@ enum BezierTangentDirection {
     case Out
 }
 
-
 /// A bezier knot.
 struct BezierPoint {
     public var position: Vector3
@@ -28,31 +26,24 @@ struct BezierPoint {
     public var tangentOut: Vector3
     public var rotation: Quaternion
 
-    public func EnforceTangentMode(master: BezierTangentDirection, mode: BezierTangentMode) {
-    }
-
+    public func EnforceTangentMode(master _: BezierTangentDirection, mode _: BezierTangentMode) {}
 
     /// Set the position while also moving tangent points.
-    public func SetPosition(_ position: Vector3) {
-    }
+    public func SetPosition(_: Vector3) {}
 
-    public func SetTangentIn(_ tangent: Vector3, mode: BezierTangentMode) {
+    public func SetTangentIn(_: Vector3, mode _: BezierTangentMode) {}
 
-    }
+    public func SetTangentOut(_: Vector3, mode _: BezierTangentMode) {}
 
-    public func SetTangentOut(_ tangent: Vector3, mode: BezierTangentMode) {
-
-    }
-
-    public static func QuadraticPosition(a: BezierPoint, b: BezierPoint, t: Float) -> Vector3 {
+    public static func QuadraticPosition(a _: BezierPoint, b _: BezierPoint, t _: Float) -> Vector3 {
         Vector3()
     }
 
-    public static func CubicPosition(a: BezierPoint, b: BezierPoint, t: Float) -> Vector3 {
+    public static func CubicPosition(a _: BezierPoint, b _: BezierPoint, t _: Float) -> Vector3 {
         Vector3()
     }
 
-    public static func GetLookDirection(points: [BezierPoint], index: Int, previous: Int, next: Int) -> Vector3 {
+    public static func GetLookDirection(points _: [BezierPoint], index _: Int, previous _: Int, next _: Int) -> Vector3 {
         Vector3()
     }
 }

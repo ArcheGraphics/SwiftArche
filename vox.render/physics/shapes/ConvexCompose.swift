@@ -15,7 +15,7 @@ public struct ConvexHull {
 public class ConvexCompose {
     private let vhacd = VHACD_ConvexCompose()
     private var _convexHulls: [ConvexHull] = []
-    
+
     /// The maximum number of convex hulls to produce
     public var maxConvexHulls: UInt32 {
         get {
@@ -25,7 +25,7 @@ public class ConvexCompose {
             vhacd.maxConvexHulls = newValue
         }
     }
-    
+
     /// The voxel resolution to use
     public var resolution: UInt32 {
         get {
@@ -35,7 +35,7 @@ public class ConvexCompose {
             vhacd.resolution = newValue
         }
     }
-    
+
     /// if the voxels are within 1% of the volume of the hull, we consider this a close enough approximation
     public var minimumVolumePercentErrorAllowed: Double {
         get {
@@ -45,7 +45,7 @@ public class ConvexCompose {
             vhacd.minimumVolumePercentErrorAllowed = newValue
         }
     }
-    
+
     /// The maximum recursion depth
     public var maxRecursionDepth: UInt32 {
         get {
@@ -55,7 +55,7 @@ public class ConvexCompose {
             vhacd.maxRecursionDepth = newValue
         }
     }
-    
+
     /// Whether or not to shrinkwrap the voxel positions to the source mesh on output
     public var shrinkWrap: Bool {
         get {
@@ -65,6 +65,7 @@ public class ConvexCompose {
             vhacd.shrinkWrap = newValue
         }
     }
+
     /// How to fill the interior of the voxelized mesh
     public var fillMode: VHACD_FillMode {
         get {
@@ -74,7 +75,7 @@ public class ConvexCompose {
             vhacd.fillMode = newValue
         }
     }
-    
+
     /// The maximum number of vertices allowed in any output convex hull
     public var maxNumVerticesPerCH: UInt32 {
         get {
@@ -84,7 +85,7 @@ public class ConvexCompose {
             vhacd.maxNumVerticesPerCH = newValue
         }
     }
-    
+
     /// Whether or not to run asynchronously, taking advantage of additional cores
     public var asyncACD: Bool {
         get {
@@ -94,7 +95,7 @@ public class ConvexCompose {
             vhacd.asyncACD = newValue
         }
     }
-    
+
     /// Once a voxel patch has an edge length of less than 4 on all 3 sides, we don't keep recursing
     public var minEdgeLength: UInt32 {
         get {
@@ -104,7 +105,7 @@ public class ConvexCompose {
             vhacd.minEdgeLength = newValue
         }
     }
-    
+
     /// Whether or not to attempt to split planes along the best location. Experimental feature. False by default.
     public var findBestPlane: Bool {
         get {
@@ -114,18 +115,16 @@ public class ConvexCompose {
             vhacd.findBestPlane = newValue
         }
     }
-    
+
     public var convexHulls: [ConvexHull] {
-        get {
-            _convexHulls
-        }
+        _convexHulls
     }
-    
+
     public init() {}
-    
+
     public func compute(for mesh: ModelMesh) {
         _convexHulls = []
-        
+
         let points = mesh.getPositions()!
         var floatArray: [Float] = []
         floatArray.reserveCapacity(points.count * 3)
@@ -134,24 +133,24 @@ public class ConvexCompose {
             floatArray.append(v.y)
             floatArray.append(v.z)
         }
-        
+
         var indices: [UInt32]? = mesh.getIndices()
         if indices == nil {
             let indices16: [UInt16]? = mesh.getIndices()
             if let indices16 = indices16 {
-                indices = indices16.map({ v in
+                indices = indices16.map { v in
                     UInt32(v)
-                })
+                }
             }
         }
-        
+
         if var indices = indices {
             vhacd.compute(withPoints: &floatArray, pointsCount: UInt32(points.count),
                           indices: &indices, indicesCount: UInt32(indices.count))
-            
+
             let hullCount = vhacd.hullCount()
             _convexHulls.reserveCapacity(Int(hullCount))
-            for i in 0..<hullCount {
+            for i in 0 ..< hullCount {
                 var points = [SIMD3<Float>](repeating: SIMD3<Float>(), count: Int(vhacd.pointCount(at: i)))
                 var triangles = [SIMD3<UInt32>](repeating: SIMD3<UInt32>(), count: Int(vhacd.triangleCount(at: i)))
                 var center = SIMD3<Float>()

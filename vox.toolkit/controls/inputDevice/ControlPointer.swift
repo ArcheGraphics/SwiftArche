@@ -13,14 +13,14 @@ enum DeltaType {
     case None
 }
 
-class ControlPointer : IControlInput {
-    private static var _deltaType: DeltaType = DeltaType.None
-    private static var _handlerType: ControlHandlerType = ControlHandlerType.None
+class ControlPointer: IControlInput {
+    private static var _deltaType: DeltaType = .None
+    private static var _handlerType: ControlHandlerType = .None
     private static var _frameIndex: Int = 0
     private static var _lastUsefulFrameIndex: Int = -1
     private static var _distanceOfPointers: Float = 0
-    
-    static func onUpdateHandler(_ input: InputManager, callback: (ControlHandlerType)->Void) {
+
+    static func onUpdateHandler(_ input: InputManager, callback: (ControlHandlerType) -> Void) {
         _frameIndex += 1
         let pointers = input.pointers
         for pointer in pointers {
@@ -48,17 +48,17 @@ class ControlPointer : IControlInput {
             }
         }
     }
-    
+
     static func onUpdateDelta(_ control: OrbitControl, _ outDelta: inout Vector3) {
         var outDeltaVec = SIMD3<Float>(repeating: 0.0)
-        switch (ControlPointer._deltaType) {
+        switch ControlPointer._deltaType {
         case DeltaType.Moving:
             outDeltaVec.x = 0
             outDeltaVec.y = 0
-            if (ControlPointer._lastUsefulFrameIndex == _frameIndex - 1) {
+            if ControlPointer._lastUsefulFrameIndex == _frameIndex - 1 {
                 let pointers = control.input.pointers
                 let length = pointers.count
-                for i in 0..<length {
+                for i in 0 ..< length {
                     let pointer = pointers[i]
                     outDeltaVec.x += Float(pointer.deltaX)
                     outDeltaVec.y += Float(pointer.deltaY)
@@ -66,28 +66,26 @@ class ControlPointer : IControlInput {
                 outDeltaVec.x /= Float(length)
                 outDeltaVec.y /= Float(length)
             }
-            break
         case DeltaType.Distance:
             let canvas = control.canvas
             let pointers = control.input.pointers
             if let canvas {
                 let curDistance = Vector2.distance(left: pointers[0].screenPoint(canvas),
                                                    right: pointers[1].screenPoint(canvas))
-                if (ControlPointer._lastUsefulFrameIndex == _frameIndex - 1) {
+                if ControlPointer._lastUsefulFrameIndex == _frameIndex - 1 {
                     outDeltaVec = SIMD3<Float>(0, ControlPointer._distanceOfPointers - curDistance, 0)
                 }
                 ControlPointer._distanceOfPointers = curDistance
             }
-            break
         default:
             break
         }
         outDelta = Vector3(outDeltaVec)
         ControlPointer._lastUsefulFrameIndex = _frameIndex
     }
-    
+
     private static func _updateType(_ handlerType: ControlHandlerType, _ deltaType: DeltaType) {
-        if (ControlPointer._handlerType != handlerType || ControlPointer._deltaType != deltaType) {
+        if ControlPointer._handlerType != handlerType || ControlPointer._deltaType != deltaType {
             ControlPointer._handlerType = handlerType
             ControlPointer._deltaType = deltaType
             ControlPointer._lastUsefulFrameIndex = -1

@@ -9,7 +9,7 @@ import Metal.MTLHeap
 // Returns a size of the 'inSize' aligned to 'align' as long as align is a power of 2
 public func alignUp(size: Int, align: Int) -> Int {
     #if DEBUG
-    precondition(((align - 1) & align) == 0, "Align must be a power of two")
+        precondition(((align - 1) & align) == 0, "Align must be a power of two")
     #endif
 
     let alignmentMask = align - 1
@@ -29,7 +29,7 @@ public extension MTLSizeAndAlign {
 
 public extension Sequence where Element == MTLTextureDescriptor {
     func heapSizeAndAlignCombined(on device: MTLDevice) -> MTLSizeAndAlign {
-        self.reduce(MTLSizeAndAlign(size: 0, align: 0)) {
+        reduce(MTLSizeAndAlign(size: 0, align: 0)) {
             $0.combined(with: device.heapTextureSizeAndAlign(descriptor: $1))
         }
     }

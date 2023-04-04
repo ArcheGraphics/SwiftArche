@@ -14,7 +14,7 @@ public class ShadowManager {
         var depthOutput: Resource<MTLTextureDescriptor>?
         required init() {}
     }
-    
+
     private let _camera: Camera
     private let _cascadedShadowSubpass: CascadedShadowSubpass
     private var _passDescriptor = MTLRenderPassDescriptor()
@@ -30,7 +30,7 @@ public class ShadowManager {
         _shadowSampler.rAddressMode = .clampToEdge
         _shadowSampler.sAddressMode = .clampToEdge
         _shadowSampler.tAddressMode = .clampToEdge
-        
+
         _passDescriptor.depthAttachment.loadAction = .clear
         _passDescriptor.depthAttachment.storeAction = .store
     }
@@ -43,11 +43,12 @@ public class ShadowManager {
 
     private func _drawDirectShadowMap(with commandBuffer: MTLCommandBuffer) {
         let fg = Engine.fg
-        _cascadedShadowSubpass._updateShadowSettings();
+        _cascadedShadowSubpass._updateShadowSettings()
         let mapDesc = _cascadedShadowSubpass._getShadowMapDescriptor()
-        
+
         let task = fg.addFrameTask(for: ShadowRenderCommandEncoderData.self, name: "directShadowMap pass",
-                                    commandBuffer: commandBuffer) { data, builder in
+                                   commandBuffer: commandBuffer)
+        { data, builder in
             data.depthOutput = builder.write(resource: builder.create(name: "direct shadow map", description: mapDesc))
         } execute: { [self] builder, commandBuffer in
             if let commandBuffer {
@@ -58,7 +59,7 @@ public class ShadowManager {
                                        ShadowManager._shadowSamplerProperty, shadowMap)
                 frameData.setSampler(ShadowManager._shadowSamplerProperty, _shadowSampler)
                 frameData.enableMacro(CASCADED_COUNT.rawValue, (_camera.scene.shadowCascades.rawValue, .int))
-                
+
                 // render shadow map
                 _passDescriptor.depthAttachment.texture = shadowMap
                 var encoder = RenderCommandEncoder(commandBuffer, _passDescriptor, "direct shadow pass")
@@ -70,9 +71,7 @@ public class ShadowManager {
         fg.blackboard[BlackBoardType.shadow.rawValue] = task.data.depthOutput
     }
 
-    private func _drawSpotShadowMap(with commandBuffer: MTLCommandBuffer) {
-    }
+    private func _drawSpotShadowMap(with _: MTLCommandBuffer) {}
 
-    private func _drawPointShadowMap(with commandBuffer: MTLCommandBuffer) {
-    }
+    private func _drawPointShadowMap(with _: MTLCommandBuffer) {}
 }

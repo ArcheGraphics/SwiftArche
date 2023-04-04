@@ -7,10 +7,10 @@
 import Metal
 import vox_render
 
-open class ParticleEmitter : ComputePass {
+open class ParticleEmitter: ComputePass {
     var _target: ParticleSystemData?
     public var isEnabled: Bool = true
-    
+
     public var target: ParticleSystemData? {
         get {
             _target
@@ -22,11 +22,11 @@ open class ParticleEmitter : ComputePass {
             }
         }
     }
- 
+
     /// Updates the emitter state from \p currentTimeInSeconds to the following time-step.
-    open func update(_ commandEncoder: MTLComputeCommandEncoder,
-                     currentTimeInSeconds: Float, timeIntervalInSeconds: Float) {}
-    
+    open func update(_: MTLComputeCommandEncoder,
+                     currentTimeInSeconds _: Float, timeIntervalInSeconds _: Float) {}
+
     func createRandomTexture(_ device: MTLDevice, _ size: Int) -> MTLTexture {
         let desc = MTLTextureDescriptor()
         desc.width = size
@@ -37,13 +37,13 @@ open class ParticleEmitter : ComputePass {
         updateRandomTexture(texture)
         return texture
     }
-    
+
     func updateRandomTexture(_ texture: MTLTexture) {
         let size = texture.width
         var buffer: [SIMD2<Float>] = []
         buffer.reserveCapacity(size)
-        for _ in 0..<size {
-            buffer.append(SIMD2<Float>(Float.random(in: 0..<1), Float.random(in: 0..<1)))
+        for _ in 0 ..< size {
+            buffer.append(SIMD2<Float>(Float.random(in: 0 ..< 1), Float.random(in: 0 ..< 1)))
         }
         texture.replace(region: MTLRegionMake1D(0, size), mipmapLevel: 0, withBytes: buffer,
                         bytesPerRow: MemoryLayout<SIMD2<Float>>.stride * size)

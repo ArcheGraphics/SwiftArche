@@ -5,11 +5,11 @@
 //  property of any third parties.
 
 import Cocoa
-import vox_render
 import Math
+import vox_render
 import vox_toolkit
 
-fileprivate class ShootScript: Script {
+private class ShootScript: Script {
     var ray = Ray()
     var position = Vector3()
     var rotation = Quaternion()
@@ -19,9 +19,9 @@ fileprivate class ShootScript: Script {
         camera = entity.getComponent(Camera.self)
     }
 
-    override func onUpdate(_ deltaTime: Float) {
+    override func onUpdate(_: Float) {
         let inputManager = Engine.inputManager
-        if (!inputManager.pointers.isEmpty && inputManager.isPointerTrigger(.leftMouseDown)) {
+        if !inputManager.pointers.isEmpty && inputManager.isPointerTrigger(.leftMouseDown) {
             _ = camera.screenPointToRay(inputManager.pointers[0].screenPoint(Engine.canvas), ray)
             ray.direction *= 50
             _ = addSphere(entity, 0.5, position, rotation, ray.direction)
@@ -29,9 +29,10 @@ fileprivate class ShootScript: Script {
     }
 
     private func addSphere(_ rootEntity: Entity, _ radius: Float, _ position: Vector3,
-                           _ rotation: Quaternion, _ velocity: Vector3) -> Entity {
+                           _ rotation: Quaternion, _ velocity: Vector3) -> Entity
+    {
         let mtl = PBRMaterial()
-        mtl.baseColor = Color(Float.random(in: 0...1), Float.random(in: 0...1), Float.random(in: 0...1), 1.0)
+        mtl.baseColor = Color(Float.random(in: 0 ... 1), Float.random(in: 0 ... 1), Float.random(in: 0 ... 1), 1.0)
         mtl.roughness = 0.5
         mtl.metallic = 0.0
         let sphereEntity = rootEntity.createChild()
@@ -56,7 +57,7 @@ class PhysXJointBasicApp: NSViewController {
     var canvas: Canvas!
     var engine: Engine!
     var iblBaker: IBLBaker!
-    
+
     func transform(_ position: Vector3, _ rotation: Quaternion, _ outPosition: inout Vector3, _ outRotation: inout Quaternion) {
         outRotation *= rotation
         outPosition = Vector3.transformByQuat(v: outPosition, quaternion: rotation) + position
@@ -64,7 +65,7 @@ class PhysXJointBasicApp: NSViewController {
 
     func createChain(_ rootEntity: Entity, _ position: Vector3, _ rotation: Quaternion, _ length: Int, _ separation: Float) {
         var prevCollider: Collider? = nil
-        for i in 0..<length {
+        for i in 0 ..< length {
             var localPosition = Vector3(0, -separation / 2 * Float(2 * i + 1), 0)
             var localQuaternion = Quaternion()
             transform(position, rotation, &localPosition, &localQuaternion)
@@ -72,7 +73,7 @@ class PhysXJointBasicApp: NSViewController {
 
             let currentCollider = currentEntity.getComponent(DynamicCollider.self)
             let fixedJoint = currentEntity.addComponent(FixedJoint.self)
-            if (prevCollider != nil) {
+            if prevCollider != nil {
                 fixedJoint.connectedAnchor = currentEntity.transform.worldPosition - prevCollider!.entity.transform.worldPosition
                 fixedJoint.connectedCollider = prevCollider
             } else {
@@ -106,7 +107,7 @@ class PhysXJointBasicApp: NSViewController {
         canvas.setParentView(view)
         engine = Engine(canvas: canvas)
         iblBaker = IBLBaker()
-        
+
         let scene = Engine.sceneManager.activeScene!
         let hdr = Engine.textureLoader.loadHDR(with: "assets/kloppenheim_06_4k.hdr")!
         iblBaker.bake(scene, with: hdr, size: 256, level: 3)
@@ -130,10 +131,9 @@ class PhysXJointBasicApp: NSViewController {
 
         Engine.run()
     }
-    
+
     override func viewDidDisappear() {
         super.viewDidDisappear()
         Engine.destroy()
     }
 }
-

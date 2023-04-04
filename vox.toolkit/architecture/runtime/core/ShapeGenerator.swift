@@ -4,8 +4,8 @@
 //  personal capacity and am not conveying any rights to any intellectual
 //  property of any third parties.
 
-import vox_render
 import Math
+import vox_render
 
 /// Describes each primitive ProBuilder can create by default. Pass to @"UnityEngine.ProBuilder.ShapeGenerator.CreateShape" to get a primitive with default parameters.
 public enum ShapeType {
@@ -40,7 +40,7 @@ public enum ShapeType {
 }
 
 /// Functions for creating ProBuilderMesh primitives.
-public class ShapeGenerator {
+public enum ShapeGenerator {
     static let k_IcosphereVertices: [Vector3] = [
         Vector3(-1, Math.phi, 0),
         Vector3(1, Math.phi, 0),
@@ -55,7 +55,7 @@ public class ShapeGenerator {
         Vector3(Math.phi, 0, -1),
         Vector3(Math.phi, 0, 1),
         Vector3(-Math.phi, 0, -1),
-        Vector3(-Math.phi, 0, 1)
+        Vector3(-Math.phi, 0, 1),
     ]
 
     static let k_IcosphereTriangles: [Int] = [
@@ -81,7 +81,7 @@ public class ShapeGenerator {
         2, 4, 11,
         6, 2, 10,
         8, 6, 7,
-        9, 8, 1
+        9, 8, 1,
     ]
 
     /// A set of 8 vertices forming the template for a cube mesh.
@@ -96,12 +96,12 @@ public class ShapeGenerator {
         Vector3(-0.5, 0.5, 0.5), // 4
         Vector3(0.5, 0.5, 0.5), // 5
         Vector3(0.5, 0.5, -0.5), // 6
-        Vector3(-0.5, 0.5, -0.5)        // 7
+        Vector3(-0.5, 0.5, -0.5), // 7
     ]
 
     /// A set of triangles forming a cube with reference to the k_CubeVertices array.
     static let k_CubeTriangles: [Int] = [
-        0, 1, 4, 5, 1, 2, 5, 6, 2, 3, 6, 7, 3, 0, 7, 4, 4, 5, 7, 6, 3, 2, 0, 1
+        0, 1, 4, 5, 1, 2, 5, 6, 2, 3, 6, 7, 3, 0, 7, 4, 4, 5, 7, 6, 3, 2, 0, 1,
     ]
 
     /// Create a shape with default parameters.
@@ -109,7 +109,7 @@ public class ShapeGenerator {
     ///   - shape: The ShapeType to create.
     ///   - pivotType: Where the shape's pivot will be.
     /// - Returns: A new GameObject with the ProBuilderMesh initialized to the primitve shape.
-    public static func CreateShape(_ shape: ShapeType, pivotType: PivotLocation = PivotLocation.Center) -> ProBuilderMesh {
+    public static func CreateShape(_: ShapeType, pivotType _: PivotLocation = PivotLocation.Center) -> ProBuilderMesh {
         let entity = Entity()
         return entity.addComponent(ProBuilderMesh.self)
     }
@@ -121,7 +121,7 @@ public class ShapeGenerator {
     ///   - steps: How many steps does the stairset have.
     ///   - buildSides: If true, build the side and back walls. If false, only the stair top and connecting planes will be built.
     /// - Returns: A new GameObject with a reference to the ProBuilderMesh component.
-    public static func GenerateStair(pivotType: PivotLocation, size: Vector3, steps: Int, buildSides: Bool) -> ProBuilderMesh {
+    public static func GenerateStair(pivotType _: PivotLocation, size _: Vector3, steps _: Int, buildSides _: Bool) -> ProBuilderMesh {
         let entity = Entity()
         return entity.addComponent(ProBuilderMesh.self)
     }
@@ -136,8 +136,9 @@ public class ShapeGenerator {
     ///   - steps: How many steps this stair set contains.
     ///   - buildSides: If true, build the side and back walls. If false, only the stair top and connecting planes will be built.
     /// - Returns: A new GameObject with a reference to the ProBuilderMesh component.
-    public static func GenerateCurvedStair(pivotType: PivotLocation, stairWidth: Float, height: Float, innerRadius: Float,
-                                           circumference: Float, steps: Int, buildSides: Bool) -> ProBuilderMesh {
+    public static func GenerateCurvedStair(pivotType _: PivotLocation, stairWidth _: Float, height _: Float, innerRadius _: Float,
+                                           circumference _: Float, steps _: Int, buildSides _: Bool) -> ProBuilderMesh
+    {
         let entity = Entity()
         return entity.addComponent(ProBuilderMesh.self)
     }
@@ -153,8 +154,9 @@ public class ShapeGenerator {
     ///   - generateBack: If true, a back face to the stairwell will be appended.
     ///   - platformsOnly: If true, only the front face and tops of the stairwell will be built.  Nice for when a staircase is embedded between geometry.
     /// - Returns: A new GameObject with a reference to the ProBuilderMesh component.
-    internal static func GenerateStair(pivotType: PivotLocation, steps: Int, width: Float, height: Float, depth: Float,
-                                       sidesGoToFloor: Bool, generateBack: Bool, platformsOnly: Bool) -> ProBuilderMesh {
+    internal static func GenerateStair(pivotType _: PivotLocation, steps _: Int, width _: Float, height _: Float, depth _: Float,
+                                       sidesGoToFloor _: Bool, generateBack _: Bool, platformsOnly _: Bool) -> ProBuilderMesh
+    {
         let entity = Entity()
         return entity.addComponent(ProBuilderMesh.self)
     }
@@ -164,7 +166,7 @@ public class ShapeGenerator {
     ///   - pivotType: Where the shape's pivot will be.
     ///   - size: The bounds of the new cube.
     /// - Returns: A new GameObject with a reference to the ProBuilderMesh component.
-    public static func GenerateCube(pivotType: PivotLocation, size: Vector3) -> ProBuilderMesh {
+    public static func GenerateCube(pivotType _: PivotLocation, size _: Vector3) -> ProBuilderMesh {
         let entity = Entity()
         return entity.addComponent(ProBuilderMesh.self)
     }
@@ -178,8 +180,9 @@ public class ShapeGenerator {
     ///   - heightCuts: The amount of divisions to create on the horizontal axis.
     ///   - smoothing: smoothing
     /// - Returns: A new GameObject with a reference to the ProBuilderMesh component.
-    public static func GenerateCylinder(pivotType: PivotLocation, axisDivisions: Int,
-                                        radius: Float, height: Float, heightCuts: Int, smoothing: Int = -1) -> ProBuilderMesh {
+    public static func GenerateCylinder(pivotType _: PivotLocation, axisDivisions _: Int,
+                                        radius _: Float, height _: Float, heightCuts _: Int, smoothing _: Int = -1) -> ProBuilderMesh
+    {
         let entity = Entity()
         return entity.addComponent(ProBuilderMesh.self)
     }
@@ -189,7 +192,7 @@ public class ShapeGenerator {
     ///   - pivotType: Where the shape's pivot will be.
     ///   - size: Scale to apply to the shape.
     /// - Returns: A new GameObject with a reference to the ProBuilderMesh component.
-    public static func GeneratePrism(pivotType: PivotLocation, size: Vector3) -> ProBuilderMesh {
+    public static func GeneratePrism(pivotType _: PivotLocation, size _: Vector3) -> ProBuilderMesh {
         let entity = Entity()
         return entity.addComponent(ProBuilderMesh.self)
     }
@@ -203,8 +206,9 @@ public class ShapeGenerator {
     ///   - legWidth: The width of each leg on both sides of the door
     ///   - depth: The distance between the front and back faces of the door object
     /// - Returns: A new GameObject with a reference to the ProBuilderMesh component.
-    public static func GenerateDoor(pivotType: PivotLocation, totalWidth: Float, totalHeight: Float,
-                                    ledgeHeight: Float, legWidth: Float, depth: Float) -> ProBuilderMesh {
+    public static func GenerateDoor(pivotType _: PivotLocation, totalWidth _: Float, totalHeight _: Float,
+                                    ledgeHeight _: Float, legWidth _: Float, depth _: Float) -> ProBuilderMesh
+    {
         let entity = Entity()
         return entity.addComponent(ProBuilderMesh.self)
     }
@@ -218,8 +222,9 @@ public class ShapeGenerator {
     ///   - heightCuts: Divisions on the Y axis.
     ///   - axis: The axis to build the plane on. Ex: ProBuilder.Axis.Up is a plane with a normal of Vector3.up.
     /// - Returns: A new GameObject with a reference to the ProBuilderMesh component.
-    public static func GeneratePlane(pivotType: PivotLocation, width: Float, height: Float,
-                                     widthCuts: Int, heightCuts: Int, axis: Axis) -> ProBuilderMesh {
+    public static func GeneratePlane(pivotType _: PivotLocation, width _: Float, height _: Float,
+                                     widthCuts _: Int, heightCuts _: Int, axis _: Axis) -> ProBuilderMesh
+    {
         let entity = Entity()
         return entity.addComponent(ProBuilderMesh.self)
     }
@@ -233,8 +238,9 @@ public class ShapeGenerator {
     ///   - subdivAxis: How many subdivisions on the axis.
     ///   - subdivHeight: How many subdivisions on the Y axis.
     /// - Returns: A new GameObject with a reference to the ProBuilderMesh component.
-    public static func GeneratePipe(pivotType: PivotLocation, radius: Float, height: Float,
-                                    thickness: Float, subdivAxis: Int, subdivHeight: Int) -> ProBuilderMesh {
+    public static func GeneratePipe(pivotType _: PivotLocation, radius _: Float, height _: Float,
+                                    thickness _: Float, subdivAxis _: Int, subdivHeight _: Int) -> ProBuilderMesh
+    {
         let entity = Entity()
         return entity.addComponent(ProBuilderMesh.self)
     }
@@ -246,8 +252,9 @@ public class ShapeGenerator {
     ///   - height: How tall the cone will be.
     ///   - subdivAxis: How many subdivisions on the axis.
     /// - Returns: A new GameObject with a reference to the ProBuilderMesh component.
-    public static func GenerateCone(pivotType: PivotLocation,
-                                    radius: Float, height: Float, subdivAxis: Int) -> ProBuilderMesh {
+    public static func GenerateCone(pivotType _: PivotLocation,
+                                    radius _: Float, height _: Float, subdivAxis _: Int) -> ProBuilderMesh
+    {
         let entity = Entity()
         return entity.addComponent(ProBuilderMesh.self)
     }
@@ -266,9 +273,10 @@ public class ShapeGenerator {
     ///   - backFaces: Render back faces toggle.
     ///   - endCaps: If true the faces capping the ends of this arch will be included. Does not apply if radius is 360 degrees.
     /// - Returns: A new GameObject with a reference to the ProBuilderMesh component.
-    public static func GenerateArch(pivotType: PivotLocation, angle: Float, radius: Float, width: Float, depth: Float,
-                                    radialCuts: Int, insideFaces: Bool, outsideFaces: Bool,
-                                    frontFaces: Bool, backFaces: Bool, endCaps: Bool) -> ProBuilderMesh {
+    public static func GenerateArch(pivotType _: PivotLocation, angle _: Float, radius _: Float, width _: Float, depth _: Float,
+                                    radialCuts _: Int, insideFaces _: Bool, outsideFaces _: Bool,
+                                    frontFaces _: Bool, backFaces _: Bool, endCaps _: Bool) -> ProBuilderMesh
+    {
         let entity = Entity()
         return entity.addComponent(ProBuilderMesh.self)
     }
@@ -283,8 +291,9 @@ public class ShapeGenerator {
     ///   - weldVertices: If false this function will not extract shared indexes. This is useful when showing a preview, where speed of generation is more important than making the shape editable.
     ///   - manualUvs: For performance reasons faces on icospheres are marked as manual UVs. Pass false to this parameter to force auto unwrapped UVs
     /// - Returns: A new GameObject with a reference to the ProBuilderMesh component.
-    public static func GenerateIcosahedron(pivotType: PivotLocation, radius: Float, subdivisions: Int,
-                                           weldVertices: Bool = true, manualUvs: Bool = true) -> ProBuilderMesh {
+    public static func GenerateIcosahedron(pivotType _: PivotLocation, radius _: Float, subdivisions _: Int,
+                                           weldVertices _: Bool = true, manualUvs _: Bool = true) -> ProBuilderMesh
+    {
         let entity = Entity()
         return entity.addComponent(ProBuilderMesh.self)
     }
@@ -295,11 +304,11 @@ public class ShapeGenerator {
     //      /  \    ->      /--\
     // /____\      /_\/_\
     //
-    static func SubdivideIcosahedron(vertices: [Vector3], radius: Float) -> [Vector3] {
+    static func SubdivideIcosahedron(vertices _: [Vector3], radius _: Float) -> [Vector3] {
         []
     }
 
-    static func GetCirclePoints(segments: Int, radius: Float, circumference: Float, rotation: Quaternion, offset: Float) -> [Vector3] {
+    static func GetCirclePoints(segments _: Int, radius _: Float, circumference _: Float, rotation _: Quaternion, offset _: Float) -> [Vector3] {
         []
     }
 
@@ -315,11 +324,11 @@ public class ShapeGenerator {
     ///   - verticalCircumference: The circumference of the vertical geometry in degrees.
     ///   - manualUvs: A torus shape does not unwrap textures well using automatic UVs. To disable this feature and instead use manual UVs, pass true.
     /// - Returns: A new GameObject with a reference to the ProBuilderMesh component.
-    public static func GenerateTorus(pivotType: PivotLocation, rows: Int, columns: Int,
-                                     innerRadius: Float, outerRadius: Float, smooth: Bool,
-                                     horizontalCircumference: Float, verticalCircumference: Float, manualUvs: Bool = false) -> ProBuilderMesh {
+    public static func GenerateTorus(pivotType _: PivotLocation, rows _: Int, columns _: Int,
+                                     innerRadius _: Float, outerRadius _: Float, smooth _: Bool,
+                                     horizontalCircumference _: Float, verticalCircumference _: Float, manualUvs _: Bool = false) -> ProBuilderMesh
+    {
         let entity = Entity()
         return entity.addComponent(ProBuilderMesh.self)
     }
-
 }

@@ -10,16 +10,17 @@ import Metal
 public struct ShaderPass {
     internal var _library: MTLLibrary!
     internal var _shaders: [String]
-    
-    public private(set) var tagsMap: [String : ShaderProperty] = [:]
-    
+
+    public private(set) var tagsMap: [String: ShaderProperty] = [:]
+
     public init(_ library: MTLLibrary, _ computeShader: String) {
         _shaders = [computeShader]
         _library = library
     }
-    
+
     public init(_ library: MTLLibrary, _ vertexSource: String, _ fragmentSource: String?,
-                tags: [String: ShaderProperty] = [ShaderTagKey.pipelineStage.rawValue : PipelineStage.Forward]) {
+                tags: [String: ShaderProperty] = [ShaderTagKey.pipelineStage.rawValue: PipelineStage.Forward])
+    {
         if fragmentSource == nil {
             _shaders = [vertexSource]
         } else {
@@ -35,7 +36,8 @@ public struct ShaderPass {
     ///   - source: shader name
     ///   - macroInfo: macros
     func createProgram(_ source: String,
-                       _ macroInfo: ShaderMacroCollection) -> MTLFunction? {
+                       _ macroInfo: ShaderMacroCollection) -> MTLFunction?
+    {
         let functionConstants = makeFunctionConstants(macroInfo)
 
         do {

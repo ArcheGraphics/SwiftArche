@@ -4,8 +4,8 @@
 //  personal capacity and am not conveying any rights to any intellectual
 //  property of any third parties.
 
-import vox_render
 import Math
+import vox_render
 
 /// <summary>
 /// Wrapper around Triangle.NET triangulation methods. https://github.com/zon/triangle
@@ -13,13 +13,14 @@ import Math
 class Triangulation {
     /// Given a set of points this method will format the points into a boundary contour and triangulate, returning
     /// a set of indexes that corresponds to the original ordering.
-    public static func SortAndTriangulate(points: [Vector2], indexes: inout [Int], convex: Bool = false) -> Bool {
+    public static func SortAndTriangulate(points _: [Vector2], indexes _: inout [Int], convex _: Bool = false) -> Bool {
         false
     }
 
     /// Attempts to triangulate a set of vertices. If unordered is specified as false vertices will not be re-ordered before triangulation.
-    public static func TriangulateVertices(_ vertices: [Vertex], triangles: inout [Int],
-                                           unordered: Bool = true, convex: Bool = false) -> Bool {
+    public static func TriangulateVertices(_: [Vertex], triangles _: inout [Int],
+                                           unordered _: Bool = true, convex _: Bool = false) -> Bool
+    {
         false
     }
 
@@ -29,13 +30,15 @@ class Triangulation {
     ///   - triangles: Resulting set of indices. Indices outside the vertices array are hole vertices.
     ///   When creating a mesh, add all the hole vertices to the vertices array so that the indices are valid.
     ///   - holes: Jagged array containing sets of vertices that make up holes in the polygon.
-    public static func TriangulateVertices(_ vertices: [Vector3], triangles: inout [Int],
-                                           holes: [[Vector3]]? = nil) -> Bool {
+    public static func TriangulateVertices(_: [Vector3], triangles _: inout [Int],
+                                           holes _: [[Vector3]]? = nil) -> Bool
+    {
         false
     }
 
-    public static func TriangulateVertices(_ vertices: [Vector3], triangles: inout [Int],
-                                           unordered: Bool = true, convex: Bool = false) -> Bool {
+    public static func TriangulateVertices(_: [Vector3], triangles _: inout [Int],
+                                           unordered _: Bool = true, convex _: Bool = false) -> Bool
+    {
         false
     }
 
@@ -45,7 +48,7 @@ class Triangulation {
     ///   - indexes: indexes
     ///   - convex: convex
     /// - Returns: Triangulation may optionally be set to convex, which will result in some a convex shape.
-    public static func Triangulate(points: [Vector2], indexes: inout [Int], convex: Bool = false) -> Bool {
+    public static func Triangulate(points _: [Vector2], indexes _: inout [Int], convex _: Bool = false) -> Bool {
         false
     }
 
@@ -55,7 +58,7 @@ class Triangulation {
     ///   - holes: holes
     ///   - indexes: Indices outside of the points list index into holes when layed out linearly.
     /// {vertices 0,1,2...vertices.length-1, holes 0 values, hole 1 values etc.}
-    public static func Triangulate(points: [Vector2], holes: [[Vector2]], indexes: inout [Int]) -> Bool {
+    public static func Triangulate(points _: [Vector2], holes _: [[Vector2]], indexes _: inout [Int]) -> Bool {
         false
     }
 }

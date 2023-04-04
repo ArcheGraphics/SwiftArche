@@ -4,8 +4,8 @@
 //  personal capacity and am not conveying any rights to any intellectual
 //  property of any third parties.
 
-import vox_render
 import Math
+import vox_render
 
 /// Contains information about a ProBuilder action (success, failure, notification, etc)
 public final class ActionResult {
@@ -46,23 +46,17 @@ public final class ActionResult {
 
     /// Generic "Success" action result with no notification text.
     public static var Success: ActionResult {
-        get {
-            ActionResult(status: ActionResult.Status.Success, notification: "")
-        }
+        ActionResult(status: ActionResult.Status.Success, notification: "")
     }
 
     /// Generic "No Selection" action result with "Nothing Selected" notification.
     public static var NoSelection: ActionResult {
-        get {
-            ActionResult(status: ActionResult.Status.Canceled, notification: "Nothing Selected")
-        }
+        ActionResult(status: ActionResult.Status.Canceled, notification: "Nothing Selected")
     }
 
     /// Generic "Canceled" action result with "User Canceled" notification.
     public static var UserCanceled: ActionResult {
-        get {
-            ActionResult(status: ActionResult.Status.Canceled, notification: "User Canceled")
-        }
+        ActionResult(status: ActionResult.Status.Canceled, notification: "User Canceled")
     }
 }
 

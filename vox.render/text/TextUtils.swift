@@ -4,28 +4,29 @@
 //  personal capacity and am not conveying any rights to any intellectual
 //  property of any third parties.
 
-import Math
 import CoreGraphics
 import CoreText
+import Math
 #if os(macOS)
-import AppKit
+    import AppKit
 #else
-import UIKit
+    import UIKit
 #endif
 
 class TextUtils {
     static func textUpdate(fontSize: Float, fontAtlas: MTLFontAtlas, string: String,
                            vertices: inout [Vector3], texCoords: inout [Vector2], indices: inout [UInt32],
-                           bounds: inout BoundingBox) {
-#if os(iOS) || targetEnvironment(macCatalyst)
-        let textRect = CGRectInset(UIScreen.main.accessibilityFrame, 0, 0) // RG: text x,y from top left
-        let font = UIFont(name: fontAtlas.font.fontName, size: CGFloat(fontSize))!
-#else
-        let textRect = CGRectInset(NSScreen.main!.visibleFrame, 0, 0) // RG: text x,y from top left
-        let font = NSFont(name: fontAtlas.font.fontName, size: CGFloat(fontSize))!
-#endif
+                           bounds: inout BoundingBox)
+    {
+        #if os(iOS) || targetEnvironment(macCatalyst)
+            let textRect = CGRectInset(UIScreen.main.accessibilityFrame, 0, 0) // RG: text x,y from top left
+            let font = UIFont(name: fontAtlas.font.fontName, size: CGFloat(fontSize))!
+        #else
+            let textRect = CGRectInset(NSScreen.main!.visibleFrame, 0, 0) // RG: text x,y from top left
+            let font = NSFont(name: fontAtlas.font.fontName, size: CGFloat(fontSize))!
+        #endif
         let attributedString = NSAttributedString(string: string,
-                attributes: [NSAttributedString.Key.font: font])
+                                                  attributes: [NSAttributedString.Key.font: font])
         let stringRange = CFRangeMake(0, attributedString.length)
         let rectPath = CGPath(rect: textRect, transform: nil)
 
@@ -48,7 +49,7 @@ class TextUtils {
         var v = Int()
         var i = Int()
 
-        enumerateGlyphs(in: frame) { (glyph, glyphIndex, glyphBounds) in
+        enumerateGlyphs(in: frame) { glyph, glyphIndex, glyphBounds in
             guard glyph < fontAtlas.glyphDescriptors.count
             else {
                 return
@@ -99,11 +100,12 @@ class TextUtils {
         }
         bounds.center = Vector3()
     }
-    
+
     private static func enumerateGlyphs(in frame: CTFrame,
                                         block: (_ glyph: CGGlyph,
                                                 _ glyphIndex: Int,
-                                                _ glyphBounds: CGRect) -> Void) {
+                                                _ glyphBounds: CGRect) -> Void)
+    {
         let entire = CFRangeMake(0, 0)
 
         let framePath = CTFrameGetPath(frame)
@@ -117,31 +119,31 @@ class TextUtils {
         var glyphIndexInFrame = CFIndex()
 
         #if os(iOS) || targetEnvironment(macCatalyst)
-        UIGraphicsBeginImageContext(.init(width: 1, height: 1))
-        let context = UIGraphicsGetCurrentContext()
+            UIGraphicsBeginImageContext(.init(width: 1, height: 1))
+            let context = UIGraphicsGetCurrentContext()
         #endif
 
         #if os(macOS)
-        let context = CGContext(data: nil, width: 4096, height: 4096,
-                bitsPerComponent: 8, bytesPerRow: 4096 * 4,
-                space: NSColorSpace.genericRGB.cgColorSpace!,
-                bitmapInfo: CGImageAlphaInfo.premultipliedFirst.rawValue)
+            let context = CGContext(data: nil, width: 4096, height: 4096,
+                                    bitsPerComponent: 8, bytesPerRow: 4096 * 4,
+                                    space: NSColorSpace.genericRGB.cgColorSpace!,
+                                    bitmapInfo: CGImageAlphaInfo.premultipliedFirst.rawValue)
         #endif
 
         lines.enumerated().forEach { lineIndex, line in
             let lineOrigin = lineOriginBuffer[lineIndex]
             let runs = CTLineGetGlyphRuns(line) as! [CTRun]
 
-            runs.enumerated().forEach { runIndex, run in
+            runs.enumerated().forEach { _, run in
                 let glyphCount = CTRunGetGlyphCount(run)
                 var glyphBuffer = [CGGlyph](repeating: .init(),
-                        count: glyphCount)
+                                            count: glyphCount)
                 CTRunGetGlyphs(run, entire, &glyphBuffer)
 
                 var positionBuffer = [CGPoint](repeating: .zero, count: glyphCount)
                 CTRunGetPositions(run, entire, &positionBuffer)
 
-                for glyphIndex in 0..<glyphCount {
+                for glyphIndex in 0 ..< glyphCount {
                     let glyph = glyphBuffer[glyphIndex]
                     let glyphOrigin = positionBuffer[glyphIndex]
                     var glyphRect = CTRunGetImageBounds(run, context, CFRangeMake(glyphIndex, 1))
@@ -157,7 +159,7 @@ class TextUtils {
             }
         }
         #if os(iOS) || targetEnvironment(macCatalyst)
-        UIGraphicsEndImageContext()
+            UIGraphicsEndImageContext()
         #endif
     }
 }

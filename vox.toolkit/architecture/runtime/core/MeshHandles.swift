@@ -4,8 +4,8 @@
 //  personal capacity and am not conveying any rights to any intellectual
 //  property of any third parties.
 
-import vox_render
 import Math
+import vox_render
 
 class MeshHandles {
     static var s_Vector2List: [Vector3] = []
@@ -19,38 +19,25 @@ class MeshHandles {
     static let k_Billboard2 = Vector2(1, -1)
     static let k_Billboard3 = Vector2(1, 1)
 
-    internal static func CreateFaceMesh(mesh: ProBuilderMesh, target: Mesh) {
-    }
+    internal static func CreateFaceMesh(mesh _: ProBuilderMesh, target _: Mesh) {}
 
-    internal static func CreateFaceMeshFromFaces(mesh: ProBuilderMesh, faces: [Face], target: Mesh) {
-    }
+    internal static func CreateFaceMeshFromFaces(mesh _: ProBuilderMesh, faces _: [Face], target _: Mesh) {}
 
-    internal static func CreateEdgeMesh(mesh: ProBuilderMesh, target: Mesh) {
-    }
+    internal static func CreateEdgeMesh(mesh _: ProBuilderMesh, target _: Mesh) {}
 
-    internal static func CreateEdgeMesh(mesh: ProBuilderMesh, target: Mesh, edges: [Edge]) {
-    }
+    internal static func CreateEdgeMesh(mesh _: ProBuilderMesh, target _: Mesh, edges _: [Edge]) {}
 
-    internal static func CreateVertexMesh(mesh: ProBuilderMesh, target: Mesh) {
-    }
+    internal static func CreateVertexMesh(mesh _: ProBuilderMesh, target _: Mesh) {}
 
-    internal static func CreateVertexMesh(mesh: ProBuilderMesh, target: Mesh, indexes: [Int]) {
-    }
+    internal static func CreateVertexMesh(mesh _: ProBuilderMesh, target _: Mesh, indexes _: [Int]) {}
 
-    static func CreatePointMesh(positions: [Vector3], indexes: [Int], target: Mesh) {
-    }
+    static func CreatePointMesh(positions _: [Vector3], indexes _: [Int], target _: Mesh) {}
 
-    internal static func CreatePointBillboardMesh(positions: [Vector3], target: Mesh) {
-    }
+    internal static func CreatePointBillboardMesh(positions _: [Vector3], target _: Mesh) {}
 
-    static func CreatePointBillboardMesh(positions: [Vector3], indexes: [Int], target: Mesh) {
-    }
+    static func CreatePointBillboardMesh(positions _: [Vector3], indexes _: [Int], target _: Mesh) {}
 
-    internal static func CreateEdgeBillboardMesh(mesh: ProBuilderMesh, target: Mesh) {
-    }
+    internal static func CreateEdgeBillboardMesh(mesh _: ProBuilderMesh, target _: Mesh) {}
 
-    internal static func CreateEdgeBillboardMesh<T: Collection<Edge>>(mesh: ProBuilderMesh, target: Mesh, edges: T) {
-    }
-
-
+    internal static func CreateEdgeBillboardMesh<T: Collection<Edge>>(mesh _: ProBuilderMesh, target _: Mesh, edges _: T) {}
 }

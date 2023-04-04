@@ -14,13 +14,13 @@ public struct SerializedCodingKeys: CodingKey {
     public init(key: String) {
         stringValue = key
     }
-    
+
     public init?(stringValue: String) {
         self.stringValue = stringValue
     }
 
     public init?(intValue: Int) {
         self.intValue = intValue
-        self.stringValue = String(intValue)
+        stringValue = String(intValue)
     }
 }

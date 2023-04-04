@@ -5,13 +5,13 @@
 //  property of any third parties.
 
 import Cocoa
-import vox_render
-import Math
-import vox_toolkit
-import ModelIO
 import ImGui
+import Math
+import ModelIO
+import vox_render
+import vox_toolkit
 
-fileprivate class GUI: Script {
+private class GUI: Script {
     private var fogMode: Int {
         get {
             scene.fogMode.rawValue
@@ -30,7 +30,7 @@ fileprivate class GUI: Script {
             scene.postprocessManager.autoExposure = newValue
         }
     }
-    
+
     override func onGUI() {
         UIElement.Init()
 
@@ -51,14 +51,13 @@ fileprivate class GUI: Script {
     }
 }
 
-fileprivate struct Material {
+private struct Material {
     var name: String = ""
-    var baseColor: Color = Color()
+    var baseColor: Color = .init()
     var roughness: Float = 0
     var metallic: Float = 0
 
-    init() {
-    }
+    init() {}
 
     init(_ n: String, _ c: Color, _ r: Float, _ m: Float) {
         name = n
@@ -85,7 +84,7 @@ class IblApp: NSViewController {
         Material("White", Color(1.0, 1.0, 1.0, 1.0), 0.1, 1.0),
         Material("Red", Color(1.0, 0.0, 0.0, 1.0), 0.1, 1.0),
         Material("Blue", Color(0.0, 0.0, 1.0, 1.0), 0.1, 1.0),
-        Material("Black", Color(0.0, 1.0, 1.0, 1.0), 0.1, 1.0)
+        Material("Black", Color(0.0, 1.0, 1.0, 1.0), 0.1, 1.0),
     ]
 
     func loadHDR(_ scene: Scene) {
@@ -104,8 +103,8 @@ class IblApp: NSViewController {
 
     func loadPCGSky(_ scene: Scene) {
         let pcgSky = MDLSkyCubeTexture(name: "natrual", channelEncoding: .float16,
-                textureDimensions: [512, 512], turbidity: 1.0, sunElevation: 1.0,
-                sunAzimuth: 1.0, upperAtmosphereScattering: 1.0, groundAlbedo: 1.0)
+                                       textureDimensions: [512, 512], turbidity: 1.0, sunElevation: 1.0,
+                                       sunAzimuth: 1.0, upperAtmosphereScattering: 1.0, groundAlbedo: 1.0)
         let cubeMap = try! Engine.textureLoader.loadTexture(with: pcgSky)!
         scene.ambientLight = loadAmbientLight(withPCG: cubeMap, lodStart: 2, lodEnd: 5)
 
@@ -141,8 +140,8 @@ class IblApp: NSViewController {
         let mat = _materials[7]
 
         let sphere = PrimitiveMesh.createSphere(radius: 0.5, segments: 64)
-        for i in 0..<7 {
-            for j in 0..<7 {
+        for i in 0 ..< 7 {
+            for j in 0 ..< 7 {
                 let sphereEntity = rootEntity.createChild("SphereEntity\(i)\(j)")
                 sphereEntity.transform.position = Vector3(Float(i) - 3.5, Float(j) - 3.5, 0)
                 let sphereMtl = PBRMaterial()
@@ -157,10 +156,9 @@ class IblApp: NSViewController {
         }
         Engine.run()
     }
-    
+
     override func viewDidDisappear() {
         super.viewDidDisappear()
         Engine.destroy()
     }
 }
-

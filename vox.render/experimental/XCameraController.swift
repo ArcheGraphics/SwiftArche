@@ -17,8 +17,7 @@ struct XCameraKeypoint {
     var lightEnv: Int = 0
 
     // Constructors.
-    init() {
-    }
+    init() {}
 
     init(_ pos: Vector3, _ forward: Vector3, _ up: Vector3, _ lightEnv: Int) {
         position = pos
@@ -58,8 +57,7 @@ class XCameraController {
 
     var _keypointCount: Int = 0
 
-    init() {
-    }
+    init() {}
 
     /// Multiplier for update time to control movement speed.
     var movementSpeed: Float = 1.0
@@ -83,7 +81,7 @@ class XCameraController {
     }
 
     func updateTime(in seconds: CFAbsoluteTime) {
-        if (_keypoints.count < 2) {
+        if _keypoints.count < 2 {
             return
         }
 
@@ -98,29 +96,32 @@ class XCameraController {
     }
 
     func moveTo(index: Int) {
-        if (index < _keypoints.count) {
+        if index < _keypoints.count {
             _progress = index > 0 ? _distances[index - 1] : 0.0
         }
     }
 
     // MARK: - keypoint
+
     /// Keypoint access and modification.
     func addKeypoint(at position: Vector3,
                      forward: Vector3,
                      up: Vector3,
-                     lightEnv: Int) {
+                     lightEnv: Int)
+    {
         _keypoints.append(XCameraKeypoint(position, forward, up, lightEnv))
     }
 
     func updateKeypoint(_ index: Int,
                         position: Vector3,
                         forward: Vector3,
-                        up: Vector3) {
+                        up: Vector3)
+    {
         if index < _keypoints.count {
             _keypoints[index].position = position
             _keypoints[index].forward = forward
             _keypoints[index].up = up
-            if (!_loadedDistances) {
+            if !_loadedDistances {
                 updateDistances()
             }
         }
@@ -132,14 +133,14 @@ class XCameraController {
 
     func popKeypoint() {
         _ = _keypoints.popLast()
-        if (!_loadedDistances) {
+        if !_loadedDistances {
             updateDistances()
         }
     }
 
     func getKeypoints(_ outKeypoints: inout [Vector3], outForwards: inout [Vector3]) {
         let length = _keypoints.count
-        for i in 0..<length {
+        for i in 0 ..< length {
             outKeypoints.append(_keypoints[i].position)
             outForwards.append(_keypoints[i].forward)
         }
@@ -155,12 +156,12 @@ class XCameraController {
         if let path = getOrCreateApplicationSupportPath() {
             let filename = String(format: "%@/%@.waypoints", path, file)
 
-            var data: String = ""
+            var data = ""
 
             let length = _keypoints.count
             assert(_distances.count == length)
 
-            for i in 0..<length {
+            for i in 0 ..< length {
                 data += String(format: "p %f %f %f\n", _keypoints[i].position.x, _keypoints[i].position.y, _keypoints[i].position.z)
                 data += String(format: "f %f %f %f\n", _keypoints[i].forward.x, _keypoints[i].forward.y, _keypoints[i].forward.z)
                 data += String(format: "u %f %f %f\n", _keypoints[i].up.x, _keypoints[i].up.y, _keypoints[i].up.z)
@@ -231,6 +232,7 @@ class XCameraController {
     }
 
     // MARK: - Private
+
     /// Internal method to calculate length limit for keypoint path.
     private var length: Float {
         _totalDistance > 0.0 ? _totalDistance : Float(_keypoints.count)
@@ -244,7 +246,7 @@ class XCameraController {
         }
 
         var lastDistance: Float = 0.0
-        for i in 0..<_distances.count {
+        for i in 0 ..< _distances.count {
             let distance = _distances[i]
             if time < distance {
                 t = (time - lastDistance) / (distance - lastDistance)
@@ -267,10 +269,10 @@ class XCameraController {
 
         let length = _keypoints.count
         _distances = .init(repeating: 0, count: length)
-        for i in 0..<length {
+        for i in 0 ..< length {
             let steps = 32
             var distance: Float = 0.0
-            for j in 0..<steps {
+            for j in 0 ..< steps {
                 let q = getPosition(at: Float(i) + Float(j) / Float(steps))
                 distance += (p - q).length()
                 p = q
@@ -287,10 +289,11 @@ class XCameraController {
                             kp0: inout Int,
                             kp1: inout Int,
                             kp2: inout Int,
-                            kpprev: inout Int) {
+                            kpprev: inout Int)
+    {
         let loopedTime = fmod(time, length)
         kp0 = index(for: loopedTime, t: &t)
-        if (_loop) {
+        if _loop {
             kp1 = (kp0 + 1) % _keypoints.count
             kp2 = (kp0 + 2) % _keypoints.count
             kpprev = (kp0 + _keypoints.count - 1) % _keypoints.count
@@ -303,7 +306,8 @@ class XCameraController {
 
     /// Internal function to perform the interpolation for interpolant t.
     private static func interpolate(for t: Float, p0: Vector3, p1: Vector3, p2: Vector3,
-                                    pprev: Vector3) -> Vector3 {
+                                    pprev: Vector3) -> Vector3
+    {
         let i: Float = t
         let i2: Float = i * i
         let i3: Float = i * i * i
@@ -320,12 +324,12 @@ class XCameraController {
     }
 
     private func getPosition(at time: Float) -> Vector3 {
-        if (_keypoints.count == 1) {
+        if _keypoints.count == 1 {
             return _keypoints[0].position
         }
 
         var t: Float = 0
-        var kp0: Int = 0, kp1: Int = 0, kp2: Int = 0, kpprev: Int = 0
+        var kp0 = 0, kp1 = 0, kp2 = 0, kpprev = 0
         getIndices(at: time, t: &t, kp0: &kp0, kp1: &kp1, kp2: &kp2, kpprev: &kpprev)
 
         let p0 = _keypoints[kp0].position
@@ -337,12 +341,12 @@ class XCameraController {
     }
 
     private func getForward(at time: Float) -> Vector3 {
-        if (_keypoints.count == 1) {
+        if _keypoints.count == 1 {
             return _keypoints[0].forward
         }
 
         var t: Float = 0
-        var kp0: Int = 0, kp1: Int = 0, kp2: Int = 0, kpprev: Int = 0
+        var kp0 = 0, kp1 = 0, kp2 = 0, kpprev = 0
         getIndices(at: time, t: &t, kp0: &kp0, kp1: &kp1, kp2: &kp2, kpprev: &kpprev)
 
         let p0 = _keypoints[kp0].forward
@@ -354,7 +358,7 @@ class XCameraController {
     }
 
     private func getLightEnv(at time: Float, outA: inout Int, outB: inout Int, outInterp: inout Float) {
-        if (_keypoints.count == 1) {
+        if _keypoints.count == 1 {
             outA = _keypoints[0].lightEnv
             outB = _keypoints[0].lightEnv
             outInterp = 0.0
@@ -366,7 +370,7 @@ class XCameraController {
         let kp0 = index(for: loopedTime, t: &t)
         var kpprev = (kp0 + _keypoints.count - 1) % _keypoints.count
 
-        if (!_loop) {
+        if !_loop {
             kpprev = max(kp0 - 1, 0)
         }
 

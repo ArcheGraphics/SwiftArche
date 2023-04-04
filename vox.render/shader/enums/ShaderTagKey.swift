@@ -7,8 +7,8 @@
 import Foundation
 
 public enum ShaderTagKey: String {
-    case pipelineStage = "pipelineStage"
-    case spriteDisableBatching = "spriteDisableBatching"
+    case pipelineStage
+    case spriteDisableBatching
 }
 
 public enum ShaderProperty: Equatable {
@@ -18,7 +18,7 @@ public enum ShaderProperty: Equatable {
 }
 
 /// Pipeline stage.
-public class PipelineStage {
+public enum PipelineStage {
     /// Shadow caster stage.
     public static let ShadowCaster: ShaderProperty = .String("ShadowCaster")
     /// Forward shading stage.

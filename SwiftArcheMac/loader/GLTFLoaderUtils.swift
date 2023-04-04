@@ -5,10 +5,10 @@
 //  property of any third parties.
 
 import Cocoa
-import vox_render
-import Math
-import vox_toolkit
 import ImGui
+import Math
+import vox_render
+import vox_toolkit
 
 struct GLTFInfo {
     let name: String
@@ -36,7 +36,7 @@ class LoaderGUI: Script {
     var currentAnimationItem: Int = -1
 //    var animator: Animator?
     var animationName: [String] = []
-    
+
     let gltfInfo = [
         GLTFInfo("AntiqueCamera"),
         GLTFInfo("Avocado"),
@@ -151,7 +151,7 @@ class LoaderGUI: Script {
         GLTFInfo("SheenChair", "Chair using [material variants][sheen]"),
         GLTFInfo("SheenCloth", "Fabric example using [sheen]",
                  "gltf", "glTF-Sample-Models/2.0/SheenCloth/glTF"),
-        GLTFInfo("ToyCar", "Toy car example using [transmission][clearcoat][sheen]")
+        GLTFInfo("ToyCar", "Toy car example using [transmission][clearcoat][sheen]"),
     ]
 
     var loaderItem: Int {
@@ -162,14 +162,14 @@ class LoaderGUI: Script {
             if newValue != currentItem {
                 currentItem = newValue
                 let assetURL = Bundle.main.url(forResource: gltfInfo[newValue].fileName,
-                        withExtension: gltfInfo[newValue].ext,
-                        subdirectory: gltfInfo[newValue].dir)!
+                                               withExtension: gltfInfo[newValue].ext,
+                                               subdirectory: gltfInfo[newValue].dir)!
                 GLTFLoader.parse(assetURL, { [self] resource in
                     entity.clearChildren()
                     animationName = []
 //                    animator = nil
                     currentAnimationItem = -1
-                    
+
                     entity.addChild(resource.defaultSceneRoot)
                     let renderers = resource.defaultSceneRoot.getComponentsIncludeChildren(Renderer.self)
                     var bounds = BoundingBox()
@@ -179,7 +179,7 @@ class LoaderGUI: Script {
                     let scale = 1 / bounds.getExtent().internalValue.max()
                     resource.defaultSceneRoot.transform.worldPosition = Vector3()
                     resource.defaultSceneRoot.transform.scale *= scale
-                    
+
 //                    animator = resource.defaultSceneRoot!.getComponent(Animator.self)
 //                    if let animation = resource.animations {
 //                        animationName = animation.map { clip in
@@ -191,7 +191,7 @@ class LoaderGUI: Script {
             }
         }
     }
-    
+
     var animationItem: Int {
         get {
             currentAnimationItem
@@ -200,7 +200,7 @@ class LoaderGUI: Script {
             if newValue != currentAnimationItem {
                 currentAnimationItem = newValue
                 // if let animator = animator {
-                    // animator.play(animationName[currentAnimationItem])
+                // animator.play(animationName[currentAnimationItem])
                 // }
             }
         }
@@ -212,13 +212,13 @@ class LoaderGUI: Script {
         ImGuiNewFrame()
 
         UIElement.selection("GLTF Name", gltfInfo.map { info in
-            return info.name
+            info.name
         }, &loaderItem)
         if !animationName.isEmpty {
             UIElement.selection("Animation Name", animationName, &animationItem)
             // ImGuiSliderFloat("Speed", &animator!.speed, -1.0, 1.0, nil, 1)
         }
-        
+
         if loaderItem > -1 {
             ImGuiTextUnformatted(gltfInfo[loaderItem].description)
         }

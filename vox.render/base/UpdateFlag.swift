@@ -18,8 +18,7 @@ public class UpdateFlag {
     /// - Parameters: Dispatch.
     ///   - bit: Bit
     ///   - param: Parameter
-    public func dispatch(bit: Int?, param: AnyObject?) {
-    }
+    public func dispatch(bit _: Int?, param _: AnyObject?) {}
 
     private func _removeFromManagers() {
         for flagManager in _flagManagers {

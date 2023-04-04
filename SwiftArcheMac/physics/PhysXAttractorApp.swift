@@ -5,12 +5,12 @@
 //  property of any third parties.
 
 import Cocoa
-import vox_render
-import Math
-import vox_toolkit
 import ImGui
+import Math
+import vox_render
+import vox_toolkit
 
-fileprivate class GUI: Script {
+private class GUI: Script {
     override func onGUI() {
         UIElement.Init()
 
@@ -20,8 +20,7 @@ fileprivate class GUI: Script {
     }
 }
 
-
-fileprivate class Attractor: Script {
+private class Attractor: Script {
     private var collider: DynamicCollider!
 
     override func onAwake() {
@@ -35,7 +34,7 @@ fileprivate class Attractor: Script {
     }
 }
 
-fileprivate class Interaction: Script {
+private class Interaction: Script {
     var ray = Ray()
     var position = Vector3()
     var rotation = Quaternion()
@@ -45,24 +44,24 @@ fileprivate class Interaction: Script {
         camera = entity.getComponent(Camera.self)
     }
 
-    override func onUpdate(_ deltaTime: Float) {
+    override func onUpdate(_: Float) {
         let pointers = Engine.inputManager.pointers
-        if (pointers.count > 0) {
+        if pointers.count > 0 {
             _ = camera.screenPointToRay(pointers[0].screenPoint(Engine.canvas), ray)
             entity.transform.position = ray.origin + ray.direction * 18
         }
     }
 }
 
-
 class PhysXAttractorApp: NSViewController {
     var canvas: Canvas!
     var engine: Engine!
     var iblBaker: IBLBaker!
-    
+
     func addPlane(_ rootEntity: Entity,
                   _ position: Vector3,
-                  _ rotation: Quaternion) -> Entity {
+                  _ rotation: Quaternion) -> Entity
+    {
         let mtl = PBRMaterial()
         mtl.baseColor = Color(0.03179807202597362, 0.3939682161541871, 0.41177952549087604, 1)
         mtl.setRenderFace(at: 0, .Double)
@@ -85,11 +84,12 @@ class PhysXAttractorApp: NSViewController {
     func addSphere(_ rootEntity: Entity,
                    _ radius: Float,
                    _ position: Vector3,
-                   _ rotation: Quaternion) -> Entity {
+                   _ rotation: Quaternion) -> Entity
+    {
         let mtl = PBRMaterial()
         mtl.baseColor = Color(1.0, 168 / 255, 196 / 255, 1.0)
-        mtl.roughness = 0.8;
-        mtl.metallic = 0.4;
+        mtl.roughness = 0.8
+        mtl.metallic = 0.4
 
         let sphereEntity = rootEntity.createChild()
         let renderer = sphereEntity.addComponent(MeshRenderer.self)
@@ -131,9 +131,9 @@ class PhysXAttractorApp: NSViewController {
         _ = addPlane(rootEntity, Vector3(0, 0, 0), quatNegaFront90)
 
         let quat = Quaternion(x: 0, y: 0, z: 0.3, w: 0.7).normalized
-        for i in 0..<4 {
-            for j in 0..<4 {
-                for k in 0..<4 {
+        for i in 0 ..< 4 {
+            for j in 0 ..< 4 {
+                for k in 0 ..< 4 {
                     _ = addSphere(rootEntity, 1, Vector3(Float(-4 + 2 * i), Float(-4 + 2 * j), Float(-4 + 2 * k)), quat)
                 }
             }
@@ -146,7 +146,7 @@ class PhysXAttractorApp: NSViewController {
         canvas.setParentView(view)
         engine = Engine(canvas: canvas)
         iblBaker = IBLBaker()
-        
+
         let scene = Engine.sceneManager.activeScene!
         let hdr = Engine.textureLoader.loadHDR(with: "assets/kloppenheim_06_4k.hdr")!
         iblBaker.bake(scene, with: hdr, size: 256, level: 3)
@@ -187,10 +187,9 @@ class PhysXAttractorApp: NSViewController {
 
         Engine.run()
     }
-    
+
     override func viewDidDisappear() {
         super.viewDidDisappear()
         Engine.destroy()
     }
 }
-

@@ -4,8 +4,8 @@
 //  personal capacity and am not conveying any rights to any intellectual
 //  property of any third parties.
 
-import vox_render
 import Math
+import vox_render
 
 public class Sphere: Shape {
     static let k_IcosphereVertices: [Vector3] = [
@@ -22,7 +22,7 @@ public class Sphere: Shape {
         Vector3(Math.phi, 0, -1),
         Vector3(Math.phi, 0, 1),
         Vector3(-Math.phi, 0, -1),
-        Vector3(-Math.phi, 0, 1)
+        Vector3(-Math.phi, 0, 1),
     ]
 
     static let k_IcosphereTriangles: [Int] = [
@@ -48,7 +48,7 @@ public class Sphere: Shape {
         2, 4, 11,
         6, 2, 10,
         8, 6, 7,
-        9, 8, 1
+        9, 8, 1,
     ]
 
     var m_Subdivisions = 3
@@ -57,15 +57,13 @@ public class Sphere: Shape {
 
     var m_Smooth: Bool = true
 
-    public func CopyShape(_ shape: Shape) {
+    public func CopyShape(_: Shape) {}
 
-    }
-
-    public func UpdateBounds(mesh: ProBuilderMesh, size: Vector3, rotation: Quaternion, bounds: Bounds) -> Bounds {
+    public func UpdateBounds(mesh _: ProBuilderMesh, size _: Vector3, rotation _: Quaternion, bounds _: Bounds) -> Bounds {
         Bounds()
     }
 
-    public func RebuildMesh(_ mesh: ProBuilderMesh, size: Vector3, rotation: Quaternion) -> Bounds {
+    public func RebuildMesh(_: ProBuilderMesh, size _: Vector3, rotation _: Quaternion) -> Bounds {
         Bounds()
     }
 
@@ -75,7 +73,7 @@ public class Sphere: Shape {
     //  /  \  ->    /--\
     // /____\      /_\/_\
     //
-    static func SubdivideIcosahedron(vertices: [Vector3], radius: Float) -> [Vector3] {
+    static func SubdivideIcosahedron(vertices _: [Vector3], radius _: Float) -> [Vector3] {
         []
     }
 }

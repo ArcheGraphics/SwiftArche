@@ -6,8 +6,6 @@
 
 import Math
 
-
-
 struct XICBData {
     // Default indirect command buffers.
     var commandBuffer: MTLIndirectCommandBuffer!
@@ -58,16 +56,18 @@ class XCulling {
     init(with device: MTLDevice,
          library: MTLLibrary,
          useRasterizationRate: Bool,
-         genCSMUsingVertexAmplification: Bool) {
+         genCSMUsingVertexAmplification: Bool)
+    {
         _device = device
         rebuildPipelines(with: library, useRasterizationRate: useRasterizationRate, genCSMUsingVertexAmplification: genCSMUsingVertexAmplification)
     }
 
     func rebuildPipelines(with library: MTLLibrary,
                           useRasterizationRate: Bool,
-                          genCSMUsingVertexAmplification: Bool) {
+                          genCSMUsingVertexAmplification: Bool)
+    {
         _resetChunkExecutionRangeState = newComputePipelineState(library: library, functionName: "resetChunkExecutionRange",
-                label: "ChunkExecRangeReset", functionConstants: nil)
+                                                                 label: "ChunkExecRangeReset", functionConstants: nil)
 
         var TRUE_VALUE = true
         var FALSE_VALUE = false
@@ -75,11 +75,13 @@ class XCulling {
         let fc = MTLFunctionConstantValues()
 
         #if SUPPORT_CSM_GENERATION_WITH_VERTEX_AMPLIFICATION
-        fc.setConstantValue(&genCSMUsingVertexAmplification, type: .bool, index: XFunctionConstIndexFilteredCulling.rawValue)
+            fc.setConstantValue(&genCSMUsingVertexAmplification, type: .bool, index: XFunctionConstIndexFilteredCulling.rawValue)
         #endif
 
         // ----------------------------------
-        //MARK: - CULLING STATES
+
+        // MARK: - CULLING STATES
+
         // ----------------------------------
 
         let encodeChunksFunction = library.makeFunction(name: "encodeChunks")!
@@ -93,20 +95,24 @@ class XCulling {
         fc.setConstantValue(&FALSE_VALUE, type: .bool, index: Int(XFunctionConstIndexUseOcclusionCulling.rawValue))
         fc.setConstantValue(&useRasterizationRate, type: .bool, index: Int(XFunctionConstIndexRasterizationRate.rawValue))
         _encodeChunksState[Int(XRenderCullType.None.rawValue)] = newComputePipelineState(
-                library: library, functionName: "encodeChunks",
-                label: "EncodeAllChunks",
-                functionConstants: fc)
+            library: library, functionName: "encodeChunks",
+            label: "EncodeAllChunks",
+            functionConstants: fc
+        )
         _encodeChunksState[Int(XRenderCullType.Frustum.rawValue)] = newComputePipelineState(
-                library: library, functionName: "encodeChunksWithCulling",
-                label: "CullAndEncodeChunksFrustum",
-                functionConstants: fc)
+            library: library, functionName: "encodeChunksWithCulling",
+            label: "CullAndEncodeChunksFrustum",
+            functionConstants: fc
+        )
         fc.setConstantValue(&TRUE_VALUE, type: .bool, index: Int(XFunctionConstIndexUseOcclusionCulling.rawValue))
         _encodeChunksState[Int(XRenderCullType.FrustumDepth.rawValue)] = newComputePipelineState(
-                library: library, functionName: "encodeChunksWithCulling",
-                label: "CullAndEncodeChunksOccAndFrustum",
-                functionConstants: fc)
+            library: library, functionName: "encodeChunksWithCulling",
+            label: "CullAndEncodeChunksOccAndFrustum",
+            functionConstants: fc
+        )
 
-        //MARK: - Depth Only
+        // MARK: - Depth Only
+
         fc.setConstantValue(&TRUE_VALUE, type: .bool, index: Int(XFunctionConstIndexPackCommands.rawValue))
         fc.setConstantValue(&FALSE_VALUE, type: .bool, index: Int(XFunctionConstIndexVisualizeCulling.rawValue))
         fc.setConstantValue(&FALSE_VALUE, type: .bool, index: Int(XFunctionConstIndexEncodeAlphaMask.rawValue))
@@ -115,23 +121,24 @@ class XCulling {
         fc.setConstantValue(&FALSE_VALUE, type: .bool, index: Int(XFunctionConstIndexUseOcclusionCulling.rawValue))
         fc.setConstantValue(&FALSE_VALUE, type: .bool, index: Int(XFunctionConstIndexRasterizationRate.rawValue))
         _encodeChunksState_DepthOnly[XRenderCullType.None] = newComputePipelineState(library: library, functionName: "encodeChunks",
-                label: "EncodeAllChunks_DepthOnly",
-                functionConstants: fc)
+                                                                                     label: "EncodeAllChunks_DepthOnly",
+                                                                                     functionConstants: fc)
         _encodeChunksState_DepthOnly[XRenderCullType.Frustum] = newComputePipelineState(library: library, functionName: "encodeChunksWithCulling",
-                label: "CullAndEncodeChunksFrustum_DepthOnly",
-                functionConstants: fc)
+                                                                                        label: "CullAndEncodeChunksFrustum_DepthOnly",
+                                                                                        functionConstants: fc)
         fc.setConstantValue(&TRUE_VALUE, type: .bool, index: Int(XFunctionConstIndexUseOcclusionCulling.rawValue))
         _encodeChunksState_DepthOnly[XRenderCullType.FrustumDepth] = newComputePipelineState(library: library, functionName: "encodeChunksWithCulling",
-                label: "CullAndEncodeChunksOccAndFrustum_DepthOnly",
-                functionConstants: fc)
+                                                                                             label: "CullAndEncodeChunksOccAndFrustum_DepthOnly",
+                                                                                             functionConstants: fc)
 
-        if (genCSMUsingVertexAmplification) {
+        if genCSMUsingVertexAmplification {
             _encodeChunksState_DepthOnly_Filtered = newComputePipelineState(library: library, functionName: "encodeChunksWithCullingFiltered",
                                                                             label: "CullAndEncodeChunksOccAndFrustum_Filtered",
                                                                             functionConstants: fc)
         }
 
         // MARK: - Both
+
         fc.setConstantValue(&TRUE_VALUE, type: .bool, index: Int(XFunctionConstIndexPackCommands.rawValue))
         fc.setConstantValue(&FALSE_VALUE, type: .bool, index: Int(XFunctionConstIndexVisualizeCulling.rawValue))
         fc.setConstantValue(&FALSE_VALUE, type: .bool, index: Int(XFunctionConstIndexEncodeAlphaMask.rawValue))
@@ -140,17 +147,18 @@ class XCulling {
         fc.setConstantValue(&FALSE_VALUE, type: .bool, index: Int(XFunctionConstIndexUseOcclusionCulling.rawValue))
         fc.setConstantValue(&useRasterizationRate, type: .bool, index: Int(XFunctionConstIndexRasterizationRate.rawValue))
         _encodeChunksState_Both[XRenderCullType.None] = newComputePipelineState(library: library, functionName: "encodeChunks",
-                label: "EncodeAllChunks_Both",
-                functionConstants: fc)
+                                                                                label: "EncodeAllChunks_Both",
+                                                                                functionConstants: fc)
         _encodeChunksState_Both[XRenderCullType.Frustum] = newComputePipelineState(library: library, functionName: "encodeChunksWithCulling",
-                label: "CullAndEncodeChunksFrustum_Both",
-                functionConstants: fc)
+                                                                                   label: "CullAndEncodeChunksFrustum_Both",
+                                                                                   functionConstants: fc)
         fc.setConstantValue(&TRUE_VALUE, type: .bool, index: Int(XFunctionConstIndexUseOcclusionCulling.rawValue))
         _encodeChunksState_Both[XRenderCullType.FrustumDepth] = newComputePipelineState(library: library, functionName: "encodeChunksWithCulling",
-                label: "CullAndEncodeChunksOccAndFrustum_Both",
-                functionConstants: fc)
+                                                                                        label: "CullAndEncodeChunksOccAndFrustum_Both",
+                                                                                        functionConstants: fc)
 
         // MARK: - Alpha Masked
+
         fc.setConstantValue(&TRUE_VALUE, type: .bool, index: Int(XFunctionConstIndexPackCommands.rawValue))
         fc.setConstantValue(&FALSE_VALUE, type: .bool, index: Int(XFunctionConstIndexVisualizeCulling.rawValue))
         fc.setConstantValue(&TRUE_VALUE, type: .bool, index: Int(XFunctionConstIndexEncodeAlphaMask.rawValue))
@@ -159,17 +167,18 @@ class XCulling {
         fc.setConstantValue(&FALSE_VALUE, type: .bool, index: Int(XFunctionConstIndexUseOcclusionCulling.rawValue))
         fc.setConstantValue(&FALSE_VALUE, type: .bool, index: Int(XFunctionConstIndexRasterizationRate.rawValue))
         _encodeChunksState_AlphaMask[XRenderCullType.None] = newComputePipelineState(library: library, functionName: "encodeChunks",
-                label: "EncodeAllChunks_AlphaMask",
-                functionConstants: fc)
+                                                                                     label: "EncodeAllChunks_AlphaMask",
+                                                                                     functionConstants: fc)
         _encodeChunksState_AlphaMask[XRenderCullType.Frustum] = newComputePipelineState(library: library, functionName: "encodeChunksWithCulling",
-                label: "CullAndEncodeChunksFrustum_AlphaMask",
-                functionConstants: fc)
+                                                                                        label: "CullAndEncodeChunksFrustum_AlphaMask",
+                                                                                        functionConstants: fc)
         fc.setConstantValue(&TRUE_VALUE, type: .bool, index: Int(XFunctionConstIndexUseOcclusionCulling.rawValue))
         _encodeChunksState_AlphaMask[XRenderCullType.FrustumDepth] = newComputePipelineState(library: library, functionName: "encodeChunksWithCulling",
-                label: "CullAndEncodeChunksOccAndFrustum_AlphaMask",
-                functionConstants: fc)
+                                                                                             label: "CullAndEncodeChunksOccAndFrustum_AlphaMask",
+                                                                                             functionConstants: fc)
 
-        //MARK: - Alpha Masked Depth Only
+        // MARK: - Alpha Masked Depth Only
+
         fc.setConstantValue(&TRUE_VALUE, type: .bool, index: Int(XFunctionConstIndexPackCommands.rawValue))
         fc.setConstantValue(&FALSE_VALUE, type: .bool, index: Int(XFunctionConstIndexVisualizeCulling.rawValue))
         fc.setConstantValue(&TRUE_VALUE, type: .bool, index: Int(XFunctionConstIndexEncodeAlphaMask.rawValue))
@@ -179,26 +188,27 @@ class XCulling {
         fc.setConstantValue(&FALSE_VALUE, type: .bool, index: Int(XFunctionConstIndexRasterizationRate.rawValue))
 
         _encodeChunksState_DepthOnly_AlphaMask[XRenderCullType.None] = newComputePipelineState(library: library, functionName: "encodeChunks",
-                label: "EncodeAllChunks_DepthOnly_AlphaMask",
-                functionConstants: fc)
+                                                                                               label: "EncodeAllChunks_DepthOnly_AlphaMask",
+                                                                                               functionConstants: fc)
 
         _encodeChunksState_DepthOnly_AlphaMask[XRenderCullType.Frustum] = newComputePipelineState(library: library, functionName: "encodeChunksWithCulling",
-                label: "CullAndEncodeChunksFrustum_DepthOnly_AlphaMask",
-                functionConstants: fc)
+                                                                                                  label: "CullAndEncodeChunksFrustum_DepthOnly_AlphaMask",
+                                                                                                  functionConstants: fc)
         fc.setConstantValue(&TRUE_VALUE, type: .bool, index: Int(XFunctionConstIndexUseOcclusionCulling.rawValue))
         _encodeChunksState_DepthOnly_AlphaMask[XRenderCullType.FrustumDepth] = newComputePipelineState(library: library, functionName: "encodeChunksWithCulling",
-                label: "CullAndEncodeChunksOccAndFrustum_DepthOnly_AlphaMask",
-                functionConstants: fc)
+                                                                                                       label: "CullAndEncodeChunksOccAndFrustum_DepthOnly_AlphaMask",
+                                                                                                       functionConstants: fc)
 
         #if SUPPORT_CSM_GENERATION_WITH_VERTEX_AMPLIFICATION
-        if (genCSMUsingVertexAmplification) {
-            _encodeChunksState_DepthOnly_AlphaMask_Filtered = newComputePipelineState(library, "encodeChunksWithCullingFiltered",
-                    "CullAndEncodeChunksOccAndFrustum_FilteredAlphaDepth",
-                    fc)
-        }
+            if genCSMUsingVertexAmplification {
+                _encodeChunksState_DepthOnly_AlphaMask_Filtered = newComputePipelineState(library, "encodeChunksWithCullingFiltered",
+                                                                                          "CullAndEncodeChunksOccAndFrustum_FilteredAlphaDepth",
+                                                                                          fc)
+            }
         #endif
 
-        //MARK: - Alpha Masked Both
+        // MARK: - Alpha Masked Both
+
         fc.setConstantValue(&TRUE_VALUE, type: .bool, index: Int(XFunctionConstIndexPackCommands.rawValue))
         fc.setConstantValue(&FALSE_VALUE, type: .bool, index: Int(XFunctionConstIndexVisualizeCulling.rawValue))
         fc.setConstantValue(&TRUE_VALUE, type: .bool, index: Int(XFunctionConstIndexEncodeAlphaMask.rawValue))
@@ -207,18 +217,19 @@ class XCulling {
         fc.setConstantValue(&FALSE_VALUE, type: .bool, index: Int(XFunctionConstIndexUseOcclusionCulling.rawValue))
         fc.setConstantValue(&useRasterizationRate, type: .bool, index: Int(XFunctionConstIndexRasterizationRate.rawValue))
         _encodeChunksState_Both_AlphaMask[XRenderCullType.None] = newComputePipelineState(library: library, functionName: "encodeChunks",
-                label: "EncodeAllChunks_Both_AlphaMask",
-                functionConstants: fc)
+                                                                                          label: "EncodeAllChunks_Both_AlphaMask",
+                                                                                          functionConstants: fc)
 
         _encodeChunksState_Both_AlphaMask[XRenderCullType.Frustum] = newComputePipelineState(library: library, functionName: "encodeChunksWithCulling",
-                label: "CullAndEncodeChunksFrustum_Both_AlphaMask",
-                functionConstants: fc)
+                                                                                             label: "CullAndEncodeChunksFrustum_Both_AlphaMask",
+                                                                                             functionConstants: fc)
         fc.setConstantValue(&TRUE_VALUE, type: .bool, index: Int(XFunctionConstIndexUseOcclusionCulling.rawValue))
         _encodeChunksState_Both_AlphaMask[XRenderCullType.FrustumDepth] = newComputePipelineState(library: library, functionName: "encodeChunksWithCulling",
-                label: "CullAndEncodeChunksOccAndFrustum_Both_AlphaMask",
-                functionConstants: fc)
+                                                                                                  label: "CullAndEncodeChunksOccAndFrustum_Both_AlphaMask",
+                                                                                                  functionConstants: fc)
 
-        //MARK: - Transparent
+        // MARK: - Transparent
+
         fc.setConstantValue(&FALSE_VALUE, type: .bool, index: Int(XFunctionConstIndexPackCommands.rawValue))
         fc.setConstantValue(&FALSE_VALUE, type: .bool, index: Int(XFunctionConstIndexVisualizeCulling.rawValue))
         fc.setConstantValue(&TRUE_VALUE, type: .bool, index: Int(XFunctionConstIndexEncodeAlphaMask.rawValue))
@@ -228,19 +239,20 @@ class XCulling {
         fc.setConstantValue(&useRasterizationRate, type: .bool, index: Int(XFunctionConstIndexRasterizationRate.rawValue))
 
         _encodeChunksState_Transparent[XRenderCullType.None] = newComputePipelineState(library: library, functionName: "encodeChunks",
-                label: "EncodeAllChunks_Transparent",
-                functionConstants: fc)
+                                                                                       label: "EncodeAllChunks_Transparent",
+                                                                                       functionConstants: fc)
 
         _encodeChunksState_Transparent[XRenderCullType.Frustum] = newComputePipelineState(library: library, functionName: "encodeChunksWithCulling",
-                label: "CullAndEncodeChunksFrustum_Transparent",
-                functionConstants: fc)
+                                                                                          label: "CullAndEncodeChunksFrustum_Transparent",
+                                                                                          functionConstants: fc)
 
         fc.setConstantValue(&TRUE_VALUE, type: .bool, index: Int(XFunctionConstIndexUseOcclusionCulling.rawValue))
         _encodeChunksState_Transparent[XRenderCullType.FrustumDepth] = newComputePipelineState(library: library, functionName: "encodeChunksWithCulling",
-                label: "CullAndEncodeChunksOccAndFrustum_Transparent",
-                functionConstants: fc)
+                                                                                               label: "CullAndEncodeChunksOccAndFrustum_Transparent",
+                                                                                               functionConstants: fc)
 
-        //MARK: - Visualization
+        // MARK: - Visualization
+
         fc.setConstantValue(&FALSE_VALUE, type: .bool, index: Int(XFunctionConstIndexPackCommands.rawValue))
         fc.setConstantValue(&TRUE_VALUE, type: .bool, index: Int(XFunctionConstIndexVisualizeCulling.rawValue))
         fc.setConstantValue(&FALSE_VALUE, type: .bool, index: Int(XFunctionConstIndexEncodeAlphaMask.rawValue))
@@ -248,12 +260,12 @@ class XCulling {
         fc.setConstantValue(&TRUE_VALUE, type: .bool, index: Int(XFunctionConstIndexEncodeToMain.rawValue))
         fc.setConstantValue(&TRUE_VALUE, type: .bool, index: Int(XFunctionConstIndexUseOcclusionCulling.rawValue))
         _visualizeCullingState = newComputePipelineState(library: library, functionName: "encodeChunksWithCulling",
-                label: "CullingStateVisualization",
-                functionConstants: fc)
+                                                         label: "CullingStateVisualization",
+                                                         functionConstants: fc)
         fc.setConstantValue(&TRUE_VALUE, type: .bool, index: Int(XFunctionConstIndexEncodeAlphaMask.rawValue))
         _visualizeCullingState_AlphaMask = newComputePipelineState(library: library, functionName: "encodeChunksWithCulling",
-                label: "CullingStateVisualization_AlphaMask",
-                functionConstants: fc)
+                                                                   label: "CullingStateVisualization_AlphaMask",
+                                                                   functionConstants: fc)
         _visualizeCullingState_Transparent = _visualizeCullingState_AlphaMask
     }
 
@@ -264,7 +276,8 @@ class XCulling {
                          chunkViz: Bool,
                          frameData: MTLBuffer,
                          globalTexturesBuffer: MTLBuffer,
-                         lightParamsBuffer: MTLBuffer) {
+                         lightParamsBuffer: MTLBuffer)
+    {
         let icbDescriptor = MTLIndirectCommandBufferDescriptor()
         icbDescriptor.commandTypes = .drawIndexed
         icbDescriptor.inheritPipelineState = true
@@ -273,36 +286,37 @@ class XCulling {
         icbDescriptor.maxFragmentBufferBindCount = Int(XBufferIndexFragmentICBBufferCount.rawValue)
 
         commandData.commandBuffer = _device.makeIndirectCommandBuffer(descriptor: icbDescriptor,
-                maxCommandCount: Int(mesh.opaqueChunkCount),
-                options: MTLResourceOptions())
+                                                                      maxCommandCount: Int(mesh.opaqueChunkCount),
+                                                                      options: MTLResourceOptions())
         commandData.commandBuffer.label = "Opaque ICB"
         commandData.commandBuffer_alphaMask = _device.makeIndirectCommandBuffer(descriptor: icbDescriptor,
-                maxCommandCount: Int(mesh.alphaMaskedChunkCount),
-                options: MTLResourceOptions())
+                                                                                maxCommandCount: Int(mesh.alphaMaskedChunkCount),
+                                                                                options: MTLResourceOptions())
         commandData.commandBuffer_alphaMask.label = "AlphaMask ICB"
         commandData.commandBuffer_transparent = _device.makeIndirectCommandBuffer(descriptor: icbDescriptor,
-                maxCommandCount: Int(mesh.transparentChunkCount),
-                options: MTLResourceOptions())
+                                                                                  maxCommandCount: Int(mesh.transparentChunkCount),
+                                                                                  options: MTLResourceOptions())
         commandData.commandBuffer_transparent.label = "Transparent ICB"
 
         icbDescriptor.maxVertexBufferBindCount = Int(XBufferIndexVertexDepthOnlyICBBufferCount.rawValue)
         icbDescriptor.maxFragmentBufferBindCount = 0
         commandData.commandBuffer_depthOnly = _device.makeIndirectCommandBuffer(descriptor: icbDescriptor,
-                maxCommandCount: Int(mesh.opaqueChunkCount),
-                options: MTLResourceOptions())
+                                                                                maxCommandCount: Int(mesh.opaqueChunkCount),
+                                                                                options: MTLResourceOptions())
         commandData.commandBuffer_depthOnly.label = "Opaque DepthOnly ICB"
 
         icbDescriptor.maxVertexBufferBindCount = Int(XBufferIndexVertexDepthOnlyICBAlphaMaskBufferCount.rawValue)
         icbDescriptor.maxFragmentBufferBindCount = Int(XBufferIndexFragmentDepthOnlyICBAlphaMaskBufferCount.rawValue)
         commandData.commandBuffer_depthOnly_alphaMask = _device.makeIndirectCommandBuffer(descriptor: icbDescriptor,
-                maxCommandCount: Int(mesh.alphaMaskedChunkCount),
-                options: MTLResourceOptions())
+                                                                                          maxCommandCount: Int(mesh.alphaMaskedChunkCount),
+                                                                                          options: MTLResourceOptions())
         commandData.commandBuffer_depthOnly_alphaMask.label = "AlphaMask DepthOnly ICB"
 
-        if (chunkViz) {
+        if chunkViz {
             commandData.chunkVizBuffer = _device.makeBuffer(
-                    length: MemoryLayout<XChunkVizData>.stride * Int(mesh.chunkCount),
-                    options: .storageModePrivate)
+                length: MemoryLayout<XChunkVizData>.stride * Int(mesh.chunkCount),
+                options: .storageModePrivate
+            )
             commandData.chunkVizBuffer.label = "ChunkViz"
         }
 
@@ -310,7 +324,7 @@ class XCulling {
 
         // Read back in callback
         commandData.executionRangeBuffer = _device.makeBuffer(length: MemoryLayout<MTLIndirectCommandBufferExecutionRange>.stride * numExecutionRanges,
-                options: .storageModeShared)
+                                                              options: .storageModeShared)
         commandData.executionRangeBuffer.label = "Execution Range Buffer"
         commandData.icbEncodeArgsBuffer = _device.makeBuffer(length: _icbEncodeArgsEncoder.encodedLength)
         commandData.icbEncodeArgsBuffer.label = "ICB Encode Args Buffer"
@@ -324,7 +338,7 @@ class XCulling {
         let commandBuffers: [MTLIndirectCommandBuffer] = [commandData.commandBuffer, commandData.commandBuffer_alphaMask, commandData.commandBuffer_transparent]
         let commandBuffersDepthOnly: [MTLIndirectCommandBuffer?] = [commandData.commandBuffer_depthOnly, commandData.commandBuffer_depthOnly_alphaMask, nil]
 
-        for i in 0..<numExecutionRanges {
+        for i in 0 ..< numExecutionRanges {
             let depthOnly = commandBuffersDepthOnly[i] != nil ? commandBuffersDepthOnly[i]! : commandBuffers[i]
             _icbEncodeArgsEncoder.setArgumentBuffer(icbEncodeArgsBuffers[i], offset: 0)
             _icbEncodeArgsEncoder.setIndirectCommandBuffer(commandBuffers[i], index: Int(XEncodeArgsIndexCommandBuffer.rawValue))
@@ -351,33 +365,34 @@ class XCulling {
                         depthOnly: Bool,
                         mesh: XMesh,
                         materialBuffer: MTLBuffer,
-                        rrData: MTLBuffer,
-                        encoder: MTLComputeCommandEncoder) {
+                        rrData _: MTLBuffer,
+                        encoder: MTLComputeCommandEncoder)
+    {
         encoder.pushDebugGroup("Encode chunks")
 
-        if (mainPass) {
+        if mainPass {
             encoder.useResource(commandData.commandBuffer, usage: .readWrite)
             encoder.useResource(commandData.commandBuffer_alphaMask, usage: .readWrite)
             encoder.useResource(commandData.commandBuffer_transparent, usage: .readWrite)
         }
 
-        if (depthOnly) {
+        if depthOnly {
             encoder.useResource(commandData.commandBuffer_depthOnly, usage: .readWrite)
             encoder.useResource(commandData.commandBuffer_depthOnly_alphaMask, usage: .readWrite)
         }
 
         let opaqueCullPipeline: MTLComputePipelineState,
-                alphaMaskCullPipeline: MTLComputePipelineState,
-                transparentCullPipeline: MTLComputePipelineState?
-        if (cullMode == .Visualization) {
+            alphaMaskCullPipeline: MTLComputePipelineState,
+            transparentCullPipeline: MTLComputePipelineState?
+        if cullMode == .Visualization {
             opaqueCullPipeline = _visualizeCullingState
             alphaMaskCullPipeline = _visualizeCullingState_AlphaMask
             transparentCullPipeline = _visualizeCullingState_Transparent
-        } else if (mainPass && depthOnly) {
+        } else if mainPass, depthOnly {
             opaqueCullPipeline = _encodeChunksState_Both[cullMode]!
             alphaMaskCullPipeline = _encodeChunksState_Both_AlphaMask[cullMode]!
             transparentCullPipeline = _encodeChunksState_Transparent[cullMode]!
-        } else if (depthOnly) {
+        } else if depthOnly {
             opaqueCullPipeline = _encodeChunksState_DepthOnly[cullMode]!
             alphaMaskCullPipeline = _encodeChunksState_DepthOnly_AlphaMask[cullMode]!
             transparentCullPipeline = nil
@@ -396,7 +411,7 @@ class XCulling {
         encoder.setBuffer(commandData.executionRangeBuffer, offset: 0, index: Int(XBufferIndexComputeExecutionRange.rawValue))
         encoder.setBuffer(frameDataBuffer, offset: 0, index: Int(XBufferIndexComputeFrameData.rawValue))
         #if SUPPORT_RASTERIZATION_RATE
-        encoder.setBuffer(rrMapData, offset: 0, index: XBufferIndexRasterizationRateMap.rawValue)
+            encoder.setBuffer(rrMapData, offset: 0, index: XBufferIndexRasterizationRateMap.rawValue)
         #endif
         encoder.setTexture(pyramidTexture, index: 0)
 
@@ -404,39 +419,39 @@ class XCulling {
 
         // Cull opaque draws
         encodeCulling(encoder: encoder, cullPipeline: opaqueCullPipeline,
-                icbEncodeArgsBuffer: commandData.icbEncodeArgsBuffer,
-                chunkCount: UInt32(mesh.opaqueChunkCount),
-                chunkOffset: 0, packCommands: packCommands)
+                      icbEncodeArgsBuffer: commandData.icbEncodeArgsBuffer,
+                      chunkCount: UInt32(mesh.opaqueChunkCount),
+                      chunkOffset: 0, packCommands: packCommands)
 
         // Cull alpha mask draws
         encoder.setBufferOffset(MemoryLayout<MTLIndirectCommandBufferExecutionRange>.stride,
-                index: Int(XBufferIndexComputeExecutionRange.rawValue))
+                                index: Int(XBufferIndexComputeExecutionRange.rawValue))
 
         if commandData.chunkVizBuffer != nil {
             encoder.setBufferOffset(MemoryLayout<XChunkVizData>.stride * Int(mesh.opaqueChunkCount),
-                    index: Int(XBufferIndexComputeChunkViz.rawValue))
+                                    index: Int(XBufferIndexComputeChunkViz.rawValue))
         }
 
         encodeCulling(encoder: encoder, cullPipeline: alphaMaskCullPipeline,
-                icbEncodeArgsBuffer: commandData.icbEncodeArgsBuffer_alphaMask,
-                chunkCount: UInt32(mesh.alphaMaskedChunkCount),
-                chunkOffset: UInt32(mesh.opaqueChunkCount), packCommands: packCommands)
+                      icbEncodeArgsBuffer: commandData.icbEncodeArgsBuffer_alphaMask,
+                      chunkCount: UInt32(mesh.alphaMaskedChunkCount),
+                      chunkOffset: UInt32(mesh.opaqueChunkCount), packCommands: packCommands)
 
         // Cull transparent draws
         if let transparentCullPipeline {
             encoder.setBufferOffset(MemoryLayout<MTLIndirectCommandBufferExecutionRange>.stride * 2,
-                    index: Int(XBufferIndexComputeExecutionRange.rawValue))
+                                    index: Int(XBufferIndexComputeExecutionRange.rawValue))
 
             if commandData.chunkVizBuffer != nil {
-                encoder.setBufferOffset(MemoryLayout<XChunkVizData>.stride * Int((mesh.opaqueChunkCount + mesh.alphaMaskedChunkCount)),
-                        index: Int(XBufferIndexComputeChunkViz.rawValue))
+                encoder.setBufferOffset(MemoryLayout<XChunkVizData>.stride * Int(mesh.opaqueChunkCount + mesh.alphaMaskedChunkCount),
+                                        index: Int(XBufferIndexComputeChunkViz.rawValue))
             }
 
             encodeCulling(encoder: encoder, cullPipeline: transparentCullPipeline,
-                    icbEncodeArgsBuffer: commandData.icbEncodeArgsBuffer_transparent,
-                    chunkCount: UInt32(mesh.transparentChunkCount),
-                    chunkOffset: UInt32(mesh.opaqueChunkCount + mesh.alphaMaskedChunkCount),
-                    packCommands: mainPass ? false : packCommands)
+                          icbEncodeArgsBuffer: commandData.icbEncodeArgsBuffer_transparent,
+                          chunkCount: UInt32(mesh.transparentChunkCount),
+                          chunkOffset: UInt32(mesh.opaqueChunkCount + mesh.alphaMaskedChunkCount),
+                          packCommands: mainPass ? false : packCommands)
         }
 
         encoder.popDebugGroup()
@@ -445,15 +460,17 @@ class XCulling {
     func executeCullingFiltered(commandData: XICBData,
                                 frameViewData1: XFrameViewData,
                                 frameViewData2: XFrameViewData,
-                                frameDataBuffer: MTLBuffer,
+                                frameDataBuffer _: MTLBuffer,
                                 cullMode: XRenderCullType,
                                 pyramidTexture1: MTLTexture,
                                 pyramidTexture2: MTLTexture,
                                 mesh: XMesh,
                                 materialBuffer: MTLBuffer,
-                                encoder: MTLComputeCommandEncoder) {
+                                encoder: MTLComputeCommandEncoder)
+    {
         if let opaqueCullPipeline = _encodeChunksState_DepthOnly_Filtered,
-           let alphaMaskCullPipeline = _encodeChunksState_DepthOnly_AlphaMask_Filtered {
+           let alphaMaskCullPipeline = _encodeChunksState_DepthOnly_AlphaMask_Filtered
+        {
             encoder.pushDebugGroup("Encode chunks filtered")
             encoder.useResource(commandData.commandBuffer_depthOnly, usage: .readWrite)
             encoder.useResource(commandData.commandBuffer_depthOnly_alphaMask, usage: .readWrite)
@@ -474,24 +491,23 @@ class XCulling {
 
             // Cull opaque draws
             encodeCulling(encoder: encoder, cullPipeline: opaqueCullPipeline,
-                    icbEncodeArgsBuffer: commandData.icbEncodeArgsBuffer,
-                    chunkCount: UInt32(mesh.opaqueChunkCount),
-                    chunkOffset: 0, packCommands: packCommands)
+                          icbEncodeArgsBuffer: commandData.icbEncodeArgsBuffer,
+                          chunkCount: UInt32(mesh.opaqueChunkCount),
+                          chunkOffset: 0, packCommands: packCommands)
 
             // Cull alpha mask draws
             encoder.setBufferOffset(MemoryLayout<MTLIndirectCommandBufferExecutionRange>.stride,
-                    index: Int(XBufferIndexComputeExecutionRange.rawValue))
-
+                                    index: Int(XBufferIndexComputeExecutionRange.rawValue))
 
             if commandData.chunkVizBuffer != nil {
                 encoder.setBufferOffset(MemoryLayout<XChunkVizData>.stride * Int(mesh.opaqueChunkCount),
-                        index: Int(XBufferIndexComputeChunkViz.rawValue))
+                                        index: Int(XBufferIndexComputeChunkViz.rawValue))
             }
 
             encodeCulling(encoder: encoder, cullPipeline: alphaMaskCullPipeline,
-                    icbEncodeArgsBuffer: commandData.icbEncodeArgsBuffer_alphaMask,
-                    chunkCount: UInt32(mesh.alphaMaskedChunkCount),
-                    chunkOffset: UInt32(mesh.opaqueChunkCount), packCommands: packCommands)
+                          icbEncodeArgsBuffer: commandData.icbEncodeArgsBuffer_alphaMask,
+                          chunkCount: UInt32(mesh.alphaMaskedChunkCount),
+                          chunkOffset: UInt32(mesh.opaqueChunkCount), packCommands: packCommands)
 
             encoder.popDebugGroup()
         }
@@ -503,24 +519,25 @@ class XCulling {
                                              mainPass: Bool,
                                              depthOnly: Bool,
                                              mesh: XMesh,
-                                             commandBuffer: MTLCommandBuffer) {
+                                             commandBuffer: MTLCommandBuffer)
+    {
         if let blitEncoder = commandBuffer.makeBlitCommandEncoder() {
             blitEncoder.label = "ICB Reset"
-            for viewIndex in 0..<viewCount {
-                if (mainPass) {
+            for viewIndex in 0 ..< viewCount {
+                if mainPass {
                     blitEncoder.resetCommandsInBuffer(commandData[viewIndex].commandBuffer,
-                            range: 0..<Int(mesh.opaqueChunkCount))
+                                                      range: 0 ..< Int(mesh.opaqueChunkCount))
                     blitEncoder.resetCommandsInBuffer(commandData[viewIndex].commandBuffer_alphaMask,
-                            range: 0..<Int(mesh.alphaMaskedChunkCount))
+                                                      range: 0 ..< Int(mesh.alphaMaskedChunkCount))
                     blitEncoder.resetCommandsInBuffer(commandData[viewIndex].commandBuffer_transparent,
-                            range: 0..<Int(mesh.transparentChunkCount))
+                                                      range: 0 ..< Int(mesh.transparentChunkCount))
                 }
 
-                if (depthOnly) {
+                if depthOnly {
                     blitEncoder.resetCommandsInBuffer(commandData[viewIndex].commandBuffer_depthOnly,
-                            range: 0..<Int(mesh.opaqueChunkCount))
+                                                      range: 0 ..< Int(mesh.opaqueChunkCount))
                     blitEncoder.resetCommandsInBuffer(commandData[viewIndex].commandBuffer_depthOnly_alphaMask,
-                            range: 0..<Int(mesh.alphaMaskedChunkCount))
+                                                      range: 0 ..< Int(mesh.alphaMaskedChunkCount))
                 }
             }
             blitEncoder.endEncoding()
@@ -533,24 +550,25 @@ class XCulling {
                                                 mainPass: Bool,
                                                 depthOnly: Bool,
                                                 mesh: XMesh,
-                                                commandBuffer: MTLCommandBuffer) {
+                                                commandBuffer: MTLCommandBuffer)
+    {
         if let blitEncoder = commandBuffer.makeBlitCommandEncoder() {
             blitEncoder.label = "ICB Optimize"
-            for viewIndex in 0..<viewCount {
-                if (mainPass) {
+            for viewIndex in 0 ..< viewCount {
+                if mainPass {
                     blitEncoder.optimizeIndirectCommandBuffer(commandData[viewIndex].commandBuffer,
-                            range: 0..<Int(mesh.opaqueChunkCount))
+                                                              range: 0 ..< Int(mesh.opaqueChunkCount))
                     blitEncoder.optimizeIndirectCommandBuffer(commandData[viewIndex].commandBuffer_alphaMask,
-                            range: 0..<Int(mesh.alphaMaskedChunkCount))
+                                                              range: 0 ..< Int(mesh.alphaMaskedChunkCount))
                     blitEncoder.optimizeIndirectCommandBuffer(commandData[viewIndex].commandBuffer_transparent,
-                            range: 0..<Int(mesh.transparentChunkCount))
+                                                              range: 0 ..< Int(mesh.transparentChunkCount))
                 }
 
-                if (depthOnly) {
+                if depthOnly {
                     blitEncoder.optimizeIndirectCommandBuffer(commandData[viewIndex].commandBuffer_depthOnly,
-                            range: 0..<Int(mesh.opaqueChunkCount))
+                                                              range: 0 ..< Int(mesh.opaqueChunkCount))
                     blitEncoder.optimizeIndirectCommandBuffer(commandData[viewIndex].commandBuffer_depthOnly_alphaMask,
-                            range: 0..<Int(mesh.alphaMaskedChunkCount))
+                                                              range: 0 ..< Int(mesh.alphaMaskedChunkCount))
                 }
             }
             blitEncoder.endEncoding()
@@ -564,7 +582,8 @@ class XCulling {
                                icbEncodeArgsBuffer: MTLBuffer,
                                chunkCount: UInt32,
                                chunkOffset: UInt32,
-                               packCommands: Bool) {
+                               packCommands: Bool)
+    {
         var cullParams = XCullParams()
         cullParams.numChunks = chunkCount
         cullParams.offset = chunkOffset
@@ -575,19 +594,19 @@ class XCulling {
         var lengthResetValue = packCommands ? 0 : cullParams.numChunks
         encoder.setComputePipelineState(_resetChunkExecutionRangeState)
         encoder.setBytes(&lengthResetValue, length: MemoryLayout<UInt32>.stride,
-                index: Int(XBufferIndexComputeExecutionRange.rawValue) + 1)
+                         index: Int(XBufferIndexComputeExecutionRange.rawValue) + 1)
         encoder.dispatchThreadgroups(MTLSizeMake(1, 1, 1), threadsPerThreadgroup: MTLSizeMake(1, 1, 1))
 
         // Fill.
         encoder.setComputePipelineState(cullPipeline)
         encoder.setBytes(&cullParams, length: MemoryLayout<XCullParams>.stride,
-                index: Int(XBufferIndexCullParams.rawValue))
+                         index: Int(XBufferIndexCullParams.rawValue))
         encoder.setBufferOffset(MemoryLayout<XMeshChunk>.stride * Int(cullParams.offset),
-                index: Int(XBufferIndexComputeChunks.rawValue))
+                                index: Int(XBufferIndexComputeChunks.rawValue))
 
         let threadgroupSize = MTLSizeMake(Int(CULLING_THREADGROUP_SIZE), 1, 1)
         let threadgroupCount = MTLSizeMake(divideRoundUp(numerator: Int(cullParams.numChunks),
-                denominator: threadgroupSize.width), 1, 1)
+                                                         denominator: threadgroupSize.width), 1, 1)
         encoder.dispatchThreadgroups(threadgroupCount, threadsPerThreadgroup: threadgroupSize)
     }
 }

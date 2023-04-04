@@ -3125,6 +3125,7 @@
 				3EC036FE29321131002187DC /* Frameworks */,
 				3EC036FF29321131002187DC /* Resources */,
 				3EB32B8229322E9D0019A4F3 /* Copy Metal Libraries */,
+				3E5C394F29DBEDDC0026E999 /* swift format */,
 			);
 			buildRules = (
 			);
@@ -3367,6 +3368,24 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		3E5C394F29DBEDDC0026E999 /* swift format */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "swift format";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "if which swiftformat >/dev/null; then\nswiftformat .\nelse\necho \"error: SwiftFormat not installed, download from https://github.com/nicklockwood/SwiftFormat\"\nexit 1\nfi\n";
+		};
 		3EB32B8229322E9D0019A4F3 /* Copy Metal Libraries */ = {
 			isa = PBXShellScriptBuildPhase;
 			alwaysOutOfDate = 1;

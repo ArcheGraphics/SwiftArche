@@ -26,7 +26,7 @@ class XAmbientObscurance {
     init(with device: MTLDevice, library: MTLLibrary) {
         _device = device
         _scalableAmbientObscurancePipeline = newComputePipelineState(library: library, functionName: "scalableAmbientObscurance",
-                label: "ScalableAmbientObscurance", functionConstants: nil)!
+                                                                     label: "ScalableAmbientObscurance", functionConstants: nil)!
     }
 
     // Writes commands to update the SAO texture using the command buffer, with
@@ -35,7 +35,8 @@ class XAmbientObscurance {
                 frameDataBuffer: MTLBuffer,
                 cameraParamsBuffer: MTLBuffer,
                 depth: MTLTexture,
-                depthPyramid: MTLTexture) {
+                depthPyramid: MTLTexture)
+    {
         if let computeEncoder = commandBuffer.makeComputeCommandEncoder() {
             computeEncoder.label = "SAO Generation"
             computeEncoder.setComputePipelineState(_scalableAmbientObscurancePipeline)
@@ -45,7 +46,7 @@ class XAmbientObscurance {
             computeEncoder.setTexture(depth, index: 1)
             computeEncoder.setTexture(depthPyramid, index: 2)
             computeEncoder.dispatchThreads(MTLSizeMake(_texture.width, _texture.height, 1),
-                    threadsPerThreadgroup: MTLSizeMake(8, 8, 1))
+                                           threadsPerThreadgroup: MTLSizeMake(8, 8, 1))
             computeEncoder.endEncoding()
         }
     }
@@ -53,11 +54,11 @@ class XAmbientObscurance {
     // Resizes the internal data structures to the required output size.
     func resize(_ size: CGSize) {
         let validSAOTexture = _texture != nil &&
-                _texture!.width == Int(size.width) &&
-                _texture!.height == Int(size.height)
-        if (!validSAOTexture) {
+            _texture!.width == Int(size.width) &&
+            _texture!.height == Int(size.height)
+        if !validSAOTexture {
             let saoTexDesc = MTLTextureDescriptor.texture2DDescriptor(pixelFormat: .r8Unorm, width: Int(size.width),
-                    height: Int(size.height), mipmapped: false)
+                                                                      height: Int(size.height), mipmapped: false)
             saoTexDesc.storageMode = .private
             saoTexDesc.usage = [.shaderWrite, .shaderRead]
 

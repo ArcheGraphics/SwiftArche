@@ -5,15 +5,15 @@
 //  property of any third parties.
 
 import Cocoa
-import vox_render
-import Math
-import vox_toolkit
-import vox_flex
 import ImGui
+import Math
+import vox_flex
+import vox_render
+import vox_toolkit
 
-fileprivate class GUI: Script {
+private class GUI: Script {
     var ssf: ScreenSpaceFluid!
-    
+
     private var kernelRadius: Int32 {
         get {
             Int32(ssf.kernelRadius)
@@ -22,7 +22,7 @@ fileprivate class GUI: Script {
             ssf.kernelRadius = Int(newValue)
         }
     }
-    
+
     override func onGUI() {
         UIElement.Init()
 
@@ -57,18 +57,18 @@ class ScreenSpaceFluidApp: NSViewController {
         scene.background.mode = .Sky
         scene.background.sky = skySubpass
     }
-    
+
     func createSDF() -> ImplicitTriangleMesh {
         let assetURL = Bundle.main.url(forResource: "bunny", withExtension: "obj", subdirectory: "assets")!
         let triangleMesh = TriangleMesh(device: Engine.device)!
         triangleMesh.load(assetURL)
-        
+
         return ImplicitTriangleMesh.builder()
             .withTriangleMesh(triangleMesh)
             .withResolutionX(100)
             .build()!
     }
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
         canvas = Canvas(frame: view.frame)
@@ -86,9 +86,9 @@ class ScreenSpaceFluidApp: NSViewController {
         cameraEntity.transform.lookAt(targetPosition: Vector3())
         cameraEntity.addComponent(Camera.self)
         cameraEntity.addComponent(OrbitControl.self)
-        
+
         let particleSystem = ParticleSystemData(maxLength: 10000)
-        
+
         let emitter = VolumeParticleEmitter()
         emitter.target = particleSystem
         emitter.maxRegion = BoundingBox3F(point1: Vector3F(-1, -1, -1), point2: Vector3F(1, 1, 1))
@@ -105,17 +105,16 @@ class ScreenSpaceFluidApp: NSViewController {
             commandBuffer.commit()
             commandBuffer.waitUntilCompleted()
         }
-        
+
         let ssf = cameraEntity.addComponent(ScreenSpaceFluid.self)
         ssf.particleSystem = particleSystem
         gui.ssf = ssf
-        
+
         Engine.run()
     }
-    
+
     override func viewDidDisappear() {
         super.viewDidDisappear()
         Engine.destroy()
     }
 }
-

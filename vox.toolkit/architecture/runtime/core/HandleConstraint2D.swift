@@ -4,8 +4,8 @@
 //  personal capacity and am not conveying any rights to any intellectual
 //  property of any third parties.
 
-import vox_render
 import Math
+import vox_render
 
 /// A class for storing and applying Vector2 masks.
 final class HandleConstraint2D {
@@ -38,7 +38,7 @@ final class HandleConstraint2D {
 }
 
 extension HandleConstraint2D: Hashable {
-    static func ==(a: HandleConstraint2D, b: HandleConstraint2D) -> Bool {
+    static func == (a: HandleConstraint2D, b: HandleConstraint2D) -> Bool {
         a.x == b.x && a.y == b.y
     }
 

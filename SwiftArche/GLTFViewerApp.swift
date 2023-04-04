@@ -4,20 +4,20 @@
 //  personal capacity and am not conveying any rights to any intellectual
 //  property of any third parties.
 
-import UIKit
 import ARKit
-import vox_render
 import Math
+import UIKit
+import vox_render
 
-fileprivate class ARScript: Script {
+private class ARScript: Script {
     private var _isInitialize: Bool = false
 
-    override func onARUpdate(_ deltaTime: Float, _ frame: ARFrame) {
+    override func onARUpdate(_: Float, _ frame: ARFrame) {
         if !_isInitialize {
             _isInitialize = true
             let assetURL = Bundle.main.url(forResource: "SciFiHelmet",
-                    withExtension: "gltf",
-                    subdirectory: "glTF")!
+                                           withExtension: "gltf",
+                                           subdirectory: "glTF")!
             GLTFLoader.parse(assetURL) { [self] resource in
                 entity.clearChildren()
                 entity.addChild(resource.defaultSceneRoot)
@@ -27,7 +27,7 @@ fileprivate class ARScript: Script {
                     bounds = BoundingBox.merge(box1: bounds, box2: renderer.bounds)
                 }
                 let scale = 0.1 / bounds.getExtent().internalValue.max()
-                
+
                 // Create a transform with a translation of 0.2 meters in front of the camera
                 var translation = matrix_identity_float4x4
                 translation.columns.3.z = -0.5
@@ -65,24 +65,23 @@ class GltfViewerApp: UIViewController {
         light.transform.lookAt(targetPosition: Vector3())
         let directLight = light.addComponent(DirectLight.self)
         directLight.shadowType = .SoftLow
-        
+
         let arEntity = rootEntity.createChild()
         arEntity.addComponent(ARScript.self)
 
         Engine.run()
     }
 
-    override func viewWillAppear(_ animated: Bool) {
+    override func viewWillAppear(_: Bool) {
         Engine.arManager?.run()
     }
 
-    override func viewWillDisappear(_ animated: Bool) {
+    override func viewWillDisappear(_: Bool) {
         Engine.arManager?.pause()
     }
-    
+
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
         Engine.destroy()
     }
 }
-

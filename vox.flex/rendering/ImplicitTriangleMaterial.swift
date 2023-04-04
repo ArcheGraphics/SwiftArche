@@ -17,7 +17,7 @@ public class ImplicitTriangleMaterial: BaseMaterial {
     private var _sdf: ImplicitTriangleMesh?
     private var _absThreshold: Float = 0.001
     private var _maxTraceSteps: UInt32 = 2
-    
+
     /// sdf mesh.
     public var sdf: ImplicitTriangleMesh? {
         get {
@@ -32,7 +32,7 @@ public class ImplicitTriangleMaterial: BaseMaterial {
             }
         }
     }
-    
+
     public var absThreshold: Float {
         get {
             _absThreshold
@@ -42,7 +42,7 @@ public class ImplicitTriangleMaterial: BaseMaterial {
             shaderData.setData(ImplicitTriangleMaterial.absThresholdProperty, newValue)
         }
     }
-    
+
     public var maxTraceSteps: UInt32 {
         get {
             _maxTraceSteps
@@ -53,13 +53,13 @@ public class ImplicitTriangleMaterial: BaseMaterial {
         }
     }
 
-    public override init(_ name: String = "implicit triangle mat") {
+    override public init(_ name: String = "implicit triangle mat") {
         super.init(name)
         shader.append(ShaderPass(Engine.library("flex.shader"), "vertex_sdf", "fragment_sdf"))
 
         shaderData.enableMacro(OMIT_NORMAL.rawValue)
         shaderData.enableMacro(NEED_TILINGOFFSET.rawValue)
-        
+
         shaderData.setData(ImplicitTriangleMaterial.absThresholdProperty, _absThreshold)
         shaderData.setData(ImplicitTriangleMaterial.maxTraceStepsProperty, _maxTraceSteps)
     }

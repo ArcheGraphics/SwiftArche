@@ -9,7 +9,7 @@ import Math
 /// Physical collider shape mesh.
 public class MeshColliderShape: ColliderShape {
     private var _mesh: ModelMesh?
-    
+
     public var mesh: ModelMesh? {
         get {
             _mesh
@@ -39,27 +39,23 @@ public class MeshColliderShape: ColliderShape {
             (_nativeShape as! PhysXMeshColliderShape).setCookParamter(cookingOptions)
         }
     }
-    
+
     public var colliderPoints: [Vector3] {
-        get {
-            (_nativeShape as! PhysXMeshColliderShape).position
-        }
+        (_nativeShape as! PhysXMeshColliderShape).position
     }
-    
+
     public var colliderWireframeIndices: [UInt32] {
-        get {
-            (_nativeShape as! PhysXMeshColliderShape).wireframeIndices
-        }
+        (_nativeShape as! PhysXMeshColliderShape).wireframeIndices
     }
 
     public required init() {
         super.init()
         _nativeShape = PhysXPhysics.createMeshColliderShape(
-                _id,
-                material._nativeMaterial
+            _id,
+            material._nativeMaterial
         )
     }
-    
+
     /// special API should not change cookingOptions after call
     public func cookConvexHull(_ convexHull: inout ConvexHull) {
         (_nativeShape as! PhysXMeshColliderShape).cookConvexHull(&convexHull)

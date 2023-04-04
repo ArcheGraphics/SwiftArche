@@ -17,22 +17,22 @@ public struct FrameTaskBuilder {
 
     public mutating func create<description_type: ResourceRealize>(name: String, description: description_type) -> Resource<description_type> {
         typealias resource_type = Resource<description_type>
-        framegraph_.resources_.append(resource_type(name: name, creator: { [weak render_task_] in return render_task_!},
-                                                    description: description));
+        framegraph_.resources_.append(resource_type(name: name, creator: { [weak render_task_] in render_task_! },
+                                                    description: description))
         let resource = framegraph_.resources_.last!
-        render_task_.creates_.append({ [weak resource] in return resource! });
+        render_task_.creates_.append { [weak resource] in resource! }
         return resource as! resource_type
     }
 
     public func read<resource_type: ResourceBase>(resource: resource_type) -> resource_type {
-        resource.readers_.append({ [weak render_task_] in return render_task_!} )
-        render_task_.reads_.append({ [weak resource] in return resource! })
+        resource.readers_.append { [weak render_task_] in render_task_! }
+        render_task_.reads_.append { [weak resource] in resource! }
         return resource
     }
 
     public func write<resource_type: ResourceBase>(resource: resource_type) -> resource_type {
-        resource.writers_.append({ [weak render_task_] in return render_task_!})
-        render_task_.writes_.append({ [weak resource] in return resource! })
+        resource.writers_.append { [weak render_task_] in render_task_! }
+        render_task_.writes_.append { [weak resource] in resource! }
         return resource
     }
 }

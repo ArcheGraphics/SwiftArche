@@ -15,11 +15,11 @@ func removeFromArray<T: AnyObject>(array: inout [T], item: T) -> Bool {
     let index = array.firstIndex { (v: T) in
         v === item
     }
-    if (index == nil) {
+    if index == nil {
         return false
     }
     let last = array.count - 1
-    if (index! != last) {
+    if index! != last {
         let end = array[last]
         array[index!] = end
     }

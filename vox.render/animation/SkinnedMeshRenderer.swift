@@ -20,9 +20,9 @@ public class SkinnedMeshRenderer: MeshRenderer {
     private var _useJointTexture: Bool = false
     private var _animator: Animator?
     private var _skinnedMeshIndex: Int = 0
-    
+
     private var _maxVertexUniformVectors: Int = 256
-    private var _localBounds: BoundingBox = BoundingBox()
+    private var _localBounds: BoundingBox = .init()
     private var _skinningMatrices: [simd_float4x4] = []
     private var _jointTexture: MTLTexture?
     private var _listenerFlag: ListenerUpdateFlag?
@@ -36,18 +36,18 @@ public class SkinnedMeshRenderer: MeshRenderer {
             _checkBlendShapeWeightLength()
         }
     }
-    
+
     public func setSkinnedMeshTarget(for index: Int) {
         if let mesh = _mesh as? SkinnedMesh {
             _skinnedMeshIndex = index
             let jointCount = mesh.skinningMatricesCount(at: index)
-            if (jointCount != 0) {
+            if jointCount != 0 {
                 // Allocates skinning matrices.
                 _skinningMatrices = [simd_float4x4](repeating: simd_float4x4(), count: jointCount)
-                
+
                 shaderData.enableMacro(HAS_SKIN.rawValue)
                 shaderData.setData(with: SkinnedMeshRenderer._jointCountProperty, data: jointCount)
-                if (jointCount > SkinnedMeshRenderer._maxJoints) {
+                if jointCount > SkinnedMeshRenderer._maxJoints {
                     _useJointTexture = true
                 } else {
                     let maxJoints = max(SkinnedMeshRenderer._maxJoints, jointCount)
@@ -61,7 +61,7 @@ public class SkinnedMeshRenderer: MeshRenderer {
             shaderData.disableMacro(HAS_SKIN.rawValue)
         }
     }
-    
+
     override func _render(_ devicePipeline: DevicePipeline) {
         let mesh: Mesh?
         if let skinnedMesh = _mesh as? SkinnedMesh {
@@ -69,9 +69,9 @@ public class SkinnedMeshRenderer: MeshRenderer {
         } else {
             mesh = _mesh
         }
-        
+
         if let mesh {
-            if (_dirtyUpdateFlag & MeshRendererUpdateFlags.VertexElementMacro.rawValue != 0) {
+            if _dirtyUpdateFlag & MeshRendererUpdateFlags.VertexElementMacro.rawValue != 0 {
                 let vertexDescriptor = mesh._vertexDescriptor
                 shaderData.disableMacro(HAS_UV.rawValue)
                 shaderData.disableMacro(HAS_NORMAL.rawValue)
@@ -94,14 +94,14 @@ public class SkinnedMeshRenderer: MeshRenderer {
             }
 
             let subMeshes = mesh.subMeshes
-            for i in 0..<subMeshes.count {
+            for i in 0 ..< subMeshes.count {
                 let material: Material?
                 if i < _materials.count {
                     material = _materials[i]
                 } else {
                     material = nil
                 }
-                if (material != nil) {
+                if material != nil {
                     let renderData = MeshRenderData(renderer: self, material: material!,
                                                     mesh: mesh, subMesh: subMeshes[i])
                     devicePipeline.pushRenderData(renderData)
@@ -110,13 +110,14 @@ public class SkinnedMeshRenderer: MeshRenderer {
         }
     }
 
-    override func update(_ deltaTime: Float) {
+    override func update(_: Float) {
         if _animator == nil {
             _animator = entity.getComponent(Animator.self)
         }
-        
+
         if let animator = _animator,
-           let skinnedMesh = _mesh as? SkinnedMesh {
+           let skinnedMesh = _mesh as? SkinnedMesh
+        {
             skinnedMesh.getSkinningMatrices(at: _skinnedMeshIndex, animator: animator, matrix: &_skinningMatrices)
         }
     }
@@ -141,7 +142,7 @@ public class SkinnedMeshRenderer: MeshRenderer {
             worldBounds = BoundingBox.transform(source: localBounds, matrix: worldMatrix)
         }
     }
-    
+
     override func _onDestroy() {
         super._onDestroy()
         if let mesh = _mesh as? SkinnedMesh {
@@ -150,7 +151,7 @@ public class SkinnedMeshRenderer: MeshRenderer {
     }
 
     private func _createJointTexture() {
-        if (_jointTexture == nil) {
+        if _jointTexture == nil {
             let descriptor = MTLTextureDescriptor()
             descriptor.width = 4
             descriptor.height = _skinningMatrices.count
@@ -170,7 +171,7 @@ public class SkinnedMeshRenderer: MeshRenderer {
 
         if let texture = _jointTexture {
             texture.replace(region: MTLRegion(origin: MTLOrigin(x: 0, y: 0, z: 0),
-                    size: MTLSize(width: texture.width, height: texture.height, depth: 1)),
+                                              size: MTLSize(width: texture.width, height: texture.height, depth: 1)),
                             mipmapLevel: 0, withBytes: &_skinningMatrices, bytesPerRow: 16 * MemoryLayout<Float>.stride)
         }
     }
@@ -178,13 +179,13 @@ public class SkinnedMeshRenderer: MeshRenderer {
     private func _checkBlendShapeWeightLength() {
         if let mesh = _mesh as? ModelMesh {
             let newBlendShapeCount = mesh.blendShapeCount
-            if (!blendShapeWeights.isEmpty) {
-                if (blendShapeWeights.count != newBlendShapeCount) {
+            if !blendShapeWeights.isEmpty {
+                if blendShapeWeights.count != newBlendShapeCount {
                     var newBlendShapeWeights = [Float](repeating: 0, count: newBlendShapeCount)
-                    if (newBlendShapeCount > blendShapeWeights.count) {
+                    if newBlendShapeCount > blendShapeWeights.count {
                         newBlendShapeWeights.insert(contentsOf: blendShapeWeights, at: 0)
                     } else {
-                        for i in 0..<newBlendShapeCount {
+                        for i in 0 ..< newBlendShapeCount {
                             newBlendShapeWeights[i] = blendShapeWeights[i]
                         }
                     }

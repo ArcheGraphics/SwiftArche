@@ -5,7 +5,7 @@
 //  property of any third parties.
 
 #if os(iOS)
-import ARKit
+    import ARKit
 #endif
 import Metal
 
@@ -22,119 +22,100 @@ open class Script: Component {
     var _waitHandlingInValid: Bool = false
 
     /// Called when be enabled first time, only once.
-    open func onAwake() {
-    }
+    open func onAwake() {}
 
     /// Called when be enabled.
-    open func onEnable() {
-    }
+    open func onEnable() {}
 
     /// Called before the frame-level loop start for the first time, only once.
-    open func onStart() {
-    }
+    open func onStart() {}
 
     /// The main loop, called frame by frame.
     /// - Parameter deltaTime: The deltaTime when the script update.
-    open func onUpdate(_ deltaTime: Float) {
-    }
+    open func onUpdate(_: Float) {}
 
     /// Called after the onUpdate finished, called frame by frame.
     /// - Parameter deltaTime: The deltaTime when the script update.
-    open func onLateUpdate(_ deltaTime: Float) {
-    }
+    open func onLateUpdate(_: Float) {}
 
-#if os(iOS)
-    /// Called after the onLateUpdate finished, called frame by frame.
-    /// - Parameter deltaTime: The deltaTime when the script update.
-    /// - Parameter frame: The ARFrame when the script update.
-    open func onARUpdate(_ deltaTime: Float, _ frame: ARFrame) {
-    }
-#endif
+    #if os(iOS)
+        /// Called after the onLateUpdate finished, called frame by frame.
+        /// - Parameter deltaTime: The deltaTime when the script update.
+        /// - Parameter frame: The ARFrame when the script update.
+        open func onARUpdate(_: Float, _: ARFrame) {}
+    #endif
 
     /// Called before camera rendering, called per camera.
     /// - Parameter camera: Current camera.
     /// - Parameter commandBuffer: Current commandBuffer.
-    open func onBeginRender(_ camera: Camera, _ commandBuffer: MTLCommandBuffer) {
-    }
+    open func onBeginRender(_: Camera, _: MTLCommandBuffer) {}
 
     /// Called after camera rendering, called per camera.
     /// - Parameter camera: Current camera.
     /// - Parameter commandBuffer: Current commandBuffer.
-    open func onEndRender(_ camera: Camera, _ commandBuffer: MTLCommandBuffer) {
-    }
+    open func onEndRender(_: Camera, _: MTLCommandBuffer) {}
 
     /// Called before physics calculations, the number of times is related to the physical update frequency.
-    open func onPhysicsUpdate() {
-    }
+    open func onPhysicsUpdate() {}
 
     /// Called when the collision enter.
     /// - Parameter other: ColliderShape
-    open func onTriggerEnter(_ other: ColliderShape) {
-    }
+    open func onTriggerEnter(_: ColliderShape) {}
 
     /// Called when the collision stay.
     /// - Remark: onTriggerStay is called every frame while the collision stay.
     /// - Parameter other:ColliderShape
-    open func onTriggerExit(_ other: ColliderShape) {
-    }
+    open func onTriggerExit(_: ColliderShape) {}
 
     /// Called when the collision exit.
     /// - Parameter other: ColliderShape
-    open func onTriggerStay(_ other: ColliderShape) {
-    }
+    open func onTriggerStay(_: ColliderShape) {}
 
     /// Called when the collision enter.
     /// - Parameter other: ColliderShape
-    open func onCollisionEnter(_ other: Collision) {
-    }
+    open func onCollisionEnter(_: Collision) {}
 
     /// Called when the collision stay.
     /// - Remark: onTriggerStay is called every frame while the collision stay.
     /// - Parameter other: ColliderShape
-    open func onCollisionExit(_ other: Collision) {
-    }
+    open func onCollisionExit(_: Collision) {}
 
     /// Called when the collision exit.
     /// - Parameter other: ColliderShape
-    open func onCollisionStay(_ other: Collision) {
-    }
+    open func onCollisionStay(_: Collision) {}
 
     /// Called when the pointer is casted while over the ColliderShape.
     ///   - hitResult: The pointer hit result
     ///   - type: The event type depend on platform (NSEvent.type or UITouch.phase)
-    open func onPointerCast(_ hitResult: HitResult, _ type: UInt) {
-    }
-    
-    open func onGUI() {
-    }
+    open func onPointerCast(_: HitResult, _: UInt) {}
+
+    open func onGUI() {}
 
     /// Called when be disabled.
-    open func onDisable() {
-    }
+    open func onDisable() {}
 
     /// Called at the end of the destroyed frame.
-    open func onDestroy() {
-    }
+    open func onDestroy() {}
 
     override func _onAwake() {
         onAwake()
     }
 
     override func _onEnable() {
-        if (_waitHandlingInValid) {
+        if _waitHandlingInValid {
             _waitHandlingInValid = false
         } else {
             let componentsManager = Engine._componentsManager
-            if (!_started) {
+            if !_started {
                 componentsManager.addOnStartScript(self)
             }
             componentsManager.addOnUpdateScript(self)
-#if os(iOS)
-            Engine.arManager?.addOnUpdateScript(self)
-#endif
-#if os(macOS)
-            Engine._guiManager.addOnGUIScript(self)
-#endif
+            #if os(iOS)
+                Engine.arManager?.addOnUpdateScript(self)
+            #endif
+            #if os(macOS)
+                Engine._guiManager.addOnGUIScript(self)
+            #endif
             _entity._addScript(self)
         }
         onEnable()
@@ -143,9 +124,9 @@ open class Script: Component {
     override func _onDisable() {
         _waitHandlingInValid = true
         Engine._componentsManager.addDisableScript(component: self)
-#if os(macOS)
-        Engine._guiManager.removeOnGUIScript(self)
-#endif
+        #if os(macOS)
+            Engine._guiManager.removeOnGUIScript(self)
+        #endif
         onDisable()
     }
 
@@ -155,9 +136,9 @@ open class Script: Component {
 
     func _handlingInValid() {
         Engine._componentsManager.removeOnUpdateScript(self)
-#if os(iOS)
-        Engine.arManager?.removeOnUpdateScript(self)
-#endif
+        #if os(iOS)
+            Engine.arManager?.removeOnUpdateScript(self)
+        #endif
         _entity._removeScript(self)
         _waitHandlingInValid = false
     }

@@ -11,12 +11,12 @@ public struct ControllerColliderHit {
     public var collider: Collider?
     public var entity: Entity?
     public weak var controller: CharacterController?
-    
+
     public var moveDirection = Vector3()
     public var moveLength: Float = 0
     public var normal = Vector3()
     public var point = Vector3()
-    
+
     public init(_ controller: CharacterController) {
         self.controller = controller
     }

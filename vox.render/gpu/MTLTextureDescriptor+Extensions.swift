@@ -37,7 +37,7 @@ public extension MTLTextureDescriptor {
 
 extension MTLTextureDescriptor: ResourceRealize {
     public typealias actual_type = MTLTexture
-    
+
     public var size: Int {
         let sizeAndAlign = Engine.device.heapTextureSizeAndAlign(descriptor: self)
         return alignUp(size: sizeAndAlign.size, align: sizeAndAlign.align)
@@ -46,7 +46,7 @@ extension MTLTextureDescriptor: ResourceRealize {
     public func realize(with heap: MTLHeap?) -> MTLTexture? {
         heap!.makeTexture(descriptor: self)
     }
-    
+
     public func derealize(resource: actual_type) {
         resource.makeAliasable()
     }

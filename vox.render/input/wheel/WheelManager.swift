@@ -8,12 +8,12 @@ import Cocoa
 import Math
 
 class WheelManager {
-    var _delta: Vector3 = Vector3()
+    var _delta: Vector3 = .init()
     private var _nativeEvents: [NSEvent] = []
-    
+
     func _update() {
         var delta = SIMD3<Float>(repeating: 0.0)
-        if (!_nativeEvents.isEmpty) {
+        if !_nativeEvents.isEmpty {
             for evt in _nativeEvents {
                 delta.x += Float(evt.deltaX)
                 delta.y += Float(evt.deltaY)
@@ -23,8 +23,8 @@ class WheelManager {
         }
         _delta = Vector3(delta)
     }
-    
+
     func _onWheelEvent(_ evt: NSEvent) {
-      _nativeEvents.append(evt)
+        _nativeEvents.append(evt)
     }
 }

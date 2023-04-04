@@ -5,13 +5,13 @@
 //  property of any third parties.
 
 import Cocoa
-import vox_render
-import Math
-import vox_toolkit
 import ImGui
+import Math
 import ModelIO
+import vox_render
+import vox_toolkit
 
-fileprivate class GUI: Script {
+private class GUI: Script {
     var show_demo_window: Bool = true
     var show_another_window: Bool = false
     var clear_color: SIMD3<Float> = .init(x: 0.28, y: 0.36, z: 0.5)
@@ -55,7 +55,7 @@ fileprivate class GUI: Script {
             counter += 1
         }
 
-        //SameLine(offset_from_start_x: 0, spacing: 0)
+        // SameLine(offset_from_start_x: 0, spacing: 0)
 
         ImGuiSameLine(0, 2)
         ImGuiTextV(String(format: "counter = %d", counter))
@@ -89,7 +89,7 @@ class SkyboxApp: NSViewController {
 
         let skyMaterial = SkyBoxMaterial()
         // method1: load cubemap
-        //skyMaterial.textureCubeMap = try! Engine.textureLoader.loadTexture(with: "country")!
+        // skyMaterial.textureCubeMap = try! Engine.textureLoader.loadTexture(with: "country")!
 
         // method2: load hdr
         let hdr = Engine.textureLoader.loadHDR(with: "assets/kloppenheim_06_4k.hdr")!
@@ -129,10 +129,9 @@ class SkyboxApp: NSViewController {
 
         Engine.run()
     }
-    
+
     override func viewDidDisappear() {
         super.viewDidDisappear()
         Engine.destroy()
     }
 }
-

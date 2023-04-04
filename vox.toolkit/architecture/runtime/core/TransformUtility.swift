@@ -4,27 +4,25 @@
 //  personal capacity and am not conveying any rights to any intellectual
 //  property of any third parties.
 
-import vox_render
 import Math
+import vox_render
 
 /// Helper functions for working with transforms.
-public class TransformUtility {
-    static var s_ChildStack: Dictionary<Transform, [Transform]> = [:]
+public enum TransformUtility {
+    static var s_ChildStack: [Transform: [Transform]] = [:]
 
     /// Unparent all children from a transform, saving them for later re-parenting (see ReparentChildren).
-    internal static func UnparentChildren(t: Transform) {
-    }
+    internal static func UnparentChildren(t _: Transform) {}
 
     /// Re-parent all children to a transform.  Must have called UnparentChildren prior.
-    internal static func ReparentChildren(t: Transform) {
-    }
+    internal static func ReparentChildren(t _: Transform) {}
 
     /// Transform a vertex into world space.
     /// - Parameters:
     ///   - transform: The transform to apply.
     ///   - vertex: A model space vertex.
     /// - Returns: A new vertex in world coordinate space.
-    public static func TransformVertex(transform: Transform, vertex: Vertex) -> Vertex {
+    public static func TransformVertex(transform _: Transform, vertex _: Vertex) -> Vertex {
         Vertex()
     }
 
@@ -33,7 +31,7 @@ public class TransformUtility {
     ///   - transform: The transform to apply.
     ///   - vertex: A world space vertex.
     /// - Returns: A new vertex in transform coordinate space.
-    public static func InverseTransformVertex(transform: Transform, vertex: Vertex) -> Vertex {
+    public static func InverseTransformVertex(transform _: Transform, vertex _: Vertex) -> Vertex {
         Vertex()
     }
 }

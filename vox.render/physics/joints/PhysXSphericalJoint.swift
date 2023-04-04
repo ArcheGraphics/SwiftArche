@@ -8,11 +8,13 @@ import Math
 
 class PhysXSphericalJoint: PhysXJoint {
     init(_ actor0: PhysXCollider?, _ position0: Vector3, _ rotation0: Quaternion,
-         _ actor1: PhysXCollider?, _ position1: Vector3, _ rotation1: Quaternion) {
+         _ actor1: PhysXCollider?, _ position1: Vector3, _ rotation1: Quaternion)
+    {
         super.init()
         _pxJoint = PhysXPhysics._pxPhysics.createSphericalJoint(
-                actor0?._pxActor ?? nil, position0.internalValue, rotation0.internalValue,
-                actor1?._pxActor ?? nil, position1.internalValue, rotation1.internalValue)
+            actor0?._pxActor ?? nil, position0.internalValue, rotation0.internalValue,
+            actor1?._pxActor ?? nil, position1.internalValue, rotation1.internalValue
+        )
     }
 
     func setHardLimitCone(_ yLimitAngle: Float, _ zLimitAngle: Float, _ contactDist: Float) {
@@ -21,8 +23,8 @@ class PhysXSphericalJoint: PhysXJoint {
 
     func setSoftLimitCone(_ yLimitAngle: Float, _ zLimitAngle: Float, _ stiffness: Float, _ damping: Float) {
         (_pxJoint as! CPxSphericalJoint).setLimitCone(
-                CPxJointLimitCone(softLimit: yLimitAngle, zLimitAngle,
-                        CPxSpring(stiffness: stiffness, damping)))
+            CPxJointLimitCone(softLimit: yLimitAngle, zLimitAngle,
+                              CPxSpring(stiffness: stiffness, damping)))
     }
 
     func setSphericalJointFlag(_ flag: Int, _ value: Bool) {

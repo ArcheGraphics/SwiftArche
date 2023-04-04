@@ -19,9 +19,9 @@ public class SphereColliderShape: ColliderShape {
     public required init() {
         super.init()
         _nativeShape = PhysXPhysics.createSphereColliderShape(
-                _id,
-                radius,
-                material._nativeMaterial
+            _id,
+            radius,
+            material._nativeMaterial
         )
     }
 }

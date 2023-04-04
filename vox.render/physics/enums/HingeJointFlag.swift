@@ -9,9 +9,9 @@ import Math
 /// Flags specific to the Hinge Joint.
 enum HingeJointFlag: UInt32 {
     /// enable the limit
-    case  LimitEnabled = 1
+    case LimitEnabled = 1
     /// enable the drive
-    case  DriveEnabled = 2
+    case DriveEnabled = 2
     /// if the existing velocity is beyond the drive velocity, do not add force
-    case  DriveFreeSpin = 4
+    case DriveFreeSpin = 4
 }

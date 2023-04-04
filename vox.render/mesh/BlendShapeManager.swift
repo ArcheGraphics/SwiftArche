@@ -29,8 +29,8 @@ public class BlendShapeManager {
     private var _vertexElementOffset: Int = 0
     private var _storeInVertexBufferInfo: [Vector2] = []
     private var _modelMesh: ModelMesh
-    private var _lastCreateHostInfo: Vector3 = Vector3(0, 0, 0)
-    private var _dataTextureInfo: SIMD3<UInt32> = SIMD3<UInt32>()
+    private var _lastCreateHostInfo: Vector3 = .init(0, 0, 0)
+    private var _dataTextureInfo: SIMD3<UInt32> = .init()
 
     init(_ modelMesh: ModelMesh) {
         _modelMesh = modelMesh
@@ -63,7 +63,7 @@ public class BlendShapeManager {
     }
 
     func _updateShaderData(_ shaderData: ShaderData, _ skinnedMeshRenderer: SkinnedMeshRenderer) {
-        if (_blendShapeCount > 0) {
+        if _blendShapeCount > 0 {
             shaderData.enableMacro(HAS_BLENDSHAPE.rawValue)
             shaderData.setImageSampler(with: BlendShapeManager._blendShapeTextureProperty,
                                        BlendShapeManager._blendShapeSamplerProperty, texture: _vertexTexture)
@@ -72,12 +72,12 @@ public class BlendShapeManager {
             shaderData.setData(with: BlendShapeManager._blendShapeWeightsProperty, array: skinnedMeshRenderer.blendShapeWeights)
             shaderData.enableMacro(BLENDSHAPE_COUNT.rawValue, (_blendShapeCount, .int))
 
-            if (_useBlendNormal) {
+            if _useBlendNormal {
                 shaderData.enableMacro(HAS_BLENDSHAPE_NORMAL.rawValue)
             } else {
                 shaderData.disableMacro(HAS_BLENDSHAPE_NORMAL.rawValue)
             }
-            if (_useBlendTangent) {
+            if _useBlendTangent {
                 shaderData.enableMacro(HAS_BLENDSHAPE_TANGENT.rawValue)
             } else {
                 shaderData.disableMacro(HAS_BLENDSHAPE_TANGENT.rawValue)
@@ -90,33 +90,33 @@ public class BlendShapeManager {
 
     func _layoutOrCountChange() -> Bool {
         Int(_lastCreateHostInfo.x) != _blendShapeCount ||
-                (_lastCreateHostInfo.y != 0) != _useBlendNormal ||
-                (_lastCreateHostInfo.z != 0) != _useBlendTangent
+            (_lastCreateHostInfo.y != 0) != _useBlendNormal ||
+            (_lastCreateHostInfo.z != 0) != _useBlendTangent
     }
 
     func _needUpdateData() -> Bool {
         for subDataDirtyFlag in _subDataDirtyFlags {
-            if (subDataDirtyFlag.flag) {
+            if subDataDirtyFlag.flag {
                 return true
             }
         }
         return false
     }
 
-    func _update(_ vertexCountChange: Bool, _ noLongerAccessible: Bool) {
+    func _update(_ vertexCountChange: Bool, _: Bool) {
         let createHost = _layoutOrCountChange() || vertexCountChange
-        if (createHost) {
+        if createHost {
             _createTextureArray(_modelMesh.vertexCount)
             _lastCreateHostInfo = Vector3(Float(_blendShapeCount), _useBlendNormal ? 1.0 : 0.0, _useBlendTangent ? 1.0 : 0.0)
         }
-        if (_needUpdateData()) {
+        if _needUpdateData() {
             _updateTextureArray(_modelMesh.vertexCount, createHost)
         }
     }
 
     func _releaseMemoryCache() {
         var blendShapeNamesMap = [String](repeating: "", count: _blendShapes.count)
-        for i in 0..<_blendShapes.count {
+        for i in 0 ..< _blendShapes.count {
             blendShapeNamesMap[i] = _blendShapes[i].name
         }
         _blendShapeNames = blendShapeNamesMap
@@ -129,7 +129,7 @@ public class BlendShapeManager {
     private func _createTextureArray(_ vertexCount: Int) {
         var textureWidth = _vertexElementCount * vertexCount
         var textureHeight = 1
-        if (textureWidth > maxTextureSize) {
+        if textureWidth > maxTextureSize {
             textureHeight = Int(ceil(Float(textureWidth) / Float(maxTextureSize)))
             textureWidth = maxTextureSize
         }
@@ -151,21 +151,22 @@ public class BlendShapeManager {
     }
 
     private func _updateTextureArray(_ vertexCount: Int, _ force: Bool) {
-        for i in 0..<_blendShapes.count {
+        for i in 0 ..< _blendShapes.count {
             let subDirtyFlag = _subDataDirtyFlags[i]
-            if (force || subDirtyFlag.flag) {
+            if force || subDirtyFlag.flag {
                 let frames = _blendShapes[i].frames
                 if let endFrame = frames.last,
-                   endFrame.deltaPositions.count == vertexCount {
+                   endFrame.deltaPositions.count == vertexCount
+                {
                     var offset = 0
-                    for j in 0..<vertexCount {
+                    for j in 0 ..< vertexCount {
                         let position = endFrame.deltaPositions[j]
                         _vertices[offset] = position.x
                         _vertices[offset + 1] = position.y
                         _vertices[offset + 2] = position.z
                         offset += 4
 
-                        if (endFrame.deltaNormals != nil) {
+                        if endFrame.deltaNormals != nil {
                             let normal = endFrame.deltaNormals![j]
                             _vertices[offset] = normal.x
                             _vertices[offset + 1] = normal.y
@@ -173,7 +174,7 @@ public class BlendShapeManager {
                             offset += 4
                         }
 
-                        if (endFrame.deltaTangents != nil) {
+                        if endFrame.deltaTangents != nil {
                             let tangent = endFrame.deltaTangents![j]
                             _vertices[offset] = tangent.x
                             _vertices[offset + 1] = tangent.y
@@ -193,12 +194,12 @@ public class BlendShapeManager {
         }
     }
 
-    private func _updateLayoutChange(_ a: Int?, _ blendShape: AnyObject?) {
+    private func _updateLayoutChange(_: Int?, _ blendShape: AnyObject?) {
         let notFirst = _blendShapeCount > 1
         var vertexElementCount = 1
         var useBlendNormal = (blendShape as! BlendShape)._useBlendShapeNormal
         var useBlendTangent = (blendShape as! BlendShape)._useBlendShapeTangent
-        if (notFirst) {
+        if notFirst {
             useBlendNormal = useBlendNormal && _useBlendNormal
             useBlendTangent = useBlendTangent && _useBlendTangent
         }

@@ -10,7 +10,7 @@ open class FrameData {
     private var _shaderBuffers: [String: BufferAllocation] = [:]
     private var _imageViews: [String: MTLTexture] = [:]
     private var _samplers: [String: MTLSamplerDescriptor] = [:]
-    static private var _defaultSamplerDesc: MTLSamplerDescriptor = MTLSamplerDescriptor()
+    private static var _defaultSamplerDesc: MTLSamplerDescriptor = .init()
     internal var _macroCollection = ShaderMacroCollection()
     var group: ShaderDataGroup = .Frame
     var resourceCache: ResourceCache
@@ -24,14 +24,14 @@ open class FrameData {
         FrameData._defaultSamplerDesc.sAddressMode = .repeat
         FrameData._defaultSamplerDesc.tAddressMode = .repeat
     }
-    
+
     public func clear() {
         _shaderBuffers = [:]
         _imageViews = [:]
         _samplers = [:]
         _macroCollection.clear()
     }
-    
+
     public func getData(_ property: String) -> BufferAllocation? {
         _shaderBuffers[property]
     }
@@ -47,7 +47,7 @@ open class FrameData {
 
         if value != nil {
             _imageViews[textureName] = value
-            let sampler = _samplers.firstIndex { (key: String, value: MTLSamplerDescriptor) in
+            let sampler = _samplers.firstIndex { (key: String, _: MTLSamplerDescriptor) in
                 key == samplerName
             }
             if sampler == nil {
@@ -80,10 +80,10 @@ open class FrameData {
     }
 }
 
-extension FrameData {
+public extension FrameData {
     /// Enable macro.
     /// - Parameter name: Macro name
-    public func enableMacro(_ name: UInt32) {
+    func enableMacro(_ name: UInt32) {
         _macroCollection._value[UInt16(name)] = (1, .bool)
     }
 
@@ -91,41 +91,39 @@ extension FrameData {
     /// - Parameters:
     ///   - name: Macro name
     ///   - value: Macro value
-    public func enableMacro(_ name: UInt32, _ value: (Int, MTLDataType)) {
+    func enableMacro(_ name: UInt32, _ value: (Int, MTLDataType)) {
         _macroCollection._value[UInt16(name)] = value
     }
 
     /// Disable macro
     /// - Parameter name: Macro name
-    public func disableMacro(_ name: UInt32) {
+    func disableMacro(_ name: UInt32) {
         _macroCollection._value.removeValue(forKey: UInt16(name))
     }
 }
 
 extension FrameData {
     func bindData(_ commandEncoder: MTLComputeCommandEncoder,
-                  _ reflectionUniforms: [ReflectionUniform]) {
+                  _ reflectionUniforms: [ReflectionUniform])
+    {
         for uniform in reflectionUniforms {
             if uniform.group != group {
                 continue
             }
-            
+
             switch uniform.bindingType {
             case .buffer:
                 if let bufferAlloc = _shaderBuffers[uniform.name] {
                     commandEncoder.setBuffer(bufferAlloc.buffer, offset: bufferAlloc.offset, index: uniform.location)
                 }
-                break
             case .texture:
                 if let image = _imageViews[uniform.name] {
                     commandEncoder.setTexture(image, index: uniform.location)
                 }
-                break
             case .sampler:
                 if let sampler = _samplers[uniform.name] {
                     commandEncoder.setSamplerState(Engine.resourceCache.requestSamplers(sampler), index: uniform.location)
                 }
-                break
             default:
                 break
             }
@@ -133,12 +131,13 @@ extension FrameData {
     }
 
     func bindData(_ commandEncoder: MTLRenderCommandEncoder,
-                  _ reflectionUniforms: [ReflectionUniform]) {
+                  _ reflectionUniforms: [ReflectionUniform])
+    {
         for uniform in reflectionUniforms {
             if uniform.group != group {
                 continue
             }
-            
+
             switch uniform.bindingType {
             case .buffer:
                 if let bufferAlloc = _shaderBuffers[uniform.name] {
@@ -149,7 +148,6 @@ extension FrameData {
                         commandEncoder.setFragmentBuffer(bufferAlloc.buffer, offset: bufferAlloc.offset, index: uniform.location)
                     }
                 }
-                break
             case .texture:
                 if let image = _imageViews[uniform.name] {
                     if uniform.functionType == .vertex {
@@ -159,7 +157,6 @@ extension FrameData {
                         commandEncoder.setFragmentTexture(image, index: uniform.location)
                     }
                 }
-                break
             case .sampler:
                 if let sampler = _samplers[uniform.name] {
                     if uniform.functionType == .vertex {
@@ -169,7 +166,6 @@ extension FrameData {
                         commandEncoder.setFragmentSamplerState(Engine.resourceCache.requestSamplers(sampler), index: uniform.location)
                     }
                 }
-                break
             default:
                 break
             }

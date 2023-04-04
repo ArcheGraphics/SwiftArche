@@ -5,15 +5,16 @@
 //  property of any third parties.
 
 import Cocoa
-import vox_render
-import Math
-import vox_toolkit
 import ImGui
+import Math
+import vox_render
+import vox_toolkit
 
 func addSphere(_ rootEntity: Entity, _ radius: Float,
-               _ position: Vector3, _ rotation: Quaternion, isDynamic: Bool = true) -> Entity {
+               _ position: Vector3, _ rotation: Quaternion, isDynamic: Bool = true) -> Entity
+{
     let mtl = PBRMaterial()
-    mtl.baseColor = Color(Float.random(in: 0...1), Float.random(in: 0...1), Float.random(in: 0...1), 1.0)
+    mtl.baseColor = Color(Float.random(in: 0 ... 1), Float.random(in: 0 ... 1), Float.random(in: 0 ... 1), 1.0)
     mtl.metallic = 0.0
     mtl.roughness = 0.5
     let sphereEntity = rootEntity.createChild()
@@ -37,9 +38,10 @@ func addSphere(_ rootEntity: Entity, _ radius: Float,
 }
 
 func addCapsule(_ rootEntity: Entity, _ radius: Float, _ height: Float,
-                _ position: Vector3, _ rotation: Quaternion, isDynamic: Bool = true) -> Entity {
+                _ position: Vector3, _ rotation: Quaternion, isDynamic: Bool = true) -> Entity
+{
     let mtl = PBRMaterial()
-    mtl.baseColor = Color(Float.random(in: 0...1), Float.random(in: 0...1), Float.random(in: 0...1), 1.0)
+    mtl.baseColor = Color(Float.random(in: 0 ... 1), Float.random(in: 0 ... 1), Float.random(in: 0 ... 1), 1.0)
     mtl.metallic = 0.0
     mtl.roughness = 0.5
     let capsuleEntity = rootEntity.createChild()
@@ -64,17 +66,18 @@ func addCapsule(_ rootEntity: Entity, _ radius: Float, _ height: Float,
 }
 
 func addBox(_ rootEntity: Entity, _ size: Vector3,
-            _ position: Vector3, _ rotation: Quaternion, isDynamic: Bool = true) -> Entity {
+            _ position: Vector3, _ rotation: Quaternion, isDynamic: Bool = true) -> Entity
+{
     let mtl = PBRMaterial()
-    mtl.baseColor = Color(Float.random(in: 0...1), Float.random(in: 0...1), Float.random(in: 0...1), 1.0)
+    mtl.baseColor = Color(Float.random(in: 0 ... 1), Float.random(in: 0 ... 1), Float.random(in: 0 ... 1), 1.0)
     mtl.metallic = 0.0
     mtl.roughness = 0.5
     let boxEntity = rootEntity.createChild()
     let renderer = boxEntity.addComponent(MeshRenderer.self)
     renderer.mesh = PrimitiveMesh.createCuboid(
-            width: size.x,
-            height: size.y,
-            depth: size.z
+        width: size.x,
+        height: size.y,
+        depth: size.z
     )
     renderer.setMaterial(mtl)
     boxEntity.transform.position = position
@@ -96,13 +99,14 @@ func addBox(_ rootEntity: Entity, _ size: Vector3,
 }
 
 func addPlane(_ rootEntity: Entity, _ size: Vector3,
-              _ position: Vector3, _ rotation: Quaternion) -> Entity {
+              _ position: Vector3, _ rotation: Quaternion) -> Entity
+{
     let mtl = PBRMaterial()
     mtl.baseColor = Color(
-            0.2179807202597362,
-            0.2939682161541871,
-            0.31177952549087604,
-            1
+        0.2179807202597362,
+        0.2939682161541871,
+        0.31177952549087604,
+        1
     )
     mtl.roughness = 0.0
     mtl.metallic = 0.0
@@ -111,9 +115,9 @@ func addPlane(_ rootEntity: Entity, _ size: Vector3,
 
     let renderer = planeEntity.addComponent(MeshRenderer.self)
     renderer.mesh = PrimitiveMesh.createCuboid(
-            width: size.x,
-            height: size.y,
-            depth: size.z
+        width: size.x,
+        height: size.y,
+        depth: size.z
     )
     renderer.setMaterial(mtl)
     planeEntity.transform.position = position
@@ -121,7 +125,7 @@ func addPlane(_ rootEntity: Entity, _ size: Vector3,
 
     let physicsPlane = PlaneColliderShape()
     physicsPlane.position = Vector3(0, size.y, 0)
-    physicsPlane.isSceneQuery = false;
+    physicsPlane.isSceneQuery = false
     let planeCollider = planeEntity.addComponent(StaticCollider.self)
     planeCollider.addShape(physicsPlane)
 
@@ -133,18 +137,19 @@ func addDuckMesh(_ rootEntity: Entity) {
     GLTFLoader.parse(assetURL, { resource in
         let entity = resource.defaultSceneRoot!
         rootEntity.addChild(entity)
-        
+
         let colliderShape = MeshColliderShape()
 //        colliderShape.isConvex = true
         colliderShape.mesh = resource.meshes![0][0]
         let collider = entity.addComponent(StaticCollider.self)
         collider.addShape(colliderShape)
-        
+
         rootEntity.getComponent(EngineVisualizer.self)?.addMeshColliderShapeWireframe(with: colliderShape)
     }, true)
 }
 
 // MARK: - CollisionScript
+
 class CollisionScript: Script {
     private var sphereRenderer: MeshRenderer!
 
@@ -152,49 +157,50 @@ class CollisionScript: Script {
         sphereRenderer = entity.getComponent(MeshRenderer.self)
     }
 
-    override func onTriggerEnter(_ other: ColliderShape) {
+    override func onTriggerEnter(_: ColliderShape) {
 //        print("onTriggerEnter")
         if let sphereRenderer {
-            (sphereRenderer.getMaterial() as! PBRMaterial).baseColor = Color(Float.random(in: 0..<1),
-                                                                             Float.random(in: 0..<1), Float.random(in: 0..<1), 0.5)
+            (sphereRenderer.getMaterial() as! PBRMaterial).baseColor = Color(Float.random(in: 0 ..< 1),
+                                                                             Float.random(in: 0 ..< 1), Float.random(in: 0 ..< 1), 0.5)
         }
     }
-    
-    override func onTriggerStay(_ other: ColliderShape) {
+
+    override func onTriggerStay(_: ColliderShape) {
 //        print("onTriggerStay")
     }
 
-    override func onTriggerExit(_ other: ColliderShape) {
+    override func onTriggerExit(_: ColliderShape) {
 //        print("onTriggerExit")
         if let sphereRenderer {
-            (sphereRenderer.getMaterial() as! PBRMaterial).baseColor = Color(Float.random(in: 0..<1),
-                                                                             Float.random(in: 0..<1), Float.random(in: 0..<1), 0.5)
+            (sphereRenderer.getMaterial() as! PBRMaterial).baseColor = Color(Float.random(in: 0 ..< 1),
+                                                                             Float.random(in: 0 ..< 1), Float.random(in: 0 ..< 1), 0.5)
         }
     }
-    
-    override func onCollisionExit(_ other: Collision) {
+
+    override func onCollisionExit(_: Collision) {
 //        print("onCollisionExit")
     }
-    
-    override func onCollisionStay(_ other: Collision) {
+
+    override func onCollisionStay(_: Collision) {
 //        print("onCollisionStay")
     }
-    
-    override func onCollisionEnter(_ other: Collision) {
+
+    override func onCollisionEnter(_: Collision) {
 //        print("onCollisionEnter")
     }
 }
 
 // MARK: - PhysicsVisual
+
 @propertyWrapper
 struct EnumToBool {
     var number: Bool = false
     var type: VisualizationParameter
-    
+
     init(type: VisualizationParameter) {
         self.type = type
     }
-    
+
     var wrappedValue: Bool {
         get { number }
         set {
@@ -209,73 +215,73 @@ struct EnumToBool {
 class PhysicsVisual: Script {
     @EnumToBool(type: .WorldAxes)
     var worldAxes: Bool
-    
+
     @EnumToBool(type: .BodyAxes)
     var bodyAxes: Bool
-    
+
     @EnumToBool(type: .BodyMassAxes)
     var bodyMassAxes: Bool
-    
+
     @EnumToBool(type: .BodyLinVelocity)
     var bodyLinVelocity: Bool
-    
+
     @EnumToBool(type: .BodyAngVelocity)
     var bodyAngVelocity: Bool
-    
+
     @EnumToBool(type: .ContactPoint)
     var contactPoint: Bool
-    
+
     @EnumToBool(type: .ContactNormal)
     var contactNormal: Bool
-    
+
     @EnumToBool(type: .ContactError)
     var contactError: Bool
-    
+
     @EnumToBool(type: .ContactForce)
     var contactForce: Bool
-    
+
     @EnumToBool(type: .ActorAxes)
     var actorAxes: Bool
-    
+
     @EnumToBool(type: .CollisionAABBS)
     var collisionAABBS: Bool
-    
+
     @EnumToBool(type: .CollisionShapes)
     var collisionShapes: Bool
-    
+
     @EnumToBool(type: .CollisionAxes)
     var collisionAxes: Bool
-    
+
     @EnumToBool(type: .CollisionCompounds)
     var collisionCompounds: Bool
-    
+
     @EnumToBool(type: .CollisionFaceNormal)
     var collisionFaceNormal: Bool
-    
+
     @EnumToBool(type: .CollisionEdges)
     var collisionEdges: Bool
-    
+
     @EnumToBool(type: .CollisionStatic)
     var collisionStatic: Bool
-    
+
     @EnumToBool(type: .CollisionDynamic)
     var collisionDynamic: Bool
-    
+
     @EnumToBool(type: .JointLocalFrames)
     var jointLocalFrames: Bool
-    
+
     @EnumToBool(type: .JointLimits)
     var jointLimits: Bool
-    
+
     @EnumToBool(type: .CullBox)
     var cullBox: Bool
-    
+
     @EnumToBool(type: .MBPRegins)
     var mbpRegins: Bool
-    
+
     override func onGUI() {
         UIElement.Init()
-        
+
         ImGuiNewFrame()
         ImGuiSliderFloat("visual size", &Engine.physicsManager.visualScale, 1.0, 10.0, nil, 1)
         ImGuiCheckbox("worldAxes", &worldAxes)
@@ -283,7 +289,7 @@ class PhysicsVisual: Script {
         ImGuiCheckbox("bodyMassAxes", &bodyMassAxes)
         ImGuiCheckbox("bodyLinVelocity", &bodyLinVelocity)
         ImGuiCheckbox("bodyAngVelocity", &bodyAngVelocity)
-        
+
         ImGuiCheckbox("contactPoint", &contactPoint)
         ImGuiCheckbox("contactNormal", &contactNormal)
         ImGuiCheckbox("contactError", &contactError)
@@ -304,7 +310,7 @@ class PhysicsVisual: Script {
 
         // Rendering
         ImGuiRender()
-        
+
         Engine.physicsManager.drawGizmos()
     }
 }

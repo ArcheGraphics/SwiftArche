@@ -4,8 +4,8 @@
 //  personal capacity and am not conveying any rights to any intellectual
 //  property of any third parties.
 
-import vox_render
 import Math
+import vox_render
 
 /// An edge composed of both the local index and common index.
 ///
@@ -65,13 +65,13 @@ public struct EdgeLookup {
     }
 }
 
-extension EdgeLookup {
+public extension EdgeLookup {
     /// Create a list of EdgeLookup edges from a set of local edges and a sharedIndexes dictionary.
     /// - Parameters:
     ///   - edges: A collection of local edges.
     ///   - lookup: A shared index lookup dictionary (see ProBuilderMesh.sharedIndexes).
     /// - Returns: A set of EdgeLookup edges.
-    public static func GetEdgeLookup(edges: [Edge], lookup: [Int: Int]) -> [EdgeLookup] {
+    static func GetEdgeLookup(edges _: [Edge], lookup _: [Int: Int]) -> [EdgeLookup] {
         []
     }
 
@@ -80,19 +80,15 @@ extension EdgeLookup {
     ///   - edges: A collection of local edges.
     ///   - lookup: A shared index lookup dictionary (see ProBuilderMesh.sharedIndexes).
     /// - Returns: A HashSet of EdgeLookup edges. EdgeLookup values are compared by their common property only - local edges are not compared.
-    public static func GetEdgeLookupHashSet(edges: [Edge], lookup: [Int: Int]) -> Set<EdgeLookup> {
+    static func GetEdgeLookupHashSet(edges _: [Edge], lookup _: [Int: Int]) -> Set<EdgeLookup> {
         Set()
     }
 }
 
-extension EdgeLookup: Hashable {
-
-}
+extension EdgeLookup: Hashable {}
 
 extension EdgeLookup: CustomStringConvertible {
     public var description: String {
         "Common: (\(common.a), \(common.b)), local: (\(local.a), \(local.b)"
     }
-
-
 }

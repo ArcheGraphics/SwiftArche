@@ -50,9 +50,7 @@ public class AnimationClip: AnimationState {
     /// Gets animation time ratio of last update. Useful when the range between
     /// previous and current frame needs to pe processed.
     public var previousTimeRatio: Float {
-        get {
-            (_nativeState as! CAnimationClip).previousTimeRatio()
-        }
+        (_nativeState as! CAnimationClip).previousTimeRatio()
     }
 
     public init(_ url: URL) {

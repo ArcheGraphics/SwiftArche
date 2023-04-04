@@ -8,7 +8,7 @@ import Math
 
 /// A joint which behaves in a similar way to a hinge or axle.
 public class HingeJoint: Joint {
-    private var _axis: Vector3 = Vector3(1, 0, 0)
+    private var _axis: Vector3 = .init(1, 0, 0)
     private var _hingeFlags: UInt32 = 0
     private var _useSpring: Bool = false
     private var _jointMonitor: JointMotor?
@@ -38,16 +38,12 @@ public class HingeJoint: Joint {
 
     /// The current angle in degrees of the joint relative to its rest position.
     public var angle: Float {
-        get {
-            (_nativeJoint as! PhysXHingeJoint).getAngle()
-        }
+        (_nativeJoint as! PhysXHingeJoint).getAngle()
     }
 
     /// The angular velocity of the joint in degrees per second.
     public var velocity: Vector3 {
-        get {
-            (_nativeJoint as! PhysXHingeJoint).getVelocity()
-        }
+        (_nativeJoint as! PhysXHingeJoint).getVelocity()
     }
 
     /// Enables the joint's limits. Disabled by default.
@@ -56,7 +52,7 @@ public class HingeJoint: Joint {
             (_hingeFlags & HingeJointFlag.LimitEnabled.rawValue) == HingeJointFlag.LimitEnabled.rawValue
         }
         set {
-            if (newValue != useLimits) {
+            if newValue != useLimits {
                 _hingeFlags |= HingeJointFlag.LimitEnabled.rawValue
             }
             (_nativeJoint as! PhysXHingeJoint).setHingeJointFlag(HingeJointFlag.LimitEnabled.rawValue, newValue)
@@ -69,7 +65,7 @@ public class HingeJoint: Joint {
             (_hingeFlags & HingeJointFlag.DriveEnabled.rawValue) == HingeJointFlag.DriveEnabled.rawValue
         }
         set {
-            if (newValue != useMotor) {
+            if newValue != useMotor {
                 _hingeFlags |= HingeJointFlag.DriveEnabled.rawValue
             }
             (_nativeJoint as! PhysXHingeJoint).setHingeJointFlag(HingeJointFlag.DriveEnabled.rawValue, newValue)
@@ -111,7 +107,7 @@ public class HingeJoint: Joint {
         set {
             _limits = newValue
             if newValue != nil {
-                if (useSpring) {
+                if useSpring {
                     (_nativeJoint as! PhysXHingeJoint).setSoftLimit(newValue!.min, newValue!.max, newValue!.stiffness, newValue!.damping)
                 } else {
                     (_nativeJoint as! PhysXHingeJoint).setHardLimit(newValue!.min, newValue!.max, newValue!.contactDistance)

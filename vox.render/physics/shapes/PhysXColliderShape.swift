@@ -20,11 +20,11 @@ enum ShapeFlag: UInt8 {
 class PhysXColliderShape {
     static var halfSqrt: Float = 0.70710678118655
 
-    var _scale: Vector3 = Vector3(1, 1, 1)
-    var _position: Vector3 = Vector3()
-    var _rotation: Vector3? = nil
-    var _axis: Quaternion? = nil
-    var _physxRotation: Quaternion = Quaternion()
+    var _scale: Vector3 = .init(1, 1, 1)
+    var _position: Vector3 = .init()
+    var _rotation: Vector3?
+    var _axis: Quaternion?
+    var _physxRotation: Quaternion = .init()
 
     private var _shapeFlags: UInt8 = ShapeFlag.SCENE_QUERY_SHAPE.rawValue | ShapeFlag.SIMULATION_SHAPE.rawValue
 
@@ -34,7 +34,7 @@ class PhysXColliderShape {
     var _pxGeometry: CPxGeometry!
     var _id: UInt32!
     var _contactOffset: Float = 0
-    
+
     func setVisualize(_ value: Bool) {
         _pxShape.setVisualize(value)
     }
@@ -42,7 +42,7 @@ class PhysXColliderShape {
     func setRotation(_ value: Vector3) {
         _rotation = value
         _physxRotation = Quaternion.rotationYawPitchRoll(yaw: value.x, pitch: value.y, roll: value.z)
-        if (_axis != nil) {
+        if _axis != nil {
             _physxRotation = _physxRotation * _axis!
         }
         _physxRotation = _physxRotation.normalized
@@ -54,7 +54,7 @@ class PhysXColliderShape {
         _setLocalPose()
     }
 
-    func setWorldScale(_ scale: Vector3) {
+    func setWorldScale(_: Vector3) {
         fatalError("use subClass")
     }
 
@@ -62,7 +62,7 @@ class PhysXColliderShape {
         _contactOffset = offset
         _pxShape.setContactOffset(offset)
 
-        for i in 0..<_controllers.count {
+        for i in 0 ..< _controllers.count {
             _controllers.get(i)!._pxController.setContactOffset(offset)
         }
     }
@@ -96,10 +96,10 @@ class PhysXColliderShape {
         _id = id
         _pxMaterial = material
         _pxShape = PhysXPhysics._pxPhysics.createShape(
-                with: _pxGeometry,
-                material: material,
-                isExclusive: true,
-                shapeFlags: _shapeFlags
+            with: _pxGeometry,
+            material: material,
+            isExclusive: true,
+            shapeFlags: _shapeFlags
         )
         _pxShape.setUUID(id)
     }

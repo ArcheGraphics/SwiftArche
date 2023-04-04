@@ -191,32 +191,34 @@ class XCamera {
     func updateState() {
         // Generate the view matrix from a matrix lookat.
         _cameraParams.viewMatrix = XCamera.sInvMatrixLookat(inEye: _position.internalValue,
-                inTo: (_position + _direction).internalValue,
-                inUp: _up.internalValue)
+                                                            inTo: (_position + _direction).internalValue,
+                                                            inUp: _up.internalValue)
 
         let px = _projectionOffset.x
         let py = _projectionOffset.y
 
         // Generate projection matrix from viewing angle and plane distances.
-        if (_viewAngle != 0) {
+        if _viewAngle != 0 {
             let va_tan = 1.0 / tanf(_viewAngle * 0.5)
             let ys = va_tan
             let xs = ys / _aspectRatio
             let zs = _farPlane / (_farPlane - _nearPlane)
             _cameraParams.projectionMatrix = float4x4(
-                    SIMD4<Float>(xs, 0, 0, 0),
-                    SIMD4<Float>(0, ys, 0, 0),
-                    SIMD4<Float>(px, py, zs, 1),
-                    SIMD4<Float>(0, 0, -_nearPlane * zs, 0))
+                SIMD4<Float>(xs, 0, 0, 0),
+                SIMD4<Float>(0, ys, 0, 0),
+                SIMD4<Float>(px, py, zs, 1),
+                SIMD4<Float>(0, 0, -_nearPlane * zs, 0)
+            )
         } else {
             let ys = 2.0 / _width
             let xs = ys / _aspectRatio
             let zs = 1.0 / (_farPlane - _nearPlane)
             _cameraParams.projectionMatrix = float4x4(
-                    SIMD4<Float>(xs, 0, 0, 0),
-                    SIMD4<Float>(0, ys, 0, 0),
-                    SIMD4<Float>(0, 0, zs, 0),
-                    SIMD4<Float>(px, py, -_nearPlane * zs, 1))
+                SIMD4<Float>(xs, 0, 0, 0),
+                SIMD4<Float>(0, ys, 0, 0),
+                SIMD4<Float>(0, 0, zs, 0),
+                SIMD4<Float>(px, py, -_nearPlane * zs, 1)
+            )
         }
 
         // Derived matrices.
@@ -226,30 +228,32 @@ class XCamera {
         _cameraParams.invViewMatrix = simd_inverse(_cameraParams.viewMatrix)
 
         let transp_vpm = simd_transpose(_cameraParams.viewProjectionMatrix)
-        _cameraParams.worldFrustumPlanes.0 = XCamera.sPlaneNormalize(transp_vpm.columns.3 + transp_vpm.columns.0)    // Left plane eq.
-        _cameraParams.worldFrustumPlanes.1 = XCamera.sPlaneNormalize(transp_vpm.columns.3 - transp_vpm.columns.0)    // Right plane eq.
-        _cameraParams.worldFrustumPlanes.2 = XCamera.sPlaneNormalize(transp_vpm.columns.3 + transp_vpm.columns.1)    // Up plane eq.
-        _cameraParams.worldFrustumPlanes.3 = XCamera.sPlaneNormalize(transp_vpm.columns.3 - transp_vpm.columns.1)    // Down plane eq.
-        _cameraParams.worldFrustumPlanes.4 = XCamera.sPlaneNormalize(transp_vpm.columns.3 + transp_vpm.columns.2)    // Near plane eq.
-        _cameraParams.worldFrustumPlanes.5 = XCamera.sPlaneNormalize(transp_vpm.columns.3 - transp_vpm.columns.2)    // Far plane eq.
+        _cameraParams.worldFrustumPlanes.0 = XCamera.sPlaneNormalize(transp_vpm.columns.3 + transp_vpm.columns.0) // Left plane eq.
+        _cameraParams.worldFrustumPlanes.1 = XCamera.sPlaneNormalize(transp_vpm.columns.3 - transp_vpm.columns.0) // Right plane eq.
+        _cameraParams.worldFrustumPlanes.2 = XCamera.sPlaneNormalize(transp_vpm.columns.3 + transp_vpm.columns.1) // Up plane eq.
+        _cameraParams.worldFrustumPlanes.3 = XCamera.sPlaneNormalize(transp_vpm.columns.3 - transp_vpm.columns.1) // Down plane eq.
+        _cameraParams.worldFrustumPlanes.4 = XCamera.sPlaneNormalize(transp_vpm.columns.3 + transp_vpm.columns.2) // Near plane eq.
+        _cameraParams.worldFrustumPlanes.5 = XCamera.sPlaneNormalize(transp_vpm.columns.3 - transp_vpm.columns.2) // Far plane eq.
 
         // Inverse Column.
         _cameraParams.invProjZ = SIMD4<Float>(
-                _cameraParams.invProjectionMatrix.columns.2.z,
-                _cameraParams.invProjectionMatrix.columns.2.w,
-                _cameraParams.invProjectionMatrix.columns.3.z,
-                _cameraParams.invProjectionMatrix.columns.3.w)
+            _cameraParams.invProjectionMatrix.columns.2.z,
+            _cameraParams.invProjectionMatrix.columns.2.w,
+            _cameraParams.invProjectionMatrix.columns.3.z,
+            _cameraParams.invProjectionMatrix.columns.3.w
+        )
 
         let invScale = _farPlane - _nearPlane
         let bias = -_nearPlane
 
         _cameraParams.invProjZNormalized = SIMD4<Float>(
-                _cameraParams.invProjZ.x + (_cameraParams.invProjZ.y * bias),
-                _cameraParams.invProjZ.y * invScale,
-                _cameraParams.invProjZ.z + (_cameraParams.invProjZ.w * bias),
-                _cameraParams.invProjZ.w * invScale)
+            _cameraParams.invProjZ.x + (_cameraParams.invProjZ.y * bias),
+            _cameraParams.invProjZ.y * invScale,
+            _cameraParams.invProjZ.z + (_cameraParams.invProjZ.w * bias),
+            _cameraParams.invProjZ.w * invScale
+        )
 
-        //Update frustum corners.
+        // Update frustum corners.
         // Get the 8 points of the view frustum in world space.
         _frustumCorners[0] = Vector3(-1.0, 1.0, 0.0)
         _frustumCorners[1] = Vector3(1.0, 1.0, 0.0)
@@ -262,7 +266,7 @@ class XCamera {
 
         let invViewProjMatrix = _cameraParams.invViewProjectionMatrix
 
-        for j in 0..<8 {
+        for j in 0 ..< 8 {
             let corner = invViewProjMatrix * SIMD4<Float>(_frustumCorners[j].x, _frustumCorners[j].y, _frustumCorners[j].z, 1.0)
             _frustumCorners[j] = Vector3(corner.xyz / corner.w)
         }
@@ -282,8 +286,8 @@ class XCamera {
         let y = axis.y
         let z = axis.z
         let mat = Matrix3x3(m11: ct + x * x * ci, m12: y * x * ci + z * st, m13: z * x * ci - y * st,
-                m21: x * y * ci - z * st, m22: ct + y * y * ci, m23: z * y * ci + x * st,
-                m31: x * z * ci + y * st, m32: y * z * ci - x * st, m33: ct + z * z * ci)
+                            m21: x * y * ci - z * st, m22: ct + y * y * ci, m23: z * y * ci + x * st,
+                            m31: x * z * ci + y * st, m32: y * z * ci - x * st, m33: ct + z * z * ci)
 
         // Apply to basis vectors.
         _direction = mat * _direction
@@ -330,9 +334,9 @@ class XCamera {
         let y = cross(z, x)
         let t = SIMD3<Float>(-dot(x, inEye), -dot(y, inEye), -dot(z, inEye))
         return float4x4(SIMD4<Float>(x.x, y.x, z.x, 0),
-                SIMD4<Float>(x.y, y.y, z.y, 0),
-                SIMD4<Float>(x.z, y.z, z.z, 0),
-                SIMD4<Float>(t.x, t.y, t.z, 1))
+                        SIMD4<Float>(x.y, y.y, z.y, 0),
+                        SIMD4<Float>(x.z, y.z, z.z, 0),
+                        SIMD4<Float>(t.x, t.y, t.z, 1))
     }
 
     /// Helper function to normalize a plane equation so the plane direction is normalized to 1 this

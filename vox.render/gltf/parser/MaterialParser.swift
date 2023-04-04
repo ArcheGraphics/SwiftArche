@@ -10,8 +10,8 @@ class MaterialParser: Parser {
     override func parse(_ context: ParserContext) {
         var materials: [Material] = []
         let glTFResource = context.glTFResource!
-        for i in 0..<glTFResource.gltf.materials.count {
-            if (context.materialIndex != nil && context.materialIndex! != i) {
+        for i in 0 ..< glTFResource.gltf.materials.count {
+            if context.materialIndex != nil && context.materialIndex! != i {
                 continue
             }
             let gltfMaterial = glTFResource.gltf.materials[i]
@@ -39,13 +39,14 @@ class MaterialParser: Parser {
 
                 if let pbrMetallicRoughness = gltfMaterial.metallicRoughness {
                     pbrMtl.baseColor = Color(
-                            Color.linearToGammaSpace(value: pbrMetallicRoughness.baseColorFactor.x),
-                            Color.linearToGammaSpace(value: pbrMetallicRoughness.baseColorFactor.y),
-                            Color.linearToGammaSpace(value: pbrMetallicRoughness.baseColorFactor.z),
-                            pbrMetallicRoughness.baseColorFactor.w
+                        Color.linearToGammaSpace(value: pbrMetallicRoughness.baseColorFactor.x),
+                        Color.linearToGammaSpace(value: pbrMetallicRoughness.baseColorFactor.y),
+                        Color.linearToGammaSpace(value: pbrMetallicRoughness.baseColorFactor.z),
+                        pbrMetallicRoughness.baseColorFactor.w
                     )
                     if let baseColorTexture = pbrMetallicRoughness.baseColorTexture,
-                       let samplers = glTFResource.samplers {
+                       let samplers = glTFResource.samplers
+                    {
                         pbrMtl.baseTexture = glTFResource.textures![baseColorTexture.index]
                         if let sampler = samplers[baseColorTexture.index] {
                             pbrMtl.baseSampler = sampler
@@ -56,7 +57,8 @@ class MaterialParser: Parser {
                         pbrMtl.roughness = pbrMetallicRoughness.roughnessFactor
                         pbrMtl.metallic = pbrMetallicRoughness.metallicFactor
                         if let metallicRoughnessTexture = pbrMetallicRoughness.metallicRoughnessTexture,
-                           let samplers = glTFResource.samplers {
+                           let samplers = glTFResource.samplers
+                        {
                             pbrMtl.roughnessMetallicTexture = glTFResource.textures![metallicRoughnessTexture.index]
                             if let sampler = samplers[metallicRoughnessTexture.index] {
                                 pbrMtl.roughnessMetallicSampler = sampler
@@ -82,7 +84,8 @@ class MaterialParser: Parser {
 //                )
 
                 if let normalTexture = gltfMaterial.normalTexture,
-                   let samplers = glTFResource.samplers {
+                   let samplers = glTFResource.samplers
+                {
                     pbrMtl.normalTextureIntensity = normalTexture.scale
                     pbrMtl.normalTexture = glTFResource.textures![normalTexture.index]
                     if let sampler = samplers[normalTexture.index] {
@@ -92,10 +95,11 @@ class MaterialParser: Parser {
                 }
 
                 if let occlusionTexture = gltfMaterial.occlusionTexture,
-                   let samplers = glTFResource.samplers {
-                    if (occlusionTexture.texCoord == TextureCoordinate.UV1.rawValue) {
+                   let samplers = glTFResource.samplers
+                {
+                    if occlusionTexture.texCoord == TextureCoordinate.UV1.rawValue {
                         pbrMtl.occlusionTextureCoord = TextureCoordinate.UV1
-                    } else if (occlusionTexture.texCoord > TextureCoordinate.UV1.rawValue) {
+                    } else if occlusionTexture.texCoord > TextureCoordinate.UV1.rawValue {
                         logger.warning("Occlusion texture uv coordinate must be UV0 or UV1.")
                     }
 
@@ -118,10 +122,8 @@ class MaterialParser: Parser {
             switch gltfMaterial.alphaMode {
             case .blend:
                 mtl.isTransparent = true
-                break
             case .mask:
                 mtl.alphaCutoff = gltfMaterial.alphaCutoff
-                break
             case .opaque:
                 mtl.isTransparent = false
                 break

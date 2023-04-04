@@ -20,7 +20,7 @@ open class ComputePass {
     public init(_ scene: Scene) {
         _passData = (scene.shaderData, Engine.fg.frameData)
     }
-    
+
     /// generate PSO before calculation only work for shader without function constant values.
     public func precompileAll() {
         _precompilePSO.removeAll()
@@ -40,14 +40,14 @@ open class ComputePass {
             var compileMacros = ShaderMacroCollection()
             ShaderMacroCollection.unionCollection(compileMacros, _passData.0._macroCollection, &compileMacros)
             ShaderMacroCollection.unionCollection(compileMacros, _passData.1._macroCollection, &compileMacros)
-            
+
             for shaderPass in shader {
                 _pipelineDescriptor.computeFunction = Engine.resourceCache.requestShaderModule(shaderPass, compileMacros)[0]
                 let pipelineState = Engine.resourceCache.requestComputePipeline(_pipelineDescriptor)
                 _passData.0.bindData(commandEncoder, pipelineState.uniformBlock)
                 _passData.1.bindData(commandEncoder, pipelineState.uniformBlock)
                 commandEncoder.setComputePipelineState(pipelineState.handle)
-                
+
                 let nWidth = min(threadsPerGridX, pipelineState.handle.threadExecutionWidth)
                 let nHeight = min(threadsPerGridY, pipelineState.handle.maxTotalThreadsPerThreadgroup / nWidth)
                 commandEncoder.dispatchThreads(MTLSize(width: threadsPerGridX, height: threadsPerGridY, depth: threadsPerGridZ),
@@ -58,7 +58,7 @@ open class ComputePass {
                 _passData.0.bindData(commandEncoder, pipelineState.uniformBlock)
                 _passData.1.bindData(commandEncoder, pipelineState.uniformBlock)
                 commandEncoder.setComputePipelineState(pipelineState.handle)
-                
+
                 let nWidth = min(threadsPerGridX, pipelineState.handle.threadExecutionWidth)
                 let nHeight = min(threadsPerGridY, pipelineState.handle.maxTotalThreadsPerThreadgroup / nWidth)
                 commandEncoder.dispatchThreads(MTLSize(width: threadsPerGridX, height: threadsPerGridY, depth: threadsPerGridZ),
@@ -67,17 +67,18 @@ open class ComputePass {
         }
         commandEncoder.popDebugGroup()
     }
-    
+
     /// Compute function
     /// - Parameter commandEncoder: CommandEncoder to use to record compute commands
     public func compute(commandEncoder: MTLComputeCommandEncoder,
-                        threadgroupsPerGrid: MTLSize, threadsPerThreadgroup: MTLSize, label: String = "") {
+                        threadgroupsPerGrid: MTLSize, threadsPerThreadgroup: MTLSize, label: String = "")
+    {
         commandEncoder.pushDebugGroup(label)
         if _precompilePSO.isEmpty {
             var compileMacros = ShaderMacroCollection()
             ShaderMacroCollection.unionCollection(compileMacros, _passData.0._macroCollection, &compileMacros)
             ShaderMacroCollection.unionCollection(compileMacros, _passData.1._macroCollection, &compileMacros)
-            
+
             for shaderPass in shader {
                 _pipelineDescriptor.computeFunction = Engine.resourceCache.requestShaderModule(shaderPass, compileMacros)[0]
                 let pipelineState = Engine.resourceCache.requestComputePipeline(_pipelineDescriptor)
@@ -96,17 +97,18 @@ open class ComputePass {
         }
         commandEncoder.popDebugGroup()
     }
-    
+
     /// Compute function
     /// - Parameter commandEncoder: CommandEncoder to use to record compute commands
     public func compute(commandEncoder: MTLComputeCommandEncoder,
-                        indirectBuffer: MTLBuffer, threadsPerThreadgroup: MTLSize, label: String = "") {
+                        indirectBuffer: MTLBuffer, threadsPerThreadgroup: MTLSize, label: String = "")
+    {
         commandEncoder.pushDebugGroup(label)
         if _precompilePSO.isEmpty {
             var compileMacros = ShaderMacroCollection()
             ShaderMacroCollection.unionCollection(compileMacros, _passData.0._macroCollection, &compileMacros)
             ShaderMacroCollection.unionCollection(compileMacros, _passData.1._macroCollection, &compileMacros)
-            
+
             for shaderPass in shader {
                 _pipelineDescriptor.computeFunction = Engine.resourceCache.requestShaderModule(shaderPass, compileMacros)[0]
                 let pipelineState = Engine.resourceCache.requestComputePipeline(_pipelineDescriptor)

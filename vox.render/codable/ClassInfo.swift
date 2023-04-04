@@ -6,32 +6,32 @@
 
 import Foundation
 
-public struct ClassInfo : CustomStringConvertible, Equatable {
+public struct ClassInfo: CustomStringConvertible, Equatable {
     public let classObject: AnyClass
     let className: String
-    
+
     init?(_ classObject: AnyClass?) {
         guard classObject != nil else { return nil }
 
         let cName = class_getName(classObject)
-        self.className = String(cString: cName)
+        className = String(cString: cName)
         self.classObject = classObject!
     }
 
     public var superclassInfo: ClassInfo? {
-        let superclassObject: AnyClass? = class_getSuperclass(self.classObject)
+        let superclassObject: AnyClass? = class_getSuperclass(classObject)
         return ClassInfo(superclassObject)
     }
 
     public var description: String {
-        return self.className
+        return className
     }
 
-    public static func ==(lhs: ClassInfo, rhs: ClassInfo) -> Bool {
+    public static func == (lhs: ClassInfo, rhs: ClassInfo) -> Bool {
         return lhs.className == rhs.className
     }
-    
-    public static func getSubclass<T:AnyObject>(_ type: T.Type) -> [ClassInfo] {
+
+    public static func getSubclass<T: AnyObject>(_ type: T.Type) -> [ClassInfo] {
         let superClassInfo = ClassInfo(type.self)!
 
         var count = UInt32(0)

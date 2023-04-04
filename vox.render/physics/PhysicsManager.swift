@@ -10,7 +10,7 @@ import Math
 public class PhysicsManager {
     private var _restTime: Float = 0
     private var _colliders: DisorderedArray<Collider> = DisorderedArray()
-    private var _gravity: Vector3 = Vector3(0, -9.81, 0)
+    private var _gravity: Vector3 = .init(0, -9.81, 0)
     private var _nativePhysicsManager: PhysXPhysicsManager!
     private var _physicalObjectsMap: [UInt32: ColliderShape] = [:]
 
@@ -34,124 +34,124 @@ public class PhysicsManager {
     init() {
         PhysXPhysics.initialization()
         _nativePhysicsManager = PhysXPhysics.createPhysicsManager(
-                { (obj1: UInt32, obj2: UInt32, info: [ContactInfo]) in
-                    let shape1 = self._physicalObjectsMap[obj1]
-                    let shape2 = self._physicalObjectsMap[obj2]
+            { (obj1: UInt32, obj2: UInt32, info: [ContactInfo]) in
+                let shape1 = self._physicalObjectsMap[obj1]
+                let shape2 = self._physicalObjectsMap[obj2]
 
-                    var scripts = shape1!.collider!.entity._scripts
-                    for i in 0..<scripts.count {
-                        scripts.get(i)!.onCollisionEnter(Collision(shape: shape2!, contacts: info))
-                    }
+                var scripts = shape1!.collider!.entity._scripts
+                for i in 0 ..< scripts.count {
+                    scripts.get(i)!.onCollisionEnter(Collision(shape: shape2!, contacts: info))
+                }
 
-                    scripts = shape2!.collider!.entity._scripts
-                    for i in 0..<scripts.count {
-                        scripts.get(i)!.onCollisionEnter(Collision(shape: shape1!, contacts: info))
-                    }
-                },
-                { (obj1: UInt32, obj2: UInt32, info: [ContactInfo]) in
-                    let shape1 = self._physicalObjectsMap[obj1]
-                    let shape2 = self._physicalObjectsMap[obj2]
+                scripts = shape2!.collider!.entity._scripts
+                for i in 0 ..< scripts.count {
+                    scripts.get(i)!.onCollisionEnter(Collision(shape: shape1!, contacts: info))
+                }
+            },
+            { (obj1: UInt32, obj2: UInt32, info: [ContactInfo]) in
+                let shape1 = self._physicalObjectsMap[obj1]
+                let shape2 = self._physicalObjectsMap[obj2]
 
-                    var scripts = shape1!.collider!.entity._scripts
-                    for i in 0..<scripts.count {
-                        scripts.get(i)!.onCollisionExit(Collision(shape: shape2!, contacts: info))
-                    }
+                var scripts = shape1!.collider!.entity._scripts
+                for i in 0 ..< scripts.count {
+                    scripts.get(i)!.onCollisionExit(Collision(shape: shape2!, contacts: info))
+                }
 
-                    scripts = shape2!.collider!.entity._scripts
-                    for i in 0..<scripts.count {
-                        scripts.get(i)!.onCollisionExit(Collision(shape: shape1!, contacts: info))
-                    }
-                },
-                { (obj1: UInt32, obj2: UInt32, info: [ContactInfo]) in
-                    let shape1 = self._physicalObjectsMap[obj1]
-                    let shape2 = self._physicalObjectsMap[obj2]
+                scripts = shape2!.collider!.entity._scripts
+                for i in 0 ..< scripts.count {
+                    scripts.get(i)!.onCollisionExit(Collision(shape: shape1!, contacts: info))
+                }
+            },
+            { (obj1: UInt32, obj2: UInt32, info: [ContactInfo]) in
+                let shape1 = self._physicalObjectsMap[obj1]
+                let shape2 = self._physicalObjectsMap[obj2]
 
-                    var scripts = shape1!.collider!.entity._scripts
-                    for i in 0..<scripts.count {
-                        scripts.get(i)!.onCollisionStay(Collision(shape: shape2!, contacts: info))
-                    }
+                var scripts = shape1!.collider!.entity._scripts
+                for i in 0 ..< scripts.count {
+                    scripts.get(i)!.onCollisionStay(Collision(shape: shape2!, contacts: info))
+                }
 
-                    scripts = shape2!.collider!.entity._scripts
-                    for i in 0..<scripts.count {
-                        scripts.get(i)!.onCollisionStay(Collision(shape: shape1!, contacts: info))
-                    }
-                },
-                { (obj1: UInt32, obj2: UInt32) in
-                    let shape1 = self._physicalObjectsMap[obj1]
-                    let shape2 = self._physicalObjectsMap[obj2]
+                scripts = shape2!.collider!.entity._scripts
+                for i in 0 ..< scripts.count {
+                    scripts.get(i)!.onCollisionStay(Collision(shape: shape1!, contacts: info))
+                }
+            },
+            { (obj1: UInt32, obj2: UInt32) in
+                let shape1 = self._physicalObjectsMap[obj1]
+                let shape2 = self._physicalObjectsMap[obj2]
 
-                    var scripts = shape1!.collider!.entity._scripts
-                    for i in 0..<scripts.count {
-                        scripts.get(i)!.onTriggerEnter(shape2!)
-                    }
+                var scripts = shape1!.collider!.entity._scripts
+                for i in 0 ..< scripts.count {
+                    scripts.get(i)!.onTriggerEnter(shape2!)
+                }
 
-                    scripts = shape2!.collider!.entity._scripts
-                    for i in 0..<scripts.count {
-                        scripts.get(i)!.onTriggerEnter(shape1!)
-                    }
-                },
-                { (obj1: UInt32, obj2: UInt32) in
-                    let shape1 = self._physicalObjectsMap[obj1]
-                    let shape2 = self._physicalObjectsMap[obj2]
+                scripts = shape2!.collider!.entity._scripts
+                for i in 0 ..< scripts.count {
+                    scripts.get(i)!.onTriggerEnter(shape1!)
+                }
+            },
+            { (obj1: UInt32, obj2: UInt32) in
+                let shape1 = self._physicalObjectsMap[obj1]
+                let shape2 = self._physicalObjectsMap[obj2]
 
-                    var scripts = shape1!.collider!.entity._scripts
-                    for i in 0..<scripts.count {
-                        scripts.get(i)!.onTriggerExit(shape2!)
-                    }
+                var scripts = shape1!.collider!.entity._scripts
+                for i in 0 ..< scripts.count {
+                    scripts.get(i)!.onTriggerExit(shape2!)
+                }
 
-                    scripts = shape2!.collider!.entity._scripts
-                    for i in 0..<scripts.count {
-                        scripts.get(i)!.onTriggerExit(shape1!)
-                    }
-                },
-                { (obj1: UInt32, obj2: UInt32) in
-                    let shape1 = self._physicalObjectsMap[obj1]
-                    let shape2 = self._physicalObjectsMap[obj2]
+                scripts = shape2!.collider!.entity._scripts
+                for i in 0 ..< scripts.count {
+                    scripts.get(i)!.onTriggerExit(shape1!)
+                }
+            },
+            { (obj1: UInt32, obj2: UInt32) in
+                let shape1 = self._physicalObjectsMap[obj1]
+                let shape2 = self._physicalObjectsMap[obj2]
 
-                    var scripts = shape1!.collider!.entity._scripts
-                    for i in 0..<scripts.count {
-                        scripts.get(i)!.onTriggerStay(shape2!)
-                    }
+                var scripts = shape1!.collider!.entity._scripts
+                for i in 0 ..< scripts.count {
+                    scripts.get(i)!.onTriggerStay(shape2!)
+                }
 
-                    scripts = shape2!.collider!.entity._scripts
-                    for i in 0..<scripts.count {
-                        scripts.get(i)!.onTriggerStay(shape1!)
-                    }
-                },
-                { (obj1: UInt32, obj2: UInt32, name: String) in
-                    let shape1 = self._physicalObjectsMap[obj1]
-                    let shape2 = self._physicalObjectsMap[obj2]
+                scripts = shape2!.collider!.entity._scripts
+                for i in 0 ..< scripts.count {
+                    scripts.get(i)!.onTriggerStay(shape1!)
+                }
+            },
+            { (obj1: UInt32, obj2: UInt32, name: String) in
+                let shape1 = self._physicalObjectsMap[obj1]
+                let shape2 = self._physicalObjectsMap[obj2]
 
-                    var joints = shape1!.collider!.entity.getComponents(Joint.self)
-                    for i in 0..<joints.count {
-                        if joints[i].name == name {
-                            joints[i].destroy()
-                        }
-                    }
-
-                    joints = shape2!.collider!.entity.getComponents(Joint.self)
-                    for i in 0..<joints.count {
-                        if joints[i].name == name {
-                            joints[i].destroy()
-                        }
+                var joints = shape1!.collider!.entity.getComponents(Joint.self)
+                for i in 0 ..< joints.count {
+                    if joints[i].name == name {
+                        joints[i].destroy()
                     }
                 }
+
+                joints = shape2!.collider!.entity.getComponents(Joint.self)
+                for i in 0 ..< joints.count {
+                    if joints[i].name == name {
+                        joints[i].destroy()
+                    }
+                }
+            }
         )
     }
-    
+
     func destroy() {
         _nativePhysicsManager.destroy()
         PhysXPhysics.destroy()
     }
 
     /// Call on every frame to update pose of objects.
-    func _update(_  deltaTime: Float) {
+    func _update(_ deltaTime: Float) {
         let componentsManager = Engine._componentsManager
 
         let simulateTime = deltaTime + _restTime
-        let step: Int = Int(floor(min(maxSumTimeStep, simulateTime) / fixedTimeStep))
+        let step = Int(floor(min(maxSumTimeStep, simulateTime) / fixedTimeStep))
         _restTime = simulateTime - Float(step) * fixedTimeStep
-        for _ in 0..<step {
+        for _ in 0 ..< step {
             componentsManager.callScriptOnPhysicsUpdate()
             _callColliderOnUpdate()
             _nativePhysicsManager.update(fixedTimeStep)
@@ -161,7 +161,7 @@ public class PhysicsManager {
 
     /// Add ColliderShape into the manager.
     /// - Parameter colliderShape: The Collider Shape.
-    func _addColliderShape(_  colliderShape: ColliderShape) {
+    func _addColliderShape(_ colliderShape: ColliderShape) {
         _physicalObjectsMap[colliderShape.id] = colliderShape
         _nativePhysicsManager.addColliderShape(colliderShape._nativeShape)
     }
@@ -172,15 +172,15 @@ public class PhysicsManager {
         _physicalObjectsMap.removeValue(forKey: colliderShape.id)
         _nativePhysicsManager.removeColliderShape(colliderShape._nativeShape)
     }
-    
+
     func _getColliderShape(_ id: UInt32) -> ColliderShape? {
         _physicalObjectsMap[id]
     }
 
     /// Add collider into the manager.
     /// - Parameter collider: StaticCollider or DynamicCollider.
-    func _addCollider(_  collider: Collider) {
-        if (collider._index == -1) {
+    func _addCollider(_ collider: Collider) {
+        if collider._index == -1 {
             collider._index = _colliders.count
             _colliders.add(collider)
         }
@@ -189,7 +189,7 @@ public class PhysicsManager {
 
     /// Remove collider.
     /// - Parameter collider: StaticCollider or DynamicCollider.
-    func _removeCollider(_  collider: Collider) {
+    func _removeCollider(_ collider: Collider) {
         let replaced = _colliders.deleteByIndex(collider._index)
         if replaced != nil {
             replaced!._index = collider._index
@@ -200,8 +200,8 @@ public class PhysicsManager {
 
     /// Add CharacterController into the manager.
     /// - Parameter controller: The Character Controller.
-    func _addCharacterController(_  controller: CharacterController) {
-        if (controller._index == -1) {
+    func _addCharacterController(_ controller: CharacterController) {
+        if controller._index == -1 {
             controller._index = _colliders.count
             _colliders.add(controller)
         }
@@ -221,32 +221,33 @@ public class PhysicsManager {
 
     func _callColliderOnUpdate() {
         let elements = _colliders._elements
-        for i in 0..<_colliders.count {
+        for i in 0 ..< _colliders.count {
             elements[i]!._onUpdate()
         }
     }
 
     func _callColliderOnLateUpdate() {
         let elements = _colliders._elements
-        for i in 0..<_colliders.count {
+        for i in 0 ..< _colliders.count {
             elements[i]!._onLateUpdate()
         }
     }
 }
 
-//MARK: - Raycast
+// MARK: - Raycast
 
-extension PhysicsManager {
+public extension PhysicsManager {
     /// Casts a ray through the Scene and returns the first hit.
     /// - Parameters:
     ///   - ray: The ray
     ///   - distance: The max distance the ray should check
     ///   - outHitResult: If true is returned, outHitResult will contain more detailed collision information
     /// - Returns: Returns true if the ray intersects with a Collider, otherwise false.
-    public func raycastSpecific(shape: ColliderShape, position: Vector3, rotation: Quaternion,
-                                with ray: Ray, distance: Float = Float.greatestFiniteMagnitude) -> HitResult? {
+    func raycastSpecific(shape: ColliderShape, position: Vector3, rotation: Quaternion,
+                         with ray: Ray, distance: Float = Float.greatestFiniteMagnitude) -> HitResult?
+    {
         var hitResult = HitResult()
-        let result = _nativePhysicsManager.raycastSpecific(ray, distance, shape._nativeShape, position, rotation) { [self](info) in
+        let result = _nativePhysicsManager.raycastSpecific(ray, distance, shape._nativeShape, position, rotation) { [self] info in
             hitResult.colliderShape = _physicalObjectsMap[info.index]
             hitResult.collider = hitResult.colliderShape!._collider
             hitResult.entity = hitResult.collider!.entity
@@ -255,7 +256,7 @@ extension PhysicsManager {
             hitResult.point = Vector3(info.position)
         }
 
-        if (result) {
+        if result {
             return hitResult
         } else {
             return nil
@@ -268,8 +269,9 @@ extension PhysicsManager {
     ///   - distance: The max distance the ray should check
     ///   - layerMask: Layer mask that is used to selectively ignore Colliders when casting
     /// - Returns: Returns true if the ray intersects with a Collider, otherwise false.
-    public func raycast(_ ray: Ray, distance: Float = Float.greatestFiniteMagnitude,
-                        layerMask: Layer = Layer.Everything) -> Bool {
+    func raycast(_ ray: Ray, distance: Float = Float.greatestFiniteMagnitude,
+                 layerMask: Layer = Layer.Everything) -> Bool
+    {
         let onRaycast = { (obj: UInt32) -> Bool in
             let shape = self._physicalObjectsMap[obj]!
             return (shape.collider!.entity.layer.rawValue & layerMask.rawValue != 0) && shape.isSceneQuery
@@ -284,31 +286,33 @@ extension PhysicsManager {
     ///   - layerMask: Layer mask that is used to selectively ignore Colliders when casting
     ///   - outHitResult: If true is returned, outHitResult will contain more detailed collision information
     /// - Returns: Returns true if the ray intersects with a Collider, otherwise false.
-    public func raycast(_ ray: Ray, distance: Float = Float.greatestFiniteMagnitude,
-                        layerMask: Layer = Layer.Everything) -> HitResult? {
+    func raycast(_ ray: Ray, distance: Float = Float.greatestFiniteMagnitude,
+                 layerMask: Layer = Layer.Everything) -> HitResult?
+    {
         let onRaycast = { (obj: UInt32) -> Bool in
             let shape = self._physicalObjectsMap[obj]!
             return (shape.collider!.entity.layer.rawValue & layerMask.rawValue != 0) && shape.isSceneQuery
         }
         var hitResult = HitResult()
-        let result = _nativePhysicsManager.raycast(ray, distance, onRaycast, { [self](info) in
+        let result = _nativePhysicsManager.raycast(ray, distance, onRaycast) { [self] info in
             hitResult.colliderShape = _physicalObjectsMap[info.index]
             hitResult.collider = hitResult.colliderShape!._collider
             hitResult.entity = hitResult.collider!.entity
             hitResult.distance = info.distance
             hitResult.normal = Vector3(info.normal)
             hitResult.point = Vector3(info.position)
-        })
+        }
 
-        if (result) {
+        if result {
             return hitResult
         } else {
             return nil
         }
     }
 
-    public func raycastAll(_ ray: Ray, distance: Float = Float.greatestFiniteMagnitude,
-                           layerMask: Layer = Layer.Everything) -> [HitResult] {
+    func raycastAll(_ ray: Ray, distance: Float = Float.greatestFiniteMagnitude,
+                    layerMask: Layer = Layer.Everything) -> [HitResult]
+    {
         let onRaycast = { (obj: UInt32) -> Bool in
             let shape = self._physicalObjectsMap[obj]!
             return (shape.collider!.entity.layer.rawValue & layerMask.rawValue != 0) && shape.isSceneQuery
@@ -329,9 +333,9 @@ extension PhysicsManager {
     }
 }
 
-//MARK: - Sweep
+// MARK: - Sweep
 
-extension PhysicsManager {
+public extension PhysicsManager {
     /// Casts a ray through the Scene and returns the first hit.
     /// - Parameters:
     ///   - dir: The direction
@@ -339,30 +343,33 @@ extension PhysicsManager {
     ///   - layerMask: Layer mask that is used to selectively ignore Colliders when casting
     ///   - outHitResult: If true is returned, outHitResult will contain more detailed collision information
     /// - Returns: Returns true if the ray intersects with a Collider, otherwise false.
-    public func sweepSpecific(shape: ColliderShape, position: Vector3, rotation: Quaternion,
-                              dir: Vector3, distance: Float = Float.greatestFiniteMagnitude,
-                              target: ColliderShape, targetPosition: Vector3, targetRotation: Quaternion) -> HitResult? {
+    func sweepSpecific(shape: ColliderShape, position: Vector3, rotation: Quaternion,
+                       dir: Vector3, distance: Float = Float.greatestFiniteMagnitude,
+                       target: ColliderShape, targetPosition: Vector3, targetRotation: Quaternion) -> HitResult?
+    {
         var hitResult = HitResult()
         let result = _nativePhysicsManager.sweepSpecific(dir, distance, shape._nativeShape, position, rotation,
-                target._nativeShape, targetPosition, targetRotation, { [self](info) in
+                                                         target._nativeShape, targetPosition, targetRotation)
+        { [self] info in
             hitResult.colliderShape = _physicalObjectsMap[info.index]
             hitResult.collider = hitResult.colliderShape!.collider
             hitResult.entity = hitResult.collider!.entity
             hitResult.distance = info.distance
             hitResult.normal = Vector3(info.normal)
             hitResult.point = Vector3(info.position)
-        })
+        }
 
-        if (result) {
+        if result {
             return hitResult
         } else {
             return nil
         }
     }
 
-    public func sweep(shape: ColliderShape, position: Vector3, rotation: Quaternion,
-                      dir: Vector3, distance: Float = Float.greatestFiniteMagnitude,
-                      layerMask: Layer = Layer.Everything) -> Bool {
+    func sweep(shape: ColliderShape, position: Vector3, rotation: Quaternion,
+               dir: Vector3, distance: Float = Float.greatestFiniteMagnitude,
+               layerMask: Layer = Layer.Everything) -> Bool
+    {
         let onSweep = { (obj: UInt32) -> Bool in
             let shape = self._physicalObjectsMap[obj]!
             return (shape.collider!.entity.layer.rawValue & layerMask.rawValue != 0) && shape.isSceneQuery
@@ -377,34 +384,37 @@ extension PhysicsManager {
     ///   - layerMask: Layer mask that is used to selectively ignore Colliders when casting
     ///   - outHitResult: If true is returned, outHitResult will contain more detailed collision information
     /// - Returns: Returns true if the ray intersects with a Collider, otherwise false.
-    public func sweep(shape: ColliderShape, position: Vector3, rotation: Quaternion,
-                      dir: Vector3, distance: Float = Float.greatestFiniteMagnitude,
-                      layerMask: Layer = Layer.Everything) -> HitResult? {
+    func sweep(shape: ColliderShape, position: Vector3, rotation: Quaternion,
+               dir: Vector3, distance: Float = Float.greatestFiniteMagnitude,
+               layerMask: Layer = Layer.Everything) -> HitResult?
+    {
         let onSweep = { (obj: UInt32) -> Bool in
             let shape = self._physicalObjectsMap[obj]!
             return (shape.collider!.entity.layer.rawValue & layerMask.rawValue != 0) && shape.isSceneQuery
         }
         var hitResult = HitResult()
         let result = _nativePhysicsManager.sweep(shape._nativeShape, position, rotation,
-                dir, distance, onSweep, { [self](info) in
+                                                 dir, distance, onSweep)
+        { [self] info in
             hitResult.colliderShape = _physicalObjectsMap[info.index]
             hitResult.collider = hitResult.colliderShape!.collider
             hitResult.entity = hitResult.collider!.entity
             hitResult.distance = info.distance
             hitResult.normal = Vector3(info.normal)
             hitResult.point = Vector3(info.position)
-        })
+        }
 
-        if (result) {
+        if result {
             return hitResult
         } else {
             return nil
         }
     }
 
-    public func sweepAll(shape: ColliderShape, position: Vector3, rotation: Quaternion,
-                         dir: Vector3, distance: Float = Float.greatestFiniteMagnitude,
-                         layerMask: Layer = Layer.Everything) -> [HitResult] {
+    func sweepAll(shape: ColliderShape, position: Vector3, rotation: Quaternion,
+                  dir: Vector3, distance: Float = Float.greatestFiniteMagnitude,
+                  layerMask: Layer = Layer.Everything) -> [HitResult]
+    {
         let onSweep = { (obj: UInt32) -> Bool in
             let shape = self._physicalObjectsMap[obj]!
             return (shape.collider!.entity.layer.rawValue & layerMask.rawValue != 0) && shape.isSceneQuery
@@ -425,17 +435,19 @@ extension PhysicsManager {
     }
 }
 
-//MARK: - Overlap
+// MARK: - Overlap
 
-extension PhysicsManager {
-    public func overlapSpecific(shape: ColliderShape, position: Vector3, rotation: Quaternion,
-                                target: ColliderShape, targetPosition: Vector3, targetRotation: Quaternion) -> Bool {
+public extension PhysicsManager {
+    func overlapSpecific(shape: ColliderShape, position: Vector3, rotation: Quaternion,
+                         target: ColliderShape, targetPosition: Vector3, targetRotation: Quaternion) -> Bool
+    {
         _nativePhysicsManager.overlapSpecific(shape._nativeShape, position, rotation,
-                target._nativeShape, targetPosition, targetRotation)
+                                              target._nativeShape, targetPosition, targetRotation)
     }
 
-    public func overlap(shape: ColliderShape, origin: Vector3, rotation: Quaternion,
-                        layerMask: Layer = Layer.Everything) -> Bool {
+    func overlap(shape: ColliderShape, origin: Vector3, rotation: Quaternion,
+                 layerMask: Layer = Layer.Everything) -> Bool
+    {
         let onOverlap = { (obj: UInt32) -> Bool in
             let shape = self._physicalObjectsMap[obj]!
             return (shape.collider!.entity.layer.rawValue & layerMask.rawValue != 0) && shape.isSceneQuery
@@ -443,8 +455,9 @@ extension PhysicsManager {
         return _nativePhysicsManager.hasOverlap(shape._nativeShape, origin, rotation, onOverlap)
     }
 
-    public func overlapAll(shape: ColliderShape, origin: Vector3, rotation: Quaternion,
-                           layerMask: Layer = Layer.Everything) -> [ColliderShape] {
+    func overlapAll(shape: ColliderShape, origin: Vector3, rotation: Quaternion,
+                    layerMask: Layer = Layer.Everything) -> [ColliderShape]
+    {
         let onOverlap = { (obj: UInt32) -> Bool in
             let shape = self._physicalObjectsMap[obj]!
             return (shape.collider!.entity.layer.rawValue & layerMask.rawValue != 0) && shape.isSceneQuery
@@ -460,44 +473,48 @@ extension PhysicsManager {
     }
 }
 
-//MARK: - Other Query
+// MARK: - Other Query
 
-extension PhysicsManager {
-    public func computePenetration(shape0: ColliderShape, position0: Vector3, rotation0: Quaternion,
-                                   shape1: ColliderShape, position1: Vector3, rotation1: Quaternion,
-                                   direction: inout Vector3, depth: inout Float) -> Bool {
+public extension PhysicsManager {
+    func computePenetration(shape0: ColliderShape, position0: Vector3, rotation0: Quaternion,
+                            shape1: ColliderShape, position1: Vector3, rotation1: Quaternion,
+                            direction: inout Vector3, depth: inout Float) -> Bool
+    {
         _nativePhysicsManager.computePenetration(&direction, &depth, shape0._nativeShape, position0, rotation0,
-                shape1._nativeShape, position1, rotation1)
+                                                 shape1._nativeShape, position1, rotation1)
     }
 
-    public func closestPoint(point: Vector3, shape: ColliderShape, position: Vector3, rotation: Quaternion,
-                             closest: inout Vector3) -> Float {
+    func closestPoint(point: Vector3, shape: ColliderShape, position: Vector3, rotation: Quaternion,
+                      closest: inout Vector3) -> Float
+    {
         _nativePhysicsManager.closestPoint(point, shape._nativeShape, position, rotation, &closest)
     }
 }
 
 // MARK: - Collider Filter
-extension PhysicsManager {
-    public func getIgnoreLayerCollision(group1: UInt16, group2: UInt16) -> Bool {
+
+public extension PhysicsManager {
+    func getIgnoreLayerCollision(group1: UInt16, group2: UInt16) -> Bool {
         _nativePhysicsManager.getIgnoreLayerCollision(group1: group1, group2: group2)
     }
 
-    public func ignoreLayerCollision(group1: UInt16, group2: UInt16, enable: Bool) {
+    func ignoreLayerCollision(group1: UInt16, group2: UInt16, enable: Bool) {
         _nativePhysicsManager.ignoreLayerCollision(group1: group1, group2: group2, enable: enable)
     }
 
-    public func getIgnoreCollision(group1: Collider, group2: Collider) -> Bool {
+    func getIgnoreCollision(group1: Collider, group2: Collider) -> Bool {
         _nativePhysicsManager.getIgnoreCollision(group1: group1._nativeCollider, group2: group2._nativeCollider)
     }
 
-    public func ignoreCollision(group1: Collider, group2: Collider, enable: Bool) {
+    func ignoreCollision(group1: Collider, group2: Collider, enable: Bool) {
         _nativePhysicsManager.ignoreCollision(group1: group1._nativeCollider, group2: group2._nativeCollider, enable: enable)
     }
 }
 
 // MARK: - Visualize
-extension PhysicsManager {
-    public var visualScale: Float {
+
+public extension PhysicsManager {
+    var visualScale: Float {
         get {
             _nativePhysicsManager.getVisualScale()
         }
@@ -505,13 +522,13 @@ extension PhysicsManager {
             _nativePhysicsManager.setVisualScale(newValue)
         }
     }
-    
-    public func setVisualType(_ type: VisualizationParameter, value: Bool) {
+
+    func setVisualType(_ type: VisualizationParameter, value: Bool) {
         _nativePhysicsManager.setVisualType(type, value)
     }
-    
+
     /// Must be called in onGUI
-    public func drawGizmos(font: MTLFontAtlas? = nil) {
+    func drawGizmos(font: MTLFontAtlas? = nil) {
         _nativePhysicsManager.draw { p0, color in
             PointBatcher.ins.addPoint(p0, color: color)
         } checkResizePoint: { count in

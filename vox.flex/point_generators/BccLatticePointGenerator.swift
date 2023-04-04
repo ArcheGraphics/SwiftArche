@@ -18,39 +18,40 @@ class BccLatticePointGenerator: PointGenerator {
     /// where \p spacing is the size of the unit cell of BCC structure.
     func forEachPoint(boundingBox: BoundingBox3F,
                       spacing: Float,
-                      callback: (Vector3F) -> Bool) {
+                      callback: (Vector3F) -> Bool)
+    {
         let halfSpacing = spacing / 2.0
         let boxWidth = boundingBox.width
         let boxHeight = boundingBox.height
         let boxDepth = boundingBox.depth
-        
+
         var position = Vector3F()
         var hasOffset = false
         var shouldQuit = false
-        var k: Int = 0
+        var k = 0
         while Float(k) * halfSpacing <= boxDepth && !shouldQuit {
             position.z = Float(k) * halfSpacing + boundingBox.lowerCorner.z
-            
-            let offset = (hasOffset) ? halfSpacing : 0.0
-            var j: Int = 0
+
+            let offset = hasOffset ? halfSpacing : 0.0
+            var j = 0
             while Float(j) * spacing + offset <= boxHeight && !shouldQuit {
                 position.y = Float(j) * spacing + offset + boundingBox.lowerCorner.y
-                var i: Int = 0
+                var i = 0
                 while Float(i) * spacing + offset <= boxWidth {
                     position.x = Float(i) * spacing + offset + boundingBox.lowerCorner.x
-                    if (!callback(position)) {
+                    if !callback(position) {
                         shouldQuit = true
                         break
                     }
-                    
+
                     i += 1
                 }
-                
+
                 j += 1
             }
-            
+
             hasOffset = !hasOffset
-            
+
             k += 1
         }
     }

@@ -27,12 +27,12 @@ public class MTLTextureCodableBox: Codable {
 
             var offset = 0
 
-            for slice in 0..<texture.arrayLength {
-                for mipMaplevel in 0..<texture.mipmapLevelCount {
+            for slice in 0 ..< texture.arrayLength {
+                for mipMaplevel in 0 ..< texture.mipmapLevelCount {
                     guard let textureView = texture.makeTextureView(pixelFormat: texture.pixelFormat,
-                            textureType: texture.textureType,
-                            levels: mipMaplevel..<mipMaplevel + 1,
-                            slices: slice..<slice + 1)
+                                                                    textureType: texture.textureType,
+                                                                    levels: mipMaplevel ..< mipMaplevel + 1,
+                                                                    slices: slice ..< slice + 1)
                     else {
                         throw MetalError.MTLTextureSerializationError.dataAccessFailure
                     }
@@ -47,11 +47,11 @@ public class MTLTextureCodableBox: Codable {
                     }
 
                     textureView.getBytes(pointer.advanced(by: offset),
-                            bytesPerRow: bytesPerRow,
-                            bytesPerImage: bytesPerImage,
-                            from: textureView.region,
-                            mipmapLevel: 0,
-                            slice: 0)
+                                         bytesPerRow: bytesPerRow,
+                                         bytesPerImage: bytesPerImage,
+                                         from: textureView.region,
+                                         mipmapLevel: 0,
+                                         slice: 0)
 
                     offset += bytesPerImage
                 }
@@ -82,12 +82,12 @@ public class MTLTextureCodableBox: Codable {
 
             var offset = 0
 
-            for slice in 0..<texture.arrayLength {
-                for mipMaplevel in 0..<texture.mipmapLevelCount {
+            for slice in 0 ..< texture.arrayLength {
+                for mipMaplevel in 0 ..< texture.mipmapLevelCount {
                     guard let textureView = texture.makeTextureView(pixelFormat: texture.pixelFormat,
-                            textureType: texture.textureType,
-                            levels: mipMaplevel..<mipMaplevel + 1,
-                            slices: slice..<slice + 1)
+                                                                    textureType: texture.textureType,
+                                                                    levels: mipMaplevel ..< mipMaplevel + 1,
+                                                                    slices: slice ..< slice + 1)
                     else {
                         throw MetalError.MTLTextureSerializationError.dataAccessFailure
                     }
@@ -102,11 +102,11 @@ public class MTLTextureCodableBox: Codable {
                     }
 
                     textureView.replace(region: textureView.region,
-                            mipmapLevel: 0,
-                            slice: 0,
-                            withBytes: pointer.advanced(by: offset),
-                            bytesPerRow: bytesPerRow,
-                            bytesPerImage: bytesPerImage)
+                                        mipmapLevel: 0,
+                                        slice: 0,
+                                        withBytes: pointer.advanced(by: offset),
+                                        bytesPerRow: bytesPerRow,
+                                        bytesPerImage: bytesPerImage)
 
                     offset += bytesPerImage
                 }

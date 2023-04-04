@@ -18,14 +18,14 @@ public class SceneManager {
         }
         set {
             let oldScene = _activeScene
-            if (oldScene !== newValue) {
+            if oldScene !== newValue {
                 oldScene?._processActive(false)
                 newValue?._processActive(true)
                 _activeScene = newValue
             }
         }
     }
-    
+
     func destroy() {
         _allScenes.forEach { s in
             s.destroy()
@@ -41,7 +41,7 @@ public class SceneManager {
     /// - Remark: the global information of destScene will be used after the merge, and the lightingMap information will be merged.
     public func mergeScenes(_ sourceScene: Scene, _ destScene: Scene) {
         let oldRootEntities = sourceScene.rootEntities
-        for i in 0..<oldRootEntities.count {
+        for i in 0 ..< oldRootEntities.count {
             destScene.addRootEntity(oldRootEntities[i])
         }
     }
@@ -51,6 +51,5 @@ public class SceneManager {
     /// - Parameters:
     ///   - url: the path of the scene
     ///   - destroyOldScene: whether to destroy old scene information
-    public func loadScene(url: String, destroyOldScene: Bool = true) {
-    }
+    public func loadScene(url _: String, destroyOldScene _: Bool = true) {}
 }

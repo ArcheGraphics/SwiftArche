@@ -19,9 +19,9 @@ public class BoxColliderShape: ColliderShape {
     public required init() {
         super.init()
         _nativeShape = PhysXPhysics.createBoxColliderShape(
-                _id,
-                size,
-                material._nativeMaterial
+            _id,
+            size,
+            material._nativeMaterial
         )
     }
 }

@@ -11,7 +11,7 @@ class Validator: Parser {
         let gltf = context.glTFResource.gltf!
 
         let gltfVersion = Float(gltf.version)!
-        if (!(gltfVersion >= 2 && gltfVersion < 3)) {
+        if !(gltfVersion >= 2 && gltfVersion < 3) {
             fatalError("Only support gltf 2.x.")
         }
 

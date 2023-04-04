@@ -4,8 +4,8 @@
 //  personal capacity and am not conveying any rights to any intellectual
 //  property of any third parties.
 
-import vox_render
 import Math
+import vox_render
 
 /// Information required to append a face to a pb_Object.
 final class FaceRebuildData {
@@ -25,17 +25,15 @@ final class FaceRebuildData {
         0
     }
 
-    public static func Apply<T>(newFaces: T,
-                                mesh: ProBuilderMesh,
-                                vertices: [Vertex]? = nil,
-                                faces: [Face]? = nil) where T: Sequence<FaceRebuildData> {
-    }
+    public static func Apply<T>(newFaces _: T,
+                                mesh _: ProBuilderMesh,
+                                vertices _: [Vertex]? = nil,
+                                faces _: [Face]? = nil) where T: Sequence<FaceRebuildData> {}
 
     /// Shift face rebuild data to appropriate positions and update the vertex, face, and shared indexes arrays.
-    public static func Apply<T>(newFaces: T,
-                                vertices: [Vertex],
-                                faces: [Face],
-                                sharedVertexLookup: [Int: Int],
-                                sharedTextureLookup: [Int: Int]? = nil) where T: Sequence<FaceRebuildData> {
-    }
+    public static func Apply<T>(newFaces _: T,
+                                vertices _: [Vertex],
+                                faces _: [Face],
+                                sharedVertexLookup _: [Int: Int],
+                                sharedTextureLookup _: [Int: Int]? = nil) where T: Sequence<FaceRebuildData> {}
 }

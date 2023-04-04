@@ -10,7 +10,8 @@ public extension MTLDevice {
     func multisampleRenderTargetPair(width: Int, height: Int,
                                      pixelFormat: MTLPixelFormat,
                                      sampleCount: Int = 4) throws -> (main: MTLTexture,
-                                                                      resolve: MTLTexture) {
+                                                                      resolve: MTLTexture)
+    {
         let mainDescriptor = MTLTextureDescriptor()
         mainDescriptor.textureType = .type2DMultisample
         mainDescriptor.sampleCount = sampleCount
@@ -39,7 +40,7 @@ public extension MTLDevice {
         if supportsOnly8K() {
             maxSide = 8192
         } else {
-            maxSide = 16_384
+            maxSide = 16384
         }
 
         guard desiredSize.width > 0,
@@ -62,15 +63,15 @@ public extension MTLDevice {
 
     private func supportsOnly8K() -> Bool {
         #if targetEnvironment(macCatalyst)
-        return !supportsFamily(.apple3)
-        #elseif os(macOS)
-        return false
-        #else
-        if #available(iOS 13.0, *) {
             return !supportsFamily(.apple3)
-        } else {
-            return !self.supportsFeatureSet(.iOS_GPUFamily3_v3)
-        }
+        #elseif os(macOS)
+            return false
+        #else
+            if #available(iOS 13.0, *) {
+                return !supportsFamily(.apple3)
+            } else {
+                return !supportsFeatureSet(.iOS_GPUFamily3_v3)
+            }
         #endif
     }
 }

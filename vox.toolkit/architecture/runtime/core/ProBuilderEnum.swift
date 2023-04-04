@@ -4,8 +4,8 @@
 //  personal capacity and am not conveying any rights to any intellectual
 //  property of any third parties.
 
-import vox_render
 import Math
+import vox_render
 
 /// Defines what objects are selectable for the scene tool.
 public struct SelectMode: OptionSet {

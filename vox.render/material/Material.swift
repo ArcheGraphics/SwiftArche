@@ -21,24 +21,24 @@ open class Material: Serializable {
             _updateRenderState()
         }
     }
-    
+
     /// Create a material instance.
     public required init() {
         shaderData = ShaderData(group: .Material)
     }
-    
+
     func _updateRenderState() {
         if let shader {
             let lastStatesCount = renderStates.count
-            
+
             var maxPassCount = 0
             let subShaders = shader.subShaders
-            for i in 0..<subShaders.count {
+            for i in 0 ..< subShaders.count {
                 maxPassCount = max(subShaders[i].passes.count, maxPassCount)
             }
-            
-            if (lastStatesCount < maxPassCount) {
-                for _ in lastStatesCount..<maxPassCount {
+
+            if lastStatesCount < maxPassCount {
+                for _ in lastStatesCount ..< maxPassCount {
                     renderStates.append(RenderState())
                 }
             } else {

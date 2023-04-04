@@ -4,21 +4,21 @@
 //  personal capacity and am not conveying any rights to any intellectual
 //  property of any third parties.
 
-import vox_render
 import Math
+import vox_render
 
 public class ControlledPlayer: Script {
     public var camera: Entity!
     var character: CharacterController?
     var displacement = Vector3()
-    
+
     public var jump = Jump()
-    
-    public override func onStart() {
+
+    override public func onStart() {
         character = entity.getComponent(CharacterController.self)
     }
-    
-    public override func onUpdate(_ deltaTime: Float) {
+
+    override public func onUpdate(_: Float) {
         let inputManager = Engine.inputManager
         if inputManager.isKeyHeldDown() {
             var forward = camera.transform.worldForward
@@ -47,18 +47,18 @@ public class ControlledPlayer: Script {
         }
     }
 
-    public override func onPhysicsUpdate() {
+    override public func onPhysicsUpdate() {
         if let character = character {
             let physicsManager = Engine.physicsManager
             let gravity = physicsManager.gravity
             let fixedTimeStep = physicsManager.fixedTimeStep
-            
+
             let heightDelta = jump.getHeight(elapsedTime: fixedTimeStep)
             var dy: Float = 0
-            if(heightDelta != 0.0) {
-                dy = heightDelta;
+            if heightDelta != 0.0 {
+                dy = heightDelta
             } else {
-                dy = gravity.y * fixedTimeStep;
+                dy = gravity.y * fixedTimeStep
             }
             displacement.y = dy
 
@@ -68,10 +68,11 @@ public class ControlledPlayer: Script {
             }
         }
     }
-    
+
     func startJump() {
         if let character = character,
-           character.isGrounded {
+           character.isGrounded
+        {
             jump.startJump()
         }
     }
@@ -85,7 +86,7 @@ public struct Jump {
     private var jumpTime: Float = 0
 
     mutating func startJump() {
-        if (jump) {
+        if jump {
             return
         }
         jumpTime = 0.0
@@ -93,14 +94,14 @@ public struct Jump {
     }
 
     mutating func stopJump() {
-        if (!jump) {
+        if !jump {
             return
         }
         jump = false
     }
 
     mutating func getHeight(elapsedTime: Float) -> Float {
-        if (!jump) {
+        if !jump {
             return 0.0
         }
         jumpTime += elapsedTime

@@ -19,16 +19,16 @@ class CascadedShadowSubpass: GeometrySubpass {
     private static let _shadowSplitSpheresProperty = "u_shadowSplitSpheres"
 
     private static var _maxCascades: Int = 4
-    private static var _cascadesSplitDistance: [Float] = [Float](repeating: 0, count: CascadedShadowSubpass._maxCascades + 1)
+    private static var _cascadesSplitDistance: [Float] = .init(repeating: 0, count: CascadedShadowSubpass._maxCascades + 1)
 
     private let _camera: Camera
 
     private var _shadowMapResolution: UInt32 = 0
-    private var _shadowMapSize: Vector4 = Vector4()
+    private var _shadowMapSize: Vector4 = .init()
     private var _shadowTileResolution: UInt32 = 0
     private var _shadowMapFormat: MTLPixelFormat = .invalid
     private var _shadowCascadeMode: ShadowCascadesMode = .NoCascades
-    private var _shadowSliceData: ShadowSliceData = ShadowSliceData()
+    private var _shadowSliceData: ShadowSliceData = .init()
     private var _existShadowMap: Bool = false
 
     private var _splitBoundSpheres = [Float](repeating: 0, count: 4 * CascadedShadowSubpass._maxCascades)
@@ -36,16 +36,16 @@ class CascadedShadowSubpass: GeometrySubpass {
     private var _shadowMatrices = [simd_float4x4](repeating: simd_float4x4(), count: CascadedShadowSubpass._maxCascades + 1)
     // strength, null, lightIndex
     private var _shadowInfos = SIMD3<Float>()
-    private var _viewportOffsets: [Vector2] = [Vector2](repeatElement(Vector2(), count: 4))
+    private var _viewportOffsets: [Vector2] = .init(repeatElement(Vector2(), count: 4))
     private var _descriptor = MTLTextureDescriptor()
-    
+
     init(_ camera: Camera) {
         _camera = camera
         _shadowSliceData.virtualCamera.isOrthographic = true
         super.init()
     }
 
-    override func prepare(_ pipelineDescriptor: MTLRenderPipelineDescriptor, _ depthStencilDescriptor: MTLDepthStencilDescriptor) {
+    override func prepare(_ pipelineDescriptor: MTLRenderPipelineDescriptor, _: MTLDepthStencilDescriptor) {
         pipelineDescriptor.label = "shadow map"
         pipelineDescriptor.depthAttachmentPixelFormat = _shadowMapFormat
     }
@@ -54,7 +54,7 @@ class CascadedShadowSubpass: GeometrySubpass {
         _existShadowMap = false
         _renderDirectShadowMap(pipeline: pipeline, on: &encoder)
 
-        if (_existShadowMap) {
+        if _existShadowMap {
             _updateReceiversShaderData(with: Engine.requestBufferBlock(minimum_size: 5 * 256))
         }
     }
@@ -65,21 +65,22 @@ class CascadedShadowSubpass: GeometrySubpass {
         let shadowResolution = ShadowUtils.shadowResolution(scene.shadowResolution)
         let shadowCascades = scene.shadowCascades
 
-        if (shadowFormat != _shadowMapFormat ||
-                shadowResolution != _shadowMapResolution ||
-                shadowCascades != _shadowCascadeMode) {
+        if shadowFormat != _shadowMapFormat ||
+            shadowResolution != _shadowMapResolution ||
+            shadowCascades != _shadowCascadeMode
+        {
             _shadowMapFormat = shadowFormat
             _shadowMapResolution = shadowResolution
             _shadowCascadeMode = shadowCascades
 
-            if (shadowCascades == ShadowCascadesMode.NoCascades) {
+            if shadowCascades == ShadowCascadesMode.NoCascades {
                 _shadowTileResolution = shadowResolution
                 _shadowMapSize = Vector4(1 / Float(shadowResolution), 1 / Float(shadowResolution), Float(shadowResolution), Float(shadowResolution))
             } else {
                 let shadowTileResolution = ShadowUtils.getMaxTileResolutionInAtlas(
-                        atlasWidth: shadowResolution,
-                        atlasHeight: shadowResolution,
-                        tileCount: shadowCascades.rawValue
+                    atlasWidth: shadowResolution,
+                    atlasHeight: shadowResolution,
+                    tileCount: shadowCascades.rawValue
                 )
                 _shadowTileResolution = shadowTileResolution
                 let width = Float(shadowTileResolution * 2)
@@ -87,14 +88,12 @@ class CascadedShadowSubpass: GeometrySubpass {
                 _shadowMapSize = Vector4(1.0 / width, 1.0 / height, width, height)
             }
 
-            switch (shadowCascades) {
+            switch shadowCascades {
             case ShadowCascadesMode.NoCascades:
                 _viewportOffsets[0] = Vector2()
-                break
             case ShadowCascadesMode.TwoCascades:
                 _viewportOffsets[0] = Vector2(0, 0)
                 _viewportOffsets[1] = Vector2(Float(_shadowTileResolution), 0)
-                break
             case ShadowCascadesMode.FourCascades:
                 _viewportOffsets[0] = Vector2(0, 0)
                 _viewportOffsets[1] = Vector2(Float(_shadowTileResolution), 0)
@@ -104,13 +103,14 @@ class CascadedShadowSubpass: GeometrySubpass {
         }
     }
 
-    private func _renderDirectShadowMap(pipeline: DevicePipeline, on encoder: inout RenderCommandEncoder) {
+    private func _renderDirectShadowMap(pipeline _: DevicePipeline, on encoder: inout RenderCommandEncoder) {
         let shadowCascades = _camera.scene.shadowCascades.rawValue
         let bufferBlock = Engine.requestBufferBlock(minimum_size: 20 * 256)
 
         let sunLightIndex = Engine._lightManager._getSunLightIndex()
         if sunLightIndex != -1,
-           let light = _camera.scene._sunLight {
+           let light = _camera.scene._sunLight
+        {
             let shadowFar = min(_camera.scene.shadowDistance, _camera.farClipPlane)
             _getCascadesSplitDistance(shadowFar)
             _shadowInfos.x = light.shadowStrength
@@ -124,42 +124,42 @@ class CascadedShadowSubpass: GeometrySubpass {
             let cameraWorldForward = _camera.entity.transform.worldForward.normalized
             _shadowSliceData.virtualCamera.forward = lightForward
 
-            for j in 0..<shadowCascades {
+            for j in 0 ..< shadowCascades {
                 ShadowUtils.getBoundSphereByFrustum(
-                        near: CascadedShadowSubpass._cascadesSplitDistance[j],
-                        far: CascadedShadowSubpass._cascadesSplitDistance[j + 1],
-                        camera: _camera,
-                        forward: cameraWorldForward,
-                        shadowSliceData: _shadowSliceData
+                    near: CascadedShadowSubpass._cascadesSplitDistance[j],
+                    far: CascadedShadowSubpass._cascadesSplitDistance[j + 1],
+                    camera: _camera,
+                    forward: cameraWorldForward,
+                    shadowSliceData: _shadowSliceData
                 )
                 ShadowUtils.getDirectionLightShadowCullPlanes(
-                        cameraFrustum: _camera._frustum,
-                        splitDistance: CascadedShadowSubpass._cascadesSplitDistance[j],
-                        cameraNear: _camera.nearClipPlane,
-                        direction: lightForward,
-                        shadowSliceData: _shadowSliceData
+                    cameraFrustum: _camera._frustum,
+                    splitDistance: CascadedShadowSubpass._cascadesSplitDistance[j],
+                    cameraNear: _camera.nearClipPlane,
+                    direction: lightForward,
+                    shadowSliceData: _shadowSliceData
                 )
                 ShadowUtils.getDirectionalLightMatrices(
-                        lightUp: lightUp,
-                        lightSide: lightSide,
-                        lightForward: lightForward,
-                        cascadeIndex: j,
-                        nearPlane: light.shadowNearPlane,
-                        shadowResolution: _shadowTileResolution,
-                        shadowSliceData: _shadowSliceData,
-                        outShadowMatrices: &_shadowMatrices
+                    lightUp: lightUp,
+                    lightSide: lightSide,
+                    lightForward: lightForward,
+                    cascadeIndex: j,
+                    nearPlane: light.shadowNearPlane,
+                    shadowResolution: _shadowTileResolution,
+                    shadowSliceData: _shadowSliceData,
+                    outShadowMatrices: &_shadowMatrices
                 )
-                if (shadowCascades > 1) {
+                if shadowCascades > 1 {
                     ShadowUtils.applySliceTransform(
-                            tileSize: _shadowTileResolution,
-                            atlasWidth: Int(_shadowMapSize.z),
-                            atlasHeight: Int(_shadowMapSize.w),
-                            cascadeIndex: j,
-                            atlasOffset: _viewportOffsets[j],
-                            outShadowMatrices: &_shadowMatrices
+                        tileSize: _shadowTileResolution,
+                        atlasWidth: Int(_shadowMapSize.z),
+                        atlasHeight: Int(_shadowMapSize.w),
+                        cascadeIndex: j,
+                        atlasOffset: _viewportOffsets[j],
+                        outShadowMatrices: &_shadowMatrices
                     )
                 }
-                _updateSingleShadowCasterShaderData(&encoder, bufferBlock, (light as! DirectLight), _shadowSliceData)
+                _updateSingleShadowCasterShaderData(&encoder, bufferBlock, light as! DirectLight, _shadowSliceData)
 
                 // upload pre-cascade infos.
                 let center = _shadowSliceData.splitBoundSphere.center
@@ -176,22 +176,22 @@ class CascadedShadowSubpass: GeometrySubpass {
                 pipeline._transparentQueue.removeAll()
                 let renderers = Engine._componentsManager._renderers
                 let elements = renderers._elements
-                for k in 0..<renderers.count {
+                for k in 0 ..< renderers.count {
                     ShadowUtils.shadowCullFrustum(_shadowSliceData.virtualCamera, pipeline, _camera, light, elements[k]!, _shadowSliceData)
                 }
                 pipeline._opaqueQueue.sort(by: DevicePipeline._compareFromNearToFar)
                 pipeline._alphaTestQueue.sort(by: DevicePipeline._compareFromNearToFar)
 
                 encoder.handle.setViewport(MTLViewport(originX: Double(_viewportOffsets[j].x), originY: Double(_viewportOffsets[j].y),
-                        width: Double(_shadowTileResolution), height: Double(_shadowTileResolution), znear: 0, zfar: 1))
+                                                       width: Double(_shadowTileResolution), height: Double(_shadowTileResolution), znear: 0, zfar: 1))
                 // for no cascade is for the edge,for cascade is for the beyond maxCascade pixel can use (0,0,0) trick sample the shadowMap
                 encoder.handle.setScissorRect(MTLScissorRect(x: Int(_viewportOffsets[j].x + 1), y: Int(_viewportOffsets[j].y + 1),
-                        width: Int(_shadowTileResolution - 2), height: Int(_shadowTileResolution - 2)))
-                for i in 0..<pipeline._opaqueQueue.count {
+                                                             width: Int(_shadowTileResolution - 2), height: Int(_shadowTileResolution - 2)))
+                for i in 0 ..< pipeline._opaqueQueue.count {
                     super._drawElement(pipeline: pipeline, on: &encoder, pipeline._opaqueQueue[i])
                 }
 
-                for i in 0..<pipeline._alphaTestQueue.count {
+                for i in 0 ..< pipeline._alphaTestQueue.count {
                     super._drawElement(pipeline: pipeline, on: &encoder, pipeline._alphaTestQueue[i])
                 }
             }
@@ -211,29 +211,26 @@ class CascadedShadowSubpass: GeometrySubpass {
         let range = shadowFar - nearClipPlane
         let tFov = tan(MathUtil.degreeToRadian(fieldOfView) * 0.5)
         let denominator = 1.0 + tFov * tFov * (aspectRatio * aspectRatio + 1.0)
-        switch (shadowCascades) {
+        switch shadowCascades {
         case ShadowCascadesMode.NoCascades:
             CascadedShadowSubpass._cascadesSplitDistance[1] = _getFarWithRadius(shadowFar, denominator)
-            break
         case ShadowCascadesMode.TwoCascades:
             CascadedShadowSubpass._cascadesSplitDistance[1] = _getFarWithRadius(nearClipPlane + range * shadowTwoCascadeSplits, denominator)
             CascadedShadowSubpass._cascadesSplitDistance[2] = _getFarWithRadius(shadowFar, denominator)
-            break
         case ShadowCascadesMode.FourCascades:
             CascadedShadowSubpass._cascadesSplitDistance[1] = _getFarWithRadius(
-                    nearClipPlane + range * shadowFourCascadeSplits.x,
-                    denominator
+                nearClipPlane + range * shadowFourCascadeSplits.x,
+                denominator
             )
             CascadedShadowSubpass._cascadesSplitDistance[2] = _getFarWithRadius(
-                    nearClipPlane + range * shadowFourCascadeSplits.y,
-                    denominator
+                nearClipPlane + range * shadowFourCascadeSplits.y,
+                denominator
             )
             CascadedShadowSubpass._cascadesSplitDistance[3] = _getFarWithRadius(
-                    nearClipPlane + range * shadowFourCascadeSplits.z,
-                    denominator
+                nearClipPlane + range * shadowFourCascadeSplits.z,
+                denominator
             )
             CascadedShadowSubpass._cascadesSplitDistance[4] = _getFarWithRadius(shadowFar, denominator)
-            break
         }
     }
 
@@ -248,13 +245,13 @@ class CascadedShadowSubpass: GeometrySubpass {
         let scene = _camera.scene
         let shadowCascades = scene.shadowCascades.rawValue
         if shadowCascades > 1 {
-            for i in (shadowCascades * 4)..<_splitBoundSpheres.count {
+            for i in (shadowCascades * 4) ..< _splitBoundSpheres.count {
                 _splitBoundSpheres[i] = 0.0
             }
         }
 
         // set zero matrix to project the index out of max cascade
-        for i in shadowCascades..<_shadowMatrices.count {
+        for i in shadowCascades ..< _shadowMatrices.count {
             _shadowMatrices[i] = simd_float4x4()
         }
 
@@ -262,22 +259,23 @@ class CascadedShadowSubpass: GeometrySubpass {
         var allocation = bufferBlock.allocate(MemoryLayout<simd_float4x4>.stride * _shadowMatrices.count)
         allocation.update(_shadowMatrices)
         frameData.setData(CascadedShadowSubpass._shadowMatricesProperty, allocation)
-        
+
         allocation = bufferBlock.allocate(MemoryLayout<SIMD3<Float>>.stride)
         allocation.update(_shadowInfos)
         frameData.setData(CascadedShadowSubpass._shadowInfosProperty, allocation)
-        
+
         allocation = bufferBlock.allocate(MemoryLayout<Float>.stride * _splitBoundSpheres.count)
         allocation.update(_splitBoundSpheres)
         frameData.setData(CascadedShadowSubpass._shadowSplitSpheresProperty, allocation)
-        
+
         allocation = bufferBlock.allocate(MemoryLayout<Vector4>.stride)
         allocation.update(_shadowMapSize)
         frameData.setData(CascadedShadowSubpass._shadowMapSize, allocation)
     }
 
-    private func _updateSingleShadowCasterShaderData(_ encoder: inout RenderCommandEncoder, _ bufferBlock: BufferBlock,
-                                                     _ light: DirectLight, _ shadowSliceData: ShadowSliceData) {
+    private func _updateSingleShadowCasterShaderData(_: inout RenderCommandEncoder, _ bufferBlock: BufferBlock,
+                                                     _ light: DirectLight, _ shadowSliceData: ShadowSliceData)
+    {
         let virtualCamera = shadowSliceData.virtualCamera
         let frameData = Engine.fg.frameData
 
@@ -285,7 +283,7 @@ class CascadedShadowSubpass: GeometrySubpass {
         allocation.update(ShadowUtils.getShadowBias(light: light, projectionMatrix: virtualCamera.projectionMatrix,
                                                     shadowResolution: _shadowTileResolution))
         frameData.setData(CascadedShadowSubpass._lightShadowBiasProperty, allocation)
-        
+
         allocation = bufferBlock.allocate(MemoryLayout<Vector3>.stride)
         allocation.update(light.direction)
         frameData.setData(CascadedShadowSubpass._lightDirectionProperty, allocation)

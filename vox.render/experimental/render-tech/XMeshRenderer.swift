@@ -61,7 +61,8 @@ class XMeshRenderer {
          lightCullingTileSize: Int,
          lightClusteringTileSize: Int,
          useSinglePassCSMGeneration: Bool,
-         genCSMUsingVertexAmplification: Bool) {
+         genCSMUsingVertexAmplification: Bool)
+    {
         _device = device
         _textureManager = textureManager
 
@@ -71,13 +72,13 @@ class XMeshRenderer {
         _lightCullingTileSize = lightCullingTileSize
         _lightClusteringTileSize = lightClusteringTileSize
         rebuildPipelines(with: library, GBufferPixelFormats: GBufferPixelFormats,
-                lightingPixelFormat: lightingPixelFormat,
-                depthStencilFormat: depthStencilFormat,
-                sampleCount: sampleCount,
-                useRasterizationRate: useRasterizationRate,
-                singlePassDeferredLighting: singlePassDeferredLighting,
-                useSinglePassCSMGeneration: useSinglePassCSMGeneration,
-                genCSMUsingVertexAmplification: genCSMUsingVertexAmplification)
+                         lightingPixelFormat: lightingPixelFormat,
+                         depthStencilFormat: depthStencilFormat,
+                         sampleCount: sampleCount,
+                         useRasterizationRate: useRasterizationRate,
+                         singlePassDeferredLighting: singlePassDeferredLighting,
+                         useSinglePassCSMGeneration: useSinglePassCSMGeneration,
+                         genCSMUsingVertexAmplification: genCSMUsingVertexAmplification)
     }
 
     func rebuildPipelines(with library: MTLLibrary,
@@ -88,15 +89,18 @@ class XMeshRenderer {
                           useRasterizationRate: Bool,
                           singlePassDeferredLighting: Bool,
                           useSinglePassCSMGeneration: Bool,
-                          genCSMUsingVertexAmplification: Bool) {
+                          genCSMUsingVertexAmplification: Bool)
+    {
         var TRUE_VALUE = true
         var FALSE_VALUE = false
 
-        //Both Apple Silicon and iPhone will respond with true
+        // Both Apple Silicon and iPhone will respond with true
         let nilFragmentFunction = _device.supportsFamily(.apple4) ? library.makeFunction(name: "dummyFragmentShader") : nil
 
         // ----------------------------------
-        //MARK: - Create vertex descriptors
+
+        // MARK: - Create vertex descriptors
+
         // ----------------------------------
 
         let vd = MTLVertexDescriptor()
@@ -133,7 +137,7 @@ class XMeshRenderer {
         vd.layouts[Int(XBufferIndexVertexMeshGenerics.rawValue)].stepRate = 1
         vd.layouts[Int(XBufferIndexVertexMeshGenerics.rawValue)].stepFunction = .perVertex
 
-        //MARK: - Depth Only Vertex Descriptor
+        // MARK: - Depth Only Vertex Descriptor
 
         let depthOnlyVD = MTLVertexDescriptor()
 
@@ -145,7 +149,7 @@ class XMeshRenderer {
         depthOnlyVD.layouts[Int(XBufferIndexVertexMeshPositions.rawValue)].stepRate = 1
         depthOnlyVD.layouts[Int(XBufferIndexVertexMeshPositions.rawValue)].stepFunction = .perVertex
 
-        //MARK: - Depth Only Alpha Mask Vertex Descriptor
+        // MARK: - Depth Only Alpha Mask Vertex Descriptor
 
         let depthOnlyAlphaMaskVD = depthOnlyVD.copy() as! MTLVertexDescriptor
 
@@ -162,7 +166,9 @@ class XMeshRenderer {
         let vertexFunction = library.makeFunction(name: "vertexShader")
 
         // ----------------------------------
-        //MARK: - Forward pipeline states
+
+        // MARK: - Forward pipeline states
+
         // ----------------------------------
         var useRasterizationRate = useRasterizationRate
         var fc = MTLFunctionConstantValues()
@@ -232,8 +238,8 @@ class XMeshRenderer {
         psd.fragmentFunction = fragmentFunctionLCTransparentICB
         _forwardTransparentLightCluster = try? _device.makeRenderPipelineState(descriptor: psd, options: MTLPipelineOption(), reflection: nil)
 
+        // MARK: - ICB Debug pipelines
 
-        //MARK: - ICB Debug pipelines
         psd.colorAttachments[0].isBlendingEnabled = false
         psd.label = "MeshForwardPipelineState_ICB_Debug"
         psd.fragmentFunction = fragmentFunctionOpaqueICBDebug
@@ -253,7 +259,9 @@ class XMeshRenderer {
         _forwardTransparentLightClusterDebug = try? _device.makeRenderPipelineState(descriptor: psd, options: MTLPipelineOption(), reflection: nil)
 
         // ----------------------------------
-        //MARK: - Depth-only pipeline states
+
+        // MARK: - Depth-only pipeline states
+
         // ----------------------------------
         let depthOnlyVertexFunction = library.makeFunction(name: "vertexShaderDepthOnly")
 
@@ -266,18 +274,18 @@ class XMeshRenderer {
         depthOnlyDescriptor.depthAttachmentPixelFormat = .depth32Float
         depthOnlyDescriptor.supportIndirectCommandBuffers = true
         // Enable vertex amplification - need a minimum of 2 amplification to enable on shaders
-        if (genCSMUsingVertexAmplification) {
+        if genCSMUsingVertexAmplification {
             depthOnlyDescriptor.maxVertexAmplificationCount = 2
-        } else if (useSinglePassCSMGeneration) {
+        } else if useSinglePassCSMGeneration {
             depthOnlyDescriptor.maxVertexAmplificationCount = 1
         }
         _depthOnlyOpaque = try? _device.makeRenderPipelineState(descriptor: depthOnlyDescriptor,
-                options: MTLPipelineOption(), reflection: nil)
+                                                                options: MTLPipelineOption(), reflection: nil)
 
-        if (genCSMUsingVertexAmplification) {
+        if genCSMUsingVertexAmplification {
             depthOnlyDescriptor.vertexFunction = library.makeFunction(name: "vertexShaderDepthOnlyAmplified")
             _depthOnlyAmplifiedOpaque = try? _device.makeRenderPipelineState(descriptor: depthOnlyDescriptor,
-                    options: MTLPipelineOption(), reflection: nil)
+                                                                             options: MTLPipelineOption(), reflection: nil)
         }
 
         let depthOnlyAlphaMaskVertexFunction = library.makeFunction(name: "vertexShaderDepthOnlyAlphaMask")
@@ -287,16 +295,16 @@ class XMeshRenderer {
         depthOnlyDescriptor.fragmentFunction = depthOnlyAlphaMaskFragmentFunction
         depthOnlyDescriptor.vertexDescriptor = depthOnlyAlphaMaskVD
         _depthOnlyAlphaMask = try? _device.makeRenderPipelineState(descriptor: depthOnlyDescriptor,
-                options: MTLPipelineOption(), reflection: nil)
+                                                                   options: MTLPipelineOption(), reflection: nil)
 
-        if (genCSMUsingVertexAmplification) {
+        if genCSMUsingVertexAmplification {
             depthOnlyDescriptor.vertexFunction = library.makeFunction(name: "vertexShaderDepthOnlyAlphaMaskAmplified")
             _depthOnlyAmplifiedAlphaMask = try? _device.makeRenderPipelineState(descriptor: depthOnlyDescriptor,
-                    options: MTLPipelineOption(), reflection: nil)
+                                                                                options: MTLPipelineOption(), reflection: nil)
         }
 
         // Reset vertex amplification to disabled
-        if (genCSMUsingVertexAmplification) {
+        if genCSMUsingVertexAmplification {
             depthOnlyDescriptor.maxVertexAmplificationCount = 1
         }
 
@@ -310,17 +318,19 @@ class XMeshRenderer {
         depthOnlyDescriptor.fragmentFunction = depthOnlyTileFragmentFunction
 
         _depthOnlyTileOpaque = try? _device.makeRenderPipelineState(descriptor: depthOnlyDescriptor,
-                options: MTLPipelineOption(), reflection: nil)
+                                                                    options: MTLPipelineOption(), reflection: nil)
 
         depthOnlyDescriptor.label = "DepthOnlyTilePipelineState_AlphaMask"
         depthOnlyDescriptor.vertexFunction = depthOnlyAlphaMaskVertexFunction
         depthOnlyDescriptor.fragmentFunction = depthOnlyTileAlphaMaskFragmentFunction
 
         _depthOnlyTileAlphaMask = try? _device.makeRenderPipelineState(descriptor: depthOnlyDescriptor,
-                options: MTLPipelineOption(), reflection: nil)
+                                                                       options: MTLPipelineOption(), reflection: nil)
 
         // ----------------------------------
-        //MARK: - GBuffer pipeline states
+
+        // MARK: - GBuffer pipeline states
+
         // ----------------------------------
 
         fc = MTLFunctionConstantValues()
@@ -341,10 +351,10 @@ class XMeshRenderer {
         rpd.depthAttachmentPixelFormat = depthStencilFormat
         rpd.supportIndirectCommandBuffers = true
         var GBufferIndexStart = XTraditionalGBufferStart.rawValue
-        if (singlePassDeferredLighting) {
+        if singlePassDeferredLighting {
             GBufferIndexStart = XGBufferLightIndex.rawValue
         }
-        for GBufferIndex in GBufferIndexStart..<XGBufferIndexCount.rawValue {
+        for GBufferIndex in GBufferIndexStart ..< XGBufferIndexCount.rawValue {
             rpd.colorAttachments[Int(GBufferIndex)].pixelFormat = GBufferPixelFormats[Int(GBufferIndex)]
         }
         _gBufferOpaque = try? _device.makeRenderPipelineState(descriptor: rpd, options: MTLPipelineOption(), reflection: nil)
@@ -363,8 +373,9 @@ class XMeshRenderer {
     // Writes commands prior to executing a set of passes for rendering a mesh.
     func prerender(mesh: XMesh,
                    direct: Bool,
-                   icbData: inout XICBData,
-                   encoder: MTLRenderCommandEncoder) {
+                   icbData _: inout XICBData,
+                   encoder: MTLRenderCommandEncoder)
+    {
         if !direct {
             encoder.useResource(mesh.indices, usage: .read)
             encoder.useResource(mesh.vertices, usage: .read)
@@ -381,78 +392,80 @@ class XMeshRenderer {
                 icbData: inout XICBData,
                 flags: [String: Bool],
                 cameraParams: inout XCameraParams,
-                encoder: MTLRenderCommandEncoder) {
+                encoder: MTLRenderCommandEncoder)
+    {
         let cullingVisualizationMode = flags["cullingVisualizationMode"] ?? false
         let debugView = flags["debugView"] ?? false
         let clusteredLighting = flags["clusteredLighting"] ?? false
         let amplifyRendering = flags["amplify"] ?? false
         let useTileShader = flags["useTileShader"] ?? false
 
-        var pipelineState: MTLRenderPipelineState? = nil
-        if (pass == .Depth) {
-            if (useTileShader) {
+        var pipelineState: MTLRenderPipelineState?
+        if pass == .Depth {
+            if useTileShader {
                 pipelineState = _depthOnlyTileOpaque
-            } else if (amplifyRendering) {
+            } else if amplifyRendering {
                 pipelineState = _depthOnlyAmplifiedOpaque
             } else {
                 pipelineState = _depthOnlyOpaque
             }
-        } else if (pass == .DepthAlphaMasked) {
-            if (useTileShader) {
+        } else if pass == .DepthAlphaMasked {
+            if useTileShader {
                 pipelineState = _depthOnlyTileAlphaMask
-            } else if (amplifyRendering) {
+            } else if amplifyRendering {
                 pipelineState = _depthOnlyAmplifiedAlphaMask
             } else {
                 pipelineState = _depthOnlyAlphaMask
             }
-        } else if (pass == .GBuffer) {
+        } else if pass == .GBuffer {
             pipelineState = _gBufferOpaque
-        } else if (pass == .GBufferAlphaMasked) {
+        } else if pass == .GBufferAlphaMasked {
             pipelineState = _gBufferAlphaMask
-        } else if (pass == .Forward) {
+        } else if pass == .Forward {
             pipelineState = _forwardOpaque
-        } else if (pass == .ForwardAlphaMasked) {
+        } else if pass == .ForwardAlphaMasked {
             pipelineState = _forwardAlphaMask
-        } else if (pass == .ForwardTransparent) {
+        } else if pass == .ForwardTransparent {
             pipelineState = clusteredLighting ? _forwardTransparentLightCluster : _forwardTransparent
         } else {
             fatalError("Unsupported pass type")
         }
 
-        if (cullingVisualizationMode) {
-            if (pass == .GBuffer || pass == .GBufferAlphaMasked) {
+        if cullingVisualizationMode {
+            if pass == .GBuffer || pass == .GBufferAlphaMasked {
                 pipelineState = _gBufferDebug
             }
         }
 
-        if (debugView) {
-            if (pass == .Forward) {
+        if debugView {
+            if pass == .Forward {
                 pipelineState = _forwardOpaqueDebug
-            } else if (pass == .ForwardAlphaMasked) {
+            } else if pass == .ForwardAlphaMasked {
                 pipelineState = _forwardAlphaMaskDebug
-            } else if (pass == .ForwardTransparent) {
+            } else if pass == .ForwardTransparent {
                 pipelineState = _forwardTransparentDebug
             }
         }
 
-        if (pass == .ForwardTransparent && clusteredLighting) {
-            if (debugView) {
+        if pass == .ForwardTransparent && clusteredLighting {
+            if debugView {
                 pipelineState = _forwardTransparentLightClusterDebug
             } else {
                 pipelineState = _forwardTransparentLightCluster
             }
         }
 
-        if (pipelineState == nil) {
+        if pipelineState == nil {
             return
         }
 
         encoder.setRenderPipelineState(pipelineState!)
 
-        if (pass == .DepthAlphaMasked
-                || pass == .GBufferAlphaMasked
-                || pass == .ForwardAlphaMasked
-                || pass == .ForwardTransparent) {
+        if pass == .DepthAlphaMasked
+            || pass == .GBufferAlphaMasked
+            || pass == .ForwardAlphaMasked
+            || pass == .ForwardTransparent
+        {
             encoder.setCullMode(.none)
         }
 
@@ -460,48 +473,50 @@ class XMeshRenderer {
 
         _textureManager.makeResident(for: encoder)
 
-        if (direct) {
+        if direct {
             encoder.setVertexBuffer(mesh.vertices, offset: 0, index: Int(XBufferIndexVertexMeshPositions.rawValue))
             encoder.setVertexBuffer(mesh.normals, offset: 0, index: Int(XBufferIndexVertexMeshNormals.rawValue))
             encoder.setVertexBuffer(mesh.tangents, offset: 0, index: Int(XBufferIndexVertexMeshTangents.rawValue))
             encoder.setVertexBuffer(mesh.uvs, offset: 0, index: Int(XBufferIndexVertexMeshGenerics.rawValue))
 
-            var submeshes: UnsafePointer<XSubMesh>? = nil
+            var submeshes: UnsafePointer<XSubMesh>?
             var submeshCount = 0
-            if (pass == .Depth || pass == .GBuffer || pass == .Forward) {
+            if pass == .Depth || pass == .GBuffer || pass == .Forward {
                 submeshes = mesh.meshes
                 submeshCount = Int(mesh.opaqueMeshCount)
-            } else if (pass == .DepthAlphaMasked || pass == .GBufferAlphaMasked || pass == .ForwardAlphaMasked) {
+            } else if pass == .DepthAlphaMasked || pass == .GBufferAlphaMasked || pass == .ForwardAlphaMasked {
                 submeshes = mesh.meshes.advanced(by: Int(mesh.opaqueMeshCount))
                 submeshCount = Int(mesh.alphaMaskedMeshCount)
-            } else if (pass == .ForwardTransparent) {
+            } else if pass == .ForwardTransparent {
                 submeshes = mesh.meshes.advanced(by: Int(mesh.opaqueMeshCount + mesh.alphaMaskedMeshCount))
                 submeshCount = Int(mesh.transparentMeshCount)
             } else {
                 fatalError("Unsupported pass type")
             }
             drawSubMeshes(submeshes!, count: submeshCount, indexBuffer: mesh.indices,
-                    chunkData: mesh.chunkData, setMaterialOffset: pass != .Depth,
-                    materialSize: materialSize, cameraParams: cameraParams, renderEncoder: encoder)
+                          chunkData: mesh.chunkData, setMaterialOffset: pass != .Depth,
+                          materialSize: materialSize, cameraParams: cameraParams, renderEncoder: encoder)
         } else {
-            var cmdBuffer: MTLIndirectCommandBuffer? = nil
+            var cmdBuffer: MTLIndirectCommandBuffer?
             var executionRangeOffset = 0
 
-            if (pass == .Depth) {
+            if pass == .Depth {
                 cmdBuffer = icbData.commandBuffer_depthOnly
                 executionRangeOffset = 0
-            } else if (pass == .DepthAlphaMasked) {
+            } else if pass == .DepthAlphaMasked {
                 cmdBuffer = icbData.commandBuffer_depthOnly_alphaMask
                 executionRangeOffset = MemoryLayout<MTLIndirectCommandBufferExecutionRange>.stride
-            } else if (pass == .GBuffer
-                    || pass == .Forward) {
+            } else if pass == .GBuffer
+                || pass == .Forward
+            {
                 cmdBuffer = icbData.commandBuffer
                 executionRangeOffset = 0
-            } else if (pass == .GBufferAlphaMasked
-                    || pass == .ForwardAlphaMasked) {
+            } else if pass == .GBufferAlphaMasked
+                || pass == .ForwardAlphaMasked
+            {
                 cmdBuffer = icbData.commandBuffer_alphaMask
                 executionRangeOffset = MemoryLayout<MTLIndirectCommandBufferExecutionRange>.stride
-            } else if (pass == .ForwardTransparent) {
+            } else if pass == .ForwardTransparent {
                 cmdBuffer = icbData.commandBuffer_transparent
                 executionRangeOffset = MemoryLayout<MTLIndirectCommandBufferExecutionRange>.stride * 2
             } else {
@@ -514,28 +529,29 @@ class XMeshRenderer {
     private func drawSubMeshes(_ meshes: UnsafePointer<XSubMesh>,
                                count: Int,
                                indexBuffer: MTLBuffer,
-                               chunkData: UnsafePointer<XMeshChunk>,
+                               chunkData _: UnsafePointer<XMeshChunk>,
                                setMaterialOffset: Bool,
                                materialSize: Int,
                                cameraParams: XCameraParams,
-                               renderEncoder: MTLRenderCommandEncoder) {
-        for i in 0..<count {
+                               renderEncoder: MTLRenderCommandEncoder)
+    {
+        for i in 0 ..< count {
             let mesh = meshes[i]
 
-            if (setMaterialOffset) {
+            if setMaterialOffset {
                 renderEncoder.setFragmentBufferOffset(Int(mesh.materialIndex) * materialSize,
                                                       index: Int(XBufferIndexFragmentMaterial.rawValue))
             }
 
             let frustumCulled = !sphereInFrustum(cameraParams: cameraParams, sphere: mesh.boundingSphere)
 
-            if (frustumCulled) {
+            if frustumCulled {
                 continue
             }
 
             renderEncoder.drawIndexedPrimitives(type: .triangle, indexCount: Int(mesh.indexCount),
-                    indexType: .uint32, indexBuffer: indexBuffer,
-                    indexBufferOffset: Int(mesh.indexBegin) * MemoryLayout<UInt32>.stride)
+                                                indexType: .uint32, indexBuffer: indexBuffer,
+                                                indexBufferOffset: Int(mesh.indexBegin) * MemoryLayout<UInt32>.stride)
         }
     }
 }
@@ -549,10 +565,11 @@ func distanceToPlane(_ sphere: XSphere, _ planeEq: simd_float4) -> Float {
 // Checks if a sphere is in a frustum.
 func sphereInFrustum(cameraParams: XCameraParams, sphere: XSphere) -> Bool {
     return (simd_min(
-            simd_min(distanceToPlane(sphere, cameraParams.worldFrustumPlanes.0),
-                    simd_min(distanceToPlane(sphere, cameraParams.worldFrustumPlanes.1),
-                            distanceToPlane(sphere, cameraParams.worldFrustumPlanes.2))),
-            simd_min(distanceToPlane(sphere, cameraParams.worldFrustumPlanes.3),
-                    simd_min(distanceToPlane(sphere, cameraParams.worldFrustumPlanes.4),
-                            distanceToPlane(sphere, cameraParams.worldFrustumPlanes.5))))) >= 0.0
+        simd_min(distanceToPlane(sphere, cameraParams.worldFrustumPlanes.0),
+                 simd_min(distanceToPlane(sphere, cameraParams.worldFrustumPlanes.1),
+                          distanceToPlane(sphere, cameraParams.worldFrustumPlanes.2))),
+        simd_min(distanceToPlane(sphere, cameraParams.worldFrustumPlanes.3),
+                 simd_min(distanceToPlane(sphere, cameraParams.worldFrustumPlanes.4),
+                          distanceToPlane(sphere, cameraParams.worldFrustumPlanes.5)))
+    )) >= 0.0
 }

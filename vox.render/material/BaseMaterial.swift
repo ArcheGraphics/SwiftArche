@@ -22,7 +22,7 @@ open class BaseMaterial: Material {
     public static let _emissiveTextureProp = "u_emissiveTexture"
     public static let _emissiveSamplerProp = "u_emissiveSampler"
 
-    public override var shader: Shader? {
+    override public var shader: Shader? {
         didSet {
             _updateRenderState()
         }
@@ -32,11 +32,11 @@ open class BaseMaterial: Material {
     public var isTransparent: Bool {
         didSet {
             if isTransparent {
-                for i in 0..<renderStates.count {
+                for i in 0 ..< renderStates.count {
                     setRenderQueueType(at: i, RenderQueueType.Transparent)
                 }
             } else {
-                for i in 0..<renderStates.count {
+                for i in 0 ..< renderStates.count {
                     setRenderQueueType(at: i, alphaCutoff > 0 ? RenderQueueType.AlphaTest : RenderQueueType.Opaque)
                 }
             }
@@ -49,18 +49,18 @@ open class BaseMaterial: Material {
             shaderData.setData(with: BaseMaterial._alphaCutoffProp, data: alphaCutoff)
             if alphaCutoff > 0 {
                 shaderData.enableMacro(NEED_ALPHA_CUTOFF.rawValue)
-                for i in 0..<renderStates.count {
+                for i in 0 ..< renderStates.count {
                     setRenderQueueType(at: i, isTransparent ? RenderQueueType.Transparent : RenderQueueType.AlphaTest)
                 }
             } else {
                 shaderData.disableMacro(NEED_ALPHA_CUTOFF.rawValue)
-                for i in 0..<renderStates.count {
+                for i in 0 ..< renderStates.count {
                     setRenderQueueType(at: i, isTransparent ? RenderQueueType.Transparent : RenderQueueType.Opaque)
                 }
             }
         }
     }
-    
+
     /// Tiling and offset of main textures.
     @Serialized(default: Vector4(1, 1, 0, 0))
     public var tilingOffset: Vector4 {
@@ -68,12 +68,12 @@ open class BaseMaterial: Material {
             shaderData.setData(with: BaseMaterial._tilingOffsetProp, data: tilingOffset)
         }
     }
-    
+
     public required init() {
         super.init()
         createArgumentBuffer()
     }
-    
+
     func createArgumentBuffer() {
         // alpha-cutoff
         var desc = MTLArgumentDescriptor()
@@ -81,7 +81,7 @@ open class BaseMaterial: Material {
         desc.dataType = .float
         desc.access = .readOnly
         shaderData.registerArgumentDescriptor(with: BaseMaterial._alphaCutoffProp, descriptor: desc)
-        
+
         // tiling offset
         desc = MTLArgumentDescriptor()
         desc.index = 1
@@ -89,10 +89,10 @@ open class BaseMaterial: Material {
         desc.access = .readOnly
         shaderData.registerArgumentDescriptor(with: BaseMaterial._tilingOffsetProp, descriptor: desc)
         shaderData.createArgumentBuffer(with: "u_baseMaterial")
-        
+
         shaderData.setData(with: BaseMaterial._alphaCutoffProp, data: 0)
     }
-    
+
     /// Set if is transparent of the shader pass render state.
     /// - Parameters:
     ///   - passIndex: Shader pass index
@@ -105,7 +105,6 @@ open class BaseMaterial: Material {
         case RenderQueueType.Transparent:
             renderState.blendState.targetBlendState.enabled = true
             renderState.depthState.writeEnabled = false
-            break
         case RenderQueueType.Opaque, RenderQueueType.AlphaTest:
             renderState.blendState.targetBlendState.enabled = false
             renderState.depthState.writeEnabled = true
@@ -118,7 +117,7 @@ open class BaseMaterial: Material {
     public func setBlendMode(at passIndex: Int, _ blendMode: BlendMode) {
         assert(renderStates.count > passIndex)
         let target = renderStates[passIndex].blendState.targetBlendState
-        switch (blendMode) {
+        switch blendMode {
         case BlendMode.Normal:
             target.sourceColorBlendFactor = .sourceAlpha
             target.destinationColorBlendFactor = .oneMinusSourceAlpha
@@ -126,7 +125,6 @@ open class BaseMaterial: Material {
             target.destinationAlphaBlendFactor = .oneMinusSourceAlpha
             target.colorBlendOperation = .add
             target.alphaBlendOperation = .add
-            break
         case BlendMode.Additive:
             target.sourceColorBlendFactor = .sourceAlpha
             target.destinationColorBlendFactor = .one
@@ -134,7 +132,6 @@ open class BaseMaterial: Material {
             target.destinationAlphaBlendFactor = .oneMinusSourceAlpha
             target.colorBlendOperation = .add
             target.alphaBlendOperation = .add
-            break
         }
     }
 
@@ -143,31 +140,28 @@ open class BaseMaterial: Material {
     /// - Parameter renderFace: Render face
     public func setRenderFace(at passIndex: Int, _ renderFace: RenderFace) {
         assert(renderStates.count > passIndex)
-        switch (renderFace) {
+        switch renderFace {
         case RenderFace.Front:
             renderStates[passIndex].rasterState.cullMode = .back
-            break
         case RenderFace.Back:
             renderStates[passIndex].rasterState.cullMode = .front
-            break
         case RenderFace.Double:
             renderStates[passIndex].rasterState.cullMode = .none
-            break
         }
     }
-    
+
     override func _updateRenderState() {
         if let shader {
             let lastStatesCount = renderStates.count
-            
+
             var maxPassCount = 0
             let subShaders = shader.subShaders
-            for i in 0..<subShaders.count {
+            for i in 0 ..< subShaders.count {
                 maxPassCount = max(subShaders[i].passes.count, maxPassCount)
             }
-            
-            if (lastStatesCount < maxPassCount) {
-                for i in lastStatesCount..<maxPassCount {
+
+            if lastStatesCount < maxPassCount {
+                for i in lastStatesCount ..< maxPassCount {
                     renderStates.append(RenderState())
                     setBlendMode(at: i, BlendMode.Normal)
                 }

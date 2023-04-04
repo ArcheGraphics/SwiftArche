@@ -5,20 +5,20 @@
 //  property of any third parties.
 
 import Cocoa
-import vox_render
 import Math
+import vox_render
 import vox_toolkit
 
-fileprivate class MoveScript: Script {
+private class MoveScript: Script {
     var pos: Float = -5
     var vel: Float = 0.05
     var velSign: Float = -1
 
     override func onPhysicsUpdate() {
-        if (pos >= 5) {
+        if pos >= 5 {
             velSign = -1
         }
-        if (pos <= -5) {
+        if pos <= -5 {
             velSign = 1
         }
         pos += vel * velSign
@@ -30,14 +30,14 @@ class PhysXDebugApp: NSViewController {
     var canvas: Canvas!
     var engine: Engine!
     var iblBaker: IBLBaker!
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
         canvas = Canvas(frame: view.frame)
         canvas.setParentView(view)
         engine = Engine(canvas: canvas)
         iblBaker = IBLBaker()
-        
+
         let scene = Engine.sceneManager.activeScene!
         let hdr = Engine.textureLoader.loadHDR(with: "assets/kloppenheim_06_4k.hdr")!
         iblBaker.bake(scene, with: hdr, size: 256, level: 3)
@@ -50,7 +50,7 @@ class PhysXDebugApp: NSViewController {
         cameraEntity.transform.lookAt(targetPosition: Vector3())
         cameraEntity.addComponent(Camera.self)
         cameraEntity.addComponent(OrbitControl.self)
-                
+
         let light = rootEntity.createChild("light")
         light.transform.position = Vector3(1, 3, 0)
         light.transform.lookAt(targetPosition: Vector3())
@@ -86,7 +86,7 @@ class PhysXDebugApp: NSViewController {
 
         let sphereMtl = PBRMaterial()
         let sphereRenderer = sphereEntity.addComponent(MeshRenderer.self)
-        sphereMtl.baseColor = Color(Float.random(in: 0..<1), Float.random(in: 0..<1), Float.random(in: 0..<1), 0.5)
+        sphereMtl.baseColor = Color(Float.random(in: 0 ..< 1), Float.random(in: 0 ..< 1), Float.random(in: 0 ..< 1), 0.5)
         sphereMtl.metallic = 0.0
         sphereMtl.roughness = 0.5
         sphereMtl.isTransparent = true
@@ -107,17 +107,17 @@ class PhysXDebugApp: NSViewController {
         sphereEntity.addComponent(CollisionScript.self)
         sphereEntity.addComponent(MoveScript.self)
 
-        //MARK: - debug draw
+        // MARK: - debug draw
+
         let wireframe = rootEntity.addComponent(EngineVisualizer.self)
         wireframe.addEntityWireframe(with: sphereEntity)
         wireframe.addEntityWireframe(with: boxEntity)
 
         Engine.run()
     }
-    
+
     override func viewDidDisappear() {
         super.viewDidDisappear()
         Engine.destroy()
     }
 }
-

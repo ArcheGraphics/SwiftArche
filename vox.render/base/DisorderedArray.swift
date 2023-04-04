@@ -17,7 +17,7 @@ class DisorderedArray<T> {
     }
 
     func add(_ element: T) {
-        if (count == _elements.count) {
+        if count == _elements.count {
             _elements.append(element)
         } else {
             _elements[count] = element
@@ -26,7 +26,7 @@ class DisorderedArray<T> {
     }
 
     func get(_ index: Int) -> T? {
-        if (index >= count) {
+        if index >= count {
             fatalError("Index is out of range.")
         }
         return _elements[index]
@@ -36,9 +36,9 @@ class DisorderedArray<T> {
     /// - Parameter index: index
     /// - Returns: The replaced item is used to reset its index.
     func deleteByIndex(_ index: Int) -> T? {
-        var end: T? = nil
+        var end: T?
         let lastIndex = count - 1
-        if (index != lastIndex) {
+        if index != lastIndex {
             end = _elements[lastIndex]
             _elements[index] = end!
         }

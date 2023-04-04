@@ -4,8 +4,8 @@
 //  personal capacity and am not conveying any rights to any intellectual
 //  property of any third parties.
 
-import vox_render
 import Math
+import vox_render
 
 class SelectPathFaces {
     static var s_cachedPredecessors: [Int] = []
@@ -13,7 +13,7 @@ class SelectPathFaces {
     static var s_cachedMesh: ProBuilderMesh?
     static var s_cachedFacesCount: Int = 0
     static var s_cachedWings: [WingedEdge] = []
-    static var s_cachedFacesIndex: Dictionary<Face, Int> = [:]
+    static var s_cachedFacesIndex: [Face: Int] = [:]
 
     /// Calculates the indexes of all faces in the shortest path between start and end
     /// - Parameters:
@@ -21,7 +21,7 @@ class SelectPathFaces {
     ///   - start: The index of the ending face
     ///   - end: The mesh of the object
     /// - Returns: The indexes of all faces
-    public static func GetPath(mesh: ProBuilderMesh, start: Int, end: Int) -> [Int] {
+    public static func GetPath(mesh _: ProBuilderMesh, start _: Int, end _: Int) -> [Int] {
         []
     }
 
@@ -31,16 +31,15 @@ class SelectPathFaces {
     ///   - mesh: The mesh of the object
     ///   - start: The index of the starting face
     /// - Returns: A list of predecessors from a face index to all other faces
-    static func Dijkstra(mesh: ProBuilderMesh, start: Int) -> [Int] {
+    static func Dijkstra(mesh _: ProBuilderMesh, start _: Int) -> [Int] {
         []
     }
 
-    static func GetWeight(face1: Int, face2: Int, mesh: ProBuilderMesh) -> Float {
+    static func GetWeight(face1 _: Int, face2 _: Int, mesh _: ProBuilderMesh) -> Float {
         0
     }
 
-
-    static func GetMinimalPath(predecessors: [Int], start: Int, end: Int) -> [Int] {
+    static func GetMinimalPath(predecessors _: [Int], start _: Int, end _: Int) -> [Int] {
         []
     }
 }

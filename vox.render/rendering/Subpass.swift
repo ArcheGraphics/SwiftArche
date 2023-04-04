@@ -7,6 +7,5 @@
 import Metal
 
 open class Subpass {
-    open func draw(pipeline: DevicePipeline, on encoder: inout RenderCommandEncoder) {
-    }
+    open func draw(pipeline _: DevicePipeline, on _: inout RenderCommandEncoder) {}
 }

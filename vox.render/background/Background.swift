@@ -12,12 +12,12 @@ public class Background {
     /// Background mode.
     /// @defaultValue `BackgroundMode.SolidColor`
     /// - Remark: If using `BackgroundMode.Sky` mode and material or mesh of the `sky` is not defined, it will downgrade to `BackgroundMode.SolidColor`.
-    public var mode: BackgroundMode = BackgroundMode.SolidColor
+    public var mode: BackgroundMode = .SolidColor
 
     /// Background solid color.
     /// @defaultValue `Color(0.8, 0.8, 0.8, 1.0)`
     /// - Remark: When `mode` is `BackgroundMode.SolidColor`, the property will take effects.
-    public var solidColor: Color = Color(0.8, 0.8, 0.8, 1.0)
+    public var solidColor: Color = .init(0.8, 0.8, 0.8, 1.0)
 
     /// Background sky.
     /// - Remark: When `mode` is `BackgroundMode.Sky`, the property will take effects.
@@ -27,9 +27,9 @@ public class Background {
     /// - Remark: When `mode` is `BackgroundMode.Texture`, the property will take effects.
     public var texture: BackgroundSubpass?
 
-#if os(iOS)
-    /// Background ar.
-    /// - Remark: When `mode` is `BackgroundMode.AR`, the property will take effects.
-    public var ar: ARSubpass?
-#endif
+    #if os(iOS)
+        /// Background ar.
+        /// - Remark: When `mode` is `BackgroundMode.AR`, the property will take effects.
+        public var ar: ARSubpass?
+    #endif
 }

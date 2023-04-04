@@ -14,9 +14,9 @@ public class TerrianData {
 
     // Terrain rendering data
     var terrainTextures: [HabitatTextures] = []
-    
+
     var targetHeightmap: MTLTexture
-    
+
     init(targetHeightmap: MTLTexture) {
         self.targetHeightmap = targetHeightmap
     }

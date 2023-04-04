@@ -7,21 +7,22 @@
 import Metal
 
 open class GeometrySubpass: Subpass {
-    open func drawElement(pipeline: DevicePipeline, on encoder: inout RenderCommandEncoder) {
+    open func drawElement(pipeline _: DevicePipeline, on _: inout RenderCommandEncoder) {
         // rewrite by subclass
     }
 
-    open func prepare(_ pipelineDescriptor: MTLRenderPipelineDescriptor,
-                      _ depthStencilDescriptor: MTLDepthStencilDescriptor) {
+    open func prepare(_: MTLRenderPipelineDescriptor,
+                      _: MTLDepthStencilDescriptor)
+    {
         // rewrite by subclass
     }
 
-    open override func draw(pipeline: DevicePipeline, on encoder: inout RenderCommandEncoder) {
+    override open func draw(pipeline: DevicePipeline, on encoder: inout RenderCommandEncoder) {
         encoder.handle.pushDebugGroup("Draw Element")
         drawElement(pipeline: pipeline, on: &encoder)
         encoder.handle.popDebugGroup()
     }
-    
+
     public func _drawElement(pipeline: DevicePipeline, on encoder: inout RenderCommandEncoder, _ element: RenderElement) {
         switch element.data.renderType {
         case .Mesh:
@@ -35,7 +36,8 @@ open class GeometrySubpass: Subpass {
     }
 
     public func _drawMesh(pipeline: DevicePipeline, on encoder: inout RenderCommandEncoder,
-                          renderState: RenderState, shaderPass: ShaderPass, meshRenderData: MeshRenderData) {
+                          renderState: RenderState, shaderPass: ShaderPass, meshRenderData: MeshRenderData)
+    {
         let mesh = meshRenderData.mesh
         let renderer = meshRenderData.renderer
         let material = meshRenderData.material
@@ -44,10 +46,10 @@ open class GeometrySubpass: Subpass {
         let pipelineDescriptor = MTLRenderPipelineDescriptor()
         let depthStencilDescriptor = MTLDepthStencilDescriptor()
         prepare(pipelineDescriptor, depthStencilDescriptor)
-        
+
         var shaderMacro = Engine.fg.frameData._macroCollection
         ShaderMacroCollection.unionCollection(material.shaderData._macroCollection,
-                renderer._globalShaderMacro, &shaderMacro)
+                                              renderer._globalShaderMacro, &shaderMacro)
 
         let functions = Engine.resourceCache.requestShaderModule(shaderPass, shaderMacro)
         pipelineDescriptor.vertexFunction = functions[0]
@@ -57,7 +59,7 @@ open class GeometrySubpass: Subpass {
         pipelineDescriptor.vertexDescriptor = mesh._vertexDescriptor
         renderState._apply(pipelineDescriptor, depthStencilDescriptor, encoder.handle,
                            renderer.entity.transform._isFrontFaceInvert())
-        
+
         let pso = Engine.resourceCache.requestGraphicsPipeline(pipelineDescriptor)
         encoder.bind(depthStencilState: depthStencilDescriptor)
         encoder.bind(camera: camera, pso)
@@ -68,7 +70,7 @@ open class GeometrySubpass: Subpass {
         encoder.bind(mesh: mesh)
         encoder.draw(subMesh: meshRenderData.subMesh, with: mesh)
     }
-    
+
     public func _drawBatcher<B: Batcher>(pipeline: DevicePipeline, on encoder: inout RenderCommandEncoder, _ batcher: B) {
         batcher.drawBatcher(&encoder, pipeline.camera)
     }

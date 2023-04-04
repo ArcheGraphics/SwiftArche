@@ -20,7 +20,7 @@ public class UpdateFlagManager {
     /// - Parameter flag: The UpdateFlag.
     public func removeFlag(flag: UpdateFlag) {
         let success = removeFromArray(array: &_updateFlags, item: flag)
-        if (success) {
+        if success {
             _ = removeFromArray(array: &flag._flagManagers, item: self)
         }
     }

@@ -13,26 +13,26 @@ public class AnimationVisualizer: Script {
     var joints: [Gizmos.VertexPNC] = []
     var _skeletonData = [Float](repeating: 0, count: Int(CAnimator.kMaxJoints() * 64))
 
-    public override func onAwake() {
+    override public func onAwake() {
         animator = entity.getComponent(Animator.self)
         _createBoneMesh()
         _createJointMesh()
     }
 
-    public override func onGUI() {
+    override public func onGUI() {
         if let animator {
             let instanceCount = animator.fillPostureUniforms(&_skeletonData)
             let modelMat = entity.transform.worldMatrix
-            for i in 0..<instanceCount {
+            for i in 0 ..< instanceCount {
                 let col0 = SIMD4<Float>(_skeletonData[i * 16], _skeletonData[i * 16 + 1],
-                        _skeletonData[i * 16 + 2], _skeletonData[i * 16 + 3])
+                                        _skeletonData[i * 16 + 2], _skeletonData[i * 16 + 3])
                 let col1 = SIMD4<Float>(_skeletonData[i * 16 + 4], _skeletonData[i * 16 + 5],
-                        _skeletonData[i * 16 + 6], _skeletonData[i * 16 + 7])
+                                        _skeletonData[i * 16 + 6], _skeletonData[i * 16 + 7])
                 let col2 = SIMD4<Float>(_skeletonData[i * 16 + 8], _skeletonData[i * 16 + 9],
-                        _skeletonData[i * 16 + 10], _skeletonData[i * 16 + 11])
+                                        _skeletonData[i * 16 + 10], _skeletonData[i * 16 + 11])
                 let col3 = SIMD4<Float>(_skeletonData[i * 16 + 12], _skeletonData[i * 16 + 13],
-                        _skeletonData[i * 16 + 14], _skeletonData[i * 16 + 15])
-                for j in 0..<bones.count / 3 {
+                                        _skeletonData[i * 16 + 14], _skeletonData[i * 16 + 15])
+                for j in 0 ..< bones.count / 3 {
                     let bone0 = bones[j * 3]
                     let bone1 = bones[j * 3 + 1]
                     let bone2 = bones[j * 3 + 2]
@@ -46,7 +46,7 @@ public class AnimationVisualizer: Script {
                                        n2: Vector3.transformNormal(v: bone2.normal, m: instanceMat.normalMat),
                                        color0: bone0.color, color1: bone1.color, color2: bone2.color)
                 }
-                for j in 0..<joints.count / 3 {
+                for j in 0 ..< joints.count / 3 {
                     let joint0 = joints[j * 3]
                     let joint1 = joints[j * 3 + 1]
                     let joint2 = joints[j * 3 + 2]
@@ -110,12 +110,12 @@ public class AnimationVisualizer: Script {
 
                  Gizmos.VertexPNC(pos[5], normals[7], white),
                  Gizmos.VertexPNC(pos[4], normals[7], white),
-                 Gizmos.VertexPNC(pos[1], normals[7], white)
-        ]
+                 Gizmos.VertexPNC(pos[1], normals[7], white)]
     }
 
     func _getBoneWorldMatrix(_ joint0: SIMD4<Float>, _ joint1: SIMD4<Float>,
-                             _ joint2: SIMD4<Float>, _ joint3: SIMD4<Float>) -> (modelMat: Matrix, normalMat: Matrix3x3) {
+                             _ joint2: SIMD4<Float>, _ joint3: SIMD4<Float>) -> (modelMat: Matrix, normalMat: Matrix3x3)
+    {
         // Rebuilds bone properties.
         // Bone length is set to zero to disable leaf rendering.
         let is_bone = joint3.w
@@ -129,29 +129,30 @@ public class AnimationVisualizer: Script {
 
         var world_matrix = simd_float4x4()
         world_matrix.columns.0 = SIMD4<Float>(bone_dir, 0.0)
-        
+
         var boneTangent = cross(binormal, bone_dir)
         if length_squared(boneTangent) < Float.leastNonzeroMagnitude {
             world_matrix.columns.1 = SIMD4<Float>(0, 0, 0, 0)
         } else {
             world_matrix.columns.1 = SIMD4<Float>(bone_len * normalize(boneTangent), 0.0)
         }
-        
+
         boneTangent = cross(bone_dir, world_matrix[1].xyz)
         if length_squared(boneTangent) < Float.leastNonzeroMagnitude {
             world_matrix.columns.2 = SIMD4<Float>(0, 0, 0, 0)
         } else {
             world_matrix.columns.2 = SIMD4<Float>(bone_len * normalize(boneTangent), 0.0)
         }
-        
+
         world_matrix.columns.3 = SIMD4<Float>(joint3.xyz, 1.0)
 
         let cross_matrix = simd_float3x3(
-        cross(world_matrix[1].xyz, world_matrix[2].xyz),
-        cross(world_matrix[2].xyz, world_matrix[0].xyz),
-        cross(world_matrix[0].xyz, world_matrix[1].xyz));
-        let invdet = 1.0 / dot(cross_matrix[2], world_matrix[2].xyz);
-        let normal_matrix = cross_matrix * invdet;
+            cross(world_matrix[1].xyz, world_matrix[2].xyz),
+            cross(world_matrix[2].xyz, world_matrix[0].xyz),
+            cross(world_matrix[0].xyz, world_matrix[1].xyz)
+        )
+        let invdet = 1.0 / dot(cross_matrix[2], world_matrix[2].xyz)
+        let normal_matrix = cross_matrix * invdet
         return (Matrix(world_matrix), Matrix3x3(normal_matrix))
     }
 
@@ -162,7 +163,7 @@ public class AnimationVisualizer: Script {
         let kNumPointsXY = kNumPointsPerCircle + 6
         let kNumPointsXZ = kNumPointsPerCircle
         let kNumPoints = kNumPointsXY + kNumPointsXZ + kNumPointsYZ
-        let kRadius = kInter  // Radius multiplier.
+        let kRadius = kInter // Radius multiplier.
         let red = Color32(r: 255, g: 0, b: 0)
         let green = Color32(r: 0, g: 255, b: 0)
         let blue = Color32(r: 0, g: 0, b: 255)
@@ -170,7 +171,7 @@ public class AnimationVisualizer: Script {
         // Fills vertices.
         joints.reserveCapacity(kNumPoints)
         var vertex = Gizmos.VertexPNC()
-        for j in 0..<kNumPointsYZ {  // YZ plan.
+        for j in 0 ..< kNumPointsYZ { // YZ plan.
             let angle = Float(j) * 2 * Float.pi / Float(kNumSlices)
             let s = sinf(angle), c = cosf(angle)
             vertex.pos = Vector3(0.0, c * kRadius, s * kRadius)
@@ -178,7 +179,7 @@ public class AnimationVisualizer: Script {
             vertex.color = red
             joints.append(vertex)
         }
-        for j in 0..<kNumPointsXY {  // XY plan.
+        for j in 0 ..< kNumPointsXY { // XY plan.
             let angle = Float(j) * 2 * Float.pi / Float(kNumSlices)
             let s = sinf(angle), c = cosf(angle)
             vertex.pos = Vector3(s * kRadius, c * kRadius, 0.0)
@@ -186,7 +187,7 @@ public class AnimationVisualizer: Script {
             vertex.color = blue
             joints.append(vertex)
         }
-        for j in 0..<kNumPointsXZ {  // XZ plan.
+        for j in 0 ..< kNumPointsXZ { // XZ plan.
             let angle = Float(j) * 2 * Float.pi / Float(kNumSlices)
             let s = sinf(angle), c = cosf(angle)
             vertex.pos = Vector3(c * kRadius, 0.0, -s * kRadius)
@@ -197,7 +198,8 @@ public class AnimationVisualizer: Script {
     }
 
     func _getJointWorldMatrix(_ joint0: SIMD4<Float>, _ joint1: SIMD4<Float>,
-                              _ joint2: SIMD4<Float>, _ joint3: SIMD4<Float>) -> (modelMat: Matrix, normalMat: Matrix3x3) {
+                              _ joint2: SIMD4<Float>, _ joint3: SIMD4<Float>) -> (modelMat: Matrix, normalMat: Matrix3x3)
+    {
         // Rebuilds joint matrix.
         var joint_matrix = [SIMD4<Float>](repeating: SIMD4<Float>(), count: 4)
         joint_matrix[0] = SIMD4<Float>(normalize(joint0.xyz), 0.0)
@@ -215,13 +217,14 @@ public class AnimationVisualizer: Script {
         world_matrix.columns.1 = joint_matrix[1] * bone_len
         world_matrix.columns.2 = joint_matrix[2] * bone_len
         world_matrix.columns.3 = joint_matrix[3]
-        
+
         let cross_matrix = simd_float3x3(
-        cross(world_matrix[1].xyz, world_matrix[2].xyz),
-        cross(world_matrix[2].xyz, world_matrix[0].xyz),
-        cross(world_matrix[0].xyz, world_matrix[1].xyz));
-        let invdet = 1.0 / dot(cross_matrix[2], world_matrix[2].xyz);
-        let normal_matrix = cross_matrix * invdet;
+            cross(world_matrix[1].xyz, world_matrix[2].xyz),
+            cross(world_matrix[2].xyz, world_matrix[0].xyz),
+            cross(world_matrix[0].xyz, world_matrix[1].xyz)
+        )
+        let invdet = 1.0 / dot(cross_matrix[2], world_matrix[2].xyz)
+        let normal_matrix = cross_matrix * invdet
         return (Matrix(world_matrix), Matrix3x3(normal_matrix))
     }
 }

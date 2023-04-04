@@ -5,8 +5,8 @@
 //  property of any third parties.
 
 import Cocoa
-import vox_render
 import Math
+import vox_render
 import vox_toolkit
 
 class GltfViewerApp: NSViewController {
@@ -39,7 +39,7 @@ class GltfViewerApp: NSViewController {
         light.transform.lookAt(targetPosition: Vector3())
         let directLight = light.addComponent(DirectLight.self)
         directLight.shadowType = .SoftLow
-        
+
         let planeEntity = rootEntity.createChild()
         planeEntity.transform.position = Vector3(0, -1, 0)
         let shadowPlane = planeEntity.addComponent(MeshRenderer.self)
@@ -51,17 +51,16 @@ class GltfViewerApp: NSViewController {
         shadowMtl.setRenderFace(at: 0, .Double)
         shadowPlane.setMaterial(shadowMtl)
         shadowPlane.castShadows = false
-        
+
         let gltfRoot = rootEntity.createChild()
         let gui = gltfRoot.addComponent(LoaderGUI.self)
         gui.loaderItem = 8
         gui.camera = camera
         Engine.run()
     }
-    
+
     override func viewDidDisappear() {
         super.viewDidDisappear()
         Engine.destroy()
     }
 }
-

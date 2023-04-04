@@ -4,11 +4,11 @@
 //  personal capacity and am not conveying any rights to any intellectual
 //  property of any third parties.
 
-import vox_render
 import Math
+import vox_render
 
 /// Functions for removing vertices and triangles from a mesh.
-public class DeleteElements {
+public enum DeleteElements {
     /// Deletes the vertices from the passed index array, and handles rebuilding the sharedIndexes array.
     /// - Remark
     /// This function does not retriangulate the mesh. Ie, you are responsible for ensuring that indexes
@@ -16,16 +16,14 @@ public class DeleteElements {
     /// - Parameters:
     ///   - mesh: The source mesh.
     ///   - distinctIndexes: A list of vertices to delete. Note that this must not contain duplicates.
-    public static func DeleteVertices<T: Sequence<Int>>(mesh: ProBuilderMesh, distinctIndexes: T) {
-    }
-
+    public static func DeleteVertices<T: Sequence<Int>>(mesh _: ProBuilderMesh, distinctIndexes _: T) {}
 
     /// Removes a face from a mesh.
     /// - Parameters:
     ///   - mesh: The source mesh.
     ///   - face: The face to remove.
     /// - Returns: An array of vertex indexes that were deleted as a result of face deletion.
-    public static func DeleteFace(mesh: ProBuilderMesh, face: Face) -> [Int] {
+    public static func DeleteFace(mesh _: ProBuilderMesh, face _: Face) -> [Int] {
         []
     }
 
@@ -34,7 +32,7 @@ public class DeleteElements {
     ///   - mesh: The source mesh.
     ///   - faces: The faces to remove.
     /// - Returns: An array of vertex indexes that were deleted as a result of deletion.
-    public static func DeleteFaces<T: Sequence<Face>>(mesh: ProBuilderMesh, faces: T) -> [Int] {
+    public static func DeleteFaces<T: Sequence<Face>>(mesh _: ProBuilderMesh, faces _: T) -> [Int] {
         []
     }
 
@@ -43,7 +41,7 @@ public class DeleteElements {
     ///   - mesh: The source mesh.
     ///   - faceIndexes: The indexes of faces to remove (corresponding to the @"UnityEngine.ProBuilder.ProBuilderMesh.faces" collection.
     /// - Returns: An array of vertex indexes that were deleted as a result of deletion.
-    public static func DeleteFaces(mesh: ProBuilderMesh, faceIndexes: [Int]) -> [Int] {
+    public static func DeleteFaces(mesh _: ProBuilderMesh, faceIndexes _: [Int]) -> [Int] {
         []
     }
 }

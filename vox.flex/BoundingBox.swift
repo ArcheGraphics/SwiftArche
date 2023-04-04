@@ -12,20 +12,19 @@ public struct BoundingBoxRayIntersection3<T: BinaryFloatingPoint> {
     public var isIntersecting: Bool = true
 
     /// Distance to the first intersection point.
-    public var tNear: T = T.greatestFiniteMagnitude
+    public var tNear: T = .greatestFiniteMagnitude
 
     /// Distance to the second (and the last) intersection point.s
-    public var tFar: T = T.greatestFiniteMagnitude
+    public var tFar: T = .greatestFiniteMagnitude
 }
 
 /// 3-D axis-aligned bounding box class.
 public struct BoundingBox3F {
-
     /// Lower corner of the bounding box.
-    public var lowerCorner: Vector3F = Vector3F(repeating: Float.greatestFiniteMagnitude)
+    public var lowerCorner: Vector3F = .init(repeating: Float.greatestFiniteMagnitude)
 
     /// Upper corner of the bounding box.
-    public var upperCorner: Vector3F = Vector3F(repeating: -Float.greatestFiniteMagnitude)
+    public var upperCorner: Vector3F = .init(repeating: -Float.greatestFiniteMagnitude)
 
     /// Default constructor.
     public init() {
@@ -69,18 +68,21 @@ public struct BoundingBox3F {
 
     /// Returns true of this box and other box overlaps.
     public func overlaps(other: BoundingBox3F) -> Bool {
-        if (upperCorner.x < other.lowerCorner.x ||
-                lowerCorner.x > other.upperCorner.x) {
+        if upperCorner.x < other.lowerCorner.x ||
+            lowerCorner.x > other.upperCorner.x
+        {
             return false
         }
 
-        if (upperCorner.y < other.lowerCorner.y ||
-                lowerCorner.y > other.upperCorner.y) {
+        if upperCorner.y < other.lowerCorner.y ||
+            lowerCorner.y > other.upperCorner.y
+        {
             return false
         }
 
-        if (upperCorner.z < other.lowerCorner.z ||
-                lowerCorner.z > other.upperCorner.z) {
+        if upperCorner.z < other.lowerCorner.z ||
+            lowerCorner.z > other.upperCorner.z
+        {
             return false
         }
 
@@ -89,15 +91,15 @@ public struct BoundingBox3F {
 
     /// Returns true if the input point is inside of this box.
     public func contains(point: Vector3F) -> Bool {
-        if (upperCorner.x < point.x || lowerCorner.x > point.x) {
+        if upperCorner.x < point.x || lowerCorner.x > point.x {
             return false
         }
 
-        if (upperCorner.y < point.y || lowerCorner.y > point.y) {
+        if upperCorner.y < point.y || lowerCorner.y > point.y {
             return false
         }
 
-        if (upperCorner.z < point.z || lowerCorner.z > point.z) {
+        if upperCorner.z < point.z || lowerCorner.z > point.z {
             return false
         }
 
@@ -107,29 +109,28 @@ public struct BoundingBox3F {
     /// Returns true if the input ray is intersecting with this box.
     public func intersects(ray: Ray3F) -> Bool {
         var tMin: Float = 0
-        var tMax: Float = Float.greatestFiniteMagnitude
+        var tMax = Float.greatestFiniteMagnitude
 
         let rayInvDir = 1 / ray.direction
 
-        for i in 0..<3 {
+        for i in 0 ..< 3 {
             var tNear: Float = (lowerCorner[i] - ray.origin[i]) * rayInvDir[i]
             var tFar: Float = (upperCorner[i] - ray.origin[i]) * rayInvDir[i]
 
-            if (tNear > tFar) {
+            if tNear > tFar {
                 swap(&tNear, &tFar)
             }
 
             tMin = max(tNear, tMin)
             tMax = min(tFar, tMax)
 
-            if (tMin > tMax) {
+            if tMin > tMax {
                 return false
             }
         }
 
         return true
     }
-
 
     /// Returns intersection.isIntersecting = true if the input ray is
     /// intersecting with this box. If interesects, intersection.tNear is
@@ -139,22 +140,22 @@ public struct BoundingBox3F {
         var intersection = BoundingBoxRayIntersection3<Float>()
 
         var tMin: Float = 0
-        var tMax: Float = Float.greatestFiniteMagnitude
+        var tMax = Float.greatestFiniteMagnitude
 
         let rayInvDir = 1 / ray.direction
 
-        for i in 0..<3 {
+        for i in 0 ..< 3 {
             var tNear: Float = (lowerCorner[i] - ray.origin[i]) * rayInvDir[i]
             var tFar: Float = (upperCorner[i] - ray.origin[i]) * rayInvDir[i]
 
-            if (tNear > tFar) {
+            if tNear > tFar {
                 swap(&tNear, &tFar)
             }
 
             tMin = max(tNear, tMin)
             tMax = min(tFar, tMax)
 
-            if (tMin > tMax) {
+            if tMin > tMax {
                 intersection.isIntersecting = false
                 return intersection
             }
@@ -162,7 +163,7 @@ public struct BoundingBox3F {
 
         intersection.isIntersecting = true
 
-        if (contains(point: ray.origin)) {
+        if contains(point: ray.origin) {
             intersection.tNear = tMax
             intersection.tFar = Float.greatestFiniteMagnitude
         } else {
@@ -244,8 +245,8 @@ public struct BoundingBox3F {
 
     /// Returns true if the box is empty.
     public var isEmpty: Bool {
-        (lowerCorner.x >= upperCorner.x ||
-                lowerCorner.y >= upperCorner.y ||
-                lowerCorner.z >= upperCorner.z)
+        lowerCorner.x >= upperCorner.x ||
+            lowerCorner.y >= upperCorner.y ||
+            lowerCorner.z >= upperCorner.z
     }
 }

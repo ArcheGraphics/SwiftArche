@@ -16,7 +16,7 @@ public class DepthState {
     public var compareFunction: MTLCompareFunction = .less
 
     func _apply(_ depthStencilDescriptor: MTLDepthStencilDescriptor) {
-        if (enabled) {
+        if enabled {
             // apply compare func.
             depthStencilDescriptor.depthCompareFunction = compareFunction
 

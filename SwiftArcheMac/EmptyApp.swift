@@ -5,18 +5,16 @@
 //  property of any third parties.
 
 import Cocoa
-import vox_render
 import Math
+import vox_render
 import vox_toolkit
 
 class EmptyApp: NSViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
     }
-    
+
     override func viewDidDisappear() {
         super.viewDidDisappear()
     }
 }
-
-

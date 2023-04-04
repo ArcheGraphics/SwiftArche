@@ -9,8 +9,8 @@ import Metal
 public class RenderPipelineState {
     private var _reflection: MTLRenderPipelineReflection?
     private var _handle: MTLRenderPipelineState?
-    
-    var uploadRenderCount: UInt64 = UInt64.max
+
+    var uploadRenderCount: UInt64 = .max
     var uploadScene: Scene?
     var uploadCamera: Camera?
     var uploadRenderer: Renderer?
@@ -20,22 +20,18 @@ public class RenderPipelineState {
     var uniformBlock: [ReflectionUniform] = []
 
     var handle: MTLRenderPipelineState {
-        get {
-            _handle!
-        }
+        _handle!
     }
 
     var reflection: MTLRenderPipelineReflection {
-        get {
-            _reflection!
-        }
+        _reflection!
     }
 
     init(_ device: MTLDevice, _ descriptor: MTLRenderPipelineDescriptor) {
         do {
             _handle = try device.makeRenderPipelineState(descriptor: descriptor,
-                    options: MTLPipelineOption.argumentInfo, reflection: &_reflection)
-        } catch let error {
+                                                         options: MTLPipelineOption.argumentInfo, reflection: &_reflection)
+        } catch {
             fatalError(error.localizedDescription)
         }
 
@@ -51,7 +47,7 @@ public class RenderPipelineState {
         // isUsed have bug when no-debug
         var count = _reflection.vertexBindings.count
         if count != 0 {
-            for i in 0..<count {
+            for i in 0 ..< count {
                 let aug = _reflection.vertexBindings[i]
                 var shaderUniform = ReflectionUniform()
                 shaderUniform.name = aug.name
@@ -65,7 +61,7 @@ public class RenderPipelineState {
 
         count = _reflection.fragmentBindings.count
         if count != 0 {
-            for i in 0..<count {
+            for i in 0 ..< count {
                 let aug = _reflection.fragmentBindings[i]
                 var shaderUniform = ReflectionUniform()
                 shaderUniform.name = aug.name

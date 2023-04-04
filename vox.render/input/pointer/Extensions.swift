@@ -5,20 +5,20 @@
 //  property of any third parties.
 
 #if os(iOS)
-import UIKit
+    import UIKit
 #else
-import Cocoa
+    import Cocoa
 #endif
 import Math
 
 #if os(iOS)
 
 #else
-extension NSEvent {
-    public func screenPoint(_ canvas: Canvas)->Vector2 {
-        var mousePoint = canvas.convert(locationInWindow, to: nil)
-        mousePoint = NSMakePoint(mousePoint.x, canvas.bounds.size.height - mousePoint.y)
-        return Vector2(Float(mousePoint.x), Float(mousePoint.y))
+    public extension NSEvent {
+        func screenPoint(_ canvas: Canvas) -> Vector2 {
+            var mousePoint = canvas.convert(locationInWindow, to: nil)
+            mousePoint = NSMakePoint(mousePoint.x, canvas.bounds.size.height - mousePoint.y)
+            return Vector2(Float(mousePoint.x), Float(mousePoint.y))
+        }
     }
-}
 #endif

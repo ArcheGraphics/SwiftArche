@@ -16,7 +16,7 @@ public enum LightingMode {
 
     /// Checks if lighting mode is deferred.
     static func lightingModeIsDeferred(_ mode: LightingMode) -> Bool {
-        switch (mode) {
+        switch mode {
         case .Forward:
             return false
         case .DeferredTiled, .DeferredClustered:
@@ -52,45 +52,46 @@ public struct RenderCullType: OptionSet {
 }
 
 // MARK: - Render Config with hardware support
+
 // FIXME: - Must modify config in vox.shader by correspoding change
-public struct RenderConfig {
+public enum RenderConfig {
     public static var supportMaterialUpdates: Bool {
         true
     }
-    
+
     public static var useTextureStreaming: Bool {
         true && supportMaterialUpdates
     }
-    
+
     public static var supportSparseTexture: Bool {
         true && useTextureStreaming
     }
-    
+
     public static var supportPageAccessCounters: Bool {
         true && supportSparseTexture
     }
-    
+
     public static var enableDebugRendering: Bool {
         true
     }
-    
+
     public static var supportRasterizationRate: Bool {
         true
     }
-    
+
     public static var useResolvePass: Bool {
         true
     }
-    
+
     public static var supportTAA: Bool {
         true && useResolvePass
     }
-    
+
     /// High level flag to enable SAO.
     public static var useScalableAmbientObscurance: Bool {
         true
     }
-    
+
     /// Enable use of local lights in the scene.  When disabled, only the sun used.
     public static var useLocalLights: Bool {
         true
@@ -105,7 +106,7 @@ public struct RenderConfig {
     public static var localLightScattering: Bool {
         true && useScatteringVolume && useLocalLights
     }
-    
+
     /// Support using tile shaders for depth prepass on Apple Silicon.
     public static var supportDepthPrepassTileShader: Bool {
         true
@@ -125,7 +126,7 @@ public struct RenderConfig {
     public static var supportLightClusteringTileShader: Bool {
         true && supportLightCullingTileShaders
     }
-    
+
     /// Enable code to perform deferred lighting in a single render pass using programable blending.
     public static var supportSinglePassDeferred: Bool {
         true
@@ -146,14 +147,15 @@ public struct RenderConfig {
     public static var supportCSMGenerationWithVertexAmplification: Bool {
         true && supportSinglePassCSMGeneration
     }
-    
+
     // MARK: - Config Constants
+
     /// Use Equal depth test when rendering GBuffer after depth prepass.
     /// Noticeable win on traditional GPUs
     public static var useEqualDepthTest: Bool {
         true
     }
-    
+
     public static var maxFrameInFlight: Int {
         3
     }
@@ -161,11 +163,11 @@ public struct RenderConfig {
     public static var taaJitterCount: Int {
         8
     }
-    
+
     public static var maxAnisotropy: Int {
         10
     }
-    
+
     public static var alphaCount: Float {
         0.1
     }
@@ -174,11 +176,11 @@ public struct RenderConfig {
     public static var tileDepthBoundsDispatchSize: Int {
         8
     }
-    
+
     /// Flag to indicate that this light is included in scattering and affects transparencies.
     /// Lights are culled without limiting to the opaque depth range in the tile.
     public static var lightForTransparentFlag: UInt32 {
-        0x00000001
+        0x0000_0001
     }
 
     public static var lightClusterRange: Float {
@@ -189,7 +191,7 @@ public struct RenderConfig {
     public static var maxLightsPerTile: Int {
         64
     }
-    
+
     public static var maxLightPerCluster: Int {
         16
     }
@@ -205,7 +207,7 @@ public struct RenderConfig {
     public static var spotShadowDepthBias: Float {
         0.001
     }
-    
+
     public static var tileShaderDimension: Int {
         16
     }
@@ -213,7 +215,7 @@ public struct RenderConfig {
     public static var tileShaderWidth: Int {
         tileShaderDimension
     }
-    
+
     public static var tileShaderHeight: Int {
         tileShaderDimension
     }
@@ -227,19 +229,19 @@ public struct RenderConfig {
     public static var defaultLightCullingTileSize: Int {
         32
     }
-    
+
     public static var textureHeapSize: Int {
         if useTextureStreaming {
             return 512 * 1024 * 1024 // 512MB
         } else {
-#if os(iOS)
-            return 512 * 1024 * 1024 // 512MB
-#else
-            return 1536 * 1024 * 1024 // 1.5GB
-#endif
+            #if os(iOS)
+                return 512 * 1024 * 1024 // 512MB
+            #else
+                return 1536 * 1024 * 1024 // 1.5GB
+            #endif
         }
     }
-    
+
     /// Size of scattering volume tiles in pixels.
     public static var scatteringTileSize: Int {
         8
@@ -254,8 +256,9 @@ public struct RenderConfig {
     public static var scatteringRange: Float {
         100
     }
-    
+
     // MARK: - User-Define Config
+
     public static var lightingMode: LightingMode = .DeferredClustered
 
     public static var renderMode: RenderMode = .Indirect

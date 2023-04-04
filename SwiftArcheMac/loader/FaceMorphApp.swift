@@ -5,8 +5,8 @@
 //  property of any third parties.
 
 import Cocoa
-import vox_render
 import Math
+import vox_render
 import vox_toolkit
 
 class FaceMorphApp: NSViewController {
@@ -33,7 +33,7 @@ class FaceMorphApp: NSViewController {
         cameraEntity.addComponent(Camera.self)
         let control = cameraEntity.addComponent(OrbitControl.self)
         control.target = Vector3(0, 1, 0)
-        
+
         let light = rootEntity.createChild("light")
         light.transform.position = Vector3(0.1, 5, 0.1)
         light.transform.lookAt(targetPosition: Vector3())
@@ -44,7 +44,7 @@ class FaceMorphApp: NSViewController {
         GLTFLoader.parse(assetURL) { [] resource in
             let faceGUI = gltfRoot.addComponent(FaceGUI.self)
             gltfRoot.addChild(resource.defaultSceneRoot)
-            
+
             let skinRenderers = gltfRoot.getComponentsIncludeChildren(SkinnedMeshRenderer.self)
             for renderer in skinRenderers {
                 if !renderer.blendShapeWeights.isEmpty {
@@ -56,10 +56,9 @@ class FaceMorphApp: NSViewController {
 
         Engine.run()
     }
-    
+
     override func viewDidDisappear() {
         super.viewDidDisappear()
         Engine.destroy()
     }
 }
-

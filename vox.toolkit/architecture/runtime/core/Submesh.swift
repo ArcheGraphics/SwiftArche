@@ -4,8 +4,8 @@
 //  personal capacity and am not conveying any rights to any intellectual
 //  property of any third parties.
 
-import vox_render
 import Math
+import vox_render
 
 /// A set of indexes and material.
 public final class Submesh {
@@ -50,17 +50,15 @@ public final class Submesh {
     ///   - submeshIndex: The index of this submesh corresponding to the MeshRenderer.sharedMaterials property.
     ///   - topology: What topology is this submesh. ProBuilder only recognizes Triangles and Quads.
     ///   - indexes: The triangles or quads.
-    public init<T: Sequence<Int>>(submeshIndex: Int, topology: MTLPrimitiveType, indexes: T) {
-    }
-    
+    public init<T: Sequence<Int>>(submeshIndex _: Int, topology _: MTLPrimitiveType, indexes _: T) {}
+
     /// Create new Submesh from a mesh, submesh index, and material.
     /// - Parameters:
     ///   - mesh: The source mesh.
     ///   - subMeshIndex: Which submesh to read from.
-    public init(mesh: Mesh, subMeshIndex: Int) {
-    }
+    public init(mesh _: Mesh, subMeshIndex _: Int) {}
 
-    internal static func GetSubmeshCount(mesh: ProBuilderMesh) -> Int {
+    internal static func GetSubmeshCount(mesh _: ProBuilderMesh) -> Int {
         0
     }
 
@@ -71,13 +69,13 @@ public final class Submesh {
     ///   - preferredTopology: Should the resulting submeshes be in quads or triangles. Note that quads are not guaranteed
     ///   ie, some faces may not be able to be represented in quad format and will fall back on triangles.
     /// - Returns: An array of Submeshes.
-    public static func GetSubmeshes<T: Sequence<Face>>(faces: T, submeshCount: Int,
-                                                       preferredTopology: MTLPrimitiveType = .triangle) -> [Submesh] {
+    public static func GetSubmeshes<T: Sequence<Face>>(faces _: T, submeshCount _: Int,
+                                                       preferredTopology _: MTLPrimitiveType = .triangle) -> [Submesh]
+    {
         []
     }
 
-    internal static func MapFaceMaterialsToSubmeshIndex(mesh: ProBuilderMesh) {
-    }
+    internal static func MapFaceMaterialsToSubmeshIndex(mesh _: ProBuilderMesh) {}
 }
 
 extension Submesh: CustomStringConvertible {

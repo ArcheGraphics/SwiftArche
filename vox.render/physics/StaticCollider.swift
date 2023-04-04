@@ -9,7 +9,7 @@ import Math
 /// A static collider component that will not move.
 /// - Remark: Mostly used for object which always stays at the same place and never moves around.
 public class StaticCollider: Collider {
-    public internal(set) override var entity: Entity {
+    override public internal(set) var entity: Entity {
         get {
             _entity
         }
@@ -17,9 +17,9 @@ public class StaticCollider: Collider {
             super.entity = newValue
             let transform = _entity.transform
             _nativeCollider = PhysXPhysics.createStaticCollider(
-                    transform!.worldPosition,
-                    transform!.worldRotationQuaternion
+                transform!.worldPosition,
+                transform!.worldRotationQuaternion
             )
         }
-    }    
+    }
 }

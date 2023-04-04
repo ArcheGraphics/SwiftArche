@@ -4,13 +4,13 @@
 //  personal capacity and am not conveying any rights to any intellectual
 //  property of any third parties.
 
-import Metal
 import Math
+import Metal
 
 public final class Camera: Component {
     /// The first enabled Camera component that is tagged "MainCamera"
     public static var mainCamera: Camera?
-    
+
     private var _cameraData = CameraData()
     private static var _cameraProperty = "u_camera"
 
@@ -36,8 +36,8 @@ public final class Camera: Component {
 
     public var devicePipeline: DevicePipeline!
 
-    var _globalShaderMacro: ShaderMacroCollection = ShaderMacroCollection()
-    var _frustum: BoundingFrustum = BoundingFrustum()
+    var _globalShaderMacro: ShaderMacroCollection = .init()
+    var _frustum: BoundingFrustum = .init()
     var _cameraInfo = CameraInfo()
 
     private var _isProjMatSetting = false
@@ -51,12 +51,12 @@ public final class Camera: Component {
     private var _frustumViewChangeFlag: BoolUpdateFlag!
     private var _isViewMatrixDirty: BoolUpdateFlag!
     private var _isInvViewProjDirty: BoolUpdateFlag!
-    private var _lastAspectSize: Vector2 = Vector2(0, 0)
-    private var _invViewProjMat: Matrix = Matrix()
-    private var _inverseProjectionMatrix: Matrix = Matrix()
+    private var _lastAspectSize: Vector2 = .init(0, 0)
+    private var _invViewProjMat: Matrix = .init()
+    private var _inverseProjectionMatrix: Matrix = .init()
     var _replacementShader: Shader?
     var _replacementSubShaderTag: String?
-    
+
     /// Near clip plane - the closest point to the camera when rendering occurs.
     @Serialized(default: 0.1)
     public var nearClipPlane: Float {
@@ -89,14 +89,14 @@ public final class Camera: Component {
             _projMatChange()
         }
     }
-    
+
     /// Aspect ratio. The default is automatically calculated by the viewport's aspect ratio. If it is manually set,
     /// the manual value will be kept. Call resetAspectRatio() to restore it.
     public var aspectRatio: Float {
         get {
             let canvas = Engine.canvas!
             return _customAspectRatio ?? (Float(canvas.bounds.size.width) * viewport.z)
-            / (Float(canvas.bounds.size.height) * viewport.w)
+                / (Float(canvas.bounds.size.height) * viewport.w)
         }
         set {
             _customAspectRatio = newValue
@@ -123,15 +123,13 @@ public final class Camera: Component {
 
     /// View matrix.
     public var viewMatrix: Matrix {
-        get {
-            if (_isViewMatrixDirty.flag) {
-                _isViewMatrixDirty.flag = false
-                _cameraInfo.viewMatrix = Matrix.rotationTranslation(quaternion: _transform.worldRotationQuaternion,
-                                                                    translation: _transform.worldPosition)
-                _ = _cameraInfo.viewMatrix.invert()
-            }
-            return _cameraInfo.viewMatrix
+        if _isViewMatrixDirty.flag {
+            _isViewMatrixDirty.flag = false
+            _cameraInfo.viewMatrix = Matrix.rotationTranslation(quaternion: _transform.worldRotationQuaternion,
+                                                                translation: _transform.worldPosition)
+            _ = _cameraInfo.viewMatrix.invert()
         }
+        return _cameraInfo.viewMatrix
     }
 
     /// The projection matrix is calculated by the relevant parameters of the camera by default.
@@ -139,26 +137,27 @@ public final class Camera: Component {
     public var projectionMatrix: Matrix {
         get {
             let canvas = Engine.canvas!
-            if ((!_isProjectionDirty || _isProjMatSetting) &&
-                    _lastAspectSize.x == Float(canvas.bounds.size.width) &&
-                    _lastAspectSize.y == Float(canvas.bounds.size.height)
-               ) {
+            if (!_isProjectionDirty || _isProjMatSetting) &&
+                _lastAspectSize.x == Float(canvas.bounds.size.width) &&
+                _lastAspectSize.y == Float(canvas.bounds.size.height)
+            {
                 return _cameraInfo.projectionMatrix
             }
             _isProjectionDirty = false
             _lastAspectSize = Vector2(Float(canvas.bounds.size.width), Float(canvas.bounds.size.height))
             let aspectRatio = aspectRatio
-            if (!_cameraInfo.isOrthographic) {
+            if !_cameraInfo.isOrthographic {
                 _cameraInfo.projectionMatrix = Matrix.perspective(
-                        fovy: MathUtil.degreeToRadian(fieldOfView),
-                        aspect: aspectRatio,
-                        near: nearClipPlane,
-                        far: farClipPlane)
+                    fovy: MathUtil.degreeToRadian(fieldOfView),
+                    aspect: aspectRatio,
+                    near: nearClipPlane,
+                    far: farClipPlane
+                )
             } else {
                 let width = orthographicSize * aspectRatio
                 let height = orthographicSize
                 _cameraInfo.projectionMatrix = Matrix.ortho(left: -width, right: width, bottom: -height, top: height,
-                        near: nearClipPlane, far: farClipPlane)
+                                                            near: nearClipPlane, far: farClipPlane)
             }
             return _cameraInfo.projectionMatrix
         }
@@ -189,7 +188,7 @@ public final class Camera: Component {
         }
     }
 
-    public internal(set) override var entity: Entity {
+    override public internal(set) var entity: Entity {
         get {
             _entity
         }
@@ -223,7 +222,7 @@ public final class Camera: Component {
     }
 }
 
-extension Camera {
+public extension Camera {
     /// Set the replacement shader.
     /// - Parameters:
     ///   - shader: Replacement shader
@@ -231,25 +230,25 @@ extension Camera {
     /// - Remark:
     /// If replacementTagName is not specified, the first sub shader will be replaced.
     /// If replacementTagName is specified, the replacement shader will find the first sub shader which has the same tag value get by replacementTagKey.
-    public func setReplacementShader(with shader: Shader, replacementTagName: String? = nil) {
+    func setReplacementShader(with shader: Shader, replacementTagName: String? = nil) {
         _replacementShader = shader
         _replacementSubShaderTag = replacementTagName
     }
-    
+
     /// Reset and clear the replacement shader.
-    public func resetReplacementShader() {
+    func resetReplacementShader() {
         _replacementShader = nil
         _replacementSubShaderTag = nil
     }
-    
+
     /// Restore the automatic calculation of projection matrix through fieldOfView, nearClipPlane and farClipPlane.
-    public func resetProjectionMatrix() {
+    func resetProjectionMatrix() {
         _isProjMatSetting = false
         _projMatChange()
     }
 
     /// Restore the automatic calculation of the aspect ratio through the viewport aspect ratio.
-    public func resetAspectRatio() {
+    func resetAspectRatio() {
         _customAspectRatio = nil
         _projMatChange()
     }
@@ -259,7 +258,7 @@ extension Camera {
     ///   - point: Point in world space
     /// - Returns: A point in the viewport space, X and Y are the viewport space coordinates, Z is the viewport depth,
     //    the near clipping plane is 0, the far clipping plane is 1, and W is the world unit distance from the camera
-    public func worldToViewportPoint(_ point: Vector3) -> Vector3 {
+    func worldToViewportPoint(_ point: Vector3) -> Vector3 {
         let cameraPoint = Vector3.transformCoordinate(v: point, m: viewMatrix)
         let viewportPoint = Vector3.transformToVec4(v: cameraPoint, m: projectionMatrix)
 
@@ -272,11 +271,11 @@ extension Camera {
     ///   - point: Point in viewport space, X and Y are the viewport space coordinates, Z is the viewport depth.
     ///   The near clipping plane is 0, and the far clipping plane is 1
     /// - Returns: Point in world space
-    public func viewportToWorldPoint(_ point: Vector3) -> Vector3 {
+    func viewportToWorldPoint(_ point: Vector3) -> Vector3 {
         let nf = 1 / (nearClipPlane - farClipPlane)
 
         var z: Float
-        if (isOrthographic) {
+        if isOrthographic {
             z = -point.z * 2 * nf
             z += (farClipPlane + nearClipPlane) * nf
         } else {
@@ -294,7 +293,7 @@ extension Camera {
     ///   - point: Point in viewport space, which is represented by normalization
     ///   - out: Ray
     /// - Returns: Ray
-    public func viewportPointToRay(_ point: Vector2, _ out: Ray) -> Ray {
+    func viewportPointToRay(_ point: Vector2, _ out: Ray) -> Ray {
         // Use the intersection of the near clipping plane as the origin point.
         out.origin = _innerViewportToWorldPoint(point.x, point.y, 0.0, invViewProjMat)
         // Use the intersection of the far clipping plane as the origin point.
@@ -307,40 +306,40 @@ extension Camera {
     /// - Parameters:
     ///   - point: Point in screen space
     /// - Returns: Point in viewport space
-    public func screenToViewportPoint(_ point: Vector2) -> Vector2 {
+    func screenToViewportPoint(_ point: Vector2) -> Vector2 {
         let canvas = Engine.canvas!
         let viewport = viewport
         return Vector2((point.x / Float(canvas.bounds.size.width) - viewport.x) / viewport.z,
-                (point.y / Float(canvas.bounds.size.height) - viewport.y) / viewport.w)
+                       (point.y / Float(canvas.bounds.size.height) - viewport.y) / viewport.w)
     }
 
-    public func screenToViewportPoint(_ point: Vector3) -> Vector3 {
+    func screenToViewportPoint(_ point: Vector3) -> Vector3 {
         let canvas = Engine.canvas!
         let viewport = viewport
         return Vector3((point.x / Float(canvas.bounds.size.width) - viewport.x) / viewport.z,
-                (point.y / Float(canvas.bounds.size.height) - viewport.y) / viewport.w,
-                point.z)
+                       (point.y / Float(canvas.bounds.size.height) - viewport.y) / viewport.w,
+                       point.z)
     }
 
     /// Transform the X and Y coordinates of a point from viewport space to screen space.
     /// - Parameters:
     ///   - point: Point in viewport space
     /// - Returns: Point in screen space
-    public func viewportToScreenPoint(_ point: Vector2) -> Vector2 {
+    func viewportToScreenPoint(_ point: Vector2) -> Vector2 {
         let canvas = Engine.canvas!
         let x = (viewport.x + point.x * viewport.z) * Float(canvas.bounds.size.width)
         let y = (viewport.y + point.y * viewport.w) * Float(canvas.bounds.size.height)
         return Vector2(x, y)
     }
 
-    public func viewportToScreenPoint(_ point: Vector3) -> Vector3 {
+    func viewportToScreenPoint(_ point: Vector3) -> Vector3 {
         let canvas = Engine.canvas!
         let x = (viewport.x + point.x * viewport.z) * Float(canvas.bounds.size.width)
         let y = (viewport.y + point.y * viewport.w) * Float(canvas.bounds.size.height)
         return Vector3(x, y, point.z)
     }
 
-    public func viewportToScreenPoint(_ point: Vector4) -> Vector4 {
+    func viewportToScreenPoint(_ point: Vector4) -> Vector4 {
         let canvas = Engine.canvas!
         let x = (viewport.x + point.x * viewport.z) * Float(canvas.bounds.size.width)
         let y = (viewport.y + point.y * viewport.w) * Float(canvas.bounds.size.height)
@@ -351,7 +350,7 @@ extension Camera {
     /// - Parameters:
     ///   - point: Point in world space
     /// - Returns: Point of screen space
-    public func worldToScreenPoint(_ point: Vector3) -> Vector3 {
+    func worldToScreenPoint(_ point: Vector3) -> Vector3 {
         viewportToScreenPoint(worldToViewportPoint(point))
     }
 
@@ -360,7 +359,7 @@ extension Camera {
     ///   - point: Screen space point
     ///   - out: Point in world space
     /// - Returns: Point in world space
-    public func screenToWorldPoint(_ point: Vector3, _ out: Vector3) -> Vector3 {
+    func screenToWorldPoint(_ point: Vector3, _: Vector3) -> Vector3 {
         viewportToWorldPoint(screenToViewportPoint(point))
     }
 
@@ -369,20 +368,20 @@ extension Camera {
     ///   - point: Point in screen space, the unit is pixel
     ///   - out: Ray
     /// - Returns: Ray
-    public func screenPointToRay(_ point: Vector2, _ out: Ray) -> Ray {
+    func screenPointToRay(_ point: Vector2, _ out: Ray) -> Ray {
         viewportPointToRay(screenToViewportPoint(point), out)
     }
 
     /// Manually call the rendering of the camera.
-    public func update() {
+    func update() {
         _cameraInfo.viewProjectionMatrix = projectionMatrix * viewMatrix
         _cameraInfo.position = _transform.worldPosition
-        if (_cameraInfo.isOrthographic) {
+        if _cameraInfo.isOrthographic {
             _cameraInfo.forward = _transform.worldForward
         }
 
         // compute cull frustum.
-        if (enableFrustumCulling && (_frustumViewChangeFlag.flag || _isFrustumProjectDirty)) {
+        if enableFrustumCulling, _frustumViewChangeFlag.flag || _isFrustumProjectDirty {
             _frustum.calculateFromMatrix(matrix: _cameraInfo.viewProjectionMatrix)
             _frustumViewChangeFlag.flag = false
             _isFrustumProjectDirty = false
@@ -392,13 +391,13 @@ extension Camera {
 
         // union scene and camera macro.
         ShaderMacroCollection.unionCollection(
-                scene._globalShaderMacro,
-                shaderData._macroCollection,
-                &_globalShaderMacro
+            scene._globalShaderMacro,
+            shaderData._macroCollection,
+            &_globalShaderMacro
         )
     }
-    
-    public func commit(with commandBuffer: MTLCommandBuffer, frameBuffer: MTLRenderPassDescriptor) {
+
+    func commit(with commandBuffer: MTLCommandBuffer, frameBuffer: MTLRenderPassDescriptor) {
         devicePipeline.commit(with: commandBuffer, frameBuffer: renderTarget ?? frameBuffer)
     }
 }
@@ -430,23 +429,19 @@ extension Camera {
 
     /// The inverse matrix of view projection matrix.
     private var invViewProjMat: Matrix {
-        get {
-            if (_isInvViewProjDirty.flag) {
-                _isInvViewProjDirty.flag = false
-                _invViewProjMat = _transform.worldMatrix * inverseProjectionMatrix
-            }
-            return _invViewProjMat
+        if _isInvViewProjDirty.flag {
+            _isInvViewProjDirty.flag = false
+            _invViewProjMat = _transform.worldMatrix * inverseProjectionMatrix
         }
+        return _invViewProjMat
     }
 
     /// The inverse of the projection matrix.
     private var inverseProjectionMatrix: Matrix {
-        get {
-            if (_isInvProjMatDirty) {
-                _isInvProjMatDirty = false
-                _inverseProjectionMatrix = Matrix.invert(a: projectionMatrix)
-            }
-            return _inverseProjectionMatrix
+        if _isInvProjMatDirty {
+            _isInvProjMatDirty = false
+            _inverseProjectionMatrix = Matrix.invert(a: projectionMatrix)
         }
+        return _inverseProjectionMatrix
     }
 }

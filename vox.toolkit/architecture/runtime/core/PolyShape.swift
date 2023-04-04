@@ -4,8 +4,8 @@
 //  personal capacity and am not conveying any rights to any intellectual
 //  property of any third parties.
 
-import vox_render
 import Math
+import vox_render
 
 /// PolyShape is a component that handles the creation of <see cref="ProBuilderMesh"/> shapes from a set of contiguous points.
 public final class PolyShape: Script {
@@ -31,14 +31,11 @@ public final class PolyShape: Script {
 
     /// Get the points that form the path for the base of this shape.
     public var controlPoints: [Vector3] {
-        get {
-            m_Points
-        }
+        m_Points
     }
 
     /// Set the points that form the path for the base of this shape.
-    public func SetControlPoints(_ points: [Vector3]) {
-    }
+    public func SetControlPoints(_: [Vector3]) {}
 
     /// Set the distance that this shape should extrude from the base. After setting this value, you will need to
     /// invoke <see cref="MeshOperations.AppendElements.CreateShapeFromPolygon"/> to rebuild the <see cref="ProBuilderMesh"/> component.
@@ -65,7 +62,7 @@ public final class PolyShape: Script {
 
     internal var mesh: ProBuilderMesh? {
         get {
-            if (m_Mesh == nil) {
+            if m_Mesh == nil {
                 m_Mesh = entity.getComponent(ProBuilderMesh.self)
             }
 

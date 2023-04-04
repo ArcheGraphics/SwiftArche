@@ -5,21 +5,21 @@
 //  property of any third parties.
 
 import Cocoa
-import vox_render
 import Math
-import vox_toolkit
 import vox_flex
+import vox_render
+import vox_toolkit
 
 class HashGridApp: NSViewController {
     var canvas: Canvas!
     var engine: Engine!
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
         canvas = Canvas(frame: view.frame)
         canvas.setParentView(view)
         engine = Engine(canvas: canvas)
-        
+
         let scene = Engine.sceneManager.activeScene!
         let rootEntity = scene.createRootEntity()
 
@@ -27,13 +27,13 @@ class HashGridApp: NSViewController {
         cameraEntity.transform.position = Vector3(5, 5, 5)
         cameraEntity.transform.lookAt(targetPosition: Vector3())
         cameraEntity.addComponent(Camera.self)
-        
+
         let count: UInt = 10000
         var positions: [SIMD3<Float>] = []
-        for _ in 0..<count {
-            positions.append(SIMD3<Float>(Float.random(in: 0..<64), Float.random(in: 0..<64), Float.random(in: 0..<64)))
+        for _ in 0 ..< count {
+            positions.append(SIMD3<Float>(Float.random(in: 0 ..< 64), Float.random(in: 0 ..< 64), Float.random(in: 0 ..< 64)))
         }
-        
+
         let positionBuffer = BufferView(array: positions)
         let itemCount = BufferView(array: [count])
         let hashGrid = HashGrid
@@ -53,10 +53,9 @@ class HashGridApp: NSViewController {
 
         Engine.run()
     }
-    
+
     override func viewDidDisappear() {
         super.viewDidDisappear()
         Engine.destroy()
     }
 }
-

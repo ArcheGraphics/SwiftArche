@@ -4,8 +4,8 @@
 //  personal capacity and am not conveying any rights to any intellectual
 //  property of any third parties.
 
-import vox_render
 import Math
+import vox_render
 
 public class Arch: Shape {
     var m_Thickness: Float = 0.1
@@ -18,15 +18,13 @@ public class Arch: Shape {
 
     var m_Smooth = true
 
-    public func CopyShape(_ shape: Shape) {
+    public func CopyShape(_: Shape) {}
 
-    }
-
-    func GetFace(vertex1: Vector2, vertex2: Vector2, depth: Float) -> [Vector3] {
+    func GetFace(vertex1 _: Vector2, vertex2 _: Vector2, depth _: Float) -> [Vector3] {
         []
     }
 
-    public func RebuildMesh(_ mesh: ProBuilderMesh, size: Vector3, rotation: Quaternion) -> Bounds {
+    public func RebuildMesh(_: ProBuilderMesh, size _: Vector3, rotation _: Quaternion) -> Bounds {
         Bounds()
     }
 }

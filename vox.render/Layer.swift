@@ -74,13 +74,13 @@ public struct Layer: OptionSet {
     /// Layer 27.
     public static let Layer27 = Layer(rawValue: 0x8000000)
     /// Layer 28.
-    public static let Layer28 = Layer(rawValue: 0x10000000)
+    public static let Layer28 = Layer(rawValue: 0x1000_0000)
     /// Layer 29.
-    public static let Layer29 = Layer(rawValue: 0x20000000)
+    public static let Layer29 = Layer(rawValue: 0x2000_0000)
     /// Layer 30.
-    public static let Layer30 = Layer(rawValue: 0x40000000)
+    public static let Layer30 = Layer(rawValue: 0x4000_0000)
     /// Layer 31.
-    public static let Layer31 = Layer(rawValue: 0x80000000)
+    public static let Layer31 = Layer(rawValue: 0x8000_0000)
     /// All layers.
-    public static let Everything = Layer(rawValue: 0xffffffff)
+    public static let Everything = Layer(rawValue: 0xFFFF_FFFF)
 }

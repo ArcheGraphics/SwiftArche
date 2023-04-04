@@ -7,6 +7,5 @@
 import Foundation
 
 class Parser {
-    func parse(_ context: ParserContext) {
-    }
+    func parse(_: ParserContext) {}
 }

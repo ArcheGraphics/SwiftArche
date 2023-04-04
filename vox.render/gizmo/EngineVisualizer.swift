@@ -12,7 +12,7 @@ public class EngineVisualizer: Script {
         Vector3(-1, 1, -1),
         Vector3(1, 1, -1),
         Vector3(1, -1, -1),
-        Vector3(-1, -1, -1)
+        Vector3(-1, -1, -1),
     ]
     private static let _halfSqrt: Float = 0.70710678118655
 
@@ -43,7 +43,7 @@ public class EngineVisualizer: Script {
     ///   - entity: The entity
     ///   - includeChildren: Whether include child entity(default is true)
     public func addEntityWireframe(with entity: Entity, includeChildren: Bool = true) {
-        if (includeChildren) {
+        if includeChildren {
             let cameras = entity.getComponentsIncludeChildren(Camera.self)
             for camera in cameras {
                 addCameraWireframe(with: camera)
@@ -98,14 +98,14 @@ public class EngineVisualizer: Script {
         _wireframeElements.append(WireframeElement(transform, Int(positionsOffset)))
 
         // front
-        for i in 0..<4 {
+        for i in 0 ..< 4 {
             var newPosition = EngineVisualizer._ndcPosition[i]
             _ = newPosition.transformCoordinate(m: inverseProj)
             _localPositions.append(newPosition)
         }
 
         // back
-        for i in 0..<4 {
+        for i in 0 ..< 4 {
             var newPosition = EngineVisualizer._ndcPosition[i]
             newPosition = Vector3(newPosition.x, newPosition.y, 1)
             _ = newPosition.transformCoordinate(m: inverseProj)
@@ -174,12 +174,12 @@ public class EngineVisualizer: Script {
 
         _growthIndexMemory(coneIndicesCount)
         WireframePrimitive.createConeWireframe(
-                radius,
-                height,
-                &_localPositions,
-                UInt32(positionsOffset),
-                &_indices,
-                _indicesCount
+            radius,
+            height,
+            &_localPositions,
+            UInt32(positionsOffset),
+            &_indices,
+            _indicesCount
         )
         _indicesCount += coneIndicesCount
         // rotation to default transform forward direction(-Z)
@@ -196,11 +196,11 @@ public class EngineVisualizer: Script {
 
         _growthIndexMemory(sphereIndicesCount)
         WireframePrimitive.createSphereWireframe(
-                light.distance,
-                &_localPositions,
-                UInt32(positionsOffset),
-                &_indices,
-                _indicesCount
+            light.distance,
+            &_localPositions,
+            UInt32(positionsOffset),
+            &_indices,
+            _indicesCount
         )
         _indicesCount += sphereIndicesCount
 
@@ -257,13 +257,13 @@ public class EngineVisualizer: Script {
         let cuboidIndicesCount = WireframePrimitive.cuboidIndexCount
         _growthIndexMemory(Int(cuboidIndicesCount))
         WireframePrimitive.createCuboidWireframe(
-                worldScale.x * shape.size.x,
-                worldScale.y * shape.size.y,
-                worldScale.z * shape.size.z,
-                &_localPositions,
-                UInt32(positionsOffset),
-                &_indices,
-                _indicesCount
+            worldScale.x * shape.size.x,
+            worldScale.y * shape.size.y,
+            worldScale.z * shape.size.z,
+            &_localPositions,
+            UInt32(positionsOffset),
+            &_indices,
+            _indicesCount
         )
         let tempRotation = Quaternion.rotationYawPitchRoll(yaw: shape.rotation.x, pitch: shape.rotation.y, roll: shape.rotation.z)
         _localRotation(positionsOffset, tempRotation)
@@ -285,11 +285,11 @@ public class EngineVisualizer: Script {
         let sphereIndicesCount = WireframePrimitive.sphereIndexCount
         _growthIndexMemory(Int(sphereIndicesCount))
         WireframePrimitive.createSphereWireframe(
-                max(worldScale.x, worldScale.y, worldScale.z) * shape.radius,
-                &_localPositions,
-                UInt32(positionsOffset),
-                &_indices,
-                _indicesCount
+            max(worldScale.x, worldScale.y, worldScale.z) * shape.radius,
+            &_localPositions,
+            UInt32(positionsOffset),
+            &_indices,
+            _indicesCount
         )
         let tempRotation = Quaternion.rotationYawPitchRoll(yaw: shape.rotation.x, pitch: shape.rotation.y, roll: shape.rotation.z)
         _localRotation(positionsOffset, tempRotation)
@@ -311,21 +311,19 @@ public class EngineVisualizer: Script {
         let capsuleIndicesCount = WireframePrimitive.capsuleIndexCount
         _growthIndexMemory(Int(capsuleIndicesCount))
         WireframePrimitive.createCapsuleWireframe(
-                maxScale * shape.radius,
-                maxScale * shape.height,
-                &_localPositions,
-                UInt32(positionsOffset),
-                &_indices,
-                _indicesCount
+            maxScale * shape.radius,
+            maxScale * shape.height,
+            &_localPositions,
+            UInt32(positionsOffset),
+            &_indices,
+            _indicesCount
         )
         var tempAxis = Quaternion()
-        switch (shape.upAxis) {
+        switch shape.upAxis {
         case ColliderShapeUpAxis.X:
             tempAxis = Quaternion(x: 0, y: 0, z: EngineVisualizer._halfSqrt, w: EngineVisualizer._halfSqrt)
-            break
         case ColliderShapeUpAxis.Y:
             tempAxis = Quaternion(x: 0, y: 0, z: 0, w: 1)
-            break
         case ColliderShapeUpAxis.Z:
             tempAxis = Quaternion(x: EngineVisualizer._halfSqrt, y: 0, z: 0, w: EngineVisualizer._halfSqrt)
         }
@@ -338,7 +336,7 @@ public class EngineVisualizer: Script {
         _indicesCount += Int(capsuleIndicesCount)
         _wireframeElements.append(WireframeElement(transform, positionsOffset))
     }
-    
+
     public func addMeshColliderShapeWireframe(with shape: MeshColliderShape) {
         let transform = shape.collider!.entity.transform!
         let worldScale = transform.lossyWorldScale
@@ -346,20 +344,20 @@ public class EngineVisualizer: Script {
 
         let points = shape.colliderPoints
         let indices = shape.colliderWireframeIndices
-        
+
         _growthIndexMemory(indices.count)
-        for i in 0..<indices.count {
+        for i in 0 ..< indices.count {
             _indices[_indicesCount + i] = indices[i] + UInt32(positionsOffset)
         }
-        points.forEach({ v in
+        points.forEach { v in
             _localPositions.append(worldScale * v)
-        })
-        
+        }
+
         _indicesCount += indices.count
         _wireframeElements.append(WireframeElement(transform, positionsOffset))
     }
 
-    public override func onGUI() {
+    override public func onGUI() {
         // update local to world geometry
         let localPositionLength = _localPositions.count
         if localPositionLength > _globalPositions.count {
@@ -368,15 +366,15 @@ public class EngineVisualizer: Script {
             _ = _globalPositions.dropLast(_globalPositions.count - localPositionLength)
         }
         var positionIndex = 0
-        for i in 0..<_wireframeElements.count {
+        for i in 0 ..< _wireframeElements.count {
             let wireframeElement = _wireframeElements[i]
             let beginIndex = wireframeElement.transformRanges
             let endIndex = i < _wireframeElements.count - 1 ? _wireframeElements[i + 1].transformRanges : localPositionLength
-            if (wireframeElement.updateFlag.flag) {
+            if wireframeElement.updateFlag.flag {
                 let transform = wireframeElement.transform
                 let worldMatrix = Matrix.rotationTranslation(quaternion: transform.worldRotationQuaternion, translation: transform.worldPosition)
 
-                for _ in beginIndex..<endIndex {
+                for _ in beginIndex ..< endIndex {
                     let localPosition = _localPositions[positionIndex]
                     _globalPositions[positionIndex] = Vector3.transformCoordinate(v: localPosition, m: worldMatrix)
                     positionIndex += 1
@@ -390,23 +388,23 @@ public class EngineVisualizer: Script {
         // update world-space geometry
         _growthIndexMemory(_boundsIndicesCount)
         var indicesCount = _indicesCount
-        for i in 0..<_wireframeRenderers.count {
+        for i in 0 ..< _wireframeRenderers.count {
             let renderer = _wireframeRenderers[i]
             let bounds = renderer.bounds
             var tempVector = bounds.getExtent()
 
             let positionsOffset = _globalPositions.count
             WireframePrimitive.createCuboidWireframe(
-                    tempVector.x * 2,
-                    tempVector.y * 2,
-                    tempVector.z * 2,
-                    &_globalPositions,
-                    UInt32(positionsOffset),
-                    &_indices,
-                    indicesCount
+                tempVector.x * 2,
+                tempVector.y * 2,
+                tempVector.z * 2,
+                &_globalPositions,
+                UInt32(positionsOffset),
+                &_indices,
+                indicesCount
             )
             tempVector = bounds.getCenter()
-            for i in positionsOffset..<_globalPositions.count {
+            for i in positionsOffset ..< _globalPositions.count {
                 _globalPositions[i] += tempVector
             }
             indicesCount += Int(WireframePrimitive.cuboidIndexCount)
@@ -420,31 +418,31 @@ public class EngineVisualizer: Script {
 
     private func _growthIndexMemory(_ length: Int) {
         let neededLength = _indicesCount + length
-        if (neededLength > _indices.count) {
-            if (neededLength > UInt32.max) {
+        if neededLength > _indices.count {
+            if neededLength > UInt32.max {
                 fatalError("The vertex count is over limit.")
             }
 
             var newIndices = [UInt32](repeating: 0, count: neededLength)
-            newIndices.replaceSubrange(0..<_indices.count, with: _indices)
+            newIndices.replaceSubrange(0 ..< _indices.count, with: _indices)
             _indices = newIndices
         }
     }
 
     private func _localTranslate(_ positionsOffset: Int, _ offset: Vector3) {
-        for i in positionsOffset..<_localPositions.count {
+        for i in positionsOffset ..< _localPositions.count {
             _localPositions[i] += offset
         }
     }
 
     private func _localRotation(_ positionsOffset: Int, _ rotation: Quaternion) {
-        for i in positionsOffset..<_localPositions.count {
+        for i in positionsOffset ..< _localPositions.count {
             _localPositions[i] = Vector3.transformByQuat(v: _localPositions[i], quaternion: rotation)
         }
     }
 
     private func _rotateAroundX(_ positionsOffset: Int) {
-        for i in positionsOffset..<_localPositions.count {
+        for i in positionsOffset ..< _localPositions.count {
             let position = _localPositions[i]
             _localPositions[i] = Vector3(position.x, -position.z, position.y)
         }

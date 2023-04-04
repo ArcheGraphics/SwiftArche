@@ -12,14 +12,15 @@ class KHR_materials_pbrSpecularGlossiness {
         let material = PBRSpecularMaterial()
 
         material.baseColor = Color(
-                Color.linearToGammaSpace(value: schema.diffuseFactor.x),
-                Color.linearToGammaSpace(value: schema.diffuseFactor.y),
-                Color.linearToGammaSpace(value: schema.diffuseFactor.z),
-                schema.diffuseFactor.w
+            Color.linearToGammaSpace(value: schema.diffuseFactor.x),
+            Color.linearToGammaSpace(value: schema.diffuseFactor.y),
+            Color.linearToGammaSpace(value: schema.diffuseFactor.z),
+            schema.diffuseFactor.w
         )
 
         if let diffuseTexture = schema.diffuseTexture,
-           let samplers = glTFResource.samplers {
+           let samplers = glTFResource.samplers
+        {
             material.baseTexture = glTFResource.textures![diffuseTexture.index]
             if let sampler = samplers[diffuseTexture.index] {
                 material.baseSampler = sampler
@@ -28,15 +29,16 @@ class KHR_materials_pbrSpecularGlossiness {
         }
 
         material.specularColor = Color(
-                Color.linearToGammaSpace(value: schema.specularFactor.x),
-                Color.linearToGammaSpace(value: schema.specularFactor.y),
-                Color.linearToGammaSpace(value: schema.specularFactor.z),
-                1.0
+            Color.linearToGammaSpace(value: schema.specularFactor.x),
+            Color.linearToGammaSpace(value: schema.specularFactor.y),
+            Color.linearToGammaSpace(value: schema.specularFactor.z),
+            1.0
         )
         material.glossiness = schema.glossinessFactor
 
         if let specularGlossinessTexture = schema.specularGlossinessTexture,
-           let samplers = glTFResource.samplers {
+           let samplers = glTFResource.samplers
+        {
             material.specularGlossinessTexture = glTFResource.textures![specularGlossinessTexture.index]
             if let sampler = samplers[specularGlossinessTexture.index] {
                 material.specularGlossinessSampler = sampler

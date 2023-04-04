@@ -24,11 +24,11 @@ public class ResourceCache {
     var samplers: [Int: (resource: MTLSamplerState, useCount: Int)] = [:]
     var depth_stencil_states: [Int: (resource: MTLDepthStencilState, useCount: Int)] = [:]
     var uniformNameMap: [String: ShaderDataGroup] = [:]
-    
+
     public init(_ device: MTLDevice) {
         self.device = device
     }
-    
+
     func setUniformName(with name: String, group: ShaderDataGroup) {
         // can upgrade to make warn if exits
         uniformNameMap[name] = group
@@ -116,7 +116,7 @@ public class ResourceCache {
         depth_stencil_states = [:]
         samplers = [:]
     }
-    
+
     func garbageCollection(below threshold: Int) {
         gc(&shader_modules, threshold: threshold)
         gc(&graphics_pipelines, threshold: threshold)
@@ -124,14 +124,14 @@ public class ResourceCache {
         gc(&samplers, threshold: threshold)
         gc(&depth_stencil_states, threshold: threshold)
     }
-    
+
     func gc<T>(_ contain: inout [Int: (resource: T, useCount: Int)], threshold: Int) -> Void {
         contain = contain.filter { element in
             element.value.useCount > threshold
-        }.mapValues({ element in
+        }.mapValues { element in
             var element = element
             element.useCount = 0
             return element
-        })
+        }
     }
 }

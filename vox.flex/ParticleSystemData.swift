@@ -12,18 +12,16 @@ public class ParticleSystemData: ShaderData {
     private static let velocityProperty = "u_velocity"
     private static let forceProperty = "u_force"
     private static let counterProperty = "u_counter"
-    
+
     var _mass: Float = 1e-3
     var _radius: Float = 1e-3
     private var _maxLength: UInt32 = 0
     private var _neighborSearcher: HashGrid?
-    
+
     public var neighborSearcher: HashGrid? {
-        get {
-            _neighborSearcher
-        }
+        _neighborSearcher
     }
-    
+
     /// the radius of the particles.
     public var radius: Float {
         get {
@@ -33,7 +31,7 @@ public class ParticleSystemData: ShaderData {
             _radius = max(newValue, 0)
         }
     }
-    
+
     /// the mass of the particles.
     public var mass: Float {
         get {
@@ -43,42 +41,32 @@ public class ParticleSystemData: ShaderData {
             _mass = max(newValue, 0)
         }
     }
-    
+
     /// the  maxnumber of particles.
     public var maxNumberOfParticles: UInt32 {
-        get {
-            _maxLength
-        }
+        _maxLength
     }
-    
+
     /// the number of particles.
     public var numberOfParticles: BufferView {
-        get {
-            getData(ParticleSystemData.counterProperty)!
-        }
+        getData(ParticleSystemData.counterProperty)!
     }
-    
+
     /// the position array
     public var positions: BufferView {
-        get {
-            getData(ParticleSystemData.positionProperty)!
-        }
+        getData(ParticleSystemData.positionProperty)!
     }
-    
+
     /// the velocity array
     public var velocities: BufferView {
-        get {
-            getData(ParticleSystemData.velocityProperty)!
-        }
+        getData(ParticleSystemData.velocityProperty)!
     }
-    
+
     ///  the force array
     public var forces: BufferView {
-        get {
-            getData(ParticleSystemData.forceProperty)!
-        }
+        getData(ParticleSystemData.forceProperty)!
     }
-    
+
     public init(maxLength: UInt32) {
         super.init()
         _maxLength = maxLength
@@ -87,7 +75,7 @@ public class ParticleSystemData: ShaderData {
         addScalarData(with: ParticleSystemData.velocityProperty, initialVal: Vector3F(), maxLength: Int(maxLength))
         addScalarData(with: ParticleSystemData.forceProperty, initialVal: Vector3F(), maxLength: Int(maxLength))
     }
-    
+
     /// Adds a data layer
     /// - Parameters:
     ///   - name: shader paramter name, used in reflection
@@ -98,9 +86,9 @@ public class ParticleSystemData: ShaderData {
         data.assign(initialVal)
         setData(name, data)
     }
-    
+
     //! Builds neighbor searcher with given search radius.
-    
+
     public func buildNeighborSearcher(commandBuffer: MTLCommandBuffer, maxSearchRadius: Float, hashGridResolution: UInt32 = 64) {
         if _neighborSearcher == nil {
             _neighborSearcher = HashGrid(hashGridResolution, hashGridResolution, hashGridResolution, maxSearchRadius * 2)

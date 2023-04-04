@@ -10,8 +10,8 @@ public struct MTLBufferDescriptor {
     public var count: Int
     public var stride: Int
     public var options: MTLResourceOptions = [.storageModePrivate]
-    public var label: String? = nil
-    
+    public var label: String?
+
     public init(count: Int, stride: Int) {
         self.count = count
         self.stride = stride
@@ -20,7 +20,7 @@ public struct MTLBufferDescriptor {
 
 extension MTLBufferDescriptor: ResourceRealize {
     public typealias actual_type = MTLBuffer
-    
+
     public var size: Int {
         let sizeAndAlign = Engine.device.heapBufferSizeAndAlign(length: stride * count, options: options)
         return alignUp(size: sizeAndAlign.size, align: sizeAndAlign.align)
@@ -31,19 +31,20 @@ extension MTLBufferDescriptor: ResourceRealize {
         buffer?.label = label
         return buffer
     }
-    
+
     public func derealize(resource: MTLBuffer) {
         resource.makeAliasable()
     }
 }
 
 // MARK: - RetainedBufferDescriptor
+
 public struct RetainedBufferDescriptor {
     public var count: Int
     public var stride: Int
     public var options: MTLResourceOptions = [.storageModePrivate]
-    public var label: String? = nil
-    
+    public var label: String?
+
     public init(count: Int, stride: Int) {
         self.count = count
         self.stride = stride
@@ -52,16 +53,15 @@ public struct RetainedBufferDescriptor {
 
 extension RetainedBufferDescriptor: ResourceRealize {
     public typealias actual_type = BufferView
-    
+
     public var size: Int {
         let sizeAndAlign = Engine.device.heapBufferSizeAndAlign(length: stride * count, options: options)
         return alignUp(size: sizeAndAlign.size, align: sizeAndAlign.align)
     }
 
-    public func realize(with heap: MTLHeap?) -> BufferView? {
+    public func realize(with _: MTLHeap?) -> BufferView? {
         return nil
     }
-    
-    public func derealize(resource: BufferView) {
-    }
+
+    public func derealize(resource _: BufferView) {}
 }

@@ -35,10 +35,10 @@ public class CapsuleColliderShape: ColliderShape {
     public required init() {
         super.init()
         _nativeShape = PhysXPhysics.createCapsuleColliderShape(
-                _id,
-                radius,
-                height,
-                material._nativeMaterial
+            _id,
+            radius,
+            height,
+            material._nativeMaterial
         )
     }
 }

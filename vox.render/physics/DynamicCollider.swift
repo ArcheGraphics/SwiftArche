@@ -120,7 +120,7 @@ public class DynamicCollider: Collider {
             (_nativeCollider as! PhysXDynamicCollider).setUseGravity(useGravity)
         }
     }
-    
+
     /// The mass of the dynamic collider.
     public var mass: Float {
         get {
@@ -130,8 +130,8 @@ public class DynamicCollider: Collider {
             (_nativeCollider as! PhysXDynamicCollider).setMass(newValue)
         }
     }
-    
-    public internal(set) override var entity: Entity {
+
+    override public internal(set) var entity: Entity {
         get {
             _entity
         }
@@ -139,8 +139,8 @@ public class DynamicCollider: Collider {
             super.entity = newValue
             let transform = _entity.transform!
             _nativeCollider = PhysXPhysics.createDynamicCollider(
-                    transform.worldPosition,
-                    transform.worldRotationQuaternion
+                transform.worldPosition,
+                transform.worldRotationQuaternion
             )
         }
     }
@@ -181,14 +181,14 @@ public class DynamicCollider: Collider {
     public func wakeUp() {
         (_nativeCollider as! PhysXDynamicCollider).wakeUp()
     }
-    
+
     /// Sets the mass based on the attached colliders assuming a constant density.
     public func setDensity(_ value: Float) {
         _density = value
         (_nativeCollider as! PhysXDynamicCollider).setDensity(value)
     }
-    
-    public override func addShape(_ shape: ColliderShape) {
+
+    override public func addShape(_ shape: ColliderShape) {
         super.addShape(shape)
         setDensity(_density)
     }

@@ -13,16 +13,14 @@ public class BlendShape {
 
     var _useBlendShapeNormal: Bool = true
     var _useBlendShapeTangent: Bool = true
-    var _layoutChangeManager: UpdateFlagManager = UpdateFlagManager()
+    var _layoutChangeManager: UpdateFlagManager = .init()
 
-    private var _dataChangeManager: UpdateFlagManager = UpdateFlagManager()
+    private var _dataChangeManager: UpdateFlagManager = .init()
     private var _frames: [BlendShapeFrame] = []
 
     /// Frames of BlendShape.
     public var frames: [BlendShapeFrame] {
-        get {
-            _frames
-        }
+        _frames
     }
 
     /// Create a BlendShape.
@@ -41,7 +39,8 @@ public class BlendShape {
     public func addFrame(weight: Float,
                          deltaPositions: [Vector3],
                          deltaNormals: [Vector3]? = nil,
-                         deltaTangents: [Vector3]? = nil) -> BlendShapeFrame {
+                         deltaTangents: [Vector3]? = nil) -> BlendShapeFrame
+    {
         let frame = BlendShapeFrame(weight, deltaPositions, deltaNormals, deltaTangents)
         _addFrame(frame)
         return frame
@@ -71,7 +70,7 @@ public class BlendShape {
 
     private func _addFrame(_ frame: BlendShapeFrame) {
         let frameCount = _frames.count
-        if (frameCount > 0 && frame.deltaPositions.count != _frames[frameCount - 1].deltaPositions.count) {
+        if frameCount > 0, frame.deltaPositions.count != _frames[frameCount - 1].deltaPositions.count {
             fatalError("Frame's deltaPositions length must same with before frame deltaPositions length.")
         }
         _frames.append(frame)
@@ -83,7 +82,7 @@ public class BlendShape {
     private func _updateUseNormalAndTangent(_ useNormal: Bool, _ useTangent: Bool) {
         let useBlendShapeNormal = _useBlendShapeNormal && useNormal
         let useBlendShapeTangent = _useBlendShapeTangent && useTangent
-        if (_useBlendShapeNormal != useBlendShapeNormal || _useBlendShapeTangent != useBlendShapeTangent) {
+        if _useBlendShapeNormal != useBlendShapeNormal || _useBlendShapeTangent != useBlendShapeTangent {
             _useBlendShapeNormal = useBlendShapeNormal
             _useBlendShapeTangent = useBlendShapeTangent
             _layoutChangeManager.dispatch(type: 0, param: self)

@@ -4,8 +4,8 @@
 //  personal capacity and am not conveying any rights to any intellectual
 //  property of any third parties.
 
-import vox_render
 import Math
+import vox_render
 
 /// A container for normal, tangent, and bitangent values.
 public struct Normal {
@@ -20,10 +20,10 @@ public struct Normal {
 extension Normal: Hashable {
     public static func == (lhs: Normal, rhs: Normal) -> Bool {
         return Math.Approx3(a: lhs.normal, b: rhs.normal) &&
-        Math.Approx4(a: lhs.tangent, b: rhs.tangent) &&
-        Math.Approx3(a: lhs.bitangent, b: rhs.bitangent)
+            Math.Approx4(a: lhs.tangent, b: rhs.tangent) &&
+            Math.Approx3(a: lhs.bitangent, b: rhs.bitangent)
     }
-    
+
     public func hash(into hasher: inout Hasher) {
         var hashCode = VectorHash.GetHashCode(normal)
         hashCode = (hashCode * 397) ^ VectorHash.GetHashCode(tangent)

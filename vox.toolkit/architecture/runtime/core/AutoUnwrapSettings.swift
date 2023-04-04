@@ -5,17 +5,15 @@
 //  property of any third parties.
 
 import Foundation
-import vox_render
 import Math
+import vox_render
 
 /// A collection of settings describing how to project UV coordinates for a @"UnityEngine.ProBuilder.Face".
 public struct AutoUnwrapSettings {
     public static var defaultAutoUnwrapSettings: AutoUnwrapSettings {
-        get {
-            var settings = AutoUnwrapSettings()
-            settings.Reset()
-            return settings
-        }
+        var settings = AutoUnwrapSettings()
+        settings.Reset()
+        return settings
     }
 
     /// The point from which UV transform operations will be performed.
@@ -156,31 +154,25 @@ public struct AutoUnwrapSettings {
 
     /// Get a set of unwrap parameters that tiles UVs.
     public static var tile: AutoUnwrapSettings {
-        get {
-            var res = AutoUnwrapSettings()
-            res.Reset()
-            return res
-        }
+        var res = AutoUnwrapSettings()
+        res.Reset()
+        return res
     }
 
     /// Get a set of unwrap parameters that strectches the face texture to fill a normalized coordinate space, maintaining th aspect ratio.
     public static var fit: AutoUnwrapSettings {
-        get {
-            var res = AutoUnwrapSettings()
-            res.Reset()
-            res.fill = Fill.Fit
-            return res
-        }
+        var res = AutoUnwrapSettings()
+        res.Reset()
+        res.fill = Fill.Fit
+        return res
     }
 
     /// Get a set of unwrap parameters that strectches the face texture to fill a normalized coordinate space, disregarding the aspect ratio.
     public static var stretch: AutoUnwrapSettings {
-        get {
-            var res = AutoUnwrapSettings()
-            res.Reset()
-            res.fill = Fill.Stretch
-            return res
-        }
+        var res = AutoUnwrapSettings()
+        res.Reset()
+        res.fill = Fill.Stretch
+        return res
     }
 
     /// Resets all parameters to default values.
@@ -200,13 +192,13 @@ public struct AutoUnwrapSettings {
 extension AutoUnwrapSettings: CustomStringConvertible {
     public var description: String {
         "Use World Space: \(useWorldSpace)\n" +
-                        "Flip U: \(flipU)\n" +
-                        "Flip V: \(flipV)\n" +
-                        "Swap UV: \(swapUV)\n" +
-                        "Fill Mode: \(fill)\n" +
-                        "Anchor: \(anchor)\n" +
-                        "Scale: \(scale)\n" +
-                        "Offset: \(offset)\n" +
-                        "Rotation: \(rotation)"
+            "Flip U: \(flipU)\n" +
+            "Flip V: \(flipV)\n" +
+            "Swap UV: \(swapUV)\n" +
+            "Fill Mode: \(fill)\n" +
+            "Anchor: \(anchor)\n" +
+            "Scale: \(scale)\n" +
+            "Offset: \(offset)\n" +
+            "Rotation: \(rotation)"
     }
 }

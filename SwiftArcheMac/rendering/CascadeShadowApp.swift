@@ -5,12 +5,12 @@
 //  property of any third parties.
 
 import Cocoa
-import vox_render
-import Math
-import vox_toolkit
 import ImGui
+import Math
+import vox_render
+import vox_toolkit
 
-fileprivate class GUI: Script {
+private class GUI: Script {
     var rotation: Rotation!
     var directLight: DirectLight!
     var planeRenderer: MeshRenderer!
@@ -48,13 +48,10 @@ fileprivate class GUI: Script {
             switch newValue {
             case 0:
                 scene.shadowCascades = .NoCascades
-                break
             case 1:
                 scene.shadowCascades = .TwoCascades
-                break
             case 2:
                 scene.shadowCascades = .FourCascades
-                break
             default:
                 break
             }
@@ -149,13 +146,13 @@ fileprivate class GUI: Script {
     }
 }
 
-fileprivate class Rotation: Script {
+private class Rotation: Script {
     var pause = true
     private var _time: Float = 0
     private var _center = Vector3()
 
     override func onUpdate(_ deltaTime: Float) {
-        if (!pause) {
+        if !pause {
             _time += deltaTime
             entity.transform.position = Vector3(10 * cos(_time), 10, 10 * sin(_time))
             entity.transform.lookAt(targetPosition: _center)
@@ -163,7 +160,7 @@ fileprivate class Rotation: Script {
     }
 }
 
-fileprivate class CSSMVisualMaterial: BaseMaterial {
+private class CSSMVisualMaterial: BaseMaterial {
     private var _baseColor = Color(1, 1, 1, 1)
 
     /// Base color.
@@ -176,7 +173,7 @@ fileprivate class CSSMVisualMaterial: BaseMaterial {
             shaderData.setData(with: CSSMVisualMaterial._baseColorProp, data: newValue.toLinear())
         }
     }
-    
+
     public required init() {
         super.init()
         name = "shadowmap mat"
@@ -191,21 +188,21 @@ class CascadeShadowApp: NSViewController {
     var canvas: Canvas!
     var engine: Engine!
     var iblBaker: IBLBaker!
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
         canvas = Canvas(frame: view.frame)
         canvas.setParentView(view)
         engine = Engine(canvas: canvas)
         iblBaker = IBLBaker()
-        
+
         let scene = Engine.sceneManager.activeScene!
         scene.shadowResolution = ShadowResolution.High
         scene.shadowDistance = 300
         scene.shadowCascades = ShadowCascadesMode.FourCascades
         let hdr = Engine.textureLoader.loadHDR(with: "assets/kloppenheim_06_4k.hdr")!
         iblBaker.bake(scene, with: hdr, size: 256, level: 3)
-        
+
         let rootEntity = scene.createRootEntity()
         let gui = rootEntity.addComponent(GUI.self)
         let cameraEntity = rootEntity.createChild()
@@ -240,14 +237,14 @@ class CascadeShadowApp: NSViewController {
         planeRenderer.setMaterial(planeMaterial)
         planeRenderer.castShadows = false
         planeRenderer.receiveShadows = true
-        
+
         // Create box
         let boxMesh = PrimitiveMesh.createCuboid(width: 2.0, height: 2.0, depth: 2.0)
         let boxMaterial = PBRMaterial()
         boxMaterial.roughness = 0.2
         boxMaterial.metallic = 1
         gui.boxMaterial = boxMaterial
-        for i in 0..<40 {
+        for i in 0 ..< 40 {
             let boxEntity = rootEntity.createChild("BoxEntity")
             boxEntity.transform.position = Vector3(0, 2, Float(i * 10) - 200)
 
@@ -259,7 +256,7 @@ class CascadeShadowApp: NSViewController {
 
         Engine.run()
     }
-    
+
     override func viewDidDisappear() {
         super.viewDidDisappear()
         Engine.destroy()

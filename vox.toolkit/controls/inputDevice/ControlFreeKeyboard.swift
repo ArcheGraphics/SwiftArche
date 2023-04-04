@@ -7,34 +7,35 @@
 import Math
 import vox_render
 
-class ControlFreeKeyboard : IControlInput {
-    static func onUpdateHandler(_ input: InputManager, callback: (ControlHandlerType)->Void) {
-        if (input.isKeyHeldDown(.VKEY_LEFT) ||
+class ControlFreeKeyboard: IControlInput {
+    static func onUpdateHandler(_ input: InputManager, callback: (ControlHandlerType) -> Void) {
+        if input.isKeyHeldDown(.VKEY_LEFT) ||
             input.isKeyHeldDown(.VKEY_A) ||
             input.isKeyHeldDown(.VKEY_UP) ||
             input.isKeyHeldDown(.VKEY_W) ||
             input.isKeyHeldDown(.VKEY_DOWN) ||
             input.isKeyHeldDown(.VKEY_S) ||
             input.isKeyHeldDown(.VKEY_RIGHT) ||
-            input.isKeyHeldDown(.VKEY_D)) {
+            input.isKeyHeldDown(.VKEY_D)
+        {
             callback(ControlHandlerType.PAN)
         } else {
             callback(ControlHandlerType.None)
         }
     }
-    
+
     static func onUpdateDelta(_ control: FreeControl, _ outDelta: inout Vector3) {
         var outDeltaVec = SIMD3<Float>(repeating: 0)
-        if (control.input.isKeyHeldDown(.VKEY_LEFT) || control.input.isKeyHeldDown(.VKEY_A)) {
+        if control.input.isKeyHeldDown(.VKEY_LEFT) || control.input.isKeyHeldDown(.VKEY_A) {
             outDeltaVec.x -= control.movementSpeed
         }
-        if (control.input.isKeyHeldDown(.VKEY_RIGHT) || control.input.isKeyHeldDown(.VKEY_D)) {
+        if control.input.isKeyHeldDown(.VKEY_RIGHT) || control.input.isKeyHeldDown(.VKEY_D) {
             outDeltaVec.x += control.movementSpeed
         }
-        if (control.input.isKeyHeldDown(.VKEY_UP) || control.input.isKeyHeldDown(.VKEY_W)) {
+        if control.input.isKeyHeldDown(.VKEY_UP) || control.input.isKeyHeldDown(.VKEY_W) {
             outDeltaVec.z -= control.movementSpeed
         }
-        if (control.input.isKeyHeldDown(.VKEY_DOWN) || control.input.isKeyHeldDown(.VKEY_S)) {
+        if control.input.isKeyHeldDown(.VKEY_DOWN) || control.input.isKeyHeldDown(.VKEY_S) {
             outDeltaVec.z += control.movementSpeed
         }
         outDelta = Vector3(outDeltaVec)

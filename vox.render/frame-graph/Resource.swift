@@ -10,11 +10,11 @@ public class ResourceBase {
     private static var idGenerator: Int = 0
 
     var id_: Int
-    var creator_: (()->FrameTaskBase)?
-    var readers_: [()->FrameTaskBase] = []
-    var writers_: [()->FrameTaskBase] = []
+    var creator_: (() -> FrameTaskBase)?
+    var readers_: [() -> FrameTaskBase] = []
+    var writers_: [() -> FrameTaskBase] = []
     var ref_count_: Int
-    
+
     deinit {
         creator_ = nil
         readers_ = []
@@ -31,7 +31,7 @@ public class ResourceBase {
         creator_ != nil
     }
 
-    public init(name: String, creator: (()->FrameTaskBase)?) {
+    public init(name: String, creator: (() -> FrameTaskBase)?) {
         self.name = name
         creator_ = creator
         ref_count_ = 0
@@ -39,13 +39,12 @@ public class ResourceBase {
         ResourceBase.idGenerator = id_
     }
 
-    open func realize(with heap: MTLHeap) -> Bool {
+    open func realize(with _: MTLHeap) -> Bool {
         true
     }
 
-    open func derealize() {
-    }
-    
+    open func derealize() {}
+
     open var size: Int {
         0
     }
@@ -56,7 +55,7 @@ public class Resource<description_type: ResourceRealize>: ResourceBase {
 
     var description_: description_type
     var actual_: actual_type?
-    
+
     deinit {
         actual_ = nil
     }
@@ -69,7 +68,7 @@ public class Resource<description_type: ResourceRealize>: ResourceBase {
         actual_
     }
 
-    required init(name: String, creator: @escaping ()->FrameTaskBase, description: description_type) {
+    required init(name: String, creator: @escaping () -> FrameTaskBase, description: description_type) {
         description_ = description
         actual_ = nil
         super.init(name: name, creator: creator)
@@ -85,7 +84,7 @@ public class Resource<description_type: ResourceRealize>: ResourceBase {
         super.init(name: name, creator: nil)
     }
 
-    public override func realize(with heap: MTLHeap) -> Bool {
+    override public func realize(with heap: MTLHeap) -> Bool {
         if transient {
             actual_ = description_.realize(with: heap)
             return actual_ != nil
@@ -94,14 +93,14 @@ public class Resource<description_type: ResourceRealize>: ResourceBase {
         }
     }
 
-    public override func derealize() {
+    override public func derealize() {
         if let actual, transient {
             description_.derealize(resource: actual)
             actual_ = nil
         }
     }
-    
-    public override var size: Int {
+
+    override public var size: Int {
         description_.size
     }
 }

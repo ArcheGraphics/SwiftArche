@@ -4,9 +4,9 @@
 //  personal capacity and am not conveying any rights to any intellectual
 //  property of any third parties.
 
-import Math
 import CoreGraphics
 import CoreText
+import Math
 
 public struct GlyphDescriptor {
     var glyphIndex: CGGlyph
@@ -15,11 +15,12 @@ public struct GlyphDescriptor {
 
     public init(glyphIndex: UInt,
                 topLeftCoordinate: SIMD2<Float>,
-                bottomRightCoordinate: SIMD2<Float>) {
+                bottomRightCoordinate: SIMD2<Float>)
+    {
         self.glyphIndex = CGGlyph(glyphIndex)
         self.topLeftCoordinate = topLeftCoordinate
         self.bottomRightCoordinate = bottomRightCoordinate
     }
 }
 
-extension GlyphDescriptor: Codable { }
+extension GlyphDescriptor: Codable {}

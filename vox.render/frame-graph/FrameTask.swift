@@ -7,9 +7,9 @@
 import Metal
 
 public class FrameTaskBase {
-    var creates_: [()->ResourceBase] = []
-    var reads_: [()->ResourceBase] = []
-    var writes_: [()->ResourceBase] = []
+    var creates_: [() -> ResourceBase] = []
+    var reads_: [() -> ResourceBase] = []
+    var writes_: [() -> ResourceBase] = []
     var events_: [EventWrapper] = []
     var ref_count_: Int
 
@@ -18,10 +18,10 @@ public class FrameTaskBase {
 
     public init(name: String) {
         self.name = name
-        self.cull_immune = false
+        cull_immune = false
         ref_count_ = 0
     }
-    
+
     deinit {
         creates_ = []
         reads_ = []
@@ -29,11 +29,9 @@ public class FrameTaskBase {
         events_ = []
     }
 
-    open func setup(builder: inout FrameTaskBuilder) {
-    }
+    open func setup(builder _: inout FrameTaskBuilder) {}
 
-    open func execute() {
-    }
+    open func execute() {}
 }
 
 public class FrameTask<data_type: EmptyClassType>: FrameTaskBase {
@@ -45,41 +43,42 @@ public class FrameTask<data_type: EmptyClassType>: FrameTaskBase {
     public var data: data_type {
         data_
     }
-    
+
     init(name: String, commandBuffer: MTLCommandBuffer?,
          setup: @escaping (data_type, inout FrameTaskBuilder) -> Void,
-         execute: @escaping (data_type, MTLCommandBuffer?) -> Void) {
+         execute: @escaping (data_type, MTLCommandBuffer?) -> Void)
+    {
         setup_ = setup
         execute_ = execute
         data_ = data_type()
         commandBuffer_ = commandBuffer
         super.init(name: name)
     }
-    
+
     deinit {
         commandBuffer_ = nil
     }
 
-    public override func setup(builder: inout FrameTaskBuilder) {
+    override public func setup(builder: inout FrameTaskBuilder) {
         setup_(data_, &builder)
     }
 
-    public override func execute() {
+    override public func execute() {
         if let commandBuffer_ {
             // wait for resource ready
             for event in events_ {
                 event.wait(for: commandBuffer_)
             }
         }
-        
+
         execute_(data_, commandBuffer_)
-        
+
         if let commandBuffer_ {
             // signal for resource ready
             for event in events_ {
                 event.signal(for: commandBuffer_)
             }
-            
+
             // this pass is the first one
             if events_.isEmpty {
                 events_.append(EventWrapper(with: commandBuffer_.device))

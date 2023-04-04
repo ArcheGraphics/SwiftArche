@@ -4,8 +4,8 @@
 //  personal capacity and am not conveying any rights to any intellectual
 //  property of any third parties.
 
-import Metal
 import Math
+import Metal
 
 public class SkyBoxMaterial: Material {
     /// Whether to decode from texture with equirectangular HDR format.
@@ -18,14 +18,14 @@ public class SkyBoxMaterial: Material {
             }
         }
     }
-    
+
     /// Texture cube map of the sky box material.
     public var textureCubeMap: MTLTexture? {
         didSet {
             shaderData.setImageSampler(with: "u_cubeTexture", "u_cubeSampler", texture: textureCubeMap)
         }
     }
-    
+
     public required init() {
         super.init()
         shader = ShaderFactory.skybox

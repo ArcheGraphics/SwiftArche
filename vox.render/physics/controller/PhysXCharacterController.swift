@@ -11,7 +11,7 @@ class PhysXCharacterController: PhysXCollider {
     var _pxController: CPxController!
     var _pxManager: PhysXPhysicsManager!
     var _shape: PhysXColliderShape!
-    var _behaviorCallback: ((UInt32)->UInt8)!
+    var _behaviorCallback: ((UInt32) -> UInt8)!
     var _hitReport: ((UInt32, Vector3, Float, Vector3, Vector3) -> Void)!
 
     func move(_ disp: Vector3, _ minDist: Float, _ elapsedTime: Float) -> UInt8 {
@@ -43,15 +43,15 @@ class PhysXCharacterController: PhysXCollider {
     func setSlopeLimit(_ slopeLimit: Float) {
         _pxController.setSlopeLimit(slopeLimit)
     }
-    
-    func setBehaviorCallback(_ script: @escaping (UInt32)->UInt8) {
+
+    func setBehaviorCallback(_ script: @escaping (UInt32) -> UInt8) {
         _behaviorCallback = script
     }
-    
+
     func setHitReport(_ script: @escaping (UInt32, Vector3, Float, Vector3, Vector3) -> Void) {
         _hitReport = script
     }
-    
+
     func getCollisionFlags() -> ControllerCollisionFlag {
         ControllerCollisionFlag(rawValue: UInt8(_pxController.collisionFlags()))
     }
@@ -71,7 +71,7 @@ class PhysXCharacterController: PhysXCollider {
     }
 
     func _createPXController(_ pxManager: PhysXPhysicsManager, _ shape: PhysXColliderShape) {
-        if (shape is PhysXBoxColliderShape) {
+        if shape is PhysXBoxColliderShape {
             let desc = CPxBoxControllerDesc()
             desc.halfHeight = (shape as! PhysXBoxColliderShape)._halfSize.x
             desc.halfSideExtent = (shape as! PhysXBoxColliderShape)._halfSize.y
@@ -83,9 +83,9 @@ class PhysXCharacterController: PhysXCollider {
             desc.setUserControllerHitReport { [self] id, dir, length, normal, point in
                 _hitReport(id, Vector3(dir), length, Vector3(normal), Vector3(point))
             }
-            
+
             _pxController = pxManager._getControllerManager().createController(desc)
-        } else if (shape is PhysXCapsuleColliderShape) {
+        } else if shape is PhysXCapsuleColliderShape {
             let desc = CPxCapsuleControllerDesc()
             desc.radius = (shape as! PhysXCapsuleColliderShape)._radius
             desc.height = (shape as! PhysXCapsuleColliderShape)._halfHeight * 2
@@ -97,7 +97,7 @@ class PhysXCharacterController: PhysXCollider {
             desc.setUserControllerHitReport { [self] id, dir, length, normal, point in
                 _hitReport(id, Vector3(dir), length, Vector3(normal), Vector3(point))
             }
-            
+
             _pxController = pxManager._getControllerManager().createController(desc)
         } else {
             fatalError("unsupported shape type")
@@ -107,7 +107,7 @@ class PhysXCharacterController: PhysXCollider {
     }
 
     func _destroyPXController() {
-        if (_pxController != nil) {
+        if _pxController != nil {
             _pxController = nil
         }
     }

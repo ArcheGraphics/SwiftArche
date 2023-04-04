@@ -36,17 +36,17 @@ public class PBRMaterial: PBRBaseMaterial {
             }
         }
     }
-    
+
     public var roughnessMetallicSampler: MTLSamplerDescriptor? {
         didSet {
             shaderData.setSampler(with: PBRMaterial._roughnessMetallicSamplerProp, sampler: roughnessMetallicSampler)
         }
     }
-    
+
     public required init() {
         super.init()
         shaderData.enableMacro(IS_METALLIC_WORKFLOW.rawValue)
-        
+
         shaderData.setData(with: PBRMaterial._metallicProp, data: metallic)
         shaderData.setData(with: PBRMaterial._roughnessProp, data: roughness)
     }

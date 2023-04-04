@@ -11,32 +11,32 @@ class Spherical {
     public var radius: Float = 1.0
     public var phi: Float = 0
     public var theta: Float = 0
-    private var _matrix: Matrix = Matrix()
-    private var _matrixInv: Matrix = Matrix()
-    
-    init(radius: Float = 1.0,  phi: Float = 0, theta: Float = 0) {
+    private var _matrix: Matrix = .init()
+    private var _matrixInv: Matrix = .init()
+
+    init(radius: Float = 1.0, phi: Float = 0, theta: Float = 0) {
         self.radius = radius
         self.phi = phi
         self.theta = theta
     }
-    
-    func makeSafe()-> Spherical {
-        let count:Float = floor(phi / .pi)
+
+    func makeSafe() -> Spherical {
+        let count: Float = floor(phi / .pi)
         phi = simd_clamp(phi, count * .pi + .leastNonzeroMagnitude, (count + 1) * .pi - .leastNonzeroMagnitude)
         return self
     }
-    
-    func set(_ radius: Float, _ phi: Float, _ theta: Float)-> Spherical {
+
+    func set(_ radius: Float, _ phi: Float, _ theta: Float) -> Spherical {
         self.radius = radius
         self.phi = phi
         self.theta = theta
         return self
     }
-    
+
     func setYAxis(_ up: Vector3) {
         var xAxis = Vector3(1, 0, 0)
         let yAxis = up.normalized
-        if (Vector3.equals(left: xAxis, right: yAxis)) {
+        if Vector3.equals(left: xAxis, right: yAxis) {
             xAxis = Vector3(0, 1, 0)
         }
         let zAxis = Vector3.cross(left: xAxis, right: yAxis).normalized
@@ -50,16 +50,16 @@ class Spherical {
                             m31: xAxis.z, m32: yAxis.z, m33: zAxis.z, m34: 0,
                             m41: 0, m42: 0, m43: 0, m44: 1)
     }
-    
-    func setFromVec3(_ value: Vector3, atTheBack: Bool = false)-> Spherical {
+
+    func setFromVec3(_ value: Vector3, atTheBack: Bool = false) -> Spherical {
         var value = value
         _ = value.transformNormal(m: _matrixInv)
         radius = value.length()
-        if (radius == 0) {
+        if radius == 0 {
             theta = 0
             phi = 0
         } else {
-            if (atTheBack) {
+            if atTheBack {
                 phi = 2 * .pi - acos(simd_clamp(value.y / radius, -1, 1))
                 theta = atan2(-value.x, -value.z)
             } else {
@@ -69,8 +69,8 @@ class Spherical {
         }
         return self
     }
-    
-    func setToVec3(_ value: inout Vector3)->Bool {
+
+    func setToVec3(_ value: inout Vector3) -> Bool {
         let sinPhiRadius = sin(phi) * radius
         phi -= floor(phi / .pi / 2) * .pi * 2
         value = Vector3(sinPhiRadius * sin(theta), radius * cos(phi), sinPhiRadius * cos(theta))

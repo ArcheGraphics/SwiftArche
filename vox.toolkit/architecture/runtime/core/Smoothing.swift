@@ -4,14 +4,14 @@
 //  personal capacity and am not conveying any rights to any intellectual
 //  property of any third parties.
 
-import vox_render
 import Math
+import vox_render
 
 /// Utilities for working with smoothing groups. Smoothing groups are how ProBuilder defines hard and soft edges.
 /// ProBuilder calculates vertex normals by first calculating the normal for every face, which in turn is applied to each
 /// vertex that makes up the face. Afterwards, each vertex normal is averaged with coincident vertices belonging to the
 /// same smoothing group.
-public class Smoothing {
+public enum Smoothing {
     /// Faces with smoothingGroup = 0 are hard edges. Historically negative values were sometimes also written as hard edges.
     internal static let smoothingGroupNone = 0
 
@@ -30,12 +30,12 @@ public class Smoothing {
     /// Get the first available unused smoothing group.
     /// - Parameter mesh: The target mesh.
     /// - Returns: An unused smoothing group.
-    public static func GetUnusedSmoothingGroup(mesh: ProBuilderMesh) -> Int {
+    public static func GetUnusedSmoothingGroup(mesh _: ProBuilderMesh) -> Int {
         0
     }
 
     /// Get the first available smooth group after a specified index.
-    static func GetNextUnusedSmoothingGroup(start: Int, used: Set<Int>) -> Int {
+    static func GetNextUnusedSmoothingGroup(start _: Int, used _: Set<Int>) -> Int {
         0
     }
 
@@ -43,7 +43,7 @@ public class Smoothing {
     /// - Parameter index: The smoothing group to test.
     /// - Returns: True if the smoothing group value is smoothed, false if not.
     public static func IsSmooth(at index: Int) -> Bool {
-        (index > smoothingGroupNone && (index < hardRangeMin || index > hardRangeMax))
+        index > smoothingGroupNone && (index < hardRangeMin || index > hardRangeMax)
     }
 
     /// Generate smoothing groups for a set of faces by comparing adjacent faces with normal differences less than angleThreshold (in degrees).
@@ -51,18 +51,16 @@ public class Smoothing {
     ///   - mesh: The source mesh.
     ///   - faces: Faces to be considered for smoothing.
     ///   - angleThreshold: The maximum angle difference in degrees between adjacent face normals for the shared edge to be considered smooth.
-    public static func ApplySmoothingGroups(mesh: ProBuilderMesh, faces: [Face], angleThreshold: Float) {
-    }
+    public static func ApplySmoothingGroups(mesh _: ProBuilderMesh, faces _: [Face], angleThreshold _: Float) {}
 
-    internal static func ApplySmoothingGroups(mesh: ProBuilderMesh, faces: [Face], angleThreshold: Float, normals: [Vector3]) {
-    }
+    internal static func ApplySmoothingGroups(mesh _: ProBuilderMesh, faces _: [Face], angleThreshold _: Float, normals _: [Vector3]) {}
 
     // Walk the perimiter of a wing looking for compatibly smooth connections. Returns true if any match was found, false if not.
-    static func FindSoftEdgesRecursive(normals: [Vector3], wing: WingedEdge, angleThreshold: Float, processed: Set<Face>) -> Bool {
+    static func FindSoftEdgesRecursive(normals _: [Vector3], wing _: WingedEdge, angleThreshold _: Float, processed _: Set<Face>) -> Bool {
         false
     }
 
-    static func IsSoftEdge(normals: [Vector3], left: EdgeLookup, right: EdgeLookup, threshold: Float) -> Bool {
+    static func IsSoftEdge(normals _: [Vector3], left _: EdgeLookup, right _: EdgeLookup, threshold _: Float) -> Bool {
         false
     }
 }

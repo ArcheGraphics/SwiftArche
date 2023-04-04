@@ -10,7 +10,7 @@ class SceneParser: Parser {
     private static var _defaultMaterial: PBRMaterial!
 
     private static func _getDefaultMaterial() -> PBRMaterial {
-        if (SceneParser._defaultMaterial == nil) {
+        if SceneParser._defaultMaterial == nil {
             SceneParser._defaultMaterial = PBRMaterial()
         }
 
@@ -25,7 +25,7 @@ class SceneParser: Parser {
             return
         }
 
-        for i in 0..<gltf.nodes.count {
+        for i in 0 ..< gltf.nodes.count {
             let gltfNode = gltf.nodes[i]
             let entity = glTFResource.entities[i]
 
@@ -58,7 +58,7 @@ class SceneParser: Parser {
             camera.fieldOfView = perspective.yFOV
         }
 
-        if (context.cameras == nil) {
+        if context.cameras == nil {
             context.cameras = []
         }
         context.cameras!.append(camera)
@@ -72,11 +72,11 @@ class SceneParser: Parser {
         let gltfMeshPrimitives = glTFMesh.primitives
         let blendShapeWeights = gltfNode.weights ?? glTFMesh.weights
 
-        for i in 0..<gltfMeshPrimitives.count {
+        for i in 0 ..< gltfMeshPrimitives.count {
             let mesh = glTFResource.meshes![glTFMesh.index][i]
             let renderer: MeshRenderer
 
-            if (blendShapeWeights != nil) {
+            if blendShapeWeights != nil {
                 context.hasSkinned = true
                 let skinRenderer = entity.addComponent(SkinnedMeshRenderer.self)
                 skinRenderer.mesh = mesh

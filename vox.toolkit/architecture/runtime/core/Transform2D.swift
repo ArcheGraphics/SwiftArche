@@ -4,8 +4,8 @@
 //  personal capacity and am not conveying any rights to any intellectual
 //  property of any third parties.
 
-import vox_render
 import Math
+import vox_render
 
 /// A Transform class limited to 2D
 final class Transform2D {
@@ -24,7 +24,7 @@ final class Transform2D {
         self.scale = scale
     }
 
-    public func TransformPoint(_ p: Vector2) -> Vector2 {
+    public func TransformPoint(_: Vector2) -> Vector2 {
         Vector2()
     }
 }

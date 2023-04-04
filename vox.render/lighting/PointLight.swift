@@ -9,7 +9,7 @@ import Math
 /// Point light.
 public class PointLight: Light {
     private static let _pointLightProperty = "u_pointLight"
-    private static var _combinedData: [PointLightData] = [PointLightData](repeating: PointLightData(), count: Light._maxLight)
+    private static var _combinedData: [PointLightData] = .init(repeating: PointLightData(), count: Light._maxLight)
 
     static func _updateShaderData(_ shaderData: ShaderData) {
         shaderData.setData(with: PointLight._pointLightProperty, array: PointLight._combinedData)

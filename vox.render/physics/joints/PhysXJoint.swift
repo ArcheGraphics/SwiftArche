@@ -10,8 +10,8 @@ class PhysXJoint {
     var _pxJoint: CPxJoint!
     var _collider: PhysXCollider?
     private var _connectedAnchor = Vector3()
-    private var _breakForce: Float = Float.greatestFiniteMagnitude
-    private var _breakTorque: Float = Float.greatestFiniteMagnitude
+    private var _breakForce: Float = .greatestFiniteMagnitude
+    private var _breakTorque: Float = .greatestFiniteMagnitude
 
     func setConnectedCollider(_ value: PhysXCollider?) {
         _pxJoint.setActors(value?._pxActor, _collider?._pxActor)

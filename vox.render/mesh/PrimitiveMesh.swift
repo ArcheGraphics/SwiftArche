@@ -4,11 +4,11 @@
 //  personal capacity and am not conveying any rights to any intellectual
 //  property of any third parties.
 
-import Metal
 import Math
+import Metal
 
 /// Used to generate common primitive meshes.
-public class PrimitiveMesh {
+public enum PrimitiveMesh {
     /// Create Mesh with position in clipped space.
     /// - Returns: Mesh
     public static func createQuadPlane(noLongerAccessible: Bool = true) -> ModelMesh {
@@ -27,10 +27,10 @@ public class PrimitiveMesh {
         mesh.uploadData(noLongerAccessible)
         _ = mesh.addSubMesh(0, 6)
         mesh.bounds = BoundingBox(Vector3(-Float.greatestFiniteMagnitude, -Float.greatestFiniteMagnitude, -Float.greatestFiniteMagnitude),
-                Vector3(Float.greatestFiniteMagnitude, Float.greatestFiniteMagnitude, Float.greatestFiniteMagnitude))
+                                  Vector3(Float.greatestFiniteMagnitude, Float.greatestFiniteMagnitude, Float.greatestFiniteMagnitude))
         return mesh
     }
-    
+
     /// Create a sphere mesh.
     /// - Parameters:
     ///   - radius: Sphere radius
@@ -39,7 +39,8 @@ public class PrimitiveMesh {
     /// - Returns: Sphere model mesh
     public static func createSphere(radius: Float = 0.5,
                                     segments: Int = 18,
-                                    noLongerAccessible: Bool = true) -> ModelMesh {
+                                    noLongerAccessible: Bool = true) -> ModelMesh
+    {
         let mesh = ModelMesh()
         let segments = max(2, segments)
 
@@ -56,7 +57,7 @@ public class PrimitiveMesh {
         var normals: [Vector3] = .init(repeating: Vector3(), count: vertexCount)
         var uvs: [Vector2] = .init(repeating: Vector2(), count: vertexCount)
 
-        for i in 0..<vertexCount {
+        for i in 0 ..< vertexCount {
             let x = i % count
             let y = Int(Float(i) * countReciprocal) | 0
             let u = Float(x) * segmentsReciprocal
@@ -78,7 +79,7 @@ public class PrimitiveMesh {
         }
 
         var offset = 0
-        for i in 0..<rectangleCount {
+        for i in 0 ..< rectangleCount {
             let x = i % segments
             let y = Int(Float(i) * segmentsReciprocal) | 0
 
@@ -116,16 +117,17 @@ public class PrimitiveMesh {
     public static func createCuboid(width: Float = 1,
                                     height: Float = 1,
                                     depth: Float = 1,
-                                    noLongerAccessible: Bool = true) -> ModelMesh {
+                                    noLongerAccessible: Bool = true) -> ModelMesh
+    {
         let mesh = ModelMesh()
 
         let halfWidth: Float = width / 2
         let halfHeight: Float = height / 2
         let halfDepth: Float = depth / 2
 
-        var positions: [Vector3] = [Vector3](repeating: Vector3(), count: 24)
-        var normals: [Vector3] = [Vector3](repeating: Vector3(), count: 24)
-        var uvs: [Vector2] = [Vector2](repeating: Vector2(), count: 24)
+        var positions = [Vector3](repeating: Vector3(), count: 24)
+        var normals = [Vector3](repeating: Vector3(), count: 24)
+        var uvs = [Vector2](repeating: Vector2(), count: 24)
 
         // Up
         positions[0] = Vector3(-halfWidth, halfHeight, -halfDepth)
@@ -253,7 +255,7 @@ public class PrimitiveMesh {
 
         mesh.bounds = BoundingBox(Vector3(-halfWidth, -halfHeight, -halfDepth), Vector3(halfWidth, halfHeight, halfDepth))
         PrimitiveMesh._initialize(mesh, positions, normals, uvs,
-                indices, noLongerAccessible)
+                                  indices, noLongerAccessible)
         return mesh
     }
 
@@ -269,7 +271,8 @@ public class PrimitiveMesh {
                                    height: Float = 1,
                                    horizontalSegments: Int = 1,
                                    verticalSegments: Int = 1,
-                                   noLongerAccessible: Bool = true) -> ModelMesh {
+                                   noLongerAccessible: Bool = true) -> ModelMesh
+    {
         let mesh = ModelMesh()
         let horizontalSegments = max(1, horizontalSegments)
         let verticalSegments = max(1, verticalSegments)
@@ -291,7 +294,7 @@ public class PrimitiveMesh {
         var normals: [Vector3] = .init(repeating: Vector3(), count: vertexCount)
         var uvs: [Vector2] = .init(repeating: Vector2(), count: vertexCount)
 
-        for i in 0..<vertexCount {
+        for i in 0 ..< vertexCount {
             let x = i % horizontalCount
             let z = Int(Float(i) * horizontalCountReciprocal) | 0
 
@@ -304,7 +307,7 @@ public class PrimitiveMesh {
         }
 
         var offset = 0
-        for i in 0..<rectangleCount {
+        for i in 0 ..< rectangleCount {
             let x = i % horizontalSegments
             let y = Int(Float(i) * horizontalCountReciprocal) | 0
 
@@ -346,7 +349,8 @@ public class PrimitiveMesh {
                                       height: Float = 2,
                                       radialSegments: Int = 20,
                                       heightSegments: Int = 1,
-                                      noLongerAccessible: Bool = true) -> ModelMesh {
+                                      noLongerAccessible: Bool = true) -> ModelMesh
+    {
         let mesh = ModelMesh()
 
         let radialCount = radialSegments + 1
@@ -357,8 +361,7 @@ public class PrimitiveMesh {
         let torsoRectangleCount = radialSegments * heightSegments
         let capTriangleCount = radialSegments * 2
         let totalVertexCount = torsoVertexCount + 2 + capTriangleCount
-        var indices = [UInt32](repeating: 0, count: torsoRectangleCount * 6 + capTriangleCount * 3
-        )
+        var indices = [UInt32](repeating: 0, count: torsoRectangleCount * 6 + capTriangleCount * 3)
         let radialCountReciprocal = 1.0 / Float(radialCount)
         let radialSegmentsReciprocal = 1.0 / Float(radialSegments)
         let heightSegmentsReciprocal = 1.0 / Float(heightSegments)
@@ -376,7 +379,7 @@ public class PrimitiveMesh {
         let slope = radiusDiff / height
         let radiusSlope = radiusDiff / Float(heightSegments)
 
-        for i in 0..<torsoVertexCount {
+        for i in 0 ..< torsoVertexCount {
             let x = i % radialCount
             let y = Int(Float(i) * radialCountReciprocal) | 0
             let u = Float(x) * radialSegmentsReciprocal
@@ -398,7 +401,7 @@ public class PrimitiveMesh {
             uvs[i] = Vector2(u, 1 - v)
         }
 
-        for i in 0..<torsoRectangleCount {
+        for i in 0 ..< torsoRectangleCount {
             let x = i % radialSegments
             let y = Int(Float(i) * radialSegmentsReciprocal) | 0
 
@@ -441,7 +444,7 @@ public class PrimitiveMesh {
         let diameterTopReciprocal = 1.0 / (radiusTop * 2)
         let diameterBottomReciprocal = 1.0 / (radiusBottom * 2)
         let positionStride = radialCount * heightSegments
-        for i in 0..<radialSegments {
+        for i in 0 ..< radialSegments {
             let curPosBottom = positions[i]
             var curPosX = curPosBottom.x
             var curPosZ = curPosBottom.z
@@ -470,7 +473,7 @@ public class PrimitiveMesh {
         let topCapIndex = torsoVertexCount + 1
         let bottomIndicesIndex = torsoVertexCount + 2
         let topIndicesIndex = bottomIndicesIndex + 1
-        for i in 0..<radialSegments {
+        for i in 0 ..< radialSegments {
             let firstStride = i * 2
             let secondStride = i == radialSegments - 1 ? 0 : firstStride + 2
 
@@ -512,7 +515,8 @@ public class PrimitiveMesh {
                                    radialSegments: Int = 30,
                                    tubularSegments: Int = 30,
                                    arc: Float = 360,
-                                   noLongerAccessible: Bool = true) -> ModelMesh {
+                                   noLongerAccessible: Bool = true) -> ModelMesh
+    {
         let mesh = ModelMesh()
 
         let vertexCount = (radialSegments + 1) * (tubularSegments + 1)
@@ -527,8 +531,8 @@ public class PrimitiveMesh {
 
         var offset = 0
 
-        for i in 0...radialSegments {
-            for j in 0...tubularSegments {
+        for i in 0 ... radialSegments {
+            for j in 0 ... tubularSegments {
                 let u = Float(j / tubularSegments) * arc
                 let v = Float(i / radialSegments) * Float.pi * 2
                 let cosV = cos(v)
@@ -537,9 +541,9 @@ public class PrimitiveMesh {
                 let sinU = sin(u)
 
                 let position = Vector3(
-                        (radius + tubeRadius * cosV) * cosU,
-                        (radius + tubeRadius * cosV) * sinU,
-                        tubeRadius * sinV
+                    (radius + tubeRadius * cosV) * cosU,
+                    (radius + tubeRadius * cosV) * sinU,
+                    tubeRadius * sinV
                 )
                 positions[offset] = position
 
@@ -553,8 +557,8 @@ public class PrimitiveMesh {
         }
 
         offset = 0
-        for i in 1...radialSegments {
-            for j in 1...tubularSegments {
+        for i in 1 ... radialSegments {
+            for j in 1 ... tubularSegments {
                 let a = (tubularSegments + 1) * i + j - 1
                 let b = (tubularSegments + 1) * (i - 1) + j - 1
                 let c = (tubularSegments + 1) * (i - 1) + j
@@ -578,7 +582,7 @@ public class PrimitiveMesh {
 
         let outerRadius = radius + tubeRadius
         mesh.bounds = BoundingBox(Vector3(-outerRadius, -outerRadius, -tubeRadius),
-                Vector3(outerRadius, outerRadius, tubeRadius))
+                                  Vector3(outerRadius, outerRadius, tubeRadius))
 
         PrimitiveMesh._initialize(mesh, positions, normals, uvs, indices, noLongerAccessible)
         return mesh
@@ -596,7 +600,8 @@ public class PrimitiveMesh {
                                   height: Float = 2,
                                   radialSegments: Int = 20,
                                   heightSegments: Int = 1,
-                                  noLongerAccessible: Bool = true) -> ModelMesh {
+                                  noLongerAccessible: Bool = true) -> ModelMesh
+    {
         let mesh = ModelMesh()
 
         let radialCount = radialSegments + 1
@@ -606,8 +611,7 @@ public class PrimitiveMesh {
         let torsoVertexCount = radialCount * verticalCount
         let torsoRectangleCount = radialSegments * heightSegments
         let totalVertexCount = torsoVertexCount + 1 + radialSegments
-        var indices = [UInt32](repeating: 0, count: torsoRectangleCount * 6 + radialSegments * 3
-        )
+        var indices = [UInt32](repeating: 0, count: torsoRectangleCount * 6 + radialSegments * 3)
         let radialCountReciprocal = 1.0 / Float(radialCount)
         let radialSegmentsReciprocal = 1.0 / Float(radialSegments)
         let heightSegmentsReciprocal = 1.0 / Float(heightSegments)
@@ -623,7 +627,7 @@ public class PrimitiveMesh {
         let thetaRange = Float.pi * 2
         let slope = radius / height
 
-        for i in 0..<torsoVertexCount {
+        for i in 0 ..< torsoVertexCount {
             let x = i % radialCount
             let y = Int(Float(i) * radialCountReciprocal) | 0
             let u = Float(x) * radialSegmentsReciprocal
@@ -645,7 +649,7 @@ public class PrimitiveMesh {
             uvs[i] = Vector2(u, 1 - v)
         }
 
-        for i in 0..<torsoRectangleCount {
+        for i in 0 ..< torsoRectangleCount {
             let x = i % radialSegments
             let y = Int(Float(i) * radialSegmentsReciprocal) | 0
 
@@ -678,7 +682,7 @@ public class PrimitiveMesh {
         // Add bottom cap vertices
         var offset = torsoVertexCount + 1
         let diameterBottomReciprocal = 1.0 / (radius * 2)
-        for i in 0..<radialSegments {
+        for i in 0 ..< radialSegments {
             let curPos = positions[i]
             let curPosX = curPos.x
             let curPosZ = curPos.z
@@ -693,7 +697,7 @@ public class PrimitiveMesh {
         }
 
         let bottomIndicesIndex = torsoVertexCount + 1
-        for i in 0..<radialSegments {
+        for i in 0 ..< radialSegments {
             let firstStride = i
             let secondStride = i == radialSegments - 1 ? 0 : firstStride + 1
 
@@ -707,7 +711,7 @@ public class PrimitiveMesh {
         }
 
         mesh.bounds = BoundingBox(Vector3(-radius, -halfHeight, -radius),
-                Vector3(radius, halfHeight, radius))
+                                  Vector3(radius, halfHeight, radius))
 
         PrimitiveMesh._initialize(mesh, positions, normals, uvs, indices, noLongerAccessible)
         return mesh
@@ -725,7 +729,8 @@ public class PrimitiveMesh {
                                      height: Float = 2,
                                      radialSegments: Int = 6,
                                      heightSegments: Int = 1,
-                                     noLongerAccessible: Bool = true) -> ModelMesh {
+                                     noLongerAccessible: Bool = true) -> ModelMesh
+    {
         let mesh = ModelMesh()
 
         let radialSegments = max(2, radialSegments)
@@ -757,7 +762,7 @@ public class PrimitiveMesh {
         var indicesOffset = 0
 
         // create torso
-        for i in 0..<torsoVertexCount {
+        for i in 0 ..< torsoVertexCount {
             let x = i % radialCount
             let y = Int(Float(i) * radialCountReciprocal) | 0
             let u = Float(x) * radialSegmentsReciprocal
@@ -771,7 +776,7 @@ public class PrimitiveMesh {
             uvs[i] = Vector2(u, 1 - v)
         }
 
-        for i in 0..<torsoRectangleCount {
+        for i in 0 ..< torsoRectangleCount {
             let x = i % radialSegments
             let y = Int(Float(i) * radialSegmentsReciprocal) | 0
 
@@ -795,32 +800,32 @@ public class PrimitiveMesh {
         }
 
         PrimitiveMesh._createCapsuleCap(
-                radius,
-                height,
-                radialSegments,
-                thetaRange,
-                torsoVertexCount,
-                1,
-                &positions,
-                &normals,
-                &uvs,
-                &indices,
-                indicesOffset
+            radius,
+            height,
+            radialSegments,
+            thetaRange,
+            torsoVertexCount,
+            1,
+            &positions,
+            &normals,
+            &uvs,
+            &indices,
+            indicesOffset
         )
 
         indicesOffset += 6 * capRectangleCount
         PrimitiveMesh._createCapsuleCap(
-                radius,
-                height,
-                radialSegments,
-                -thetaRange,
-                torsoVertexCount + capVertexCount,
-                -1,
-                &positions,
-                &normals,
-                &uvs,
-                &indices,
-                indicesOffset
+            radius,
+            height,
+            radialSegments,
+            -thetaRange,
+            torsoVertexCount + capVertexCount,
+            -1,
+            &positions,
+            &normals,
+            &uvs,
+            &indices,
+            indicesOffset
         )
 
         mesh.bounds = BoundingBox(Vector3(-radius, -radius - halfHeight, -radius), Vector3(radius, radius + halfHeight, radius))
@@ -838,7 +843,8 @@ public class PrimitiveMesh {
                                           _ normals: inout [Vector3],
                                           _ uvs: inout [Vector2],
                                           _ indices: inout [UInt32],
-                                          _ indicesOffset: Int) {
+                                          _ indicesOffset: Int)
+    {
         var indicesOffset = indicesOffset
         let radialCount = radialSegments + 1
         let halfHeight = height * 0.5 * Float(posIndex)
@@ -847,7 +853,7 @@ public class PrimitiveMesh {
         let radialCountReciprocal = 1.0 / Float(radialCount)
         let radialSegmentsReciprocal = 1.0 / Float(radialSegments)
 
-        for i in 0..<capVertexCount {
+        for i in 0 ..< capVertexCount {
             let x = i % radialCount
             let y = Int(Float(i) * radialCountReciprocal) | 0
             let u = Float(x) * radialSegmentsReciprocal
@@ -866,7 +872,7 @@ public class PrimitiveMesh {
             uvs[index] = Vector2(u, v)
         }
 
-        for i in 0..<capRectangleCount {
+        for i in 0 ..< capRectangleCount {
             let x = i % radialSegments
             let y = Int(Float(i) * radialSegmentsReciprocal) | 0
 
@@ -897,7 +903,8 @@ extension PrimitiveMesh {
                                     _ normals: [Vector3],
                                     _ uvs: [Vector2],
                                     _ indices: [UInt32],
-                                    _ noLongerAccessible: Bool) {
+                                    _ noLongerAccessible: Bool)
+    {
         mesh.setPositions(positions: positions)
         mesh.setNormals(normals: normals)
         mesh.setUVs(uv: uvs)

@@ -57,5 +57,5 @@ public let kDirectionFront: Int = 1 << 5
 
 //! All direction.
 public let kDirectionAll: Int = kDirectionLeft | kDirectionRight |
-        kDirectionDown | kDirectionUp | kDirectionBack |
-        kDirectionFront
+    kDirectionDown | kDirectionUp | kDirectionBack |
+    kDirectionFront

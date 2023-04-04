@@ -9,7 +9,8 @@ import Math
 class KHR_texture_transform {
     static func parseEngineResource(_ schema: GLTFTextureTransform?,
                                     _ material: UnlitMaterial,
-                                    _ context: ParserContext) {
+                                    _: ParserContext)
+    {
         if let schema = schema {
             material.tilingOffset = Vector4(schema.scale.x, schema.scale.y, schema.offset.x, schema.offset.y)
         }
@@ -17,7 +18,8 @@ class KHR_texture_transform {
 
     static func parseEngineResource(_ schema: GLTFTextureTransform?,
                                     _ material: PBRBaseMaterial,
-                                    _ context: ParserContext) {
+                                    _: ParserContext)
+    {
         if let schema = schema {
             material.tilingOffset = Vector4(schema.scale.x, schema.scale.y, schema.offset.x, schema.offset.y)
         }

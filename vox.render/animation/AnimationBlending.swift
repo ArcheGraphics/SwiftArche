@@ -16,7 +16,7 @@ public class AnimationBlending: AnimationState {
         }
     }
 
-    public override init() {
+    override public init() {
         super.init()
         _nativeState = CAnimatorBlending()
     }

@@ -5,11 +5,11 @@
 //  property of any third parties.
 
 import Cocoa
-import vox_render
 import Math
+import vox_render
 import vox_toolkit
 
-fileprivate class AtmoicScript: Script {
+private class AtmoicScript: Script {
     var atomicCounter: ComputePass!
     private var _atomicBuffer: BufferView
 
@@ -17,23 +17,24 @@ fileprivate class AtmoicScript: Script {
         _atomicBuffer = BufferView(count: 1, stride: MemoryLayout<UInt32>.stride)
         super.init()
     }
-    
+
     final class AtomicEncoderData: EmptyClassType {
         var output: Resource<RetainedBufferDescriptor>?
     }
-    
+
     override func onBeginRender(_ camera: Camera, _ commandBuffer: MTLCommandBuffer) {
         let fg = Engine.fg
         let atomicResource = fg.addRetainedResource(for: RetainedBufferDescriptor.self, name: "atomicBuffer",
                                                     description: RetainedBufferDescriptor(count: 1, stride: MemoryLayout<UInt32>.stride),
                                                     actual: _atomicBuffer)
         camera.scene.shaderData.setData(with: "u_atomic", buffer: _atomicBuffer.buffer)
-        
+
         fg.addFrameTask(for: AtomicEncoderData.self, name: "atomic", commandBuffer: commandBuffer) { data, builder in
             data.output = builder.write(resource: atomicResource)
-        } execute: { [self] builder, commandBuffer in
+        } execute: { [self] _, commandBuffer in
             if let commandBuffer,
-                let commandEncoder = commandBuffer.makeComputeCommandEncoder() {
+               let commandEncoder = commandBuffer.makeComputeCommandEncoder()
+            {
                 atomicCounter.compute(commandEncoder: commandEncoder)
                 commandEncoder.endEncoding()
             }
@@ -67,22 +68,21 @@ class AtomicComputeApp: NSViewController {
         material.shader = Shader.create(in: Engine.library("app.shader"), vertexSource: "vertex_atomic",
                                         fragmentSource: "fragment_atomic")
         renderer.setMaterial(material)
-        
+
         let atomicCounter = ComputePass(scene)
         atomicCounter.threadsPerGridX = 2
         atomicCounter.threadsPerGridY = 2
         atomicCounter.threadsPerGridZ = 2
         atomicCounter.shader.append(ShaderPass(Engine.library("app.shader"), "compute_atomic"))
-        
+
         let atomicScript = cameraEntity.addComponent(AtmoicScript.self)
         atomicScript.atomicCounter = atomicCounter
-        
+
         Engine.run()
     }
-    
+
     override func viewDidDisappear() {
         super.viewDidDisappear()
         Engine.destroy()
     }
 }
-

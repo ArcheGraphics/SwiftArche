@@ -7,7 +7,5 @@
 import Metal
 
 public class MeshSubpass: Subpass {
-    public override func draw(pipeline: DevicePipeline, on encoder: inout RenderCommandEncoder) {
-        
-    }
+    override public func draw(pipeline _: DevicePipeline, on _: inout RenderCommandEncoder) {}
 }

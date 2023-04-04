@@ -5,18 +5,17 @@
 //  property of any third parties.
 
 import Cocoa
-import vox_render
 import Math
+import vox_render
 import vox_toolkit
 
-fileprivate struct Material {
+private struct Material {
     var name: String = ""
-    var baseColor: Color = Color()
+    var baseColor: Color = .init()
     var roughness: Float = 0
     var metallic: Float = 0
 
-    init() {
-    }
+    init() {}
 
     init(_ n: String, _ c: Color, _ r: Float, _ m: Float) {
         name = n
@@ -41,7 +40,7 @@ class PbrApp: NSViewController {
         Material("White", Color(1.0, 1.0, 1.0, 1.0), 0.1, 1.0),
         Material("Red", Color(1.0, 0.0, 0.0, 1.0), 0.1, 1.0),
         Material("Blue", Color(0.0, 0.0, 1.0, 1.0), 0.1, 1.0),
-        Material("Black", Color(0.0, 1.0, 1.0, 1.0), 0.1, 1.0)
+        Material("Black", Color(0.0, 1.0, 1.0, 1.0), 0.1, 1.0),
     ]
 
     override func viewDidLoad() {
@@ -71,8 +70,8 @@ class PbrApp: NSViewController {
         directionLight.intensity = 0.3
 
         let sphere = PrimitiveMesh.createSphere(radius: 0.5, segments: 30)
-        for i in 0..<7 {
-            for j in 0..<7 {
+        for i in 0 ..< 7 {
+            for j in 0 ..< 7 {
                 let sphereEntity = rootEntity.createChild("SphereEntity\(i)\(j)")
                 sphereEntity.transform.position = Vector3(Float(i - 3), Float(j - 3), 0)
                 let sphereMtl = PBRMaterial()
@@ -88,10 +87,9 @@ class PbrApp: NSViewController {
 
         Engine.run()
     }
-    
+
     override func viewDidDisappear() {
         super.viewDidDisappear()
         Engine.destroy()
     }
 }
-

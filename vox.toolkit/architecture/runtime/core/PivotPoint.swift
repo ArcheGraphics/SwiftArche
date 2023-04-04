@@ -4,8 +4,8 @@
 //  personal capacity and am not conveying any rights to any intellectual
 //  property of any third parties.
 
-import vox_render
 import Math
+import vox_render
 
 public enum PivotPoint {
     /// Transforms are applied from the center point of the selection bounding box.

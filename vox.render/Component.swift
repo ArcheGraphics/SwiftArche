@@ -13,7 +13,7 @@ open class Component: NSObject, Polymorphic, Serializable {
 
     private var _phasedActive: Bool = false
     private var _enabled: Bool = true
-    
+
     /// The entity which the component belongs to.
     public internal(set) var entity: Entity {
         get {
@@ -24,14 +24,14 @@ open class Component: NSObject, Polymorphic, Serializable {
         }
     }
 
-    public required override init() {
+    override public required init() {
         super.init()
     }
 
     /// Destroy this instance.
     func destroy() {
         _entity._removeComponent(self)
-        if (_entity.isActiveInHierarchy) {
+        if _entity.isActiveInHierarchy {
             if _enabled {
                 _onDisable()
             }
@@ -45,10 +45,10 @@ open class Component: NSObject, Polymorphic, Serializable {
             _enabled
         }
         set {
-            if (newValue != _enabled) {
+            if newValue != _enabled {
                 _enabled = newValue
-                if (_entity.isActiveInHierarchy) {
-                    if (newValue) {
+                if _entity.isActiveInHierarchy {
+                    if newValue {
                         _phasedActive = true
                         _onEnable()
 
@@ -63,39 +63,33 @@ open class Component: NSObject, Polymorphic, Serializable {
 
     /// The scene which the component's entity belongs to.
     public var scene: Scene {
-        get {
-            _entity.scene
-        }
+        _entity.scene
     }
 
-    func _onAwake() {
-    }
+    func _onAwake() {}
 
-    func _onEnable() {
-    }
+    func _onEnable() {}
 
-    func _onDisable() {
-    }
+    func _onDisable() {}
 
-    func _onDestroy() {
-    }
+    func _onDestroy() {}
 
     func _setActive(_ value: Bool) {
-        if (value) {
+        if value {
             // Awake condition is un awake && current entity is active in hierarchy
-            if (!_awoken && entity._isActiveInHierarchy) {
+            if !_awoken && entity._isActiveInHierarchy {
                 _awoken = true
                 _onAwake()
             }
             // Developer maybe do `isActive = false` in `onAwake` method
             // Enable condition is phased active state is false && current compoment is active in hierarchy
-            if (!_phasedActive && entity._isActiveInHierarchy && _enabled) {
+            if !_phasedActive && entity._isActiveInHierarchy && _enabled {
                 _phasedActive = true
                 _onEnable()
             }
         } else {
             // Disable condition is phased active state is true && current compoment is inActive in hierarchy
-            if (_phasedActive && !(entity._isActiveInHierarchy && _enabled)) {
+            if _phasedActive && !(entity._isActiveInHierarchy && _enabled) {
                 _phasedActive = false
                 _onDisable()
             }

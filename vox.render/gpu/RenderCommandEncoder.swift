@@ -73,7 +73,7 @@ public struct RenderCommandEncoder {
             _uploadScene = scene
         }
     }
-    
+
     public mutating func bind(fg: FrameGraph, _ pso: RenderPipelineState) {
         if _uploadPSO !== pso {
             _bind(pso: pso)
@@ -86,7 +86,7 @@ public struct RenderCommandEncoder {
 
     public mutating func bind(mesh: Mesh) {
         if _uploadMesh !== mesh {
-            for index in 0..<31 {
+            for index in 0 ..< 31 {
                 if let bufferView = mesh._vertexBufferBindings[index] {
                     handle.setVertexBuffer(bufferView.buffer, offset: 0, index: index)
                 }
@@ -99,11 +99,11 @@ public struct RenderCommandEncoder {
         let indexBufferBinding = mesh._indexBufferBinding
         if indexBufferBinding != nil {
             handle.drawIndexedPrimitives(type: subMesh.topology, indexCount: subMesh.count,
-                    indexType: indexBufferBinding!.format, indexBuffer: indexBufferBinding!.buffer,
-                    indexBufferOffset: 0, instanceCount: mesh._instanceCount)
+                                         indexType: indexBufferBinding!.format, indexBuffer: indexBufferBinding!.buffer,
+                                         indexBufferOffset: 0, instanceCount: mesh._instanceCount)
         } else {
             handle.drawPrimitives(type: subMesh.topology, vertexStart: subMesh.start,
-                    vertexCount: subMesh.count, instanceCount: mesh._instanceCount)
+                                  vertexCount: subMesh.count, instanceCount: mesh._instanceCount)
         }
     }
 

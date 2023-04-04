@@ -18,7 +18,7 @@ public extension SerializableEncodable {
     func encode(to encoder: Encoder) throws {
         // Get the container keyed by the SerializedCodingKeys defined by the propertyWrapper @Serialized
         var container = encoder.container(keyedBy: SerializedCodingKeys.self)
-        
+
         // Mirror for current model
         var mirror: Mirror? = Mirror(reflecting: self)
 
@@ -26,15 +26,15 @@ public extension SerializableEncodable {
         repeat {
             // If mirror is nil (no superclassMirror was nil), break
             guard let children = mirror?.children else { break }
-            
+
             // Try to encode each child
             for child in children {
                 guard let encodableKey = child.value as? EncodableProperty else { continue }
-                
+
                 // Get the propertyName of the property. By syntax, the property name is
                 // in the form: "_name". Dropping the "_" -> "name"
                 let propertyName = String((child.label ?? "").dropFirst())
-                
+
                 // propertyName here is not neceserly used in the `encodeValue` method
                 try encodableKey.encodeValue(from: &container, propertyName: propertyName)
             }

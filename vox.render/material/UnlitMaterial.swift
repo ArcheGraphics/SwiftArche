@@ -4,8 +4,8 @@
 //  personal capacity and am not conveying any rights to any intellectual
 //  property of any third parties.
 
-import Metal
 import Math
+import Metal
 
 /// Unlit Material.
 public class UnlitMaterial: BaseMaterial {
@@ -36,28 +36,28 @@ public class UnlitMaterial: BaseMaterial {
             }
         }
     }
-    
+
     public required init() {
         super.init()
         shader = ShaderFactory.unlit
         name = "unlit mat"
     }
-    
+
     override func createArgumentBuffer() {
         super.createArgumentBuffer()
-        
+
         var desc = MTLArgumentDescriptor()
         desc.index = 0
         desc.dataType = .float4
         desc.access = .readOnly
         shaderData.registerArgumentDescriptor(with: UnlitMaterial._baseColorProp, descriptor: desc)
-        
+
         desc = MTLArgumentDescriptor()
         desc.index = 1
         desc.dataType = .sampler
         desc.access = .readOnly
         shaderData.registerArgumentDescriptor(with: UnlitMaterial._baseSamplerProp, descriptor: desc)
-        
+
         desc = MTLArgumentDescriptor()
         desc.index = 2
         desc.dataType = .texture

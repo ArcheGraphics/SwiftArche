@@ -12,7 +12,7 @@ class TextureParser: Parser {
         let gltf = context.glTFResource.gltf!
         var textures: [MTLTexture] = []
         var samplers: [MTLSamplerDescriptor?] = []
-        for index in 0..<gltf.textures.count {
+        for index in 0 ..< gltf.textures.count {
             if context.textureIndex != nil && context.textureIndex! != index {
                 return
             }
@@ -26,10 +26,8 @@ class TextureParser: Parser {
                 switch sampler.magFilter {
                 case .nearest:
                     descriptor.magFilter = .nearest
-                    break
                 case .linear:
                     descriptor.magFilter = .linear
-                    break
                 default:
                     break
                 }
@@ -37,10 +35,8 @@ class TextureParser: Parser {
                 switch sampler.minMipFilter {
                 case .nearest, .nearestNearest, .nearestLinear:
                     descriptor.minFilter = .nearest
-                    break
                 case .linear, .linearLinear, .linearNearest:
                     descriptor.minFilter = .linear
-                    break
                 default:
                     break
                 }
@@ -48,10 +44,8 @@ class TextureParser: Parser {
                 switch sampler.minMipFilter {
                 case .nearest, .linear, .nearestNearest, .linearNearest:
                     descriptor.mipFilter = .nearest
-                    break
                 case .nearestLinear, .linearLinear:
                     descriptor.mipFilter = .linear
-                    break
                 default:
                     break
                 }
@@ -59,13 +53,10 @@ class TextureParser: Parser {
                 switch sampler.wrapS {
                 case .clampToEdge:
                     descriptor.sAddressMode = .clampToEdge
-                    break
                 case .mirroredRepeat:
                     descriptor.sAddressMode = .mirrorRepeat
-                    break
                 case .repeat:
                     descriptor.sAddressMode = .repeat
-                    break
                 default:
                     break
                 }
@@ -73,13 +64,10 @@ class TextureParser: Parser {
                 switch sampler.wrapT {
                 case .clampToEdge:
                     descriptor.tAddressMode = .clampToEdge
-                    break
                 case .mirroredRepeat:
                     descriptor.tAddressMode = .mirrorRepeat
-                    break
                 case .repeat:
                     descriptor.tAddressMode = .repeat
-                    break
                 default:
                     break
                 }
@@ -88,7 +76,7 @@ class TextureParser: Parser {
                 samplers.append(nil)
             }
         }
-        
+
         // generate all mipmap
         if let commandBuffer = Engine.commandQueue.makeCommandBuffer() {
             if let commandEncoder = commandBuffer.makeBlitCommandEncoder() {
@@ -99,7 +87,7 @@ class TextureParser: Parser {
             }
             commandBuffer.commit()
         }
-        
+
         context.glTFResource.samplers = samplers
         context.glTFResource.textures = textures
     }

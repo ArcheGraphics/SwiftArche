@@ -13,27 +13,19 @@ public struct BufferAllocation {
     private var _size: Int
 
     public var isEmpty: Bool {
-        get {
-            _size == 0
-        }
+        _size == 0
     }
 
     public var size: Int {
-        get {
-            _size
-        }
+        _size
     }
 
     public var offset: Int {
-        get {
-            _baseOffset
-        }
+        _baseOffset
     }
 
     public var buffer: MTLBuffer {
-        get {
-            _buffer
-        }
+        _buffer
     }
 
     public init(_ buffer: MTLBuffer, _ size: Int, _ offset: Int) {
@@ -49,7 +41,7 @@ public struct BufferAllocation {
             }
         }
     }
-    
+
     public func update<T>(_ array: [T], offset: Int = 0) {
         let byteCount = array.count * MemoryLayout<T>.size
         if byteCount + offset <= _size {
@@ -67,9 +59,7 @@ public class BufferBlock {
     private var _offset: Int = 0
 
     public var size: Int {
-        get {
-            _buffer.length
-        }
+        _buffer.length
     }
 
     public init(_ device: MTLDevice, size: Int, options: MTLResourceOptions) {
@@ -83,7 +73,7 @@ public class BufferBlock {
     public func allocate(_ size: Int) -> BufferAllocation {
         let aligned_offset = (_offset + _alignment - 1) & ~(_alignment - 1)
 
-        if (aligned_offset + size > _buffer.length) {
+        if aligned_offset + size > _buffer.length {
             fatalError("No more space available from the underlying buffer")
         }
         // Move the current offset and return an allocation
@@ -95,7 +85,6 @@ public class BufferBlock {
         _offset = 0
     }
 }
-
 
 /// A pool of buffer blocks for a specific usage.
 /// It may contain inactive blocks that can be recycled.
@@ -128,7 +117,7 @@ public class BufferPool {
     }
 
     public func requestBufferBlock(minimum_size: Int) -> BufferBlock {
-        for i in _active_buffer_block_count..<_buffer_blocks.count {
+        for i in _active_buffer_block_count ..< _buffer_blocks.count {
             if _buffer_blocks[i].size >= minimum_size {
                 _active_buffer_block_count += 1
                 return _buffer_blocks[i]

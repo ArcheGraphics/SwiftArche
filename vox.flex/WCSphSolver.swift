@@ -25,7 +25,7 @@ import vox_render
 open class WCSphSolver: SphSolverBase {
     // WCSPH solver properties
     private var _eosExponent: Float = 7.0
-    
+
     public var eosExponent: Float {
         get {
             _eosExponent
@@ -34,7 +34,7 @@ open class WCSphSolver: SphSolverBase {
             _eosExponent = max(newValue, 1.0)
         }
     }
-    
+
     public required init() {
         super.init()
         let sph = SphSystemData(maxLength: ParticleSystemSolverBase.maxLength)
@@ -43,18 +43,18 @@ open class WCSphSolver: SphSolverBase {
         sph.relativeKernelRadius = 1.8
         _particleSystemData = sph
     }
-    
-    public override func onBeginAdvanceTimeStep(_ commandBuffer: MTLCommandBuffer, _ timeStepInSeconds: Float) {
+
+    override public func onBeginAdvanceTimeStep(_ commandBuffer: MTLCommandBuffer, _: Float) {
         if let particleSystemData = particleSystemData as? SphSystemData {
             particleSystemData.buildNeighborSearcher(commandBuffer: commandBuffer, maxSearchRadius: particleSystemData.kernelRadius)
         }
     }
-    
-    public override func accumulateForces(_ commandBuffer: MTLCommandBuffer, _ timeStepInSeconds: Float) {
+
+    override public func accumulateForces(_ commandBuffer: MTLCommandBuffer, _ timeStepInSeconds: Float) {
         accumulateNonPressureForces(commandBuffer, timeStepInSeconds)
         accumulatePressureForce(commandBuffer, timeStepInSeconds)
     }
-    
+
     /// Accumulates the non-pressure forces to the forces array in the particle system.
     func accumulateNonPressureForces(_ commandBuffer: MTLCommandBuffer, _ timeStepInSeconds: Float) {
         super.accumulateForces(commandBuffer, timeStepInSeconds)
@@ -62,7 +62,7 @@ open class WCSphSolver: SphSolverBase {
     }
 
     /// Accumulates the pressure force to the forces array in the particle system.
-    func accumulatePressureForce(_ commandBuffer: MTLCommandBuffer, _ timeStepInSeconds: Float) {
+    func accumulatePressureForce(_ commandBuffer: MTLCommandBuffer, _: Float) {
         if let commandEncoder = commandBuffer.makeComputeCommandEncoder() {
             commandEncoder.label = "accumulate pressure force"
             computePressure(commandEncoder)
@@ -70,24 +70,24 @@ open class WCSphSolver: SphSolverBase {
             commandEncoder.endEncoding()
         }
     }
-    
+
     /// Computes the pressure.
-    func computePressure(_ encoder: MTLCommandEncoder) {}
+    func computePressure(_: MTLCommandEncoder) {}
 
     /// Accumulates the pressure force to the given \p pressureForces array.
-    func accumulatePressureForce(_ encoder: MTLCommandEncoder) {}
-    
+    func accumulatePressureForce(_: MTLCommandEncoder) {}
+
     /// Accumulates the viscosity force to the forces array in the particle system.
-    func accumulateViscosityForce(_ commandBuffer: MTLCommandBuffer) {}
-    
-    public override func onEndAdvanceTimeStep(_ commandBuffer: MTLCommandBuffer, _ timeStepInSeconds: Float) {
+    func accumulateViscosityForce(_: MTLCommandBuffer) {}
+
+    override public func onEndAdvanceTimeStep(_ commandBuffer: MTLCommandBuffer, _ timeStepInSeconds: Float) {
         if let commandEncoder = commandBuffer.makeComputeCommandEncoder() {
             commandEncoder.label = "post-process"
             computePseudoViscosity(commandEncoder, timeStepInSeconds)
             commandEncoder.endEncoding()
         }
     }
-    
+
     /// Computes pseudo viscosity.
-    func computePseudoViscosity(_ encoder: MTLCommandEncoder, _ timeStepInSeconds: Float) {}
+    func computePseudoViscosity(_: MTLCommandEncoder, _: Float) {}
 }

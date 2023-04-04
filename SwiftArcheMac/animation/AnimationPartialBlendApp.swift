@@ -5,22 +5,23 @@
 //  property of any third parties.
 
 import Cocoa
-import vox_render
-import Math
-import vox_toolkit
 import ImGui
+import Math
+import vox_render
+import vox_toolkit
 
-fileprivate class GUI: Script {
+private class GUI: Script {
     var lower_body_sampler: AnimationClip?
     var upper_body_sampler: AnimationClip?
     var lowerMask: Float = 0
     var upperMask: Float = 1
-    
+
     override func onGUI() {
         if let lower_body_sampler,
-           let upper_body_sampler {
+           let upper_body_sampler
+        {
             UIElement.Init()
-            
+
             ImGuiNewFrame()
             ImGuiSliderFloat("Clip Lower Weight", &lower_body_sampler.weight, 0.0, 1.0, nil, 1)
             ImGuiSliderFloat("Clip Lower Joint Mask", &lowerMask, 0.0, 1.0, nil, 1)
@@ -31,7 +32,7 @@ fileprivate class GUI: Script {
         }
         setupPerJointWeights()
     }
-    
+
     func setupPerJointWeights() {
         // Setup partial animation mask. This mask is defined by a weight_setting
         // assigned to each joint of the hierarchy. Joint to disable are set to a
@@ -40,7 +41,8 @@ fileprivate class GUI: Script {
         // (weight_setting and 1 - weight_setting) in order for a layer to select
         // joints that are rejected by the other layer.
         if let lower_body_sampler,
-           let upper_body_sampler {
+           let upper_body_sampler
+        {
             lower_body_sampler.setJointMasks(1.0)
             lower_body_sampler.setJointMasks(lowerMask, root: "Spine1")
             upper_body_sampler.setJointMasks(0.0)
@@ -53,14 +55,14 @@ class AnimationPartialBlendApp: NSViewController {
     var canvas: Canvas!
     var engine: Engine!
     var iblBaker: IBLBaker!
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
         canvas = Canvas(frame: view.frame)
         canvas.setParentView(view)
         engine = Engine(canvas: canvas)
         iblBaker = IBLBaker()
-        
+
         let scene = Engine.sceneManager.activeScene!
         let hdr = Engine.textureLoader.loadHDR(with: "assets/kloppenheim_06_4k.hdr")!
         iblBaker.bake(scene, with: hdr, size: 256, level: 3)
@@ -84,7 +86,7 @@ class AnimationPartialBlendApp: NSViewController {
                                   withExtension: "ozz",
                                   subdirectory: "assets/Animation")!
         animator.loadSkeleton(url)
-        
+
         url = Bundle.main.url(forResource: "pab_walk",
                               withExtension: "ozz",
                               subdirectory: "assets/Animation")!
@@ -96,20 +98,19 @@ class AnimationPartialBlendApp: NSViewController {
                               subdirectory: "assets/Animation")!
         let upper_body_sampler = AnimationClip(url)
         gui.upper_body_sampler = upper_body_sampler
-        
+
         let animationBlending = AnimationBlending()
         animationBlending.addChild(state: lower_body_sampler)
         animationBlending.addChild(state: upper_body_sampler)
         animator.rootState = animationBlending
-        
+
         characterEntity.addComponent(AnimationVisualizer.self)
 
         Engine.run()
     }
-    
+
     override func viewDidDisappear() {
         super.viewDidDisappear()
         Engine.destroy()
     }
 }
-

@@ -13,7 +13,7 @@ public class EventWrapper {
     private let _event: MTLEvent
     /// filters calls counter
     private var _signalCounter: UInt64
-    
+
     public init(with device: MTLDevice) {
         // create event
         _event = device.makeEvent()!
@@ -27,7 +27,7 @@ public class EventWrapper {
         // Wait for the event to be signaled
         commandBuffer.encodeWaitForEvent(_event, value: _signalCounter)
     }
-    
+
     /// signal an event
     public func signal(for commandBuffer: MTLCommandBuffer) {
         assert(commandBuffer.device === _event.device)

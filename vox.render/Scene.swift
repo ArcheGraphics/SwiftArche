@@ -4,8 +4,8 @@
 //  personal capacity and am not conveying any rights to any intellectual
 //  property of any third parties.
 
-import Metal
 import Math
+import Metal
 
 public final class Scene: NSObject, Serializable {
     private static let _fogColorProperty = "u_fogColor"
@@ -16,40 +16,40 @@ public final class Scene: NSObject, Serializable {
     public var name: String
 
     /// The background of the scene.
-    public var background: Background = Background()
+    public var background: Background = .init()
     /// Scene-related shader data.
-    public var shaderData: ShaderData = ShaderData(group: .Scene)
+    public var shaderData: ShaderData = .init(group: .Scene)
 
     /// If cast shadows.
     @Serialized(default: true)
     public var castShadows: Bool
-    
+
     /// The resolution of the shadow maps.
     @Serialized(default: .High)
     public var shadowResolution: ShadowResolution
-    
+
     /// The splits of two cascade distribution.
     @Serialized(default: 1.0 / 3.0)
     public var shadowTwoCascadeSplits: Float
-    
+
     /// The splits of four cascade distribution.
     @Serialized(default: Vector3(1.0 / 4, 1.0 / 4, 1.0 / 4))
     public var shadowFourCascadeSplits: Vector3
-    
+
     /// Max Shadow distance.
     @Serialized(default: 50)
     public var shadowDistance: Float
-    
+
     /// Number of cascades to use for directional light shadows.
     @Serialized(default: .NoCascades)
     public var shadowCascades: ShadowCascadesMode
-    
+
     @Serialized("rootEntities", default: [])
     var _rootEntities: [Entity]
-    
+
     var _activeCameras: [Camera] = []
     var _isActiveInEngine: Bool = false
-    var _globalShaderMacro: ShaderMacroCollection = ShaderMacroCollection()
+    var _globalShaderMacro: ShaderMacroCollection = .init()
     var _sunLight: Light?
 
     private var _ambientLight: AmbientLight!
@@ -58,9 +58,7 @@ public final class Scene: NSObject, Serializable {
 
     /// Get the post-process manager.
     public var postprocessManager: PostprocessManager {
-        get {
-            _postprocessManager
-        }
+        _postprocessManager
     }
 
     /// Ambient light.
@@ -70,14 +68,14 @@ public final class Scene: NSObject, Serializable {
         }
         set {
             let lastAmbientLight = _ambientLight
-            if (lastAmbientLight !== newValue) {
+            if lastAmbientLight !== newValue {
                 lastAmbientLight?._removeFromScene(self)
                 newValue._addToScene(self)
                 _ambientLight = newValue
             }
         }
     }
-    
+
     /// Fog start.
     @Serialized(default: 0)
     public var fogStart: Float {
@@ -127,22 +125,18 @@ public final class Scene: NSObject, Serializable {
 
     /// Count of root entities.
     public var rootEntitiesCount: Int {
-        get {
-            _rootEntities.count
-        }
+        _rootEntities.count
     }
 
     /// Root entity collection.
     public var rootEntities: [Entity] {
-        get {
-            _rootEntities
-        }
+        _rootEntities
     }
 
     /// Create scene.
     /// - Parameters:
     ///   - name: Name
-    public override init() {
+    override public init() {
         super.init()
 
         ambientLight = AmbientLight()
@@ -153,13 +147,13 @@ public final class Scene: NSObject, Serializable {
         shaderData.enableMacro(CASCADED_COUNT.rawValue, (shadowCascades.rawValue, .int))
         _computeLinearFogParams(fogStart, fogEnd)
         _computeExponentialFogParams(fogDensity)
-        
+
         var desc = MTLArgumentDescriptor()
         desc.index = 0
         desc.dataType = .float4
         desc.access = .readOnly
         shaderData.registerArgumentDescriptor(with: Scene._fogColorProperty, descriptor: desc)
-        
+
         desc = MTLArgumentDescriptor()
         desc.index = 1
         desc.dataType = .float4
@@ -167,7 +161,7 @@ public final class Scene: NSObject, Serializable {
         shaderData.registerArgumentDescriptor(with: Scene._fogParamProperty, descriptor: desc)
         shaderData.createArgumentBuffer(with: "u_fog")
     }
-    
+
     deinit {
         destroy()
     }
@@ -200,25 +194,25 @@ public final class Scene: NSObject, Serializable {
         let isRoot = entity._isRoot
 
         // let entity become root
-        if (!isRoot) {
+        if !isRoot {
             entity._isRoot = true
             entity._removeFromParent()
         }
 
         // add or remove from scene's rootEntities
         let oldScene = entity._scene
-        if (oldScene !== self) {
-            if ((oldScene != nil) && isRoot) {
+        if oldScene !== self {
+            if (oldScene != nil) && isRoot {
                 oldScene!._removeFromEntityList(entity)
             }
             _addToRootEntityList(index: nil, rootEntity: entity)
             Entity._traverseSetOwnerScene(entity, self)
-        } else if (!isRoot) {
+        } else if !isRoot {
             _addToRootEntityList(index: nil, rootEntity: entity)
         }
 
         // process entity active/inActive
-        if (_isActiveInEngine) {
+        if _isActiveInEngine {
             if !entity._isActiveInHierarchy && entity._isActive {
                 entity._processActive()
             }
@@ -237,25 +231,25 @@ public final class Scene: NSObject, Serializable {
         let isRoot = entity._isRoot
 
         // let entity become root
-        if (!isRoot) {
+        if !isRoot {
             entity._isRoot = true
             entity._removeFromParent()
         }
 
         // add or remove from scene's rootEntities
         let oldScene = entity._scene
-        if (oldScene !== self) {
-            if ((oldScene != nil) && isRoot) {
+        if oldScene !== self {
+            if (oldScene != nil) && isRoot {
                 oldScene!._removeFromEntityList(entity)
             }
             _addToRootEntityList(index: index, rootEntity: entity)
             Entity._traverseSetOwnerScene(entity, self)
-        } else if (!isRoot) {
+        } else if !isRoot {
             _addToRootEntityList(index: index, rootEntity: entity)
         }
 
         // process entity active/inActive
-        if (_isActiveInEngine) {
+        if _isActiveInEngine {
             if !entity._isActiveInHierarchy && entity._isActive {
                 entity._processActive()
             }
@@ -269,7 +263,7 @@ public final class Scene: NSObject, Serializable {
     /// Remove an entity.
     /// - Parameter entity: The root entity to remove
     public func removeRootEntity(_ entity: Entity) {
-        if (entity._isRoot && entity._scene === self) {
+        if entity._isRoot && entity._scene === self {
             _removeFromEntityList(entity)
             entity._isRoot = false
             if _isActiveInEngine && entity._isActiveInHierarchy {
@@ -291,10 +285,10 @@ public final class Scene: NSObject, Serializable {
     /// - Returns: Entity
     public func findEntityByName(_ name: String) -> Entity? {
         for root in _rootEntities {
-          let entity = root.findByName(name)
-          if entity != nil {
-            return entity
-          }
+            let entity = root.findByName(name)
+            if entity != nil {
+                return entity
+            }
         }
         return nil
     }
@@ -304,20 +298,20 @@ public final class Scene: NSObject, Serializable {
     /// - Returns: Entity
     public func findEntityByPath(_ path: String) -> Entity? {
         let splits = path.split(separator: "/")
-        for i in 0..<rootEntitiesCount {
+        for i in 0 ..< rootEntitiesCount {
             if let findEntity = getRootEntity(i) {
-                if (findEntity.name != splits[0]) {
+                if findEntity.name != splits[0] {
                     continue
                 }
-                
+
                 var result: [Entity] = [findEntity]
-                for j in 1..<splits.count {
+                for j in 1 ..< splits.count {
                     result = Entity._findChildByName(result, String(splits[j]))
                     if result.isEmpty {
                         break
                     }
                 }
-                
+
                 if !result.isEmpty {
                     return result[0]
                 }
@@ -327,21 +321,21 @@ public final class Scene: NSObject, Serializable {
     }
 }
 
-//MARK: - Internal Members
+// MARK: - Internal Members
 
 extension Scene {
-    internal func _attachRenderCamera(_ camera: Camera) {
+    func _attachRenderCamera(_ camera: Camera) {
         let index = _activeCameras.firstIndex { cam in
             cam === camera
         }
-        if (index == nil) {
+        if index == nil {
             _activeCameras.append(camera)
         } else {
             logger.warning("Camera already attached.")
         }
     }
 
-    internal func _detachRenderCamera(_ camera: Camera) {
+    func _detachRenderCamera(_ camera: Camera) {
         _activeCameras.removeAll { cam in
             cam === camera
         }
@@ -350,9 +344,9 @@ extension Scene {
     func _processActive(_ active: Bool) {
         _isActiveInEngine = active
         let rootEntities = _rootEntities
-        for i in 0..<rootEntities.count {
+        for i in 0 ..< rootEntities.count {
             let entity = rootEntities[i]
-            if (entity._isActive) {
+            if entity._isActive {
                 active ? entity._processActive() : entity._processInActive()
             }
         }
@@ -367,11 +361,11 @@ extension Scene {
 
         lightManager._updateShaderData(shaderData)
         let sunLightIndex = lightManager._getSunLightIndex()
-        if (sunLightIndex != -1) {
+        if sunLightIndex != -1 {
             _sunLight = lightManager._directLights.get(sunLightIndex)
         }
 
-        if (castShadows && _sunLight != nil && _sunLight!.shadowType != ShadowType.None) {
+        if castShadows, _sunLight != nil, _sunLight!.shadowType != ShadowType.None {
             shaderData.enableMacro(CASCADED_SHADOW_MAP.rawValue)
             shaderData.enableMacro(SHADOW_MODE.rawValue, (_sunLight!.shadowType.rawValue, .int))
         } else {
@@ -380,36 +374,36 @@ extension Scene {
 
         // union scene and camera macro.
         ShaderMacroCollection.unionCollection(
-                Engine._macroCollection,
-                shaderData._macroCollection,
-                &_globalShaderMacro
+            Engine._macroCollection,
+            shaderData._macroCollection,
+            &_globalShaderMacro
         )
     }
 
     func _removeFromEntityList(_ entity: Entity) {
         _rootEntities.remove(at: entity._siblingIndex)
-        for index in entity._siblingIndex..<rootEntities.count {
+        for index in entity._siblingIndex ..< rootEntities.count {
             _rootEntities[index]._siblingIndex = _rootEntities[index]._siblingIndex - 1
         }
         entity._siblingIndex = -1
     }
 }
 
-//MARK: - Private Members
+// MARK: - Private Members
 
 extension Scene {
     private func _addToRootEntityList(index: Int?, rootEntity: Entity) {
         let rootEntityCount = _rootEntities.count
-        if (index == nil) {
+        if index == nil {
             rootEntity._siblingIndex = rootEntityCount
             _rootEntities.append(rootEntity)
         } else {
-            if (index! < 0 || index! > rootEntityCount) {
+            if index! < 0 || index! > rootEntityCount {
                 fatalError()
             }
             rootEntity._siblingIndex = index!
             _rootEntities[index!] = rootEntity
-            for i in index! + 1..<rootEntityCount + 1 {
+            for i in index! + 1 ..< rootEntityCount + 1 {
                 _rootEntities[i]._siblingIndex = _rootEntities[i]._siblingIndex + 1
             }
         }

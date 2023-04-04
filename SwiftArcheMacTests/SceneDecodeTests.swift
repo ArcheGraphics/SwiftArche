@@ -4,8 +4,8 @@
 //  personal capacity and am not conveying any rights to any intellectual
 //  property of any third parties.
 
-import XCTest
 @testable import vox_render
+import XCTest
 
 final class SceneDecodeTests: XCTestCase {
     var canvas: Canvas!
@@ -15,7 +15,7 @@ final class SceneDecodeTests: XCTestCase {
     override func setUpWithError() throws {
         canvas = Canvas(frame: CGRect())
         engine = Engine(canvas: canvas)
-        
+
         jsonEncode = JSONEncoder()
         jsonEncode.outputFormatting = .prettyPrinted
     }
@@ -32,11 +32,11 @@ final class SceneDecodeTests: XCTestCase {
 
         let data = try! jsonEncode.encode(scene)
         // print(String(data: data, encoding: .utf8)!)
-        
+
         let newScene = try! Engine.makeDecoder().decode(Scene.self, from: data)
         XCTAssertEqual(scene.name, newScene.name)
     }
-    
+
     func testSceneWithEntityDecode() throws {
         let scene = Engine.sceneManager.activeScene!
         scene.name = "SceneName"
@@ -45,11 +45,11 @@ final class SceneDecodeTests: XCTestCase {
 
         let data = try! jsonEncode.encode(scene)
         // print(String(data: data, encoding: .utf8)!)
-        
+
         let newScene = try! Engine.makeDecoder().decode(Scene.self, from: data)
         XCTAssertEqual(rootEntity.name, newScene.rootEntities[0].name)
     }
-    
+
     func testSceneWithChildEntityDecode() throws {
         let scene = Engine.sceneManager.activeScene!
         scene.name = "SceneName"
@@ -58,10 +58,10 @@ final class SceneDecodeTests: XCTestCase {
         let childEntity = rootEntity.createChild("ChildName")
         let camera = childEntity.addComponent(Camera.self)
         camera.fieldOfView = 10
-        
+
         let data = try! jsonEncode.encode(scene)
         // print(String(data: data, encoding: .utf8)!)
-        
+
         let newScene = try! Engine.makeDecoder().decode(Scene.self, from: data)
         XCTAssertEqual(childEntity.name, newScene.rootEntities[0].children[0].name)
     }

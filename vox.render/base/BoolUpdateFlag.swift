@@ -9,7 +9,7 @@ import Foundation
 public class BoolUpdateFlag: UpdateFlag {
     public var flag: Bool = true
 
-    public override func dispatch(bit: Int?, param: AnyObject?) {
+    override public func dispatch(bit _: Int?, param _: AnyObject?) {
         flag = true
     }
 }

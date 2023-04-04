@@ -13,9 +13,9 @@ public class StencilState {
     /// Write the reference value of the stencil buffer.
     public var referenceValue: UInt32 = 0
     /// Specifying a bit-wise mask that is used to AND the reference value and the stored stencil value when the test is done.
-    public var mask: UInt32 = 0xff
+    public var mask: UInt32 = 0xFF
     /// Specifying a bit mask to enable or disable writing of individual bits in the stencil planes.
-    public var writeMask: UInt32 = 0xff
+    public var writeMask: UInt32 = 0xFF
     /// The comparison function of the reference value of the front face of the geometry and the current buffer storage value.
     public var compareFunctionFront: MTLCompareFunction = .always
     /// The comparison function of the reference value of the back of the geometry and the current buffer storage value.
@@ -34,8 +34,9 @@ public class StencilState {
     public var zFailOperationBack: MTLStencilOperation = .keep
 
     func _apply(_ depthStencilDescriptor: MTLDepthStencilDescriptor,
-                _ renderEncoder: MTLRenderCommandEncoder) {
-        if (enabled) {
+                _ renderEncoder: MTLRenderCommandEncoder)
+    {
+        if enabled {
             // apply stencil func.
             depthStencilDescriptor.frontFaceStencil.stencilCompareFunction = compareFunctionFront
             depthStencilDescriptor.frontFaceStencil.readMask = mask

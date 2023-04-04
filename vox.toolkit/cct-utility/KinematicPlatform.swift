@@ -4,8 +4,8 @@
 //  personal capacity and am not conveying any rights to any intellectual
 //  property of any third parties.
 
-import vox_render
 import Math
+import vox_render
 
 public class KinematicPlatform: Script {
     // PT: Captures the state of the platform. We decouple this data from the platform itself so that the
@@ -22,7 +22,7 @@ public class KinematicPlatform: Script {
         case LOOP_FLIP
         case LOOP_WRAP
     }
-    
+
     var state = PlatformState()
     var platform: DynamicCollider?
 
@@ -34,32 +34,34 @@ public class KinematicPlatform: Script {
     public var travelTime: Float = 0
     /// rotation speed
     public var rotationSpeed: Float = 0
-    
+
     /// previous position
     public var prePosition: Vector3 {
         state.prevPosition
     }
+
     /// previous rotation
     public var preRotation: Quaternion {
         state.prevRotation
     }
+
     /// points segment count
     public var segmentsCount: Int {
         points.count - 1
     }
-    
+
     public func setDefaultTravelTime(platformSpeed: Float) {
         let pathLength = computeLength()
         travelTime = pathLength / platformSpeed
     }
-    
+
     public func reset() {
         state = PlatformState()
     }
 
     public func computeLength() -> Float {
         var totalLength: Float = 0.0
-        for i in 0..<segmentsCount {
+        for i in 0 ..< segmentsCount {
             let a = i % points.count
             let b = (i + 1) % points.count
             totalLength += (points[b] - points[a]).length()
@@ -81,38 +83,38 @@ public class KinematicPlatform: Script {
         let coeff = 1.0 / totalLength
 
         var currentLength: Float = 0.0
-        for i in 0..<segmentsCount {
+        for i in 0 ..< segmentsCount {
             let a = i % points.count
             let b = (i + 1) % points.count
             let length = coeff * (points[b] - points[a]).length()
 
-            if (t >= currentLength && t <= currentLength + length) {
+            if t >= currentLength && t <= currentLength + length {
                 // Desired point is on current segment
                 // currentLength maps to 0.0
                 // currentLength+length maps to 1.0
-                let nt = (t - currentLength) / (length)
+                let nt = (t - currentLength) / length
                 return getPoint(&p, seg: i, t: nt)
             }
             currentLength += length
         }
         return false
     }
-    
-    public override func onStart() {
+
+    override public func onStart() {
         platform = entity.getComponent(DynamicCollider.self)
         if let platform {
             platform.isKinematic = true
         }
     }
 
-    public override func onUpdate(_ deltaTime: Float) {
+    override public func onUpdate(_ deltaTime: Float) {
         state.currentTime += deltaTime
         state.currentRotationTime += deltaTime
 
         // Compute current position on the path
         var t = state.currentTime / travelTime
-        if (t > 1.0) {
-            if (mode == .LOOP_FLIP) {
+        if t > 1.0 {
+            if mode == .LOOP_FLIP {
                 state.flip = !state.flip
                 // Make it loop
                 state.currentTime = fmodf(state.currentTime, travelTime)
@@ -124,7 +126,7 @@ public class KinematicPlatform: Script {
         }
 
         var currentPos = Vector3()
-        if (getPoint(&currentPos, t: state.flip ? 1.0 - t : t)) {
+        if getPoint(&currentPos, t: state.flip ? 1.0 - t : t) {
             state.prevPosition = currentPos
             state.prevRotation = entity.transform.worldRotationQuaternion * Quaternion.rotationX(rad: state.currentRotationTime * rotationSpeed)
             if let platform {

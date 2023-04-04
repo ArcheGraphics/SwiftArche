@@ -4,17 +4,17 @@
 //  personal capacity and am not conveying any rights to any intellectual
 //  property of any third parties.
 
-import Metal
 import Math
+import Metal
 
 public class MeshRenderer: Renderer {
     enum MeshRendererUpdateFlags: Int {
         /// VertexElementMacro.
-        case  VertexElementMacro = 0x2
+        case VertexElementMacro = 0x2
         /// All.
-        case  All = 0x3
+        case All = 0x3
     }
-    
+
     var _mesh: Mesh?
 
     /// Mesh assigned to the renderer.
@@ -24,12 +24,12 @@ public class MeshRenderer: Renderer {
         }
         set {
             let lastMesh = _mesh
-            if (lastMesh != nil) {
+            if lastMesh != nil {
                 let listener = ListenerUpdateFlag()
                 listener.listener = _onMeshChanged
                 lastMesh!._updateFlagManager.removeFlag(flag: listener)
             }
-            if (newValue != nil) {
+            if newValue != nil {
                 let listener = ListenerUpdateFlag()
                 listener.listener = _onMeshChanged
                 newValue!._updateFlagManager.addFlag(flag: listener)
@@ -41,7 +41,7 @@ public class MeshRenderer: Renderer {
 
     override func _updateBounds(_ worldBounds: inout BoundingBox) {
         let mesh = _mesh
-        if (mesh != nil) {
+        if mesh != nil {
             let localBounds = mesh!.bounds
             let worldMatrix = _entity.transform.worldMatrix
             worldBounds = BoundingBox.transform(source: localBounds, matrix: worldMatrix)
@@ -51,8 +51,8 @@ public class MeshRenderer: Renderer {
     }
 
     override func _render(_ devicePipeline: DevicePipeline) {
-        if (_mesh != nil) {
-            if (_dirtyUpdateFlag & MeshRendererUpdateFlags.VertexElementMacro.rawValue != 0) {
+        if _mesh != nil {
+            if _dirtyUpdateFlag & MeshRendererUpdateFlags.VertexElementMacro.rawValue != 0 {
                 let vertexDescriptor = mesh!._vertexDescriptor
                 shaderData.disableMacro(HAS_UV.rawValue)
                 shaderData.disableMacro(HAS_NORMAL.rawValue)
@@ -75,14 +75,14 @@ public class MeshRenderer: Renderer {
             }
 
             let subMeshes = mesh!.subMeshes
-            for i in 0..<subMeshes.count {
+            for i in 0 ..< subMeshes.count {
                 let material: Material?
                 if i < _materials.count {
                     material = _materials[i]
                 } else {
                     material = nil
                 }
-                if (material != nil) {
+                if material != nil {
                     let renderData = MeshRenderData(renderer: self, material: material!,
                                                     mesh: mesh!, subMesh: subMeshes[i])
                     devicePipeline.pushRenderData(renderData)
@@ -91,7 +91,7 @@ public class MeshRenderer: Renderer {
         }
     }
 
-    private func _onMeshChanged(type: Int?, object: AnyObject?) {
+    private func _onMeshChanged(type: Int?, object _: AnyObject?) {
         if type! & MeshModifyFlags.Bounds.rawValue != 0 {
             _dirtyUpdateFlag |= RendererUpdateFlags.WorldVolume.rawValue
         }

@@ -6,9 +6,9 @@
 
 import Math
 #if os(iOS)
-import UIKit
+    import UIKit
 #else
-import Cocoa
+    import Cocoa
 #endif
 
 class PointerManager {
@@ -16,91 +16,91 @@ class PointerManager {
     var firePointerEvent: Bool = true
 
     // MARK: - IOS
-#if os(iOS)
-    var _pointers: [UITouch] = []
-    private var _nativeEvents: [UITouch] = []
 
-    func _onPointerEvent(_ evt: UITouch) {
-        _nativeEvents.append(evt)
-    }
+    #if os(iOS)
+        var _pointers: [UITouch] = []
+        private var _nativeEvents: [UITouch] = []
 
-    func isPointerTrigger(_ pointerButton: UITouch.Phase) -> Bool {
-        for evt in _pointers {
-            if evt.phase == pointerButton {
-                return true
-            }
+        func _onPointerEvent(_ evt: UITouch) {
+            _nativeEvents.append(evt)
         }
-        return false
-    }
 
-    func fireiOSPointerEvent() {
-
-    }
-#else
-    //MARK: - MACOS
-    var _pointers: [NSEvent] = []
-    private var _nativeEvents: [NSEvent] = []
-
-    func _onPointerEvent(_ evt: NSEvent) {
-        _nativeEvents.append(evt)
-    }
-
-    func isPointerTrigger(_ pointerButton: NSEvent.EventType) -> Bool {
-        for evt in _pointers {
-            if evt.type == pointerButton {
-                return true
-            }
-        }
-        return false
-    }
-
-    func fireMacPointerEvent() {
-        let raycast = { [self] (event: NSEvent) -> HitResult? in
-            let cameras = Engine.sceneManager.activeScene?._activeCameras;
-            if let cameras = cameras {
-                for camera in cameras {
-                    if (!camera.enabled || camera.renderTarget != nil) {
-                        continue;
-                    }
-                    _ = camera.screenPointToRay(event.screenPoint(Engine.canvas), _ray)
-                    return Engine.physicsManager.raycast(_ray, distance: Float.greatestFiniteMagnitude, layerMask: camera.cullingMask)
+        func isPointerTrigger(_ pointerButton: UITouch.Phase) -> Bool {
+            for evt in _pointers {
+                if evt.phase == pointerButton {
+                    return true
                 }
             }
-            return nil
+            return false
         }
 
-        // fire event
-        for event in _pointers {
-            switch event.type {
-            case .leftMouseDown, .rightMouseDown, .otherMouseDown,
-                 .leftMouseUp, .rightMouseUp, .otherMouseUp:
-                if let hitResult = raycast(event) {
-                    let scripts = hitResult.entity!._scripts;
-                    for i in 0..<scripts.count {
-                        let script = scripts.get(i)!
-                        if !script._waitHandlingInValid {
-                            script.onPointerCast(hitResult, event.type.rawValue)
+        func fireiOSPointerEvent() {}
+    #else
+
+        // MARK: - MACOS
+
+        var _pointers: [NSEvent] = []
+        private var _nativeEvents: [NSEvent] = []
+
+        func _onPointerEvent(_ evt: NSEvent) {
+            _nativeEvents.append(evt)
+        }
+
+        func isPointerTrigger(_ pointerButton: NSEvent.EventType) -> Bool {
+            for evt in _pointers {
+                if evt.type == pointerButton {
+                    return true
+                }
+            }
+            return false
+        }
+
+        func fireMacPointerEvent() {
+            let raycast = { [self] (event: NSEvent) -> HitResult? in
+                let cameras = Engine.sceneManager.activeScene?._activeCameras
+                if let cameras = cameras {
+                    for camera in cameras {
+                        if !camera.enabled || camera.renderTarget != nil {
+                            continue
+                        }
+                        _ = camera.screenPointToRay(event.screenPoint(Engine.canvas), _ray)
+                        return Engine.physicsManager.raycast(_ray, distance: Float.greatestFiniteMagnitude, layerMask: camera.cullingMask)
+                    }
+                }
+                return nil
+            }
+
+            // fire event
+            for event in _pointers {
+                switch event.type {
+                case .leftMouseDown, .rightMouseDown, .otherMouseDown,
+                     .leftMouseUp, .rightMouseUp, .otherMouseUp:
+                    if let hitResult = raycast(event) {
+                        let scripts = hitResult.entity!._scripts
+                        for i in 0 ..< scripts.count {
+                            let script = scripts.get(i)!
+                            if !script._waitHandlingInValid {
+                                script.onPointerCast(hitResult, event.type.rawValue)
+                            }
                         }
                     }
+                default:
+                    break
                 }
-                break
-            default:
-                break
             }
         }
-    }
-#endif
+    #endif
 
     func _update() {
         _pointers = _nativeEvents
         _nativeEvents = []
 
         if firePointerEvent {
-#if os(iOS)
-            fireiOSPointerEvent()
-#else
-            fireMacPointerEvent()
-#endif
+            #if os(iOS)
+                fireiOSPointerEvent()
+            #else
+                fireMacPointerEvent()
+            #endif
         }
     }
 }

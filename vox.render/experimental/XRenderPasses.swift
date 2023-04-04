@@ -25,4 +25,4 @@ enum XRenderPass {
     case ForwardTransparent
 
     case Count
-};
+}

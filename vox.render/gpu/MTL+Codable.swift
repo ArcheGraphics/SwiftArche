@@ -6,17 +6,13 @@
 
 import Metal
 
-extension MTLCPUCacheMode: Codable {
-}
+extension MTLCPUCacheMode: Codable {}
 
-extension MTLTextureUsage: Codable {
-}
+extension MTLTextureUsage: Codable {}
 
-extension MTLTextureType: Codable {
-}
+extension MTLTextureType: Codable {}
 
-extension MTLPixelFormat: Codable {
-}
+extension MTLPixelFormat: Codable {}
 
 extension MTLOrigin: Codable {
     private enum CodingKeys: String, CodingKey {

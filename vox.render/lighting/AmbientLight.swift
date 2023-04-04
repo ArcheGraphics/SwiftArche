@@ -4,8 +4,8 @@
 //  personal capacity and am not conveying any rights to any intellectual
 //  property of any third parties.
 
-import Metal
 import Math
+import Metal
 
 /// Ambient light.
 public class AmbientLight: Serializable {
@@ -22,7 +22,7 @@ public class AmbientLight: Serializable {
 
     private var _scenes: [Scene] = []
 
-    required public init() {
+    public required init() {
         _sampler.mipFilter = .linear
         _sampler.minFilter = .linear
         _sampler.magFilter = .linear
@@ -45,7 +45,7 @@ public class AmbientLight: Serializable {
 
     /// Diffuse reflection solid color.
     /// - Remark: Effective when diffuse reflection mode is `DiffuseMode.SolidColor`.
-    public var diffuseSolidColor: Color = Color(0.212, 0.227, 0.259) {
+    public var diffuseSolidColor: Color = .init(0.212, 0.227, 0.259) {
         didSet {
             for scene in _scenes {
                 scene.shaderData.setData(with: AmbientLight._diffuseColorProperty, data: diffuseSolidColor.toLinear())
@@ -101,45 +101,45 @@ public class AmbientLight: Serializable {
         desc.dataType = .float4
         desc.access = .readOnly
         shaderData.registerArgumentDescriptor(with: AmbientLight._diffuseColorProperty, descriptor: desc)
-        
+
         desc = MTLArgumentDescriptor()
         desc.index = 1
         desc.dataType = .int
         desc.access = .readOnly
         shaderData.registerArgumentDescriptor(with: AmbientLight._mipmapProperty, descriptor: desc)
-        
+
         desc = MTLArgumentDescriptor()
         desc.index = 2
         desc.dataType = .float
         desc.access = .readOnly
         shaderData.registerArgumentDescriptor(with: AmbientLight._diffuseIntensityProperty, descriptor: desc)
-        
+
         desc = MTLArgumentDescriptor()
         desc.index = 3
         desc.dataType = .float
         desc.access = .readOnly
         shaderData.registerArgumentDescriptor(with: AmbientLight._specularIntensityProperty, descriptor: desc)
-        
+
         desc = MTLArgumentDescriptor()
         desc.index = 4
         desc.dataType = .pointer
         desc.access = .readOnly
         shaderData.registerArgumentDescriptor(with: AmbientLight._diffuseSHProperty, descriptor: desc)
-        
+
         desc = MTLArgumentDescriptor()
         desc.index = 5
         desc.dataType = .texture
         desc.textureType = .typeCube
         desc.access = .readOnly
         shaderData.registerArgumentDescriptor(with: AmbientLight._specularTextureProperty, descriptor: desc)
-        
+
         desc = MTLArgumentDescriptor()
         desc.index = 6
         desc.dataType = .sampler
         desc.access = .readOnly
         shaderData.registerArgumentDescriptor(with: AmbientLight._specularSamplerProperty, descriptor: desc)
         shaderData.createArgumentBuffer(with: "u_envMapLight")
-        
+
         if let diffuseSphericalHarmonics {
             shaderData.setData(with: AmbientLight._diffuseSHProperty, buffer: diffuseSphericalHarmonics.buffer)
         }
@@ -150,7 +150,6 @@ public class AmbientLight: Serializable {
         _setSpecularTexture(shaderData)
     }
 
-
     func _removeFromScene(_ scene: Scene) {
         _scenes.removeAll { (v: Scene) in
             v === scene
@@ -158,7 +157,7 @@ public class AmbientLight: Serializable {
     }
 
     private func _setDiffuseMode(_ sceneShaderData: ShaderData) {
-        if (diffuseMode == DiffuseMode.SphericalHarmonics) {
+        if diffuseMode == DiffuseMode.SphericalHarmonics {
             sceneShaderData.enableMacro(HAS_SH.rawValue)
         } else {
             sceneShaderData.disableMacro(HAS_SH.rawValue)

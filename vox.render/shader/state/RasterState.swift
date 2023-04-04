@@ -18,7 +18,8 @@ public class RasterState {
     public var depthClamp: Float = 0.01
 
     func _apply(_ frontFaceInvert: Bool,
-                _ renderEncoder: MTLRenderCommandEncoder) {
+                _ renderEncoder: MTLRenderCommandEncoder)
+    {
         renderEncoder.setCullMode(cullMode)
 
         if frontFaceInvert {
@@ -27,7 +28,7 @@ public class RasterState {
             renderEncoder.setFrontFacing(.counterClockwise)
         }
 
-        if (depthBias != 0 || depthSlopeScale != 0 || depthClamp != 0) {
+        if depthBias != 0 || depthSlopeScale != 0 || depthClamp != 0 {
             renderEncoder.setDepthBias(depthBias, slopeScale: depthSlopeScale, clamp: depthClamp)
         }
     }

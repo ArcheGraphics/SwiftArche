@@ -14,7 +14,7 @@ class PhysXPhysics {
     static func initialization() {
         _pxPhysics = CPxPhysics()
     }
-    
+
     static func destroy() {
         _pxPhysics.destroy()
     }
@@ -25,9 +25,10 @@ class PhysXPhysics {
                                      _ onTriggerEnter: ((UInt32, UInt32) -> Void)?,
                                      _ onTriggerExit: ((UInt32, UInt32) -> Void)?,
                                      _ onTriggerStay: ((UInt32, UInt32) -> Void)?,
-                                     _ onJointBreak: ((UInt32, UInt32, String) -> Void)?) -> PhysXPhysicsManager {
+                                     _ onJointBreak: ((UInt32, UInt32, String) -> Void)?) -> PhysXPhysicsManager
+    {
         PhysXPhysicsManager(onContactEnter, onContactExit, onContactStay,
-                onTriggerEnter, onTriggerExit, onTriggerStay, onJointBreak)
+                            onTriggerEnter, onTriggerExit, onTriggerStay, onJointBreak)
     }
 
     static func createDynamicCollider(_ position: Vector3, _ rotation: Quaternion) -> PhysXDynamicCollider {
@@ -46,40 +47,46 @@ class PhysXPhysics {
                                       _ dynamicFriction: Float,
                                       _ bounciness: Float,
                                       _ frictionCombine: Int,
-                                      _ bounceCombine: Int) -> PhysXPhysicsMaterial {
+                                      _ bounceCombine: Int) -> PhysXPhysicsMaterial
+    {
         PhysXPhysicsMaterial(staticFriction, dynamicFriction, bounciness,
-                CombineMode(rawValue: frictionCombine)!,
-                CombineMode(rawValue: bounceCombine)!)
+                             CombineMode(rawValue: frictionCombine)!,
+                             CombineMode(rawValue: bounceCombine)!)
     }
 
-    //MARK: - Collider Shape
+    // MARK: - Collider Shape
 
     static func createBoxColliderShape(_ uniqueID: UInt32, _ size: Vector3,
-                                       _ material: PhysXPhysicsMaterial) -> PhysXBoxColliderShape {
+                                       _ material: PhysXPhysicsMaterial) -> PhysXBoxColliderShape
+    {
         PhysXBoxColliderShape(uniqueID, size, material)
     }
 
     static func createSphereColliderShape(_ uniqueID: UInt32, _ radius: Float,
-                                          _ material: PhysXPhysicsMaterial) -> PhysXSphereColliderShape {
+                                          _ material: PhysXPhysicsMaterial) -> PhysXSphereColliderShape
+    {
         PhysXSphereColliderShape(uniqueID, radius, material)
     }
 
     static func createPlaneColliderShape(_ uniqueID: UInt32,
-                                         _ material: PhysXPhysicsMaterial) -> PhysXPlaneColliderShape {
+                                         _ material: PhysXPhysicsMaterial) -> PhysXPlaneColliderShape
+    {
         PhysXPlaneColliderShape(uniqueID, material)
     }
 
     static func createCapsuleColliderShape(_ uniqueID: UInt32, _ radius: Float, _ height: Float,
-                                           _ material: PhysXPhysicsMaterial) -> PhysXCapsuleColliderShape {
+                                           _ material: PhysXPhysicsMaterial) -> PhysXCapsuleColliderShape
+    {
         PhysXCapsuleColliderShape(uniqueID, radius, height, material)
     }
 
     static func createMeshColliderShape(_ uniqueID: UInt32,
-                                        _ material: PhysXPhysicsMaterial) -> PhysXMeshColliderShape {
+                                        _ material: PhysXPhysicsMaterial) -> PhysXMeshColliderShape
+    {
         PhysXMeshColliderShape(uniqueID, material)
     }
 
-    //MARK: - Joint
+    // MARK: - Joint
 
     static func createFixedJoint(_ collider: PhysXCollider) -> PhysXFixedJoint {
         PhysXFixedJoint(collider)

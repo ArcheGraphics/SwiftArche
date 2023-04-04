@@ -15,19 +15,19 @@ public typealias Serializable = SerializableEncodable & SerializableDecodable
 public final class Serialized<T> {
     var key: String?
     var alternateKey: String?
-    
+
     private var _value: T?
-    
+
     /// Wrapped value getter for optionals
-    private func _wrappedValue<U>(_ type: U.Type) -> U? where U: ExpressibleByNilLiteral {
+    private func _wrappedValue<U>(_: U.Type) -> U? where U: ExpressibleByNilLiteral {
         return _value as? U
     }
-    
+
     /// Wrapped value getter for non-optionals
-    private func _wrappedValue<U>(_ type: U.Type) -> U {
+    private func _wrappedValue<U>(_: U.Type) -> U {
         return _value as! U
     }
-    
+
     public var wrappedValue: T {
         get {
             return _wrappedValue(T.self)
@@ -35,7 +35,7 @@ public final class Serialized<T> {
             _value = newValue
         }
     }
-    
+
     /// Defualt init for Serialized wrapper
     /// - Parameters:
     ///   - key: The JSON decoding key to be used. If `nil` (or not passed), the property name gets used for decoding
@@ -44,13 +44,12 @@ public final class Serialized<T> {
     public init(_ key: String? = nil, alternateKey: String? = nil, default value: T? = nil) {
         self.key = key
         self.alternateKey = alternateKey
-        self._value = value
+        _value = value
     }
 }
 
 /// Encodable support
 extension Serialized: EncodableProperty where T: Encodable {
-    
     /// Basic property encoding with the key (if present), or propertyName if key not present
     /// - Parameters:
     ///   - container: The default container
@@ -64,7 +63,6 @@ extension Serialized: EncodableProperty where T: Encodable {
 
 /// Decodable support
 extension Serialized: DecodableProperty where T: Decodable {
-    
     /// Adding the DecodableProperty support for Serialized annotated objects, where the Object conforms to Decodable
     /// - Parameters:
     ///   - container: The decoding container

@@ -10,7 +10,7 @@ import vox_render
 public class SphSystemData: ParticleSystemData {
     private static let pressureProperty = "u_pressure"
     private static let densityProperty = "u_density"
-    
+
     /// Target density of this particle system in kg/m^3.
     private var _targetDensity: Float = kWaterDensity
     /// Target spacing of this particle system in meters.
@@ -20,9 +20,9 @@ public class SphSystemData: ParticleSystemData {
     private var _kernelRadiusOverTargetSpacing: Float = 1.8
     /// SPH kernel radius in meters.
     private var _kernelRadius: Float = 0
-    
+
     /// the radius of the particles.
-    public override var radius: Float {
+    override public var radius: Float {
         get {
             _radius
         }
@@ -31,9 +31,9 @@ public class SphSystemData: ParticleSystemData {
             targetSpacing = newValue
         }
     }
-    
+
     /// the mass of the particles.
-    public override var mass: Float {
+    override public var mass: Float {
         get {
             _mass
         }
@@ -43,21 +43,17 @@ public class SphSystemData: ParticleSystemData {
             _mass = max(newValue, 0)
         }
     }
-    
+
     /// the pressure array
     public var pressure: BufferView {
-        get {
-            getData(SphSystemData.pressureProperty)!
-        }
+        getData(SphSystemData.pressureProperty)!
     }
-    
+
     ///  the density array
     public var density: BufferView {
-        get {
-            getData(SphSystemData.densityProperty)!
-        }
+        getData(SphSystemData.densityProperty)!
     }
-    
+
     public var targetDensity: Float {
         get {
             _targetDensity
@@ -67,7 +63,7 @@ public class SphSystemData: ParticleSystemData {
             computeMass()
         }
     }
-    
+
     public var targetSpacing: Float {
         get {
             _targetSpacing
@@ -78,7 +74,7 @@ public class SphSystemData: ParticleSystemData {
             computeMass()
         }
     }
-    
+
     public var relativeKernelRadius: Float {
         get {
             _kernelRadiusOverTargetSpacing
@@ -89,7 +85,7 @@ public class SphSystemData: ParticleSystemData {
             computeMass()
         }
     }
-    
+
     public var kernelRadius: Float {
         get {
             _kernelRadius
@@ -100,34 +96,35 @@ public class SphSystemData: ParticleSystemData {
             computeMass()
         }
     }
-    
-    public override init(maxLength: UInt32) {
+
+    override public init(maxLength: UInt32) {
         super.init(maxLength: maxLength)
         addScalarData(with: SphSystemData.pressureProperty, initialVal: Float(0), maxLength: Int(maxLength))
         addScalarData(with: SphSystemData.densityProperty, initialVal: Float(0), maxLength: Int(maxLength))
         targetSpacing = _targetSpacing
     }
-    
+
     public func computeMass() {
         var points: [Vector3F] = []
         let pointsGenerator = BccLatticePointGenerator()
         let sampleBound = BoundingBox3F(
             point1: Vector3F(-1.5 * _kernelRadius, -1.5 * _kernelRadius,
-                              -1.5 * _kernelRadius),
+                             -1.5 * _kernelRadius),
             point2: Vector3F(1.5 * _kernelRadius, 1.5 * _kernelRadius,
-                             1.5 * _kernelRadius))
-        
+                             1.5 * _kernelRadius)
+        )
+
         pointsGenerator.generate(boundingBox: sampleBound, spacing: _targetSpacing, points: &points)
-        
+
         var maxNumberDensity: Float = 0.0
         let kernel = SphStdKernel3(kernelRadius: _kernelRadius)
         for point in points {
-            var sum: Float = 0.0;
-            
+            var sum: Float = 0.0
+
             for neighborPoint in points {
                 sum += kernel[simd_distance(neighborPoint, point)]
             }
-            maxNumberDensity = max(maxNumberDensity, sum);
+            maxNumberDensity = max(maxNumberDensity, sum)
         }
         _mass = _targetDensity / maxNumberDensity
     }

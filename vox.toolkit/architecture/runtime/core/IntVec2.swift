@@ -4,22 +4,19 @@
 //  personal capacity and am not conveying any rights to any intellectual
 //  property of any third parties.
 
-import vox_render
 import Math
+import vox_render
 
 /// Vertex positions are sorted as integers to avoid floating point precision errors.
 struct IntVec2 {
     public var value = Vector2()
 
     public var x: Float {
-        get {
-            value.x
-        }
+        value.x
     }
+
     public var y: Float {
-        get {
-            value.y
-        }
+        value.y
     }
 
     public init(vector: Vector2) {
@@ -36,7 +33,7 @@ struct IntVec2 {
 }
 
 extension IntVec2: Hashable {
-    static func ==(lhs: IntVec2, rhs: IntVec2) -> Bool {
+    static func == (lhs: IntVec2, rhs: IntVec2) -> Bool {
         lhs.Equals(rhs)
     }
 

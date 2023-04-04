@@ -7,6 +7,7 @@
 import Foundation
 
 // MARK: - PolymorphicCodableError
+
 enum PolymorphicCodableError: Error {
     case missingPolymorphicTypes
     case unableToFindPolymorphicType(String)
@@ -15,6 +16,7 @@ enum PolymorphicCodableError: Error {
 }
 
 // MARK: - Extension
+
 public extension Encoder {
     func encode<ValueType>(_ value: ValueType) throws {
         guard let value = value as? Polymorphic else {
@@ -29,11 +31,11 @@ public extension Encoder {
 }
 
 public extension Decoder {
-    func decode<ExpectedType>(_ expectedType: ExpectedType.Type, of key: CodingUserInfoKey) throws -> ExpectedType {
+    func decode<ExpectedType>(_: ExpectedType.Type, of key: CodingUserInfoKey) throws -> ExpectedType {
         let container = try self.container(keyedBy: PolymorphicMetaContainerKeys.self)
         let typeID = try container.decode(String.self, forKey: ._type)
 
-        guard let types = self.userInfo[key] as? [Polymorphic.Type] else {
+        guard let types = userInfo[key] as? [Polymorphic.Type] else {
             throw PolymorphicCodableError.missingPolymorphicTypes
         }
 
@@ -58,12 +60,14 @@ public extension Decoder {
 }
 
 // MARK: - User Register
+
 // MARK: - PolymorphicValue
+
 @propertyWrapper
 public struct PolymorphicValue<Value> {
     public var wrappedValue: Value
     var key: CodingUserInfoKey = .polymorphicTypes
-    
+
     public init(wrappedValue: Value, key: CodingUserInfoKey = .polymorphicTypes) {
         self.wrappedValue = wrappedValue
         self.key = key
@@ -72,15 +76,16 @@ public struct PolymorphicValue<Value> {
 
 extension PolymorphicValue: Codable {
     public init(from decoder: Decoder) throws {
-        self.wrappedValue = try decoder.decode(Value.self, of: key)
+        wrappedValue = try decoder.decode(Value.self, of: key)
     }
 
     public func encode(to encoder: Encoder) throws {
-        try encoder.encode(self.wrappedValue)
+        try encoder.encode(wrappedValue)
     }
 }
 
 // MARK: - Polymorphic Protocol
+
 public protocol Polymorphic: Codable {
     static var typeID: String { get }
 }

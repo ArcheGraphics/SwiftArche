@@ -4,8 +4,8 @@
 //  personal capacity and am not conveying any rights to any intellectual
 //  property of any third parties.
 
-import XCTest
 import vox_render
+import XCTest
 
 final class PolymorphicDecodeTests: XCTestCase {
     func testComponent() throws {
@@ -19,13 +19,13 @@ final class PolymorphicDecodeTests: XCTestCase {
         let decoder = JSONDecoder()
         decoder.userInfo[.polymorphicTypes] = [
             Camera.self,
-            Transform.self
+            Transform.self,
         ]
         let model = try decoder.decode([PolymorphicValue<Component>].self, from: data)
         XCTAssertEqual((model[0].wrappedValue as! Transform).number, 0)
         XCTAssertEqual((model[1].wrappedValue as! Camera).name, "camera")
     }
-    
+
     func testEncode() throws {
         let model = UserRecord(name: "A name", pet: Snake(name: "A Snake"))
         let data = try JSONEncoder().encode(model)
@@ -52,7 +52,7 @@ final class PolymorphicDecodeTests: XCTestCase {
         let pet = try XCTUnwrap(model.pet as? Snake)
         XCTAssertEqual(pet.name, "A Snake")
     }
-    
+
     func testDecodeDog() throws {
         let data = #"""
         {
@@ -73,7 +73,7 @@ final class PolymorphicDecodeTests: XCTestCase {
         let decoder = JSONDecoder()
         decoder.userInfo[.polymorphicTypes] = [
             Snake.self,
-            Dog.self
+            Dog.self,
         ]
 
         return decoder
@@ -81,6 +81,7 @@ final class PolymorphicDecodeTests: XCTestCase {
 }
 
 // MARK: - Protocol
+
 struct UserRecord: Codable {
     let name: String
 
@@ -99,10 +100,10 @@ struct Dog: Animal {
 }
 
 // MARK: - Inheritence
-fileprivate class Component: Polymorphic {
-}
 
-fileprivate class Transform: Component {
+private class Component: Polymorphic {}
+
+private class Transform: Component {
     var number: Int = 0
 
     enum CodingKeys: String, CodingKey {
@@ -126,7 +127,7 @@ fileprivate class Transform: Component {
     }
 }
 
-fileprivate class Camera: Component {
+private class Camera: Component {
     var name: String = "camera"
 
     enum CodingKeys: String, CodingKey {

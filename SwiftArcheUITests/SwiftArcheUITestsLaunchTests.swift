@@ -8,7 +8,6 @@
 import XCTest
 
 final class SwiftArcheUITestsLaunchTests: XCTestCase {
-
     override class var runsForEachTargetApplicationUIConfiguration: Bool {
         true
     }

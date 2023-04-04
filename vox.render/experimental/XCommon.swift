@@ -21,7 +21,7 @@ func divideRoundUp(numerator: MTLSize, denominator: MTLSize) -> MTLSize {
 // Returns name of App/Executable.
 func getAppName() -> String {
     var bundleName = Bundle.main.object(forInfoDictionaryKey: "CFBundleName") as? String
-    if (bundleName == nil) {
+    if bundleName == nil {
         bundleName = String(utf8String: getprogname())
     }
     return bundleName!
@@ -45,7 +45,8 @@ func getOrCreateApplicationSupportPath() -> String? {
 }
 
 func newComputePipelineState(library: MTLLibrary, functionName: String, label: String,
-                             functionConstants: MTLFunctionConstantValues?) -> MTLComputePipelineState? {
+                             functionConstants: MTLFunctionConstantValues?) -> MTLComputePipelineState?
+{
     let descriptor = MTLComputePipelineDescriptor()
     descriptor.label = label
 

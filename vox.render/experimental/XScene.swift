@@ -35,6 +35,7 @@ class XScene: Codable {
     var pointLights: XPointLightData {
         _pointLights[0]
     }
+
     var spotLights: XSpotLightData {
         _spotLights[0]
     }
@@ -42,6 +43,7 @@ class XScene: Codable {
     var pointLightCount: Int {
         _pointLights.count
     }
+
     var spotLightCount: Int {
         _spotLights.count
     }
@@ -58,9 +60,10 @@ class XScene: Codable {
     func addPointLight(_ position: Vector3,
                        radius: Float,
                        color: Vector3,
-                       flags: XLightType) {
+                       flags: XLightType)
+    {
         _pointLights.append(XPointLightData(posSqrRadius: simd_make_float4(position.internalValue, radius),
-                color: color.internalValue, flags: flags.rawValue))
+                                            color: color.internalValue, flags: flags.rawValue))
     }
 
     func addSpotLight(_ pos: Vector3,
@@ -68,7 +71,8 @@ class XScene: Codable {
                       height: Float,
                       angle: Float,
                       color: Vector3,
-                      flags: XLightType) {
+                      flags: XLightType)
+    {
         var spotLight = XSpotLightData()
 
         var boundingSphere = simd_float4()
@@ -95,10 +99,11 @@ class XScene: Codable {
         let xs = ys
         let zs = spotFarClip / (spotFarClip - spotNearClip)
         let projMatrix = float4x4(
-                SIMD4<Float>(xs, 0, 0, 0),
-                SIMD4<Float>(0, ys, 0, 0),
-                SIMD4<Float>(0, 0, zs, 1),
-                SIMD4<Float>(0, 0, -spotNearClip * zs, 0))
+            SIMD4<Float>(xs, 0, 0, 0),
+            SIMD4<Float>(0, ys, 0, 0),
+            SIMD4<Float>(0, 0, zs, 1),
+            SIMD4<Float>(0, 0, -spotNearClip * zs, 0)
+        )
 
         spotLight.viewProjMatrix = projMatrix * viewMatrix.elements
 
@@ -110,7 +115,8 @@ class XScene: Codable {
         _pointLights = []
     }
 
-// MARK: - Codable
+    // MARK: - Codable
+
     enum CodingKeys: String, CodingKey {
         case center_offset
 
@@ -162,7 +168,7 @@ class XScene: Codable {
         _spotLights = try container.decode([XSpotLightData].self, forKey: .spot_lights)
 
         _occluderVerts = try container.decode([Vector3].self, forKey: .occluder_verts)
-        for i in 0..<_occluderVerts.count {
+        for i in 0 ..< _occluderVerts.count {
             var transformedVert = _occluderVerts[i]
             let t = transformedVert.z
             transformedVert.z = transformedVert.y

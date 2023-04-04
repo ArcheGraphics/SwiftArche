@@ -6,7 +6,7 @@
 
 import Foundation
 
-public enum ControlHandlerType:Int {
+public enum ControlHandlerType: Int {
     case None = 0
     case ROTATE = 1
     case ZOOM = 2

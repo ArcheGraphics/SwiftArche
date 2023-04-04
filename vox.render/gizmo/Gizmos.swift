@@ -6,22 +6,23 @@
 
 import Math
 
-public class Gizmos {
+public enum Gizmos {
     /// A vertex made of positions and normals.
     public struct VertexPNC {
         public var pos: Vector3
         public var normal: Vector3
         public var color: Color32
-        
+
         init(_ pos: Vector3 = Vector3(),
              _ normal: Vector3 = Vector3(),
-             _ color: Color32 = Color32(r: 0, g: 0, b: 0)) {
+             _ color: Color32 = Color32(r: 0, g: 0, b: 0))
+        {
             self.pos = pos
             self.normal = normal
             self.color = color
         }
     }
-    
+
     static let gCapsuleVertices: [Vector3] = [
         Vector3(0.0000, -2.0000, -0.0000),
         Vector3(0.3827, -1.9239, -0.0000),
@@ -119,7 +120,8 @@ public class Gizmos {
     static let NB_CIRCLE_PTS: Int = 20
     static let MAX_TEMP_VERTEX_BUFFER: Int = 400
 
-// MARK: - API
+    // MARK: - API
+
     public struct RenderFlag: OptionSet {
         public let rawValue: UInt8
 
@@ -148,20 +150,22 @@ public class Gizmos {
     public static func addLine(p0: Vector3, p1: Vector3, color: Color32) {
         LineBatcher.ins.addLine(p0: p0, p1: p1, color: color)
     }
-    
+
     public static func addLine(p0: Vector3, p1: Vector3, color0: Color32, color1: Color32) {
         LineBatcher.ins.addLine(p0: p0, p1: p1, color0: color0, color1: color1)
     }
 
     public static func addTriangle(p0: Vector3, p1: Vector3, p2: Vector3,
-                                   n0: Vector3, n1: Vector3, n2: Vector3, color: Color32) {
+                                   n0: Vector3, n1: Vector3, n2: Vector3, color: Color32)
+    {
         TriangleBatcher.ins.addTriangle(p0: p0, p1: p1, p2: p2,
-                n0: n0, n1: n1, n2: n2, color: color)
+                                        n0: n0, n1: n1, n2: n2, color: color)
     }
-    
+
     public static func addTriangle(p0: Vector3, p1: Vector3, p2: Vector3,
                                    n0: Vector3, n1: Vector3, n2: Vector3,
-                                   color0: Color32, color1: Color32, color2: Color32) {
+                                   color0: Color32, color1: Color32, color2: Color32)
+    {
         TriangleBatcher.ins.addTriangle(p0: p0, p1: p1, p2: p2,
                                         n0: n0, n1: n1, n2: n2,
                                         color0: color0, color1: color1, color2: color2)
@@ -170,13 +174,14 @@ public class Gizmos {
     public static func addTriangle(p0: Vector3, p1: Vector3, p2: Vector3, color: Color32) {
         TriangleBatcher.ins.addTriangle(p0: p0, p1: p1, p2: p2, color: color)
     }
-    
+
     public static func addTriangle(p0: Vector3, p1: Vector3, p2: Vector3,
-                                   color0: Color32, color1: Color32, color2: Color32) {
+                                   color0: Color32, color1: Color32, color2: Color32)
+    {
         TriangleBatcher.ins.addTriangle(p0: p0, p1: p1, p2: p2,
                                         color0: color0, color1: color1, color2: color2)
     }
-    
+
     public static func addText(string: String, position: Vector3, color: Color32, size: Float, font: MTLFontAtlas) {
         var vertices: [Vector3] = []
         var texCoords: [Vector2] = []
@@ -184,10 +189,10 @@ public class Gizmos {
         var bounds = BoundingBox()
         TextUtils.textUpdate(fontSize: size, fontAtlas: font, string: string,
                              vertices: &vertices, texCoords: &texCoords, indices: &indices, bounds: &bounds)
-        let worldVertice = vertices.map({ v in
+        let worldVertice = vertices.map { v in
             v + position
-        })
-        
+        }
+
         TextBatcher.ins.appendElement(vertices: worldVertice, texCoords: texCoords, indices: indices,
                                       color: Color(color), fontAtlas: font.fontAtlasTexture,
                                       material: TextRenderer._defaultMaterial)
@@ -259,7 +264,7 @@ public class Gizmos {
 
         if renderFlags.contains(.Solid) {
             let halfHeight: Float = 0.0
-            for i in 0..<gNumCapsuleIndices / 3 {
+            for i in 0 ..< gNumCapsuleIndices / 3 {
                 let i0 = gCapsuleIndices[i * 3 + 0]
                 let i1 = gCapsuleIndices[i * 3 + 1]
                 let i2 = gCapsuleIndices[i * 3 + 2]
@@ -297,17 +302,17 @@ public class Gizmos {
             var verts = [Vector3](repeating: Vector3(), count: MAX_TEMP_VERTEX_BUFFER * 6)
             var normals = [Vector3](repeating: Vector3(), count: MAX_TEMP_VERTEX_BUFFER * 6)
 
-            if (!initDone) {
+            if !initDone {
                 generateSphere(nbSeg: 16, nbVerts: &nbVerts, verts: &verts, normals: &normals)
                 initDone = true
             }
 
             var i = 0
-            while (i < nbVerts) {
+            while i < nbVerts {
                 addTriangle(p0: sphereCenter + sphereRadius * verts[i],
-                        p1: sphereCenter + sphereRadius * verts[i + 1],
-                        p2: sphereCenter + sphereRadius * verts[i + 2],
-                        n0: normals[i], n1: normals[i + 1], n2: normals[i + 2], color: color)
+                            p1: sphereCenter + sphereRadius * verts[i + 1],
+                            p2: sphereCenter + sphereRadius * verts[i + 2],
+                            n0: normals[i], n1: normals[i + 1], n2: normals[i + 2], color: color)
                 i += 3
             }
         }
@@ -322,14 +327,14 @@ public class Gizmos {
 
         if renderFlags.contains(.Wireframe) {
             addCircle(nbPts: nbVerts, pts: pts, color: color, offset: Vector3(0))
-            for i in 0..<nbVerts {
-                addLine(p0: tip, p1: pts[i], color: color)    // side of the cone
-                addLine(p0: tr.getTranslation(), p1: pts[i], color: color)    // base disk of the cone
+            for i in 0 ..< nbVerts {
+                addLine(p0: tip, p1: pts[i], color: color) // side of the cone
+                addLine(p0: tr.getTranslation(), p1: pts[i], color: color) // base disk of the cone
             }
         }
 
         if renderFlags.contains(.Solid) {
-            for i in 0..<nbVerts {
+            for i in 0 ..< nbVerts {
                 let j = (i + 1) % nbVerts
                 addTriangle(p0: tip, p1: pts[i], p2: pts[j], color: color)
                 addTriangle(p0: tr.getTranslation(), p1: pts[i], p2: pts[j], color: color)
@@ -348,21 +353,21 @@ public class Gizmos {
         generatePolygon(nbVerts: nbVerts, verts: &pts2, orientation: .ORIENTATION_XZ, amplitude: radius, phase: 0.0, transform: tr2)
 
         if renderFlags.contains(.Wireframe) {
-            for i in 0..<nbVerts {
+            for i in 0 ..< nbVerts {
                 let j = (i + 1) % nbVerts
-                addLine(p0: pts[i], p1: pts[j], color: color)        // circle
-                addLine(p0: pts2[i], p1: pts2[j], color: color)    // circle
+                addLine(p0: pts[i], p1: pts[j], color: color) // circle
+                addLine(p0: pts2[i], p1: pts2[j], color: color) // circle
             }
 
-            for i in 0..<nbVerts {
-                addLine(p0: pts[i], p1: pts2[i], color: color)    // side
-                addLine(p0: tr.getTranslation(), p1: pts[i], color: color)        // disk
-                addLine(p0: tr2.getTranslation(), p1: pts2[i], color: color)        // disk
+            for i in 0 ..< nbVerts {
+                addLine(p0: pts[i], p1: pts2[i], color: color) // side
+                addLine(p0: tr.getTranslation(), p1: pts[i], color: color) // disk
+                addLine(p0: tr2.getTranslation(), p1: pts2[i], color: color) // disk
             }
         }
 
         if renderFlags.contains(.Solid) {
-            for i in 0..<nbVerts {
+            for i in 0 ..< nbVerts {
                 let j = (i + 1) % nbVerts
                 addTriangle(p0: tr.getTranslation(), p1: pts[i], p2: pts[j], color: color)
                 addTriangle(p0: tr2.getTranslation(), p1: pts2[i], p2: pts2[j], color: color)
@@ -375,7 +380,7 @@ public class Gizmos {
     public static func addCapsule(radius: Float, height: Float, tr: Matrix, color: Color32, renderFlags: RenderFlag) {
         let p0 = Vector3.transformCoordinate(v: Vector3(0, -height / 2, 0), m: tr)
         let p1 = Vector3.transformCoordinate(v: Vector3(0, height / 2, 0), m: tr)
-        
+
         var tr2 = tr
         tr2.setTranslation(p0)
         addSphere(sphereCenter: p0, sphereRadius: radius, color: color, renderFlags: renderFlags)
@@ -400,10 +405,10 @@ public class Gizmos {
         addTriangle(p0: pts[0], p1: pts[1], p2: pts[2], color: color)
         addTriangle(p0: pts[0], p1: pts[2], p2: pts[3], color: color)
     }
-
 }
 
 // MARK: - Private
+
 extension Gizmos {
     static func addBox(pts: [Vector3], color: Color32, renderFlags: RenderFlag) {
         if renderFlags.contains(.Wireframe) {
@@ -411,10 +416,10 @@ extension Gizmos {
                 0, 1, 1, 2, 2, 3, 3, 0,
                 7, 6, 6, 5, 5, 4, 4, 7,
                 1, 5, 6, 2,
-                3, 7, 4, 0
+                3, 7, 4, 0,
             ]
 
-            for i in 0..<12 {
+            for i in 0 ..< 12 {
                 addLine(p0: pts[indices[i * 2]], p1: pts[indices[i * 2 + 1]], color: color)
             }
         }
@@ -426,17 +431,17 @@ extension Gizmos {
                 5, 7, 4, 5, 6, 7,
                 4, 3, 0, 4, 7, 3,
                 3, 6, 2, 3, 7, 6,
-                5, 0, 1, 5, 4, 0
+                5, 0, 1, 5, 4, 0,
             ]
 
-            for i in 0..<12 {
+            for i in 0 ..< 12 {
                 addTriangle(p0: pts[indices[i * 3 + 0]], p1: pts[indices[i * 3 + 1]], p2: pts[indices[i * 3 + 2]], color: color)
             }
         }
     }
 
     static func addCircle(nbPts: Int, pts: [Vector3], color: Color32, offset: Vector3) {
-        for i in 0..<nbPts {
+        for i in 0 ..< nbPts {
             let j = (i + 1) % nbPts
             addLine(p0: pts[i] + offset, p1: pts[j] + offset, color: color)
         }
@@ -450,23 +455,24 @@ extension Gizmos {
 
     @discardableResult
     static func generatePolygon(nbVerts: Int, verts: inout [Vector3], orientation: Orientation,
-                                amplitude: Float, phase: Float, transform: Matrix? = nil) -> Bool {
+                                amplitude: Float, phase: Float, transform: Matrix? = nil) -> Bool
+    {
         if nbVerts == 0 {
             return false
         }
 
         let step = 2 * Float.pi / Float(nbVerts)
 
-        for i in 0..<nbVerts {
+        for i in 0 ..< nbVerts {
             let angle = phase + Float(i) * step
             let y = sinf(angle) * amplitude
             let x = cosf(angle) * amplitude
 
-            if (orientation == .ORIENTATION_XY) {
+            if orientation == .ORIENTATION_XY {
                 verts[i] = Vector3(x, y, 0.0)
-            } else if (orientation == .ORIENTATION_XZ) {
+            } else if orientation == .ORIENTATION_XZ {
                 verts[i] = Vector3(x, 0.0, y)
-            } else if (orientation == .ORIENTATION_YZ) {
+            } else if orientation == .ORIENTATION_YZ {
                 verts[i] = Vector3(0.0, x, y)
             }
 
@@ -494,7 +500,7 @@ extension Gizmos {
         let halfSeg = nbSeg / 2
         let nSeg = halfSeg * 2
 
-        if (((nSeg + 1) * (nSeg + 1)) > MAX_TEMP_VERTEX_BUFFER) {
+        if ((nSeg + 1) * (nSeg + 1)) > MAX_TEMP_VERTEX_BUFFER {
             return false
         }
 
@@ -503,12 +509,12 @@ extension Gizmos {
 
         // compute sphere vertices on the temporary buffer
         nbVerts = 0
-        for i in 0...nSeg {
+        for i in 0 ... nSeg {
             let theta = Float(i) * stepTheta
             let cosi = cos(theta)
             let sini = sin(theta)
 
-            for j in -halfSeg...halfSeg {
+            for j in -halfSeg ... halfSeg {
                 let phi = Float(j) * stepPhi
                 let sinj = sin(phi)
                 let cosj = cos(phi)
@@ -525,8 +531,8 @@ extension Gizmos {
 
         nbVerts = 0
         // now create triangle soup data
-        for i in 0..<nSeg {
-            for j in 0..<nSeg {
+        for i in 0 ..< nSeg {
+            for j in 0 ..< nSeg {
                 // add one triangle
                 verts[nbVerts] = tempVertexBuffer[(nSeg + 1) * i + j]
                 normals[nbVerts] = tempNormalBuffer[(nSeg + 1) * i + j]
@@ -552,7 +558,6 @@ extension Gizmos {
                 verts[nbVerts] = tempVertexBuffer[(nSeg + 1) * (i + 1) + j]
                 normals[nbVerts] = tempNormalBuffer[(nSeg + 1) * (i + 1) + j]
                 nbVerts += 1
-
             }
         }
 

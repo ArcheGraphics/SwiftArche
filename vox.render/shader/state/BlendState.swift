@@ -4,28 +4,29 @@
 //  personal capacity and am not conveying any rights to any intellectual
 //  property of any third parties.
 
-import Metal
 import Math
+import Metal
 
 /// Blend state.
 public class BlendState {
     /// The blend state of the render target.
-    public var targetBlendState: RenderTargetBlendState = RenderTargetBlendState()
+    public var targetBlendState: RenderTargetBlendState = .init()
     /// Constant blend color.
-    public var blendColor: Color = Color(0, 0, 0, 0)
+    public var blendColor: Color = .init(0, 0, 0, 0)
     /// Whether to use (Alpha-to-Coverage) technology.
     public var alphaToCoverage: Bool = false
 
     func _apply(_ pipelineDescriptor: MTLRenderPipelineDescriptor,
-                _ renderEncoder: MTLRenderCommandEncoder) {
+                _ renderEncoder: MTLRenderCommandEncoder)
+    {
         let enabled = targetBlendState.enabled
-        if (enabled) {
+        if enabled {
             pipelineDescriptor.colorAttachments[0].isBlendingEnabled = true
         } else {
             pipelineDescriptor.colorAttachments[0].isBlendingEnabled = false
         }
 
-        if (enabled) {
+        if enabled {
             // apply blend factor.
             pipelineDescriptor.colorAttachments[0].sourceRGBBlendFactor = targetBlendState.sourceColorBlendFactor
             pipelineDescriptor.colorAttachments[0].destinationRGBBlendFactor = targetBlendState.destinationColorBlendFactor
@@ -44,7 +45,7 @@ public class BlendState {
         pipelineDescriptor.colorAttachments[0].writeMask = targetBlendState.colorWriteMask
 
         // apply alpha to coverage.
-        if (alphaToCoverage) {
+        if alphaToCoverage {
             pipelineDescriptor.isAlphaToCoverageEnabled = true
         } else {
             pipelineDescriptor.isAlphaToCoverageEnabled = false

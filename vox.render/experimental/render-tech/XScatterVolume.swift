@@ -36,7 +36,8 @@ class XScatterVolume {
          library: MTLLibrary,
          useRasterizationRate: Bool,
          lightCullingTileSize: Int,
-         lightClusteringTileSize: Int) {
+         lightClusteringTileSize: Int)
+    {
         _lightCullingTileSize = lightCullingTileSize
         _lightClusteringTileSize = lightClusteringTileSize
 
@@ -46,7 +47,8 @@ class XScatterVolume {
     }
 
     func rebuildPipelines(with library: MTLLibrary,
-                          useRasterizationRate: Bool) {
+                          useRasterizationRate: Bool)
+    {
         var TRUE_VALUE = true
         var FALSE_VALUE = false
 
@@ -58,15 +60,15 @@ class XScatterVolume {
         fc.setConstantValue(&_lightCullingTileSize, type: .uint, index: Int(XFunctionConstIndexLightCullingTileSize.rawValue))
         fc.setConstantValue(&_lightClusteringTileSize, type: .uint, index: Int(XFunctionConstIndexLightClusteringTileSize.rawValue))
         _scatteringPipelineState = newComputePipelineState(library: library, functionName: "kernelScattering",
-                label: "ScatteringKernal", functionConstants: fc)
+                                                           label: "ScatteringKernal", functionConstants: fc)
 
         fc.setConstantValue(&TRUE_VALUE, type: .bool, index: Int(XFunctionConstIndexLightCluster.rawValue))
 
         _scatteringCLPipelineState = newComputePipelineState(library: library, functionName: "kernelScattering",
-                label: "ClusteredScatteringKernal", functionConstants: fc)
+                                                             label: "ClusteredScatteringKernal", functionConstants: fc)
 
         _scatteringAccumPipelineState = newComputePipelineState(library: library, functionName: "kernelAccumulateScattering",
-                label: "AccumulateScatteringKernal", functionConstants: nil)
+                                                                label: "AccumulateScatteringKernal", functionConstants: nil)
     }
 
     /// Writes commands to update the volume using the command buffer.
@@ -82,7 +84,8 @@ class XScatterVolume {
                 spotLightShadows: MTLTexture,
                 rrMapData: MTLBuffer,
                 clustered: Bool,
-                resetHistory: Bool) {
+                resetHistory: Bool)
+    {
         _scatteringVolumeIndex = 1 - _scatteringVolumeIndex
 
         if let computeEncoder = commandBuffer.makeComputeCommandEncoder() {
@@ -92,7 +95,7 @@ class XScatterVolume {
             computeEncoder.setBuffer(cameraParamsBuffer, offset: 0, index: Int(XBufferIndexCameraParams.rawValue))
             computeEncoder.setBuffer(rrMapData, offset: 0, index: Int(XBufferIndexRasterizationRateMap.rawValue))
 
-            if (clustered) {
+            if clustered {
                 computeEncoder.setComputePipelineState(_scatteringCLPipelineState)
             } else {
                 computeEncoder.setComputePipelineState(_scatteringPipelineState)
@@ -105,7 +108,7 @@ class XScatterVolume {
             computeEncoder.setTexture(spotLightShadows, index: 5)
             computeEncoder.setTexture(_scatteringVolume[_scatteringVolumeIndex], index: 0)
 
-            if (resetHistory) {
+            if resetHistory {
                 computeEncoder.setTexture(nil, index: 1)
             } else {
                 computeEncoder.setTexture(_scatteringVolume[1 - _scatteringVolumeIndex], index: 1)
@@ -116,11 +119,11 @@ class XScatterVolume {
             computeEncoder.setTexture(shadowMap, index: 4)
 
             if let scatteringVolume = _scatteringVolume[0] {
-                //MTLSize groupSize     = {1, 1, SCATTERING_VOLUME_DEPTH}
+                // MTLSize groupSize     = {1, 1, SCATTERING_VOLUME_DEPTH}
                 var groupSize = MTLSize(width: 4, height: 4, depth: 4)
                 var threadGroups = divideRoundUp(numerator: MTLSize(width: scatteringVolume.width,
-                        height: scatteringVolume.height,
-                        depth: scatteringVolume.depth), denominator: groupSize)
+                                                                    height: scatteringVolume.height,
+                                                                    depth: scatteringVolume.depth), denominator: groupSize)
 
                 computeEncoder.dispatchThreadgroups(threadGroups, threadsPerThreadgroup: groupSize)
 
@@ -130,7 +133,7 @@ class XScatterVolume {
 
                 groupSize = MTLSize(width: Int(SCATTERING_TILE_SIZE), height: Int(SCATTERING_TILE_SIZE), depth: 1)
                 threadGroups = divideRoundUp(numerator: MTLSize(width: scatteringVolume.width,
-                        height: scatteringVolume.height, depth: 1), denominator: groupSize)
+                                                                height: scatteringVolume.height, depth: 1), denominator: groupSize)
 
                 computeEncoder.dispatchThreadgroups(threadGroups, threadsPerThreadgroup: groupSize)
             }
@@ -142,31 +145,32 @@ class XScatterVolume {
     func resize(_ size: CGSize) {
         let scatteringVolumeSize = divideRoundUp(
             numerator: MTLSize(width: Int(size.width), height: Int(size.height), depth: 1),
-            denominator: MTLSize(width: Int(SCATTERING_TILE_SIZE), height: Int(SCATTERING_TILE_SIZE), depth: 1))
+            denominator: MTLSize(width: Int(SCATTERING_TILE_SIZE), height: Int(SCATTERING_TILE_SIZE), depth: 1)
+        )
 
-            let validScatteringVolume = _scatteringVolume[0] != nil &&
-                    (_scatteringVolume[0]!.width == Int(scatteringVolumeSize.width)) &&
-                    (_scatteringVolume[0]!.height == Int(scatteringVolumeSize.height))
+        let validScatteringVolume = _scatteringVolume[0] != nil &&
+            (_scatteringVolume[0]!.width == Int(scatteringVolumeSize.width)) &&
+            (_scatteringVolume[0]!.height == Int(scatteringVolumeSize.height))
 
-            if (!validScatteringVolume) {
-                let desc = MTLTextureDescriptor.texture2DDescriptor(pixelFormat: .rgba16Float,
-                        width: scatteringVolumeSize.width,
-                        height: scatteringVolumeSize.height,
-                        mipmapped: false)
+        if !validScatteringVolume {
+            let desc = MTLTextureDescriptor.texture2DDescriptor(pixelFormat: .rgba16Float,
+                                                                width: scatteringVolumeSize.width,
+                                                                height: scatteringVolumeSize.height,
+                                                                mipmapped: false)
 
-                desc.textureType = .type3D
-                desc.depth = Int(SCATTERING_VOLUME_DEPTH)
-                desc.storageMode = .private
-                desc.usage = [.shaderWrite, .shaderRead]
+            desc.textureType = .type3D
+            desc.depth = Int(SCATTERING_VOLUME_DEPTH)
+            desc.storageMode = .private
+            desc.usage = [.shaderWrite, .shaderRead]
 
-                _scatteringVolume[0] = _device.makeTexture(descriptor: desc)
-                _scatteringVolume[0]!.label = "Scattering Volume 0"
+            _scatteringVolume[0] = _device.makeTexture(descriptor: desc)
+            _scatteringVolume[0]!.label = "Scattering Volume 0"
 
-                _scatteringVolume[1] = _device.makeTexture(descriptor: desc)!
-                _scatteringVolume[1]!.label = "Scattering Volume 1"
+            _scatteringVolume[1] = _device.makeTexture(descriptor: desc)!
+            _scatteringVolume[1]!.label = "Scattering Volume 1"
 
-                scatteringAccumVolume = _device.makeTexture(descriptor: desc)
-                scatteringAccumVolume!.label = "Scattering Volume Accum"
-            }
+            scatteringAccumVolume = _device.makeTexture(descriptor: desc)
+            scatteringAccumVolume!.label = "Scattering Volume Accum"
         }
     }
+}

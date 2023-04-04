@@ -21,7 +21,8 @@ struct XLightingEnvironment {
 
     // Helper function to interpolate between lighting environments.
     static func interpolateLightingEnvironment(envA: Int, envB: Int, val: Float,
-                                               lightEnvs: [XLightingEnvironment]) -> XLightingEnvironment {
+                                               lightEnvs: [XLightingEnvironment]) -> XLightingEnvironment
+    {
         var env = XLightingEnvironment()
         env.exposure = lightEnvs[envA].exposure * (1.0 - val) + lightEnvs[envB].exposure * val
         env.sunColor = lightEnvs[envA].sunColor * (1.0 - val) + lightEnvs[envB].sunColor * val
@@ -50,7 +51,7 @@ class XLightingEnvironmentState {
 
     // A range of lighting environments.
     var _lightingEnvironments: [XLightingEnvironment] = .init(repeating: XLightingEnvironment(),
-            count: XLightingEnvironmentState.LIGHT_ENV_COUNT)
+                                                              count: XLightingEnvironmentState.LIGHT_ENV_COUNT)
 
     var _currentLightingEnvironment: XLightingEnvironment
 
@@ -115,10 +116,11 @@ class XLightingEnvironmentState {
     /// Update the current lighting environment based on interpolation.
     func update() {
         _currentLightingEnvironment = XLightingEnvironment.interpolateLightingEnvironment(
-                envA: _currentLightingEnvironmentA,
-                envB: _currentLightingEnvironmentB,
-                val: _currentLightingEnvironmentInterp,
-                lightEnvs: _lightingEnvironments)
+            envA: _currentLightingEnvironmentA,
+            envB: _currentLightingEnvironmentB,
+            val: _currentLightingEnvironmentInterp,
+            lightEnvs: _lightingEnvironments
+        )
     }
 
     /// Skip to next lighting environment.

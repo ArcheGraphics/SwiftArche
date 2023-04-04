@@ -42,11 +42,11 @@ public class CharacterController: Collider {
             (_nativeCollider as! PhysXCharacterController).setSlopeLimit(slopeLimit)
         }
     }
-    
+
     public var collisionFlags: ControllerCollisionFlag {
         (_nativeCollider as! PhysXCharacterController).getCollisionFlags()
     }
-    
+
     public var isGrounded: Bool {
         collisionFlags.contains(ControllerCollisionFlag.Down)
     }
@@ -56,7 +56,8 @@ public class CharacterController: Collider {
         _nativeCollider = PhysXPhysics.createCharacterController()
         (_nativeCollider as! PhysXCharacterController).setHitReport { [self] id, dir, length, normal, point in
             if let behavior,
-               let shape = Engine.physicsManager._getColliderShape(id) {
+               let shape = Engine.physicsManager._getColliderShape(id)
+            {
                 var result = ControllerColliderHit(self)
                 result.colliderShape = shape
                 result.collider = shape.collider
@@ -70,7 +71,8 @@ public class CharacterController: Collider {
         }
         (_nativeCollider as! PhysXCharacterController).setBehaviorCallback { [self] id in
             if let behavior,
-               let shape = Engine.physicsManager._getColliderShape(id) {
+               let shape = Engine.physicsManager._getColliderShape(id)
+            {
                 return behavior.getShapeBehaviorFlags(shape: shape).rawValue
             }
             return 0
@@ -90,8 +92,8 @@ public class CharacterController: Collider {
 
     /// Add collider shape on this controller.
     /// - Parameter shape: Collider shape
-    public override func addShape(_ shape: ColliderShape) {
-        if (_shapes.count > 0) {
+    override public func addShape(_ shape: ColliderShape) {
+        if _shapes.count > 0 {
             fatalError("only allow single shape on controller!")
         }
         super.addShape(shape)
@@ -99,14 +101,14 @@ public class CharacterController: Collider {
     }
 
     /// Remove all shape attached.
-    public override func clearShapes() {
-        if (_shapes.count > 0) {
+    override public func clearShapes() {
+        if _shapes.count > 0 {
             super.removeShape(_shapes[0].wrappedValue)
         }
     }
 
     override func _onUpdate() {
-        if (_updateFlag.flag) {
+        if _updateFlag.flag {
             (_nativeCollider as! PhysXCharacterController).setWorldPosition(entity.transform.worldPosition)
 
             let worldScale = entity.transform.lossyWorldScale
@@ -133,11 +135,11 @@ public class CharacterController: Collider {
 
 public struct ControllerCollisionFlag: OptionSet {
     public let rawValue: UInt8
-    
+
     public init(rawValue: UInt8) {
         self.rawValue = rawValue
     }
-    
+
     /// Character is colliding to the sides.
     public static let Sides = ControllerCollisionFlag(rawValue: 1 << 0)
     /// Character has collision above.

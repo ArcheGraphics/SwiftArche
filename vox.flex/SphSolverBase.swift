@@ -10,22 +10,20 @@ import vox_render
 open class SphSolverBase: ParticleSystemSolver {
     static let kTimeStepLimitBySpeedFactor: Float = 0.4
     static let kTimeStepLimitByForceFactor: Float = 0.25
-    
+
     private var _negativePressureScale: Float = 0.0
     private var _viscosityCoefficient: Float = 0.01
     private var _pseudoViscosityCoefficient: Float = 10.0
     private var _speedOfSound: Float = 100.0
     private var _timeStepLimitScale: Float = 1.0
-    
+
     /// the particle system data.
     public var sphSystemData: SphSystemData? {
-        get {
-            _particleSystemData as? SphSystemData
-        }
+        _particleSystemData as? SphSystemData
     }
-    
+
     /// the emitter.
-    public override var emitter: ParticleEmitter? {
+    override public var emitter: ParticleEmitter? {
         get {
             _emitter
         }
@@ -37,7 +35,7 @@ open class SphSolverBase: ParticleSystemSolver {
             _emitter?.target = _particleSystemData
         }
     }
-    
+
     public var negativePressureScale: Float {
         get {
             _negativePressureScale
@@ -46,7 +44,7 @@ open class SphSolverBase: ParticleSystemSolver {
             _negativePressureScale = newValue
         }
     }
-    
+
     public var viscosityCoefficient: Float {
         get {
             _viscosityCoefficient
@@ -55,7 +53,7 @@ open class SphSolverBase: ParticleSystemSolver {
             _viscosityCoefficient = newValue
         }
     }
-    
+
     public var pseudoViscosityCoefficient: Float {
         get {
             _pseudoViscosityCoefficient
@@ -64,7 +62,7 @@ open class SphSolverBase: ParticleSystemSolver {
             _pseudoViscosityCoefficient = newValue
         }
     }
-    
+
     public var speedOfSound: Float {
         get {
             _speedOfSound
@@ -73,7 +71,7 @@ open class SphSolverBase: ParticleSystemSolver {
             _speedOfSound = max(newValue, Float.leastNonzeroMagnitude)
         }
     }
-    
+
     public var timeStepLimitScale: Float {
         get {
             _timeStepLimitScale
@@ -82,24 +80,24 @@ open class SphSolverBase: ParticleSystemSolver {
             _timeStepLimitScale = max(newValue, 0)
         }
     }
-    
+
     public required init() {
         super.init()
         isUsingFixedSubTimeSteps = false
     }
-    
-    open override func numberOfSubTimeSteps(_ timeIntervalInSeconds: Float) -> UInt {
+
+    override open func numberOfSubTimeSteps(_ timeIntervalInSeconds: Float) -> UInt {
         if let sphSystemData = sphSystemData {
             let kernelRadius = sphSystemData.kernelRadius
             let mass = sphSystemData.mass
-            
+
             var maxForceMagnitude: Float = 0.0
             maxForceMagnitude = kGravity
-            
+
             let timeStepLimitBySpeed = SphSolverBase.kTimeStepLimitBySpeedFactor * kernelRadius / _speedOfSound
             let timeStepLimitByForce = SphSolverBase.kTimeStepLimitByForceFactor * sqrt(kernelRadius * mass / maxForceMagnitude)
             let desiredTimeStep = timeStepLimitScale * min(timeStepLimitBySpeed, timeStepLimitByForce)
-            
+
             return UInt(ceil(timeIntervalInSeconds / desiredTimeStep))
         } else {
             return super.numberOfSubTimeSteps(timeIntervalInSeconds)

@@ -11,14 +11,14 @@ public class VolumeParticleEmitter: ParticleEmitter {
     private static let emitterProperty = "u_emitterData"
     private static let sdfTextureProperty = "u_sdfTexture"
     private static let sdfSamplerProperty = "u_sdfSampler"
-    
+
     private var _jitter: Float = 0
     private var _maxRegion = BoundingBox3F()
     private var _spacing: Float = 0
     private var _initialVelocity = Vector3F()
     private var _linearVelocity = Vector3F()
     private var _angularVelocity = Vector3F()
-    private var _maxNumberOfParticles: UInt32 = UInt32.max
+    private var _maxNumberOfParticles: UInt32 = .max
     private var _isOneShot: Bool = false
     private var _allowOverlapping: Bool = false
     private var _implicitSurface: ImplicitTriangleMesh?
@@ -41,7 +41,7 @@ public class VolumeParticleEmitter: ParticleEmitter {
             }
         }
     }
-    
+
     public var jitter: Float {
         get {
             _jitter
@@ -52,7 +52,7 @@ public class VolumeParticleEmitter: ParticleEmitter {
             defaultShaderData.setData(VolumeParticleEmitter.emitterProperty, _data)
         }
     }
-    
+
     public var maxRegion: BoundingBox3F {
         get {
             _maxRegion
@@ -63,7 +63,7 @@ public class VolumeParticleEmitter: ParticleEmitter {
             defaultShaderData.setData(VolumeParticleEmitter.emitterProperty, _data)
         }
     }
-    
+
     public var spacing: Float {
         get {
             _spacing
@@ -74,7 +74,7 @@ public class VolumeParticleEmitter: ParticleEmitter {
             defaultShaderData.setData(VolumeParticleEmitter.emitterProperty, _data)
         }
     }
-    
+
     public var initialVelocity: Vector3F {
         get {
             _initialVelocity
@@ -85,7 +85,7 @@ public class VolumeParticleEmitter: ParticleEmitter {
             defaultShaderData.setData(VolumeParticleEmitter.emitterProperty, _data)
         }
     }
-    
+
     public var linearVelocity: Vector3F {
         get {
             _linearVelocity
@@ -96,7 +96,7 @@ public class VolumeParticleEmitter: ParticleEmitter {
             defaultShaderData.setData(VolumeParticleEmitter.emitterProperty, _data)
         }
     }
-    
+
     public var angularVelocity: Vector3F {
         get {
             _angularVelocity
@@ -107,8 +107,8 @@ public class VolumeParticleEmitter: ParticleEmitter {
             defaultShaderData.setData(VolumeParticleEmitter.emitterProperty, _data)
         }
     }
-    
-    public override var target: ParticleSystemData? {
+
+    override public var target: ParticleSystemData? {
         get {
             _target
         }
@@ -120,7 +120,7 @@ public class VolumeParticleEmitter: ParticleEmitter {
             }
         }
     }
-    
+
     public var maxNumberOfParticles: UInt32 {
         get {
             _maxNumberOfParticles
@@ -135,7 +135,7 @@ public class VolumeParticleEmitter: ParticleEmitter {
             defaultShaderData.setData(VolumeParticleEmitter.emitterProperty, _data)
         }
     }
-    
+
     public var isOneShot: Bool {
         get {
             _isOneShot
@@ -144,7 +144,7 @@ public class VolumeParticleEmitter: ParticleEmitter {
             _isOneShot = newValue
         }
     }
-    
+
     public var allowOverlapping: Bool {
         get {
             _allowOverlapping
@@ -153,29 +153,31 @@ public class VolumeParticleEmitter: ParticleEmitter {
             _allowOverlapping = newValue
         }
     }
-    
-    public override init() {
+
+    override public init() {
         super.init()
         shader.append(ShaderPass(Engine.library("flex.shader"), "volumeEmitter"))
         defaultShaderData.setImageView("u_randomTexture", "u_randomSampler", createRandomTexture(Engine.device, 256))
     }
 
-    public override func update(_ commandEncoder: MTLComputeCommandEncoder,
-                                currentTimeInSeconds: Float, timeIntervalInSeconds: Float) {
+    override public func update(_ commandEncoder: MTLComputeCommandEncoder,
+                                currentTimeInSeconds _: Float, timeIntervalInSeconds _: Float)
+    {
         if let target = target {
-            if (!isEnabled) {
+            if !isEnabled {
                 return
             }
             emit(commandEncoder, target)
-            
+
             if _isOneShot {
                 isEnabled = false
             }
         }
     }
-    
+
     private func emit(_ commandEncoder: MTLComputeCommandEncoder,
-                      _ target: ParticleSystemData) {
+                      _: ParticleSystemData)
+    {
         let region = _maxRegion
         let boxWidth = region.width
         let boxHeight = region.height

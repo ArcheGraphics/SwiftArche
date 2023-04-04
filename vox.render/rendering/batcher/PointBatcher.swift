@@ -6,13 +6,13 @@
 
 import Math
 
-class PointBatcher : Batcher {
+class PointBatcher: Batcher {
     static var _ins: PointBatcher!
     var pointBuffer: BufferView!
     var colorBuffer: BufferView!
     var maxVerts: Int = 0
     var numVerts: Int = 0
-    
+
     private let _shaderMacro = ShaderMacroCollection()
     private let _depthStencilDescriptor = MTLDepthStencilDescriptor()
     private let _pipelineDescriptor = MTLRenderPipelineDescriptor()
@@ -27,18 +27,18 @@ class PointBatcher : Batcher {
         }
         return _ins
     }
-    
+
     var containData: Bool {
         numVerts != 0
     }
-    
+
     var pointSize: Float = 10
-    
+
     func addPoint(_ p0: Vector3, color: Color32) {
         checkResizePoint(count: numVerts + 1)
         addVert(p0, color32: color)
     }
-    
+
     func checkResizePoint(count: Int) {
         if count > maxVerts {
             maxVerts = Int(ceil(Float(count) * 1.2))
@@ -49,7 +49,8 @@ class PointBatcher : Batcher {
             if let pointBuffer = pointBuffer,
                let colorBuffer = colorBuffer,
                let commandBuffer = Engine.commandQueue.makeCommandBuffer(),
-               let blit = commandBuffer.makeBlitCommandEncoder() {
+               let blit = commandBuffer.makeBlitCommandEncoder()
+            {
                 blit.copy(from: pointBuffer.buffer, sourceOffset: 0, to: newPointBuffer.buffer,
                           destinationOffset: 0, size: pointBuffer.count * pointBuffer.stride)
                 blit.copy(from: colorBuffer.buffer, sourceOffset: 0, to: newColorBuffer.buffer,
@@ -62,18 +63,20 @@ class PointBatcher : Batcher {
             colorBuffer = newColorBuffer
         }
     }
-    
+
     func addVert(_ p0: Vector3, color32: Color32) {
         if maxVerts > numVerts,
            let pointBuffer = pointBuffer,
-           let colorBuffer = colorBuffer {
+           let colorBuffer = colorBuffer
+        {
             pointBuffer.assign(p0, at: numVerts)
             colorBuffer.assign(color32, at: numVerts)
             numVerts += 1
         }
     }
-    
+
     // MARK: - Render
+
     func prepare(_ encoder: MTLRenderCommandEncoder) {
         var desc = MTLVertexAttributeDescriptor()
         desc.format = .float3
@@ -88,7 +91,7 @@ class PointBatcher : Batcher {
         desc.bufferIndex = 1
         _descriptor.attributes[Int(Color_0.rawValue)] = desc
         _descriptor.layouts[1].stride = MemoryLayout<Color32>.stride
-        
+
         _material = BaseMaterial()
         _material.shader = Shader.create(in: Engine.library(),
                                          vertexSource: "vertex_point_gizmos",
@@ -96,7 +99,7 @@ class PointBatcher : Batcher {
         _pipelineDescriptor.label = "Point Gizmo Pipeline"
         _pipelineDescriptor.colorAttachments[0].pixelFormat = Canvas.colorPixelFormat
         _pipelineDescriptor.depthAttachmentPixelFormat = Canvas.depthPixelFormat
-        if let format = Canvas.stencilPixelFormat  {
+        if let format = Canvas.stencilPixelFormat {
             _pipelineDescriptor.stencilAttachmentPixelFormat = format
         }
 
@@ -109,21 +112,22 @@ class PointBatcher : Batcher {
         _pso = Engine.resourceCache.requestGraphicsPipeline(_pipelineDescriptor)
         _depthStencilState = Engine.resourceCache.requestDepthStencilState(_depthStencilDescriptor)
     }
-    
+
     func drawBatcher(_ encoder: inout RenderCommandEncoder, _ camera: Camera) {
         if let pointBuffer = pointBuffer,
-           let colorBuffer = colorBuffer {
+           let colorBuffer = colorBuffer
+        {
             encoder.handle.pushDebugGroup("Point Gizmo Subpass")
-            if (_pso == nil) {
+            if _pso == nil {
                 prepare(encoder.handle)
             }
-            
+
             encoder.handle.setDepthStencilState(_depthStencilState)
             encoder.handle.setFrontFacing(.clockwise)
             encoder.handle.setCullMode(.back)
-            
+
             encoder.bind(camera: camera, _pso)
-            
+
             encoder.handle.setVertexBuffer(pointBuffer.buffer, offset: 0, index: 0)
             encoder.handle.setVertexBuffer(colorBuffer.buffer, offset: 0, index: 1)
             encoder.handle.setVertexBytes(&pointSize, length: MemoryLayout<Float>.stride, index: 3)
@@ -133,7 +137,7 @@ class PointBatcher : Batcher {
             flush()
         }
     }
-    
+
     func flush() {
         numVerts = 0
     }

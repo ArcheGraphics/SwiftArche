@@ -85,30 +85,30 @@ extension ComponentsManager {
         animation._onUpdateIndex = -1
     }
 
-    //MARK: - Execute Components
+    // MARK: - Execute Components
 
     func callAnimationUpdate(_ deltaTime: Float) {
         let elements = _onUpdateAnimations._elements
-        for i in 0..<_onUpdateAnimations.count {
+        for i in 0 ..< _onUpdateAnimations.count {
             elements[i]!.update(deltaTime)
         }
     }
 
     func callRendererOnUpdate(_ deltaTime: Float) {
         let elements = _renderers._elements
-        for i in 0..<_renderers.count {
+        for i in 0 ..< _renderers.count {
             elements[i]!.update(deltaTime)
         }
     }
 
     func callScriptOnStart() {
         let onStartScripts = _onStartScripts
-        if (onStartScripts.count > 0) {
+        if onStartScripts.count > 0 {
             let elements = onStartScripts._elements
             // The 'onStartScripts.length' maybe add if you add some Script with addComponent() in some Script's onStart()
-            for i in 0..<onStartScripts.count {
+            for i in 0 ..< onStartScripts.count {
                 let script = elements[i]!
-                if (!script._waitHandlingInValid) {
+                if !script._waitHandlingInValid {
                     script._started = true
                     script._onStartIndex = -1
                     script.onStart()
@@ -120,9 +120,9 @@ extension ComponentsManager {
 
     func callScriptOnUpdate(_ deltaTime: Float) {
         let elements = _onUpdateScripts._elements
-        for i in 0..<_onUpdateScripts.count {
+        for i in 0 ..< _onUpdateScripts.count {
             let element = elements[i]!
-            if (element._started) {
+            if element._started {
                 element.onUpdate(deltaTime)
             }
         }
@@ -130,9 +130,9 @@ extension ComponentsManager {
 
     func callScriptOnLateUpdate(_ deltaTime: Float) {
         let elements = _onUpdateScripts._elements
-        for i in 0..<_onUpdateScripts.count {
+        for i in 0 ..< _onUpdateScripts.count {
             let element = elements[i]!
-            if (element._started) {
+            if element._started {
                 element.onLateUpdate(deltaTime)
             }
         }
@@ -140,33 +140,33 @@ extension ComponentsManager {
 
     func callScriptOnPhysicsUpdate() {
         let elements = _onUpdateScripts._elements
-        for i in 0..<_onUpdateScripts.count {
+        for i in 0 ..< _onUpdateScripts.count {
             let element = elements[i]!
-            if (!element._waitHandlingInValid && element._started) {
+            if !element._waitHandlingInValid, element._started {
                 element.onPhysicsUpdate()
             }
         }
     }
 
-    func callCameraOnBeginRender(_ camera: Camera,  _ commandBuffer: MTLCommandBuffer) {
+    func callCameraOnBeginRender(_ camera: Camera, _ commandBuffer: MTLCommandBuffer) {
         let camComps = camera.entity._scripts
-        for i in 0..<camComps.count {
+        for i in 0 ..< camComps.count {
             camComps.get(i)?.onBeginRender(camera, commandBuffer)
         }
     }
 
-    func callCameraOnEndRender(_ camera: Camera,  _ commandBuffer: MTLCommandBuffer) {
+    func callCameraOnEndRender(_ camera: Camera, _ commandBuffer: MTLCommandBuffer) {
         let camComps = camera.entity._scripts
-        for i in 0..<camComps.count {
+        for i in 0 ..< camComps.count {
             camComps.get(i)?.onEndRender(camera, commandBuffer)
         }
     }
 
     func handlingInvalidScripts() {
         var length = _disableScripts.count
-        if (length > 0) {
+        if length > 0 {
             for disableScript in _disableScripts {
-                if (disableScript._waitHandlingInValid) {
+                if disableScript._waitHandlingInValid {
                     disableScript._handlingInValid()
                 }
             }
@@ -174,7 +174,7 @@ extension ComponentsManager {
         }
 
         length = _destroyScripts.count
-        if (length > 0) {
+        if length > 0 {
             for destroyScript in _destroyScripts {
                 destroyScript.onDestroy()
             }

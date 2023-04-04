@@ -4,8 +4,8 @@
 //  personal capacity and am not conveying any rights to any intellectual
 //  property of any third parties.
 
-import vox_render
 import Math
+import vox_render
 
 /// A winged-edge data structure holds references to an edge, the previous and next edge in it's triangle, it's connected face, and the opposite edge (common).
 /// ```
@@ -37,13 +37,12 @@ public final class WingedEdge {
     /// The WingedEdge that is on the opposite side of this edge.
     public private(set) var opposite: WingedEdge!
 
-    init() {
-    }
+    init() {}
 
     /// Equality comparision tests for local edge equality, disregarding other values.
     /// - Parameter other: The WingedEdge to compare against.
     /// - Returns: True if the local edges are equal, false if not.
-    public func Equals(other: WingedEdge) -> Bool {
+    public func Equals(other _: WingedEdge) -> Bool {
         false
     }
 
@@ -54,35 +53,33 @@ public final class WingedEdge {
     }
 
     /// Given two adjacent triangle wings, attempt to create a single quad.
-    internal static func MakeQuad(left: WingedEdge, right: WingedEdge) -> [Int] {
+    internal static func MakeQuad(left _: WingedEdge, right _: WingedEdge) -> [Int] {
         []
     }
 
     /// Return the @"UnityEngine.ProBuilder.WingedEdge.previous" or @"UnityEngine.ProBuilder.WingedEdge.next" WingedEdge if it contains the passed common (shared) index.
     /// - Parameter common: The common index to search next and previous for.
     /// - Returns: The next or previous WingedEdge that contains common, or null if not found.
-    public func GetAdjacentEdgeWithCommonIndex(common: Int) -> WingedEdge? {
+    public func GetAdjacentEdgeWithCommonIndex(common _: Int) -> WingedEdge? {
         nil
-
     }
 
     /// Order a face's edges in sequence.
     /// The first edge is used as a starting point.
     /// - Parameter face: The source face.
     /// - Returns: A new set of edges where each edge y value matches the next edge x.
-    public static func SortEdgesByAdjacency(face: Face) -> [Edge] {
+    public static func SortEdgesByAdjacency(face _: Face) -> [Edge] {
         []
     }
 
     /// Sort edges list by adjacency, such that each edge's common y value matches the next edge's common x.
     /// - Parameter edges: The edges to sort in-place.
-    public static func SortEdgesByAdjacency(edges: [Edge]) {
-    }
+    public static func SortEdgesByAdjacency(edges _: [Edge]) {}
 
     /// Get a dictionary of common indexes and all WingedEdge values touching the index.
     /// - Parameter wings: The wings to search for spokes.
     /// - Returns: A dictionary where each key is a common index with a list of each winged edge touching it.
-    public static func GetSpokes(wings: [WingedEdge]) -> [Int: [WingedEdge]] {
+    public static func GetSpokes(wings _: [WingedEdge]) -> [Int: [WingedEdge]] {
         [:]
     }
 
@@ -91,7 +88,7 @@ public final class WingedEdge {
     /// - Parameters:
     ///   - wings: The wings to be sorted.
     ///   - common: The common indexes to be sorted.
-    internal static func SortCommonIndexesByAdjacency(wings: [WingedEdge], common: Set<Int>) -> [Int] {
+    internal static func SortCommonIndexesByAdjacency(wings _: [WingedEdge], common _: Set<Int>) -> [Int] {
         []
     }
 
@@ -100,7 +97,7 @@ public final class WingedEdge {
     ///   - mesh: The mesh from which faces will read.
     ///   - oneWingPerFace: Optionally restrict the list to only include one WingedEdge per-face.
     /// - Returns: A new list of WingedEdge values gathered from @"UnityEngine.ProBuilder.ProBuilderMesh.faces".
-    public static func GetWingedEdges(mesh: ProBuilderMesh, oneWingPerFace: Bool = false) -> [WingedEdge] {
+    public static func GetWingedEdges(mesh _: ProBuilderMesh, oneWingPerFace _: Bool = false) -> [WingedEdge] {
         []
     }
 
@@ -110,17 +107,15 @@ public final class WingedEdge {
     ///   - faces: Which faces to include in the WingedEdge list.
     ///   - oneWingPerFace: If `oneWingPerFace` is true the returned list will contain a single winged edge per-face (but still point to all edges).
     /// - Returns: A new list of WingedEdge values gathered from faces.
-    public static func GetWingedEdges(mesh: ProBuilderMesh, faces: [Face], oneWingPerFace: Bool = false) -> [WingedEdge] {
+    public static func GetWingedEdges(mesh _: ProBuilderMesh, faces _: [Face], oneWingPerFace _: Bool = false) -> [WingedEdge] {
         []
     }
 }
 
 extension WingedEdge: Hashable {
-    public func hash(into hasher: inout Hasher) {
+    public func hash(into _: inout Hasher) {}
 
-    }
-
-    public static func ==(lhs: WingedEdge, rhs: WingedEdge) -> Bool {
+    public static func == (lhs: WingedEdge, rhs: WingedEdge) -> Bool {
         lhs.Equals(other: rhs)
     }
 }

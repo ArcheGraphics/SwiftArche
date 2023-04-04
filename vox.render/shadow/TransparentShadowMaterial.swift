@@ -10,12 +10,12 @@ public class TransparentShadowMaterial: BaseMaterial {
     private var _baseColor = Color(1, 1, 1, 1)
 
     /// Base color.
-    public var baseColor: Color = Color(1, 1, 1, 1) {
+    public var baseColor: Color = .init(1, 1, 1, 1) {
         didSet {
             shaderData.setData(with: TransparentShadowMaterial._baseColorProp, data: baseColor.toLinear())
         }
     }
-    
+
     public required init() {
         super.init()
         shader = Shader.create(in: Engine.library(), vertexSource: "vertex_unlit_worldPos",

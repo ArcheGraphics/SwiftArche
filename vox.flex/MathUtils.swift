@@ -15,8 +15,9 @@ public enum Math {
     ///   - eps: The tolerance.
     /// - Returns: True if similar.
     public static func similar(x: Float, y: Float,
-                               eps: Float = Float.leastNonzeroMagnitude) -> Bool {
-        (abs(x - y) <= eps)
+                               eps: Float = Float.leastNonzeroMagnitude) -> Bool
+    {
+        abs(x - y) <= eps
     }
 
     /// Returns the absolute minimum value among the two inputs.
@@ -80,7 +81,7 @@ public enum Math {
     ///   - z: The third value.
     /// - Returns: The index of minimum
     public static func argmin3<T: Comparable>(x: T, y: T, z: T) -> UInt {
-        if (x < y) {
+        if x < y {
             return (x < z) ? 0 : 2
         } else {
             return (y < z) ? 1 : 2
@@ -94,7 +95,7 @@ public enum Math {
     ///   - z: The third value.
     /// - Returns: The index of maximum
     public static func argmax3<T: Comparable>(x: T, y: T, z: T) -> UInt {
-        if (x > y) {
+        if x > y {
             return (x > z) ? 0 : 2
         } else {
             return (y > z) ? 1 : 2
@@ -122,9 +123,9 @@ public enum Math {
     ///   - high: The high value.
     /// - Returns: The clamped value.
     public static func clamp<T: Comparable>(val: T, low: T, high: T) -> T {
-        if (val < low) {
+        if val < low {
             return low
-        } else if (val > high) {
+        } else if val > high {
             return high
         } else {
             return val
@@ -154,7 +155,8 @@ public enum Math {
     ///   - t: The offset from \p i.
     /// - Returns: Value type.
     public static func getBarycentric(x: Float, iLow: ssize_t, iHigh: ssize_t,
-                                      i: inout ssize_t, f: inout Float) {
+                                      i: inout ssize_t, f: inout Float)
+    {
         let s: Float = floor(x)
         i = ssize_t(s)
 
@@ -162,13 +164,13 @@ public enum Math {
         let imin = iLow + offset
         let imax = iHigh + offset
 
-        if (imin == imax) {
+        if imin == imax {
             i = imin
             f = 0
-        } else if (i < imin) {
+        } else if i < imin {
             i = imin
             f = 0
-        } else if (i > imax - 1) {
+        } else if i > imax - 1 {
             i = imax - 1
             f = 1
         } else {
@@ -183,7 +185,8 @@ public enum Math {
                                   f1: Float,
                                   f2: Float,
                                   f3: Float,
-                                  f: Float) -> Float {
+                                  f: Float) -> Float
+    {
         let d1 = (f2 - f0) / 2
         let d2 = (f3 - f1) / 2
         let D1 = f2 - f1
@@ -201,21 +204,22 @@ public enum Math {
                                            f1: Float,
                                            f2: Float,
                                            f3: Float,
-                                           f: Float) -> Float {
+                                           f: Float) -> Float
+    {
         var d1 = (f2 - f0) / 2
         var d2 = (f3 - f1) / 2
         let D1 = f2 - f1
 
-        if (abs(D1) < Float.leastNonzeroMagnitude) {
+        if abs(D1) < Float.leastNonzeroMagnitude {
             d1 = 0
             d2 = 0
         }
 
-        if (sign(D1) != sign(d1)) {
+        if sign(D1) != sign(d1) {
             d1 = 0
         }
 
-        if (sign(D1) != sign(d2)) {
+        if sign(D1) != sign(d2) {
             d2 = 0
         }
 
@@ -228,16 +232,16 @@ public enum Math {
     }
 }
 
-//MARK: - lerp
+// MARK: - lerp
 
-extension Math {
+public extension Math {
     ///  Computes linear interpolation.
     /// - Parameters:
     ///   - value0: The first value.
     ///   - value1: The second value.
     ///   - f: Relative offset [0, 1] from the first value.
     /// - Returns: The interpolated value.
-    public static func lerp(value0: Float, value1: Float, f: Float) -> Float {
+    static func lerp(value0: Float, value1: Float, f: Float) -> Float {
         (1 - f) * value0 + f * value1
     }
 
@@ -247,8 +251,9 @@ extension Math {
     ///   - value1: The second value.
     ///   - f: Relative offset [0, 1] from the first value.
     /// - Returns: The interpolated value.
-    public static func lerp(value0: SIMD2<Float>, value1: SIMD2<Float>,
-                            f: Float) -> SIMD2<Float> {
+    static func lerp(value0: SIMD2<Float>, value1: SIMD2<Float>,
+                     f: Float) -> SIMD2<Float>
+    {
         (1 - f) * value0 + f * value1
     }
 
@@ -258,8 +263,9 @@ extension Math {
     ///   - value1: The second value.
     ///   - f: Relative offset [0, 1] from the first value.
     /// - Returns: The interpolated value.
-    public static func lerp(value0: SIMD3<Float>, value1: SIMD3<Float>,
-                            f: Float) -> SIMD3<Float> {
+    static func lerp(value0: SIMD3<Float>, value1: SIMD3<Float>,
+                     f: Float) -> SIMD3<Float>
+    {
         (1 - f) * value0 + f * value1
     }
 
@@ -269,94 +275,103 @@ extension Math {
     ///   - value1: The second value.
     ///   - f: Relative offset [0, 1] from the first value.
     /// - Returns: The interpolated value.
-    public static func lerp(value0: SIMD4<Float>, value1: SIMD4<Float>,
-                            f: Float) -> SIMD4<Float> {
+    static func lerp(value0: SIMD4<Float>, value1: SIMD4<Float>,
+                     f: Float) -> SIMD4<Float>
+    {
         (1 - f) * value0 + f * value1
     }
 }
 
-//MARK: - bilerp
+// MARK: - bilerp
 
-extension Math {
+public extension Math {
     /// Computes bilinear interpolation.
-    public static func bilerp(f00: Float, f10: Float,
-                              f01: Float, f11: Float,
-                              tx: Float, ty: Float) -> Float {
+    static func bilerp(f00: Float, f10: Float,
+                       f01: Float, f11: Float,
+                       tx: Float, ty: Float) -> Float
+    {
         lerp(value0: lerp(value0: f00, value1: f10, f: tx),
-                value1: lerp(value0: f01, value1: f11, f: tx),
-                f: ty)
+             value1: lerp(value0: f01, value1: f11, f: tx),
+             f: ty)
     }
 
     /// Computes bilinear interpolation.
-    public static func bilerp(f00: SIMD2<Float>, f10: SIMD2<Float>,
-                              f01: SIMD2<Float>, f11: SIMD2<Float>,
-                              tx: Float, ty: Float) -> SIMD2<Float> {
+    static func bilerp(f00: SIMD2<Float>, f10: SIMD2<Float>,
+                       f01: SIMD2<Float>, f11: SIMD2<Float>,
+                       tx: Float, ty: Float) -> SIMD2<Float>
+    {
         lerp(value0: lerp(value0: f00, value1: f10, f: tx),
-                value1: lerp(value0: f01, value1: f11, f: tx),
-                f: ty)
+             value1: lerp(value0: f01, value1: f11, f: tx),
+             f: ty)
     }
 
     /// Computes bilinear interpolation.
-    public static func bilerp(f00: SIMD3<Float>, f10: SIMD3<Float>,
-                              f01: SIMD3<Float>, f11: SIMD3<Float>,
-                              tx: Float, ty: Float) -> SIMD3<Float> {
+    static func bilerp(f00: SIMD3<Float>, f10: SIMD3<Float>,
+                       f01: SIMD3<Float>, f11: SIMD3<Float>,
+                       tx: Float, ty: Float) -> SIMD3<Float>
+    {
         lerp(value0: lerp(value0: f00, value1: f10, f: tx),
-                value1: lerp(value0: f01, value1: f11, f: tx),
-                f: ty)
+             value1: lerp(value0: f01, value1: f11, f: tx),
+             f: ty)
     }
 
     /// Computes bilinear interpolation.
-    public static func bilerp(f00: SIMD4<Float>, f10: SIMD4<Float>,
-                              f01: SIMD4<Float>, f11: SIMD4<Float>,
-                              tx: Float, ty: Float) -> SIMD4<Float> {
+    static func bilerp(f00: SIMD4<Float>, f10: SIMD4<Float>,
+                       f01: SIMD4<Float>, f11: SIMD4<Float>,
+                       tx: Float, ty: Float) -> SIMD4<Float>
+    {
         lerp(value0: lerp(value0: f00, value1: f10, f: tx),
-                value1: lerp(value0: f01, value1: f11, f: tx),
-                f: ty)
+             value1: lerp(value0: f01, value1: f11, f: tx),
+             f: ty)
     }
 }
 
-//MARK: - trilerp
+// MARK: - trilerp
 
-extension Math {
+public extension Math {
     /// Computes trilinear interpolation.
-    public static func trilerp(f000: Float, f100: Float, f010: Float, f110: Float,
-                               f001: Float, f101: Float, f011: Float, f111: Float,
-                               tx: Float, ty: Float, fz: Float) -> Float {
+    static func trilerp(f000: Float, f100: Float, f010: Float, f110: Float,
+                        f001: Float, f101: Float, f011: Float, f111: Float,
+                        tx: Float, ty: Float, fz: Float) -> Float
+    {
         lerp(value0: bilerp(f00: f000, f10: f100, f01: f010, f11: f110, tx: tx, ty: ty),
-                value1: bilerp(f00: f001, f10: f101, f01: f011, f11: f111, tx: tx, ty: ty),
-                f: fz)
+             value1: bilerp(f00: f001, f10: f101, f01: f011, f11: f111, tx: tx, ty: ty),
+             f: fz)
     }
 
     /// Computes trilinear interpolation.
-    public static func trilerp(f000: SIMD2<Float>, f100: SIMD2<Float>,
-                               f010: SIMD2<Float>, f110: SIMD2<Float>,
-                               f001: SIMD2<Float>, f101: SIMD2<Float>,
-                               f011: SIMD2<Float>, f111: SIMD2<Float>,
-                               tx: Float, ty: Float, fz: Float) -> SIMD2<Float> {
+    static func trilerp(f000: SIMD2<Float>, f100: SIMD2<Float>,
+                        f010: SIMD2<Float>, f110: SIMD2<Float>,
+                        f001: SIMD2<Float>, f101: SIMD2<Float>,
+                        f011: SIMD2<Float>, f111: SIMD2<Float>,
+                        tx: Float, ty: Float, fz: Float) -> SIMD2<Float>
+    {
         lerp(value0: bilerp(f00: f000, f10: f100, f01: f010, f11: f110, tx: tx, ty: ty),
-                value1: bilerp(f00: f001, f10: f101, f01: f011, f11: f111, tx: tx, ty: ty),
-                f: fz)
+             value1: bilerp(f00: f001, f10: f101, f01: f011, f11: f111, tx: tx, ty: ty),
+             f: fz)
     }
 
     /// Computes trilinear interpolation.
-    public static func trilerp(f000: SIMD3<Float>, f100: SIMD3<Float>,
-                               f010: SIMD3<Float>, f110: SIMD3<Float>,
-                               f001: SIMD3<Float>, f101: SIMD3<Float>,
-                               f011: SIMD3<Float>, f111: SIMD3<Float>,
-                               tx: Float, ty: Float, fz: Float) -> SIMD3<Float> {
+    static func trilerp(f000: SIMD3<Float>, f100: SIMD3<Float>,
+                        f010: SIMD3<Float>, f110: SIMD3<Float>,
+                        f001: SIMD3<Float>, f101: SIMD3<Float>,
+                        f011: SIMD3<Float>, f111: SIMD3<Float>,
+                        tx: Float, ty: Float, fz: Float) -> SIMD3<Float>
+    {
         lerp(value0: bilerp(f00: f000, f10: f100, f01: f010, f11: f110, tx: tx, ty: ty),
-                value1: bilerp(f00: f001, f10: f101, f01: f011, f11: f111, tx: tx, ty: ty),
-                f: fz)
+             value1: bilerp(f00: f001, f10: f101, f01: f011, f11: f111, tx: tx, ty: ty),
+             f: fz)
     }
 
     /// Computes trilinear interpolation.
-    public static func trilerp(f000: SIMD4<Float>, f100: SIMD4<Float>,
-                               f010: SIMD4<Float>, f110: SIMD4<Float>,
-                               f001: SIMD4<Float>, f101: SIMD4<Float>,
-                               f011: SIMD4<Float>, f111: SIMD4<Float>,
-                               tx: Float, ty: Float, fz: Float) -> SIMD4<Float> {
+    static func trilerp(f000: SIMD4<Float>, f100: SIMD4<Float>,
+                        f010: SIMD4<Float>, f110: SIMD4<Float>,
+                        f001: SIMD4<Float>, f101: SIMD4<Float>,
+                        f011: SIMD4<Float>, f111: SIMD4<Float>,
+                        tx: Float, ty: Float, fz: Float) -> SIMD4<Float>
+    {
         lerp(value0: bilerp(f00: f000, f10: f100, f01: f010, f11: f110, tx: tx, ty: ty),
-                value1: bilerp(f00: f001, f10: f101, f01: f011, f11: f111, tx: tx, ty: ty),
-                f: fz)
+             value1: bilerp(f00: f001, f10: f101, f01: f011, f11: f111, tx: tx, ty: ty),
+             f: fz)
     }
 }

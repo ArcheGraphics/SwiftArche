@@ -13,7 +13,8 @@ class KHR_materials_clearcoat {
         material.clearCoatRoughness = schema.clearcoatRoughnessFactor
 
         if let clearcoatTexture = schema.clearcoatTexture,
-           let samplers = glTFResource.samplers {
+           let samplers = glTFResource.samplers
+        {
             material.clearCoatTexture = glTFResource.textures![clearcoatTexture.index]
             if let sampler = samplers[clearcoatTexture.index] {
                 material.clearCoatSampler = sampler
@@ -21,7 +22,8 @@ class KHR_materials_clearcoat {
             KHR_texture_transform.parseEngineResource(clearcoatTexture.transform, material, context)
         }
         if let clearcoatRoughnessTexture = schema.clearcoatRoughnessTexture,
-           let samplers = glTFResource.samplers {
+           let samplers = glTFResource.samplers
+        {
             material.clearCoatRoughnessTexture = glTFResource.textures![clearcoatRoughnessTexture.index]
             if let samplers = samplers[clearcoatRoughnessTexture.index] {
                 material.clearCoatRoughnessSampler = samplers
@@ -29,7 +31,8 @@ class KHR_materials_clearcoat {
             KHR_texture_transform.parseEngineResource(clearcoatRoughnessTexture.transform, material, context)
         }
         if let clearcoatNormalTexture = schema.clearcoatNormalTexture,
-           let samplers = glTFResource.samplers {
+           let samplers = glTFResource.samplers
+        {
             material.clearCoatNormalTexture = glTFResource.textures![clearcoatNormalTexture.index]
             if let samplers = samplers[clearcoatNormalTexture.index] {
                 material.clearCoatNormalSampler = samplers

@@ -40,8 +40,8 @@ public class AnimationState {
     public func removeChild(state: AnimationState) {
         _nativeState.removeChild(state._nativeState)
     }
-    
-    public func setJointMasks(_ mask:Float, root: String? = nil) {
+
+    public func setJointMasks(_ mask: Float, root: String? = nil) {
         _nativeState.setJointMasks(mask, root)
     }
 }

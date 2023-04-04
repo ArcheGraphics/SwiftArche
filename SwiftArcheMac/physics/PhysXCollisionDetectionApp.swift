@@ -5,20 +5,20 @@
 //  property of any third parties.
 
 import Cocoa
-import vox_render
 import Math
+import vox_render
 import vox_toolkit
 
-fileprivate class MoveScript: Script {
+private class MoveScript: Script {
     var pos: Float = -5
     var vel: Float = 0.05
     var velSign: Float = -1
 
     override func onPhysicsUpdate() {
-        if (pos >= 5) {
+        if pos >= 5 {
             velSign = -1
         }
-        if (pos <= -5) {
+        if pos <= -5 {
             velSign = 1
         }
         pos += vel * velSign
@@ -30,18 +30,18 @@ class PhysXCollisionDetectionApp: NSViewController {
     var canvas: Canvas!
     var engine: Engine!
     var iblBaker: IBLBaker!
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
         canvas = Canvas(frame: view.frame)
         canvas.setParentView(view)
         engine = Engine(canvas: canvas)
         iblBaker = IBLBaker()
-        
+
         let scene = Engine.sceneManager.activeScene!
         let hdr = Engine.textureLoader.loadHDR(with: "assets/kloppenheim_06_4k.hdr")!
         iblBaker.bake(scene, with: hdr, size: 256, level: 3)
-        
+
         let rootEntity = scene.createRootEntity()
         let cameraEntity = rootEntity.createChild()
         cameraEntity.transform.position = Vector3(10, 10, 10)
@@ -83,7 +83,7 @@ class PhysXCollisionDetectionApp: NSViewController {
 
         let sphereMtl = PBRMaterial()
         let sphereRenderer = sphereEntity.addComponent(MeshRenderer.self)
-        sphereMtl.baseColor = Color(Float.random(in: 0..<1), Float.random(in: 0..<1), Float.random(in: 0..<1), 1.0)
+        sphereMtl.baseColor = Color(Float.random(in: 0 ..< 1), Float.random(in: 0 ..< 1), Float.random(in: 0 ..< 1), 1.0)
         sphereMtl.metallic = 0.0
         sphereMtl.roughness = 0.5
         sphereRenderer.mesh = PrimitiveMesh.createSphere(radius: radius)
@@ -105,10 +105,9 @@ class PhysXCollisionDetectionApp: NSViewController {
 
         Engine.run()
     }
-    
+
     override func viewDidDisappear() {
         super.viewDidDisappear()
         Engine.destroy()
     }
 }
-

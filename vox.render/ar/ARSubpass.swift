@@ -4,16 +4,16 @@
 //  personal capacity and am not conveying any rights to any intellectual
 //  property of any third parties.
 
-import Metal
 import ARKit
 import Math
+import Metal
 
 public class ARSubpass: Subpass {
     var capturedImagePipelineState: MTLRenderPipelineState!
     var capturedImageDepthState: MTLDepthStencilState!
     var imagePlaneVertexBuffer: MTLBuffer!
 
-    var viewportSize: CGSize = CGSize()
+    var viewportSize: CGSize = .init()
     var viewportSizeDidChange: Bool = true
 
     // Vertex data for an image plane
@@ -60,7 +60,7 @@ public class ARSubpass: Subpass {
         capturedImagePipelineStateDescriptor.stencilAttachmentPixelFormat = Engine.canvas.depthStencilPixelFormat
         do {
             try capturedImagePipelineState = Engine.device.makeRenderPipelineState(descriptor: capturedImagePipelineStateDescriptor)
-        } catch let error {
+        } catch {
             print("Failed to created captured image pipeline state, error \(error)")
         }
 
@@ -75,9 +75,10 @@ public class ARSubpass: Subpass {
         Engine.canvas.updateFlagManager.addFlag(flag: updateFlag)
     }
 
-    public override func draw(_ encoder: inout RenderCommandEncoder) {
+    override public func draw(_ encoder: inout RenderCommandEncoder) {
         guard let arManager = Engine.arManager,
-              let currentFrame = arManager.session.currentFrame else {
+              let currentFrame = arManager.session.currentFrame
+        else {
             return
         }
 
@@ -87,7 +88,8 @@ public class ARSubpass: Subpass {
         }
 
         guard let textureY = arManager.capturedImageTextureY,
-                let textureCbCr = arManager.capturedImageTextureCbCr else {
+              let textureCbCr = arManager.capturedImageTextureCbCr
+        else {
             return
         }
 
@@ -112,7 +114,7 @@ public class ARSubpass: Subpass {
         encoder.handle.popDebugGroup()
     }
 
-    private func resize(bit: Int?, param: AnyObject?) {
+    private func resize(bit _: Int?, param: AnyObject?) {
         viewportSizeDidChange = true
         viewportSize = (param as! Canvas).bounds.size
     }
@@ -122,7 +124,7 @@ public class ARSubpass: Subpass {
         let displayToCameraTransform = frame.displayTransform(for: .landscapeRight, viewportSize: viewportSize).inverted()
 
         let vertexData = imagePlaneVertexBuffer.contents().assumingMemoryBound(to: Float.self)
-        for index in 0...3 {
+        for index in 0 ... 3 {
             let textureCoordIndex = 4 * index + 2
             let textureCoord = CGPoint(x: CGFloat(kImagePlaneVertexData[textureCoordIndex]), y: CGFloat(kImagePlaneVertexData[textureCoordIndex + 1]))
             let transformedCoord = textureCoord.applying(displayToCameraTransform)

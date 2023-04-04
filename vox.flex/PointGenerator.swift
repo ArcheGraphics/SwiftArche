@@ -11,8 +11,8 @@ protocol PointGenerator {
     /// with target point \p spacing.
     func generate(boundingBox: BoundingBox3F,
                   spacing: Float,
-                  points: inout Array<Vector3F>)
-    
+                  points: inout [Vector3F])
+
     /// Iterates every point within the bounding box with specified
     /// point pattern and invokes the callback function.
     ///
@@ -30,12 +30,13 @@ protocol PointGenerator {
 extension PointGenerator {
     func generate(boundingBox: BoundingBox3F,
                   spacing: Float,
-                  points: inout Array<Vector3F>) {
+                  points: inout [Vector3F])
+    {
         forEachPoint(boundingBox: boundingBox, spacing: spacing) {
             (point: Vector3F) in
             let pointArray: [Vector3F] = [point]
             points.append(contentsOf: pointArray)
-            return true;
+            return true
         }
     }
 }

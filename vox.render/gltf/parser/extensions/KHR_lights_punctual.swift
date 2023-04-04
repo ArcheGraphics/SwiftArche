@@ -12,12 +12,10 @@ class KHR_lights_punctual {
         switch schema.type {
         case .directional:
             light = entity.addComponent(DirectLight.self)
-            break
         case .point:
             let l = entity.addComponent(PointLight.self)
             l.distance = schema.range
             light = l
-            break
         case .spot:
             let l = entity.addComponent(SpotLight.self)
             l.distance = schema.range
@@ -32,7 +30,7 @@ class KHR_lights_punctual {
         light.color = Color(schema.color.x, schema.color.y, schema.color.z, 1)
         light.intensity = schema.intensity
 
-        if (context.glTFResource.lights == nil) {
+        if context.glTFResource.lights == nil {
             context.glTFResource.lights = []
         }
         context.glTFResource.lights!.append(light)

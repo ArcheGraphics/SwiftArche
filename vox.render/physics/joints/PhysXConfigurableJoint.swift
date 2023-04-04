@@ -8,11 +8,13 @@ import Math
 
 class PhysXConfigurableJoint: PhysXJoint {
     init(_ actor0: PhysXCollider?, _ position0: Vector3, _ rotation0: Quaternion,
-         _ actor1: PhysXCollider?, _ position1: Vector3, _ rotation1: Quaternion) {
+         _ actor1: PhysXCollider?, _ position1: Vector3, _ rotation1: Quaternion)
+    {
         super.init()
         _pxJoint = PhysXPhysics._pxPhysics.createD6Joint(
-                actor0?._pxActor ?? nil, position0.internalValue, rotation0.internalValue,
-                actor1?._pxActor ?? nil, position1.internalValue, rotation1.internalValue)
+            actor0?._pxActor ?? nil, position0.internalValue, rotation0.internalValue,
+            actor1?._pxActor ?? nil, position1.internalValue, rotation1.internalValue
+        )
     }
 
     func setMotion(_ axis: Int, _ type: Int) {
@@ -25,19 +27,19 @@ class PhysXConfigurableJoint: PhysXJoint {
 
     func setSoftDistanceLimit(_ extent: Float, _ stiffness: Float, _ damping: Float) {
         (_pxJoint as! CPxD6Joint).setDistanceLimit(CPxJointLinearLimit(softLimit: extent,
-                CPxSpring(stiffness: stiffness, damping)))
+                                                                       CPxSpring(stiffness: stiffness, damping)))
     }
 
     func setHardLinearLimit(_ axis: Int, _ lowerLimit: Float, _ upperLimit: Float, _ contactDist: Float) {
         (_pxJoint as! CPxD6Joint).setLinearLimit(CPxD6Axis(UInt32(axis)),
-                CPxJointLinearLimitPair(hardLimit: CPxTolerancesScale.new(),
-                        lowerLimit, upperLimit, contactDist))
+                                                 CPxJointLinearLimitPair(hardLimit: CPxTolerancesScale.new(),
+                                                                         lowerLimit, upperLimit, contactDist))
     }
 
     func setSoftLinearLimit(_ axis: Int, _ lowerLimit: Float, _ upperLimit: Float, _ stiffness: Float, _ damping: Float) {
         (_pxJoint as! CPxD6Joint).setLinearLimit(CPxD6Axis(UInt32(axis)),
-                CPxJointLinearLimitPair(softLimit: lowerLimit, upperLimit,
-                        CPxSpring(stiffness: stiffness, damping)))
+                                                 CPxJointLinearLimitPair(softLimit: lowerLimit, upperLimit,
+                                                                         CPxSpring(stiffness: stiffness, damping)))
     }
 
     func setHardTwistLimit(_ lowerLimit: Float, _ upperLimit: Float, _ contactDist: Float) {
@@ -46,7 +48,7 @@ class PhysXConfigurableJoint: PhysXJoint {
 
     func setSoftTwistLimit(_ lowerLimit: Float, _ upperLimit: Float, _ stiffness: Float, _ damping: Float) {
         (_pxJoint as! CPxD6Joint).setTwistLimit(CPxJointAngularLimitPair(softLimit: lowerLimit, upperLimit,
-                CPxSpring(stiffness: stiffness, damping)))
+                                                                         CPxSpring(stiffness: stiffness, damping)))
     }
 
     func setHardSwingLimit(_ yLimitAngle: Float, _ zLimitAngle: Float, _ contactDist: Float) {
@@ -55,24 +57,26 @@ class PhysXConfigurableJoint: PhysXJoint {
 
     func setSoftSwingLimit(_ yLimitAngle: Float, _ zLimitAngle: Float, _ stiffness: Float, _ damping: Float) {
         (_pxJoint as! CPxD6Joint).setSwingLimit(CPxJointLimitCone(softLimit: yLimitAngle, zLimitAngle,
-                CPxSpring(stiffness: stiffness, damping)))
+                                                                  CPxSpring(stiffness: stiffness, damping)))
     }
 
     func setHardPyramidSwingLimit(_ yLimitAngleMin: Float, _ yLimitAngleMax: Float,
-                                  _ zLimitAngleMin: Float, _ zLimitAngleMax: Float, _ contactDist: Float) {
+                                  _ zLimitAngleMin: Float, _ zLimitAngleMax: Float, _ contactDist: Float)
+    {
         (_pxJoint as! CPxD6Joint).setPyramidSwingLimit(CPxJointLimitPyramid(hardLimit: yLimitAngleMin, yLimitAngleMax,
-                zLimitAngleMin, zLimitAngleMax, contactDist))
+                                                                            zLimitAngleMin, zLimitAngleMax, contactDist))
     }
 
     func setSoftPyramidSwingLimit(_ yLimitAngleMin: Float, _ yLimitAngleMax: Float,
-                                  _ zLimitAngleMin: Float, _ zLimitAngleMax: Float, _ stiffness: Float, _ damping: Float) {
+                                  _ zLimitAngleMin: Float, _ zLimitAngleMax: Float, _ stiffness: Float, _ damping: Float)
+    {
         (_pxJoint as! CPxD6Joint).setPyramidSwingLimit(CPxJointLimitPyramid(softLimit: yLimitAngleMin, yLimitAngleMax,
-                zLimitAngleMin, zLimitAngleMax, CPxSpring(stiffness: stiffness, damping)))
+                                                                            zLimitAngleMin, zLimitAngleMax, CPxSpring(stiffness: stiffness, damping)))
     }
 
     func setDrive(_ index: Int, _ driveStiffness: Float, _ driveDamping: Float, _ driveForceLimit: Float) {
         (_pxJoint as! CPxD6Joint).setDrive(CPxD6Drive(UInt32(index)),
-                CPxD6JointDrive(limitStiffness: driveStiffness, driveDamping, driveForceLimit))
+                                           CPxD6JointDrive(limitStiffness: driveStiffness, driveDamping, driveForceLimit))
     }
 
     func setDrivePosition(_ position: Vector3, _ rotation: Quaternion) {

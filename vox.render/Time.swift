@@ -7,30 +7,24 @@
 import Foundation
 
 /// Tools for calculating the time per frame.
-public class Time {
+public enum Time {
     private static var _deltaTime: Float = 0.0001
     private static var _startTime = Date()
     private static var _lastTickTime = Date()
 
     /// Current Time
     public static var nowTime: Date {
-        get {
-            Date()
-        }
+        Date()
     }
 
     /// Time between two ticks
     public static var deltaTime: Float {
-        get {
-            _deltaTime
-        }
+        _deltaTime
     }
-    
+
     /// The time at the beginning of this frame
     public static var time: Float {
-        get {
-            Float(_lastTickTime.timeIntervalSince1970)
-        }
+        Float(_lastTickTime.timeIntervalSince1970)
     }
 
     /// Scaled delta time.
@@ -38,16 +32,12 @@ public class Time {
 
     /// Unscaled delta time.
     static var unscaledDeltaTime: Float {
-        get {
-            _deltaTime / timeScale
-        }
+        _deltaTime / timeScale
     }
 
     /// The elapsed time, after the clock is initialized.
     static var timeSinceStartup: Float {
-        get {
-            Float(Date().timeIntervalSince(_startTime))
-        }
+        Float(Date().timeIntervalSince(_startTime))
     }
 
     /// Call every frame, update delta time and other data.

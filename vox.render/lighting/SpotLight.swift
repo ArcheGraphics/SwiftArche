@@ -9,7 +9,7 @@ import Math
 /// Spot light.
 public class SpotLight: Light {
     private static let _spotLightProperty = "u_spotLight"
-    private static var _combinedData: [SpotLightData] = [SpotLightData](repeating: SpotLightData(), count: Light._maxLight)
+    private static var _combinedData: [SpotLightData] = .init(repeating: SpotLightData(), count: Light._maxLight)
 
     static func _updateShaderData(_ shaderData: ShaderData) {
         shaderData.setData(with: SpotLight._spotLightProperty, array: SpotLight._combinedData)
@@ -18,20 +18,18 @@ public class SpotLight: Light {
     /// Defines a distance cutoff at which the light's intensity must be considered zero.
     @Serialized(default: 100)
     public var distance: Float
-    
+
     /// Angle, in radians, from centre of spotlight where falloff begins.
     @Serialized(default: Float.pi / 6)
     public var angle: Float
-    
+
     /// Angle, in radians, from falloff begins to ends.
     @Serialized(default: Float.pi / 12)
     public var penumbra: Float
 
     /// Get light direction.
     public var direction: Vector3 {
-        get {
-            entity.transform.worldForward
-        }
+        entity.transform.worldForward
     }
 
     /// Get the opposite direction of the spotlight.

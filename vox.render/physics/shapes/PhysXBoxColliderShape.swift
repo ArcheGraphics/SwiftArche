@@ -8,7 +8,7 @@ import Math
 
 /// Box collider shape in PhysX.
 class PhysXBoxColliderShape: PhysXColliderShape {
-    var _halfSize: Vector3 = Vector3()
+    var _halfSize: Vector3 = .init()
 
     /// Init Box Shape and alloc PhysX objects.
     /// - Parameters:
@@ -20,9 +20,9 @@ class PhysXBoxColliderShape: PhysXColliderShape {
         super.init()
 
         _pxGeometry = CPxBoxGeometry(
-                hx: _halfSize.x * _scale.x,
-                hy: _halfSize.y * _scale.y,
-                hz: _halfSize.z * _scale.z
+            hx: _halfSize.x * _scale.x,
+            hy: _halfSize.y * _scale.y,
+            hz: _halfSize.z * _scale.z
         )
         _initialize(material._pxMaterial, uniqueID)
         _setLocalPose()
@@ -33,7 +33,7 @@ class PhysXBoxColliderShape: PhysXColliderShape {
         (_pxGeometry as! CPxBoxGeometry).halfExtents = (_halfSize * _scale).internalValue
         _pxShape.setGeometry(_pxGeometry)
 
-        for i in 0..<_controllers.count {
+        for i in 0 ..< _controllers.count {
             let pxController = _controllers.get(i)!._pxController as! CPxBoxController
             pxController.setHalfHeight(_halfSize.x)
             pxController.setHalfSideExtent(_halfSize.y)

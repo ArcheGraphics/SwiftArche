@@ -12,27 +12,25 @@ public class Collider: Component {
     var _nativeCollider: PhysXCollider!
 
     var _updateFlag: BoolUpdateFlag!
-    
+
     @Serialized("shapes", default: [])
     var _shapes: [PolymorphicValue<ColliderShape>]
-    
+
     @Serialized(default: false)
     public var visualize: Bool {
         didSet {
             _nativeCollider.setVisualize(visualize)
         }
     }
-    
+
     /// The shapes of this collider.
     public var shapes: [ColliderShape] {
-        get {
-            _shapes.map { s in
-                s.wrappedValue
-            }
+        _shapes.map { s in
+            s.wrappedValue
         }
     }
-    
-    public internal(set) override var entity: Entity {
+
+    override public internal(set) var entity: Entity {
         get {
             _entity
         }
@@ -46,8 +44,8 @@ public class Collider: Component {
     /// - Parameter shape: Collider shape
     public func addShape(_ shape: ColliderShape) {
         let oldCollider = shape._collider
-        if (oldCollider !== self) {
-            if (oldCollider != nil) {
+        if oldCollider !== self {
+            if oldCollider != nil {
                 oldCollider!.removeShape(shape)
             }
             _shapes.append(PolymorphicValue(wrappedValue: shape, key: .colliderShapeTypes))
@@ -59,12 +57,12 @@ public class Collider: Component {
 
     /// Remove a collider shape.
     /// - Parameter shape: The collider shape.
-    public func removeShape(_  shape: ColliderShape) {
+    public func removeShape(_ shape: ColliderShape) {
         let index = _shapes.firstIndex { s in
             s.wrappedValue === shape
         }
 
-        if (index != nil) {
+        if index != nil {
             _shapes.remove(at: index!)
             _nativeCollider.removeShape(shape._nativeShape)
             Engine.physicsManager._removeColliderShape(shape)
@@ -74,7 +72,7 @@ public class Collider: Component {
 
     /// Remove all shape attached.
     public func clearShapes() {
-        for i in 0..<_shapes.count {
+        for i in 0 ..< _shapes.count {
             _nativeCollider.removeShape(shapes[i]._nativeShape)
             Engine.physicsManager._removeColliderShape(shapes[i])
         }
@@ -86,26 +84,23 @@ public class Collider: Component {
     }
 
     func _onUpdate() {
-        if (_updateFlag.flag) {
+        if _updateFlag.flag {
             let transform = entity.transform
             _nativeCollider.setWorldTransform(transform!.worldPosition, transform!.worldRotationQuaternion)
             _updateFlag.flag = false
 
             let worldScale = transform!.lossyWorldScale
-            for i in 0..<_shapes.count {
+            for i in 0 ..< _shapes.count {
                 shapes[i]._nativeShape.setWorldScale(worldScale)
             }
         }
     }
 
-    func _onLateUpdate() {
-    }
-
+    func _onLateUpdate() {}
 
     override func _onEnable() {
         Engine.physicsManager._addCollider(self)
     }
-
 
     override func _onDisable() {
         Engine.physicsManager._removeCollider(self)

@@ -25,7 +25,7 @@ public class TerrainRenderer: Renderer {
 
     override func _updateBounds(_ worldBounds: inout BoundingBox) {
         worldBounds.setMinMax(Vector3(TERRAIN_SCALE / -2.0, 0, TERRAIN_SCALE / -2.0),
-                Vector3(TERRAIN_SCALE / 2.0, TERRAIN_HEIGHT, TERRAIN_SCALE / 2.0))
+                              Vector3(TERRAIN_SCALE / 2.0, TERRAIN_HEIGHT, TERRAIN_SCALE / 2.0))
     }
 
     required init() {
@@ -37,10 +37,10 @@ public class TerrainRenderer: Renderer {
         let EncodeParamsFromData = { (encoder: MTLArgumentEncoder,
                                       curHabitat: TerrainHabitatType,
                                       terrainTextures: [TerrianData.HabitatTextures]) in
-            encoder.setTexture(terrainTextures[Int(curHabitat.rawValue)].diffSpecTextureArray,
-                    index: TerrainRenderer.IabIndexForHabitatParam(habType: curHabitat, memberId: .diffSpecTextureArray))
-            encoder.setTexture(terrainTextures[Int(curHabitat.rawValue)].normalTextureArray,
-                    index: TerrainRenderer.IabIndexForHabitatParam(habType: curHabitat, memberId: .normalTextureArray))
+                encoder.setTexture(terrainTextures[Int(curHabitat.rawValue)].diffSpecTextureArray,
+                                   index: TerrainRenderer.IabIndexForHabitatParam(habType: curHabitat, memberId: .diffSpecTextureArray))
+                encoder.setTexture(terrainTextures[Int(curHabitat.rawValue)].normalTextureArray,
+                                   index: TerrainRenderer.IabIndexForHabitatParam(habType: curHabitat, memberId: .normalTextureArray))
         }
         // Configure the various terrain "habitats."
         // - these are the look-and-feel of visually distinct areas that differ by elevation
@@ -89,9 +89,10 @@ public class TerrainRenderer: Renderer {
         TerrainRenderer.EncodeParam(with: paramsEncoder, memberId: .ambientLightScale, value: 0.0)
         TerrainRenderer.EncodeParam(with: paramsEncoder, memberId: .atmosphereScale, value: 0.0)
 
-        terrainParamsBuffer.didModifyRange(0..<terrainParamsBuffer.length)
+        terrainParamsBuffer.didModifyRange(0 ..< terrainParamsBuffer.length)
 
         // MARK: - Use a height map to define the initial terrain topography
+
         let heightMapWidth = _terrainData.targetHeightmap.width
         let heightMapHeight = _terrainData.targetHeightmap.height
 
@@ -99,8 +100,8 @@ public class TerrainRenderer: Renderer {
         _srcTex.label = "SourceTerrain"
 
         var texDesc = MTLTextureDescriptor.texture2DDescriptor(pixelFormat: .r32Float,
-                width: heightMapWidth,
-                height: heightMapHeight, mipmapped: false)
+                                                               width: heightMapWidth,
+                                                               height: heightMapHeight, mipmapped: false)
         texDesc.usage = [texDesc.usage, .shaderRead, .shaderWrite]
         texDesc.storageMode = .private
         let _dstTex = Engine.device.makeTexture(descriptor: texDesc)!
@@ -113,12 +114,12 @@ public class TerrainRenderer: Renderer {
 
         _tessellationScale = 25.0
         _visiblePatchIndicesBfr
-                = Engine.device.makeBuffer(length: MemoryLayout<UInt32>.stride
+            = Engine.device.makeBuffer(length: MemoryLayout<UInt32>.stride
                 * Int(TERRAIN_PATCHES) * Int(TERRAIN_PATCHES),
                 options: .storageModePrivate)!
 
         _visiblePatchesTessFactorBfr
-                = Engine.device.makeBuffer(length: MemoryLayout<MTLQuadTessellationFactorsHalf>.stride
+            = Engine.device.makeBuffer(length: MemoryLayout<MTLQuadTessellationFactorsHalf>.stride
                 * Int(TERRAIN_PATCHES) * Int(TERRAIN_PATCHES),
                 options: .storageModePrivate)!
 
@@ -130,13 +131,14 @@ public class TerrainRenderer: Renderer {
                 computeEncoder.setTexture(_srcTex, index: 0)
                 computeEncoder.setTexture(_dstTex, index: 1)
                 computeEncoder.dispatchThreads(MTLSizeMake(heightMapWidth, heightMapHeight, 1),
-                        threadsPerThreadgroup: threadsPerThreadgroup)
+                                               threadsPerThreadgroup: threadsPerThreadgroup)
 
                 computeEncoder.endEncoding()
                 commandBuffer.commit()
             }
 
-            //MARK: - Create normals and props textures
+            // MARK: - Create normals and props textures
+
             texDesc = MTLTextureDescriptor()
             texDesc.width = heightMapWidth
             texDesc.height = heightMapHeight
@@ -154,7 +156,7 @@ public class TerrainRenderer: Renderer {
             if let encoder = commandBuffer.makeComputeCommandEncoder() {
                 encoder.setTexture(terrainPropertiesMap, index: 0)
                 encoder.dispatchThreads(MTLSize(width: heightMapWidth, height: heightMapHeight, depth: 1),
-                        threadsPerThreadgroup: MTLSize(width: 8, height: 8, depth: 1))
+                                        threadsPerThreadgroup: MTLSize(width: 8, height: 8, depth: 1))
                 encoder.endEncoding()
             }
             generateTerrainPropertiesMap(with: commandBuffer)
@@ -177,18 +179,19 @@ public class TerrainRenderer: Renderer {
 
             let threadsPerThreadgroup = MTLSize(width: 16, height: 16, depth: 1)
             computeEncoder.dispatchThreadgroups(MTLSizeMake(2, 2, 1),
-                    threadsPerThreadgroup: threadsPerThreadgroup)
+                                                threadsPerThreadgroup: threadsPerThreadgroup)
             computeEncoder.endEncoding()
         }
     }
 
     func computeUpdateHeightMap(with commandBuffer: MTLCommandBuffer,
-                                mouseBuffer: MTLBuffer) {
+                                mouseBuffer: MTLBuffer)
+    {
         if let computeEncoder = commandBuffer.makeComputeCommandEncoder() {
             computeEncoder.setTexture(terrainHeight, index: 0)
             computeEncoder.setBuffer(mouseBuffer, offset: 0, index: 0)
             computeEncoder.dispatchThreads(MTLSizeMake(terrainHeight.width / 8, terrainHeight.height / 8, 1),
-                    threadsPerThreadgroup: MTLSizeMake(8, 8, 1))
+                                           threadsPerThreadgroup: MTLSizeMake(8, 8, 1))
             computeEncoder.endEncoding()
         }
 
@@ -204,7 +207,6 @@ public class TerrainRenderer: Renderer {
 
     func generateTerrainNormalMap(with commandBuffer: MTLCommandBuffer) {
         if let computeEncoder = commandBuffer.makeComputeCommandEncoder() {
-
             let threadsPerThreadgroup = MTLSize(width: 16, height: 16, depth: 1)
             assert(((terrainHeight.width / 16) * 16) == terrainHeight.width)
             assert(((terrainHeight.height / 16) * 16) == terrainHeight.height)
@@ -212,7 +214,7 @@ public class TerrainRenderer: Renderer {
             computeEncoder.setTexture(terrainHeight, index: 0)
             computeEncoder.setTexture(terrainNormalMap, index: 1)
             computeEncoder.dispatchThreads(MTLSizeMake(terrainHeight.width, terrainHeight.height, 1),
-                    threadsPerThreadgroup: threadsPerThreadgroup)
+                                           threadsPerThreadgroup: threadsPerThreadgroup)
             computeEncoder.endEncoding()
         }
     }
@@ -222,9 +224,9 @@ public class TerrainRenderer: Renderer {
             var res: [SIMD2<Float>] = []
 
             let sampleRadius: Float = 32.0
-            for _ in 0..<numSamples {
-                let u = Float.random(in: 0..<1)
-                let v = Float.random(in: 0..<1)
+            for _ in 0 ..< numSamples {
+                let u = Float.random(in: 0 ..< 1)
+                let v = Float.random(in: 0 ..< 1)
 
                 let r = sqrtf(u)
                 let theta = 2.0 * Float.pi * v
@@ -246,20 +248,22 @@ public class TerrainRenderer: Renderer {
             var invSize = SIMD2<Float>(1.0 / Float(terrainHeight.width), 1.0 / Float(terrainHeight.height))
             computeEncoder.setBytes(&invSize, length: MemoryLayout<SIMD2<Float>>.stride, index: 2)
             computeEncoder.dispatchThreads(MTLSize(width: terrainHeight.width, height: terrainHeight.height, depth: 1),
-                    threadsPerThreadgroup: MTLSize(width: 16, height: 16, depth: 1))
+                                           threadsPerThreadgroup: MTLSize(width: 16, height: 16, depth: 1))
             computeEncoder.endEncoding()
         }
     }
 
     static func IabIndexForHabitatParam(habType: TerrainHabitatType,
-                                        memberId: TerrainHabitat_MemberIds) -> Int {
+                                        memberId: TerrainHabitat_MemberIds) -> Int
+    {
         Int(TerrainHabitat_MemberIds.COUNT.rawValue) * Int(habType.rawValue) + Int(memberId.rawValue)
     }
 
     static func EncodeParam<T>(with paramsEncoder: MTLArgumentEncoder,
                                habType: TerrainHabitatType,
                                memberId: TerrainHabitat_MemberIds,
-                               value: T) {
+                               value: T)
+    {
         var value = value
         let index = IabIndexForHabitatParam(habType: habType, memberId: memberId)
         paramsEncoder.constantData(at: index).copyMemory(from: &value, byteCount: MemoryLayout<T>.stride)
@@ -267,7 +271,8 @@ public class TerrainRenderer: Renderer {
 
     static func EncodeParam<T>(with paramsEncoder: MTLArgumentEncoder,
                                memberId: TerrainParams_MemberIds,
-                               value: T) {
+                               value: T)
+    {
         var value = value
         let index = Int(memberId.rawValue)
         paramsEncoder.constantData(at: index).copyMemory(from: &value, byteCount: MemoryLayout<T>.stride)

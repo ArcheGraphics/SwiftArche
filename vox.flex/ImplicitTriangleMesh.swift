@@ -15,39 +15,40 @@ public class ImplicitTriangleMesh {
     var res = SIMD3<Int>()
     var sdf: MTLTexture?
     var sdfSampler = MTLSamplerDescriptor()
-    
+
     public static func builder() -> Builder {
         ImplicitTriangleMesh.Builder()
     }
-    
+
     public init(mesh: TriangleMesh,
                 resolutionX: Int = 32, margin: Float = 0.2, signRayCount: UInt32 = 12,
-                transform: simd_float4x4 = simd_float4x4()) {
+                transform _: simd_float4x4 = simd_float4x4())
+    {
         _triangleMesh = mesh
         _signRayCount = signRayCount
-        
+
         sdfSampler.magFilter = .linear
         sdfSampler.minFilter = .linear
         sdfSampler.mipFilter = .linear
         sdfSampler.rAddressMode = .clampToEdge
         sdfSampler.sAddressMode = .clampToEdge
         sdfSampler.tAddressMode = .clampToEdge
-        
+
         let lowerBounds = _triangleMesh.lowerBounds()
         let upperBounds = _triangleMesh.upperBounds()
         let scale = upperBounds - lowerBounds
-        
+
         data.SDFLower = lowerBounds - scale * margin
         data.SDFUpper = upperBounds + scale * margin
         let extend = scale * (1 + margin * 2)
         let resolutionY = Int(ceil(Float(resolutionX) * extend.y / extend.x))
         let resolutionZ = Int(ceil(Float(resolutionX) * extend.z / extend.x))
         res = SIMD3<Int>(resolutionX, resolutionY, resolutionZ)
-        
+
         _createGrid()
         _generateSDF()
     }
-    
+
     private func _createGrid() {
         let desc = MTLTextureDescriptor()
         desc.pixelFormat = .r32Float
@@ -57,9 +58,9 @@ public class ImplicitTriangleMesh {
         desc.textureType = .type3D
         desc.usage = [.shaderRead, .shaderWrite]
         desc.storageMode = .private
-        sdf = Engine.device.makeTexture(descriptor: desc);
+        sdf = Engine.device.makeTexture(descriptor: desc)
     }
-    
+
     private func _generateSDF() {
         let function = Engine.library("flex.shader").makeFunction(name: "sdfBaker")
         let pipelineState = try! Engine.device.makeComputePipelineState(function: function!)
@@ -70,33 +71,34 @@ public class ImplicitTriangleMesh {
                 commandEncoder.setBuffer(_triangleMesh.nodeBuffer(), offset: 0, index: 1)
                 commandEncoder.setBuffer(_triangleMesh.verticesBuffer(), offset: 0, index: 2)
                 commandEncoder.setBuffer(_triangleMesh.normalBuffer(), offset: 0, index: 3)
-                
+
                 commandEncoder.setBytes(&data, length: MemoryLayout<SDFData>.stride, index: 4)
-                
+
                 var triangleCount = _triangleMesh.triangleCount()
                 commandEncoder.setBytes(&triangleCount, length: MemoryLayout<UInt32>.stride, index: 5)
                 commandEncoder.setBytes(&_signRayCount, length: MemoryLayout<UInt32>.stride, index: 6)
-                
+
                 let w = pipelineState.threadExecutionWidth
                 let h = pipelineState.maxTotalThreadsPerThreadgroup / w
-                let X_SLICE_SIZE = 32;
+                let X_SLICE_SIZE = 32
                 for xBeg in stride(from: 0, to: res.x, by: X_SLICE_SIZE) {
                     var xBeg = xBeg
                     var xEnd = UInt32(min(res.x, xBeg + X_SLICE_SIZE))
                     commandEncoder.setBytes(&xBeg, length: MemoryLayout<UInt32>.stride, index: 7)
                     commandEncoder.setBytes(&xEnd, length: MemoryLayout<UInt32>.stride, index: 8)
-                    
+
                     commandEncoder.dispatchThreads(MTLSizeMake(1, res.y, res.z),
                                                    threadsPerThreadgroup: MTLSizeMake(1, w, h))
                 }
                 commandEncoder.endEncoding()
             }
-            
+
             commandBuffer.commit()
         }
     }
-    
+
     // MARK: - Builder
+
     public class Builder {
         private var _mesh: TriangleMesh?
         private var _resolutionX: Int = 32
@@ -121,18 +123,19 @@ public class ImplicitTriangleMesh {
             _margin = margin
             return self
         }
-        
+
         /// Returns builder with sign ray count
         public func withSignRayCount(_ signRayCount: UInt32) -> Builder {
             _signRayCount = signRayCount
             return self
         }
-        
+
         /// Returns builder with transform.
         public func withTransform(_ transform: simd_float4x4) -> Builder {
             _transform = transform
             return self
         }
+
         /// Builds ImplicitTriangleMesh3.
         public func build() -> ImplicitTriangleMesh? {
             if let mesh = _mesh {

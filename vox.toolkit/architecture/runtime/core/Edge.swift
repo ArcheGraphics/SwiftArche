@@ -4,8 +4,8 @@
 //  personal capacity and am not conveying any rights to any intellectual
 //  property of any third parties.
 
-import vox_render
 import Math
+import vox_render
 
 /// An edge connecting two vertices. May point to an index in the vertices or the sharedIndexes array (local / common in ProBuilder terminology).
 public struct Edge {
@@ -38,24 +38,24 @@ public struct Edge {
     }
 }
 
-extension Edge {
-    public static func +(a: Edge, b: Edge) -> Edge {
+public extension Edge {
+    static func + (a: Edge, b: Edge) -> Edge {
         Edge(a.a + b.a, a.b + b.b)
     }
 
-    public static func -(a: Edge, b: Edge) -> Edge {
+    static func - (a: Edge, b: Edge) -> Edge {
         Edge(a.a - b.a, a.b - b.b)
     }
 
-    public static func +(a: Edge, b: Int) -> Edge {
+    static func + (a: Edge, b: Int) -> Edge {
         Edge(a.a + b, a.b + b)
     }
 
-    public static func -(a: Edge, b: Int) -> Edge {
+    static func - (a: Edge, b: Int) -> Edge {
         Edge(a.a - b, a.b - b)
     }
 
-    public static func ==(a: Edge, b: Edge) -> Bool {
+    static func == (a: Edge, b: Edge) -> Bool {
         a.Equals(other: b)
     }
 
@@ -65,7 +65,7 @@ extension Edge {
     ///   - a: Left edge parameter.
     ///   - b: Right edge parameter.
     /// - Returns: The sum of a + b.
-    public static func Add(_ a: Edge, _  b: Edge) -> Edge {
+    static func Add(_ a: Edge, _ b: Edge) -> Edge {
         a + b
     }
 
@@ -75,7 +75,7 @@ extension Edge {
     ///   - a: The edge to subtract from.
     ///   - b: The value to subtract.
     /// - Returns: The sum of a - b.
-    public static func Subtract(_ a: Edge, _  b: Edge) -> Edge {
+    static func Subtract(_ a: Edge, _ b: Edge) -> Edge {
         a - b
     }
 
@@ -86,8 +86,8 @@ extension Edge {
     ///   - other: The edge to compare against.
     ///   - lookup: A common vertex indexes lookup dictionary. See pb_IntArray for more information.
     /// - Returns: True if edges are perceptually equal (that is, they point to the same common indexes).
-    public func Equals(other: Edge, lookup: [Int: Int] = [:]) -> Bool {
-        if (lookup.isEmpty) {
+    func Equals(other: Edge, lookup: [Int: Int] = [:]) -> Bool {
+        if lookup.isEmpty {
             return Equals(other: other)
         }
         let x0 = lookup[a], y0 = lookup[b], x1 = lookup[other.a], y1 = lookup[other.b]
@@ -97,15 +97,15 @@ extension Edge {
     /// Does this edge contain an index?
     /// - Parameter index: The index to compare against x and y.
     /// - Returns: True if x or y is equal to a. False if not.
-    public func Contains(index: Int) -> Bool {
-        (a == index || b == index)
+    func Contains(index: Int) -> Bool {
+        a == index || b == index
     }
 
     /// Does this edge have any matching index to edge b?
     /// - Parameter other: The edge to compare against.
     /// - Returns: True if x or y matches either b.x or b.y.
-    public func Contains(other: Edge) -> Bool {
-        (a == other.a || b == other.a || a == other.b || b == other.a)
+    func Contains(other: Edge) -> Bool {
+        a == other.a || b == other.a || a == other.b || b == other.a
     }
 
     internal func Contains(index: Int, lookup: [Int: Int]) -> Bool {
@@ -123,9 +123,7 @@ extension Edge {
     }
 }
 
-extension Edge: Hashable {
-
-}
+extension Edge: Hashable {}
 
 extension Edge: CustomStringConvertible {
     public var description: String {

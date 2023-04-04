@@ -9,10 +9,10 @@ import Metal
 /// Sub shader.
 public struct SubShader {
     public private(set) var passes: [ShaderPass]
-    public private(set) var tagsMap: [String : ShaderProperty]
+    public private(set) var tagsMap: [String: ShaderProperty]
 
     /// Create a sub shader.
-    init(name: String, passes: [ShaderPass], tags: [String : ShaderProperty] = [:]) {
+    init(name _: String, passes: [ShaderPass], tags: [String: ShaderProperty] = [:]) {
         self.passes = passes
         tagsMap = tags
     }

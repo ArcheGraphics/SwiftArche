@@ -19,11 +19,11 @@ import vox_render
 ///
 open class ParticleSystemSolverBase: PhysicsAnimation {
     public static var maxLength: UInt32 = 10000
-    
+
     var _collider: ParticleCollider?
     var _emitter: ParticleEmitter?
     var _particleSystemData: ParticleSystemData?
-    
+
     private var _dragCoefficient: Float = 1e-4
     private var _gravity = Vector3F(0, -9.8, 0)
 
@@ -36,7 +36,7 @@ open class ParticleSystemSolverBase: PhysicsAnimation {
             _gravity = newValue
         }
     }
-    
+
     /// The drag coefficient.
     public var dragCoefficient: Float {
         get {
@@ -46,14 +46,12 @@ open class ParticleSystemSolverBase: PhysicsAnimation {
             _dragCoefficient = max(newValue, 0)
         }
     }
-    
+
     /// the particle system data.
     public var particleSystemData: ParticleSystemData? {
-        get {
-            _particleSystemData
-        }
+        _particleSystemData
     }
-    
+
     /// the emitter.
     public var emitter: ParticleEmitter? {
         get {
@@ -67,7 +65,7 @@ open class ParticleSystemSolverBase: PhysicsAnimation {
             _emitter?.target = _particleSystemData
         }
     }
-    
+
     /// the collider.
     public var collider: ParticleCollider? {
         get {
@@ -81,7 +79,7 @@ open class ParticleSystemSolverBase: PhysicsAnimation {
             _collider?.target = _particleSystemData
         }
     }
-    
+
     public required init() {
         super.init()
     }

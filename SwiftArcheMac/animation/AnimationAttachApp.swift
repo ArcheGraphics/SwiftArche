@@ -5,23 +5,23 @@
 //  property of any third parties.
 
 import Cocoa
-import vox_render
-import Math
-import vox_toolkit
 import ImGui
+import Math
+import vox_render
+import vox_toolkit
 
 class AnimationAttachApp: NSViewController {
     var canvas: Canvas!
     var engine: Engine!
     var iblBaker: IBLBaker!
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
         canvas = Canvas(frame: view.frame)
         canvas.setParentView(view)
         engine = Engine(canvas: canvas)
         iblBaker = IBLBaker()
-        
+
         let scene = Engine.sceneManager.activeScene!
         let hdr = Engine.textureLoader.loadHDR(with: "assets/kloppenheim_06_4k.hdr")!
         iblBaker.bake(scene, with: hdr, size: 256, level: 3)
@@ -44,7 +44,7 @@ class AnimationAttachApp: NSViewController {
                                   withExtension: "ozz",
                                   subdirectory: "assets/Animation")!
         animator.loadSkeleton(url)
-        
+
         url = Bundle.main.url(forResource: "pab_walk",
                               withExtension: "ozz",
                               subdirectory: "assets/Animation")!
@@ -53,7 +53,7 @@ class AnimationAttachApp: NSViewController {
         let animationBlending = AnimationBlending()
         animationBlending.addChild(state: baseSampler)
         animator.rootState = animationBlending
-        
+
         let attachEntity = rootEntity.createChild()
         let attachRenderer = attachEntity.addComponent(MeshRenderer.self)
         attachRenderer.mesh = PrimitiveMesh.createCuboid(width: 0.01, height: 0.01, depth: 1)
@@ -61,15 +61,14 @@ class AnimationAttachApp: NSViewController {
         attachMtl.baseColor = Color(1, 0, 0, 1)
         attachRenderer.setMaterial(attachMtl)
         animator.bindEntity(attachEntity, for: "LeftHandMiddle1")
-        
+
         characterEntity.addComponent(AnimationVisualizer.self)
 
         Engine.run()
     }
-    
+
     override func viewDidDisappear() {
         super.viewDidDisappear()
         Engine.destroy()
     }
 }
-

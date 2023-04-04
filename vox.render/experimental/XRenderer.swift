@@ -32,21 +32,17 @@ class XRenderer {
 
         var pointLightsCullingBuffer: MTLBuffer
         var spotLightsCullingBuffer: MTLBuffer
-    };
+    }
 
     /// Initialization.
-    init(with view: MTKView) {
-    }
+    init(with _: MTKView) {}
 
     /// Updates the state for frame state based on the current input.
-    func updateFrameState() {
-    }
+    func updateFrameState() {}
 
     /// Draws the the view.
-    func drawInMTKView(view: MTKView) {
-    }
+    func drawInMTKView(view _: MTKView) {}
 
     /// Resizes internal structures to the specified resolution.
-    func resize(size: CGSize) {
-    }
+    func resize(size _: CGSize) {}
 }

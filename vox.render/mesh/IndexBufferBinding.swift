@@ -12,15 +12,11 @@ public class IndexBufferBinding {
     private var _format: MTLIndexType
 
     public var buffer: MTLBuffer {
-        get {
-            _buffer.buffer
-        }
+        _buffer.buffer
     }
 
     public var format: MTLIndexType {
-        get {
-            _format
-        }
+        _format
     }
 
     public init(_ buffer: BufferView, _ format: MTLIndexType) {

@@ -4,8 +4,8 @@
 //  personal capacity and am not conveying any rights to any intellectual
 //  property of any third parties.
 
-import vox_render
 import Math
+import vox_render
 
 /// The results of a raycast hit.
 final class RaycastHit {
@@ -17,10 +17,11 @@ final class RaycastHit {
     public init(distance: Float,
                 point: Vector3,
                 normal: Vector3,
-                face: Int) {
-        self.distance = distance;
-        self.point = point;
-        self.normal = normal;
-        self.face = face;
+                face: Int)
+    {
+        self.distance = distance
+        self.point = point
+        self.normal = normal
+        self.face = face
     }
 }

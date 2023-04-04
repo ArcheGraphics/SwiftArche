@@ -5,11 +5,11 @@
 //  property of any third parties.
 
 import Cocoa
-import vox_render
 import Math
+import vox_render
 import vox_toolkit
 
-fileprivate class BakerMaterial: BaseMaterial {
+private class BakerMaterial: BaseMaterial {
     private var _texture: MTLTexture?
 
     required init() {
@@ -37,7 +37,6 @@ fileprivate class BakerMaterial: BaseMaterial {
         }
         set {
             shaderData.setData(with: "u_faceIndex", data: newValue)
-
         }
     }
 }
@@ -75,7 +74,7 @@ class IrradianceApp: NSViewController {
         var planes: [Entity] = []
         var planeMaterials: [BakerMaterial] = []
 
-        for _ in 0..<6 {
+        for _ in 0 ..< 6 {
             let bakerEntity = rootEntity.createChild("IBL Baker Entity")
             bakerEntity.transform.rotation = Vector3(90, 0, 0)
             let bakerMaterial = BakerMaterial()
@@ -97,11 +96,11 @@ class IrradianceApp: NSViewController {
         let cubeMap = createCubemap(with: hdr, size: 512, level: 3)
         scene.ambientLight.specularTexture = createSpecularTexture(with: cubeMap, format: .rgba16Float)
         let changeMip: (Int) -> Void = {
-            (mipLevel: Int) -> Void in
-            for i in 0..<6 {
+            (mipLevel: Int) in
+            for i in 0 ..< 6 {
                 let material = planeMaterials[i]
                 material.baseTexture = cubeMap.makeTextureView(pixelFormat: cubeMap.pixelFormat, textureType: .type2D,
-                        levels: mipLevel..<mipLevel + 1, slices: i..<i + 1)
+                                                               levels: mipLevel ..< mipLevel + 1, slices: i ..< i + 1)
                 material.faceIndex = i
             }
         }
@@ -109,10 +108,9 @@ class IrradianceApp: NSViewController {
 
         Engine.run()
     }
-    
+
     override func viewDidDisappear() {
         super.viewDidDisappear()
         Engine.destroy()
     }
 }
-

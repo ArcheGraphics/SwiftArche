@@ -4,8 +4,8 @@
 //  personal capacity and am not conveying any rights to any intellectual
 //  property of any third parties.
 
-import Math
 import Foundation
+import Math
 
 /// Wireframe primitive.
 class WireframePrimitive {
@@ -14,52 +14,37 @@ class WireframePrimitive {
 
     /// Get cuboid wire frame index count.
     static var cuboidIndexCount: UInt32 {
-        get {
-            48
-        }
+        48
     }
 
     /// Get sphere wire frame index count.
     static var sphereIndexCount: UInt32 {
-        get {
-            WireframePrimitive.circleIndexCount * 3
-        }
+        WireframePrimitive.circleIndexCount * 3
     }
-
 
     /// Get cone wire frame index count.
     static var coneIndexCount: UInt32 {
-        get {
-            WireframePrimitive.circleIndexCount + 8
-        }
+        WireframePrimitive.circleIndexCount + 8
     }
 
     /// Get unbound cylinder wire frame index count.
     static var unboundCylinderIndexCount: UInt32 {
-        get {
-            WireframePrimitive.circleIndexCount + 16
-        }
+        WireframePrimitive.circleIndexCount + 16
     }
 
     /// Get capsule wire frame index count.
     static var capsuleIndexCount: UInt32 {
-        get {
-            (WireframePrimitive.circleIndexCount + WireframePrimitive.ellipticIndexCount) * 2
-        }
+        (WireframePrimitive.circleIndexCount + WireframePrimitive.ellipticIndexCount) * 2
     }
 
     /// Get circle wire frame index count.
     static var circleIndexCount: UInt32 {
-        get {
-            WireframePrimitive.circleVertexCount * 2
-        }
+        WireframePrimitive.circleVertexCount * 2
     }
 
     /// Get elliptic wire frame index count.
     static var ellipticIndexCount: UInt32 {
-        get {
-            WireframePrimitive.circleVertexCount * 2
-        }
+        WireframePrimitive.circleVertexCount * 2
     }
 
     /// Store cuboid wireframe mesh data.
@@ -78,7 +63,8 @@ class WireframePrimitive {
                                       _ positions: inout [Vector3],
                                       _ positionOffset: UInt32,
                                       _ indices: inout [UInt32],
-                                      _ indicesOffset: Int) {
+                                      _ indicesOffset: Int)
+    {
         let halfWidth: Float = width / 2
         let halfHeight: Float = height / 2
         let halfDepth: Float = depth / 2
@@ -241,7 +227,8 @@ class WireframePrimitive {
                                       _ positions: inout [Vector3],
                                       _ positionOffset: UInt32,
                                       _ indices: inout [UInt32],
-                                      _ indicesOffset: Int) {
+                                      _ indicesOffset: Int)
+    {
         let shift = Vector3()
 
         // X
@@ -249,15 +236,15 @@ class WireframePrimitive {
 
         // Y
         WireframePrimitive.createCircleWireframe(radius, 1, shift, &positions,
-                positionOffset + WireframePrimitive.circleVertexCount,
-                &indices,
-                indicesOffset + Int(WireframePrimitive.circleIndexCount))
+                                                 positionOffset + WireframePrimitive.circleVertexCount,
+                                                 &indices,
+                                                 indicesOffset + Int(WireframePrimitive.circleIndexCount))
 
         // Z
         WireframePrimitive.createCircleWireframe(radius, 2, shift, &positions,
-                positionOffset + WireframePrimitive.circleVertexCount * 2,
-                &indices,
-                indicesOffset + Int(WireframePrimitive.circleIndexCount * 2))
+                                                 positionOffset + WireframePrimitive.circleVertexCount * 2,
+                                                 &indices,
+                                                 indicesOffset + Int(WireframePrimitive.circleIndexCount * 2))
     }
 
     /// Store cone wireframe mesh data.
@@ -270,7 +257,8 @@ class WireframePrimitive {
     ///   - indices: index array
     ///   - indicesOffset: index array offset
     static func createConeWireframe(_ radius: Float, _ height: Float, _ positions: inout [Vector3], _ positionOffset: UInt32,
-                                    _ indices: inout [UInt32], _ indicesOffset: Int) {
+                                    _ indices: inout [UInt32], _ indicesOffset: Int)
+    {
         let shift = Vector3(0, -height, 0)
 
         // Y
@@ -311,7 +299,8 @@ class WireframePrimitive {
     ///   - indices: index array
     ///   - indicesOffset: index array offset
     static func createUnboundCylinderWireframe(_ radius: Float, _ positions: inout [Vector3], _ positionOffset: UInt32,
-                                               _ indices: inout [UInt32], _ indicesOffset: Int) {
+                                               _ indices: inout [UInt32], _ indicesOffset: Int)
+    {
         let height: Float = 5
         let shift = Vector3()
 
@@ -321,7 +310,7 @@ class WireframePrimitive {
         let indexBegin = positionOffset + WireframePrimitive.circleVertexCount
         var indicesOffset = indicesOffset
         indicesOffset += Int(WireframePrimitive.circleIndexCount)
-        for i in 0..<8 {
+        for i in 0 ..< 8 {
             let radian: Float = MathUtil.degreeToRadian(Float(45 * i))
             positions.append(Vector3(radius * cos(radian), 0, radius * sin(radian)))
             positions.append(Vector3(radius * cos(radian), -height, radius * sin(radian)))
@@ -341,7 +330,8 @@ class WireframePrimitive {
     ///   - indices: index array
     ///   - indicesOffset: index array offset
     static func createCapsuleWireframe(_ radius: Float, _ height: Float, _ positions: inout [Vector3],
-                                       _ positionOffset: UInt32, _ indices: inout [UInt32], _ indicesOffset: Int) {
+                                       _ positionOffset: UInt32, _ indices: inout [UInt32], _ indicesOffset: Int)
+    {
         let circleIndicesCount = WireframePrimitive.circleIndexCount
         let vertexCount = WireframePrimitive.circleVertexCount
         let halfHeight = height / 2
@@ -353,35 +343,35 @@ class WireframePrimitive {
         // Y-Bottom
         shift = Vector3(0, -halfHeight, 0)
         WireframePrimitive.createCircleWireframe(
-                radius,
-                1,
-                shift,
-                &positions,
-                positionOffset + vertexCount,
-                &indices,
-                indicesOffset + Int(circleIndicesCount)
+            radius,
+            1,
+            shift,
+            &positions,
+            positionOffset + vertexCount,
+            &indices,
+            indicesOffset + Int(circleIndicesCount)
         )
 
         // X-Elliptic
         WireframePrimitive.createEllipticWireframe(
-                radius,
-                halfHeight,
-                2,
-                &positions,
-                positionOffset + vertexCount * 2,
-                &indices,
-                indicesOffset + Int(circleIndicesCount) * 2
+            radius,
+            halfHeight,
+            2,
+            &positions,
+            positionOffset + vertexCount * 2,
+            &indices,
+            indicesOffset + Int(circleIndicesCount) * 2
         )
 
         // Z-Elliptic
         WireframePrimitive.createEllipticWireframe(
-                radius,
-                halfHeight,
-                0,
-                &positions,
-                positionOffset + vertexCount * 3,
-                &indices,
-                indicesOffset + Int(circleIndicesCount) * 2 + Int(WireframePrimitive.ellipticIndexCount)
+            radius,
+            halfHeight,
+            0,
+            &positions,
+            positionOffset + vertexCount * 3,
+            &indices,
+            indicesOffset + Int(circleIndicesCount) * 2 + Int(WireframePrimitive.ellipticIndexCount)
         )
     }
 
@@ -395,31 +385,29 @@ class WireframePrimitive {
     ///   - indices: index array
     ///   - indicesOffset: index array offset
     static func createCircleWireframe(_ radius: Float, _ axis: Int, _ shift: Vector3,
-                                      _ positions: inout [Vector3], _ positionOffset: UInt32, _ indices: inout [UInt32], _ indicesOffset: Int) {
+                                      _ positions: inout [Vector3], _ positionOffset: UInt32, _ indices: inout [UInt32], _ indicesOffset: Int)
+    {
         let vertexCount = WireframePrimitive.circleVertexCount
 
         let twoPi = Float.pi * 2
         let countReciprocal = 1.0 / Float(vertexCount)
-        for i: Int in 0..<Int(vertexCount) {
+        for i: Int in 0 ..< Int(vertexCount) {
             let v = Float(i) * countReciprocal
             let thetaDelta = v * twoPi
 
-            switch (axis) {
+            switch axis {
             case 0:
                 positions.append(Vector3(shift.x, radius * cos(thetaDelta) + shift.y, radius * sin(thetaDelta) + shift.z))
-                break
             case 1:
                 positions.append(Vector3(radius * cos(thetaDelta) + shift.x, shift.y, radius * sin(thetaDelta) + shift.z))
-                break
             case 2:
                 positions.append(Vector3(radius * cos(thetaDelta) + shift.x, radius * sin(thetaDelta) + shift.y, shift.z))
-                break
             default:
                 break
             }
 
             let globalIndex = UInt32(i) + positionOffset
-            if (i < vertexCount - 1) {
+            if i < vertexCount - 1 {
                 indices[indicesOffset + 2 * i] = globalIndex
                 indices[indicesOffset + 2 * i + 1] = globalIndex + 1
             } else {
@@ -438,36 +426,34 @@ class WireframePrimitive {
     ///   - positionOffset: The min of index list
     ///   - indices: index array
     ///   - indicesOffset: index array offset
-    static func createEllipticWireframe(_ radius: Float, _ height: Float, _  axis: Int,
-                                        _ positions: inout [Vector3], _ positionOffset: UInt32, _ indices: inout [UInt32], _ indicesOffset: Int) {
+    static func createEllipticWireframe(_ radius: Float, _ height: Float, _ axis: Int,
+                                        _ positions: inout [Vector3], _ positionOffset: UInt32, _ indices: inout [UInt32], _ indicesOffset: Int)
+    {
         let vertexCount = WireframePrimitive.circleVertexCount
         let twoPi = Float.pi * 2
         let countReciprocal: Float = 1.0 / Float(vertexCount)
         var height = height
-        for i: Int in 0..<Int(vertexCount) {
+        for i: Int in 0 ..< Int(vertexCount) {
             let v = Float(i) * countReciprocal
             let thetaDelta = v * twoPi
 
-            switch (axis) {
+            switch axis {
             case 0:
                 positions.append(Vector3(0, radius * sin(thetaDelta) + height, radius * cos(thetaDelta)))
-                break
             case 1:
                 positions.append(Vector3(radius * cos(thetaDelta), height, radius * sin(thetaDelta)))
-                break
             case 2:
                 positions.append(Vector3(radius * cos(thetaDelta), radius * sin(thetaDelta) + height, 0))
-                break
             default:
                 break
             }
 
-            if (i == vertexCount / 2) {
+            if i == vertexCount / 2 {
                 height = -height
             }
 
             let globalIndex = UInt32(i) + positionOffset
-            if (i < vertexCount - 1) {
+            if i < vertexCount - 1 {
                 indices[indicesOffset + 2 * i] = globalIndex
                 indices[indicesOffset + 2 * i + 1] = globalIndex + 1
             } else {

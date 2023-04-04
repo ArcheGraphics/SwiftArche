@@ -9,7 +9,7 @@ import Metal
 /// Shader for rendering.
 public struct Shader {
     public private(set) var subShaders: [SubShader]
-    
+
     /// Create a shader.
     /// - Parameters:
     ///   - name: Name of the shader
@@ -17,7 +17,8 @@ public struct Shader {
     ///   - fragmentSource: Fragment source code
     /// - Returns: Shader
     public static func create(in library: MTLLibrary,
-                              vertexSource: String, fragmentSource: String?)-> Shader {
+                              vertexSource: String, fragmentSource: String?) -> Shader
+    {
         let shaderPass = ShaderPass(library, vertexSource, fragmentSource)
         return Shader(subShaders: [SubShader(name: "Default", passes: [shaderPass])])
     }
@@ -27,17 +28,17 @@ public struct Shader {
     ///   - name: Name of the shader
     ///   - computeSource: Vertex source code
     /// - Returns: Shader
-    public static func create(in library: MTLLibrary, computeSource: String)-> Shader {
+    public static func create(in library: MTLLibrary, computeSource: String) -> Shader {
         let shaderPass = ShaderPass(library, computeSource)
         return Shader(subShaders: [SubShader(name: "Default", passes: [shaderPass])])
     }
-    
+
     /// Create a shader.
     /// - Parameters:
     ///   - name: Name of the shader
     ///   - shaderPasses: Shader passes
     /// - Returns: Shader
-    public static func create(shaderPasses: [ShaderPass])-> Shader {
+    public static func create(shaderPasses: [ShaderPass]) -> Shader {
         return Shader(subShaders: [SubShader(name: "Default", passes: shaderPasses)])
     }
 
@@ -46,11 +47,11 @@ public struct Shader {
     ///   - name: Name of the shader
     ///   - subShaders: Sub shaders
     /// - Returns: Shader
-    public static func create(subShaders: [SubShader])-> Shader {
+    public static func create(subShaders: [SubShader]) -> Shader {
         return Shader(subShaders: subShaders)
     }
-    
+
     private init(subShaders: [SubShader]) {
-        self.subShaders = subShaders;
+        self.subShaders = subShaders
     }
 }
