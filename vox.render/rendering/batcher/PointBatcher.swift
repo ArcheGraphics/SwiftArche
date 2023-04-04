@@ -42,9 +42,9 @@ class PointBatcher : Batcher {
     func checkResizePoint(count: Int) {
         if count > maxVerts {
             maxVerts = Int(ceil(Float(count) * 1.2))
-            let newPointBuffer = BufferView(device: Engine.device, count: maxVerts, stride: MemoryLayout<Vector3>.stride,
+            let newPointBuffer = BufferView(count: maxVerts, stride: MemoryLayout<Vector3>.stride,
                                             label: "point buffer", options: .storageModeShared)
-            let newColorBuffer = BufferView(device: Engine.device, count: maxVerts, stride: MemoryLayout<Color32>.stride,
+            let newColorBuffer = BufferView(count: maxVerts, stride: MemoryLayout<Color32>.stride,
                                             label: "color32 buffer", options: .storageModeShared)
             if let pointBuffer = pointBuffer,
                let colorBuffer = colorBuffer,
@@ -89,9 +89,10 @@ class PointBatcher : Batcher {
         _descriptor.attributes[Int(Color_0.rawValue)] = desc
         _descriptor.layouts[1].stride = MemoryLayout<Color32>.stride
         
-        _material = BaseMaterial(shader: Shader.create(in: Engine.library(),
-                                                       vertexSource: "vertex_point_gizmos",
-                                                       fragmentSource: "fragment_point_gizmos"))
+        _material = BaseMaterial()
+        _material.shader = Shader.create(in: Engine.library(),
+                                         vertexSource: "vertex_point_gizmos",
+                                         fragmentSource: "fragment_point_gizmos")
         _pipelineDescriptor.label = "Point Gizmo Pipeline"
         _pipelineDescriptor.colorAttachments[0].pixelFormat = Canvas.colorPixelFormat
         _pipelineDescriptor.depthAttachmentPixelFormat = Canvas.depthPixelFormat
@@ -99,7 +100,7 @@ class PointBatcher : Batcher {
             _pipelineDescriptor.stencilAttachmentPixelFormat = format
         }
 
-        let functions = Engine.resourceCache.requestShaderModule(_material.shader.subShaders[0].passes[0], _shaderMacro)
+        let functions = Engine.resourceCache.requestShaderModule(_material.shader!.subShaders[0].passes[0], _shaderMacro)
         _pipelineDescriptor.vertexFunction = functions[0]
         _pipelineDescriptor.fragmentFunction = functions[1]
         _pipelineDescriptor.vertexDescriptor = _descriptor

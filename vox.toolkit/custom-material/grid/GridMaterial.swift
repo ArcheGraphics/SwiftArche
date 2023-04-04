@@ -19,7 +19,7 @@ public class GridMaterial: BaseMaterial {
         }
         set {
             _gridData.u_near = newValue
-            shaderData.setData(GridMaterial._gridProperty, _gridData)
+            shaderData.setData(with: GridMaterial._gridProperty, data: _gridData)
         }
     }
 
@@ -30,7 +30,7 @@ public class GridMaterial: BaseMaterial {
         }
         set {
             _gridData.u_far = newValue
-            shaderData.setData(GridMaterial._gridProperty, _gridData)
+            shaderData.setData(with: GridMaterial._gridProperty, data: _gridData)
         }
     }
 
@@ -41,7 +41,7 @@ public class GridMaterial: BaseMaterial {
         }
         set {
             _gridData.u_primaryScale = newValue
-            shaderData.setData(GridMaterial._gridProperty, _gridData)
+            shaderData.setData(with: GridMaterial._gridProperty, data: _gridData)
         }
     }
 
@@ -52,7 +52,7 @@ public class GridMaterial: BaseMaterial {
         }
         set {
             _gridData.u_secondaryScale = newValue
-            shaderData.setData(GridMaterial._gridProperty, _gridData)
+            shaderData.setData(with: GridMaterial._gridProperty, data: _gridData)
         }
     }
 
@@ -63,7 +63,7 @@ public class GridMaterial: BaseMaterial {
         }
         set {
             _gridData.u_gridIntensity = newValue
-            shaderData.setData(GridMaterial._gridProperty, _gridData)
+            shaderData.setData(with: GridMaterial._gridProperty, data: _gridData)
         }
     }
 
@@ -74,7 +74,7 @@ public class GridMaterial: BaseMaterial {
         }
         set {
             _gridData.u_axisIntensity = newValue
-            shaderData.setData(GridMaterial._gridProperty, _gridData)
+            shaderData.setData(with: GridMaterial._gridProperty, data: _gridData)
         }
     }
 
@@ -85,7 +85,7 @@ public class GridMaterial: BaseMaterial {
         }
         set {
             _gridData.u_flipProgress = newValue
-            shaderData.setData(GridMaterial._gridProperty, _gridData)
+            shaderData.setData(with: GridMaterial._gridProperty, data: _gridData)
         }
     }
     
@@ -95,13 +95,14 @@ public class GridMaterial: BaseMaterial {
         }
         set {
             _gridData.u_fade = newValue
-            shaderData.setData(GridMaterial._gridProperty, _gridData)
+            shaderData.setData(with: GridMaterial._gridProperty, data: _gridData)
         }
     }
-
-    public init(_ name: String = "") {
-        super.init(shader: Shader.create(in: Engine.library("toolkit.shader"), vertexSource: "vertex_grid",
-                                         fragmentSource: "fragment_grid"), name)
+    
+    public required init() {
+        super.init()
+        shader = Shader.create(in: Engine.library("toolkit.shader"), vertexSource: "vertex_grid",
+                               fragmentSource: "fragment_grid")
         isTransparent = true
     }
 }

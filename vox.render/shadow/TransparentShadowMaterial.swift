@@ -10,21 +10,19 @@ public class TransparentShadowMaterial: BaseMaterial {
     private var _baseColor = Color(1, 1, 1, 1)
 
     /// Base color.
-    public var baseColor: Color {
-        get {
-            _baseColor.toGamma()
-        }
-        set {
-            _baseColor = newValue
-            shaderData.setData(TransparentShadowMaterial._baseColorProp, newValue.toLinear())
+    public var baseColor: Color = Color(1, 1, 1, 1) {
+        didSet {
+            shaderData.setData(with: TransparentShadowMaterial._baseColorProp, data: baseColor.toLinear())
         }
     }
     
-    public init(_ name: String = "transparent shadow") {
-        super.init(shader: Shader.create(in: Engine.library(), vertexSource: "vertex_unlit_worldPos",
-                                         fragmentSource: "fragment_transparent_shadow"), name)
+    public required init() {
+        super.init()
+        shader = Shader.create(in: Engine.library(), vertexSource: "vertex_unlit_worldPos",
+                               fragmentSource: "fragment_transparent_shadow")
+        name = "transparent shadow"
         isTransparent = true
         shaderData.enableMacro(NEED_WORLDPOS.rawValue)
-        shaderData.setData(TransparentShadowMaterial._baseColorProp, _baseColor)
+        shaderData.setData(with: TransparentShadowMaterial._baseColorProp, data: baseColor.toLinear())
     }
 }

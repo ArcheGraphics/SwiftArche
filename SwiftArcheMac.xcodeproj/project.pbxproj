@@ -70,7 +70,6 @@
 		3E43DC9D295BDDDC00732AC0 /* sdf_baker.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3E6B23D2294964B1000AC29F /* sdf_baker.metal */; };
 		3E43DC9E295BDDDC00732AC0 /* volume_emitter.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3EABF5E0294B6382009943C1 /* volume_emitter.metal */; };
 		3E43DC9F295BDDDC00732AC0 /* ssf_kernel.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3ED9BCDE294D5A1300876ABC /* ssf_kernel.metal */; };
-		3E43DCA0295BDDDC00732AC0 /* ssf_shading.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3ED9BCE0294D616700876ABC /* ssf_shading.metal */; };
 		3E43DCA1295BDDDC00732AC0 /* particle_shading.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3EABF5E8294C3841009943C1 /* particle_shading.metal */; };
 		3E43DCA2295BDDDC00732AC0 /* ssf_depth_thick_shading.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3EABF5ED294CBCD4009943C1 /* ssf_depth_thick_shading.metal */; };
 		3E43DCA3295BDDE400732AC0 /* hash_grid.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3ED9BD102956767900876ABC /* hash_grid.metal */; };
@@ -829,6 +828,7 @@
 		3E5C394729DA9FA20026E999 /* MeshSubpass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeshSubpass.swift; sourceTree = "<group>"; };
 		3E5C394929DACA6B0026E999 /* ArgumentBufferApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArgumentBufferApp.swift; sourceTree = "<group>"; };
 		3E5C394C29DACAB30026E999 /* argument_shading.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = argument_shading.metal; sourceTree = "<group>"; };
+		3E5C394E29DAEF5A0026E999 /* arguments.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = arguments.h; sourceTree = "<group>"; };
 		3E5FC0E129D5CCDE00FF2E7E /* EventWrapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventWrapper.swift; sourceTree = "<group>"; };
 		3E5FC0E429D6390900FF2E7E /* FrameData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FrameData.swift; sourceTree = "<group>"; };
 		3E6B235D294220BC000AC29F /* FaceMorphApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FaceMorphApp.swift; sourceTree = "<group>"; };
@@ -2342,6 +2342,7 @@
 				3EC0383929321483002187DC /* shadow */,
 				3E2AC86529CDA8B400A99391 /* config.h */,
 				3EC0384829321496002187DC /* type_common.h */,
+				3E5C394E29DAEF5A0026E999 /* arguments.h */,
 				3EC0383A29321494002187DC /* macro_name.h */,
 				3EC0384929321496002187DC /* function_constant.h */,
 				3E3E439729CDC28A00D41145 /* mesh_types.h */,
@@ -3469,7 +3470,6 @@
 				3ED9BCE929514A0700876ABC /* cellular_noise.metal in Sources */,
 				3ED9BCEB29515B9D00876ABC /* noise_common.metal in Sources */,
 				3E107643296524CF00F751A5 /* samplers.metal in Sources */,
-				3E43DCA0295BDDDC00732AC0 /* ssf_shading.metal in Sources */,
 				3E1076532966B96B00F751A5 /* capsule_collider_shape.metal in Sources */,
 				3E43DC9D295BDDDC00732AC0 /* sdf_baker.metal in Sources */,
 				3ED9BCFF2952A13F00876ABC /* step_bitonic_sort.metal in Sources */,

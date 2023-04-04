@@ -34,8 +34,8 @@ public struct BufferView {
     }
 
     /// Initializes the buffer with zeros, the buffer is given an appropriate length based on the provided element count.
-    public init(device: MTLDevice, count: Int, stride: Int, label: String? = nil, options: MTLResourceOptions = []) {
-        guard let buffer = device.makeBuffer(length: stride * count, options: options) else {
+    public init(count: Int, stride: Int, label: String? = nil, options: MTLResourceOptions = []) {
+        guard let buffer = Engine.device.makeBuffer(length: stride * count, options: options) else {
             fatalError("Failed to create MTLBuffer.")
         }
         _buffer = buffer
@@ -45,8 +45,8 @@ public struct BufferView {
     }
 
     /// Initializes the buffer with the contents of the provided array.
-    public init<Element>(device: MTLDevice, array: [Element], options: MTLResourceOptions = .storageModeShared) {
-        guard let buffer = device.makeBuffer(bytes: array, length: MemoryLayout<Element>.stride * array.count, options: options) else {
+    public init<Element>(array: [Element], options: MTLResourceOptions = .storageModeShared) {
+        guard let buffer = Engine.device.makeBuffer(bytes: array, length: MemoryLayout<Element>.stride * array.count, options: options) else {
             fatalError("Failed to create MTLBuffer")
         }
         _buffer = buffer

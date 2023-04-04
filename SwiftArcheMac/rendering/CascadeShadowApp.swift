@@ -173,15 +173,17 @@ fileprivate class CSSMVisualMaterial: BaseMaterial {
         }
         set {
             _baseColor = newValue
-            shaderData.setData(CSSMVisualMaterial._baseColorProp, newValue.toLinear())
+            shaderData.setData(with: CSSMVisualMaterial._baseColorProp, data: newValue.toLinear())
         }
     }
     
-    public init(_ name: String = "shadowmap mat") {
-        super.init(shader: Shader.create(in: Engine.library("app.shader"), vertexSource: "vertex_unlit",
-                                         fragmentSource: "shadowMap_visual"), name)
+    public required init() {
+        super.init()
+        name = "shadowmap mat"
+        shader = Shader.create(in: Engine.library("app.shader"), vertexSource: "vertex_unlit",
+                               fragmentSource: "shadowMap_visual")
         shaderData.enableMacro(NEED_WORLDPOS.rawValue)
-        shaderData.setData(CSSMVisualMaterial._baseColorProp, _baseColor)
+        shaderData.setData(with: CSSMVisualMaterial._baseColorProp, data: _baseColor.toLinear())
     }
 }
 

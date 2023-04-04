@@ -21,7 +21,6 @@ public class SkinnedMeshRenderer: MeshRenderer {
     private var _animator: Animator?
     private var _skinnedMeshIndex: Int = 0
     
-    private var _blendShapeWeights: [Float] = []
     private var _maxVertexUniformVectors: Int = 256
     private var _localBounds: BoundingBox = BoundingBox()
     private var _skinningMatrices: [simd_float4x4] = []
@@ -32,19 +31,9 @@ public class SkinnedMeshRenderer: MeshRenderer {
 
     /// The weights of the BlendShapes.
     /// - Remark: Array index is BlendShape index.
-    public var blendShapeWeights: [Float] {
-        get {
-            return _blendShapeWeights
-        }
-        set {
+    public var blendShapeWeights: [Float] = [] {
+        didSet {
             _checkBlendShapeWeightLength()
-            if (newValue.count <= _blendShapeWeights.count) {
-                _blendShapeWeights = newValue
-            } else {
-                for i in 0..<_blendShapeWeights.count {
-                    _blendShapeWeights[i] = newValue[i]
-                }
-            }
         }
     }
     
@@ -57,7 +46,7 @@ public class SkinnedMeshRenderer: MeshRenderer {
                 _skinningMatrices = [simd_float4x4](repeating: simd_float4x4(), count: jointCount)
                 
                 shaderData.enableMacro(HAS_SKIN.rawValue)
-                shaderData.setData(SkinnedMeshRenderer._jointCountProperty, jointCount)
+                shaderData.setData(with: SkinnedMeshRenderer._jointCountProperty, data: jointCount)
                 if (jointCount > SkinnedMeshRenderer._maxJoints) {
                     _useJointTexture = true
                 } else {
@@ -135,8 +124,8 @@ public class SkinnedMeshRenderer: MeshRenderer {
     override func _updateShaderData(_ cameraInfo: CameraInfo) {
         _updateTransformShaderData(cameraInfo, entity.transform.worldMatrix)
 
-        if (!_useJointTexture && !_skinningMatrices.isEmpty) {
-            shaderData.setData(SkinnedMeshRenderer._jointMatrixProperty, _skinningMatrices)
+        if !_useJointTexture && !_skinningMatrices.isEmpty {
+            shaderData.setData(with: SkinnedMeshRenderer._jointMatrixProperty, array: _skinningMatrices)
         }
 
         if let mesh = mesh as? ModelMesh {
@@ -169,13 +158,14 @@ public class SkinnedMeshRenderer: MeshRenderer {
             descriptor.mipmapLevelCount = 1
             _jointTexture = Engine.device.makeTexture(descriptor: descriptor)
             shaderData.enableMacro(HAS_JOINT_TEXTURE.rawValue)
-            shaderData.setImageView(SkinnedMeshRenderer._jointTextureProperty, SkinnedMeshRenderer._jointSamplerProperty, _jointTexture)
+            shaderData.setImageSampler(with: SkinnedMeshRenderer._jointTextureProperty,
+                                       SkinnedMeshRenderer._jointSamplerProperty, texture: _jointTexture)
 
             let samplerDesc = MTLSamplerDescriptor()
             samplerDesc.mipFilter = .nearest
             samplerDesc.magFilter = .nearest
             samplerDesc.mipFilter = .nearest
-            shaderData.setSampler(SkinnedMeshRenderer._jointSamplerProperty, samplerDesc)
+            shaderData.setSampler(with: SkinnedMeshRenderer._jointSamplerProperty, sampler: samplerDesc)
         }
 
         if let texture = _jointTexture {
@@ -188,20 +178,20 @@ public class SkinnedMeshRenderer: MeshRenderer {
     private func _checkBlendShapeWeightLength() {
         if let mesh = _mesh as? ModelMesh {
             let newBlendShapeCount = mesh.blendShapeCount
-            if (!_blendShapeWeights.isEmpty) {
-                if (_blendShapeWeights.count != newBlendShapeCount) {
+            if (!blendShapeWeights.isEmpty) {
+                if (blendShapeWeights.count != newBlendShapeCount) {
                     var newBlendShapeWeights = [Float](repeating: 0, count: newBlendShapeCount)
-                    if (newBlendShapeCount > _blendShapeWeights.count) {
-                        newBlendShapeWeights.insert(contentsOf: _blendShapeWeights, at: 0)
+                    if (newBlendShapeCount > blendShapeWeights.count) {
+                        newBlendShapeWeights.insert(contentsOf: blendShapeWeights, at: 0)
                     } else {
                         for i in 0..<newBlendShapeCount {
-                            newBlendShapeWeights[i] = _blendShapeWeights[i]
+                            newBlendShapeWeights[i] = blendShapeWeights[i]
                         }
                     }
-                    _blendShapeWeights = newBlendShapeWeights
+                    blendShapeWeights = newBlendShapeWeights
                 }
             } else {
-                _blendShapeWeights = [Float](repeating: 0, count: newBlendShapeCount)
+                blendShapeWeights = [Float](repeating: 0, count: newBlendShapeCount)
             }
         }
     }

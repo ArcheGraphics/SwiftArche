@@ -32,15 +32,15 @@ public class HashGrid {
         _resolution.z = max(resolutionZ, 1)
         _gridSpacing = gridSpacing
         
-        _indirectArgsBuffer = BufferView(device: Engine.device, count: 1,
+        _indirectArgsBuffer = BufferView(count: 1,
                                          stride: MemoryLayout<MTLDispatchThreadgroupsIndirectArguments>.stride)
         
         let totalCount = Int(_resolution.x * _resolution.y * _resolution.z)
         _shaderData.setData("u_startIndexTable",
-                            BufferView(device: Engine.device, count: totalCount,
+                            BufferView(count: totalCount,
                                        stride: MemoryLayout<UInt>.stride, options: .storageModePrivate))
         _shaderData.setData("u_endIndexTable",
-                            BufferView(device: Engine.device, count: totalCount,
+                            BufferView(count: totalCount,
                                        stride: MemoryLayout<UInt>.stride, options: .storageModePrivate))
         _shaderData.setData("u_hashGridData", HashGridData(resolutionX: _resolution.x,
                                                            resolutionY: _resolution.y,
@@ -75,7 +75,7 @@ public class HashGrid {
     public func build(commandBuffer: MTLCommandBuffer, positions: BufferView,
                       itemCount: BufferView, maxNumberOfParticles: UInt32) {
         if _sortedIndices == nil || _sortedIndices.count != maxNumberOfParticles {
-            _sortedIndices = BufferView(device: Engine.device, count: Int(maxNumberOfParticles),
+            _sortedIndices = BufferView(count: Int(maxNumberOfParticles),
                                         stride: MemoryLayout<SIMD2<Float>>.stride, options: .storageModePrivate)
             _shaderData.setData("u_sortedIndices", _sortedIndices!)
         }

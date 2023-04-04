@@ -407,12 +407,12 @@ extension ModelMesh {
         }
         _vertexChangeFlag = ValueChanged.All.rawValue
         _updateVertices(vertices: &_vertices!)
-        _setVertexBufferBinding(0, BufferView(device: Engine.device, array: _vertices!))
+        _setVertexBufferBinding(0, BufferView(array: _vertices!))
 
         if _indicesFormat == MTLIndexType.uint16 {
-            _setIndexBufferBinding(IndexBufferBinding(BufferView(device: Engine.device, array: _indices16!), .uint16))
+            _setIndexBufferBinding(IndexBufferBinding(BufferView(array: _indices16!), .uint16))
         } else if _indicesFormat == MTLIndexType.uint32 {
-            _setIndexBufferBinding(IndexBufferBinding(BufferView(device: Engine.device, array: _indices32!), .uint32))
+            _setIndexBufferBinding(IndexBufferBinding(BufferView(array: _indices32!), .uint32))
         }
 
         if _blendShapeManager._blendShapeCount > 0 {

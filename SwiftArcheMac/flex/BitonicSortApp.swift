@@ -35,8 +35,8 @@ class BitonicSortApp: NSViewController {
         }
         
         let bitonicSort = BitonicSort()
-        let sortBuffer = BufferView(device: Engine.device, array: sortArray)
-        let itemCount = BufferView(device: Engine.device, array: [count])
+        let sortBuffer = BufferView(array: sortArray)
+        let itemCount = BufferView(array: [count])
         let scope = Engine.createCaptureScope(name: "bitonic")
         scope.begin()
         if let commandBuffer = Engine.commandQueue.makeCommandBuffer(),

@@ -12,9 +12,10 @@ import vox_toolkit
 fileprivate class BakerMaterial: BaseMaterial {
     private var _texture: MTLTexture?
 
-    init() {
-        super.init(shader: Shader.create(in: Engine.library("app.shader"), vertexSource: "vertex_cubemap",
-                                         fragmentSource: "fragment_cubemap") )
+    required init() {
+        super.init()
+        shader = Shader.create(in: Engine.library("app.shader"), vertexSource: "vertex_cubemap",
+                               fragmentSource: "fragment_cubemap")
         setRenderFace(at: 0, .Double)
     }
 
@@ -25,7 +26,7 @@ fileprivate class BakerMaterial: BaseMaterial {
         }
         set {
             _texture = newValue
-            shaderData.setImageView("u_baseTexture", "u_baseSampler", newValue)
+            shaderData.setImageSampler(with: "u_baseTexture", "u_baseSampler", texture: newValue)
         }
     }
 
@@ -35,7 +36,7 @@ fileprivate class BakerMaterial: BaseMaterial {
             1
         }
         set {
-            shaderData.setData("u_faceIndex", newValue)
+            shaderData.setData(with: "u_faceIndex", data: newValue)
 
         }
     }

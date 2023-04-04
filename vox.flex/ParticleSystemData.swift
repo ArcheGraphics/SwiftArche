@@ -94,7 +94,7 @@ public class ParticleSystemData: ShaderData {
     ///   - initialVal: Initial value of the new scalar data.
     ///   - maxLength: max length
     public func addScalarData<T>(with name: String, initialVal: T, maxLength: Int) {
-        let data = BufferView(device: Engine.device, count: maxLength, stride: MemoryLayout<T>.stride)
+        let data = BufferView(count: maxLength, stride: MemoryLayout<T>.stride)
         data.assign(initialVal)
         setData(name, data)
     }

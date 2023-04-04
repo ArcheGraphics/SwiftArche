@@ -10,6 +10,7 @@
 #include <metal_stdlib>
 #include "mesh_types.h"
 #include "type_common.h"
+#include "arguments.h"
 
 using namespace metal;
 

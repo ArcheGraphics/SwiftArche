@@ -23,8 +23,10 @@ class GUIManager {
         ImGui_ImplMetal_Init(Engine.device)
         ImGui_ImplOSX_Init(Engine.canvas)
 #endif
-        let material = BaseMaterial(shader: Shader.create(in: Engine.library(), vertexSource: "vertex_text",
-                                                          fragmentSource: "fragment_text"),  "default text")
+        let material = BaseMaterial()
+        material.shader = Shader.create(in: Engine.library(), vertexSource: "vertex_text",
+                                        fragmentSource: "fragment_text")
+        material.name = "default text"
         material.isTransparent = true
         material.renderStates[0].rasterState.cullMode = .front
         TextRenderer._defaultMaterial = material

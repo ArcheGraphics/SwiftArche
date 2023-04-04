@@ -134,7 +134,7 @@ public class DevicePipeline {
     func pushRenderData(_ data: RenderData) {
         let material = data.material
         let renderStates = material.renderStates
-        let materialSubShader = material.shader.subShaders[0]
+        let materialSubShader = material.shader!.subShaders[0]
         let replacementShader = context.replacementShader
 
       if let replacementShader {

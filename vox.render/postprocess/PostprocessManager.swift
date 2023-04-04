@@ -7,34 +7,28 @@
 import Metal
 
 public class PostprocessManager {
+    private static let _manualExposureValueProperty = "u_manualExposureValue"
+    private static let _exposureKeyProperty = "u_exposureKey"
+    
     var _canvas: Canvas
     weak var _scene: Scene!
     var _shaderData: ShaderData
-    var _postprocessData = PostprocessData(manualExposureValue: 0.5, exposureKey: 0.25)
 
     // default pass
     public var gammeCorrectionPass: GammaCorrection
     public var luminancePass: Luminance
 
     /// manual exposure
-    public var manualExposure: Float {
-        get {
-            _postprocessData.manualExposureValue
-        }
-        set {
-            _postprocessData.manualExposureValue = newValue
-            _shaderData.setData("u_postprocess", _postprocessData)
+    public var manualExposure: Float = 0.5 {
+        didSet {
+            _shaderData.setData(with: PostprocessManager._manualExposureValueProperty, data: manualExposure)
         }
     }
 
     /// exposure key used in auto mode
-    public var exposureKey: Float {
-        get {
-            _postprocessData.exposureKey
-        }
-        set {
-            _postprocessData.exposureKey = newValue
-            _shaderData.setData("u_postprocess", _postprocessData)
+    public var exposureKey: Float = 0.5 {
+        didSet {
+            _shaderData.setData(with: PostprocessManager._exposureKeyProperty, data: exposureKey)
         }
     }
 
@@ -49,7 +43,22 @@ public class PostprocessManager {
         _scene = scene
         _canvas = Engine.canvas!
         _shaderData = scene.shaderData
-        _shaderData.setData("u_postprocess", _postprocessData)
+        
+        var desc = MTLArgumentDescriptor()
+        desc.index = 0
+        desc.dataType = .float
+        desc.access = .readOnly
+        _shaderData.registerArgumentDescriptor(with: PostprocessManager._manualExposureValueProperty, descriptor: desc)
+        
+        desc = MTLArgumentDescriptor()
+        desc.index = 1
+        desc.dataType = .float
+        desc.access = .readOnly
+        _shaderData.registerArgumentDescriptor(with: PostprocessManager._exposureKeyProperty, descriptor: desc)
+        _shaderData.createArgumentBuffer(with: "u_postprocess")
+        
+        _shaderData.setData(with: PostprocessManager._manualExposureValueProperty, data: manualExposure)
+        _shaderData.setData(with: PostprocessManager._exposureKeyProperty, data: exposureKey)
 
         luminancePass = Luminance(scene)
         gammeCorrectionPass = GammaCorrection(scene)

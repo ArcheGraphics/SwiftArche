@@ -65,10 +65,11 @@ public class BlendShapeManager {
     func _updateShaderData(_ shaderData: ShaderData, _ skinnedMeshRenderer: SkinnedMeshRenderer) {
         if (_blendShapeCount > 0) {
             shaderData.enableMacro(HAS_BLENDSHAPE.rawValue)
-            shaderData.setImageView(BlendShapeManager._blendShapeTextureProperty, BlendShapeManager._blendShapeSamplerProperty, _vertexTexture)
-            shaderData.setSampler(BlendShapeManager._blendShapeSamplerProperty, BlendShapeManager._blendSamplerDesc)
-            shaderData.setData(BlendShapeManager._blendShapeTextureInfoProperty, _dataTextureInfo)
-            shaderData.setData(BlendShapeManager._blendShapeWeightsProperty, skinnedMeshRenderer.blendShapeWeights)
+            shaderData.setImageSampler(with: BlendShapeManager._blendShapeTextureProperty,
+                                       BlendShapeManager._blendShapeSamplerProperty, texture: _vertexTexture)
+            shaderData.setSampler(with: BlendShapeManager._blendShapeSamplerProperty, sampler: BlendShapeManager._blendSamplerDesc)
+            shaderData.setData(with: BlendShapeManager._blendShapeTextureInfoProperty, data: _dataTextureInfo)
+            shaderData.setData(with: BlendShapeManager._blendShapeWeightsProperty, array: skinnedMeshRenderer.blendShapeWeights)
             shaderData.enableMacro(BLENDSHAPE_COUNT.rawValue, (_blendShapeCount, .int))
 
             if (_useBlendNormal) {

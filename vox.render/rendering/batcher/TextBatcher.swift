@@ -37,19 +37,19 @@ class TextBatcher: Batcher {
             if position?.count ?? 0 > verticeArray.count {
                 position!.assign(with: verticeArray)
             } else {
-                position = BufferView(device: device, array: verticeArray)
+                position = BufferView(array: verticeArray)
             }
             
             if uv?.count ?? 0 > uvArray.count {
                 uv!.assign(with: uvArray)
             } else {
-                uv = BufferView(device: device, array: uvArray)
+                uv = BufferView(array: uvArray)
             }
             
             if indices?.count ?? 0 > indexArray.count {
                 indices!.assign(with: indexArray)
             } else {
-                indices = BufferView(device: device, array: indexArray)
+                indices = BufferView(array: indexArray)
             }
         }
     }
@@ -190,7 +190,7 @@ class TextBatcher: Batcher {
                 let depthStencilDescriptor = MTLDepthStencilDescriptor()
                 prepare(pipelineDescriptor, depthStencilDescriptor)
                 
-                let functions = Engine.resourceCache.requestShaderModule(batcherBuffer[i].material.shader.subShaders[0].passes[0],
+                let functions = Engine.resourceCache.requestShaderModule(batcherBuffer[i].material.shader!.subShaders[0].passes[0],
                                                                          batcherBuffer[i].material.shaderData._macroCollection)
                 pipelineDescriptor.vertexFunction = functions[0]
                 pipelineDescriptor.fragmentFunction = functions[1]

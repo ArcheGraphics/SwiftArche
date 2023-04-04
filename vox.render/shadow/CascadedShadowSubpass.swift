@@ -106,7 +106,7 @@ class CascadedShadowSubpass: GeometrySubpass {
 
     private func _renderDirectShadowMap(pipeline: DevicePipeline, on encoder: inout RenderCommandEncoder) {
         let shadowCascades = _camera.scene.shadowCascades.rawValue
-        let bufferBlock = Engine.requestBufferBlock(minimum_size: 4 * 256)
+        let bufferBlock = Engine.requestBufferBlock(minimum_size: 20 * 256)
 
         let sunLightIndex = Engine._lightManager._getSunLightIndex()
         if sunLightIndex != -1,

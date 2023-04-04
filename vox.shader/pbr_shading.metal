@@ -342,7 +342,7 @@ float4 PBRShading::execute() {
         irradiance = getLightProbeIrradiance(geometry.normal);
         irradiance *= u_envMapLight.diffuseIntensity;
     } else {
-        irradiance = u_envMapLight.diffuse * u_envMapLight.diffuseIntensity;
+        irradiance = u_envMapLight.diffuse.xyz * u_envMapLight.diffuseIntensity;
         irradiance *= M_PI_F;
     }
     
@@ -410,7 +410,7 @@ vertex VertexOut vertex_pbr(const VertexIn in [[stage_in]],
                             uint v_id [[vertex_id]],
                             constant CameraData &u_camera [[buffer(2)]],
                             constant RendererData &u_renderer [[buffer(3)]],
-                            constant float4 &u_tilingOffset [[buffer(4)]],
+                            constant BaseMaterial &u_baseMaterial [[buffer(4)]],
                             // skin
                             texture2d<float> u_jointTexture [[texture(0), function_constant(hasSkinAndHasJointTexture)]],
                             sampler u_jointSampler [[sampler(0), function_constant(hasSkinAndHasJointTexture)]],
@@ -496,7 +496,7 @@ vertex VertexOut vertex_pbr(const VertexIn in [[stage_in]],
         out.v_uv = float2(0.0, 0.0);
     }
     if (needTilingOffset) {
-        out.v_uv = out.v_uv * u_tilingOffset.xy + u_tilingOffset.zw;
+        out.v_uv = out.v_uv * u_baseMaterial.tilingOffset.xy + u_baseMaterial.tilingOffset.zw;
     }
     
     // color
@@ -536,51 +536,22 @@ vertex VertexOut vertex_pbr(const VertexIn in [[stage_in]],
 }
 
 fragment float4 fragment_pbr(VertexOut in [[stage_in]],
-                             // common_frag
                              constant CameraData &u_camera [[buffer(0)]],
                              constant RendererData &u_renderer [[buffer(1)]],
-                             // direct light
                              constant DirectLightData *u_directLight [[buffer(2), function_constant(hasDirectLight)]],
                              constant PointLightData *u_pointLight [[buffer(3), function_constant(hasPointLight)]],
                              constant SpotLightData *u_spotLight [[buffer(4), function_constant(hasSpotLight)]],
-                             // indirect light
                              constant EnvMapLight &u_envMapLight [[buffer(5)]],
-                             constant float *u_env_sh [[buffer(6), function_constant(hasSH)]],
-                             texturecube<float> u_env_specularTexture [[texture(1), function_constant(hasSpecularEnv)]],
-                             sampler u_env_specularSampler [[sampler(1), function_constant(hasSpecularEnv)]],
-                             //pbr base frag define
-                             constant float& u_alphaCutoff [[buffer(7)]],
-                             constant PBRBaseData &u_pbrBase [[buffer(8)]],
-                             constant PBRData &u_pbr [[buffer(9)]],
-                             constant PBRSpecularData &u_pbrSpecular [[buffer(10)]],
-                             // pbr_texture_frag_define
-                             texture2d<float> u_baseTexture [[texture(2), function_constant(hasBaseTexture)]],
-                             sampler u_baseSampler [[sampler(2), function_constant(hasBaseTexture)]],
-                             texture2d<float> u_normalTexture [[texture(3), function_constant(hasNormalTexture)]],
-                             sampler u_normalSampler [[sampler(3), function_constant(hasNormalTexture)]],
-                             texture2d<float> u_emissiveTexture [[texture(4), function_constant(hasEmissiveTexture)]],
-                             sampler u_emissiveSampler [[sampler(4), function_constant(hasEmissiveTexture)]],
-                             texture2d<float> u_roughnessMetallicTexture [[texture(5), function_constant(hasRoughnessMetallicTexture)]],
-                             sampler u_roughnessMetallicSampler [[sampler(5), function_constant(hasRoughnessMetallicTexture)]],
-                             texture2d<float> u_specularGlossinessTexture [[texture(6), function_constant(hasSpecularGlossinessTexture)]],
-                             sampler u_specularGlossineseSampler [[sampler(6), function_constant(hasSpecularGlossinessTexture)]],
-                             texture2d<float> u_occlusionTexture [[texture(7), function_constant(hasOcclusionTexture)]],
-                             sampler u_occlusionSampler [[sampler(7), function_constant(hasOcclusionTexture)]],
-                             texture2d<float> u_clearCoatTexture [[texture(8), function_constant(hasClearCoatTexture)]],
-                             sampler u_clearCoatSampler [[sampler(8), function_constant(hasClearCoatTexture)]],
-                             texture2d<float> u_clearCoatNormalTexture [[texture(9), function_constant(hasClearCoatNormalTexture)]],
-                             sampler u_clearCoatNormalSampler [[sampler(9), function_constant(hasClearCoatNormalTexture)]],
-                             texture2d<float> u_clearCoatRoughnessTexture [[texture(10), function_constant(hasClearCoatRoughnessTexture)]],
-                             sampler u_clearCoatRoughnessSampler [[sampler(10), function_constant(hasClearCoatRoughnessTexture)]],
+                             constant BaseMaterial& u_baseMaterial [[buffer(6)]],
+                             constant PBRMaterial& u_pbrMaterial [[buffer(7)]],
                              // shadow
-                             constant float4* u_shadowSplitSpheres [[buffer(11), function_constant(needCalculateShadow)]],
-                             constant matrix_float4x4* u_shadowMatrices [[buffer(12), function_constant(needCalculateShadow)]],
-                             constant float4 &u_shadowMapSize [[buffer(13), function_constant(needCalculateShadow)]],
-                             constant float3 &u_shadowInfo [[buffer(14), function_constant(needCalculateShadow)]],
-                             depth2d<float> u_shadowTexture [[texture(11), function_constant(needCalculateShadow)]],
-                             sampler u_shadowSampler [[sampler(11), function_constant(needCalculateShadow)]],
-                             // fog
-                             constant FogData &u_fog [[buffer(15), function_constant(hasFog)]],
+                             constant float4* u_shadowSplitSpheres [[buffer(8), function_constant(needCalculateShadow)]],
+                             constant matrix_float4x4* u_shadowMatrices [[buffer(9), function_constant(needCalculateShadow)]],
+                             constant float4 &u_shadowMapSize [[buffer(10), function_constant(needCalculateShadow)]],
+                             constant float3 &u_shadowInfo [[buffer(11), function_constant(needCalculateShadow)]],
+                             depth2d<float> u_shadowTexture [[texture(0), function_constant(needCalculateShadow)]],
+                             sampler u_shadowSampler [[sampler(0), function_constant(needCalculateShadow)]],
+                             constant FogData &u_fog [[buffer(12), function_constant(hasFog)]],
                              bool is_front_face [[front_facing]]) {
     PBRShading shading;
     
@@ -622,76 +593,76 @@ fragment float4 fragment_pbr(VertexOut in [[stage_in]],
     
     shading.u_envMapLight = u_envMapLight;
     if (hasSH) {
-        shading.u_env_sh = u_env_sh;
+        shading.u_env_sh = u_envMapLight.u_env_sh;
     }
     if (hasSpecularEnv) {
-        shading.u_env_specularSampler = u_env_specularSampler;
-        shading.u_env_specularTexture = u_env_specularTexture;
+        shading.u_env_specularSampler = u_envMapLight.u_env_specularSampler;
+        shading.u_env_specularTexture = u_envMapLight.u_env_specularTexture;
     }
     
-    shading.u_alphaCutoff = u_alphaCutoff;
-    shading.u_baseColor = u_pbrBase.baseColor;
-    shading.u_emissiveColor = u_pbrBase.emissiveColor;
-    shading.u_normalIntensity = u_pbrBase.normalTextureIntensity;
-    shading.u_occlusionIntensity = u_pbrBase.occlusionTextureIntensity;
-    shading.u_occlusionTextureCoord = u_pbrBase.occlusionTextureCoord;
+    shading.u_alphaCutoff = u_baseMaterial.alphaCutoff;
+    shading.u_baseColor = u_pbrMaterial.baseColor;
+    shading.u_emissiveColor = u_pbrMaterial.emissiveColor.xyz;
+    shading.u_normalIntensity = u_pbrMaterial.normalTextureIntensity;
+    shading.u_occlusionIntensity = u_pbrMaterial.occlusionTextureIntensity;
+    shading.u_occlusionTextureCoord = u_pbrMaterial.occlusionTextureCoord;
     
     if (isMetallicWorkFlow) {
-        shading.u_metal = u_pbr.metallic;
-        shading.u_roughness = u_pbr.roughness;
+        shading.u_metal = u_pbrMaterial.metallic;
+        shading.u_roughness = u_pbrMaterial.roughness;
     } else {
-        shading.u_PBRSpecularColor = u_pbrSpecular.specularColor;
-        shading.u_glossiness = u_pbrSpecular.glossiness;
+        shading.u_PBRSpecularColor = u_pbrMaterial.specularColor.xyz;
+        shading.u_glossiness = u_pbrMaterial.glossiness;
     }
     
     if (isClearCoat) {
-        shading.u_clearCoat = u_pbrBase.clearCoat;
-        shading.u_clearCoatRoughness = u_pbrBase.clearCoatRoughness;
+        shading.u_clearCoat = u_pbrMaterial.clearCoat;
+        shading.u_clearCoatRoughness = u_pbrMaterial.clearCoatRoughness;
     }
     
     if (hasBaseTexture) {
-        shading.u_baseTexture = u_baseTexture;
-        shading.u_baseSampler = u_baseSampler;
+        shading.u_baseTexture = u_pbrMaterial.u_baseTexture;
+        shading.u_baseSampler = u_pbrMaterial.u_baseSampler;
     }
     
     if (hasNormalTexture) {
-        shading.u_normalTexture = u_normalTexture;
-        shading.u_normalSampler = u_normalSampler;
+        shading.u_normalTexture = u_pbrMaterial.u_normalTexture;
+        shading.u_normalSampler = u_pbrMaterial.u_normalSampler;
     }
     
     if (hasEmissiveTexture) {
-        shading.u_emissiveTexture = u_emissiveTexture;
-        shading.u_emissiveSampler = u_emissiveSampler;
+        shading.u_emissiveTexture = u_pbrMaterial.u_emissiveTexture;
+        shading.u_emissiveSampler = u_pbrMaterial.u_emissiveSampler;
     }
     
     if (hasRoughnessMetallicTexture) {
-        shading.u_roughnessMetallicTexture = u_roughnessMetallicTexture;
-        shading.u_roughnessMetallicSampler = u_roughnessMetallicSampler;
+        shading.u_roughnessMetallicTexture = u_pbrMaterial.u_roughnessMetallicTexture;
+        shading.u_roughnessMetallicSampler = u_pbrMaterial.u_roughnessMetallicSampler;
     }
     
     if (hasSpecularGlossinessTexture) {
-        shading.u_specularGlossinessTexture = u_specularGlossinessTexture;
-        shading.u_specularGlossinessSampler = u_specularGlossineseSampler;
+        shading.u_specularGlossinessTexture = u_pbrMaterial.u_specularGlossinessTexture;
+        shading.u_specularGlossinessSampler = u_pbrMaterial.u_specularGlossineseSampler;
     }
     
     if (hasOcclusionTexture) {
-        shading.u_occlusionTexture = u_occlusionTexture;
-        shading.u_occlusionSampler = u_occlusionSampler;
+        shading.u_occlusionTexture = u_pbrMaterial.u_occlusionTexture;
+        shading.u_occlusionSampler = u_pbrMaterial.u_occlusionSampler;
     }
     
     if (hasClearCoatTexture) {
-        shading.u_clearCoatTexture = u_clearCoatTexture;
-        shading.u_clearCoatSampler = u_clearCoatSampler;
+        shading.u_clearCoatTexture = u_pbrMaterial.u_clearCoatTexture;
+        shading.u_clearCoatSampler = u_pbrMaterial.u_clearCoatSampler;
     }
     
     if (hasClearCoatNormalTexture) {
-        shading.u_clearCoatNormalTexture = u_clearCoatNormalTexture;
-        shading.u_clearCoatNormalSampler = u_clearCoatNormalSampler;
+        shading.u_clearCoatNormalTexture = u_pbrMaterial.u_clearCoatNormalTexture;
+        shading.u_clearCoatNormalSampler = u_pbrMaterial.u_clearCoatNormalSampler;
     }
     
     if (hasClearCoatRoughnessTexture) {
-        shading.u_clearCoatRoughnessTexture = u_clearCoatRoughnessTexture;
-        shading.u_clearCoatRoughnessSampler = u_clearCoatRoughnessSampler;
+        shading.u_clearCoatRoughnessTexture = u_pbrMaterial.u_clearCoatRoughnessTexture;
+        shading.u_clearCoatRoughnessSampler = u_pbrMaterial.u_clearCoatRoughnessSampler;
     }
     
     if (hasVertexColor) {

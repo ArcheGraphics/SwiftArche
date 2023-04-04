@@ -10,7 +10,7 @@
 #include <metal_stdlib>
 using namespace metal;
 #include "function_constant.h"
-#include "type_common.h"
+#include "arguments.h"
 #include "normal_shading.h"
 #include "shadow/shadow_shading.h"
 

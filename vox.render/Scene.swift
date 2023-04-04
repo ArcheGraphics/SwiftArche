@@ -8,7 +8,8 @@ import Metal
 import Math
 
 public final class Scene: NSObject, Serializable {
-    private static let _fogProperty = "u_fog"
+    private static let _fogColorProperty = "u_fogColor"
+    private static let _fogParamProperty = "u_fogParam"
 
     /// Scene name.
     @Serialized(default: "scene")
@@ -53,7 +54,7 @@ public final class Scene: NSObject, Serializable {
 
     private var _ambientLight: AmbientLight!
     private var _postprocessManager: PostprocessManager!
-    private var _fogData = FogData(color: vector_float4(0.5, 0.5, 0.5, 1.0), params: vector_float4())
+    private var _fogParams = Vector4()
 
     /// Get the post-process manager.
     public var postprocessManager: PostprocessManager {
@@ -117,13 +118,10 @@ public final class Scene: NSObject, Serializable {
     }
 
     /// Fog color.
+    @Serialized(default: Color(0.5, 0.5, 0.5))
     public var fogColor: Color {
-        get {
-            Color(_fogData.color).toGamma()
-        }
-        set {
-            _fogData.color = newValue.toLinear().internalValue
-            shaderData.setData(Scene._fogProperty, _fogData)
+        didSet {
+            shaderData.setData(with: Scene._fogColorProperty, data: fogColor.toLinear().internalValue)
         }
     }
 
@@ -155,6 +153,19 @@ public final class Scene: NSObject, Serializable {
         shaderData.enableMacro(CASCADED_COUNT.rawValue, (shadowCascades.rawValue, .int))
         _computeLinearFogParams(fogStart, fogEnd)
         _computeExponentialFogParams(fogDensity)
+        
+        var desc = MTLArgumentDescriptor()
+        desc.index = 0
+        desc.dataType = .float4
+        desc.access = .readOnly
+        shaderData.registerArgumentDescriptor(with: Scene._fogColorProperty, descriptor: desc)
+        
+        desc = MTLArgumentDescriptor()
+        desc.index = 1
+        desc.dataType = .float4
+        desc.access = .readOnly
+        shaderData.registerArgumentDescriptor(with: Scene._fogParamProperty, descriptor: desc)
+        shaderData.createArgumentBuffer(with: "u_fog")
     }
     
     deinit {
@@ -406,14 +417,14 @@ extension Scene {
 
     private func _computeLinearFogParams(_ fogStart: Float, _ fogEnd: Float) {
         let fogRange = fogEnd - fogStart
-        _fogData.params.x = -1 / fogRange
-        _fogData.params.y = fogEnd / fogRange
-        shaderData.setData(Scene._fogProperty, _fogData)
+        _fogParams.x = -1 / fogRange
+        _fogParams.y = fogEnd / fogRange
+        shaderData.setData(with: Scene._fogParamProperty, data: _fogParams)
     }
 
     private func _computeExponentialFogParams(_ density: Float) {
-        _fogData.params.z = density / log(2)
-        _fogData.params.w = density / sqrt(log(2))
-        shaderData.setData(Scene._fogProperty, _fogData)
+        _fogParams.z = density / log(2)
+        _fogParams.w = density / sqrt(log(2))
+        shaderData.setData(with: Scene._fogParamProperty, data: _fogParams)
     }
 }

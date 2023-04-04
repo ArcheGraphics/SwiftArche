@@ -38,7 +38,8 @@ public class BackgroundSubpass: Subpass {
     /// Constructor of Background.
     public override init() {
         _canvas = Engine.canvas
-        _material = Material(shader: ShaderFactory.background)
+        _material = Material()
+        _material.shader = ShaderFactory.background
         _material.renderStates[0].depthState.compareFunction = MTLCompareFunction.lessEqual
         super.init()
         _mesh = _createPlane()
@@ -52,7 +53,7 @@ public class BackgroundSubpass: Subpass {
             _pipelineDescriptor.stencilAttachmentPixelFormat = format
         }
 
-        let functions = Engine.resourceCache.requestShaderModule(_material.shader.subShaders[0].passes[0], _shaderMacro)
+        let functions = Engine.resourceCache.requestShaderModule(_material.shader!.subShaders[0].passes[0], _shaderMacro)
         _pipelineDescriptor.vertexFunction = functions[0]
         _pipelineDescriptor.fragmentFunction = functions[1]
         _pipelineDescriptor.vertexDescriptor = _mesh._vertexDescriptor

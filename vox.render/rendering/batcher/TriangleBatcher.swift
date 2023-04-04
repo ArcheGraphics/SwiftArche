@@ -72,12 +72,12 @@ class TriangleBatcher : Batcher {
     func checkResizePoint(count: Int) {
         if count > maxVerts {
             maxVerts = Int(ceil(Float(count) * 1.2))
-            let newPointBuffer = BufferView(device: Engine.device, count: maxVerts, stride: MemoryLayout<Vector3>.stride,
+            let newPointBuffer = BufferView(count: maxVerts, stride: MemoryLayout<Vector3>.stride,
                                             label: "point buffer", options: .storageModeShared)
-            let newColorBuffer = BufferView(device: Engine.device, count: maxVerts, stride: MemoryLayout<Color32>.stride,
+            let newColorBuffer = BufferView(count: maxVerts, stride: MemoryLayout<Color32>.stride,
                                             label: "color32 buffer", options: .storageModeShared)
-            let newNormalBuffer = BufferView(device: Engine.device, count: maxVerts, stride: MemoryLayout<Vector3>.stride,
-                                            label: "normal buffer", options: .storageModeShared)
+            let newNormalBuffer = BufferView(count: maxVerts, stride: MemoryLayout<Vector3>.stride,
+                                             label: "normal buffer", options: .storageModeShared)
             if let pointBuffer = pointBuffer,
                let colorBuffer = colorBuffer,
                let commandBuffer = Engine.commandQueue.makeCommandBuffer(),
@@ -133,9 +133,9 @@ class TriangleBatcher : Batcher {
         _descriptor.attributes[Int(Normal.rawValue)] = desc
         _descriptor.layouts[2].stride = MemoryLayout<Vector3>.stride
         
-        _material = Material(shader: Shader.create(in: Engine.library(), vertexSource: "vertex_triangle_gizmos",
-                                                   fragmentSource: "fragment_triangle_gizmos"))
-
+        _material = Material()
+        _material.shader = Shader.create(in: Engine.library(), vertexSource: "vertex_triangle_gizmos",
+                                         fragmentSource: "fragment_triangle_gizmos")
         _pipelineDescriptor.label = "Triangle Gizmo Pipeline"
         _pipelineDescriptor.colorAttachments[0].pixelFormat = Canvas.colorPixelFormat
         _pipelineDescriptor.depthAttachmentPixelFormat = Canvas.depthPixelFormat
@@ -143,7 +143,7 @@ class TriangleBatcher : Batcher {
             _pipelineDescriptor.stencilAttachmentPixelFormat = format
         }
 
-        let functions = Engine.resourceCache.requestShaderModule(_material.shader.subShaders[0].passes[0], _shaderMacro)
+        let functions = Engine.resourceCache.requestShaderModule(_material.shader!.subShaders[0].passes[0], _shaderMacro)
         _pipelineDescriptor.vertexFunction = functions[0]
         _pipelineDescriptor.fragmentFunction = functions[1]
         _pipelineDescriptor.vertexDescriptor = _descriptor

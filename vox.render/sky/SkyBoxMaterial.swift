@@ -8,38 +8,27 @@ import Metal
 import Math
 
 public class SkyBoxMaterial: Material {
-    private var _textureCubeMap: MTLTexture!
-    private var _equirectangular: Bool = false
-
     /// Whether to decode from texture with equirectangular HDR format.
-    public var equirectangular: Bool {
-        get {
-            _equirectangular
-        }
-        set {
-            if newValue != _equirectangular {
-                _equirectangular = newValue
-                if newValue {
-                    shader = ShaderFactory.skyboxHDR
-                } else {
-                    shader = ShaderFactory.skybox
-                }
+    public var equirectangular: Bool = false {
+        didSet {
+            if equirectangular {
+                shader = ShaderFactory.skyboxHDR
+            } else {
+                shader = ShaderFactory.skybox
             }
         }
     }
     
     /// Texture cube map of the sky box material.
-    public var textureCubeMap: MTLTexture {
-        get {
-            _textureCubeMap
-        }
-        set {
-            _textureCubeMap = newValue
-            shaderData.setImageView("u_cubeTexture", "u_cubeSampler", _textureCubeMap)
+    public var textureCubeMap: MTLTexture? {
+        didSet {
+            shaderData.setImageSampler(with: "u_cubeTexture", "u_cubeSampler", texture: textureCubeMap)
         }
     }
-
-    public init(_ name: String = "skybox mat") {
-        super.init(shader: ShaderFactory.skybox, name)
+    
+    public required init() {
+        super.init()
+        shader = ShaderFactory.skybox
+        name = "skybox mat"
     }
 }

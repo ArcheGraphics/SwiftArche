@@ -53,7 +53,7 @@ open class ParticleSystemSolver: ParticleSystemSolverBase {
     public required init() {
         _timeIntegration = ComputePass()
         _accumulateExternalForces = ComputePass()
-        _indirectArgsBuffer = BufferView(device: Engine.device, count: 1,
+        _indirectArgsBuffer = BufferView(count: 1,
                                          stride: MemoryLayout<MTLDispatchThreadgroupsIndirectArguments>.stride)
         _initArgsPass = ComputePass()
         super.init()

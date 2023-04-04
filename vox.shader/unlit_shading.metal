@@ -9,6 +9,7 @@ using namespace metal;
 #include "function_constant.h"
 #include "function_common.h"
 #include "shader_common.h"
+#include "arguments.h"
 
 typedef struct {
     float4 position [[position]];
@@ -20,7 +21,7 @@ vertex VertexOut vertex_unlit(const VertexIn in [[stage_in]],
                               uint v_id [[vertex_id]],
                               constant CameraData &u_camera [[buffer(2)]],
                               constant RendererData &u_renderer [[buffer(3)]],
-                              constant float4 &u_tilingOffset [[buffer(4)]],
+                              constant BaseMaterial &u_baseMaterial [[buffer(4)]],
                               // skin
                               texture2d<float> u_jointTexture [[texture(0), function_constant(hasSkinAndHasJointTexture)]],
                               constant int &u_jointCount [[buffer(5), function_constant(hasSkinAndHasJointTexture)]],
@@ -70,7 +71,7 @@ vertex VertexOut vertex_unlit(const VertexIn in [[stage_in]],
         out.v_uv = float2(0.0, 0.0);
     }
     if (needTilingOffset) {
-        out.v_uv = out.v_uv * u_tilingOffset.xy + u_tilingOffset.zw;
+        out.v_uv = out.v_uv * u_baseMaterial.tilingOffset.xy + u_baseMaterial.tilingOffset.zw;
     }
     
     // fog
@@ -99,19 +100,17 @@ float computeFogIntensity(float fogDepth, FogData u_fog) {
 }
 
 fragment float4 fragment_unlit(VertexOut in [[stage_in]],
-                               constant float4 &u_baseColor [[buffer(0)]],
-                               constant float &u_alphaCutoff [[buffer(1)]],
-                               sampler u_baseSampler [[sampler(0), function_constant(hasBaseTexture)]],
-                               texture2d<float> u_baseTexture [[texture(0), function_constant(hasBaseTexture)]],
-                               constant FogData &u_fog [[buffer(2), function_constant(hasFog)]]) {
-    float4 baseColor = u_baseColor;
+                               constant BaseMaterial& u_baseMaterial [[buffer(1)]],
+                               constant UnlitMaterial& u_unlitMaterial [[buffer(2)]],
+                               constant FogData &u_fog [[buffer(3), function_constant(hasFog)]]) {
+    float4 baseColor = u_unlitMaterial.u_baseColor;
     
     if (hasBaseTexture) {
-        baseColor *= u_baseTexture.sample(u_baseSampler, in.v_uv);
+        baseColor *= u_unlitMaterial.u_baseTexture.sample(u_unlitMaterial.u_baseSampler, in.v_uv);
     }
     
     if (needAlphaCutoff) {
-        if( baseColor.a < u_alphaCutoff ) {
+        if( baseColor.a < u_baseMaterial.alphaCutoff ) {
             discard_fragment();
         }
     }

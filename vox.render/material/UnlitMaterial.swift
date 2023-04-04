@@ -9,61 +9,65 @@ import Math
 
 /// Unlit Material.
 public class UnlitMaterial: BaseMaterial {
-    private var _baseColor = Color(1, 1, 1, 1)
-    private var _baseTexture: MTLTexture?
-    private var _tilingOffset = Vector4(1, 1, 0, 0)
-
     /// Base color.
+    @Serialized(default: Color(1, 1, 1, 1))
     public var baseColor: Color {
-        get {
-            _baseColor
-        }
-        set {
-            _baseColor = newValue
-            shaderData.setData(UnlitMaterial._baseColorProp, newValue.toLinear())
+        didSet {
+            shaderData.setData(with: UnlitMaterial._baseColorProp, data: baseColor.toLinear())
         }
     }
 
     /// Base texture.
     public var baseTexture: MTLTexture? {
-        get {
-            _baseTexture
-        }
-        set {
-            _baseTexture = newValue
-            if let newValue = newValue {
-                if let srgbFormat = newValue.pixelFormat.toSRGB {
-                    shaderData.setImageView(UnlitMaterial._baseTextureProp, UnlitMaterial._baseSamplerProp,
-                                            newValue.makeTextureView(pixelFormat: srgbFormat))
+        didSet {
+            if let baseTexture {
+                if let srgbFormat = baseTexture.pixelFormat.toSRGB {
+                    shaderData.setImageSampler(with: UnlitMaterial._baseTextureProp, UnlitMaterial._baseSamplerProp,
+                                               texture: baseTexture.makeTextureView(pixelFormat: srgbFormat))
                 } else {
-                    shaderData.setImageView(UnlitMaterial._baseTextureProp, UnlitMaterial._baseSamplerProp, newValue)
+                    shaderData.setImageSampler(with: UnlitMaterial._baseTextureProp,
+                                               UnlitMaterial._baseSamplerProp, texture: baseTexture)
                 }
                 shaderData.enableMacro(HAS_BASE_TEXTURE.rawValue)
             } else {
-                shaderData.setImageView(UnlitMaterial._baseTextureProp, UnlitMaterial._baseSamplerProp, nil)
+                shaderData.setImageSampler(with: UnlitMaterial._baseTextureProp,
+                                           UnlitMaterial._baseSamplerProp, texture: nil)
                 shaderData.disableMacro(HAS_BASE_TEXTURE.rawValue)
             }
         }
     }
-
-    /// Tiling and offset of main textures.
-    public var tilingOffset: Vector4 {
-        get {
-            _tilingOffset
-        }
-        set {
-            _tilingOffset = newValue
-            shaderData.setData(UnlitMaterial._tilingOffsetProp, newValue)
-        }
+    
+    public required init() {
+        super.init()
+        shader = ShaderFactory.unlit
+        name = "unlit mat"
     }
-
-    public init(_ name: String = "unlit mat") {
-        super.init(shader: ShaderFactory.unlit, name)
+    
+    override func createArgumentBuffer() {
+        super.createArgumentBuffer()
+        
+        var desc = MTLArgumentDescriptor()
+        desc.index = 0
+        desc.dataType = .float4
+        desc.access = .readOnly
+        shaderData.registerArgumentDescriptor(with: UnlitMaterial._baseColorProp, descriptor: desc)
+        
+        desc = MTLArgumentDescriptor()
+        desc.index = 1
+        desc.dataType = .sampler
+        desc.access = .readOnly
+        shaderData.registerArgumentDescriptor(with: UnlitMaterial._baseSamplerProp, descriptor: desc)
+        
+        desc = MTLArgumentDescriptor()
+        desc.index = 2
+        desc.dataType = .texture
+        desc.access = .readOnly
+        desc.textureType = .type2D
+        shaderData.registerArgumentDescriptor(with: UnlitMaterial._baseTextureProp, descriptor: desc)
+        shaderData.createArgumentBuffer(with: "u_unlitMaterial")
 
         shaderData.enableMacro(OMIT_NORMAL.rawValue)
         shaderData.enableMacro(NEED_TILINGOFFSET.rawValue)
-
-        shaderData.setData(UnlitMaterial._baseColorProp, _baseColor)
-        shaderData.setData(UnlitMaterial._tilingOffsetProp, _tilingOffset)
+        shaderData.setData(with: UnlitMaterial._baseColorProp, data: baseColor.toLinear())
     }
 }

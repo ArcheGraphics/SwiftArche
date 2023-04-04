@@ -19,7 +19,7 @@ public class ParticleCapsuleCollider: ParticleCollider {
     public override func update(commandEncoder: MTLComputeCommandEncoder,
                                 indirectBuffer: MTLBuffer, threadsPerThreadgroup: MTLSize) {
         if capsuleBuffer == nil || capsuleBuffer!.count != capsuleData.count {
-            capsuleBuffer = BufferView(device: Engine.device, array: capsuleData)
+            capsuleBuffer = BufferView(array: capsuleData)
         } else {
             capsuleBuffer!.assign(with: capsuleData)
         }

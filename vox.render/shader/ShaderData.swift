@@ -7,9 +7,10 @@
 import Metal
 
 open class ShaderData {
+    private var _argumentArray: [String: MTLArgumentDescriptor] = [:]
+    private var _argumentDescriptors: [String: (desc: MTLArgumentDescriptor, encoder: MTLArgumentEncoder)] = [:]
+    private var _shaderBuffers: [String: MTLBuffer] = [:]
     private var _shaderDynamicBuffers: [[String: BufferView]] = []
-    private var _shaderBuffers: [String: BufferView] = [:]
-    private var _shaderBufferFunctors: [String: () -> BufferView] = [:]
     private var _imageViews: [String: MTLTexture] = [:]
     private var _samplers: [String: MTLSamplerDescriptor] = [:]
     static private var _defaultSamplerDesc: MTLSamplerDescriptor = MTLSamplerDescriptor()
@@ -27,132 +28,140 @@ open class ShaderData {
         ShaderData._defaultSamplerDesc.rAddressMode = .repeat
         ShaderData._defaultSamplerDesc.sAddressMode = .repeat
         ShaderData._defaultSamplerDesc.tAddressMode = .repeat
+        ShaderData._defaultSamplerDesc.supportArgumentBuffers = true
     }
     
     public func clear() {
-        _shaderDynamicBuffers = [[String: BufferView]](repeating: [:], count: Engine._maxFramesInFlight)
+        _argumentArray = [:]
+        _argumentDescriptors = [:]
         _shaderBuffers = [:]
-        _shaderBufferFunctors = [:]
-        _imageViews = [:]
-        _samplers = [:]
         _macroCollection.clear()
     }
     
-    public func getData(_ property: String) -> BufferView? {
-        _shaderBuffers[property]
+    public func registerArgumentDescriptor(with name: String, descriptor: MTLArgumentDescriptor) {
+        _argumentArray[name] = descriptor
     }
-
-    public func setBufferFunctor(_ property: String, _ functor: @escaping () -> BufferView) {
-        resourceCache.setUniformName(with: property, group: group)
-        _shaderBufferFunctors[property] = functor
-    }
-
-    public func setData(_ property: String, _ value: BufferView) {
-        resourceCache.setUniformName(with: property, group: group)
-        _shaderBuffers[property] = value
-    }
-
-    public func setData<T>(_ property: String, _ data: T) {
-        resourceCache.setUniformName(with: property, group: group)
-        let value = _shaderBuffers.first { (key: String, value: BufferView) in
-            key == property
-        }
-        if value == nil {
-            _shaderBuffers[property] = BufferView(device: Engine.device, array: [data])
-        } else {
-            value!.value.assign(data)
-        }
-    }
-
-    public func setData<T>(_ property: String, _ data: [T]) {
-        resourceCache.setUniformName(with: property, group: group)
-        let value = _shaderBuffers.first { (key: String, value: BufferView) in
-            key == property
-        }
-        if value == nil {
-            _shaderBuffers[property] = BufferView(device: Engine.device, array: data)
-        } else {
-            value!.value.assign(with: data)
-        }
-    }
-
-    public func getData<T>(_ property: String, at index: Int = 0) -> T? {
-        let value = _shaderBuffers.first { (key: String, value: BufferView) in
-            key == property
-        }
-        if value == nil {
-            return nil
-        } else {
-            return value!.value[index]
-        }
-    }
-
-    public func setImageView(_ textureName: String, _ samplerName: String, _ value: MTLTexture?) {
-        resourceCache.setUniformName(with: textureName, group: group)
-        resourceCache.setUniformName(with: samplerName, group: group)
-
-        if value != nil {
-            _imageViews[textureName] = value
-            let sampler = _samplers.firstIndex { (key: String, value: MTLSamplerDescriptor) in
-                key == samplerName
-            }
-            if sampler == nil {
-                _samplers[samplerName] = ShaderData._defaultSamplerDesc
-            }
-        } else {
-            _imageViews.removeValue(forKey: textureName)
-            _samplers.removeValue(forKey: samplerName)
-        }
-    }
-
-    public func setImageView(_ name: String, _ value: MTLTexture?) {
+    
+    public func createArgumentBuffer(with name: String) {
         resourceCache.setUniformName(with: name, group: group)
+        
+        let encoder = Engine.device.makeArgumentEncoder(arguments: _argumentArray.map({ (key: String, value: MTLArgumentDescriptor) in
+            value
+        }).sorted(by: { lhs, rhs in
+            lhs.index < rhs.index
+        }))!
+        let buffer = Engine.device.makeBuffer(length: encoder.encodedLength)
+        encoder.setArgumentBuffer(buffer, offset: 0)
+        _shaderBuffers[name] = buffer
+        _argumentArray.forEach { (key: String, value: MTLArgumentDescriptor) in
+            _argumentDescriptors[key] = (desc: value, encoder: encoder)
+        }
+        _argumentArray = [:]
+    }
 
-        if value != nil {
-            _imageViews[name] = value
+    public func setData<T>(with property: String, data: T) {
+        var data = data
+        if let argument = _argumentDescriptors[property] {
+            argument.encoder.constantData(at: argument.desc.index).copyMemory(from: &data, byteCount: MemoryLayout<T>.stride)
         } else {
-            _imageViews.removeValue(forKey: name)
+            resourceCache.setUniformName(with: property, group: group)
+            let value = _shaderBuffers.first { (key: String, value: MTLBuffer) in
+                key == property
+            }
+            
+            if let value {
+                value.value.contents().copyMemory(from: &data, byteCount: MemoryLayout<T>.stride)
+            } else {
+                _shaderBuffers[property] = Engine.device.makeBuffer(bytes: &data, length: MemoryLayout<T>.stride)!
+            }
         }
     }
 
-    public func setSampler(_ name: String, _ value: MTLSamplerDescriptor?) {
-        resourceCache.setUniformName(with: name, group: group)
-
-        if value != nil {
-            _samplers[name] = value
+    public func setData<T>(with property: String, array: [T]) {
+        if let argument = _argumentDescriptors[property] {
+            argument.encoder.constantData(at: argument.desc.index).copyMemory(from: array, byteCount: MemoryLayout<T>.stride * array.count)
         } else {
-            _samplers.removeValue(forKey: name)
+            resourceCache.setUniformName(with: property, group: group)
+            let value = _shaderBuffers.first { (key: String, value: MTLBuffer) in
+                key == property
+            }
+            
+            if let value {
+                value.value.contents().copyMemory(from: array, byteCount: MemoryLayout<T>.stride * array.count)
+            } else {
+                _shaderBuffers[property] = Engine.device.makeBuffer(bytes: array, length: MemoryLayout<T>.stride * array.count)!
+            }
+        }
+    }
+    
+    public func setData(with property: String, buffer: MTLBuffer) {
+        if let argument = _argumentDescriptors[property] {
+            argument.encoder.setBuffer(buffer, offset: 0, index: argument.desc.index)
+        } else {
+            resourceCache.setUniformName(with: property, group: group)
+            _shaderBuffers[property] = buffer
+        }
+    }
+    
+    public func setImageSampler(with textureName: String, _ sampler: String, texture: MTLTexture?) {
+        setImageView(with: textureName, texture: texture)
+        setSampler(with: sampler, sampler: nil)
+    }
+
+    public func setImageView(with name: String, texture: MTLTexture?) {
+        if let argument = _argumentDescriptors[name] {
+            argument.encoder.setTexture(texture, index: argument.desc.index)
+        } else {
+            resourceCache.setUniformName(with: name, group: group)
+            _imageViews[name] = texture
+        }
+    }
+
+    public func setSampler(with name: String, sampler: MTLSamplerDescriptor?) {
+        if let argument = _argumentDescriptors[name] {
+            if let sampler {
+                argument.encoder.setSamplerState(resourceCache.requestSamplers(sampler), index: argument.desc.index)
+            } else {
+                argument.encoder.setSamplerState(resourceCache.requestSamplers(ShaderData._defaultSamplerDesc), index: argument.desc.index)
+            }
+        } else {
+            resourceCache.setUniformName(with: name, group: group)
+            if let sampler {
+                _samplers[name] = sampler
+            } else {
+                _samplers[name] = ShaderData._defaultSamplerDesc
+            }
         }
     }
 }
 
 extension ShaderData {
-    public func setDynamicData(_ property: String, _ value: BufferView) {
+    public func setDynamicData(with property: String, buffer: BufferView) {
         resourceCache.setUniformName(with: property, group: group)
-        _shaderDynamicBuffers[Engine.currentBufferIndex][property] = value
+        _shaderDynamicBuffers[Engine.currentBufferIndex][property] = buffer
     }
 
-    public func setDynamicData<T>(_ property: String, _ data: T) {
+    public func setDynamicData<T>(with property: String, data: T) {
         resourceCache.setUniformName(with: property, group: group)
         let value = _shaderDynamicBuffers[Engine.currentBufferIndex].first { (key: String, value: BufferView) in
             key == property
         }
         if value == nil {
-            _shaderDynamicBuffers[Engine.currentBufferIndex][property] = BufferView(device: Engine.device, array: [data])
+            _shaderDynamicBuffers[Engine.currentBufferIndex][property] = BufferView(array: [data])
         } else {
             value!.value.assign(data)
         }
     }
 
-    public func setDynamicData<T>(_ property: String, _ data: [T]) {
+    public func setDynamicData<T>(with property: String, array: [T]) {
         resourceCache.setUniformName(with: property, group: group)
         let value = _shaderDynamicBuffers[Engine.currentBufferIndex].first { (key: String, value: BufferView) in
             key == property
         }
         if value == nil {
-            _shaderDynamicBuffers[Engine.currentBufferIndex][property] = BufferView(device: Engine.device, array: data)
+            _shaderDynamicBuffers[Engine.currentBufferIndex][property] = BufferView(array: array)
         } else {
-            value!.value.assign(with: data)
+            value!.value.assign(with: array)
         }
     }
 }
@@ -189,14 +198,10 @@ extension ShaderData {
             
             switch uniform.bindingType {
             case .buffer:
-                if let bufferView = _shaderBuffers[uniform.name] {
-                    commandEncoder.setBuffer(bufferView.buffer, offset: 0, index: uniform.location)
+                if let buffer = _shaderBuffers[uniform.name] {
+                    commandEncoder.setBuffer(buffer, offset: 0, index: uniform.location)
                 }
                 if let bufferView = _shaderDynamicBuffers[Engine.currentBufferIndex][uniform.name] {
-                    commandEncoder.setBuffer(bufferView.buffer, offset: 0, index: uniform.location)
-                }
-                if let bufferFunctor = _shaderBufferFunctors[uniform.name] {
-                    let bufferView = bufferFunctor()
                     commandEncoder.setBuffer(bufferView.buffer, offset: 0, index: uniform.location)
                 }
                 break
@@ -225,24 +230,15 @@ extension ShaderData {
             
             switch uniform.bindingType {
             case .buffer:
-                if let bufferView = _shaderBuffers[uniform.name] {
+                if let buffer = _shaderBuffers[uniform.name] {
                     if uniform.functionType == .vertex {
-                        commandEncoder.setVertexBuffer(bufferView.buffer, offset: 0, index: uniform.location)
+                        commandEncoder.setVertexBuffer(buffer, offset: 0, index: uniform.location)
                     }
                     if uniform.functionType == .fragment {
-                        commandEncoder.setFragmentBuffer(bufferView.buffer, offset: 0, index: uniform.location)
+                        commandEncoder.setFragmentBuffer(buffer, offset: 0, index: uniform.location)
                     }
                 }
                 if let bufferView = _shaderDynamicBuffers[Engine.currentBufferIndex][uniform.name] {
-                    if uniform.functionType == .vertex {
-                        commandEncoder.setVertexBuffer(bufferView.buffer, offset: 0, index: uniform.location)
-                    }
-                    if uniform.functionType == .fragment {
-                        commandEncoder.setFragmentBuffer(bufferView.buffer, offset: 0, index: uniform.location)
-                    }
-                }
-                if let bufferFunctor = _shaderBufferFunctors[uniform.name] {
-                    let bufferView = bufferFunctor()
                     if uniform.functionType == .vertex {
                         commandEncoder.setVertexBuffer(bufferView.buffer, offset: 0, index: uniform.location)
                     }

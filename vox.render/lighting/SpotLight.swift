@@ -8,11 +8,11 @@ import Math
 
 /// Spot light.
 public class SpotLight: Light {
-    private static let _directLightProperty = "u_directLight"
+    private static let _spotLightProperty = "u_spotLight"
     private static var _combinedData: [SpotLightData] = [SpotLightData](repeating: SpotLightData(), count: Light._maxLight)
 
     static func _updateShaderData(_ shaderData: ShaderData) {
-        shaderData.setData(SpotLight._directLightProperty, SpotLight._combinedData)
+        shaderData.setData(with: SpotLight._spotLightProperty, array: SpotLight._combinedData)
     }
 
     /// Defines a distance cutoff at which the light's intensity must be considered zero.

@@ -34,8 +34,8 @@ class HashGridApp: NSViewController {
             positions.append(SIMD3<Float>(Float.random(in: 0..<64), Float.random(in: 0..<64), Float.random(in: 0..<64)))
         }
         
-        let positionBuffer = BufferView(device: Engine.device, array: positions)
-        let itemCount = BufferView(device: Engine.device, array: [count])
+        let positionBuffer = BufferView(array: positions)
+        let itemCount = BufferView(array: [count])
         let hashGrid = HashGrid
             .builder()
             .withGridSpacing(1)

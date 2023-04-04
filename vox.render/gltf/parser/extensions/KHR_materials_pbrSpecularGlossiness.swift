@@ -22,7 +22,7 @@ class KHR_materials_pbrSpecularGlossiness {
            let samplers = glTFResource.samplers {
             material.baseTexture = glTFResource.textures![diffuseTexture.index]
             if let sampler = samplers[diffuseTexture.index] {
-                material.setBaseSampler(value: sampler)
+                material.baseSampler = sampler
             }
             KHR_texture_transform.parseEngineResource(diffuseTexture.transform, material, context)
         }
@@ -39,7 +39,7 @@ class KHR_materials_pbrSpecularGlossiness {
            let samplers = glTFResource.samplers {
             material.specularGlossinessTexture = glTFResource.textures![specularGlossinessTexture.index]
             if let sampler = samplers[specularGlossinessTexture.index] {
-                material.setSpecularGlossinessSampler(value: sampler)
+                material.specularGlossinessSampler = sampler
             }
             KHR_texture_transform.parseEngineResource(specularGlossinessTexture.transform, material, context)
         }

@@ -83,8 +83,8 @@ public class SkinnedMesh: Mesh {
         
         let mesh = Mesh()
         mesh._vertexDescriptor = _vertexDescriptor
-        mesh._setVertexBufferBinding(0, BufferView(device: Engine.device, array: _vertices))
-        mesh._setIndexBufferBinding(IndexBufferBinding(BufferView(device: Engine.device, array: _indices), .uint16))
+        mesh._setVertexBufferBinding(0, BufferView(array: _vertices))
+        mesh._setIndexBufferBinding(IndexBufferBinding(BufferView(array: _indices), .uint16))
         mesh.addSubMesh(0, _indices.count, .triangle)
         _meshes.append(mesh)
     }

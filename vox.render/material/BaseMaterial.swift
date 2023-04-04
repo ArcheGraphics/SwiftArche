@@ -4,9 +4,10 @@
 //  personal capacity and am not conveying any rights to any intellectual
 //  property of any third parties.
 
-import Foundation
+import Math
 
 open class BaseMaterial: Material {
+    private static let _alphaCutoffProp = "u_alphaCutoff"
     public static let _tilingOffsetProp = "u_tilingOffset"
 
     public static let _baseColorProp = "u_baseColor"
@@ -21,79 +22,77 @@ open class BaseMaterial: Material {
     public static let _emissiveTextureProp = "u_emissiveTexture"
     public static let _emissiveSamplerProp = "u_emissiveSampler"
 
-    private static let _alphaCutoffProp = "u_alphaCutoff"
-    private var _alphaCutoff: Float = 0
-    private var _isTransparent: Bool = false
-
-    public override var shader: Shader {
-        get {
-            _shader
-        }
-        set {
-            _shader = newValue
-            let lastStatesCount = renderStates.count
-
-            var maxPassCount = 0
-            let subShaders = shader.subShaders
-            for i in 0..<subShaders.count {
-                maxPassCount = max(subShaders[i].passes.count, maxPassCount)
-            }
-
-            if (lastStatesCount < maxPassCount) {
-                for i in lastStatesCount..<maxPassCount {
-                    renderStates.append(RenderState())
-                    setBlendMode(at: i, BlendMode.Normal)
-                }
-            } else {
-                renderStates = renderStates.dropLast(renderStates.count - maxPassCount)
-            }
+    public override var shader: Shader? {
+        didSet {
+            _updateRenderState()
         }
     }
 
+    @Serialized(default: false)
     public var isTransparent: Bool {
-        get {
-            _isTransparent
-        }
-        set {
-            _isTransparent = newValue
-            if newValue {
+        didSet {
+            if isTransparent {
                 for i in 0..<renderStates.count {
                     setRenderQueueType(at: i, RenderQueueType.Transparent)
                 }
             } else {
                 for i in 0..<renderStates.count {
-                    setRenderQueueType(at: i, _alphaCutoff > 0 ? RenderQueueType.AlphaTest : RenderQueueType.Opaque)
+                    setRenderQueueType(at: i, alphaCutoff > 0 ? RenderQueueType.AlphaTest : RenderQueueType.Opaque)
                 }
             }
         }
     }
 
+    @Serialized(default: 0)
     public var alphaCutoff: Float {
-        get {
-            _alphaCutoff
-        }
-        set {
-            _alphaCutoff = newValue
-            shaderData.setData(BaseMaterial._alphaCutoffProp, newValue)
-            if newValue > 0 {
+        didSet {
+            shaderData.setData(with: BaseMaterial._alphaCutoffProp, data: alphaCutoff)
+            if alphaCutoff > 0 {
                 shaderData.enableMacro(NEED_ALPHA_CUTOFF.rawValue)
                 for i in 0..<renderStates.count {
-                    setRenderQueueType(at: i, _isTransparent ? RenderQueueType.Transparent : RenderQueueType.AlphaTest)
+                    setRenderQueueType(at: i, isTransparent ? RenderQueueType.Transparent : RenderQueueType.AlphaTest)
                 }
             } else {
                 shaderData.disableMacro(NEED_ALPHA_CUTOFF.rawValue)
                 for i in 0..<renderStates.count {
-                    setRenderQueueType(at: i, _isTransparent ? RenderQueueType.Transparent : RenderQueueType.Opaque)
+                    setRenderQueueType(at: i, isTransparent ? RenderQueueType.Transparent : RenderQueueType.Opaque)
                 }
             }
         }
     }
-
-    public override init(shader: Shader, _ name: String = "") {
-        super.init(shader: shader)
-        shaderData.setData(BaseMaterial._alphaCutoffProp, 0)
+    
+    /// Tiling and offset of main textures.
+    @Serialized(default: Vector4(1, 1, 0, 0))
+    public var tilingOffset: Vector4 {
+        didSet {
+            shaderData.setData(with: BaseMaterial._tilingOffsetProp, data: tilingOffset)
+        }
     }
-
+    
+    public required init() {
+        super.init()
+        createArgumentBuffer()
+    }
+    
+    func createArgumentBuffer() {
+        // alpha-cutoff
+        var desc = MTLArgumentDescriptor()
+        desc.index = 0
+        desc.dataType = .float
+        desc.access = .readOnly
+        shaderData.registerArgumentDescriptor(with: BaseMaterial._alphaCutoffProp, descriptor: desc)
+        
+        // tiling offset
+        desc = MTLArgumentDescriptor()
+        desc.index = 1
+        desc.dataType = .float4
+        desc.access = .readOnly
+        shaderData.registerArgumentDescriptor(with: BaseMaterial._tilingOffsetProp, descriptor: desc)
+        shaderData.createArgumentBuffer(with: "u_baseMaterial")
+        
+        shaderData.setData(with: BaseMaterial._alphaCutoffProp, data: 0)
+    }
+    
     /// Set if is transparent of the shader pass render state.
     /// - Parameters:
     ///   - passIndex: Shader pass index
@@ -154,6 +153,27 @@ open class BaseMaterial: Material {
         case RenderFace.Double:
             renderStates[passIndex].rasterState.cullMode = .none
             break
+        }
+    }
+    
+    override func _updateRenderState() {
+        if let shader {
+            let lastStatesCount = renderStates.count
+            
+            var maxPassCount = 0
+            let subShaders = shader.subShaders
+            for i in 0..<subShaders.count {
+                maxPassCount = max(subShaders[i].passes.count, maxPassCount)
+            }
+            
+            if (lastStatesCount < maxPassCount) {
+                for i in lastStatesCount..<maxPassCount {
+                    renderStates.append(RenderState())
+                    setBlendMode(at: i, BlendMode.Normal)
+                }
+            } else {
+                renderStates = renderStates.dropLast(renderStates.count - maxPassCount)
+            }
         }
     }
 }

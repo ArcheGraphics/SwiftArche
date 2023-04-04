@@ -14,7 +14,7 @@ fileprivate class AtmoicScript: Script {
     private var _atomicBuffer: BufferView
 
     required init() {
-        _atomicBuffer = BufferView(device: Engine.device, count: 1, stride: MemoryLayout<UInt32>.stride)
+        _atomicBuffer = BufferView(count: 1, stride: MemoryLayout<UInt32>.stride)
         super.init()
     }
     
@@ -27,9 +27,7 @@ fileprivate class AtmoicScript: Script {
         let atomicResource = fg.addRetainedResource(for: RetainedBufferDescriptor.self, name: "atomicBuffer",
                                                     description: RetainedBufferDescriptor(count: 1, stride: MemoryLayout<UInt32>.stride),
                                                     actual: _atomicBuffer)
-        camera.scene.shaderData.setBufferFunctor("u_atomic") { [self] in
-            _atomicBuffer
-        }
+        camera.scene.shaderData.setData(with: "u_atomic", buffer: _atomicBuffer.buffer)
         
         fg.addFrameTask(for: AtomicEncoderData.self, name: "atomic", commandBuffer: commandBuffer) { data, builder in
             data.output = builder.write(resource: atomicResource)
@@ -65,8 +63,9 @@ class AtomicComputeApp: NSViewController {
         let cubeEntity = rootEntity.createChild()
         let renderer = cubeEntity.addComponent(MeshRenderer.self)
         renderer.mesh = PrimitiveMesh.createCuboid(width: 0.1, height: 0.1, depth: 0.1)
-        let material = BaseMaterial(shader: Shader.create(in: Engine.library("app.shader"), vertexSource: "vertex_atomic",
-                                                          fragmentSource: "fragment_atomic"))
+        let material = BaseMaterial()
+        material.shader = Shader.create(in: Engine.library("app.shader"), vertexSource: "vertex_atomic",
+                                        fragmentSource: "fragment_atomic")
         renderer.setMaterial(material)
         
         let atomicCounter = ComputePass(scene)

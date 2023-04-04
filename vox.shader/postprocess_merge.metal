@@ -7,7 +7,7 @@
 #include <metal_stdlib>
 using namespace metal;
 #include "function_constant.h"
-#include "type_common.h"
+#include "arguments.h"
 
 // Notes on the math for the following tonemapping operators:
 //

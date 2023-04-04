@@ -56,19 +56,19 @@ class LineBatcher : Batcher {
             if indirectPointBuffer?.count ?? 0 > positions.count {
                 indirectPointBuffer!.assign(with: positions)
             } else {
-                indirectPointBuffer = BufferView(device: Engine.device, array: positions)
+                indirectPointBuffer = BufferView(array: positions)
             }
             
             if indirectIndicesBuffer?.count ?? 0 > indices.count {
                 indirectIndicesBuffer!.assign(with: indices)
             } else {
-                indirectIndicesBuffer = BufferView(device: Engine.device, array: indices)
+                indirectIndicesBuffer = BufferView(array: indices)
             }
             
             if indirectColorBuffer?.count ?? 0 > colors.count {
                 indirectColorBuffer!.assign(with: colors)
             } else {
-                indirectColorBuffer = BufferView(device: Engine.device, array: colors)
+                indirectColorBuffer = BufferView(array: colors)
             }
         }
     }
@@ -76,9 +76,9 @@ class LineBatcher : Batcher {
     func checkResizePoint(count: Int) {
         if count > maxVerts {
             maxVerts = Int(ceil(Float(count) * 1.2))
-            let newPointBuffer = BufferView(device: Engine.device, count: maxVerts, stride: MemoryLayout<Vector3>.stride,
+            let newPointBuffer = BufferView(count: maxVerts, stride: MemoryLayout<Vector3>.stride,
                                             label: "point buffer", options: .storageModeShared)
-            let newColorBuffer = BufferView(device: Engine.device, count: maxVerts, stride: MemoryLayout<Color32>.stride,
+            let newColorBuffer = BufferView(count: maxVerts, stride: MemoryLayout<Color32>.stride,
                                             label: "color32 buffer", options: .storageModeShared)
             if let pointBuffer = pointBuffer,
                let colorBuffer = colorBuffer,
@@ -123,8 +123,9 @@ class LineBatcher : Batcher {
         _descriptor.attributes[Int(Color_0.rawValue)] = desc
         _descriptor.layouts[1].stride = MemoryLayout<Color32>.stride
         
-        _material = BaseMaterial(shader: Shader.create(in: Engine.library(), vertexSource: "vertex_line_gizmos",
-                                                       fragmentSource: "fragment_line_gizmos"))
+        _material = BaseMaterial()
+        _material.shader = Shader.create(in: Engine.library(), vertexSource: "vertex_line_gizmos",
+                                         fragmentSource: "fragment_line_gizmos")
         _pipelineDescriptor.label = "Line Gizmo Pipeline"
         _pipelineDescriptor.colorAttachments[0].pixelFormat = Canvas.colorPixelFormat
         _pipelineDescriptor.depthAttachmentPixelFormat = Canvas.depthPixelFormat
@@ -132,7 +133,7 @@ class LineBatcher : Batcher {
             _pipelineDescriptor.stencilAttachmentPixelFormat = format
         }
 
-        let functions = Engine.resourceCache.requestShaderModule(_material.shader.subShaders[0].passes[0], _shaderMacro)
+        let functions = Engine.resourceCache.requestShaderModule(_material.shader!.subShaders[0].passes[0], _shaderMacro)
         _pipelineDescriptor.vertexFunction = functions[0]
         _pipelineDescriptor.fragmentFunction = functions[1]
         _pipelineDescriptor.vertexDescriptor = _descriptor

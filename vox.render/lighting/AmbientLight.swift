@@ -9,20 +9,18 @@ import Math
 
 /// Ambient light.
 public class AmbientLight: Serializable {
-    private var _envMapLight = EnvMapLight(diffuse: vector_float3(0.212, 0.227, 0.259), mipMapLevel: 0,
-            diffuseIntensity: 1.0, specularIntensity: 1.0)
-    private static let _envMapProperty = "u_envMapLight"
+    private static let _diffuseColorProperty = "u_env_diffuse"
+    private static let _diffuseIntensityProperty = "u_env_diffuseIntensity"
+    private static let _specularIntensityProperty = "u_env_specularIntensity"
+    private static let _mipmapProperty = "u_env_mipmap"
 
-    private var _diffuseSphericalHarmonics: BufferView?
     private static let _diffuseSHProperty = "u_env_sh"
 
-    private var _specularTexture: MTLTexture?
     private static var _specularTextureProperty = "u_env_specularTexture"
     private static var _specularSamplerProperty = "u_env_specularSampler"
     private var _sampler = MTLSamplerDescriptor()
 
     private var _scenes: [Scene] = []
-    private var _diffuseMode: DiffuseMode = .SolidColor
 
     required public init() {
         _sampler.mipFilter = .linear
@@ -33,15 +31,12 @@ public class AmbientLight: Serializable {
         _sampler.rAddressMode = .repeat
         _sampler.sAddressMode = .clampToEdge
         _sampler.tAddressMode = .clampToEdge
+        _sampler.supportArgumentBuffers = true
     }
 
     /// Diffuse mode of ambient light.
-    public var diffuseMode: DiffuseMode {
-        get {
-            _diffuseMode
-        }
-        set {
-            _diffuseMode = newValue
+    public var diffuseMode: DiffuseMode = .SolidColor {
+        didSet {
             for scene in _scenes {
                 _setDiffuseMode(scene.shaderData)
             }
@@ -50,51 +45,38 @@ public class AmbientLight: Serializable {
 
     /// Diffuse reflection solid color.
     /// - Remark: Effective when diffuse reflection mode is `DiffuseMode.SolidColor`.
-    public var diffuseSolidColor: Color {
-        get {
-            Color(_envMapLight.diffuse, 1.0).toGamma()
-        }
-        set {
-            _envMapLight.diffuse = newValue.toLinear().rgb
+    public var diffuseSolidColor: Color = Color(0.212, 0.227, 0.259) {
+        didSet {
+            for scene in _scenes {
+                scene.shaderData.setData(with: AmbientLight._diffuseColorProperty, data: diffuseSolidColor.toLinear())
+            }
         }
     }
 
     /// Diffuse reflection spherical harmonics 3.
     /// - Remark: Effective when diffuse reflection mode is `DiffuseMode.SphericalHarmonics`.
     public var diffuseSphericalHarmonics: BufferView? {
-        get {
-            _diffuseSphericalHarmonics
-        }
-        set {
-            _diffuseSphericalHarmonics = newValue
-            if newValue != nil {
+        didSet {
+            if let diffuseSphericalHarmonics {
                 for scene in _scenes {
-                    scene.shaderData.setData(AmbientLight._diffuseSHProperty, newValue!)
+                    scene.shaderData.setData(with: AmbientLight._diffuseSHProperty, buffer: diffuseSphericalHarmonics.buffer)
                 }
             }
         }
     }
 
     /// Diffuse reflection intensity.
-    public var diffuseIntensity: Float {
-        get {
-            _envMapLight.diffuseIntensity
-        }
-        set {
-            _envMapLight.diffuseIntensity = newValue
+    public var diffuseIntensity: Float = 1 {
+        didSet {
             for scene in _scenes {
-                scene.shaderData.setData(AmbientLight._envMapProperty, _envMapLight)
+                scene.shaderData.setData(with: AmbientLight._diffuseIntensityProperty, data: diffuseIntensity)
             }
         }
     }
 
     /// Specular reflection texture.
     public var specularTexture: MTLTexture? {
-        get {
-            _specularTexture
-        }
-        set {
-            _specularTexture = newValue
+        didSet {
             for scene in _scenes {
                 _setSpecularTexture(scene.shaderData)
             }
@@ -102,14 +84,10 @@ public class AmbientLight: Serializable {
     }
 
     /// Specular reflection intensity.
-    public var specularIntensity: Float {
-        get {
-            _envMapLight.specularIntensity
-        }
-        set {
-            _envMapLight.specularIntensity = newValue
+    public var specularIntensity: Float = 1 {
+        didSet {
             for scene in _scenes {
-                scene.shaderData.setData(AmbientLight._envMapProperty, _envMapLight)
+                scene.shaderData.setData(with: AmbientLight._specularIntensityProperty, data: specularIntensity)
             }
         }
     }
@@ -118,11 +96,56 @@ public class AmbientLight: Serializable {
         _scenes.append(scene)
 
         let shaderData = scene.shaderData
-        shaderData.setData(AmbientLight._envMapProperty, _envMapLight)
-        if let _diffuseSphericalHarmonics = _diffuseSphericalHarmonics {
-            shaderData.setData(AmbientLight._diffuseSHProperty, _diffuseSphericalHarmonics)
+        var desc = MTLArgumentDescriptor()
+        desc.index = 0
+        desc.dataType = .float4
+        desc.access = .readOnly
+        shaderData.registerArgumentDescriptor(with: AmbientLight._diffuseColorProperty, descriptor: desc)
+        
+        desc = MTLArgumentDescriptor()
+        desc.index = 1
+        desc.dataType = .int
+        desc.access = .readOnly
+        shaderData.registerArgumentDescriptor(with: AmbientLight._mipmapProperty, descriptor: desc)
+        
+        desc = MTLArgumentDescriptor()
+        desc.index = 2
+        desc.dataType = .float
+        desc.access = .readOnly
+        shaderData.registerArgumentDescriptor(with: AmbientLight._diffuseIntensityProperty, descriptor: desc)
+        
+        desc = MTLArgumentDescriptor()
+        desc.index = 3
+        desc.dataType = .float
+        desc.access = .readOnly
+        shaderData.registerArgumentDescriptor(with: AmbientLight._specularIntensityProperty, descriptor: desc)
+        
+        desc = MTLArgumentDescriptor()
+        desc.index = 4
+        desc.dataType = .pointer
+        desc.access = .readOnly
+        shaderData.registerArgumentDescriptor(with: AmbientLight._diffuseSHProperty, descriptor: desc)
+        
+        desc = MTLArgumentDescriptor()
+        desc.index = 5
+        desc.dataType = .texture
+        desc.textureType = .typeCube
+        desc.access = .readOnly
+        shaderData.registerArgumentDescriptor(with: AmbientLight._specularTextureProperty, descriptor: desc)
+        
+        desc = MTLArgumentDescriptor()
+        desc.index = 6
+        desc.dataType = .sampler
+        desc.access = .readOnly
+        shaderData.registerArgumentDescriptor(with: AmbientLight._specularSamplerProperty, descriptor: desc)
+        shaderData.createArgumentBuffer(with: "u_envMapLight")
+        
+        if let diffuseSphericalHarmonics {
+            shaderData.setData(with: AmbientLight._diffuseSHProperty, buffer: diffuseSphericalHarmonics.buffer)
         }
-
+        shaderData.setData(with: AmbientLight._diffuseColorProperty, data: diffuseSolidColor.toLinear())
+        shaderData.setData(with: AmbientLight._diffuseIntensityProperty, data: diffuseIntensity)
+        shaderData.setData(with: AmbientLight._specularIntensityProperty, data: specularIntensity)
         _setDiffuseMode(shaderData)
         _setSpecularTexture(shaderData)
     }
@@ -135,7 +158,7 @@ public class AmbientLight: Serializable {
     }
 
     private func _setDiffuseMode(_ sceneShaderData: ShaderData) {
-        if (_diffuseMode == DiffuseMode.SphericalHarmonics) {
+        if (diffuseMode == DiffuseMode.SphericalHarmonics) {
             sceneShaderData.enableMacro(HAS_SH.rawValue)
         } else {
             sceneShaderData.disableMacro(HAS_SH.rawValue)
@@ -143,11 +166,10 @@ public class AmbientLight: Serializable {
     }
 
     private func _setSpecularTexture(_ sceneShaderData: ShaderData) {
-        if (_specularTexture != nil) {
-            sceneShaderData.setImageView(AmbientLight._specularTextureProperty, AmbientLight._specularSamplerProperty, _specularTexture)
-            sceneShaderData.setSampler(AmbientLight._specularSamplerProperty, _sampler)
-            _envMapLight.mipMapLevel = Int32(_specularTexture!.mipmapLevelCount)
-            sceneShaderData.setData(AmbientLight._envMapProperty, _envMapLight)
+        if let specularTexture {
+            sceneShaderData.setImageView(with: AmbientLight._specularTextureProperty, texture: specularTexture)
+            sceneShaderData.setSampler(with: AmbientLight._specularSamplerProperty, sampler: _sampler)
+            sceneShaderData.setData(with: AmbientLight._mipmapProperty, data: Int32(specularTexture.mipmapLevelCount))
             sceneShaderData.enableMacro(HAS_SPECULAR_ENV.rawValue)
         } else {
             sceneShaderData.disableMacro(HAS_SPECULAR_ENV.rawValue)

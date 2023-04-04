@@ -8,60 +8,46 @@ import Metal
 
 /// PBR (Metallic-Roughness Workflow) Material.
 public class PBRMaterial: PBRBaseMaterial {
-    private var _pbrData = PBRData(metallic: 1, roughness: 1, pad1: 0, pad2: 0)
-    private static let _pbrProp = "u_pbr"
-
-    private var _metallicRoughnessTexture: MTLTexture?
-    private static let _roughnessMetallicTextureProp = "u_roughnessMetallicTexture"
-    private static let _roughnessMetallicSamplerProp = "u_roughnessMetallicSampler"
-
     /// Metallic, default 1.0.
+    @Serialized(default: 1)
     public var metallic: Float {
-        get {
-            _pbrData.metallic
-        }
-
-        set {
-            _pbrData.metallic = newValue
-            shaderData.setData(PBRMaterial._pbrProp, _pbrData)
+        didSet {
+            shaderData.setData(with: PBRMaterial._metallicProp, data: metallic)
         }
     }
 
-    /// Roughness, default 1.0.
+    /// Roughness, default 1.0
+    @Serialized(default: 1)
     public var roughness: Float {
-        get {
-            _pbrData.roughness
-        }
-
-        set {
-            _pbrData.roughness = newValue
-            shaderData.setData(PBRMaterial._pbrProp, _pbrData)
+        didSet {
+            shaderData.setData(with: PBRMaterial._roughnessProp, data: roughness)
         }
     }
 
     /// Roughness metallic texture.
     public var roughnessMetallicTexture: MTLTexture? {
-        get {
-            _metallicRoughnessTexture
-        }
-        set {
-            _metallicRoughnessTexture = newValue
-            shaderData.setImageView(PBRMaterial._roughnessMetallicTextureProp, PBRMaterial._roughnessMetallicSamplerProp, newValue)
-            if newValue != nil {
+        didSet {
+            shaderData.setImageSampler(with: PBRMaterial._roughnessMetallicTextureProp,
+                                       PBRMaterial._roughnessMetallicSamplerProp, texture: roughnessMetallicTexture)
+            if roughnessMetallicTexture != nil {
                 shaderData.enableMacro(HAS_ROUGHNESS_METALLIC_TEXTURE.rawValue)
             } else {
                 shaderData.disableMacro(HAS_ROUGHNESS_METALLIC_TEXTURE.rawValue)
             }
         }
     }
-
-    public func setRoughnessMetallicSampler(value: MTLSamplerDescriptor) {
-        shaderData.setSampler(PBRMaterial._roughnessMetallicSamplerProp, value)
+    
+    public var roughnessMetallicSampler: MTLSamplerDescriptor? {
+        didSet {
+            shaderData.setSampler(with: PBRMaterial._roughnessMetallicSamplerProp, sampler: roughnessMetallicSampler)
+        }
     }
-
-    public override init(_ name: String = "pbr") {
-        super.init(name)
+    
+    public required init() {
+        super.init()
         shaderData.enableMacro(IS_METALLIC_WORKFLOW.rawValue)
-        shaderData.setData(PBRMaterial._pbrProp, _pbrData)
+        
+        shaderData.setData(with: PBRMaterial._metallicProp, data: metallic)
+        shaderData.setData(with: PBRMaterial._roughnessProp, data: roughness)
     }
 }

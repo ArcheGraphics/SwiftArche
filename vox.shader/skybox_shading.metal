@@ -6,7 +6,7 @@
 
 #include <metal_stdlib>
 using namespace metal;
-#include "type_common.h"
+#include "arguments.h"
 #include "function_constant.h"
 #include "function_common.h"
 

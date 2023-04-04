@@ -10,6 +10,7 @@ using namespace metal;
 #include "../function_common.h"
 #include "../shader_common.h"
 #include "shadow_shading.h"
+#include "../arguments.h"
 
 typedef struct {
     float4 position [[position]];

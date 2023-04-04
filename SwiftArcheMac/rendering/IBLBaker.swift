@@ -35,7 +35,7 @@ public class IBLBaker {
         specularTexture = Engine.textureLoader.makeTexture(descriptor)
 
         // first 27 is parameter, the last is scale
-        shBuffer = BufferView(device: Engine.device, count: 3 * 9 + 1, stride: MemoryLayout<Float>.stride)
+        shBuffer = BufferView(count: 3 * 9 + 1, stride: MemoryLayout<Float>.stride)
 
         if let commandBuffer = Engine.commandQueue.makeCommandBuffer() {
             _createCubemap(commandBuffer);

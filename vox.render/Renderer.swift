@@ -182,8 +182,7 @@ public class Renderer: Component {
         _rendererData.u_localMat = entity.transform.localMatrix.elements
         var normalMatrix = Matrix.invert(a: worldMatrix)
         _rendererData.u_normalMat = normalMatrix.transpose().elements
-
-        shaderData.setDynamicData(Renderer._renderProperty, _rendererData)
+        shaderData.setDynamicData(with: Renderer._renderProperty, data: _rendererData)
     }
 
     func _registerEntityTransformListener() {

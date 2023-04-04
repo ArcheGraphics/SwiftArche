@@ -14,10 +14,6 @@ import AppKit
 public class TextRenderer: Renderer {
     static var _defaultMaterial: Material!
     
-    private var _string: String = ""
-    private var _fontAtlas: MTLFontAtlas?
-    private var _fontSize: Float = 1
-    private var _color = Color()
     private var _isDirty: Bool = false
 
     var vertices: [Vector3] = []
@@ -28,52 +24,30 @@ public class TextRenderer: Renderer {
     public var maskLayer: Layer = Layer.Layer0
     
     /// text color
-    public var color: Color {
-        get {
-            _color
-        }
-        set {
-            _color = newValue
-            shaderData.setData("u_color", _color)
+    public var color: Color = Color() {
+        didSet {
+            shaderData.setData(with: "u_color", data: color)
         }
     }
     
     /// text string
-    public var string: String {
-        get {
-            _string
-        }
-        set {
-            if _string != newValue {
-                _string = newValue
-                _isDirty = true
-            }
+    public var string: String = "" {
+        didSet {
+            _isDirty = true
         }
     }
     
     /// font atlas
     public var fontAtlas: MTLFontAtlas? {
-        get {
-            _fontAtlas
-        }
-        set {
-            if _fontAtlas !== newValue {
-                _fontAtlas = newValue
-                _isDirty = true
-            }
+        didSet {
+            _isDirty = true
         }
     }
     
     /// font size
-    public var fontSize: Float {
-        get {
-            _fontSize
-        }
-        set {
-            if _fontSize != newValue {
-                _fontSize = newValue
-                _isDirty = true
-            }
+    public var fontSize: Float = 1 {
+        didSet {
+            _isDirty = true
         }
     }
     

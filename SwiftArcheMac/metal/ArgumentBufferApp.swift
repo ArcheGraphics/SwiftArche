@@ -10,43 +10,37 @@ import Math
 import vox_toolkit
 
 fileprivate class NewMaterial: Material {
-    var encoder: MTLArgumentEncoder
-    
-    init() {
-        var argumentDescs: [MTLArgumentDescriptor] = []
+    required init() {
+        super.init()
+        shader = Shader.create(in: Engine.library("app.shader"), vertexSource: "vertex_argument_quad",
+                               fragmentSource: "fragment_argument_quad")
+        
+        // can be solved by shader framework
         var argumentDesc = MTLArgumentDescriptor()
         argumentDesc.dataType = .sampler
         argumentDesc.index = 0
         argumentDesc.access = .readOnly
-        argumentDescs.append(argumentDesc)
+        shaderData.registerArgumentDescriptor(with: "u_baseSampler", descriptor: argumentDesc)
 
         argumentDesc = MTLArgumentDescriptor()
         argumentDesc.dataType = .texture
         argumentDesc.index = 1
         argumentDesc.access = .readOnly
         argumentDesc.textureType = .type2D
-        argumentDescs.append(argumentDesc)
-        
+        shaderData.registerArgumentDescriptor(with: "u_baseTexture", descriptor: argumentDesc)
+
         argumentDesc = MTLArgumentDescriptor()
         argumentDesc.dataType = .float4
         argumentDesc.index = 2
         argumentDesc.access = .readOnly
         argumentDesc.constantBlockAlignment = MemoryLayout<Color>.alignment
-        argumentDescs.append(argumentDesc)
-        
-        encoder = Engine.device.makeArgumentEncoder(arguments: argumentDescs)!
-        var buffer = Engine.device.makeBuffer(length: encoder.encodedLength)!
-        encoder.setArgumentBuffer(buffer, offset: 0)
-        encoder.constantData(at: 2).copyMemory(from: &baseColor, byteCount: MemoryLayout<Color>.stride)
-
-        super.init(shader: Shader.create(in: Engine.library("app.shader"), vertexSource: "vertex_argument_quad",
-                                         fragmentSource: "fragment_argument_quad"))
-        shaderData.setData("u_material", BufferView(buffer: buffer, count: 0, stride: 0))
+        shaderData.registerArgumentDescriptor(with: "u_baseColor", descriptor: argumentDesc)
+        shaderData.createArgumentBuffer(with: "u_material")
     }
     
     var baseColor: Color = Color(1, 0, 0, 1) {
         didSet {
-            encoder.constantData(at: 2).copyMemory(from: &baseColor, byteCount: MemoryLayout<Color>.stride)
+            shaderData.setData(with: "u_baseColor", data: baseColor.toLinear())
         }
     }
 }

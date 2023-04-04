@@ -18,7 +18,8 @@ class MaterialParser: Parser {
             let mtl: BaseMaterial
 
             if gltfMaterial.isUnlit {
-                let material = UnlitMaterial(gltfMaterial.name ?? "")
+                let material = UnlitMaterial()
+                material.name = gltfMaterial.name ?? ""
                 mtl = material
             } else {
                 let pbrMtl: PBRBaseMaterial
@@ -47,7 +48,7 @@ class MaterialParser: Parser {
                        let samplers = glTFResource.samplers {
                         pbrMtl.baseTexture = glTFResource.textures![baseColorTexture.index]
                         if let sampler = samplers[baseColorTexture.index] {
-                            pbrMtl.setBaseSampler(value: sampler)
+                            pbrMtl.baseSampler = sampler
                         }
                         KHR_texture_transform.parseEngineResource(baseColorTexture.transform, pbrMtl, context)
                     }
@@ -58,7 +59,7 @@ class MaterialParser: Parser {
                            let samplers = glTFResource.samplers {
                             pbrMtl.roughnessMetallicTexture = glTFResource.textures![metallicRoughnessTexture.index]
                             if let sampler = samplers[metallicRoughnessTexture.index] {
-                                pbrMtl.setRoughnessMetallicSampler(value: sampler)
+                                pbrMtl.roughnessMetallicSampler = sampler
                             }
                             KHR_texture_transform.parseEngineResource(metallicRoughnessTexture.transform, pbrMtl, context)
                         }
@@ -85,7 +86,7 @@ class MaterialParser: Parser {
                     pbrMtl.normalTextureIntensity = normalTexture.scale
                     pbrMtl.normalTexture = glTFResource.textures![normalTexture.index]
                     if let sampler = samplers[normalTexture.index] {
-                        pbrMtl.setNormalSampler(value: sampler)
+                        pbrMtl.normalSampler = sampler
                     }
                     KHR_texture_transform.parseEngineResource(normalTexture.transform, pbrMtl, context)
                 }
@@ -101,7 +102,7 @@ class MaterialParser: Parser {
                     pbrMtl.occlusionTextureIntensity = occlusionTexture.scale
                     pbrMtl.occlusionTexture = glTFResource.textures![occlusionTexture.index]
                     if let sampler = samplers[occlusionTexture.index] {
-                        pbrMtl.setOcclusionSampler(value: sampler)
+                        pbrMtl.occlusionSampler = sampler
                     }
                     KHR_texture_transform.parseEngineResource(occlusionTexture.transform, pbrMtl, context)
                 }

@@ -11,7 +11,7 @@ import Metal
 
 func createSphericalHarmonicsCoefficients(with cube: MTLTexture) -> BufferView {
     // first 27 is parameter, the last is scale
-    let bufferView = BufferView(device: Engine.device, count: 28, stride: MemoryLayout<Float>.stride)
+    let bufferView = BufferView(count: 28, stride: MemoryLayout<Float>.stride)
 
     let function = Engine.library("app.shader").makeFunction(name: "compute_sh")
     let pipelineState = try! Engine.device.makeComputePipelineState(function: function!)
