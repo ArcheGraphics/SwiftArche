@@ -3,14 +3,14 @@
 --assetliterals visual-width
 --asynccapturing 
 --beforemarks 
---binarygrouping none
+--binarygrouping 4,8
 --categorymark "MARK: %c"
 --classthreshold 0
 --closingparen balanced
 --closurevoid remove
 --commas always
 --conflictmarkers reject
---decimalgrouping none
+--decimalgrouping 3,6
 --elseposition same-line
 --emptybraces no-space
 --enumnamespaces always
@@ -27,8 +27,8 @@
 --groupedextension "MARK: %c"
 --guardelse auto
 --header ignore
---hexgrouping none
---hexliteralcase lowercase
+--hexgrouping 4,8
+--hexliteralcase uppercase
 --ifdef indent
 --importgrouping alpha
 --indent 4
@@ -45,7 +45,7 @@
 --nevertrailing 
 --nospaceoperators 
 --nowrapoperators 
---octalgrouping none
+--octalgrouping 4,8
 --operatorfunc spaced
 --organizetypes actor,class,enum,struct
 --patternlet hoist
@@ -53,7 +53,7 @@
 --redundanttype infer-locals-only
 --self remove
 --selfrequired 
---semicolons never
+--semicolons inline
 --shortoptionals always
 --smarttabs enabled
 --someAny true
