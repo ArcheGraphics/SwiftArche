@@ -549,7 +549,7 @@ fragment float4 fragment_pbr(VertexOut in [[stage_in]],
                              constant matrix_float4x4* u_shadowMatrices [[buffer(9), function_constant(needCalculateShadow)]],
                              constant float4 &u_shadowMapSize [[buffer(10), function_constant(needCalculateShadow)]],
                              constant float3 &u_shadowInfo [[buffer(11), function_constant(needCalculateShadow)]],
-                             depth2d<float> u_shadowTexture [[texture(0), function_constant(needCalculateShadow)]],
+                             depth2d_array<float> u_shadowTexture [[texture(0), function_constant(needCalculateShadow)]],
                              sampler u_shadowSampler [[sampler(0), function_constant(needCalculateShadow)]],
                              constant FogData &u_fog [[buffer(12), function_constant(hasFog)]],
                              bool is_front_face [[front_facing]]) {

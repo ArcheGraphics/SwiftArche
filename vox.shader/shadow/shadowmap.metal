@@ -15,25 +15,11 @@ typedef struct {
     float4 position [[position]];
 } VertexOut;
 
-float3 applyShadowBias(float3 positionWS, float3 u_lightDirection, float2 u_shadowBias) {
-    positionWS -= u_lightDirection * u_shadowBias.x;
-    return positionWS;
-}
-
-float3 applyShadowNormalBias(float3 positionWS, float3 normalWS, float3 u_lightDirection, float2 u_shadowBias) {
-    float invNdotL = 1.0 - clamp(dot(-u_lightDirection, normalWS), 0.0, 1.0);
-    float scale = invNdotL * u_shadowBias.y;
-    positionWS += normalWS * float3(scale);
-    return positionWS;
-}
-
 vertex VertexOut vertex_shadowmap(const VertexIn in [[stage_in]],
                                   uint v_id [[vertex_id]],
                                   constant RendererData &u_renderer [[buffer(2)]],
                                   constant matrix_float4x4 &u_lightViewProjMat [[buffer(3)]],
                                   constant float4 &u_tilingOffset [[buffer(4)]],
-                                  constant float2 &u_shadowBias [[buffer(5)]],
-                                  constant float3 &u_lightDirection [[buffer(6)]],
                                   // skin
                                   texture2d<float> u_jointTexture [[texture(0), function_constant(hasSkinAndHasJointTexture)]],
                                   sampler u_jointSampler [[sampler(0), function_constant(hasSkinAndHasJointTexture)]],
@@ -95,15 +81,6 @@ vertex VertexOut vertex_shadowmap(const VertexIn in [[stage_in]],
     }
     
     float4 positionWS = u_renderer.u_modelMat * position;
-
-    positionWS.xyz = applyShadowBias(positionWS.xyz, u_lightDirection, u_shadowBias);
-    if (!omitNormal && hasNormal) {
-        float3 v_normal = normalize(matrix_float3x3(u_renderer.u_normalMat[0][0], u_renderer.u_normalMat[0][1], u_renderer.u_normalMat[0][2],
-                                                    u_renderer.u_normalMat[1][0], u_renderer.u_normalMat[1][1], u_renderer.u_normalMat[1][2],
-                                                    u_renderer.u_normalMat[2][0], u_renderer.u_normalMat[2][1], u_renderer.u_normalMat[2][2]) * normal);
-        positionWS.xyz = applyShadowNormalBias(positionWS.xyz, v_normal, u_lightDirection, u_shadowBias);
-    }
-    
     out.position = u_lightViewProjMat * positionWS;
     out.position.z = max(out.position.z, 0.0);// clamp to min ndc z
     return out;

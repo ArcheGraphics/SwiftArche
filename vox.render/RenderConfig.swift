@@ -274,47 +274,47 @@ public enum RenderConfig {
 
     /// Indicates use of single pass deferred lighting avaliable to TBDR GPUs.
     public static var singlePassDeferredLighting: Bool {
-        Engine.device.supportsFamily(.apple1) && supportSinglePassDeferred
+        Engine.device.supportsFamily(.mac2) && supportSinglePassDeferred
     }
 
     /// Indicates whether to preform a depth prepass using tiles shaders.
     public static var useDepthPrepassTileShaders: Bool {
-        Engine.device.supportsFamily(.apple4) && supportDepthPrepassTileShader
+        Engine.device.supportsFamily(.mac2) && supportDepthPrepassTileShader
     }
 
     /// Indicates use of a tile shader instead of traditional compute kernels to cull lights
     public static var useLightCullingTileShaders: Bool {
-        Engine.device.supportsFamily(.apple4) && supportLightCullingTileShaders
+        Engine.device.supportsFamily(.mac2) && supportLightCullingTileShaders
     }
 
     /// Indicates use of a tile shader instead of traditional compute kernels downsample depth.
     public static var useDepthDownsampleTileShader: Bool {
-        Engine.device.supportsFamily(.apple4) && supportDepthDownSampleTileShader
+        Engine.device.supportsFamily(.mac2) && supportDepthDownSampleTileShader
     }
 
     /// Indicates use of vertex amplification  to render to all shadow map cascased in a single pass.
     public static var useSinglePassCSMGeneration: Bool {
-        Engine.device.supportsRasterizationRateMap(layerCount: 1) && supportRasterizationRate
+        Engine.device.supportsVertexAmplificationCount(1) && Engine.device.supportsFamily(.mac2) && supportSinglePassCSMGeneration
     }
 
     /// Indicate use of vertex amplification to draw to multiple cascades in with a single draw or execute indirect command.
-    public static var genCSMUsingVertexAmplification: Bool {
-        Engine.device.supportsVertexAmplificationCount(1) && Engine.device.supportsFamily(.apple6) && supportSinglePassCSMGeneration
-    }
+//    public static var genCSMUsingVertexAmplification: Bool {
+//        Engine.device.supportsVertexAmplificationCount(2) && useSinglePassCSMGeneration && supportCSMGenerationWithVertexAmplification
+//    }
 
     /// Indicates use of rasterization rate to increase resolution at center of FOV.
     public static var useRasterizationRate: Bool {
-        Engine.device.supportsVertexAmplificationCount(2) && useSinglePassCSMGeneration && supportCSMGenerationWithVertexAmplification
+        Engine.device.supportsRasterizationRateMap(layerCount: 1) && supportRasterizationRate
     }
 
     /// Indecates whether to page textures onto a sparse heap
     public static var useSparseTextures: Bool {
-        Engine.device.supportsFamily(.apple6) && supportSparseTexture
+        Engine.device.supportsFamily(.mac2) && supportSparseTexture
     }
 
     /// Indicates whether to prefer assets using the ASTC pixel format
     public static var useASTCPixelFormat: Bool {
-        Engine.device.supportsFamily(.apple2)
+        Engine.device.supportsFamily(.mac2)
     }
 
     static let SpotShadowRenderMode: RenderMode = .Direct

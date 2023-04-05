@@ -19,9 +19,9 @@ private:
 
     float3 getShadowCoord();
 
-    float sampleShadowMapFiltered4(float3 shadowCoord);
+    float sampleShadowMapFiltered4(float3 shadowCoord, int cascadeIndex);
 
-    float sampleShadowMapFiltered9(float3 shadowCoord);
+    float sampleShadowMapFiltered9(float3 shadowCoord, int cascadeIndex);
     
 private:
     // ------------------------------------------------------------------
@@ -63,7 +63,7 @@ public:
     float3 v_pos; // world pose
     constant float4* u_shadowSplitSpheres;
     constant matrix_float4x4* u_shadowMatrices;
-    depth2d<float> u_shadowMap;
+    depth2d_array<float> u_shadowMap;
     sampler u_shadowMapSampler;
     float4 u_shadowMapSize;
     float3 u_shadowInfo;

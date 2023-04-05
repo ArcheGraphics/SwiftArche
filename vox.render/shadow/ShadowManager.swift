@@ -17,7 +17,6 @@ public class ShadowManager {
 
     private let _camera: Camera
     private let _cascadedShadowSubpass: CascadedShadowSubpass
-    private var _passDescriptor = MTLRenderPassDescriptor()
     private let _shadowSampler = MTLSamplerDescriptor()
 
     init(_ pipeline: DevicePipeline) {
@@ -30,9 +29,6 @@ public class ShadowManager {
         _shadowSampler.rAddressMode = .clampToEdge
         _shadowSampler.sAddressMode = .clampToEdge
         _shadowSampler.tAddressMode = .clampToEdge
-
-        _passDescriptor.depthAttachment.loadAction = .clear
-        _passDescriptor.depthAttachment.storeAction = .store
     }
 
     func draw(with commandBuffer: MTLCommandBuffer) {
@@ -44,7 +40,7 @@ public class ShadowManager {
     private func _drawDirectShadowMap(with commandBuffer: MTLCommandBuffer) {
         let fg = Engine.fg
         _cascadedShadowSubpass._updateShadowSettings()
-        let mapDesc = _cascadedShadowSubpass._getShadowMapDescriptor()
+        let mapDesc = _cascadedShadowSubpass._descriptor
 
         let task = fg.addFrameTask(for: ShadowRenderCommandEncoderData.self, name: "directShadowMap pass",
                                    commandBuffer: commandBuffer)
@@ -61,11 +57,9 @@ public class ShadowManager {
                 frameData.enableMacro(CASCADED_COUNT.rawValue, (_camera.scene.shadowCascades.rawValue, .int))
 
                 // render shadow map
-                _passDescriptor.depthAttachment.texture = shadowMap
-                var encoder = RenderCommandEncoder(commandBuffer, _passDescriptor, "direct shadow pass")
                 _camera.devicePipeline.context.pipelineStageTagValue = PipelineStage.ShadowCaster
-                _cascadedShadowSubpass.draw(pipeline: _camera.devicePipeline, on: &encoder)
-                encoder.endEncoding()
+                _cascadedShadowSubpass._shadowTexture = shadowMap
+                _cascadedShadowSubpass.renderShadows(to: commandBuffer)
             }
         }
         fg.blackboard[BlackBoardType.shadow.rawValue] = task.data.depthOutput

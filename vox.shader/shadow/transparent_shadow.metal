@@ -78,7 +78,7 @@ fragment float4 fragment_transparent_shadow(VertexOut in [[stage_in]],
                                             constant matrix_float4x4* u_shadowMatrices [[buffer(12), function_constant(needCalculateShadow)]],
                                             constant float4 &u_shadowMapSize [[buffer(13), function_constant(needCalculateShadow)]],
                                             constant float3 &u_shadowInfo [[buffer(14), function_constant(needCalculateShadow)]],
-                                            depth2d<float> u_shadowMap [[texture(11), function_constant(needCalculateShadow)]],
+                                            depth2d_array<float> u_shadowMap [[texture(11), function_constant(needCalculateShadow)]],
                                             sampler u_shadowMapSampler [[sampler(11), function_constant(needCalculateShadow)]]) {
     float4 baseColor = u_baseColor;
     

@@ -140,17 +140,7 @@ int ShadowShading::computeCascadeIndex(float3 positionWS) {
     return index;
 }
 
-float3 ShadowShading::getShadowCoord() {
-    int cascadeIndex = 0;
-    if (cascadeCount != 1) {
-        cascadeIndex = computeCascadeIndex(v_pos);
-    }
-    matrix_float4x4 shadowMatrix = u_shadowMatrices[cascadeIndex];
-    float4 shadowCoord = shadowMatrix * float4(v_pos, 1.0);
-    return shadowCoord.xyz / shadowCoord.w;
-}
-
-float ShadowShading::sampleShadowMapFiltered4(float3 shadowCoord) {
+float ShadowShading::sampleShadowMapFiltered4(float3 shadowCoord, int cascadeIndex) {
     float attenuation;
     float4 attenuation4;
     float2 offset = u_shadowMapSize.xy/2.0;
@@ -158,45 +148,53 @@ float ShadowShading::sampleShadowMapFiltered4(float3 shadowCoord) {
     float3 shadowCoord1 = shadowCoord + float3(offset.x,-offset.y,0.0);
     float3 shadowCoord2 = shadowCoord + float3(-offset.x,offset.y,0.0);
     float3 shadowCoord3 = shadowCoord + float3(offset,0.0);
-    attenuation4.x = u_shadowMap.gather_compare(u_shadowMapSampler, shadowCoord0.xy, shadowCoord0.z).r;
-    attenuation4.y = u_shadowMap.gather_compare(u_shadowMapSampler, shadowCoord1.xy, shadowCoord1.z).r;
-    attenuation4.z = u_shadowMap.gather_compare(u_shadowMapSampler, shadowCoord2.xy, shadowCoord2.z).r;
-    attenuation4.w = u_shadowMap.gather_compare(u_shadowMapSampler, shadowCoord3.xy, shadowCoord3.z).r;
+    attenuation4.x = u_shadowMap.sample_compare(u_shadowMapSampler, shadowCoord0.xy, cascadeIndex, shadowCoord0.z);
+    attenuation4.y = u_shadowMap.sample_compare(u_shadowMapSampler, shadowCoord1.xy, cascadeIndex, shadowCoord1.z);
+    attenuation4.z = u_shadowMap.sample_compare(u_shadowMapSampler, shadowCoord2.xy, cascadeIndex, shadowCoord2.z);
+    attenuation4.w = u_shadowMap.sample_compare(u_shadowMapSampler, shadowCoord3.xy, cascadeIndex, shadowCoord3.z);
     attenuation = dot(attenuation4, float4(0.25));
     return attenuation;
 }
 
-float ShadowShading::sampleShadowMapFiltered9(float3 shadowCoord) {
+float ShadowShading::sampleShadowMapFiltered9(float3 shadowCoord, int cascadeIndex) {
     float attenuation;
     float fetchesWeights[9];
     float2 fetchesUV[9];
     sampleShadowComputeSamplesTent5x5(u_shadowMapSize, shadowCoord.xy, fetchesWeights, fetchesUV);
-    attenuation = fetchesWeights[0] * u_shadowMap.gather_compare(u_shadowMapSampler, fetchesUV[0].xy, shadowCoord.z).r;
-    attenuation += fetchesWeights[1] * u_shadowMap.gather_compare(u_shadowMapSampler, fetchesUV[1].xy, shadowCoord.z).r;
-    attenuation += fetchesWeights[2] * u_shadowMap.gather_compare(u_shadowMapSampler, fetchesUV[2].xy, shadowCoord.z).r;
-    attenuation += fetchesWeights[3] * u_shadowMap.gather_compare(u_shadowMapSampler, fetchesUV[3].xy, shadowCoord.z).r;
-    attenuation += fetchesWeights[4] * u_shadowMap.gather_compare(u_shadowMapSampler, fetchesUV[4].xy, shadowCoord.z).r;
-    attenuation += fetchesWeights[5] * u_shadowMap.gather_compare(u_shadowMapSampler, fetchesUV[5].xy, shadowCoord.z).r;
-    attenuation += fetchesWeights[6] * u_shadowMap.gather_compare(u_shadowMapSampler, fetchesUV[6].xy, shadowCoord.z).r;
-    attenuation += fetchesWeights[7] * u_shadowMap.gather_compare(u_shadowMapSampler, fetchesUV[7].xy, shadowCoord.z).r;
-    attenuation += fetchesWeights[8] * u_shadowMap.gather_compare(u_shadowMapSampler, fetchesUV[8].xy, shadowCoord.z).r;
+    attenuation = fetchesWeights[0] * u_shadowMap.sample_compare(u_shadowMapSampler, fetchesUV[0].xy, cascadeIndex, shadowCoord.z);
+    attenuation += fetchesWeights[1] * u_shadowMap.sample_compare(u_shadowMapSampler, fetchesUV[1].xy, cascadeIndex, shadowCoord.z);
+    attenuation += fetchesWeights[2] * u_shadowMap.sample_compare(u_shadowMapSampler, fetchesUV[2].xy, cascadeIndex, shadowCoord.z);
+    attenuation += fetchesWeights[3] * u_shadowMap.sample_compare(u_shadowMapSampler, fetchesUV[3].xy, cascadeIndex, shadowCoord.z);
+    attenuation += fetchesWeights[4] * u_shadowMap.sample_compare(u_shadowMapSampler, fetchesUV[4].xy, cascadeIndex, shadowCoord.z);
+    attenuation += fetchesWeights[5] * u_shadowMap.sample_compare(u_shadowMapSampler, fetchesUV[5].xy, cascadeIndex, shadowCoord.z);
+    attenuation += fetchesWeights[6] * u_shadowMap.sample_compare(u_shadowMapSampler, fetchesUV[6].xy, cascadeIndex, shadowCoord.z);
+    attenuation += fetchesWeights[7] * u_shadowMap.sample_compare(u_shadowMapSampler, fetchesUV[7].xy, cascadeIndex, shadowCoord.z);
+    attenuation += fetchesWeights[8] * u_shadowMap.sample_compare(u_shadowMapSampler, fetchesUV[8].xy, cascadeIndex, shadowCoord.z);
     return attenuation;
 }
 
 float ShadowShading::sampleShadowMap() {
-    float3 shadowCoord = getShadowCoord();
+    // getShadowCoord
+    int cascadeIndex = 0;
+    if (cascadeCount != 1) {
+        cascadeIndex = computeCascadeIndex(v_pos);
+    }
+    matrix_float4x4 shadowMatrix = u_shadowMatrices[cascadeIndex];
+    float4 shadowCoord = shadowMatrix * float4(v_pos, 1.0);
+    shadowCoord.xyz /= shadowCoord.w;
+    
     float attenuation = 1.0;
     if(shadowCoord.z > 0.0 && shadowCoord.z < 1.0) {
         if (shadowMode == 1) {
-            attenuation = u_shadowMap.gather_compare(u_shadowMapSampler, shadowCoord.xy, shadowCoord.z).r;
+            attenuation = u_shadowMap.sample_compare(u_shadowMapSampler, shadowCoord.xy, cascadeIndex, shadowCoord.z);
         }
         
         if (shadowMode == 2) {
-            attenuation = sampleShadowMapFiltered4(shadowCoord);
+            attenuation = sampleShadowMapFiltered4(shadowCoord.xyz, cascadeIndex);
         }
         
         if (shadowMode == 3) {
-            attenuation = sampleShadowMapFiltered9(shadowCoord);
+            attenuation = sampleShadowMapFiltered9(shadowCoord.xyz, cascadeIndex);
         }
         
         attenuation = mix(1.0, attenuation, u_shadowInfo.x);
