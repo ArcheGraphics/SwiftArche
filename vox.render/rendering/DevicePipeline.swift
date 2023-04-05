@@ -69,7 +69,7 @@ public class DevicePipeline {
             {
                 data.inputShadow = builder.read(resource: fg.blackboard[BlackBoardType.shadow.rawValue] as! Resource<MTLTextureDescriptor>)
             }
-        } execute: { [self] _, commandBuffer in
+        } execute: { [self] builder, commandBuffer in
             if let commandBuffer {
                 if background.mode == BackgroundMode.SolidColor,
                    let colorAttachment = frameBuffer.colorAttachments[0]
@@ -79,6 +79,9 @@ public class DevicePipeline {
                     colorAttachment.clearColor = clearColor
                 }
                 var encoder = RenderCommandEncoder(commandBuffer, frameBuffer, "forward pass")
+
+                let shadowMap = builder.inputShadow!.actual!
+                encoder.handle.useResource(shadowMap, usage: .read, stages: .fragment)
                 context.pipelineStageTagValue = PipelineStage.Forward
                 _forwardSubpass.draw(pipeline: self, on: &encoder)
 

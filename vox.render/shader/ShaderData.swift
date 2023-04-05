@@ -6,10 +6,23 @@
 
 import Metal
 
+struct ArgumentInfo {
+    var desc: MTLArgumentDescriptor
+    var encoder: MTLArgumentEncoder
+    var bufferName: String
+    var resource: MTLResource?
+
+    init(desc: MTLArgumentDescriptor, encoder: MTLArgumentEncoder, bufferName: String) {
+        self.desc = desc
+        self.encoder = encoder
+        self.bufferName = bufferName
+    }
+}
+
 open class ShaderData {
     private var _argumentArray: [String: MTLArgumentDescriptor] = [:]
-    private var _argumentDescriptors: [String: (desc: MTLArgumentDescriptor, encoder: MTLArgumentEncoder)] = [:]
-    private var _shaderBuffers: [String: MTLBuffer] = [:]
+    private var _argumentDescriptors: [String: ArgumentInfo] = [:]
+    private var _shaderBuffers: [String: (MTLBuffer, resource: Set<String>)] = [:]
     private var _shaderDynamicBuffers: [[String: BufferView]] = []
     private var _imageViews: [String: MTLTexture] = [:]
     private var _samplers: [String: MTLSamplerDescriptor] = [:]
@@ -50,11 +63,11 @@ open class ShaderData {
         }.sorted(by: { lhs, rhs in
             lhs.index < rhs.index
         }))!
-        let buffer = Engine.device.makeBuffer(length: encoder.encodedLength)
+        let buffer = Engine.device.makeBuffer(length: encoder.encodedLength)!
         encoder.setArgumentBuffer(buffer, offset: 0)
-        _shaderBuffers[name] = buffer
+        _shaderBuffers[name] = (buffer, [])
         _argumentArray.forEach { (key: String, value: MTLArgumentDescriptor) in
-            _argumentDescriptors[key] = (desc: value, encoder: encoder)
+            _argumentDescriptors[key] = ArgumentInfo(desc: value, encoder: encoder, bufferName: name)
         }
         _argumentArray = [:]
     }
@@ -65,14 +78,14 @@ open class ShaderData {
             argument.encoder.constantData(at: argument.desc.index).copyMemory(from: &data, byteCount: MemoryLayout<T>.stride)
         } else {
             resourceCache.setUniformName(with: property, group: group)
-            let value = _shaderBuffers.first { (key: String, _: MTLBuffer) in
+            let value = _shaderBuffers.first { (key: String, _: (MTLBuffer, Set<String>)) in
                 key == property
             }
 
             if let value {
-                value.value.contents().copyMemory(from: &data, byteCount: MemoryLayout<T>.stride)
+                value.value.0.contents().copyMemory(from: &data, byteCount: MemoryLayout<T>.stride)
             } else {
-                _shaderBuffers[property] = Engine.device.makeBuffer(bytes: &data, length: MemoryLayout<T>.stride)!
+                _shaderBuffers[property] = (Engine.device.makeBuffer(bytes: &data, length: MemoryLayout<T>.stride)!, [])
             }
         }
     }
@@ -82,24 +95,31 @@ open class ShaderData {
             argument.encoder.constantData(at: argument.desc.index).copyMemory(from: array, byteCount: MemoryLayout<T>.stride * array.count)
         } else {
             resourceCache.setUniformName(with: property, group: group)
-            let value = _shaderBuffers.first { (key: String, _: MTLBuffer) in
+            let value = _shaderBuffers.first { (key: String, _: (MTLBuffer, Set<String>)) in
                 key == property
             }
 
             if let value {
-                value.value.contents().copyMemory(from: array, byteCount: MemoryLayout<T>.stride * array.count)
+                value.value.0.contents().copyMemory(from: array, byteCount: MemoryLayout<T>.stride * array.count)
             } else {
-                _shaderBuffers[property] = Engine.device.makeBuffer(bytes: array, length: MemoryLayout<T>.stride * array.count)!
+                _shaderBuffers[property] = (Engine.device.makeBuffer(bytes: array, length: MemoryLayout<T>.stride * array.count)!, [])
             }
         }
     }
 
-    public func setData(with property: String, buffer: MTLBuffer) {
-        if let argument = _argumentDescriptors[property] {
-            argument.encoder.setBuffer(buffer, offset: 0, index: argument.desc.index)
+    public func setData(with property: String, buffer: MTLBuffer?) {
+        if let buffer {
+            if let argument = _argumentDescriptors[property] {
+                argument.encoder.setBuffer(buffer, offset: 0, index: argument.desc.index)
+                _argumentDescriptors[property]!.resource = buffer
+                _shaderBuffers[argument.bufferName]!.resource.insert(property)
+            } else {
+                resourceCache.setUniformName(with: property, group: group)
+                _shaderBuffers[property] = (buffer, [])
+            }
         } else {
-            resourceCache.setUniformName(with: property, group: group)
-            _shaderBuffers[property] = buffer
+            _argumentDescriptors.removeValue(forKey: property)
+            _shaderBuffers.removeValue(forKey: property)
         }
     }
 
@@ -109,11 +129,18 @@ open class ShaderData {
     }
 
     public func setImageView(with name: String, texture: MTLTexture?) {
-        if let argument = _argumentDescriptors[name] {
-            argument.encoder.setTexture(texture, index: argument.desc.index)
+        if let texture {
+            if let argument = _argumentDescriptors[name] {
+                argument.encoder.setTexture(texture, index: argument.desc.index)
+                _argumentDescriptors[name]!.resource = texture
+                _shaderBuffers[argument.bufferName]!.resource.insert(name)
+            } else {
+                resourceCache.setUniformName(with: name, group: group)
+                _imageViews[name] = texture
+            }
         } else {
-            resourceCache.setUniformName(with: name, group: group)
-            _imageViews[name] = texture
+            _argumentDescriptors.removeValue(forKey: name)
+            _shaderBuffers.removeValue(forKey: name)
         }
     }
 
@@ -200,7 +227,16 @@ extension ShaderData {
             switch uniform.bindingType {
             case .buffer:
                 if let buffer = _shaderBuffers[uniform.name] {
-                    commandEncoder.setBuffer(buffer, offset: 0, index: uniform.location)
+                    if !buffer.resource.isEmpty {
+                        buffer.resource.forEach { resourceName in
+                            var resources: [MTLResource] = []
+                            if let argument = _argumentDescriptors[resourceName] {
+                                resources.append(argument.resource!)
+                            }
+                            commandEncoder.useResources(resources, usage: .read)
+                        }
+                    }
+                    commandEncoder.setBuffer(buffer.0, offset: 0, index: uniform.location)
                 }
                 if let bufferView = _shaderDynamicBuffers[Engine.currentBufferIndex][uniform.name] {
                     commandEncoder.setBuffer(bufferView.buffer, offset: 0, index: uniform.location)
@@ -230,11 +266,21 @@ extension ShaderData {
             switch uniform.bindingType {
             case .buffer:
                 if let buffer = _shaderBuffers[uniform.name] {
+                    var resources: [MTLResource] = []
+                    if !buffer.resource.isEmpty {
+                        buffer.resource.forEach { resourceName in
+                            if let argument = _argumentDescriptors[resourceName] {
+                                resources.append(argument.resource!)
+                            }
+                        }
+                    }
                     if uniform.functionType == .vertex {
-                        commandEncoder.setVertexBuffer(buffer, offset: 0, index: uniform.location)
+                        commandEncoder.useResources(resources, usage: .read, stages: .vertex)
+                        commandEncoder.setVertexBuffer(buffer.0, offset: 0, index: uniform.location)
                     }
                     if uniform.functionType == .fragment {
-                        commandEncoder.setFragmentBuffer(buffer, offset: 0, index: uniform.location)
+                        commandEncoder.useResources(resources, usage: .read, stages: .fragment)
+                        commandEncoder.setFragmentBuffer(buffer.0, offset: 0, index: uniform.location)
                     }
                 }
                 if let bufferView = _shaderDynamicBuffers[Engine.currentBufferIndex][uniform.name] {
