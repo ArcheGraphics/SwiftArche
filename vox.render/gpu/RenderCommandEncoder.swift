@@ -9,14 +9,14 @@ import Metal
 public struct RenderCommandEncoder {
     public let handle: MTLRenderCommandEncoder
 
-    private var _uploadFrameGraph: FrameGraph?
-    private var _uploadScene: Scene?
-    private var _uploadCamera: Camera?
-    private var _uploadRenderer: Renderer?
-    private var _uploadMaterial: Material?
-    private var _uploadMesh: Mesh?
-    private var _uploadPSO: RenderPipelineState?
-    private var _uploadDepthStencilState: MTLDepthStencilState?
+    public var _uploadFrameGraph: FrameGraph?
+    public var _uploadScene: Scene?
+    public var _uploadCamera: Camera?
+    public var _uploadRenderer: Renderer?
+    public var _uploadMaterial: Material?
+    public var _uploadMesh: Mesh?
+    public var _uploadPSO: RenderPipelineState?
+    public var _uploadDepthStencilState: MTLDepthStencilState?
 
     init(_ commandBuffer: MTLCommandBuffer, _ descriptor: MTLRenderPassDescriptor, _ label: String = "") {
         guard let encoder = commandBuffer.makeRenderCommandEncoder(descriptor: descriptor) else {
@@ -111,15 +111,19 @@ public struct RenderCommandEncoder {
         handle.endEncoding()
     }
 
+    public mutating func flush() {
+        _uploadCamera = nil
+        _uploadRenderer = nil
+        _uploadScene = nil
+        _uploadMaterial = nil
+        _uploadFrameGraph = nil
+    }
+
     private mutating func _bind(pso: RenderPipelineState) {
         if _uploadPSO !== pso {
             handle.setRenderPipelineState(pso.handle)
             _uploadPSO = pso
-            _uploadCamera = nil
-            _uploadRenderer = nil
-            _uploadScene = nil
-            _uploadMaterial = nil
-            _uploadFrameGraph = nil
+            flush()
         }
     }
 }

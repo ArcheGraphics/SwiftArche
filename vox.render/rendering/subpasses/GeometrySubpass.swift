@@ -47,11 +47,13 @@ open class GeometrySubpass: Subpass {
         let depthStencilDescriptor = MTLDepthStencilDescriptor()
         prepare(pipelineDescriptor, depthStencilDescriptor)
 
-        var shaderMacro = Engine.fg.frameData._macroCollection
-        ShaderMacroCollection.unionCollection(material.shaderData._macroCollection,
-                                              renderer._globalShaderMacro, &shaderMacro)
+        let frameData = Engine.fg.frameData
+        ShaderMacroCollection.unionCollection(frameData._macroCollection,
+                                              renderer._globalShaderMacro, &frameData._macroCollection)
+        ShaderMacroCollection.unionCollection(frameData._macroCollection,
+                                              material.shaderData._macroCollection, &frameData._macroCollection)
 
-        let functions = Engine.resourceCache.requestShaderModule(shaderPass, shaderMacro)
+        let functions = Engine.resourceCache.requestShaderModule(shaderPass, frameData._macroCollection)
         pipelineDescriptor.vertexFunction = functions[0]
         if functions.count == 2 {
             pipelineDescriptor.fragmentFunction = functions[1]

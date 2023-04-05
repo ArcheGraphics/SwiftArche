@@ -57,6 +57,9 @@ class CascadedShadowSubpass: GeometrySubpass {
         pipelineDescriptor.label = "shadow map"
         pipelineDescriptor.depthAttachmentPixelFormat = _shadowMapFormat
         if RenderConfig.useSinglePassCSMGeneration {
+            // Enable vertex amplification - need a minimum of 2 amplification to enable on shaders
+            pipelineDescriptor.maxVertexAmplificationCount = 2
+        } else {
             pipelineDescriptor.maxVertexAmplificationCount = 1
         }
     }
@@ -99,16 +102,19 @@ class CascadedShadowSubpass: GeometrySubpass {
                 _shadowPassDescriptor.renderTargetArrayLength = shadowCascades
                 encoder = RenderCommandEncoder(commandBuffer, _shadowPassDescriptor, "direct shadow pass")
                 encoder.handle.label = "Shadow Cascade Layered"
+                encoder.handle.setDepthBias(0, slopeScale: 2, clamp: 0)
             }
 
             for j in 0 ..< shadowCascades {
                 if RenderConfig.useSinglePassCSMGeneration {
                     var viewMapping = MTLVertexAmplificationViewMapping(viewportArrayIndexOffset: 0, renderTargetArrayIndexOffset: UInt32(j))
                     encoder.handle.setVertexAmplificationCount(1, viewMappings: &viewMapping)
+                    encoder._uploadFrameGraph = nil // flush manually
                 } else {
                     _shadowPassDescriptor.depthAttachment.slice = j
                     encoder = RenderCommandEncoder(commandBuffer, _shadowPassDescriptor, "direct shadow pass")
                     encoder.handle.label = "Shadow Cascade \(j)"
+                    encoder.handle.setDepthBias(0, slopeScale: 2, clamp: 0)
                 }
 
                 ShadowUtils.getBoundSphereByFrustum(
@@ -181,7 +187,6 @@ class CascadedShadowSubpass: GeometrySubpass {
     private func _getCascadesSplitDistance(_ shadowFar: Float) {
         let shadowTwoCascadeSplits = _camera.scene.shadowTwoCascadeSplits
         let shadowFourCascadeSplits = _camera.scene.shadowFourCascadeSplits
-        let shadowCascades = _shadowCascadeMode
         let nearClipPlane = _camera.nearClipPlane
         let aspectRatio = _camera.aspectRatio
         let fieldOfView = _camera.fieldOfView
@@ -190,7 +195,7 @@ class CascadedShadowSubpass: GeometrySubpass {
         let range = shadowFar - nearClipPlane
         let tFov = tan(MathUtil.degreeToRadian(fieldOfView) * 0.5)
         let denominator = 1.0 + tFov * tFov * (aspectRatio * aspectRatio + 1.0)
-        switch shadowCascades {
+        switch _shadowCascadeMode {
         case ShadowCascadesMode.NoCascades:
             CascadedShadowSubpass._cascadesSplitDistance[1] = _getFarWithRadius(shadowFar, denominator)
         case ShadowCascadesMode.TwoCascades:

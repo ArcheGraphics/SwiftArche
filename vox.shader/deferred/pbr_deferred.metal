@@ -7,7 +7,6 @@
 #include "../function_common.h"
 #include "../function_constant.h"
 #include "../shader_common.h"
-#include "../culling_shared.h"
 #include "lighting_common.h"
 
 /// Output from the main rendering vertex shader.
@@ -101,78 +100,6 @@ static PixelSurfaceData getPixelSurfaceData(const VertexOutput in,
     return output;
 }
 
-void applyChunkVizModifiers(thread PixelSurfaceData& surfaceData, float4 frozenPosition, xhalf3 normal,
-                            constant ChunkVizData & chunkViz, constant FrameConstants & frameData,
-                            constant GlobalTextures & globalTextures) {
-    if (needDebugView) {
-        if(frameData.visualizeCullingMode == VisualizationTypeChunkIndex)
-            surfaceData.albedo = wang_color(chunkViz.index);
-
-        const xhalf3 frustumCulledDebugColor = xhalf3(0.4,0,0.4);
-        const xhalf3 occlusionCulledDebugColor = xhalf3(0,0.4,0.4);
-
-        bool showFrustumCulled = (frameData.visualizeCullingMode >= VisualizationTypeFrustumCull)
-        && (chunkViz.cullType == CullResultFrustumCulled);
-        bool showOcclusionCulled = (frameData.visualizeCullingMode >= VisualizationTypeFrustumCullOcclusionCull)
-        && (chunkViz.cullType == CullResultOcclusionCulled);
-
-        if (showFrustumCulled) {
-            surfaceData.albedo = frustumCulledDebugColor;
-            surfaceData.F0 = 0.04;
-            surfaceData.roughness = 1.0f;
-        }
-        else if (showOcclusionCulled) {
-            surfaceData.albedo = occlusionCulledDebugColor;
-            surfaceData.F0 = 0.04;
-            surfaceData.roughness = 1.0f;
-        } else if(frameData.visualizeCullingMode == VisualizationTypeCascadeCount) {
-            switch(chunkViz.cascadeCount) {
-                case 0:
-                    surfaceData.albedo = xhalf3(1, 1, 1);
-                    break;
-                case 1:
-                    surfaceData.albedo = xhalf3(0, 1, 0);
-                    break;
-                case 2:
-                    surfaceData.albedo = xhalf3(1, 1, 0);
-                    break;
-                case 3:
-                    surfaceData.albedo = xhalf3(1, 0, 0);
-                    break;
-            }
-            surfaceData.F0 = 0.04;
-            surfaceData.roughness = 1.0f;
-        } else {
-            // Modulate surface brightness based on out-of-frustum and occlusion
-            bool clipped = (frameData.visualizeCullingMode >= 1)
-            && (frozenPosition.w < 0 || any(abs(frozenPosition.xyz) > frozenPosition.w));
-            bool culled = false;
-
-            if (frameData.visualizeCullingMode >= VisualizationTypeFrustumCullOcclusion) {
-                // Test for depth pyramid occlusion
-                float3 dpc = frozenPosition.xyz / frozenPosition.w;
-                dpc.xy = dpc.xy * float2(0.5, -0.5) + 0.5;
-
-                constexpr sampler samp(filter::linear, mip_filter::none, compare_func::greater);
-                float occlusion = globalTextures.viewDepthPyramid.sample_compare(samp, dpc.xy, dpc.z);
-
-                culled = occlusion > 0.5f;
-            }
-
-            if(clipped || culled) {
-                surfaceData.albedo = 0.05f;
-                surfaceData.normal = normal;
-            }
-        }
-
-#if 0 // Culling viz transparency.
-        bool showCulled = showFrustumCulled || showOcclusionCulled;
-        if (showCulled && (as_type<uint>(fp.x + fp.y) % 4))
-            discard_fragment();
-#endif
-    }
-}
-
 //------------------------------------------------------------------------------
 
 // Depth only vertex shader.
@@ -250,11 +177,8 @@ fragment GBufferFragOut fragmentGBufferShader(VertexOutput in [[ stage_in ]],
                                               constant FrameConstants & frameData [[ buffer(0) ]],
                                               constant ShaderMaterial & material [[ buffer(1) ]],
                                               constant GlobalTextures & globalTextures [[ buffer(2) ]],
-                                              constant ChunkVizData & chunkViz [[ buffer(3), function_constant(needDebugView) ]],
                                               bool is_front_face [[ front_facing]]) {
     PixelSurfaceData surfaceData = getPixelSurfaceData(in, material, is_front_face);
-
-    applyChunkVizModifiers(surfaceData, in.frozenPosition, in.normal, chunkViz, frameData, globalTextures);
 
 #if !USE_EQUAL_DEPTH_TEST // not required when using depth pre pass
     if(needAlphaCutoff && surfaceData.alpha < ALPHA_CUTOUT)
@@ -280,13 +204,10 @@ fragment xhalf4 fragmentForwardShader(VertexOutput in [[ stage_in ]],
                                       constant ShaderMaterial & material [[ buffer(2) ]],
                                       constant GlobalTextures & globalTextures [[ buffer(3) ]],
                                       constant ShaderLightParams & lightParams [[ buffer(4) ]],
-                                      constant ChunkVizData & chunkViz [[ buffer(5), function_constant(needDebugView) ]],
                                       bool is_front_face [[ front_facing ]]) {
     PixelSurfaceData surfaceData = getPixelSurfaceData(in, material, is_front_face);
     surfaceData.F0 = mix(surfaceData.F0, (xhalf)0.02, (xhalf)frameData.wetness);
     surfaceData.roughness = mix(surfaceData.roughness, (xhalf)0.1, (xhalf)frameData.wetness);
-
-    applyChunkVizModifiers(surfaceData, in.frozenPosition, in.normal, chunkViz, frameData, globalTextures);
 
 #if !USE_EQUAL_DEPTH_TEST // not required when using depth pre pass
     if(gUseAlphaMask && surfaceData.alpha < ALPHA_CUTOUT)

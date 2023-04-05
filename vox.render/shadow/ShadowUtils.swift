@@ -103,13 +103,13 @@ enum ShadowUtils {
     static func shadowResolution(_ value: ShadowResolution) -> UInt32 {
         switch value {
         case ShadowResolution.Low:
-            return 512
+            return 128
         case ShadowResolution.Medium:
-            return 1024
+            return 256
         case ShadowResolution.High:
-            return 2048
+            return 512
         case ShadowResolution.VeryHigh:
-            return 4096
+            return 1024
         }
     }
 

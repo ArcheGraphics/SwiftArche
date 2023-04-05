@@ -33,7 +33,7 @@ public final class Scene: NSObject, Serializable {
     public var shadowTwoCascadeSplits: Float
 
     /// The splits of four cascade distribution.
-    @Serialized(default: Vector3(1.0 / 4, 1.0 / 4, 1.0 / 4))
+    @Serialized(default: Vector3(1.0 / 15, 3.0 / 15.0, 7.0 / 15.0))
     public var shadowFourCascadeSplits: Vector3
 
     /// Max Shadow distance.
@@ -144,7 +144,6 @@ public final class Scene: NSObject, Serializable {
         Engine.sceneManager._allScenes.append(self)
 
         shaderData.enableMacro(FOG_MODE.rawValue, (fogMode.rawValue, .int))
-        shaderData.enableMacro(CASCADED_COUNT.rawValue, (shadowCascades.rawValue, .int))
         _computeLinearFogParams(fogStart, fogEnd)
         _computeExponentialFogParams(fogDensity)
 

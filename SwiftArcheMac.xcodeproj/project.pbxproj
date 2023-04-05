@@ -782,9 +782,7 @@
 		3E3E437929CDC07B00D41145 /* XCamera.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XCamera.swift; sourceTree = "<group>"; };
 		3E3E437D29CDC17E00D41145 /* ScatterVolume.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; path = ScatterVolume.metal; sourceTree = "<group>"; };
 		3E3E437F29CDC17E00D41145 /* debug.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; path = debug.metal; sourceTree = "<group>"; };
-		3E3E438029CDC17F00D41145 /* Culling.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; path = Culling.metal; sourceTree = "<group>"; };
 		3E3E438129CDC17F00D41145 /* LightCullingShared.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LightCullingShared.h; sourceTree = "<group>"; };
-		3E3E438229CDC17F00D41145 /* DepthPyramid.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; path = DepthPyramid.metal; sourceTree = "<group>"; };
 		3E3E438429CDC17F00D41145 /* AmbientObscurance.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; path = AmbientObscurance.metal; sourceTree = "<group>"; };
 		3E3E438529CDC17F00D41145 /* LightCulling.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; path = LightCulling.metal; sourceTree = "<group>"; };
 		3E3E438629CDC17F00D41145 /* lighting.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; path = lighting.metal; sourceTree = "<group>"; };
@@ -823,7 +821,6 @@
 		3E5C393A29D9B3DB0026E999 /* TerrainHabitatType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TerrainHabitatType.swift; sourceTree = "<group>"; };
 		3E5C393C29D9B4310026E999 /* TerrainHabitat_MemberIds.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TerrainHabitat_MemberIds.swift; sourceTree = "<group>"; };
 		3E5C393E29D9B56E0026E999 /* TerrainParams_MemberIds.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TerrainParams_MemberIds.swift; sourceTree = "<group>"; };
-		3E5C394329DA96B00026E999 /* culling_shared.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = culling_shared.h; sourceTree = "<group>"; };
 		3E5C394429DA97E50026E999 /* lighting_common.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = lighting_common.h; sourceTree = "<group>"; };
 		3E5C394729DA9FA20026E999 /* MeshSubpass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeshSubpass.swift; sourceTree = "<group>"; };
 		3E5C394929DACA6B0026E999 /* ArgumentBufferApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArgumentBufferApp.swift; sourceTree = "<group>"; };
@@ -1814,8 +1811,6 @@
 				3E6D2F08293ED78300B63F73 /* cluster_compute.h */,
 				3E6D2F09293ED78300B63F73 /* cluster_compute.metal */,
 				3E3E438429CDC17F00D41145 /* AmbientObscurance.metal */,
-				3E3E438029CDC17F00D41145 /* Culling.metal */,
-				3E3E438229CDC17F00D41145 /* DepthPyramid.metal */,
 				3E3E438529CDC17F00D41145 /* LightCulling.metal */,
 				3E3E438129CDC17F00D41145 /* LightCullingShared.h */,
 				3E3E438829CDC17F00D41145 /* Resolve.metal */,
@@ -2359,7 +2354,6 @@
 				3EC0383D29321495002187DC /* background_shading.metal */,
 				3EC0383C29321495002187DC /* pbr_shading.h */,
 				3EC0384029321495002187DC /* pbr_shading.metal */,
-				3E5C394329DA96B00026E999 /* culling_shared.h */,
 				3EF39BAB29D284EB0083E20A /* deferred */,
 				040F1E13293B86AC008BDC8D /* luminance.metal */,
 				3EC92AC72939A1ED00423396 /* postprocess_merge.metal */,
