@@ -148,6 +148,7 @@ class PhysXAttractorApp: NSViewController {
         iblBaker = IBLBaker()
 
         let scene = Engine.sceneManager.activeScene!
+        scene.shadowCascades = .FourCascades
         let hdr = Engine.textureLoader.loadHDR(with: "assets/kloppenheim_06_4k.hdr")!
         iblBaker.bake(scene, with: hdr, size: 256, level: 3)
 
@@ -166,6 +167,7 @@ class PhysXAttractorApp: NSViewController {
         light.transform.lookAt(targetPosition: Vector3())
         let directLight = light.addComponent(DirectLight.self)
         directLight.shadowType = ShadowType.SoftLow
+        directLight.shadowSlopeScale = 3
 
         let attractorEntity = rootEntity.createChild()
         let interaction = attractorEntity.addComponent(Interaction.self)

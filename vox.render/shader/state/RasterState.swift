@@ -10,26 +10,17 @@ import Metal
 public class RasterState {
     /// Specifies whether or not front- and/or back-facing polygons can be culled.
     public var cullMode: MTLCullMode = .back
-    /// A constant bias applied to all fragments.
-    public var depthBias: Float = 0
-    /// A bias that scales with the depth gradient of the primitive.
-    public var depthSlopeScale: Float = 1.0
-    /// The maximum bias value to apply to the fragment.
-    public var depthClamp: Float = 0.01
+    public var fillingMode: MTLTriangleFillMode = .fill
 
     func _apply(_ frontFaceInvert: Bool,
                 _ renderEncoder: MTLRenderCommandEncoder)
     {
         renderEncoder.setCullMode(cullMode)
-
+        renderEncoder.setTriangleFillMode(fillingMode)
         if frontFaceInvert {
             renderEncoder.setFrontFacing(.clockwise)
         } else {
             renderEncoder.setFrontFacing(.counterClockwise)
-        }
-
-        if depthBias != 0 || depthSlopeScale != 0 || depthClamp != 0 {
-            renderEncoder.setDepthBias(depthBias, slopeScale: depthSlopeScale, clamp: depthClamp)
         }
     }
 }

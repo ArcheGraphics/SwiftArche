@@ -23,11 +23,14 @@ open class GeometrySubpass: Subpass {
         encoder.handle.popDebugGroup()
     }
 
-    public func _drawElement(pipeline: DevicePipeline, on encoder: inout RenderCommandEncoder, _ element: RenderElement) {
+    public func _drawElement(pipeline: DevicePipeline, on encoder: inout RenderCommandEncoder,
+                             _ element: RenderElement, renderQueue: RenderQueueType)
+    {
         switch element.data.renderType {
         case .Mesh:
             _drawMesh(pipeline: pipeline, on: &encoder, renderState: element.renderState,
-                      shaderPass: element.shaderPass, meshRenderData: element.data as! MeshRenderData)
+                      shaderPass: element.shaderPass, meshRenderData: element.data as! MeshRenderData,
+                      renderQueue: renderQueue)
         case .Text:
             TextBatcher.ins.appendElement(element)
         case .Terrian:
@@ -36,7 +39,8 @@ open class GeometrySubpass: Subpass {
     }
 
     public func _drawMesh(pipeline: DevicePipeline, on encoder: inout RenderCommandEncoder,
-                          renderState: RenderState, shaderPass: ShaderPass, meshRenderData: MeshRenderData)
+                          renderState: RenderState, shaderPass: ShaderPass,
+                          meshRenderData: MeshRenderData, renderQueue: RenderQueueType)
     {
         let mesh = meshRenderData.mesh
         let renderer = meshRenderData.renderer
@@ -55,7 +59,9 @@ open class GeometrySubpass: Subpass {
 
         let functions = Engine.resourceCache.requestShaderModule(shaderPass, frameData._macroCollection)
         pipelineDescriptor.vertexFunction = functions[0]
-        if functions.count == 2 {
+        if renderQueue == .Opaque && pipeline.context.pipelineStageTagValue == PipelineStage.ShadowCaster {
+            pipelineDescriptor.fragmentFunction = nil
+        } else {
             pipelineDescriptor.fragmentFunction = functions[1]
         }
         pipelineDescriptor.vertexDescriptor = mesh._vertexDescriptor

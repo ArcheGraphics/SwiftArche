@@ -29,19 +29,19 @@ public class ForwardSubpass: GeometrySubpass {
 
         // opaque
         for element in pipeline._opaqueQueue {
-            super._drawElement(pipeline: pipeline, on: &encoder, element)
+            super._drawElement(pipeline: pipeline, on: &encoder, element, renderQueue: .Opaque)
         }
         super._drawBatcher(pipeline: pipeline, on: &encoder, TextBatcher.ins)
 
         // alphaTest
         for element in pipeline._alphaTestQueue {
-            super._drawElement(pipeline: pipeline, on: &encoder, element)
+            super._drawElement(pipeline: pipeline, on: &encoder, element, renderQueue: .AlphaTest)
         }
         super._drawBatcher(pipeline: pipeline, on: &encoder, TextBatcher.ins)
 
         // transparent
         for element in pipeline._transparentQueue {
-            super._drawElement(pipeline: pipeline, on: &encoder, element)
+            super._drawElement(pipeline: pipeline, on: &encoder, element, renderQueue: .Transparent)
         }
         super._drawBatcher(pipeline: pipeline, on: &encoder, TextBatcher.ins)
     }

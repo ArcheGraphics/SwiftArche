@@ -10,14 +10,14 @@ import Metal
 public enum ShaderFactory {
     /// physical-based shading
     public static var pbr: Shader {
-        let shadowCaster = ShaderPass(Engine.library(), "vertex_shadowmap", nil,
+        let shadowCaster = ShaderPass(Engine.library(), "vertex_shadowmap", "fragment_pbr_shadow",
                                       tags: [ShaderTagKey.pipelineStage.rawValue: PipelineStage.ShadowCaster])
         return Shader.create(shaderPasses: [ShaderPass(Engine.library(), "vertex_pbr", "fragment_pbr"), shadowCaster])
     }
 
     /// unlit shading
     public static var unlit: Shader {
-        let shadowCaster = ShaderPass(Engine.library(), "vertex_shadowmap", nil,
+        let shadowCaster = ShaderPass(Engine.library(), "vertex_shadowmap", "fragment_unlit_shadow",
                                       tags: [ShaderTagKey.pipelineStage.rawValue: PipelineStage.ShadowCaster])
         return Shader.create(shaderPasses: [ShaderPass(Engine.library(), "vertex_unlit", "fragment_unlit"), shadowCaster])
     }

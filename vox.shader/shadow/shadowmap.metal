@@ -13,13 +13,14 @@ using namespace metal;
 
 typedef struct {
     float4 position [[position]];
+    float2 v_uv;
 } VertexOut;
 
 vertex VertexOut vertex_shadowmap(const VertexIn in [[stage_in]],
                                   uint v_id [[vertex_id]],
                                   constant RendererData &u_renderer [[buffer(2)]],
-                                  constant matrix_float4x4 &u_lightViewProjMat [[buffer(3)]],
-                                  constant float4 &u_tilingOffset [[buffer(4)]],
+                                  constant BaseMaterial& u_baseMaterial [[buffer(3)]],
+                                  constant matrix_float4x4 &u_lightViewProjMat [[buffer(4)]],
                                   // skin
                                   texture2d<float> u_jointTexture [[texture(0), function_constant(hasSkinAndHasJointTexture)]],
                                   sampler u_jointSampler [[sampler(0), function_constant(hasSkinAndHasJointTexture)]],
@@ -80,8 +81,50 @@ vertex VertexOut vertex_shadowmap(const VertexIn in [[stage_in]],
         }
     }
     
+    // uv
+    if (hasUV) {
+        out.v_uv = in.TEXCOORD_0;
+    } else {
+        out.v_uv = float2(0.0, 0.0);
+    }
+    if (needTilingOffset) {
+        out.v_uv = out.v_uv * u_baseMaterial.tilingOffset.xy + u_baseMaterial.tilingOffset.zw;
+    }
+    
     float4 positionWS = u_renderer.u_modelMat * position;
     out.position = u_lightViewProjMat * positionWS;
     out.position.z = max(out.position.z, 0.0);// clamp to min ndc z
     return out;
+}
+
+fragment void fragment_unlit_shadow(VertexOut in [[stage_in]],
+                                    constant BaseMaterial& u_baseMaterial [[buffer(1)]],
+                                    constant UnlitMaterial& u_unlitMaterial [[buffer(2)]]) {
+    float4 baseColor = u_unlitMaterial.u_baseColor;
+    
+    if (hasBaseTexture) {
+        baseColor *= u_unlitMaterial.u_baseTexture.sample(u_unlitMaterial.u_baseSampler, in.v_uv);
+    }
+    
+    if (needAlphaCutoff) {
+        if( baseColor.a < u_baseMaterial.alphaCutoff ) {
+            discard_fragment();
+        }
+    }
+}
+
+fragment void fragment_pbr_shadow(VertexOut in [[stage_in]],
+                                  constant BaseMaterial& u_baseMaterial [[buffer(1)]],
+                                  constant PBRMaterial& u_pbrMaterial [[buffer(2)]]) {
+    float4 baseColor = u_pbrMaterial.baseColor;
+    
+    if (hasBaseTexture) {
+        baseColor *= u_pbrMaterial.u_baseTexture.sample(u_pbrMaterial.u_baseSampler, in.v_uv);
+    }
+    
+    if (needAlphaCutoff) {
+        if( baseColor.a < u_baseMaterial.alphaCutoff ) {
+            discard_fragment();
+        }
+    }
 }

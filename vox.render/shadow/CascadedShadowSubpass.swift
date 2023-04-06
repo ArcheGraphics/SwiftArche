@@ -102,7 +102,7 @@ class CascadedShadowSubpass: GeometrySubpass {
                 _shadowPassDescriptor.renderTargetArrayLength = shadowCascades
                 encoder = RenderCommandEncoder(commandBuffer, _shadowPassDescriptor, "direct shadow pass")
                 encoder.handle.label = "Shadow Cascade Layered"
-                encoder.handle.setDepthBias(0, slopeScale: 2, clamp: 0)
+                encoder.handle.setDepthBias(light.shadowBias, slopeScale: light.shadowSlopeScale, clamp: light.shadowClamp)
             }
 
             for j in 0 ..< shadowCascades {
@@ -114,7 +114,7 @@ class CascadedShadowSubpass: GeometrySubpass {
                     _shadowPassDescriptor.depthAttachment.slice = j
                     encoder = RenderCommandEncoder(commandBuffer, _shadowPassDescriptor, "direct shadow pass")
                     encoder.handle.label = "Shadow Cascade \(j)"
-                    encoder.handle.setDepthBias(0, slopeScale: 2, clamp: 0)
+                    encoder.handle.setDepthBias(light.shadowBias, slopeScale: light.shadowSlopeScale, clamp: light.shadowClamp)
                 }
 
                 ShadowUtils.getBoundSphereByFrustum(
@@ -165,11 +165,11 @@ class CascadedShadowSubpass: GeometrySubpass {
                 pipeline._alphaTestQueue.sort(by: DevicePipeline._compareFromNearToFar)
 
                 for i in 0 ..< pipeline._opaqueQueue.count {
-                    super._drawElement(pipeline: pipeline, on: &encoder, pipeline._opaqueQueue[i])
+                    super._drawElement(pipeline: pipeline, on: &encoder, pipeline._opaqueQueue[i], renderQueue: .Opaque)
                 }
 
                 for i in 0 ..< pipeline._alphaTestQueue.count {
-                    super._drawElement(pipeline: pipeline, on: &encoder, pipeline._alphaTestQueue[i])
+                    super._drawElement(pipeline: pipeline, on: &encoder, pipeline._alphaTestQueue[i], renderQueue: .AlphaTest)
                 }
 
                 if !RenderConfig.useSinglePassCSMGeneration {

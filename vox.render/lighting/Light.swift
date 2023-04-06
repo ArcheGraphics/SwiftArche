@@ -24,13 +24,17 @@ public class Light: Component {
     @Serialized(default: ShadowType.None)
     public var shadowType: ShadowType
 
-    /// Shadow bias.
-    @Serialized(default: 1)
+    /// A constant bias applied to all fragments.
+    @Serialized(default: 0)
     public var shadowBias: Float
 
-    /// Shadow mapping normal-based bias.
-    @Serialized(default: 1)
-    public var shadowNormalBias: Float
+    /// A bias that scales with the depth gradient of the primitive.
+    @Serialized(default: 2.0)
+    public var shadowSlopeScale: Float
+
+    /// The maximum bias value to apply to the fragment.
+    @Serialized(default: 0.01)
+    public var shadowClamp: Float
 
     /// Near plane value to use for shadow frustums.
     @Serialized(default: 0.1)
