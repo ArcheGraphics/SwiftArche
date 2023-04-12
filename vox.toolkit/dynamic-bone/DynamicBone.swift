@@ -63,8 +63,11 @@ public class DynamicBone: Script {
     /// Bones exclude from physics simulation.
     public var m_Exclusions: [Transform] = []
 
-    public enum FreezeAxis {
-        case None, X, Y, Z
+    public enum FreezeAxis: Int {
+        case None = 0
+        case X = 1
+        case Y = 2
+        case Z = 3
     }
 
     /// Constrain bones to move on specified plane.
@@ -507,7 +510,37 @@ public class DynamicBone: Script {
         }
     }
 
-    func updateParticles1(pt _: ParticleTree, timeVar _: Float, loopIndex _: Int) {}
+    func updateParticles1(pt: ParticleTree, timeVar: Float, loopIndex: Int) {
+        var force = m_Gravity
+        let fdir = m_Gravity.normalized
+        let pf = fdir * max(Vector3.dot(left: pt.m_RestGravity, right: fdir), 0) // project current gravity to rest gravity
+        force -= pf // remove projected gravity
+        force = (force + m_Force) * (m_ObjectScale * timeVar)
+
+        let objectMove = loopIndex == 0 ? m_ObjectMove : Vector3.zero // only first loop consider object move
+
+        for i in 0 ..< pt.m_Particles.count {
+            let p = pt.m_Particles[i]
+            if p.m_ParentIndex >= 0 {
+                // verlet integration
+                let v = p.m_Position - p.m_PrevPosition
+                let rmove = objectMove * p.m_Inert
+                p.m_PrevPosition = p.m_Position + rmove
+                var damping = p.m_Damping
+                if p.m_isCollide {
+                    damping += p.m_Friction
+                    if damping > 1 {
+                        damping = 1
+                    }
+                    p.m_isCollide = false
+                }
+                p.m_Position += v * (1 - damping) + force + rmove
+            } else {
+                p.m_PrevPosition = p.m_Position
+                p.m_Position = p.m_TransformPosition
+            }
+        }
+    }
 
     func updateParticles2(timeVar: Float) {
         for i in 0 ..< m_ParticleTrees.count {
@@ -515,7 +548,69 @@ public class DynamicBone: Script {
         }
     }
 
-    func updateParticles2(pt _: ParticleTree, timeVar _: Float) {}
+    func updateParticles2(pt: ParticleTree, timeVar: Float) {
+        var movePlane = Plane()
+
+        for i in 1 ..< pt.m_Particles.count {
+            let p = pt.m_Particles[i]
+            let p0 = pt.m_Particles[p.m_ParentIndex]
+
+            let restLen: Float
+            if p.m_Transform != nil {
+                restLen = (p0.m_TransformPosition - p.m_TransformPosition).length()
+            } else {
+                restLen = Vector3.transformToVec3(v: p.m_EndOffset, m: p0.m_TransformLocalToWorldMatrix).length()
+            }
+
+            // keep shape
+            let stiffness = MathUtil.lerp(a: 1.0, b: p.m_Stiffness, t: m_Weight)
+            if stiffness > 0 || p.m_Elasticity > 0 {
+                var m0 = p0.m_TransformLocalToWorldMatrix
+                m0.elements.columns.3 = SIMD4<Float>(p0.m_Position.internalValue, 1)
+                let restPos: Vector3
+                if p.m_Transform != nil {
+                    restPos = Vector3.transformToVec3(v: p.m_TransformLocalPosition, m: m0)
+                } else {
+                    restPos = Vector3.transformToVec3(v: p.m_EndOffset, m: m0)
+                }
+
+                var d = restPos - p.m_Position
+                p.m_Position += d * (p.m_Elasticity * timeVar)
+
+                if stiffness > 0 {
+                    d = restPos - p.m_Position
+                    let len = d.length()
+                    let maxlen = restLen * (1 - stiffness) * 2
+                    if len > maxlen {
+                        p.m_Position += d * ((len - maxlen) / len)
+                    }
+                }
+            }
+
+            // collide
+            if !m_EffectiveColliders.isEmpty {
+                let particleRadius = p.m_Radius * m_ObjectScale
+                for j in 0 ..< m_EffectiveColliders.count {
+                    let c = m_EffectiveColliders[j]
+                    p.m_isCollide = p.m_isCollide || c.collide(particlePosition: &p.m_Position, particleRadius: particleRadius)
+                }
+            }
+
+            // freeze axis, project to plane
+            if m_FreezeAxis != FreezeAxis.None {
+                let planeNormal = simd_normalize(p0.m_TransformLocalToWorldMatrix.elements[m_FreezeAxis.rawValue - 1].xyz)
+                movePlane.setNormalAndPosition(Vector3(planeNormal), p0.m_Position)
+                p.m_Position -= movePlane.normal * CollisionUtil.distancePlaneAndPoint(plane: movePlane, point: p.m_Position)
+            }
+
+            // keep length
+            let dd = p0.m_Position - p.m_Position
+            let leng = dd.length()
+            if leng > 0 {
+                p.m_Position += dd * ((leng - restLen) / leng)
+            }
+        }
+    }
 
     func skipUpdateParticles() {
         for i in 0 ..< m_ParticleTrees.count {
@@ -524,49 +619,90 @@ public class DynamicBone: Script {
     }
 
     // only update stiffness and keep bone length
-    func skipUpdateParticles(pt _: ParticleTree) {}
+    func skipUpdateParticles(pt: ParticleTree) {
+        for i in 0 ..< pt.m_Particles.count {
+            let p = pt.m_Particles[i]
+            if p.m_ParentIndex >= 0 {
+                p.m_PrevPosition += m_ObjectMove
+                p.m_Position += m_ObjectMove
+
+                let p0 = pt.m_Particles[p.m_ParentIndex]
+
+                let restLen: Float
+                if p.m_Transform != nil {
+                    restLen = (p0.m_TransformPosition - p.m_TransformPosition).length()
+                } else {
+                    restLen = Vector3.transformToVec3(v: p.m_EndOffset, m: p0.m_TransformLocalToWorldMatrix).length()
+                }
+
+                // keep shape
+                let stiffness = MathUtil.lerp(a: 1.0, b: p.m_Stiffness, t: m_Weight)
+                if stiffness > 0 {
+                    var m0 = p0.m_TransformLocalToWorldMatrix
+                    m0.elements.columns.3 = SIMD4<Float>(p0.m_Position.internalValue, 1)
+                    let restPos: Vector3
+                    if p.m_Transform != nil {
+                        restPos = Vector3.transformToVec3(v: p.m_TransformLocalPosition, m: m0)
+                    } else {
+                        restPos = Vector3.transformToVec3(v: p.m_EndOffset, m: m0)
+                    }
+
+                    let d = restPos - p.m_Position
+                    let len = d.length()
+                    let maxlen = restLen * (1 - stiffness) * 2
+                    if len > maxlen {
+                        p.m_Position += d * ((len - maxlen) / len)
+                    }
+                }
+
+                // keep length
+                let dd = p0.m_Position - p.m_Position
+                let leng = dd.length()
+                if leng > 0 {
+                    p.m_Position += dd * ((leng - restLen) / leng)
+                }
+            } else {
+                p.m_PrevPosition = p.m_Position
+                p.m_Position = p.m_TransformPosition
+            }
+        }
+    }
 
     func applyParticlesToTransforms() {
-        var ax = Vector3.right
-        var ay = Vector3.up
-        var az = Vector3.forward
-        var nx = false, ny = false, nz = false
-
-        // detect negative scale
-        let lossyScale = entity.transform.lossyWorldScale
-        if lossyScale.x < 0 || lossyScale.y < 0 || lossyScale.z < 0 {
-            var mirrorObject = entity.transform
-            repeat {
-                let ls = mirrorObject!.scale
-                nx = ls.x < 0
-                if nx {
-                    ax = mirrorObject!.worldRight
-                }
-                ny = ls.y < 0
-                if ny {
-                    ay = mirrorObject!.worldUp
-                }
-                nz = ls.z < 0
-                if nz {
-                    az = mirrorObject!.worldForward
-                }
-                if nx || ny || nz {
-                    break
-                }
-
-                mirrorObject = mirrorObject!.entity.parent?.transform
-            } while mirrorObject != nil
-        }
+        let ax = Vector3.right
+        let ay = Vector3.up
+        let az = Vector3.forward
+        let nx = false, ny = false, nz = false
 
         for i in 0 ..< m_ParticleTrees.count {
             applyParticlesToTransforms(pt: m_ParticleTrees[i], ax: ax, ay: ay, az: az, nx: nx, ny: ny, nz: nz)
         }
     }
 
-    func applyParticlesToTransforms(pt _: ParticleTree, ax _: Vector3, ay _: Vector3, az _: Vector3,
-                                    nx _: Bool, ny _: Bool, nz _: Bool) {}
+    func applyParticlesToTransforms(pt: ParticleTree, ax _: Vector3, ay _: Vector3, az _: Vector3,
+                                    nx _: Bool, ny _: Bool, nz _: Bool)
+    {
+        for i in 0 ..< pt.m_Particles.count {
+            let p = pt.m_Particles[i]
+            let p0 = pt.m_Particles[p.m_ParentIndex]
 
-    static func mirrorVector(v: Vector3, axis: Vector3) -> Vector3 {
-        return v - axis * (Vector3.dot(left: v, right: axis) * 2)
+            if p0.m_ChildCount <= 1 // do not modify bone orientation if has more then one child
+            {
+                let localPos: Vector3
+                if let transform = p.m_Transform {
+                    localPos = transform.position
+                } else {
+                    localPos = p.m_EndOffset
+                }
+                let v0 = Vector3.transformToVec3(v: localPos, m: p0.m_Transform!.worldMatrix)
+                let v1 = p.m_Position - p0.m_Position
+                let rot = Quaternion(from: v0, to: v1)
+                p0.m_Transform!.rotation = rot * p0.m_Transform!.rotation
+            }
+
+            if let transform = p.m_Transform {
+                transform.worldPosition = p.m_Position
+            }
+        }
     }
 }
