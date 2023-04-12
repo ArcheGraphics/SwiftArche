@@ -154,6 +154,8 @@
 		3E8B00FB29BDCA7A00A70123 /* SkinnedMesh.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E8B00FA29BDCA7A00A70123 /* SkinnedMesh.swift */; };
 		3EA4461529E68868005040A3 /* DynamicBoneColliderBase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EA4461429E68868005040A3 /* DynamicBoneColliderBase.swift */; };
 		3EA4461829E68944005040A3 /* DynamicBonePlaneCollider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EA4461729E68944005040A3 /* DynamicBonePlaneCollider.swift */; };
+		3EA4461A29E68C53005040A3 /* DynamicBoneCollider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EA4461929E68C53005040A3 /* DynamicBoneCollider.swift */; };
+		3EA4461C29E68E79005040A3 /* DynamicBone.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EA4461B29E68E79005040A3 /* DynamicBone.swift */; };
 		3EABF5CA294AC6E5009943C1 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EABF5C9294AC6E5009943C1 /* Constants.swift */; };
 		3EABF5D1294B1E11009943C1 /* MathUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EABF5CF294B1E11009943C1 /* MathUtils.swift */; };
 		3EABF5D2294B1E11009943C1 /* Vector3.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EABF5D0294B1E11009943C1 /* Vector3.swift */; };
@@ -886,6 +888,8 @@
 		3E8B00FA29BDCA7A00A70123 /* SkinnedMesh.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SkinnedMesh.swift; sourceTree = "<group>"; };
 		3EA4461429E68868005040A3 /* DynamicBoneColliderBase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DynamicBoneColliderBase.swift; sourceTree = "<group>"; };
 		3EA4461729E68944005040A3 /* DynamicBonePlaneCollider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DynamicBonePlaneCollider.swift; sourceTree = "<group>"; };
+		3EA4461929E68C53005040A3 /* DynamicBoneCollider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DynamicBoneCollider.swift; sourceTree = "<group>"; };
+		3EA4461B29E68E79005040A3 /* DynamicBone.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DynamicBone.swift; sourceTree = "<group>"; };
 		3EABF5C3294ABB7B009943C1 /* ParticleSystemData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParticleSystemData.swift; sourceTree = "<group>"; };
 		3EABF5C5294AC323009943C1 /* ParticleEmitter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParticleEmitter.swift; sourceTree = "<group>"; };
 		3EABF5C7294AC3F1009943C1 /* VolumeParticleEmitter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VolumeParticleEmitter.swift; sourceTree = "<group>"; };
@@ -1992,6 +1996,8 @@
 			children = (
 				3EA4461429E68868005040A3 /* DynamicBoneColliderBase.swift */,
 				3EA4461729E68944005040A3 /* DynamicBonePlaneCollider.swift */,
+				3EA4461929E68C53005040A3 /* DynamicBoneCollider.swift */,
+				3EA4461B29E68E79005040A3 /* DynamicBone.swift */,
 			);
 			path = "dynamic-bone";
 			sourceTree = "<group>";
@@ -3447,6 +3453,7 @@
 				040F1DCE2933AB71008BDC8D /* FreeControl.swift in Sources */,
 				3EBA3D0229B71DD900E5FB42 /* ControlledPlayer.swift in Sources */,
 				3E37FD2129B07A7B0050169C /* HandleOrientation.swift in Sources */,
+				3EA4461A29E68C53005040A3 /* DynamicBoneCollider.swift in Sources */,
 				3EA4461529E68868005040A3 /* DynamicBoneColliderBase.swift in Sources */,
 				040F1DD02933AC19008BDC8D /* ControlFreeKeyboard.swift in Sources */,
 				040F1DB529336F48008BDC8D /* ControlHandlerType.swift in Sources */,
@@ -3457,6 +3464,7 @@
 				040F1DCC2933AAF0008BDC8D /* ControlFreePointer.swift in Sources */,
 				3E37FD8229B1C0270050169C /* RaycastHit.swift in Sources */,
 				43D8C57503BAADE4FE366B56 /* GridMaterial.swift in Sources */,
+				3EA4461C29E68E79005040A3 /* DynamicBone.swift in Sources */,
 				43D8C96F57FDDC6923756F57 /* GridControl.swift in Sources */,
 				3E37FD1F29B079250050169C /* HandleConstraint2D.swift in Sources */,
 			);
