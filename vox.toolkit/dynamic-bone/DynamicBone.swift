@@ -181,7 +181,7 @@ public class DynamicBone: Script {
             for j in 0 ..< pt.m_Particles.count {
                 let p = pt.m_Particles[j]
                 if let transform = p.m_Transform {
-                    p.m_TransformPosition = transform.position
+                    p.m_TransformPosition = transform.worldPosition
                     p.m_TransformLocalPosition = transform.position
                     p.m_TransformLocalToWorldMatrix = transform.worldMatrix
                 }
@@ -669,19 +669,12 @@ public class DynamicBone: Script {
     }
 
     func applyParticlesToTransforms() {
-        let ax = Vector3.right
-        let ay = Vector3.up
-        let az = Vector3.forward
-        let nx = false, ny = false, nz = false
-
         for i in 0 ..< m_ParticleTrees.count {
-            applyParticlesToTransforms(pt: m_ParticleTrees[i], ax: ax, ay: ay, az: az, nx: nx, ny: ny, nz: nz)
+            applyParticlesToTransforms(pt: m_ParticleTrees[i])
         }
     }
 
-    func applyParticlesToTransforms(pt: ParticleTree, ax _: Vector3, ay _: Vector3, az _: Vector3,
-                                    nx _: Bool, ny _: Bool, nz _: Bool)
-    {
+    func applyParticlesToTransforms(pt: ParticleTree) {
         for i in 0 ..< pt.m_Particles.count {
             let p = pt.m_Particles[i]
             let p0 = pt.m_Particles[p.m_ParentIndex]
@@ -697,7 +690,7 @@ public class DynamicBone: Script {
                 let v0 = Vector3.transformToVec3(v: localPos, m: p0.m_Transform!.worldMatrix)
                 let v1 = p.m_Position - p0.m_Position
                 let rot = Quaternion(from: v0, to: v1)
-                p0.m_Transform!.rotation = rot * p0.m_Transform!.rotation
+                p0.m_Transform!.rotationQuaternion = rot * p0.m_Transform!.rotationQuaternion
             }
 
             if let transform = p.m_Transform {
