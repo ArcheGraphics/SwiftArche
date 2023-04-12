@@ -152,6 +152,8 @@
 		3E8B00F629BDC81400A70123 /* Skin.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3E8B00F529BDC81400A70123 /* Skin.cpp */; };
 		3E8B00F929BDC8F600A70123 /* CSkin.mm in Sources */ = {isa = PBXBuildFile; fileRef = 3E8B00F829BDC8F600A70123 /* CSkin.mm */; };
 		3E8B00FB29BDCA7A00A70123 /* SkinnedMesh.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E8B00FA29BDCA7A00A70123 /* SkinnedMesh.swift */; };
+		3EA4461529E68868005040A3 /* DynamicBoneColliderBase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EA4461429E68868005040A3 /* DynamicBoneColliderBase.swift */; };
+		3EA4461829E68944005040A3 /* DynamicBonePlaneCollider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EA4461729E68944005040A3 /* DynamicBonePlaneCollider.swift */; };
 		3EABF5CA294AC6E5009943C1 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EABF5C9294AC6E5009943C1 /* Constants.swift */; };
 		3EABF5D1294B1E11009943C1 /* MathUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EABF5CF294B1E11009943C1 /* MathUtils.swift */; };
 		3EABF5D2294B1E11009943C1 /* Vector3.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EABF5D0294B1E11009943C1 /* Vector3.swift */; };
@@ -882,6 +884,8 @@
 		3E8B00F729BDC8EA00A70123 /* CSkin.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CSkin.h; sourceTree = "<group>"; };
 		3E8B00F829BDC8F600A70123 /* CSkin.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = CSkin.mm; sourceTree = "<group>"; };
 		3E8B00FA29BDCA7A00A70123 /* SkinnedMesh.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SkinnedMesh.swift; sourceTree = "<group>"; };
+		3EA4461429E68868005040A3 /* DynamicBoneColliderBase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DynamicBoneColliderBase.swift; sourceTree = "<group>"; };
+		3EA4461729E68944005040A3 /* DynamicBonePlaneCollider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DynamicBonePlaneCollider.swift; sourceTree = "<group>"; };
 		3EABF5C3294ABB7B009943C1 /* ParticleSystemData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParticleSystemData.swift; sourceTree = "<group>"; };
 		3EABF5C5294AC323009943C1 /* ParticleEmitter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParticleEmitter.swift; sourceTree = "<group>"; };
 		3EABF5C7294AC3F1009943C1 /* VolumeParticleEmitter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VolumeParticleEmitter.swift; sourceTree = "<group>"; };
@@ -1397,6 +1401,7 @@
 		040F1DA429336A56008BDC8D /* vox.toolkit */ = {
 			isa = PBXGroup;
 			children = (
+				3EA4461329E68859005040A3 /* dynamic-bone */,
 				3E37FCFE29AF738F0050169C /* architecture */,
 				3E1F129A29AC3BCB00F1002E /* cct-utility */,
 				3EC92A4E2936F71D00423396 /* bridging.h */,
@@ -1980,6 +1985,15 @@
 				3E8B00F229BDC47F00A70123 /* SkinningApp.swift */,
 			);
 			path = animation;
+			sourceTree = "<group>";
+		};
+		3EA4461329E68859005040A3 /* dynamic-bone */ = {
+			isa = PBXGroup;
+			children = (
+				3EA4461429E68868005040A3 /* DynamicBoneColliderBase.swift */,
+				3EA4461729E68944005040A3 /* DynamicBonePlaneCollider.swift */,
+			);
+			path = "dynamic-bone";
 			sourceTree = "<group>";
 		};
 		3EABF5E4294C3702009943C1 /* flex */ = {
@@ -3045,6 +3059,7 @@
 				040F1D9F29336A56008BDC8D /* Headers */,
 				040F1DA029336A56008BDC8D /* Sources */,
 				040F1DA129336A56008BDC8D /* Frameworks */,
+				3EA4461629E688D2005040A3 /* swift format */,
 			);
 			buildRules = (
 			);
@@ -3380,6 +3395,25 @@
 			shellPath = /bin/sh;
 			shellScript = "if which swiftformat >/dev/null; then\nswiftformat .\nelse\necho \"error: SwiftFormat not installed, download from https://github.com/nicklockwood/SwiftFormat\"\nexit 1\nfi\n";
 		};
+		3EA4461629E688D2005040A3 /* swift format */ = {
+			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "swift format";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "if which swiftformat >/dev/null; then\nswiftformat .\nelse\necho \"error: SwiftFormat not installed, download from https://github.com/nicklockwood/SwiftFormat\"\nexit 1\nfi\n";
+		};
 		3EB32B8229322E9D0019A4F3 /* Copy Metal Libraries */ = {
 			isa = PBXShellScriptBuildPhase;
 			alwaysOutOfDate = 1;
@@ -3409,9 +3443,11 @@
 				040F1DC82933A172008BDC8D /* ControlKeyboard.swift in Sources */,
 				040F1DCA2933A3BE008BDC8D /* ControlWheel.swift in Sources */,
 				040F1DBE2933705D008BDC8D /* ControlPointer.swift in Sources */,
+				3EA4461829E68944005040A3 /* DynamicBonePlaneCollider.swift in Sources */,
 				040F1DCE2933AB71008BDC8D /* FreeControl.swift in Sources */,
 				3EBA3D0229B71DD900E5FB42 /* ControlledPlayer.swift in Sources */,
 				3E37FD2129B07A7B0050169C /* HandleOrientation.swift in Sources */,
+				3EA4461529E68868005040A3 /* DynamicBoneColliderBase.swift in Sources */,
 				040F1DD02933AC19008BDC8D /* ControlFreeKeyboard.swift in Sources */,
 				040F1DB529336F48008BDC8D /* ControlHandlerType.swift in Sources */,
 				040F1DB029336AAE008BDC8D /* Spherical.swift in Sources */,
