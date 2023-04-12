@@ -78,9 +78,9 @@ public class DynamicBone: Script {
     public var m_ReferenceObject: Transform?
     public var m_DistanceToObject: Float = 20
 
-    var m_ObjectMove = Vector3()
-    var m_ObjectPrevPosition = Vector3()
-    var m_ObjectScale: Float = 0
+    lazy var m_ObjectMove = Vector3()
+    lazy var m_ObjectPrevPosition = Vector3()
+    lazy var m_ObjectScale: Float = 0
 
     var m_Time: Float = 0
     var m_Weight: Float = 1.0
@@ -131,6 +131,34 @@ public class DynamicBone: Script {
 
     static var s_UpdateCount: Int = 0
     static var s_PrepareFrame: Int = 0
+
+    public func setWeight(w: Float) {
+        if m_Weight != w {
+            if w == 0 {
+                initTransforms()
+            } else if m_Weight == 0 {
+                resetParticlesPosition()
+            }
+            m_Weight = w
+            m_BlendWeight = w
+        }
+    }
+
+    public func getWeight() -> Float {
+        m_Weight
+    }
+
+    override public func onStart() {
+        setupParticles()
+    }
+
+    override public func onEnable() {
+        resetParticlesPosition()
+    }
+
+    override public func onDisable() {
+        initTransforms()
+    }
 
     override public func onPhysicsUpdate() {
         if m_UpdateMode == UpdateMode.AnimatePhysics {
@@ -205,89 +233,6 @@ public class DynamicBone: Script {
         }
     }
 
-    func isNeedUpdate() -> Bool {
-        return m_Weight > 0 && !(m_DistantDisable && m_DistantDisabled)
-    }
-
-    func preUpdate() {
-        if isNeedUpdate() {
-            initTransforms()
-        }
-        m_PreUpdateCount += 1
-    }
-
-    func checkDistance() {
-        if !m_DistantDisable {
-            return
-        }
-
-        if let rt = m_ReferenceObject {
-            let d2 = (rt.worldPosition - entity.transform.worldPosition).lengthSquared()
-            let disable = d2 > m_DistanceToObject * m_DistanceToObject
-            if disable != m_DistantDisabled {
-                if !disable {
-                    resetParticlesPosition()
-                }
-                m_DistantDisabled = disable
-            }
-        }
-    }
-
-    override public func onEnable() {
-        resetParticlesPosition()
-    }
-
-    override public func onDisable() {
-        initTransforms()
-    }
-
-    func isRootChanged() -> Bool {
-        var roots: [Transform] = []
-        if let m_Root {
-            roots.append(m_Root)
-        }
-
-        if !m_Roots.isEmpty {
-            for root in m_Roots {
-                if !roots.contains(root) {
-                    roots.append(root)
-                }
-            }
-        }
-
-        if roots.count != m_ParticleTrees.count {
-            return true
-        }
-
-        for i in 0 ..< roots.count {
-            if roots[i] != m_ParticleTrees[i].m_Root {
-                return true
-            }
-        }
-
-        return false
-    }
-
-    func onDidApplyAnimationProperties() {
-        updateParameters()
-    }
-
-    public func setWeight(w: Float) {
-        if m_Weight != w {
-            if w == 0 {
-                initTransforms()
-            } else if m_Weight == 0 {
-                resetParticlesPosition()
-            }
-            m_Weight = w
-            m_BlendWeight = w
-        }
-    }
-
-    public func getWeight() -> Float {
-        m_Weight
-    }
-
     func updateParticles() {
         if m_ParticleTrees.count <= 0 {
             return
@@ -328,7 +273,9 @@ public class DynamicBone: Script {
         }
     }
 
-    public func setupParticles() {
+    // MARK: - Setup
+
+    func setupParticles() {
         m_ParticleTrees = []
 
         if let m_Root {
@@ -361,13 +308,42 @@ public class DynamicBone: Script {
         updateParameters()
     }
 
+    func updateParameters() {
+        setWeight(w: m_BlendWeight)
+
+        for i in 0 ..< m_ParticleTrees.count {
+            updateParameters(pt: m_ParticleTrees[i])
+        }
+    }
+
+    func updateParameters(pt: ParticleTree) {
+        pt.m_LocalGravity = Vector3.transformToVec3(v: m_Gravity, m: pt.m_RootWorldToLocalMatrix)
+
+        for i in 0 ..< pt.m_Particles.count {
+            let p = pt.m_Particles[i]
+            p.m_Damping = m_Damping
+            p.m_Elasticity = m_Elasticity
+            p.m_Stiffness = m_Stiffness
+            p.m_Inert = m_Inert
+            p.m_Friction = m_Friction
+            p.m_Radius = m_Radius
+
+            p.m_Damping = MathUtil.clamp01(value: p.m_Damping)
+            p.m_Elasticity = MathUtil.clamp01(value: p.m_Elasticity)
+            p.m_Stiffness = MathUtil.clamp01(value: p.m_Stiffness)
+            p.m_Inert = MathUtil.clamp01(value: p.m_Inert)
+            p.m_Friction = MathUtil.clamp01(value: p.m_Friction)
+            p.m_Radius = max(p.m_Radius, 0)
+        }
+    }
+    
     func appendParticleTree(root: Transform) {
         let pt = ParticleTree()
         pt.m_Root = root
         pt.m_RootWorldToLocalMatrix = root.worldMatrix.invert()
         m_ParticleTrees.append(pt)
     }
-
+    
     func appendParticles(pt: ParticleTree, b: Transform?, parentIndex: Int, boneLength: Float) {
         var boneLength = boneLength
         let p = Particle()
@@ -433,32 +409,33 @@ public class DynamicBone: Script {
         }
     }
 
-    public func updateParameters() {
-        setWeight(w: m_BlendWeight)
+    // MARK: - Update Check
 
-        for i in 0 ..< m_ParticleTrees.count {
-            updateParameters(pt: m_ParticleTrees[i])
-        }
+    func isNeedUpdate() -> Bool {
+        return m_Weight > 0 && !(m_DistantDisable && m_DistantDisabled)
     }
 
-    func updateParameters(pt: ParticleTree) {
-        pt.m_LocalGravity = Vector3.transformToVec3(v: m_Gravity, m: pt.m_RootWorldToLocalMatrix)
+    func preUpdate() {
+        if isNeedUpdate() {
+            initTransforms()
+        }
+        m_PreUpdateCount += 1
+    }
 
-        for i in 0 ..< pt.m_Particles.count {
-            let p = pt.m_Particles[i]
-            p.m_Damping = m_Damping
-            p.m_Elasticity = m_Elasticity
-            p.m_Stiffness = m_Stiffness
-            p.m_Inert = m_Inert
-            p.m_Friction = m_Friction
-            p.m_Radius = m_Radius
+    func checkDistance() {
+        if !m_DistantDisable {
+            return
+        }
 
-            p.m_Damping = MathUtil.clamp01(value: p.m_Damping)
-            p.m_Elasticity = MathUtil.clamp01(value: p.m_Elasticity)
-            p.m_Stiffness = MathUtil.clamp01(value: p.m_Stiffness)
-            p.m_Inert = MathUtil.clamp01(value: p.m_Inert)
-            p.m_Friction = MathUtil.clamp01(value: p.m_Friction)
-            p.m_Radius = max(p.m_Radius, 0)
+        if let rt = m_ReferenceObject {
+            let d2 = (rt.worldPosition - entity.transform.worldPosition).lengthSquared()
+            let disable = d2 > m_DistanceToObject * m_DistanceToObject
+            if disable != m_DistantDisabled {
+                if !disable {
+                    resetParticlesPosition()
+                }
+                m_DistantDisabled = disable
+            }
         }
     }
 
@@ -504,6 +481,8 @@ public class DynamicBone: Script {
         }
     }
 
+    // MARK: - updateParticles1
+
     func updateParticles1(timeVar: Float, loopIndex: Int) {
         for i in 0 ..< m_ParticleTrees.count {
             updateParticles1(pt: m_ParticleTrees[i], timeVar: timeVar, loopIndex: loopIndex)
@@ -541,6 +520,8 @@ public class DynamicBone: Script {
             }
         }
     }
+
+    // MARK: - updateParticles2
 
     func updateParticles2(timeVar: Float) {
         for i in 0 ..< m_ParticleTrees.count {
@@ -612,6 +593,41 @@ public class DynamicBone: Script {
         }
     }
 
+    // MARK: - applyParticlesToTransforms
+
+    func applyParticlesToTransforms() {
+        for i in 0 ..< m_ParticleTrees.count {
+            applyParticlesToTransforms(pt: m_ParticleTrees[i])
+        }
+    }
+
+    func applyParticlesToTransforms(pt: ParticleTree) {
+        for i in 0 ..< pt.m_Particles.count {
+            let p = pt.m_Particles[i]
+            let p0 = pt.m_Particles[p.m_ParentIndex]
+
+            if p0.m_ChildCount <= 1 // do not modify bone orientation if has more then one child
+            {
+                let localPos: Vector3
+                if let transform = p.m_Transform {
+                    localPos = transform.position
+                } else {
+                    localPos = p.m_EndOffset
+                }
+                let v0 = Vector3.transformToVec3(v: localPos, m: p0.m_Transform!.worldMatrix)
+                let v1 = p.m_Position - p0.m_Position
+                let rot = Quaternion(from: v0, to: v1)
+                p0.m_Transform!.rotationQuaternion = rot * p0.m_Transform!.rotationQuaternion
+            }
+
+            if let transform = p.m_Transform {
+                transform.worldPosition = p.m_Position
+            }
+        }
+    }
+
+    // MARK: - skipUpdateParticles
+
     func skipUpdateParticles() {
         for i in 0 ..< m_ParticleTrees.count {
             skipUpdateParticles(pt: m_ParticleTrees[i])
@@ -664,37 +680,6 @@ public class DynamicBone: Script {
             } else {
                 p.m_PrevPosition = p.m_Position
                 p.m_Position = p.m_TransformPosition
-            }
-        }
-    }
-
-    func applyParticlesToTransforms() {
-        for i in 0 ..< m_ParticleTrees.count {
-            applyParticlesToTransforms(pt: m_ParticleTrees[i])
-        }
-    }
-
-    func applyParticlesToTransforms(pt: ParticleTree) {
-        for i in 0 ..< pt.m_Particles.count {
-            let p = pt.m_Particles[i]
-            let p0 = pt.m_Particles[p.m_ParentIndex]
-
-            if p0.m_ChildCount <= 1 // do not modify bone orientation if has more then one child
-            {
-                let localPos: Vector3
-                if let transform = p.m_Transform {
-                    localPos = transform.position
-                } else {
-                    localPos = p.m_EndOffset
-                }
-                let v0 = Vector3.transformToVec3(v: localPos, m: p0.m_Transform!.worldMatrix)
-                let v1 = p.m_Position - p0.m_Position
-                let rot = Quaternion(from: v0, to: v1)
-                p0.m_Transform!.rotationQuaternion = rot * p0.m_Transform!.rotationQuaternion
-            }
-
-            if let transform = p.m_Transform {
-                transform.worldPosition = p.m_Position
             }
         }
     }
