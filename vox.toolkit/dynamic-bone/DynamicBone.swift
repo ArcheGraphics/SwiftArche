@@ -340,7 +340,7 @@ public class DynamicBone: Script {
     func appendParticleTree(root: Transform) {
         let pt = ParticleTree()
         pt.m_Root = root
-        pt.m_RootWorldToLocalMatrix = root.worldMatrix.invert()
+        pt.m_RootWorldToLocalMatrix = Matrix.invert(a: root.worldMatrix)
         m_ParticleTrees.append(pt)
     }
 
@@ -359,18 +359,19 @@ public class DynamicBone: Script {
         else // end bone
         {
             let pb = pt.m_Particles[parentIndex].m_Transform!
+            let invertMat = Matrix.invert(a: pb.worldMatrix)
             if m_EndLength > 0 {
                 let ppb = pb.entity.parent
                 if let ppb {
                     p.m_EndOffset = Vector3.transformCoordinate(v: pb.worldPosition * 2 - ppb.transform.worldPosition,
-                                                                m: pb.worldMatrix.invert()) * m_EndLength
+                                                                m: invertMat) * m_EndLength
                 } else {
                     p.m_EndOffset = Vector3(m_EndLength, 0, 0)
                 }
             } else {
                 var offset = Vector3.transformToVec3(v: m_EndOffset, m: entity.transform.worldMatrix)
                 offset += pb.worldPosition
-                p.m_EndOffset = Vector3.transformCoordinate(v: offset, m: pb.worldMatrix.invert())
+                p.m_EndOffset = Vector3.transformCoordinate(v: offset, m: invertMat)
             }
             let offset = Vector3.transformCoordinate(v: p.m_EndOffset, m: pb.worldMatrix)
             p.m_Position = offset
