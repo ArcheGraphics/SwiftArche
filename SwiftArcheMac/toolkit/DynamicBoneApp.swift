@@ -11,10 +11,30 @@ import vox_render
 import vox_toolkit
 
 private class GUI: Script {
-    var dynamicBone: DynamicBone!
+    private var _dynamicBone: DynamicBone!
+    var collider: DynamicBoneCollider!
+
+    override func onAwake() {
+        let colliderEntity = entity.createChild()
+        colliderEntity.transform.position = Vector3(3, -2)
+        collider = colliderEntity.addComponent(DynamicBoneCollider.self)
+    }
+
+    var dynamicBone: DynamicBone {
+        get {
+            _dynamicBone
+        }
+        set {
+            _dynamicBone = newValue
+            _dynamicBone.m_Colliders.append(collider)
+        }
+    }
 
     override func onGUI() {
         UIElement.Init()
+
+        Gizmos.addSphere(sphereCenter: collider.entity.transform.position, sphereRadius: collider.m_Radius,
+                         color: Color32(r: 255, g: 255, b: 255), renderFlags: .Wireframe)
 
         ImGuiNewFrame()
         ImGuiSliderFloat("elasticity", &dynamicBone.m_Elasticity, 0, 1.0, nil, 1)
@@ -23,6 +43,9 @@ private class GUI: Script {
         ImGuiSliderFloat("stiffness", &dynamicBone.m_Stiffness, 0, 1.0, nil, 1)
         ImGuiSliderFloat("inert", &dynamicBone.m_Inert, 0, 1.0, nil, 1)
         ImGuiSliderFloat("gravityY", &dynamicBone.m_Gravity.y, -10, 10.0, nil, 1)
+        ImGuiSliderFloat("radius", &dynamicBone.m_Radius, 0.0, 10.0, nil, 1)
+        ImGuiSliderFloat("collider radius", &collider.m_Radius, 0.0, 10.0, nil, 1)
+        ImGuiSliderFloat("collider Y", &collider.entity.transform.position.y, -10.0, 10.0, nil, 1)
         ImGuiSliderFloat("blend weight", &dynamicBone.m_BlendWeight, 0.0, 1.0, nil, 1)
         // Rendering
         ImGuiRender()
@@ -33,7 +56,7 @@ private class MoveScript: Script {
     private var _rTri: Float = 0
 
     override func onUpdate(_ deltaTime: Float) {
-        _rTri += deltaTime * 10
+        _rTri += deltaTime * 8
         entity.transform.position = Vector3(0, cos(_rTri), 0)
     }
 }
@@ -70,10 +93,11 @@ class DynamicBoneApp: NSViewController {
         let gui = rootEntity.addComponent(GUI.self)
 
         let cameraEntity = rootEntity.createChild()
-        cameraEntity.transform.position = Vector3(5, 5, 5)
+        cameraEntity.transform.position = Vector3(10, 10, 10)
         cameraEntity.transform.lookAt(targetPosition: Vector3())
         cameraEntity.addComponent(Camera.self)
-        cameraEntity.addComponent(OrbitControl.self)
+        let control = cameraEntity.addComponent(OrbitControl.self)
+        control.target = Vector3(4, -4)
 
         let light = rootEntity.createChild("light")
         light.transform.position = Vector3(1, 3, 0)
@@ -89,6 +113,10 @@ class DynamicBoneApp: NSViewController {
         entity = createEntity(entity, offset: Vector3(1, -1, 0))
         dynamicBone.m_Root = entity.transform
 
+        entity = createEntity(entity, offset: Vector3(1, -1, 0))
+        entity = createEntity(entity, offset: Vector3(1, -1, 0))
+        entity = createEntity(entity, offset: Vector3(1, -1, 0))
+        entity = createEntity(entity, offset: Vector3(1, -1, 0))
         entity = createEntity(entity, offset: Vector3(1, -1, 0))
         entity = createEntity(entity, offset: Vector3(1, -1, 0))
 
