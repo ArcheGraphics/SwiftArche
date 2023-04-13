@@ -80,8 +80,12 @@ public class DevicePipeline {
                 }
                 var encoder = RenderCommandEncoder(commandBuffer, frameBuffer, "forward pass")
 
-                let shadowMap = builder.inputShadow!.actual!
-                encoder.handle.useResource(shadowMap, usage: .read, stages: .fragment)
+                if let sunLight = scene._sunLight,
+                   scene.castShadows, sunLight.shadowType != ShadowType.None
+                {
+                    let shadowMap = builder.inputShadow!.actual!
+                    encoder.handle.useResource(shadowMap, usage: .read, stages: .fragment)
+                }
                 context.pipelineStageTagValue = PipelineStage.Forward
                 _forwardSubpass.draw(pipeline: self, on: &encoder)
 

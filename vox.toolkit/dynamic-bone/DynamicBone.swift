@@ -336,14 +336,14 @@ public class DynamicBone: Script {
             p.m_Radius = max(p.m_Radius, 0)
         }
     }
-    
+
     func appendParticleTree(root: Transform) {
         let pt = ParticleTree()
         pt.m_Root = root
         pt.m_RootWorldToLocalMatrix = root.worldMatrix.invert()
         m_ParticleTrees.append(pt)
     }
-    
+
     func appendParticles(pt: ParticleTree, b: Transform?, parentIndex: Int, boneLength: Float) {
         var boneLength = boneLength
         let p = Particle()
@@ -602,7 +602,7 @@ public class DynamicBone: Script {
     }
 
     func applyParticlesToTransforms(pt: ParticleTree) {
-        for i in 0 ..< pt.m_Particles.count {
+        for i in 1 ..< pt.m_Particles.count {
             let p = pt.m_Particles[i]
             let p0 = pt.m_Particles[p.m_ParentIndex]
 
@@ -617,7 +617,7 @@ public class DynamicBone: Script {
                 let v0 = Vector3.transformToVec3(v: localPos, m: p0.m_Transform!.worldMatrix)
                 let v1 = p.m_Position - p0.m_Position
                 let rot = Quaternion(from: v0, to: v1)
-                p0.m_Transform!.rotationQuaternion = rot * p0.m_Transform!.rotationQuaternion
+                p0.m_Transform!.worldRotationQuaternion = (rot * p0.m_Transform!.worldRotationQuaternion).normalized
             }
 
             if let transform = p.m_Transform {
