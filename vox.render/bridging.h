@@ -10,7 +10,6 @@
 #include "../vox.shader/macro_name.h"
 #include "../vox.shader/type_common.h"
 #include "../vox.shader/mesh_types.h"
-#include "../vox.shader/terrian/TerrainRenderer_define.h"
 
 #include "../vox.physics/bridging.h"
 
@@ -18,6 +17,3 @@
 #include "loader/HDRLoader.h"
 #include "animation/ozz/bridging.h"
 #include "text/MTLFontAtlasProvider.h"
-#include "experimental/asset/XTextureManager.h"
-#include "experimental/asset/XMesh.h"
-#include "experimental/asset/XMaterial.h"

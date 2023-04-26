@@ -99,7 +99,6 @@
 		3E58E1B22940B8A6006A49CD /* HDRLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 3E58E1B12940B8A6006A49CD /* HDRLoader.m */; };
 		3E58E1B72940B8DA006A49CD /* luminance.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3E58E1B32940B8DA006A49CD /* luminance.metal */; };
 		3E58E1B82940B8DA006A49CD /* postprocess_merge.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3E58E1B52940B8DA006A49CD /* postprocess_merge.metal */; };
-		3E58E1B92940B8DA006A49CD /* cluster_compute.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3E58E1B62940B8DA006A49CD /* cluster_compute.metal */; };
 		3E58E1BB2940B8E2006A49CD /* transparent_shadow.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3E58E1BA2940B8E2006A49CD /* transparent_shadow.metal */; };
 		3E58E1C02940B8F1006A49CD /* shadow_visual.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3E58E1BC2940B8F1006A49CD /* shadow_visual.metal */; };
 		3E58E1C12940B8F1006A49CD /* cubemap_generator.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3E58E1BD2940B8F1006A49CD /* cubemap_generator.metal */; };
@@ -596,9 +595,7 @@
 		3E58E1B02940B8A6006A49CD /* HDRLoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HDRLoader.h; sourceTree = "<group>"; };
 		3E58E1B12940B8A6006A49CD /* HDRLoader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HDRLoader.m; sourceTree = "<group>"; };
 		3E58E1B32940B8DA006A49CD /* luminance.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; path = luminance.metal; sourceTree = "<group>"; };
-		3E58E1B42940B8DA006A49CD /* cluster_compute.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cluster_compute.h; sourceTree = "<group>"; };
 		3E58E1B52940B8DA006A49CD /* postprocess_merge.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; path = postprocess_merge.metal; sourceTree = "<group>"; };
-		3E58E1B62940B8DA006A49CD /* cluster_compute.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; path = cluster_compute.metal; sourceTree = "<group>"; };
 		3E58E1BA2940B8E2006A49CD /* transparent_shadow.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; path = transparent_shadow.metal; sourceTree = "<group>"; };
 		3E58E1BC2940B8F1006A49CD /* shadow_visual.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; path = shadow_visual.metal; sourceTree = "<group>"; };
 		3E58E1BD2940B8F1006A49CD /* cubemap_generator.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; path = cubemap_generator.metal; sourceTree = "<group>"; };
@@ -1355,8 +1352,6 @@
 		3E67EDFE291B301700ED60C8 /* vox.shader */ = {
 			isa = PBXGroup;
 			children = (
-				3E58E1B42940B8DA006A49CD /* cluster_compute.h */,
-				3E58E1B62940B8DA006A49CD /* cluster_compute.metal */,
 				3E58E1B32940B8DA006A49CD /* luminance.metal */,
 				3E58E1B52940B8DA006A49CD /* postprocess_merge.metal */,
 				3E0F7B1229220F5D00C4A843 /* shadow */,
@@ -2164,7 +2159,6 @@
 				04ED07DE292284FD00DD55AB /* shadow_shading.metal in Sources */,
 				3E58E1B72940B8DA006A49CD /* luminance.metal in Sources */,
 				3E67EED12921D9C800ED60C8 /* unlit_shading.metal in Sources */,
-				3E58E1B92940B8DA006A49CD /* cluster_compute.metal in Sources */,
 				3E0F7B1C2922374400C4A843 /* pbr_shading.metal in Sources */,
 				3E0F7B0C2921F63B00C4A843 /* skybox_shading.metal in Sources */,
 				3E58E1B82940B8DA006A49CD /* postprocess_merge.metal in Sources */,
