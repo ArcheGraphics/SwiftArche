@@ -168,7 +168,7 @@ public final class Entity: NSObject, Codable {
         for i in 0 ..< _components.count {
             let component = _components[i].wrappedValue
             if component is T {
-                return (component as! T)
+                return component as! T
             }
         }
         return nil

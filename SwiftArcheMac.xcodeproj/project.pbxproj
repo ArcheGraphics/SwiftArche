@@ -42,9 +42,8 @@
 		040F1E27293C727D008BDC8D /* transparent_shadow.metal in Sources */ = {isa = PBXBuildFile; fileRef = 040F1E1E293C70BB008BDC8D /* transparent_shadow.metal */; };
 		040F1E29293C865E008BDC8D /* UIElement.swift in Sources */ = {isa = PBXBuildFile; fileRef = 040F1E28293C865E008BDC8D /* UIElement.swift */; };
 		04462F21293324A300F95387 /* Textures.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 04462F20293324A200F95387 /* Textures.xcassets */; };
-		049F4DA2295D2D4800AB07EF /* PointGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 049F4DA1295D2D4800AB07EF /* PointGenerator.swift */; };
-		049F4DA5295D2DAC00AB07EF /* BccLatticePointGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 049F4DA4295D2DAC00AB07EF /* BccLatticePointGenerator.swift */; };
 		049F4DB0295EDE7A00AB07EF /* semi_implicit_euler.metal in Sources */ = {isa = PBXBuildFile; fileRef = 049F4DAF295EDE7A00AB07EF /* semi_implicit_euler.metal */; };
+		04B8484F29FD0BF800B84F06 /* Aabb.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04B8484E29FD0BF800B84F06 /* Aabb.swift */; };
 		3E1076412965214100F751A5 /* point_emitter.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3E1076402965214100F751A5 /* point_emitter.metal */; };
 		3E107643296524CF00F751A5 /* samplers.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3E107642296524CF00F751A5 /* samplers.metal */; };
 		3E10764B29654BC800F751A5 /* gravity_force.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3E10764A29654BC800F751A5 /* gravity_force.metal */; };
@@ -116,8 +115,6 @@
 		3E6B235E294220BC000AC29F /* FaceMorphApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E6B235D294220BC000AC29F /* FaceMorphApp.swift */; };
 		3E6B2360294224C1000AC29F /* FaceGUI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E6B235F294224C1000AC29F /* FaceGUI.swift */; };
 		3E6B23C329470F30000AC29F /* quad_shading.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3E6B23C229470F30000AC29F /* quad_shading.metal */; };
-		3E6B23C529488260000AC29F /* TriangleMesh.mm in Sources */ = {isa = PBXBuildFile; fileRef = 3E6B23C429488260000AC29F /* TriangleMesh.mm */; };
-		3E6B23CB2948BAB9000AC29F /* ImplicitTriangleMesh.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E6B23CA2948BAB9000AC29F /* ImplicitTriangleMesh.swift */; };
 		3E6B23D12948BC13000AC29F /* ImGui in Frameworks */ = {isa = PBXBuildFile; productRef = 3E6B23D02948BC13000AC29F /* ImGui */; };
 		3E6B23DD2949B406000AC29F /* libvox.flex.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E6B23A82946B3CA000AC29F /* libvox.flex.a */; };
 		3E6D2F01293E13DF00B63F73 /* BufferPool.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E6D2F00293E13DF00B63F73 /* BufferPool.swift */; };
@@ -148,14 +145,6 @@
 		3EA4461A29E68C53005040A3 /* DynamicBoneCollider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EA4461929E68C53005040A3 /* DynamicBoneCollider.swift */; };
 		3EA4461C29E68E79005040A3 /* DynamicBone.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EA4461B29E68E79005040A3 /* DynamicBone.swift */; };
 		3EA4461E29E6B17E005040A3 /* DynamicBoneApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EA4461D29E6B17E005040A3 /* DynamicBoneApp.swift */; };
-		3EABF5CA294AC6E5009943C1 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EABF5C9294AC6E5009943C1 /* Constants.swift */; };
-		3EABF5D1294B1E11009943C1 /* MathUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EABF5CF294B1E11009943C1 /* MathUtils.swift */; };
-		3EABF5D2294B1E11009943C1 /* Vector3.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EABF5D0294B1E11009943C1 /* Vector3.swift */; };
-		3EABF5D7294B1E7F009943C1 /* Matrix4x4.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EABF5D3294B1E7F009943C1 /* Matrix4x4.swift */; };
-		3EABF5D8294B1E7F009943C1 /* BoundingBox.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EABF5D4294B1E7F009943C1 /* BoundingBox.swift */; };
-		3EABF5D9294B1E7F009943C1 /* Matrix2x2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EABF5D5294B1E7F009943C1 /* Matrix2x2.swift */; };
-		3EABF5DA294B1E7F009943C1 /* Matrix3x3.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EABF5D6294B1E7F009943C1 /* Matrix3x3.swift */; };
-		3EABF5DC294B1EA7009943C1 /* Ray.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EABF5DB294B1EA7009943C1 /* Ray.swift */; };
 		3EACA08329A4463000F08BB2 /* PhysXControllerApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EACA08229A4463000F08BB2 /* PhysXControllerApp.swift */; };
 		3EACA08629A4584500F08BB2 /* CPxMeshGeometry.mm in Sources */ = {isa = PBXBuildFile; fileRef = 3EACA08529A4584500F08BB2 /* CPxMeshGeometry.mm */; };
 		3EACA08929A4604600F08BB2 /* PhysXMeshColliderShape.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EACA08829A4604600F08BB2 /* PhysXMeshColliderShape.swift */; };
@@ -668,6 +657,10 @@
 		049F4DAA295D3E6500AB07EF /* WCSphSolver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WCSphSolver.swift; sourceTree = "<group>"; };
 		049F4DAC295D3EA000AB07EF /* PCISphSolver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PCISphSolver.swift; sourceTree = "<group>"; };
 		049F4DAF295EDE7A00AB07EF /* semi_implicit_euler.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = semi_implicit_euler.metal; sourceTree = "<group>"; };
+		04B8484429FD099300B84F06 /* IObiBackend.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IObiBackend.swift; sourceTree = "<group>"; };
+		04B8484929FD09EF00B84F06 /* ISolverImpl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ISolverImpl.swift; sourceTree = "<group>"; };
+		04B8484B29FD0B1700B84F06 /* IColliderWorldImpl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IColliderWorldImpl.swift; sourceTree = "<group>"; };
+		04B8484E29FD0BF800B84F06 /* Aabb.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Aabb.swift; sourceTree = "<group>"; };
 		3E0E0B422959C7F700B25625 /* hash_grid_visual.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = hash_grid_visual.metal; sourceTree = "<group>"; };
 		3E1076402965214100F751A5 /* point_emitter.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = point_emitter.metal; sourceTree = "<group>"; };
 		3E107642296524CF00F751A5 /* samplers.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = samplers.metal; sourceTree = "<group>"; };
@@ -1509,6 +1502,56 @@
 			path = "time-integration";
 			sourceTree = "<group>";
 		};
+		04B8484229FD096D00B84F06 /* backends */ = {
+			isa = PBXGroup;
+			children = (
+				04B8484329FD098200B84F06 /* interface */,
+			);
+			path = backends;
+			sourceTree = "<group>";
+		};
+		04B8484329FD098200B84F06 /* interface */ = {
+			isa = PBXGroup;
+			children = (
+				04B8484829FD09E400B84F06 /* solver */,
+				04B8484729FD09DF00B84F06 /* constraints */,
+				04B8484629FD09D700B84F06 /* collisions */,
+				04B8484429FD099300B84F06 /* IObiBackend.swift */,
+			);
+			path = interface;
+			sourceTree = "<group>";
+		};
+		04B8484629FD09D700B84F06 /* collisions */ = {
+			isa = PBXGroup;
+			children = (
+				04B8484B29FD0B1700B84F06 /* IColliderWorldImpl.swift */,
+			);
+			path = collisions;
+			sourceTree = "<group>";
+		};
+		04B8484729FD09DF00B84F06 /* constraints */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = constraints;
+			sourceTree = "<group>";
+		};
+		04B8484829FD09E400B84F06 /* solver */ = {
+			isa = PBXGroup;
+			children = (
+				04B8484929FD09EF00B84F06 /* ISolverImpl.swift */,
+			);
+			path = solver;
+			sourceTree = "<group>";
+		};
+		04B8484D29FD0BE000B84F06 /* data-structures */ = {
+			isa = PBXGroup;
+			children = (
+				04B8484E29FD0BF800B84F06 /* Aabb.swift */,
+			);
+			path = "data-structures";
+			sourceTree = "<group>";
+		};
 		3E10763F2965212400F751A5 /* emitter */ = {
 			isa = PBXGroup;
 			children = (
@@ -1761,6 +1804,8 @@
 		3E6B23A92946B3CA000AC29F /* vox.flex */ = {
 			isa = PBXGroup;
 			children = (
+				04B8484D29FD0BE000B84F06 /* data-structures */,
+				04B8484229FD096D00B84F06 /* backends */,
 				3EABF5EC294C3C09009943C1 /* rendering */,
 				3E6B23C92948BAB8000AC29F /* bridging.h */,
 				3EABF5C9294AC6E5009943C1 /* Constants.swift */,
@@ -2918,6 +2963,7 @@
 				3E6B23A42946B3CA000AC29F /* Headers */,
 				3E6B23A52946B3CA000AC29F /* Sources */,
 				3E6B23A62946B3CA000AC29F /* Frameworks */,
+				04B8485229FD0DC500B84F06 /* swift format */,
 			);
 			buildRules = (
 			);
@@ -3199,6 +3245,25 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		04B8485229FD0DC500B84F06 /* swift format */ = {
+			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "swift format";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "if which swiftformat >/dev/null; then\nswiftformat .\nelse\necho \"error: SwiftFormat not installed, download from https://github.com/nicklockwood/SwiftFormat\"\nexit 1\nfi\n";
+		};
 		3E5C394F29DBEDDC0026E999 /* swift format */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -3307,18 +3372,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				049F4DA5295D2DAC00AB07EF /* BccLatticePointGenerator.swift in Sources */,
-				3E6B23C529488260000AC29F /* TriangleMesh.mm in Sources */,
-				3EABF5DA294B1E7F009943C1 /* Matrix3x3.swift in Sources */,
-				3E6B23CB2948BAB9000AC29F /* ImplicitTriangleMesh.swift in Sources */,
-				3EABF5D8294B1E7F009943C1 /* BoundingBox.swift in Sources */,
-				3EABF5CA294AC6E5009943C1 /* Constants.swift in Sources */,
-				3EABF5D1294B1E11009943C1 /* MathUtils.swift in Sources */,
-				049F4DA2295D2D4800AB07EF /* PointGenerator.swift in Sources */,
-				3EABF5D9294B1E7F009943C1 /* Matrix2x2.swift in Sources */,
-				3EABF5DC294B1EA7009943C1 /* Ray.swift in Sources */,
-				3EABF5D7294B1E7F009943C1 /* Matrix4x4.swift in Sources */,
-				3EABF5D2294B1E11009943C1 /* Vector3.swift in Sources */,
+				04B8484F29FD0BF800B84F06 /* Aabb.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
