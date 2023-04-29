@@ -44,6 +44,14 @@
 		04462F21293324A300F95387 /* Textures.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 04462F20293324A200F95387 /* Textures.xcassets */; };
 		049F4DB0295EDE7A00AB07EF /* semi_implicit_euler.metal in Sources */ = {isa = PBXBuildFile; fileRef = 049F4DAF295EDE7A00AB07EF /* semi_implicit_euler.metal */; };
 		04B8484F29FD0BF800B84F06 /* Aabb.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04B8484E29FD0BF800B84F06 /* Aabb.swift */; };
+		04B8485429FD0E3500B84F06 /* AffineTransform.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04B8485329FD0E3500B84F06 /* AffineTransform.swift */; };
+		04B8485629FD13C200B84F06 /* CellSpan.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04B8485529FD13C200B84F06 /* CellSpan.swift */; };
+		04B8485829FD13E900B84F06 /* VInt4.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04B8485729FD13E900B84F06 /* VInt4.swift */; };
+		04B8485A29FD144B00B84F06 /* SimplexCounts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04B8485929FD144B00B84F06 /* SimplexCounts.swift */; };
+		04B8485C29FD149A00B84F06 /* ParticlePair.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04B8485B29FD149A00B84F06 /* ParticlePair.swift */; };
+		04B8485E29FD15C200B84F06 /* Oni.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04B8485D29FD15C200B84F06 /* Oni.swift */; };
+		04B8486029FD17D100B84F06 /* CollisionMaterial.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04B8485F29FD17D100B84F06 /* CollisionMaterial.swift */; };
+		04B8486329FD183900B84F06 /* ObiCollisionMaterial.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04B8486229FD183900B84F06 /* ObiCollisionMaterial.swift */; };
 		3E1076412965214100F751A5 /* point_emitter.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3E1076402965214100F751A5 /* point_emitter.metal */; };
 		3E107643296524CF00F751A5 /* samplers.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3E107642296524CF00F751A5 /* samplers.metal */; };
 		3E10764B29654BC800F751A5 /* gravity_force.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3E10764A29654BC800F751A5 /* gravity_force.metal */; };
@@ -661,6 +669,14 @@
 		04B8484929FD09EF00B84F06 /* ISolverImpl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ISolverImpl.swift; sourceTree = "<group>"; };
 		04B8484B29FD0B1700B84F06 /* IColliderWorldImpl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IColliderWorldImpl.swift; sourceTree = "<group>"; };
 		04B8484E29FD0BF800B84F06 /* Aabb.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Aabb.swift; sourceTree = "<group>"; };
+		04B8485329FD0E3500B84F06 /* AffineTransform.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AffineTransform.swift; sourceTree = "<group>"; };
+		04B8485529FD13C200B84F06 /* CellSpan.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CellSpan.swift; sourceTree = "<group>"; };
+		04B8485729FD13E900B84F06 /* VInt4.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VInt4.swift; sourceTree = "<group>"; };
+		04B8485929FD144B00B84F06 /* SimplexCounts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimplexCounts.swift; sourceTree = "<group>"; };
+		04B8485B29FD149A00B84F06 /* ParticlePair.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParticlePair.swift; sourceTree = "<group>"; };
+		04B8485D29FD15C200B84F06 /* Oni.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Oni.swift; sourceTree = "<group>"; };
+		04B8485F29FD17D100B84F06 /* CollisionMaterial.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollisionMaterial.swift; sourceTree = "<group>"; };
+		04B8486229FD183900B84F06 /* ObiCollisionMaterial.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObiCollisionMaterial.swift; sourceTree = "<group>"; };
 		3E0E0B422959C7F700B25625 /* hash_grid_visual.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = hash_grid_visual.metal; sourceTree = "<group>"; };
 		3E1076402965214100F751A5 /* point_emitter.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = point_emitter.metal; sourceTree = "<group>"; };
 		3E107642296524CF00F751A5 /* samplers.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = samplers.metal; sourceTree = "<group>"; };
@@ -1548,8 +1564,22 @@
 			isa = PBXGroup;
 			children = (
 				04B8484E29FD0BF800B84F06 /* Aabb.swift */,
+				04B8485329FD0E3500B84F06 /* AffineTransform.swift */,
+				04B8485729FD13E900B84F06 /* VInt4.swift */,
+				04B8485529FD13C200B84F06 /* CellSpan.swift */,
+				04B8485929FD144B00B84F06 /* SimplexCounts.swift */,
+				04B8485B29FD149A00B84F06 /* ParticlePair.swift */,
+				04B8485F29FD17D100B84F06 /* CollisionMaterial.swift */,
 			);
 			path = "data-structures";
+			sourceTree = "<group>";
+		};
+		04B8486129FD182000B84F06 /* collisions */ = {
+			isa = PBXGroup;
+			children = (
+				04B8486229FD183900B84F06 /* ObiCollisionMaterial.swift */,
+			);
+			path = collisions;
 			sourceTree = "<group>";
 		};
 		3E10763F2965212400F751A5 /* emitter */ = {
@@ -1805,7 +1835,9 @@
 			isa = PBXGroup;
 			children = (
 				04B8484D29FD0BE000B84F06 /* data-structures */,
+				04B8486129FD182000B84F06 /* collisions */,
 				04B8484229FD096D00B84F06 /* backends */,
+				04B8485D29FD15C200B84F06 /* Oni.swift */,
 				3EABF5EC294C3C09009943C1 /* rendering */,
 				3E6B23C92948BAB8000AC29F /* bridging.h */,
 				3EABF5C9294AC6E5009943C1 /* Constants.swift */,
@@ -3373,6 +3405,14 @@
 			buildActionMask = 2147483647;
 			files = (
 				04B8484F29FD0BF800B84F06 /* Aabb.swift in Sources */,
+				04B8485C29FD149A00B84F06 /* ParticlePair.swift in Sources */,
+				04B8485429FD0E3500B84F06 /* AffineTransform.swift in Sources */,
+				04B8485629FD13C200B84F06 /* CellSpan.swift in Sources */,
+				04B8485829FD13E900B84F06 /* VInt4.swift in Sources */,
+				04B8486029FD17D100B84F06 /* CollisionMaterial.swift in Sources */,
+				04B8485E29FD15C200B84F06 /* Oni.swift in Sources */,
+				04B8485A29FD144B00B84F06 /* SimplexCounts.swift in Sources */,
+				04B8486329FD183900B84F06 /* ObiCollisionMaterial.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
