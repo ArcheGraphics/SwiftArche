@@ -7,8 +7,8 @@
 import Math
 
 /// Interface for the Oni particle physics library.
-public class Oni {
-    public let ConstraintTypeCount = 17
+public enum Oni {
+    public static let ConstraintTypeCount = 17
 
     public enum ConstraintType: Int {
         case Tether = 0

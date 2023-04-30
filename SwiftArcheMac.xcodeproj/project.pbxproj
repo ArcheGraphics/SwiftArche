@@ -141,6 +141,20 @@
 		04B8492529FEA2FC00B84F06 /* IBurstConstraintsImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04B8492429FEA2FC00B84F06 /* IBurstConstraintsImpl.swift */; };
 		04B8492829FEA40900B84F06 /* ObiSolver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04B8492729FEA40900B84F06 /* ObiSolver.swift */; };
 		04B8492A29FEA50B00B84F06 /* BurstAerodynamicConstraintsBatch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04B8492929FEA50B00B84F06 /* BurstAerodynamicConstraintsBatch.swift */; };
+		04B8492D29FEA8B600B84F06 /* BurstBendConstraints.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04B8492C29FEA8B600B84F06 /* BurstBendConstraints.swift */; };
+		04B8492F29FEA8BE00B84F06 /* BurstBendConstraintsBatch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04B8492E29FEA8BE00B84F06 /* BurstBendConstraintsBatch.swift */; };
+		04B8493229FEAA6100B84F06 /* BurstBendTwistConstraints.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04B8493129FEAA6100B84F06 /* BurstBendTwistConstraints.swift */; };
+		04B8493429FEAA6900B84F06 /* BurstBendTwistConstraintsBatch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04B8493329FEAA6900B84F06 /* BurstBendTwistConstraintsBatch.swift */; };
+		04B8493729FEAD4300B84F06 /* BurstChainConstraints.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04B8493629FEAD4300B84F06 /* BurstChainConstraints.swift */; };
+		04B8493929FEAD4B00B84F06 /* BurstChainConstraintsBatch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04B8493829FEAD4B00B84F06 /* BurstChainConstraintsBatch.swift */; };
+		04B8493C29FEB14100B84F06 /* ApplyCollisionConstraintsBatchJob.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04B8493B29FEB14100B84F06 /* ApplyCollisionConstraintsBatchJob.swift */; };
+		04B8493E29FEB14900B84F06 /* BurstColliderCollisionConstraints.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04B8493D29FEB14900B84F06 /* BurstColliderCollisionConstraints.swift */; };
+		04B8494029FEB15200B84F06 /* BurstColliderCollisionConstraintsBatch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04B8493F29FEB15200B84F06 /* BurstColliderCollisionConstraintsBatch.swift */; };
+		04B8494229FEB15A00B84F06 /* BurstColliderFrictionConstraints.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04B8494129FEB15A00B84F06 /* BurstColliderFrictionConstraints.swift */; };
+		04B8494429FEB16200B84F06 /* BurstColliderFrictionConstraintsBatch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04B8494329FEB16200B84F06 /* BurstColliderFrictionConstraintsBatch.swift */; };
+		04B8494629FEBDDF00B84F06 /* SpikyKernel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04B8494529FEBDDF00B84F06 /* SpikyKernel.swift */; };
+		04B8494829FEBE2900B84F06 /* BurstDensityConstraints.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04B8494729FEBE2900B84F06 /* BurstDensityConstraints.swift */; };
+		04B8494A29FEBE3300B84F06 /* BurstDensityConstraintsBatch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04B8494929FEBE3300B84F06 /* BurstDensityConstraintsBatch.swift */; };
 		3E1076412965214100F751A5 /* point_emitter.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3E1076402965214100F751A5 /* point_emitter.metal */; };
 		3E107643296524CF00F751A5 /* samplers.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3E107642296524CF00F751A5 /* samplers.metal */; };
 		3E10764B29654BC800F751A5 /* gravity_force.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3E10764A29654BC800F751A5 /* gravity_force.metal */; };
@@ -846,6 +860,20 @@
 		04B8492429FEA2FC00B84F06 /* IBurstConstraintsImpl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IBurstConstraintsImpl.swift; sourceTree = "<group>"; };
 		04B8492729FEA40900B84F06 /* ObiSolver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObiSolver.swift; sourceTree = "<group>"; };
 		04B8492929FEA50B00B84F06 /* BurstAerodynamicConstraintsBatch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BurstAerodynamicConstraintsBatch.swift; sourceTree = "<group>"; };
+		04B8492C29FEA8B600B84F06 /* BurstBendConstraints.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BurstBendConstraints.swift; sourceTree = "<group>"; };
+		04B8492E29FEA8BE00B84F06 /* BurstBendConstraintsBatch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BurstBendConstraintsBatch.swift; sourceTree = "<group>"; };
+		04B8493129FEAA6100B84F06 /* BurstBendTwistConstraints.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BurstBendTwistConstraints.swift; sourceTree = "<group>"; };
+		04B8493329FEAA6900B84F06 /* BurstBendTwistConstraintsBatch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BurstBendTwistConstraintsBatch.swift; sourceTree = "<group>"; };
+		04B8493629FEAD4300B84F06 /* BurstChainConstraints.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BurstChainConstraints.swift; sourceTree = "<group>"; };
+		04B8493829FEAD4B00B84F06 /* BurstChainConstraintsBatch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BurstChainConstraintsBatch.swift; sourceTree = "<group>"; };
+		04B8493B29FEB14100B84F06 /* ApplyCollisionConstraintsBatchJob.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApplyCollisionConstraintsBatchJob.swift; sourceTree = "<group>"; };
+		04B8493D29FEB14900B84F06 /* BurstColliderCollisionConstraints.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BurstColliderCollisionConstraints.swift; sourceTree = "<group>"; };
+		04B8493F29FEB15200B84F06 /* BurstColliderCollisionConstraintsBatch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BurstColliderCollisionConstraintsBatch.swift; sourceTree = "<group>"; };
+		04B8494129FEB15A00B84F06 /* BurstColliderFrictionConstraints.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BurstColliderFrictionConstraints.swift; sourceTree = "<group>"; };
+		04B8494329FEB16200B84F06 /* BurstColliderFrictionConstraintsBatch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BurstColliderFrictionConstraintsBatch.swift; sourceTree = "<group>"; };
+		04B8494529FEBDDF00B84F06 /* SpikyKernel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpikyKernel.swift; sourceTree = "<group>"; };
+		04B8494729FEBE2900B84F06 /* BurstDensityConstraints.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BurstDensityConstraints.swift; sourceTree = "<group>"; };
+		04B8494929FEBE3300B84F06 /* BurstDensityConstraintsBatch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BurstDensityConstraintsBatch.swift; sourceTree = "<group>"; };
 		3E0E0B422959C7F700B25625 /* hash_grid_visual.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = hash_grid_visual.metal; sourceTree = "<group>"; };
 		3E1076402965214100F751A5 /* point_emitter.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = point_emitter.metal; sourceTree = "<group>"; };
 		3E107642296524CF00F751A5 /* samplers.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = samplers.metal; sourceTree = "<group>"; };
@@ -1928,6 +1956,10 @@
 			isa = PBXGroup;
 			children = (
 				04B8491F29FEA25C00B84F06 /* aerodynamics */,
+				04B8492B29FEA8AC00B84F06 /* bend */,
+				04B8493029FEAA4F00B84F06 /* bend-twist */,
+				04B8493529FEAD3800B84F06 /* chain */,
+				04B8493A29FEB13000B84F06 /* collider-collision */,
 				04B848D029FE6CE000B84F06 /* density */,
 				04B8492229FEA29600B84F06 /* BurstConstraintsBatchImpl.swift */,
 				04B8492429FEA2FC00B84F06 /* IBurstConstraintsImpl.swift */,
@@ -1939,6 +1971,8 @@
 			isa = PBXGroup;
 			children = (
 				04B848D129FE6CE600B84F06 /* kernels */,
+				04B8494729FEBE2900B84F06 /* BurstDensityConstraints.swift */,
+				04B8494929FEBE3300B84F06 /* BurstDensityConstraintsBatch.swift */,
 			);
 			path = density;
 			sourceTree = "<group>";
@@ -1947,6 +1981,7 @@
 			isa = PBXGroup;
 			children = (
 				04B848D229FE6CF600B84F06 /* Poly6Kernel.swift */,
+				04B8494529FEBDDF00B84F06 /* SpikyKernel.swift */,
 			);
 			path = kernels;
 			sourceTree = "<group>";
@@ -1985,6 +2020,45 @@
 				04B8492729FEA40900B84F06 /* ObiSolver.swift */,
 			);
 			path = solver;
+			sourceTree = "<group>";
+		};
+		04B8492B29FEA8AC00B84F06 /* bend */ = {
+			isa = PBXGroup;
+			children = (
+				04B8492C29FEA8B600B84F06 /* BurstBendConstraints.swift */,
+				04B8492E29FEA8BE00B84F06 /* BurstBendConstraintsBatch.swift */,
+			);
+			path = bend;
+			sourceTree = "<group>";
+		};
+		04B8493029FEAA4F00B84F06 /* bend-twist */ = {
+			isa = PBXGroup;
+			children = (
+				04B8493129FEAA6100B84F06 /* BurstBendTwistConstraints.swift */,
+				04B8493329FEAA6900B84F06 /* BurstBendTwistConstraintsBatch.swift */,
+			);
+			path = "bend-twist";
+			sourceTree = "<group>";
+		};
+		04B8493529FEAD3800B84F06 /* chain */ = {
+			isa = PBXGroup;
+			children = (
+				04B8493629FEAD4300B84F06 /* BurstChainConstraints.swift */,
+				04B8493829FEAD4B00B84F06 /* BurstChainConstraintsBatch.swift */,
+			);
+			path = chain;
+			sourceTree = "<group>";
+		};
+		04B8493A29FEB13000B84F06 /* collider-collision */ = {
+			isa = PBXGroup;
+			children = (
+				04B8493B29FEB14100B84F06 /* ApplyCollisionConstraintsBatchJob.swift */,
+				04B8493D29FEB14900B84F06 /* BurstColliderCollisionConstraints.swift */,
+				04B8493F29FEB15200B84F06 /* BurstColliderCollisionConstraintsBatch.swift */,
+				04B8494129FEB15A00B84F06 /* BurstColliderFrictionConstraints.swift */,
+				04B8494329FEB16200B84F06 /* BurstColliderFrictionConstraintsBatch.swift */,
+			);
+			path = "collider-collision";
 			sourceTree = "<group>";
 		};
 		3E10763F2965212400F751A5 /* emitter */ = {
@@ -3837,6 +3911,8 @@
 				04B8490C29FEA01700B84F06 /* IBendTwistConstraintsBatchImpl.swift in Sources */,
 				04B848BD29FE44D500B84F06 /* IConstraintProvider.swift in Sources */,
 				04B8487A29FD3F4E00B84F06 /* ObiTriangleMeshContainer.swift in Sources */,
+				04B8494A29FEBE3300B84F06 /* BurstDensityConstraintsBatch.swift in Sources */,
+				04B8494829FEBE2900B84F06 /* BurstDensityConstraints.swift in Sources */,
 				04B848F929FE8C4E00B84F06 /* BurstHeightField.swift in Sources */,
 				04B8491029FEA09F00B84F06 /* IDistanceConstraintsBatchImpl.swift in Sources */,
 				04B8487129FD3A7E00B84F06 /* QueryShape.swift in Sources */,
@@ -3851,7 +3927,10 @@
 				04B8491229FEA0CA00B84F06 /* IPinConstraintsBatchImpl.swift in Sources */,
 				04B848BB29FE44A100B84F06 /* BurstQueryResult.swift in Sources */,
 				04B848E929FE883B00B84F06 /* BurstColliderShape.swift in Sources */,
+				04B8492D29FEA8B600B84F06 /* BurstBendConstraints.swift in Sources */,
+				04B8494229FEB15A00B84F06 /* BurstColliderFrictionConstraints.swift in Sources */,
 				04B848B429FE407B00B84F06 /* FluidInteraction.swift in Sources */,
+				04B8493E29FEB14900B84F06 /* BurstColliderCollisionConstraints.swift in Sources */,
 				04B848AD29FE3DD200B84F06 /* BurstQueryShape.swift in Sources */,
 				04B848C929FE66EC00B84F06 /* NativeMultilevelGrid.swift in Sources */,
 				04B8487429FD3DDB00B84F06 /* IBounded.swift in Sources */,
@@ -3860,16 +3939,21 @@
 				04B848C329FE640C00B84F06 /* ConstraintSorter.swift in Sources */,
 				04B848C729FE667B00B84F06 /* FluidInteractionProvider.swift in Sources */,
 				04B848A329FE3A2900B84F06 /* Float3+Extension.swift in Sources */,
+				04B8492F29FEA8BE00B84F06 /* BurstBendConstraintsBatch.swift in Sources */,
 				04B848AB29FE3D6600B84F06 /* BurstInertialFrame.swift in Sources */,
 				04B848DD29FE735100B84F06 /* BurstBoxQuery.swift in Sources */,
 				04B848DF29FE73BE00B84F06 /* BurstRay.swift in Sources */,
 				04B848EB29FE88CC00B84F06 /* BurstCapsule.swift in Sources */,
+				04B8493C29FEB14100B84F06 /* ApplyCollisionConstraintsBatchJob.swift in Sources */,
 				04B8484F29FD0BF800B84F06 /* Aabb.swift in Sources */,
 				04B8490A29FE915C00B84F06 /* IBendConstraintsBatchImpl.swift in Sources */,
 				04B848A529FE3A3100B84F06 /* Float4+Extension.swift in Sources */,
 				04B848D329FE6CF600B84F06 /* Poly6Kernel.swift in Sources */,
 				04B8487829FD3E5F00B84F06 /* BIH.swift in Sources */,
+				04B8493929FEAD4B00B84F06 /* BurstChainConstraintsBatch.swift in Sources */,
+				04B8494029FEB15200B84F06 /* BurstColliderCollisionConstraintsBatch.swift in Sources */,
 				04B8489A29FE348400B84F06 /* Types.swift in Sources */,
+				04B8494429FEB16200B84F06 /* BurstColliderFrictionConstraintsBatch.swift in Sources */,
 				04B8491E29FEA20500B84F06 /* IVolumeConstraintsBatchImpl.swift in Sources */,
 				04B848E329FE868E00B84F06 /* SpatialQueryJob.swift in Sources */,
 				04B8491829FEA17B00B84F06 /* IStitchConstraintsBatchImpl.swift in Sources */,
@@ -3881,6 +3965,8 @@
 				04B8485C29FD149A00B84F06 /* ParticlePair.swift in Sources */,
 				04B8490529FE90DD00B84F06 /* IConstraintImpl.swift in Sources */,
 				04B8488029FD544100B84F06 /* ObiUtils.swift in Sources */,
+				04B8493229FEAA6100B84F06 /* BurstBendTwistConstraints.swift in Sources */,
+				04B8493429FEAA6900B84F06 /* BurstBendTwistConstraintsBatch.swift in Sources */,
 				04B848FF29FE8F5D00B84F06 /* BurstSphere.swift in Sources */,
 				04B848F529FE8B3000B84F06 /* BurstEdgeMesh.swift in Sources */,
 				04B8491429FEA0FD00B84F06 /* IShapeMatchingConstraintsBatchImpl.swift in Sources */,
@@ -3894,6 +3980,7 @@
 				04B8485629FD13C200B84F06 /* CellSpan.swift in Sources */,
 				04B8489429FD590100B84F06 /* VoxelDistanceField.swift in Sources */,
 				04B848C129FE611F00B84F06 /* ConstraintBatcher.swift in Sources */,
+				04B8493729FEAD4300B84F06 /* BurstChainConstraints.swift in Sources */,
 				04B8487629FD3DF300B84F06 /* BIHNode.swift in Sources */,
 				04B8491C29FEA1CF00B84F06 /* ITetherConstraintsBatchImpl.swift in Sources */,
 				04B8490329FE90A400B84F06 /* IConstraintsBatchImpl.swift in Sources */,
@@ -3909,6 +3996,7 @@
 				04B8487D29FD400500B84F06 /* MeshVoxelizer.swift in Sources */,
 				04B8486729FD378200B84F06 /* ColliderRigidbody.swift in Sources */,
 				04B848B629FE40D000B84F06 /* GridHash.swift in Sources */,
+				04B8494629FEBDDF00B84F06 /* SpikyKernel.swift in Sources */,
 				04B8486529FD371B00B84F06 /* ColliderShape.swift in Sources */,
 				04B8485A29FD144B00B84F06 /* SimplexCounts.swift in Sources */,
 				04B848B229FE405000B84F06 /* IConstraint.swift in Sources */,
