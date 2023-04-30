@@ -7,19 +7,19 @@
 import Math
 
 public struct VInt4 {
-    public var x: Int
-    public var y: Int
-    public var z: Int
-    public var w: Int
+    public var x: Int32
+    public var y: Int32
+    public var z: Int32
+    public var w: Int32
 
-    public init(x: Int, y: Int, z: Int, w: Int) {
+    public init(x: Int32, y: Int32, z: Int32, w: Int32) {
         self.x = x
         self.y = y
         self.z = z
         self.w = w
     }
 
-    public init(x: Int) {
+    public init(x: Int32) {
         self.x = x
         y = x
         z = x

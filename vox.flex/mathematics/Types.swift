@@ -40,3 +40,5 @@ public typealias double3x4 = matrix_double3x4
 public typealias double4x2 = matrix_double4x2
 public typealias double4x3 = matrix_double4x3
 public typealias double4x4 = matrix_double4x4
+
+public typealias quaternion = simd_quatf
