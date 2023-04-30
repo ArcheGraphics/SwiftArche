@@ -6,14 +6,7 @@
 
 import Math
 
-public class BurstSolverImpl: ISolverImpl {
-    var m_Solver: ObiSolver
-
-    public var abstraction: ObiSolver { return m_Solver }
-
-    public init(solver: ObiSolver) {
-        m_Solver = solver
-    }
-
-    public func Destroy() {}
+public protocol ITetherConstraintsBatchImpl: IConstraintsBatchImpl {
+    func SetTetherConstraints(particleIndices: [Int], maxLengthScale: [Vector2],
+                              stiffnesses: [Float], lambdas: [Float], count: Int)
 }

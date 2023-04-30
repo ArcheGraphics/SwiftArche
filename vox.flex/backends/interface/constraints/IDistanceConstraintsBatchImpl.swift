@@ -6,14 +6,6 @@
 
 import Math
 
-public class BurstSolverImpl: ISolverImpl {
-    var m_Solver: ObiSolver
-
-    public var abstraction: ObiSolver { return m_Solver }
-
-    public init(solver: ObiSolver) {
-        m_Solver = solver
-    }
-
-    public func Destroy() {}
+public protocol IDistanceConstraintsBatchImpl: IConstraintsBatchImpl {
+    func SetDistanceConstraints(particleIndices: [Int], restLengths: [Float], stiffnesses: [Vector2], lambdas: [Float], count: Int)
 }
