@@ -6,9 +6,7 @@
 
 import Math
 
-/**
- * Interface for the Oni particle physics library.
- */
+/// Interface for the Oni particle physics library.
 public class Oni {
     public let ConstraintTypeCount = 17
 

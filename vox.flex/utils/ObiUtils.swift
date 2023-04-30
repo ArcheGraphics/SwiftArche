@@ -74,4 +74,139 @@ public enum ObiUtils {
     public static let categoryNames: [String] = [
         "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15",
     ]
+
+    public static func DrawArrowGizmo(bodyLenght _: Float, bodyWidth _: Float, headLenght _: Float, headWidth _: Float) {}
+
+    public static func DebugDrawCross(pos _: Vector3, size _: Float, color _: Color) {}
+
+    public static func ShiftLeft<T>(source _: [T], index _: Int, count _: Int, positions _: Int) {}
+
+    public static func ShiftRight<T>(source _: [T], index _: Int, count _: Int, positions _: Int) {}
+
+    public static func AreValid(bounds _: Bounds) -> Bool { false }
+
+    public static func Transform(b _: Bounds, m _: Matrix) -> Bounds { Bounds() }
+
+    public static func CountTrailingZeroes(x _: Int) -> Int { 0 }
+
+    public static func Add(a _: Vector3, b _: Vector3, result _: inout Vector3) {}
+
+    public static func Remap(value _: Float, from1 _: Float, to1 _: Float, from2 _: Float, to2 _: Float) -> Float { 0 }
+
+    public static func Mod(a _: Float, b _: Float) -> Float { 0 }
+
+    public static func Add(a _: Matrix, other _: Matrix) -> Matrix { Matrix() }
+
+    public static func FrobeniusNorm(a _: Matrix) -> Float { 0 }
+
+    public static func ScalarMultiply(a _: Matrix, s _: Float) -> Matrix { Matrix() }
+
+    public static func ProjectPointLine(point _: Vector3, lineStart _: Vector3, lineEnd _: Vector3,
+                                        mu _: inout Float, clampToSegment _: Bool = true) -> Vector3
+    {
+        Vector3()
+    }
+
+    public static func LinePlaneIntersection(planePoint _: Vector3, planeNormal _: Vector3,
+                                             linePoint _: Vector3, lineDirection _: Vector3, point _: inout Vector3) -> Bool
+    {
+        false
+    }
+
+    public static func RaySphereIntersection(rayOrigin _: Vector3, rayDirection _: Vector3,
+                                             center _: Vector3, radius _: Float) -> Float
+    {
+        0
+    }
+
+    public static func InvMassToMass(invMass _: Float) -> Float { 0 }
+
+    public static func MassToInvMass(mass _: Float) -> Float { 0 }
+
+    public static func PureSign(val _: Float) -> Int { 0 }
+
+    public static func NearestPointOnTri(p1 _: Vector3,
+                                         p2 _: Vector3,
+                                         p3 _: Vector3,
+                                         p _: Vector3,
+                                         result _: inout Vector3) {}
+
+    public static func TriangleArea(p1 _: Vector3, p2 _: Vector3, p3 _: Vector3) -> Float { 0 }
+
+    public static func EllipsoidVolume(principalRadii _: Vector3) -> Float { 0 }
+
+    public static func RestDarboux(q1 _: Quaternion, q2 _: Quaternion) -> Quaternion {
+        Quaternion()
+    }
+
+    public static func RestBendingConstraint(positionA _: Vector3, positionB _: Vector3, positionC _: Vector3) -> Float {
+        0
+    }
+
+    public static func BilateralInterleaved(count _: Int) {}
+
+    public static func BarycentricCoordinates(A _: Vector3,
+                                              B _: Vector3,
+                                              C _: Vector3,
+                                              P _: Vector3,
+                                              bary _: inout Vector3) {}
+
+    public static func BarycentricInterpolation(p1 _: Vector3, p2 _: Vector3, p3 _: Vector3, coords _: Vector3, result _: Vector3) {}
+
+    public static func BarycentricInterpolation(p1 _: Float, p2 _: Float, p3 _: Float, coords _: Vector3) -> Float {
+        0
+    }
+
+    public static func BarycentricExtrapolationScale(coords _: Vector3) -> Float {
+        0
+    }
+
+    public static func CalculateAngleWeightedNormals(vertices _: [Vector3], triangles _: [Int]) -> [Vector3] {
+        []
+    }
+
+    public static func MakePhase(group _: Int, flags _: ParticleFlags) -> Int {
+        0
+    }
+
+    public static func GetGroupFromPhase(phase _: Int) -> Int {
+        0
+    }
+
+    public static func GetFlagsFromPhase(phase _: Int) -> ParticleFlags {
+        []
+    }
+
+    public static func MakeFilter(mask _: Int, category _: Int) -> Int {
+        0
+    }
+
+    public static func GetCategoryFromFilter(filter _: Int) -> Int {
+        0
+    }
+
+    public static func GetMaskFromFilter(filter _: Int) -> Int {
+        0
+    }
+
+    public static func EigenSolve(D _: Matrix, S _: inout Vector3, V _: inout Matrix) {}
+
+    static func unitOrthogonal(input _: Vector3) -> Vector3 {
+        Vector3()
+    }
+
+    static func EigenVector(D _: Matrix, S _: Float) -> Vector3 {
+        Vector3()
+    }
+
+    static func EigenValues(D _: Matrix) -> Vector3 {
+        Vector3()
+    }
+
+    public static func GetPointCloudCentroid(points _: [Vector3]) -> Vector3 {
+        Vector3()
+    }
+
+    public static func GetPointCloudAnisotropy(points _: [Vector3], max_anisotropy _: Float, radius _: Float, hint_normal _: Vector3,
+                                               centroid _: inout Vector3, orientation _: inout Quaternion, principal_radii _: inout Vector3) {}
 }

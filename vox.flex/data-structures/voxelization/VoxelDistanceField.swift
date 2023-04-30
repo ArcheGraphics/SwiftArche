@@ -26,6 +26,6 @@ public class VoxelDistanceField {
     }
 
     public func JumpFlood() {}
-    
+
     private func JumpFloodPass(stride _: Int, input _: [[[Vector3Int]]], output _: [[[Vector3Int]]]) {}
 }

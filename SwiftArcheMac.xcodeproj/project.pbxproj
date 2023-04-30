@@ -73,6 +73,8 @@
 		04B8489029FD57B200B84F06 /* DequeModule in Frameworks */ = {isa = PBXBuildFile; productRef = 04B8488F29FD57B200B84F06 /* DequeModule */; };
 		04B8489229FD57B200B84F06 /* OrderedCollections in Frameworks */ = {isa = PBXBuildFile; productRef = 04B8489129FD57B200B84F06 /* OrderedCollections */; };
 		04B8489429FD590100B84F06 /* VoxelDistanceField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04B8489329FD590100B84F06 /* VoxelDistanceField.swift */; };
+		04B8489629FD5A5300B84F06 /* ObiColliderBase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04B8489529FD5A5300B84F06 /* ObiColliderBase.swift */; };
+		04B8489A29FE348400B84F06 /* Types.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04B8489929FE348400B84F06 /* Types.swift */; };
 		3E1076412965214100F751A5 /* point_emitter.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3E1076402965214100F751A5 /* point_emitter.metal */; };
 		3E107643296524CF00F751A5 /* samplers.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3E107642296524CF00F751A5 /* samplers.metal */; };
 		3E10764B29654BC800F751A5 /* gravity_force.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3E10764A29654BC800F751A5 /* gravity_force.metal */; };
@@ -711,6 +713,8 @@
 		04B8487C29FD400500B84F06 /* MeshVoxelizer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeshVoxelizer.swift; sourceTree = "<group>"; };
 		04B8487F29FD544100B84F06 /* ObiUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObiUtils.swift; sourceTree = "<group>"; };
 		04B8489329FD590100B84F06 /* VoxelDistanceField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoxelDistanceField.swift; sourceTree = "<group>"; };
+		04B8489529FD5A5300B84F06 /* ObiColliderBase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObiColliderBase.swift; sourceTree = "<group>"; };
+		04B8489929FE348400B84F06 /* Types.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Types.swift; sourceTree = "<group>"; };
 		3E0E0B422959C7F700B25625 /* hash_grid_visual.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = hash_grid_visual.metal; sourceTree = "<group>"; };
 		3E1076402965214100F751A5 /* point_emitter.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = point_emitter.metal; sourceTree = "<group>"; };
 		3E107642296524CF00F751A5 /* samplers.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = samplers.metal; sourceTree = "<group>"; };
@@ -1627,6 +1631,7 @@
 			children = (
 				04B8486229FD183900B84F06 /* ObiCollisionMaterial.swift */,
 				04B8487929FD3F4E00B84F06 /* ObiTriangleMeshContainer.swift */,
+				04B8489529FD5A5300B84F06 /* ObiColliderBase.swift */,
 			);
 			path = collisions;
 			sourceTree = "<group>";
@@ -1674,6 +1679,14 @@
 				04B8487F29FD544100B84F06 /* ObiUtils.swift */,
 			);
 			path = utils;
+			sourceTree = "<group>";
+		};
+		04B8489829FE346900B84F06 /* mathematics */ = {
+			isa = PBXGroup;
+			children = (
+				04B8489929FE348400B84F06 /* Types.swift */,
+			);
+			path = mathematics;
 			sourceTree = "<group>";
 		};
 		3E10763F2965212400F751A5 /* emitter */ = {
@@ -1928,6 +1941,7 @@
 		3E6B23A92946B3CA000AC29F /* vox.flex */ = {
 			isa = PBXGroup;
 			children = (
+				04B8489829FE346900B84F06 /* mathematics */,
 				04B8487E29FD543700B84F06 /* utils */,
 				04B8484D29FD0BE000B84F06 /* data-structures */,
 				04B8486129FD182000B84F06 /* collisions */,
@@ -3515,9 +3529,11 @@
 				04B8486F29FD3A2F00B84F06 /* QueryResult.swift in Sources */,
 				04B8487A29FD3F4E00B84F06 /* ObiTriangleMeshContainer.swift in Sources */,
 				04B8487129FD3A7E00B84F06 /* QueryShape.swift in Sources */,
+				04B8489629FD5A5300B84F06 /* ObiColliderBase.swift in Sources */,
 				04B8487429FD3DDB00B84F06 /* IBounded.swift in Sources */,
 				04B8484F29FD0BF800B84F06 /* Aabb.swift in Sources */,
 				04B8487829FD3E5F00B84F06 /* BIH.swift in Sources */,
+				04B8489A29FE348400B84F06 /* Types.swift in Sources */,
 				04B8485C29FD149A00B84F06 /* ParticlePair.swift in Sources */,
 				04B8488029FD544100B84F06 /* ObiUtils.swift in Sources */,
 				04B8485429FD0E3500B84F06 /* AffineTransform.swift in Sources */,
