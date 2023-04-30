@@ -86,6 +86,22 @@
 		04B848AF29FE3FE900B84F06 /* BurstRigidbody.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04B848AE29FE3FE900B84F06 /* BurstRigidbody.swift */; };
 		04B848B229FE405000B84F06 /* IConstraint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04B848B129FE405000B84F06 /* IConstraint.swift */; };
 		04B848B429FE407B00B84F06 /* FluidInteraction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04B848B329FE407B00B84F06 /* FluidInteraction.swift */; };
+		04B848B629FE40D000B84F06 /* GridHash.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04B848B529FE40D000B84F06 /* GridHash.swift */; };
+		04B848B929FE436300B84F06 /* BurstContact.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04B848B829FE436300B84F06 /* BurstContact.swift */; };
+		04B848BB29FE44A100B84F06 /* BurstQueryResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04B848BA29FE44A100B84F06 /* BurstQueryResult.swift */; };
+		04B848BD29FE44D500B84F06 /* IConstraintProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04B848BC29FE44D500B84F06 /* IConstraintProvider.swift */; };
+		04B848BF29FE602B00B84F06 /* BatchLUT.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04B848BE29FE602B00B84F06 /* BatchLUT.swift */; };
+		04B848C129FE611F00B84F06 /* ConstraintBatcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04B848C029FE611F00B84F06 /* ConstraintBatcher.swift */; };
+		04B848C329FE640C00B84F06 /* ConstraintSorter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04B848C229FE640C00B84F06 /* ConstraintSorter.swift */; };
+		04B848C529FE657D00B84F06 /* ContactProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04B848C429FE657D00B84F06 /* ContactProvider.swift */; };
+		04B848C729FE667B00B84F06 /* FluidInteractionProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04B848C629FE667B00B84F06 /* FluidInteractionProvider.swift */; };
+		04B848C929FE66EC00B84F06 /* NativeMultilevelGrid.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04B848C829FE66EC00B84F06 /* NativeMultilevelGrid.swift */; };
+		04B848CB29FE699900B84F06 /* ParticleGrid.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04B848CA29FE699900B84F06 /* ParticleGrid.swift */; };
+		04B848CE29FE69DC00B84F06 /* Queue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04B848CD29FE69DC00B84F06 /* Queue.swift */; };
+		04B848D329FE6CF600B84F06 /* Poly6Kernel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04B848D229FE6CF600B84F06 /* Poly6Kernel.swift */; };
+		04B848D529FE6D7F00B84F06 /* BurstLocalOptimization.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04B848D429FE6D7F00B84F06 /* BurstLocalOptimization.swift */; };
+		04B848D729FE6E0800B84F06 /* BurstSimplex.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04B848D629FE6E0800B84F06 /* BurstSimplex.swift */; };
+		04B848DA29FE6E7400B84F06 /* BurstSolverImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04B848D929FE6E7400B84F06 /* BurstSolverImpl.swift */; };
 		3E1076412965214100F751A5 /* point_emitter.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3E1076402965214100F751A5 /* point_emitter.metal */; };
 		3E107643296524CF00F751A5 /* samplers.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3E107642296524CF00F751A5 /* samplers.metal */; };
 		3E10764B29654BC800F751A5 /* gravity_force.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3E10764A29654BC800F751A5 /* gravity_force.metal */; };
@@ -737,6 +753,22 @@
 		04B848AE29FE3FE900B84F06 /* BurstRigidbody.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BurstRigidbody.swift; sourceTree = "<group>"; };
 		04B848B129FE405000B84F06 /* IConstraint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IConstraint.swift; sourceTree = "<group>"; };
 		04B848B329FE407B00B84F06 /* FluidInteraction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FluidInteraction.swift; sourceTree = "<group>"; };
+		04B848B529FE40D000B84F06 /* GridHash.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GridHash.swift; sourceTree = "<group>"; };
+		04B848B829FE436300B84F06 /* BurstContact.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BurstContact.swift; sourceTree = "<group>"; };
+		04B848BA29FE44A100B84F06 /* BurstQueryResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BurstQueryResult.swift; sourceTree = "<group>"; };
+		04B848BC29FE44D500B84F06 /* IConstraintProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IConstraintProvider.swift; sourceTree = "<group>"; };
+		04B848BE29FE602B00B84F06 /* BatchLUT.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BatchLUT.swift; sourceTree = "<group>"; };
+		04B848C029FE611F00B84F06 /* ConstraintBatcher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConstraintBatcher.swift; sourceTree = "<group>"; };
+		04B848C229FE640C00B84F06 /* ConstraintSorter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConstraintSorter.swift; sourceTree = "<group>"; };
+		04B848C429FE657D00B84F06 /* ContactProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactProvider.swift; sourceTree = "<group>"; };
+		04B848C629FE667B00B84F06 /* FluidInteractionProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FluidInteractionProvider.swift; sourceTree = "<group>"; };
+		04B848C829FE66EC00B84F06 /* NativeMultilevelGrid.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NativeMultilevelGrid.swift; sourceTree = "<group>"; };
+		04B848CA29FE699900B84F06 /* ParticleGrid.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParticleGrid.swift; sourceTree = "<group>"; };
+		04B848CD29FE69DC00B84F06 /* Queue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Queue.swift; sourceTree = "<group>"; };
+		04B848D229FE6CF600B84F06 /* Poly6Kernel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Poly6Kernel.swift; sourceTree = "<group>"; };
+		04B848D429FE6D7F00B84F06 /* BurstLocalOptimization.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BurstLocalOptimization.swift; sourceTree = "<group>"; };
+		04B848D629FE6E0800B84F06 /* BurstSimplex.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BurstSimplex.swift; sourceTree = "<group>"; };
+		04B848D929FE6E7400B84F06 /* BurstSolverImpl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BurstSolverImpl.swift; sourceTree = "<group>"; };
 		3E0E0B422959C7F700B25625 /* hash_grid_visual.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = hash_grid_visual.metal; sourceTree = "<group>"; };
 		3E1076402965214100F751A5 /* point_emitter.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = point_emitter.metal; sourceTree = "<group>"; };
 		3E107642296524CF00F751A5 /* samplers.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = samplers.metal; sourceTree = "<group>"; };
@@ -1718,6 +1750,8 @@
 		04B8489B29FE38E300B84F06 /* gcd */ = {
 			isa = PBXGroup;
 			children = (
+				04B848D829FE6E6B00B84F06 /* solver */,
+				04B848CF29FE6CD900B84F06 /* constraints */,
 				04B8489D29FE38F800B84F06 /* collisions */,
 				04B8489C29FE38F100B84F06 /* data-structures */,
 			);
@@ -1727,6 +1761,7 @@
 		04B8489C29FE38F100B84F06 /* data-structures */ = {
 			isa = PBXGroup;
 			children = (
+				04B848B729FE435700B84F06 /* queries */,
 				04B848B029FE403E00B84F06 /* constraint-batcher */,
 				04B8489E29FE391600B84F06 /* BurstAabb.swift */,
 				04B848A629FE3BA400B84F06 /* BurstAffineTransform.swift */,
@@ -1735,6 +1770,9 @@
 				04B848AC29FE3DD200B84F06 /* BurstQueryShape.swift */,
 				04B848AE29FE3FE900B84F06 /* BurstRigidbody.swift */,
 				04B848B329FE407B00B84F06 /* FluidInteraction.swift */,
+				04B848B529FE40D000B84F06 /* GridHash.swift */,
+				04B848C829FE66EC00B84F06 /* NativeMultilevelGrid.swift */,
+				04B848CA29FE699900B84F06 /* ParticleGrid.swift */,
 			);
 			path = "data-structures";
 			sourceTree = "<group>";
@@ -1742,6 +1780,8 @@
 		04B8489D29FE38F800B84F06 /* collisions */ = {
 			isa = PBXGroup;
 			children = (
+				04B848D429FE6D7F00B84F06 /* BurstLocalOptimization.swift */,
+				04B848D629FE6E0800B84F06 /* BurstSimplex.swift */,
 			);
 			path = collisions;
 			sourceTree = "<group>";
@@ -1750,8 +1790,63 @@
 			isa = PBXGroup;
 			children = (
 				04B848B129FE405000B84F06 /* IConstraint.swift */,
+				04B848BE29FE602B00B84F06 /* BatchLUT.swift */,
+				04B848C029FE611F00B84F06 /* ConstraintBatcher.swift */,
+				04B848C229FE640C00B84F06 /* ConstraintSorter.swift */,
+				04B848BC29FE44D500B84F06 /* IConstraintProvider.swift */,
+				04B848C429FE657D00B84F06 /* ContactProvider.swift */,
+				04B848C629FE667B00B84F06 /* FluidInteractionProvider.swift */,
 			);
 			path = "constraint-batcher";
+			sourceTree = "<group>";
+		};
+		04B848B729FE435700B84F06 /* queries */ = {
+			isa = PBXGroup;
+			children = (
+				04B848B829FE436300B84F06 /* BurstContact.swift */,
+				04B848BA29FE44A100B84F06 /* BurstQueryResult.swift */,
+			);
+			path = queries;
+			sourceTree = "<group>";
+		};
+		04B848CC29FE69CB00B84F06 /* algorithm */ = {
+			isa = PBXGroup;
+			children = (
+				04B848CD29FE69DC00B84F06 /* Queue.swift */,
+			);
+			path = algorithm;
+			sourceTree = "<group>";
+		};
+		04B848CF29FE6CD900B84F06 /* constraints */ = {
+			isa = PBXGroup;
+			children = (
+				04B848D029FE6CE000B84F06 /* density */,
+			);
+			path = constraints;
+			sourceTree = "<group>";
+		};
+		04B848D029FE6CE000B84F06 /* density */ = {
+			isa = PBXGroup;
+			children = (
+				04B848D129FE6CE600B84F06 /* kernels */,
+			);
+			path = density;
+			sourceTree = "<group>";
+		};
+		04B848D129FE6CE600B84F06 /* kernels */ = {
+			isa = PBXGroup;
+			children = (
+				04B848D229FE6CF600B84F06 /* Poly6Kernel.swift */,
+			);
+			path = kernels;
+			sourceTree = "<group>";
+		};
+		04B848D829FE6E6B00B84F06 /* solver */ = {
+			isa = PBXGroup;
+			children = (
+				04B848D929FE6E7400B84F06 /* BurstSolverImpl.swift */,
+			);
+			path = solver;
 			sourceTree = "<group>";
 		};
 		3E10763F2965212400F751A5 /* emitter */ = {
@@ -2549,6 +2644,7 @@
 			children = (
 				3EC0388E29321826002187DC /* bridging.h */,
 				3EF39B8729D181060083E20A /* RenderConfig.swift */,
+				04B848CC29FE69CB00B84F06 /* algorithm */,
 				3E717DF829C7B29D004FE1A0 /* codable */,
 				3EC03868293216F1002187DC /* enums */,
 				3EC0386729321551002187DC /* base */,
@@ -3590,37 +3686,52 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				04B848BF29FE602B00B84F06 /* BatchLUT.swift in Sources */,
 				04B8489F29FE391600B84F06 /* BurstAabb.swift in Sources */,
 				04B8486C29FD381900B84F06 /* DFNode.swift in Sources */,
 				04B848A929FE3CBE00B84F06 /* BurstCellSpan.swift in Sources */,
 				04B8486F29FD3A2F00B84F06 /* QueryResult.swift in Sources */,
+				04B848BD29FE44D500B84F06 /* IConstraintProvider.swift in Sources */,
 				04B8487A29FD3F4E00B84F06 /* ObiTriangleMeshContainer.swift in Sources */,
 				04B8487129FD3A7E00B84F06 /* QueryShape.swift in Sources */,
+				04B848B929FE436300B84F06 /* BurstContact.swift in Sources */,
+				04B848D529FE6D7F00B84F06 /* BurstLocalOptimization.swift in Sources */,
+				04B848CB29FE699900B84F06 /* ParticleGrid.swift in Sources */,
+				04B848D729FE6E0800B84F06 /* BurstSimplex.swift in Sources */,
 				04B8489629FD5A5300B84F06 /* ObiColliderBase.swift in Sources */,
+				04B848DA29FE6E7400B84F06 /* BurstSolverImpl.swift in Sources */,
+				04B848BB29FE44A100B84F06 /* BurstQueryResult.swift in Sources */,
 				04B848B429FE407B00B84F06 /* FluidInteraction.swift in Sources */,
 				04B848AD29FE3DD200B84F06 /* BurstQueryShape.swift in Sources */,
+				04B848C929FE66EC00B84F06 /* NativeMultilevelGrid.swift in Sources */,
 				04B8487429FD3DDB00B84F06 /* IBounded.swift in Sources */,
 				04B848A129FE3A1600B84F06 /* Float2+Extension.swift in Sources */,
+				04B848C329FE640C00B84F06 /* ConstraintSorter.swift in Sources */,
+				04B848C729FE667B00B84F06 /* FluidInteractionProvider.swift in Sources */,
 				04B848A329FE3A2900B84F06 /* Float3+Extension.swift in Sources */,
 				04B848AB29FE3D6600B84F06 /* BurstInertialFrame.swift in Sources */,
 				04B8484F29FD0BF800B84F06 /* Aabb.swift in Sources */,
 				04B848A529FE3A3100B84F06 /* Float4+Extension.swift in Sources */,
+				04B848D329FE6CF600B84F06 /* Poly6Kernel.swift in Sources */,
 				04B8487829FD3E5F00B84F06 /* BIH.swift in Sources */,
 				04B8489A29FE348400B84F06 /* Types.swift in Sources */,
 				04B848AF29FE3FE900B84F06 /* BurstRigidbody.swift in Sources */,
 				04B848A729FE3BA400B84F06 /* BurstAffineTransform.swift in Sources */,
 				04B8485C29FD149A00B84F06 /* ParticlePair.swift in Sources */,
 				04B8488029FD544100B84F06 /* ObiUtils.swift in Sources */,
+				04B848C529FE657D00B84F06 /* ContactProvider.swift in Sources */,
 				04B8485429FD0E3500B84F06 /* AffineTransform.swift in Sources */,
 				04B8486A29FD37C100B84F06 /* ASDF.swift in Sources */,
 				04B8485629FD13C200B84F06 /* CellSpan.swift in Sources */,
 				04B8489429FD590100B84F06 /* VoxelDistanceField.swift in Sources */,
+				04B848C129FE611F00B84F06 /* ConstraintBatcher.swift in Sources */,
 				04B8487629FD3DF300B84F06 /* BIHNode.swift in Sources */,
 				04B8485829FD13E900B84F06 /* VInt4.swift in Sources */,
 				04B8486029FD17D100B84F06 /* CollisionMaterial.swift in Sources */,
 				04B8485E29FD15C200B84F06 /* Oni.swift in Sources */,
 				04B8487D29FD400500B84F06 /* MeshVoxelizer.swift in Sources */,
 				04B8486729FD378200B84F06 /* ColliderRigidbody.swift in Sources */,
+				04B848B629FE40D000B84F06 /* GridHash.swift in Sources */,
 				04B8486529FD371B00B84F06 /* ColliderShape.swift in Sources */,
 				04B8485A29FD144B00B84F06 /* SimplexCounts.swift in Sources */,
 				04B848B229FE405000B84F06 /* IConstraint.swift in Sources */,
@@ -4023,6 +4134,7 @@
 				3EC92ADF2939C6A000423396 /* Extensions.swift in Sources */,
 				3EC039B0293218F0002187DC /* UpdateFlagManager.swift in Sources */,
 				3EC0391A2932186B002187DC /* MaterialParser.swift in Sources */,
+				04B848CE29FE69DC00B84F06 /* Queue.swift in Sources */,
 				3E8B00D029BB637A00A70123 /* CAnimationState.mm in Sources */,
 				3EC038F629321853002187DC /* CharacterController.swift in Sources */,
 				040F1E29293C865E008BDC8D /* UIElement.swift in Sources */,

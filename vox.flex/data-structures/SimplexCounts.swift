@@ -19,7 +19,7 @@ public struct SimplexCounts {
         self.triangleCount = triangleCount
     }
 
-    public func GetSimplexStartAndSize(index: Int, size: inout Int) -> Int {
+    public func GetSimplexStartAndSize(at index: Int, size: inout Int) -> Int {
         if index < pointCount {
             size = 1
             return index
