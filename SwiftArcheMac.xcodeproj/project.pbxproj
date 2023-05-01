@@ -281,6 +281,15 @@
 		04B84A6929FFE7DF00B84F06 /* ObiPath.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04B84A6829FFE7DF00B84F06 /* ObiPath.swift */; };
 		04B84A6B29FFE98000B84F06 /* ObiPathSmoother.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04B84A6A29FFE98000B84F06 /* ObiPathSmoother.swift */; };
 		04B84A6D29FFEACB00B84F06 /* ObiRopeBase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04B84A6C29FFEACB00B84F06 /* ObiRopeBase.swift */; };
+		04B84A6F29FFEBEB00B84F06 /* ObiRope.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04B84A6E29FFEBEB00B84F06 /* ObiRope.swift */; };
+		04B84A7129FFEBFC00B84F06 /* ObiRopeBlueprintBase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04B84A7029FFEBFC00B84F06 /* ObiRopeBlueprintBase.swift */; };
+		04B84A7329FFF3B600B84F06 /* ObiRopeBlueprint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04B84A7229FFF3B600B84F06 /* ObiRopeBlueprint.swift */; };
+		04B84A7529FFF3FA00B84F06 /* ObiRodBlueprint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04B84A7429FFF3FA00B84F06 /* ObiRodBlueprint.swift */; };
+		04B84A7729FFF43C00B84F06 /* ObiBoneBlueprint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04B84A7629FFF43C00B84F06 /* ObiBoneBlueprint.swift */; };
+		04B84A7929FFF4F400B84F06 /* ObiRod.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04B84A7829FFF4F400B84F06 /* ObiRod.swift */; };
+		04B84A7B29FFF50600B84F06 /* ObiBone.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04B84A7A29FFF50600B84F06 /* ObiBone.swift */; };
+		04B84A7D29FFF7D100B84F06 /* ObiRopeCursor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04B84A7C29FFF7D100B84F06 /* ObiRopeCursor.swift */; };
+		04B84A7F29FFF86600B84F06 /* ObiRopeReel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04B84A7E29FFF86600B84F06 /* ObiRopeReel.swift */; };
 		3E1076412965214100F751A5 /* point_emitter.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3E1076402965214100F751A5 /* point_emitter.metal */; };
 		3E107643296524CF00F751A5 /* samplers.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3E107642296524CF00F751A5 /* samplers.metal */; };
 		3E10764B29654BC800F751A5 /* gravity_force.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3E10764A29654BC800F751A5 /* gravity_force.metal */; };
@@ -1124,6 +1133,15 @@
 		04B84A6829FFE7DF00B84F06 /* ObiPath.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObiPath.swift; sourceTree = "<group>"; };
 		04B84A6A29FFE98000B84F06 /* ObiPathSmoother.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObiPathSmoother.swift; sourceTree = "<group>"; };
 		04B84A6C29FFEACB00B84F06 /* ObiRopeBase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObiRopeBase.swift; sourceTree = "<group>"; };
+		04B84A6E29FFEBEB00B84F06 /* ObiRope.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObiRope.swift; sourceTree = "<group>"; };
+		04B84A7029FFEBFC00B84F06 /* ObiRopeBlueprintBase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObiRopeBlueprintBase.swift; sourceTree = "<group>"; };
+		04B84A7229FFF3B600B84F06 /* ObiRopeBlueprint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObiRopeBlueprint.swift; sourceTree = "<group>"; };
+		04B84A7429FFF3FA00B84F06 /* ObiRodBlueprint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObiRodBlueprint.swift; sourceTree = "<group>"; };
+		04B84A7629FFF43C00B84F06 /* ObiBoneBlueprint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObiBoneBlueprint.swift; sourceTree = "<group>"; };
+		04B84A7829FFF4F400B84F06 /* ObiRod.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObiRod.swift; sourceTree = "<group>"; };
+		04B84A7A29FFF50600B84F06 /* ObiBone.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObiBone.swift; sourceTree = "<group>"; };
+		04B84A7C29FFF7D100B84F06 /* ObiRopeCursor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObiRopeCursor.swift; sourceTree = "<group>"; };
+		04B84A7E29FFF86600B84F06 /* ObiRopeReel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObiRopeReel.swift; sourceTree = "<group>"; };
 		3E0E0B422959C7F700B25625 /* hash_grid_visual.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = hash_grid_visual.metal; sourceTree = "<group>"; };
 		3E1076402965214100F751A5 /* point_emitter.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = point_emitter.metal; sourceTree = "<group>"; };
 		3E107642296524CF00F751A5 /* samplers.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = samplers.metal; sourceTree = "<group>"; };
@@ -2629,6 +2647,9 @@
 			isa = PBXGroup;
 			children = (
 				04B84A6C29FFEACB00B84F06 /* ObiRopeBase.swift */,
+				04B84A6E29FFEBEB00B84F06 /* ObiRope.swift */,
+				04B84A7829FFF4F400B84F06 /* ObiRod.swift */,
+				04B84A7A29FFF50600B84F06 /* ObiBone.swift */,
 			);
 			path = actors;
 			sourceTree = "<group>";
@@ -2636,6 +2657,10 @@
 		04B84A0629FF911B00B84F06 /* blueprints */ = {
 			isa = PBXGroup;
 			children = (
+				04B84A7029FFEBFC00B84F06 /* ObiRopeBlueprintBase.swift */,
+				04B84A7229FFF3B600B84F06 /* ObiRopeBlueprint.swift */,
+				04B84A7429FFF3FA00B84F06 /* ObiRodBlueprint.swift */,
+				04B84A7629FFF43C00B84F06 /* ObiBoneBlueprint.swift */,
 			);
 			path = blueprints;
 			sourceTree = "<group>";
@@ -2654,6 +2679,8 @@
 			isa = PBXGroup;
 			children = (
 				04B84A3F29FFB89700B84F06 /* ObiRopeAttach.swift */,
+				04B84A7C29FFF7D100B84F06 /* ObiRopeCursor.swift */,
+				04B84A7E29FFF86600B84F06 /* ObiRopeReel.swift */,
 			);
 			path = utils;
 			sourceTree = "<group>";
@@ -4613,6 +4640,7 @@
 				04B8495F29FF2DE400B84F06 /* BurstPinConstraintsBatch.swift in Sources */,
 				04B8491229FEA0CA00B84F06 /* IPinConstraintsBatchImpl.swift in Sources */,
 				04B848BB29FE44A100B84F06 /* BurstQueryResult.swift in Sources */,
+				04B84A7F29FFF86600B84F06 /* ObiRopeReel.swift in Sources */,
 				04B8495229FF297E00B84F06 /* ApplyBatchedCollisionConstraintsBatchJob.swift in Sources */,
 				04B84A1629FF9F7E00B84F06 /* ObiTriangleSkinMap.swift in Sources */,
 				04B848E929FE883B00B84F06 /* BurstColliderShape.swift in Sources */,
@@ -4631,6 +4659,7 @@
 				04B848A129FE3A1600B84F06 /* Float2+Extension.swift in Sources */,
 				04B848C329FE640C00B84F06 /* ConstraintSorter.swift in Sources */,
 				04B84A5B29FFE4E000B84F06 /* ObiMassDataChannel.swift in Sources */,
+				04B84A7329FFF3B600B84F06 /* ObiRopeBlueprint.swift in Sources */,
 				04B84A2429FFA49D00B84F06 /* ObiEmitterBlueprintBase.swift in Sources */,
 				04B848C729FE667B00B84F06 /* FluidInteractionProvider.swift in Sources */,
 				04B848A329FE3A2900B84F06 /* Float3+Extension.swift in Sources */,
@@ -4647,6 +4676,7 @@
 				04B849BB29FF67D500B84F06 /* ObiColliderWorld.swift in Sources */,
 				04B8499E29FF4E4800B84F06 /* ObiActor.swift in Sources */,
 				04B8497829FF36E400B84F06 /* BurstTetherConstraintsBatch.swift in Sources */,
+				04B84A7929FFF4F400B84F06 /* ObiRod.swift in Sources */,
 				04B849C429FF6DDD00B84F06 /* ObiAerodynamicConstraintsBatch.swift in Sources */,
 				04B8497629FF36DC00B84F06 /* BurstTetherConstraints.swift in Sources */,
 				04B84A6929FFE7DF00B84F06 /* ObiPath.swift in Sources */,
@@ -4686,12 +4716,14 @@
 				04B848E329FE868E00B84F06 /* SpatialQueryJob.swift in Sources */,
 				04B84A3629FFAA8100B84F06 /* ObiEmitterShapeSquare.swift in Sources */,
 				04B8498F29FF486B00B84F06 /* UpdateNormalsJob.swift in Sources */,
+				04B84A7129FFEBFC00B84F06 /* ObiRopeBlueprintBase.swift in Sources */,
 				04B8491829FEA17B00B84F06 /* IStitchConstraintsBatchImpl.swift in Sources */,
 				04B84A2629FFA85200B84F06 /* ObiFluidEmitterBlueprint.swift in Sources */,
 				04B848AF29FE3FE900B84F06 /* BurstRigidbody.swift in Sources */,
 				04B848A729FE3BA400B84F06 /* BurstAffineTransform.swift in Sources */,
 				04B8491A29FEA19F00B84F06 /* IStretchShearConstraintsBatchImpl.swift in Sources */,
 				04B84A1829FFA2EA00B84F06 /* ObiSkinnedCloth.swift in Sources */,
+				04B84A7B29FFF50600B84F06 /* ObiBone.swift in Sources */,
 				04B848F329FE8AF700B84F06 /* ObiDistanceFieldContainer.swift in Sources */,
 				04B848E529FE87A700B84F06 /* IBurstCollider.swift in Sources */,
 				04B8485C29FD149A00B84F06 /* ParticlePair.swift in Sources */,
@@ -4719,6 +4751,7 @@
 				04B848FB29FE8C8700B84F06 /* ObiHeightFieldContainer.swift in Sources */,
 				04B84A2A29FFA90C00B84F06 /* ObiEmitterShapeCube.swift in Sources */,
 				04B84A3C29FFAB9700B84F06 /* ObiSoftbodySurfaceBlueprint.swift in Sources */,
+				04B84A7729FFF43C00B84F06 /* ObiBoneBlueprint.swift in Sources */,
 				04B84A3029FFA9C500B84F06 /* ObiEmitterShapeImage.swift in Sources */,
 				04B84A5529FFE2F300B84F06 /* ObiPathDataChannelIdentity.swift in Sources */,
 				04B849DA29FF86B400B84F06 /* ObiSkinConstraintsData.swift in Sources */,
@@ -4743,6 +4776,7 @@
 				04B8496C29FF323B00B84F06 /* BurstStitchConstraints.swift in Sources */,
 				04B8491C29FEA1CF00B84F06 /* ITetherConstraintsBatchImpl.swift in Sources */,
 				04B8490329FE90A400B84F06 /* IConstraintsBatchImpl.swift in Sources */,
+				04B84A6F29FFEBEB00B84F06 /* ObiRope.swift in Sources */,
 				04B8492129FEA26800B84F06 /* BurstAerodynamicConstraints.swift in Sources */,
 				04B849F429FF8D5200B84F06 /* GraphColoring.swift in Sources */,
 				04B8485829FD13E900B84F06 /* VInt4.swift in Sources */,
@@ -4755,6 +4789,7 @@
 				04B84A1C29FFA2FC00B84F06 /* ObiSkinnedClothBlueprint.swift in Sources */,
 				04B849B129FF65A400B84F06 /* ObiBoxShapeTracker.swift in Sources */,
 				04B849F229FF8D0B00B84F06 /* StructuralConstraint.swift in Sources */,
+				04B84A7529FFF3FA00B84F06 /* ObiRodBlueprint.swift in Sources */,
 				04B84A5F29FFE54F00B84F06 /* ObiRotationalMassDataChannel.swift in Sources */,
 				04B8486029FD17D100B84F06 /* CollisionMaterial.swift in Sources */,
 				04B849EE29FF871E00B84F06 /* ObiTetherConstraintsBatch.swift in Sources */,
@@ -4764,6 +4799,7 @@
 				04B84A4B29FFDF3F00B84F06 /* ObiConstantInterpolator.swift in Sources */,
 				04B84A2C29FFA96D00B84F06 /* ObiEmitterShapeDisk.swift in Sources */,
 				04B84A5729FFE47300B84F06 /* ObiColorDataChannel.swift in Sources */,
+				04B84A7D29FFF7D100B84F06 /* ObiRopeCursor.swift in Sources */,
 				04B8495A29FF29A000B84F06 /* BurstParticleFrictionConstraintsBatch.swift in Sources */,
 				04B849CE29FF866C00B84F06 /* ObiBendTwistConstraintsBatch.swift in Sources */,
 				04B8499C29FF4DD300B84F06 /* IObiParticleCollection.swift in Sources */,
