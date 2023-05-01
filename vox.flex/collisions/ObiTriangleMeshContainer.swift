@@ -5,6 +5,7 @@
 //  property of any third parties.
 
 import Math
+import vox_render
 
 public struct Triangle: IBounded {
     public var i1: Int
@@ -27,6 +28,13 @@ public struct Triangle: IBounded {
     }
 }
 
+public class ObiTriangleMeshHandle: ObiResourceHandle<ModelMesh> {
+    public init(mesh: ModelMesh, index: Int = -1) {
+        super.init(index: index)
+        owner = mesh
+    }
+}
+
 public struct TriangleMeshHeader // we need to use the header in the backend, so it must be a struct.
 {
     public var firstNode: Int
@@ -45,4 +53,17 @@ public struct TriangleMeshHeader // we need to use the header in the backend, so
         self.firstVertex = firstVertex
         self.vertexCount = vertexCount
     }
+}
+
+public class ObiTriangleMeshContainer {
+    /// dictionary indexed by mesh, so that we don't generate data for the same mesh multiple times.
+//    public var handles: [Mesh: ObiTriangleMeshHandle] = [:]
+
+    /// One header per mesh.
+    public var headers: [TriangleMeshHeader] = []
+    public var bihNodes: [BIHNode] = []
+    public var triangles: [Triangle] = []
+    public var vertices: [Vector3] = []
+
+    public init() {}
 }

@@ -24,12 +24,10 @@ public protocol IColliderWorldImpl {
                              nodes: [BIHNode],
                              triangles: [Triangle],
                              vertices: [Vector3])
-    func SetEdgeMeshData(headers: [EdgeMeshHeader],
-                         nodes: [BIHNode],
-                         triangles: [Edge],
-                         vertices: [Vector2])
+
     func SetDistanceFieldData(headers: [DistanceFieldHeader],
                               nodes: [DFNode])
+
     func SetHeightFieldData(headers: [HeightFieldHeader],
                             samples: [Float])
 }

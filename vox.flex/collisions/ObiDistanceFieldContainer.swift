@@ -6,6 +6,13 @@
 
 import vox_render
 
+public class ObiDistanceFieldHandle: ObiResourceHandle<ObiDistanceField> {
+    public init(field: ObiDistanceField, index: Int = -1) {
+        super.init(index: index)
+        owner = field
+    }
+}
+
 /// we need to use the header in the backend, so it must be a struct./
 public struct DistanceFieldHeader {
     public var firstNode: Int
@@ -15,4 +22,17 @@ public struct DistanceFieldHeader {
         self.firstNode = firstNode
         self.nodeCount = nodeCount
     }
+}
+
+public class ObiDistanceFieldContainer {
+    /// dictionary indexed by asset, so that we don't generate data for the same distance field multiple times.
+    public var handles: [ObiDistanceField: ObiDistanceFieldHandle] = [:]
+
+    /// One header per distance field.
+    public var headers: [DistanceFieldHeader] = []
+    public var dfNodes: [DFNode] = []
+
+    public init() {}
+
+    public func DestroyDistanceField(handle _: ObiDistanceFieldHandle) {}
 }

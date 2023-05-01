@@ -13,4 +13,33 @@ public class ObiColliderBase: Script {
     private var material: ObiCollisionMaterial?
 
     private var filter: Int = 0
+
+    var obiRigidbody: ObiRigidbodyBase?
+    var wasUnityColliderEnabled = true
+    var dirty = false
+
+    /// tracker object used to determine when to update the collider's shape
+    var tracker: ObiShapeTracker?
+
+    /// Creates an OniColliderTracker of the appropiate type.
+    func CreateTracker() {}
+
+    func GetUnityCollider(enabled _: Bool) -> Component? {
+        nil
+    }
+
+    func FindSourceCollider() {}
+
+    func CreateRigidbody() {}
+
+    func AddCollider() {}
+
+    func RemoveCollider() {}
+
+    /// Check if the collider transform or its shape have changed any relevant property, and update their Oni counterparts.
+    public func UpdateIfNeeded() {}
+
+    override public func onEnable() {}
+
+    override public func onDisable() {}
 }
