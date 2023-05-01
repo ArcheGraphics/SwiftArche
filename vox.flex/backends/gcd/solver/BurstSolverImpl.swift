@@ -129,4 +129,68 @@ public class BurstSolverImpl: ISolverImpl {
                                              scale: scale.internalValue,
                                              rotation: rotation.internalValue)
     }
+
+    public func UpdateFrame(translation _: Vector4, scale _: Vector4, rotation _: Quaternion, deltaTime _: Float) {}
+
+    public func ApplyFrame(worldLinearInertiaScale _: Float, worldAngularInertiaScale _: Float, deltaTime _: Float) {}
+
+    public func ParticleCountChanged(solver _: ObiSolver) {}
+
+    public func SetActiveParticles(indices _: [Int]) {}
+
+    public func InterpolateDiffuseProperties(properties _: [Vector4], diffusePositions _: [Vector4],
+                                             diffuseProperties _: [Vector4], neighbourCount _: [Int], diffuseCount _: Int) {}
+
+    public func SetRigidbodyArrays(solver _: ObiSolver) {}
+
+    public func CreateConstraintsBatch(type: Oni.ConstraintType) -> IConstraintsBatchImpl {
+        return constraints[type.rawValue].CreateConstraintsBatch()!
+    }
+
+    public func DestroyConstraintsBatch(batch _: IConstraintsBatchImpl) {}
+
+    public func GetConstraintCount(type _: Oni.ConstraintType) -> Int {
+        0
+    }
+
+    public func GetCollisionContacts(contacts _: [Oni.Contact], count _: Int) {}
+
+    public func GetParticleCollisionContacts(contacts _: [Oni.Contact], count _: Int) {}
+
+    public func SetConstraintGroupParameters(type _: Oni.ConstraintType, parameters _: Oni.ConstraintParameters) {}
+
+    public func CollisionDetection(stepTime _: Float) {}
+
+    public func Substep(stepTime _: Float, substepTime _: Float, substeps _: Int) {}
+
+    public func ApplyInterpolation(startPositions _: [Vector4], startOrientations _: [Quaternion],
+                                   stepTime _: Float, unsimulatedTime _: Float) {}
+
+    public func GetDeformableTriangleCount() -> Int {
+        0
+    }
+
+    public func SetDeformableTriangles(indices _: [Int], num _: Int, destOffset _: Int) {}
+
+    public func RemoveDeformableTriangles(num _: Int, sourceOffset _: Int) -> Int {
+        0
+    }
+
+    public func SetSimplices(simplices _: [Int], counts _: SimplexCounts) {}
+
+    public func SetParameters(parameters _: Oni.SolverParameters) {}
+
+    public func GetBounds(min _: inout Vector3, max _: inout Vector3) {}
+
+    public func ResetForces() {}
+
+    public func GetParticleGridSize() -> Int {
+        0
+    }
+
+    public func GetParticleGrid(cells _: [Aabb]) {}
+
+    public func SpatialQuery(shapes _: [QueryShape], transforms _: [AffineTransform], results _: [QueryResult]) {}
+
+    public func ReleaseJobHandles() {}
 }

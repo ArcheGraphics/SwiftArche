@@ -188,6 +188,9 @@
 		04B8499129FF487300B84F06 /* UpdatePositionsJob.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04B8499029FF487300B84F06 /* UpdatePositionsJob.swift */; };
 		04B8499329FF487B00B84F06 /* UpdatePrincipalAxisJob.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04B8499229FF487B00B84F06 /* UpdatePrincipalAxisJob.swift */; };
 		04B8499529FF488300B84F06 /* UpdateVelocitiesJob.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04B8499429FF488300B84F06 /* UpdateVelocitiesJob.swift */; };
+		04B8499729FF4BA200B84F06 /* BurstIntegration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04B8499629FF4BA200B84F06 /* BurstIntegration.swift */; };
+		04B8499829FF4C2A00B84F06 /* IColliderWorldImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04B8484B29FD0B1700B84F06 /* IColliderWorldImpl.swift */; };
+		04B8499929FF4D8000B84F06 /* IObiBackend.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04B8484429FD099300B84F06 /* IObiBackend.swift */; };
 		3E1076412965214100F751A5 /* point_emitter.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3E1076402965214100F751A5 /* point_emitter.metal */; };
 		3E107643296524CF00F751A5 /* samplers.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3E107642296524CF00F751A5 /* samplers.metal */; };
 		3E10764B29654BC800F751A5 /* gravity_force.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3E10764A29654BC800F751A5 /* gravity_force.metal */; };
@@ -940,6 +943,7 @@
 		04B8499029FF487300B84F06 /* UpdatePositionsJob.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdatePositionsJob.swift; sourceTree = "<group>"; };
 		04B8499229FF487B00B84F06 /* UpdatePrincipalAxisJob.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdatePrincipalAxisJob.swift; sourceTree = "<group>"; };
 		04B8499429FF488300B84F06 /* UpdateVelocitiesJob.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateVelocitiesJob.swift; sourceTree = "<group>"; };
+		04B8499629FF4BA200B84F06 /* BurstIntegration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BurstIntegration.swift; sourceTree = "<group>"; };
 		3E0E0B422959C7F700B25625 /* hash_grid_visual.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = hash_grid_visual.metal; sourceTree = "<group>"; };
 		3E1076402965214100F751A5 /* point_emitter.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = point_emitter.metal; sourceTree = "<group>"; };
 		3E107642296524CF00F751A5 /* samplers.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = samplers.metal; sourceTree = "<group>"; };
@@ -1944,6 +1948,7 @@
 				04B8489D29FE38F800B84F06 /* collisions */,
 				04B8489C29FE38F100B84F06 /* data-structures */,
 				04B848FC29FE8CC700B84F06 /* BurstMath.swift */,
+				04B8499629FF4BA200B84F06 /* BurstIntegration.swift */,
 			);
 			path = gcd;
 			sourceTree = "<group>";
@@ -4132,6 +4137,7 @@
 				04B8497829FF36E400B84F06 /* BurstTetherConstraintsBatch.swift in Sources */,
 				04B8497629FF36DC00B84F06 /* BurstTetherConstraints.swift in Sources */,
 				04B8493C29FEB14100B84F06 /* ApplyCollisionConstraintsBatchJob.swift in Sources */,
+				04B8499929FF4D8000B84F06 /* IObiBackend.swift in Sources */,
 				04B8484F29FD0BF800B84F06 /* Aabb.swift in Sources */,
 				04B8490A29FE915C00B84F06 /* IBendConstraintsBatchImpl.swift in Sources */,
 				04B848A529FE3A3100B84F06 /* Float4+Extension.swift in Sources */,
@@ -4144,6 +4150,7 @@
 				04B8496229FF2E8500B84F06 /* BurstShapeMatchingConstraints.swift in Sources */,
 				04B8498B29FF485C00B84F06 /* PredictPositionsJob.swift in Sources */,
 				04B8497D29FF381D00B84F06 /* BurstVolumeConstraintsBatch.swift in Sources */,
+				04B8499829FF4C2A00B84F06 /* IColliderWorldImpl.swift in Sources */,
 				04B8494429FEB16200B84F06 /* BurstColliderFrictionConstraintsBatch.swift in Sources */,
 				04B8498929FF485300B84F06 /* InterpolationJob.swift in Sources */,
 				04B8491E29FEA20500B84F06 /* IVolumeConstraintsBatchImpl.swift in Sources */,
@@ -4161,6 +4168,7 @@
 				04B8493229FEAA6100B84F06 /* BurstBendTwistConstraints.swift in Sources */,
 				04B8493429FEAA6900B84F06 /* BurstBendTwistConstraintsBatch.swift in Sources */,
 				04B848FF29FE8F5D00B84F06 /* BurstSphere.swift in Sources */,
+				04B8499729FF4BA200B84F06 /* BurstIntegration.swift in Sources */,
 				04B8498729FF484B00B84F06 /* FindFluidParticlesJob.swift in Sources */,
 				04B848F529FE8B3000B84F06 /* BurstEdgeMesh.swift in Sources */,
 				04B8491429FEA0FD00B84F06 /* IShapeMatchingConstraintsBatchImpl.swift in Sources */,

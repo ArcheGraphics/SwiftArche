@@ -4,31 +4,32 @@
 //  personal capacity and am not conveying any rights to any intellectual
 //  property of any third parties.
 
-import Foundation
+import Math
+import vox_render
 
 public protocol IColliderWorldImpl {
     var referenceCount: Int { get }
 
     func UpdateWorld(deltaTime: Float)
 
-    func SetColliders(shapes: ObiNativeColliderShapeList,
-                      bounds: ObiNativeAabbList,
-                      transforms: ObiNativeAffineTransformList,
+    func SetColliders(shapes: [ColliderShape],
+                      bounds: [Aabb],
+                      transforms: [AffineTransform],
                       count: Int)
-    func SetRigidbodies(rigidbody: ObiNativeRigidbodyList)
+    func SetRigidbodies(rigidbody: [ColliderRigidbody])
 
-    func SetCollisionMaterials(materials: ObiNativeCollisionMaterialList)
+    func SetCollisionMaterials(materials: [CollisionMaterial])
 
-    func SetTriangleMeshData(headers: ObiNativeTriangleMeshHeaderList,
-                             nodes: ObiNativeBIHNodeList,
-                             triangles: ObiNativeTriangleList,
-                             vertices: ObiNativeVector3List)
-    func SetEdgeMeshData(headers: ObiNativeEdgeMeshHeaderList,
-                         nodes: ObiNativeBIHNodeList,
-                         triangles: ObiNativeEdgeList,
-                         vertices: ObiNativeVector2List)
-    func SetDistanceFieldData(headers: ObiNativeDistanceFieldHeaderList,
-                              nodes: ObiNativeDFNodeList)
-    func SetHeightFieldData(headers: ObiNativeHeightFieldHeaderList,
-                            samples: ObiNativeFloatList)
+    func SetTriangleMeshData(headers: [TriangleMeshHeader],
+                             nodes: [BIHNode],
+                             triangles: [Triangle],
+                             vertices: [Vector3])
+    func SetEdgeMeshData(headers: [EdgeMeshHeader],
+                         nodes: [BIHNode],
+                         triangles: [Edge],
+                         vertices: [Vector2])
+    func SetDistanceFieldData(headers: [DistanceFieldHeader],
+                              nodes: [DFNode])
+    func SetHeightFieldData(headers: [HeightFieldHeader],
+                            samples: [Float])
 }
