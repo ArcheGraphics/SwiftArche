@@ -12,12 +12,12 @@ public protocol ITetherConstraintsUser {
         set
     }
 
-    var tetherCompliance: Bool {
+    var tetherCompliance: Float {
         get
         set
     }
 
-    var tetherScale: Bool {
+    var tetherScale: Float {
         get
         set
     }
