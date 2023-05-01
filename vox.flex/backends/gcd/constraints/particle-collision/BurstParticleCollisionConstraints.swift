@@ -6,26 +6,26 @@
 
 import Math
 
-public class BurstColliderFrictionConstraints: BurstConstraintsImpl<BurstColliderFrictionConstraintsBatch>
+public class BurstParticleCollisionConstraints: BurstConstraintsImpl<BurstParticleCollisionConstraintsBatch>
 {
     public init(solver: BurstSolverImpl) {
-        super.init(solver: solver, constraintType: Oni.ConstraintType.Friction)
+        super.init(solver: solver, constraintType: Oni.ConstraintType.ParticleCollision)
     }
 
     override public func CreateConstraintsBatch() -> IConstraintsBatchImpl {
-        let dataBatch = BurstColliderFrictionConstraintsBatch(constraints: self)
+        let dataBatch = BurstParticleCollisionConstraintsBatch(constraints: self)
         batches.append(dataBatch)
         return dataBatch
     }
 
     override public func RemoveBatch(batch: IConstraintsBatchImpl) {
         batches.removeAll { b in
-            b === (batch as! BurstColliderFrictionConstraintsBatch)
+            b === (batch as! BurstParticleCollisionConstraintsBatch)
         }
         batch.Destroy()
     }
 
     override public func GetConstraintCount() -> Int {
-        return (solver as! BurstSolverImpl).colliderContacts.count
+        return (solver as! BurstSolverImpl).particleContacts.count
     }
 }

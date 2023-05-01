@@ -50,7 +50,7 @@ public class BurstSolverImpl: ISolverImpl {
 
     // particle contact generation:
     public var particleGrid: ParticleGrid
-//    public var particleContacts: BurstContact
+    public lazy var particleContacts: [BurstContact] = []
     public lazy var particleBatchData: [BatchData] = []
 
     // fluid interaction generation:

@@ -155,6 +155,27 @@
 		04B8494629FEBDDF00B84F06 /* SpikyKernel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04B8494529FEBDDF00B84F06 /* SpikyKernel.swift */; };
 		04B8494829FEBE2900B84F06 /* BurstDensityConstraints.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04B8494729FEBE2900B84F06 /* BurstDensityConstraints.swift */; };
 		04B8494A29FEBE3300B84F06 /* BurstDensityConstraintsBatch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04B8494929FEBE3300B84F06 /* BurstDensityConstraintsBatch.swift */; };
+		04B8494D29FEC2D400B84F06 /* BurstDistanceConstraints.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04B8494C29FEC2D400B84F06 /* BurstDistanceConstraints.swift */; };
+		04B8494F29FEC2DC00B84F06 /* BurstDistanceConstraintsBatch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04B8494E29FEC2DC00B84F06 /* BurstDistanceConstraintsBatch.swift */; };
+		04B8495229FF297E00B84F06 /* ApplyBatchedCollisionConstraintsBatchJob.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04B8495129FF297E00B84F06 /* ApplyBatchedCollisionConstraintsBatchJob.swift */; };
+		04B8495429FF298700B84F06 /* BurstParticleCollisionConstraints.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04B8495329FF298700B84F06 /* BurstParticleCollisionConstraints.swift */; };
+		04B8495629FF298F00B84F06 /* BurstParticleCollisionConstraintsBatch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04B8495529FF298F00B84F06 /* BurstParticleCollisionConstraintsBatch.swift */; };
+		04B8495829FF299800B84F06 /* BurstParticleFrictionConstraints.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04B8495729FF299800B84F06 /* BurstParticleFrictionConstraints.swift */; };
+		04B8495A29FF29A000B84F06 /* BurstParticleFrictionConstraintsBatch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04B8495929FF29A000B84F06 /* BurstParticleFrictionConstraintsBatch.swift */; };
+		04B8495D29FF2DDC00B84F06 /* BurstPinConstraints.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04B8495C29FF2DDC00B84F06 /* BurstPinConstraints.swift */; };
+		04B8495F29FF2DE400B84F06 /* BurstPinConstraintsBatch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04B8495E29FF2DE400B84F06 /* BurstPinConstraintsBatch.swift */; };
+		04B8496229FF2E8500B84F06 /* BurstShapeMatchingConstraints.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04B8496129FF2E8500B84F06 /* BurstShapeMatchingConstraints.swift */; };
+		04B8496429FF2E8E00B84F06 /* BurstShapeMatchingConstraintsBatch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04B8496329FF2E8E00B84F06 /* BurstShapeMatchingConstraintsBatch.swift */; };
+		04B8496729FF30F200B84F06 /* BurstSkinConstraints.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04B8496629FF30F200B84F06 /* BurstSkinConstraints.swift */; };
+		04B8496929FF30F900B84F06 /* BurstSkinConstraintsBatch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04B8496829FF30F900B84F06 /* BurstSkinConstraintsBatch.swift */; };
+		04B8496C29FF323B00B84F06 /* BurstStitchConstraints.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04B8496B29FF323B00B84F06 /* BurstStitchConstraints.swift */; };
+		04B8496E29FF324300B84F06 /* BurstStitchConstraintsBatch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04B8496D29FF324300B84F06 /* BurstStitchConstraintsBatch.swift */; };
+		04B8497129FF335200B84F06 /* BurstStretchShearConstraints.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04B8497029FF335200B84F06 /* BurstStretchShearConstraints.swift */; };
+		04B8497329FF335A00B84F06 /* BurstStretchShearConstraintsBatch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04B8497229FF335A00B84F06 /* BurstStretchShearConstraintsBatch.swift */; };
+		04B8497629FF36DC00B84F06 /* BurstTetherConstraints.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04B8497529FF36DC00B84F06 /* BurstTetherConstraints.swift */; };
+		04B8497829FF36E400B84F06 /* BurstTetherConstraintsBatch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04B8497729FF36E400B84F06 /* BurstTetherConstraintsBatch.swift */; };
+		04B8497B29FF381300B84F06 /* BurstVolumeConstraints.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04B8497A29FF381300B84F06 /* BurstVolumeConstraints.swift */; };
+		04B8497D29FF381D00B84F06 /* BurstVolumeConstraintsBatch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04B8497C29FF381D00B84F06 /* BurstVolumeConstraintsBatch.swift */; };
 		3E1076412965214100F751A5 /* point_emitter.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3E1076402965214100F751A5 /* point_emitter.metal */; };
 		3E107643296524CF00F751A5 /* samplers.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3E107642296524CF00F751A5 /* samplers.metal */; };
 		3E10764B29654BC800F751A5 /* gravity_force.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3E10764A29654BC800F751A5 /* gravity_force.metal */; };
@@ -874,6 +895,27 @@
 		04B8494529FEBDDF00B84F06 /* SpikyKernel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpikyKernel.swift; sourceTree = "<group>"; };
 		04B8494729FEBE2900B84F06 /* BurstDensityConstraints.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BurstDensityConstraints.swift; sourceTree = "<group>"; };
 		04B8494929FEBE3300B84F06 /* BurstDensityConstraintsBatch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BurstDensityConstraintsBatch.swift; sourceTree = "<group>"; };
+		04B8494C29FEC2D400B84F06 /* BurstDistanceConstraints.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BurstDistanceConstraints.swift; sourceTree = "<group>"; };
+		04B8494E29FEC2DC00B84F06 /* BurstDistanceConstraintsBatch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BurstDistanceConstraintsBatch.swift; sourceTree = "<group>"; };
+		04B8495129FF297E00B84F06 /* ApplyBatchedCollisionConstraintsBatchJob.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApplyBatchedCollisionConstraintsBatchJob.swift; sourceTree = "<group>"; };
+		04B8495329FF298700B84F06 /* BurstParticleCollisionConstraints.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BurstParticleCollisionConstraints.swift; sourceTree = "<group>"; };
+		04B8495529FF298F00B84F06 /* BurstParticleCollisionConstraintsBatch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BurstParticleCollisionConstraintsBatch.swift; sourceTree = "<group>"; };
+		04B8495729FF299800B84F06 /* BurstParticleFrictionConstraints.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BurstParticleFrictionConstraints.swift; sourceTree = "<group>"; };
+		04B8495929FF29A000B84F06 /* BurstParticleFrictionConstraintsBatch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BurstParticleFrictionConstraintsBatch.swift; sourceTree = "<group>"; };
+		04B8495C29FF2DDC00B84F06 /* BurstPinConstraints.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BurstPinConstraints.swift; sourceTree = "<group>"; };
+		04B8495E29FF2DE400B84F06 /* BurstPinConstraintsBatch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BurstPinConstraintsBatch.swift; sourceTree = "<group>"; };
+		04B8496129FF2E8500B84F06 /* BurstShapeMatchingConstraints.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BurstShapeMatchingConstraints.swift; sourceTree = "<group>"; };
+		04B8496329FF2E8E00B84F06 /* BurstShapeMatchingConstraintsBatch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BurstShapeMatchingConstraintsBatch.swift; sourceTree = "<group>"; };
+		04B8496629FF30F200B84F06 /* BurstSkinConstraints.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BurstSkinConstraints.swift; sourceTree = "<group>"; };
+		04B8496829FF30F900B84F06 /* BurstSkinConstraintsBatch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BurstSkinConstraintsBatch.swift; sourceTree = "<group>"; };
+		04B8496B29FF323B00B84F06 /* BurstStitchConstraints.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BurstStitchConstraints.swift; sourceTree = "<group>"; };
+		04B8496D29FF324300B84F06 /* BurstStitchConstraintsBatch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BurstStitchConstraintsBatch.swift; sourceTree = "<group>"; };
+		04B8497029FF335200B84F06 /* BurstStretchShearConstraints.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BurstStretchShearConstraints.swift; sourceTree = "<group>"; };
+		04B8497229FF335A00B84F06 /* BurstStretchShearConstraintsBatch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BurstStretchShearConstraintsBatch.swift; sourceTree = "<group>"; };
+		04B8497529FF36DC00B84F06 /* BurstTetherConstraints.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BurstTetherConstraints.swift; sourceTree = "<group>"; };
+		04B8497729FF36E400B84F06 /* BurstTetherConstraintsBatch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BurstTetherConstraintsBatch.swift; sourceTree = "<group>"; };
+		04B8497A29FF381300B84F06 /* BurstVolumeConstraints.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BurstVolumeConstraints.swift; sourceTree = "<group>"; };
+		04B8497C29FF381D00B84F06 /* BurstVolumeConstraintsBatch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BurstVolumeConstraintsBatch.swift; sourceTree = "<group>"; };
 		3E0E0B422959C7F700B25625 /* hash_grid_visual.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = hash_grid_visual.metal; sourceTree = "<group>"; };
 		3E1076402965214100F751A5 /* point_emitter.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = point_emitter.metal; sourceTree = "<group>"; };
 		3E107642296524CF00F751A5 /* samplers.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = samplers.metal; sourceTree = "<group>"; };
@@ -1960,7 +2002,16 @@
 				04B8493029FEAA4F00B84F06 /* bend-twist */,
 				04B8493529FEAD3800B84F06 /* chain */,
 				04B8493A29FEB13000B84F06 /* collider-collision */,
+				04B8495029FF296500B84F06 /* particle-collision */,
 				04B848D029FE6CE000B84F06 /* density */,
+				04B8494B29FEC2C800B84F06 /* distance */,
+				04B8495B29FF2DCD00B84F06 /* pin */,
+				04B8496029FF2E7600B84F06 /* shape-matching */,
+				04B8496529FF30E700B84F06 /* skin */,
+				04B8496A29FF322F00B84F06 /* stitch */,
+				04B8496F29FF334500B84F06 /* stretch-shear */,
+				04B8497429FF36CF00B84F06 /* tether */,
+				04B8497929FF380700B84F06 /* volume */,
 				04B8492229FEA29600B84F06 /* BurstConstraintsBatchImpl.swift */,
 				04B8492429FEA2FC00B84F06 /* IBurstConstraintsImpl.swift */,
 			);
@@ -2059,6 +2110,90 @@
 				04B8494329FEB16200B84F06 /* BurstColliderFrictionConstraintsBatch.swift */,
 			);
 			path = "collider-collision";
+			sourceTree = "<group>";
+		};
+		04B8494B29FEC2C800B84F06 /* distance */ = {
+			isa = PBXGroup;
+			children = (
+				04B8494C29FEC2D400B84F06 /* BurstDistanceConstraints.swift */,
+				04B8494E29FEC2DC00B84F06 /* BurstDistanceConstraintsBatch.swift */,
+			);
+			path = distance;
+			sourceTree = "<group>";
+		};
+		04B8495029FF296500B84F06 /* particle-collision */ = {
+			isa = PBXGroup;
+			children = (
+				04B8495129FF297E00B84F06 /* ApplyBatchedCollisionConstraintsBatchJob.swift */,
+				04B8495329FF298700B84F06 /* BurstParticleCollisionConstraints.swift */,
+				04B8495529FF298F00B84F06 /* BurstParticleCollisionConstraintsBatch.swift */,
+				04B8495729FF299800B84F06 /* BurstParticleFrictionConstraints.swift */,
+				04B8495929FF29A000B84F06 /* BurstParticleFrictionConstraintsBatch.swift */,
+			);
+			path = "particle-collision";
+			sourceTree = "<group>";
+		};
+		04B8495B29FF2DCD00B84F06 /* pin */ = {
+			isa = PBXGroup;
+			children = (
+				04B8495C29FF2DDC00B84F06 /* BurstPinConstraints.swift */,
+				04B8495E29FF2DE400B84F06 /* BurstPinConstraintsBatch.swift */,
+			);
+			path = pin;
+			sourceTree = "<group>";
+		};
+		04B8496029FF2E7600B84F06 /* shape-matching */ = {
+			isa = PBXGroup;
+			children = (
+				04B8496129FF2E8500B84F06 /* BurstShapeMatchingConstraints.swift */,
+				04B8496329FF2E8E00B84F06 /* BurstShapeMatchingConstraintsBatch.swift */,
+			);
+			path = "shape-matching";
+			sourceTree = "<group>";
+		};
+		04B8496529FF30E700B84F06 /* skin */ = {
+			isa = PBXGroup;
+			children = (
+				04B8496629FF30F200B84F06 /* BurstSkinConstraints.swift */,
+				04B8496829FF30F900B84F06 /* BurstSkinConstraintsBatch.swift */,
+			);
+			path = skin;
+			sourceTree = "<group>";
+		};
+		04B8496A29FF322F00B84F06 /* stitch */ = {
+			isa = PBXGroup;
+			children = (
+				04B8496B29FF323B00B84F06 /* BurstStitchConstraints.swift */,
+				04B8496D29FF324300B84F06 /* BurstStitchConstraintsBatch.swift */,
+			);
+			path = stitch;
+			sourceTree = "<group>";
+		};
+		04B8496F29FF334500B84F06 /* stretch-shear */ = {
+			isa = PBXGroup;
+			children = (
+				04B8497029FF335200B84F06 /* BurstStretchShearConstraints.swift */,
+				04B8497229FF335A00B84F06 /* BurstStretchShearConstraintsBatch.swift */,
+			);
+			path = "stretch-shear";
+			sourceTree = "<group>";
+		};
+		04B8497429FF36CF00B84F06 /* tether */ = {
+			isa = PBXGroup;
+			children = (
+				04B8497529FF36DC00B84F06 /* BurstTetherConstraints.swift */,
+				04B8497729FF36E400B84F06 /* BurstTetherConstraintsBatch.swift */,
+			);
+			path = tether;
+			sourceTree = "<group>";
+		};
+		04B8497929FF380700B84F06 /* volume */ = {
+			isa = PBXGroup;
+			children = (
+				04B8497A29FF381300B84F06 /* BurstVolumeConstraints.swift */,
+				04B8497C29FF381D00B84F06 /* BurstVolumeConstraintsBatch.swift */,
+			);
+			path = volume;
 			sourceTree = "<group>";
 		};
 		3E10763F2965212400F751A5 /* emitter */ = {
@@ -3907,15 +4042,19 @@
 				04B8486C29FD381900B84F06 /* DFNode.swift in Sources */,
 				04B8490129FE8F9000B84F06 /* BurstTriangleMesh.swift in Sources */,
 				04B848A929FE3CBE00B84F06 /* BurstCellSpan.swift in Sources */,
+				04B8496729FF30F200B84F06 /* BurstSkinConstraints.swift in Sources */,
 				04B8486F29FD3A2F00B84F06 /* QueryResult.swift in Sources */,
 				04B8490C29FEA01700B84F06 /* IBendTwistConstraintsBatchImpl.swift in Sources */,
 				04B848BD29FE44D500B84F06 /* IConstraintProvider.swift in Sources */,
 				04B8487A29FD3F4E00B84F06 /* ObiTriangleMeshContainer.swift in Sources */,
 				04B8494A29FEBE3300B84F06 /* BurstDensityConstraintsBatch.swift in Sources */,
+				04B8496429FF2E8E00B84F06 /* BurstShapeMatchingConstraintsBatch.swift in Sources */,
 				04B8494829FEBE2900B84F06 /* BurstDensityConstraints.swift in Sources */,
 				04B848F929FE8C4E00B84F06 /* BurstHeightField.swift in Sources */,
+				04B8496929FF30F900B84F06 /* BurstSkinConstraintsBatch.swift in Sources */,
 				04B8491029FEA09F00B84F06 /* IDistanceConstraintsBatchImpl.swift in Sources */,
 				04B8487129FD3A7E00B84F06 /* QueryShape.swift in Sources */,
+				04B8495D29FF2DDC00B84F06 /* BurstPinConstraints.swift in Sources */,
 				04B8492A29FEA50B00B84F06 /* BurstAerodynamicConstraintsBatch.swift in Sources */,
 				04B848B929FE436300B84F06 /* BurstContact.swift in Sources */,
 				04B848D529FE6D7F00B84F06 /* BurstLocalOptimization.swift in Sources */,
@@ -3923,14 +4062,19 @@
 				04B848D729FE6E0800B84F06 /* BurstSimplex.swift in Sources */,
 				04B8489629FD5A5300B84F06 /* ObiColliderBase.swift in Sources */,
 				04B8492329FEA29600B84F06 /* BurstConstraintsBatchImpl.swift in Sources */,
+				04B8497329FF335A00B84F06 /* BurstStretchShearConstraintsBatch.swift in Sources */,
 				04B848DA29FE6E7400B84F06 /* BurstSolverImpl.swift in Sources */,
+				04B8496E29FF324300B84F06 /* BurstStitchConstraintsBatch.swift in Sources */,
+				04B8495F29FF2DE400B84F06 /* BurstPinConstraintsBatch.swift in Sources */,
 				04B8491229FEA0CA00B84F06 /* IPinConstraintsBatchImpl.swift in Sources */,
 				04B848BB29FE44A100B84F06 /* BurstQueryResult.swift in Sources */,
+				04B8495229FF297E00B84F06 /* ApplyBatchedCollisionConstraintsBatchJob.swift in Sources */,
 				04B848E929FE883B00B84F06 /* BurstColliderShape.swift in Sources */,
 				04B8492D29FEA8B600B84F06 /* BurstBendConstraints.swift in Sources */,
 				04B8494229FEB15A00B84F06 /* BurstColliderFrictionConstraints.swift in Sources */,
 				04B848B429FE407B00B84F06 /* FluidInteraction.swift in Sources */,
 				04B8493E29FEB14900B84F06 /* BurstColliderCollisionConstraints.swift in Sources */,
+				04B8495429FF298700B84F06 /* BurstParticleCollisionConstraints.swift in Sources */,
 				04B848AD29FE3DD200B84F06 /* BurstQueryShape.swift in Sources */,
 				04B848C929FE66EC00B84F06 /* NativeMultilevelGrid.swift in Sources */,
 				04B8487429FD3DDB00B84F06 /* IBounded.swift in Sources */,
@@ -3944,6 +4088,8 @@
 				04B848DD29FE735100B84F06 /* BurstBoxQuery.swift in Sources */,
 				04B848DF29FE73BE00B84F06 /* BurstRay.swift in Sources */,
 				04B848EB29FE88CC00B84F06 /* BurstCapsule.swift in Sources */,
+				04B8497829FF36E400B84F06 /* BurstTetherConstraintsBatch.swift in Sources */,
+				04B8497629FF36DC00B84F06 /* BurstTetherConstraints.swift in Sources */,
 				04B8493C29FEB14100B84F06 /* ApplyCollisionConstraintsBatchJob.swift in Sources */,
 				04B8484F29FD0BF800B84F06 /* Aabb.swift in Sources */,
 				04B8490A29FE915C00B84F06 /* IBendConstraintsBatchImpl.swift in Sources */,
@@ -3953,6 +4099,8 @@
 				04B8493929FEAD4B00B84F06 /* BurstChainConstraintsBatch.swift in Sources */,
 				04B8494029FEB15200B84F06 /* BurstColliderCollisionConstraintsBatch.swift in Sources */,
 				04B8489A29FE348400B84F06 /* Types.swift in Sources */,
+				04B8496229FF2E8500B84F06 /* BurstShapeMatchingConstraints.swift in Sources */,
+				04B8497D29FF381D00B84F06 /* BurstVolumeConstraintsBatch.swift in Sources */,
 				04B8494429FEB16200B84F06 /* BurstColliderFrictionConstraintsBatch.swift in Sources */,
 				04B8491E29FEA20500B84F06 /* IVolumeConstraintsBatchImpl.swift in Sources */,
 				04B848E329FE868E00B84F06 /* SpatialQueryJob.swift in Sources */,
@@ -3970,6 +4118,7 @@
 				04B848FF29FE8F5D00B84F06 /* BurstSphere.swift in Sources */,
 				04B848F529FE8B3000B84F06 /* BurstEdgeMesh.swift in Sources */,
 				04B8491429FEA0FD00B84F06 /* IShapeMatchingConstraintsBatchImpl.swift in Sources */,
+				04B8495829FF299800B84F06 /* BurstParticleFrictionConstraints.swift in Sources */,
 				04B848C529FE657D00B84F06 /* ContactProvider.swift in Sources */,
 				04B848F129FE8A7300B84F06 /* BurstDistanceField.swift in Sources */,
 				04B8485429FD0E3500B84F06 /* AffineTransform.swift in Sources */,
@@ -3978,19 +4127,25 @@
 				04B848FB29FE8C8700B84F06 /* ObiHeightFieldContainer.swift in Sources */,
 				04B848EF29FE8A1400B84F06 /* BurstDFNode.swift in Sources */,
 				04B8485629FD13C200B84F06 /* CellSpan.swift in Sources */,
+				04B8497B29FF381300B84F06 /* BurstVolumeConstraints.swift in Sources */,
 				04B8489429FD590100B84F06 /* VoxelDistanceField.swift in Sources */,
 				04B848C129FE611F00B84F06 /* ConstraintBatcher.swift in Sources */,
 				04B8493729FEAD4300B84F06 /* BurstChainConstraints.swift in Sources */,
 				04B8487629FD3DF300B84F06 /* BIHNode.swift in Sources */,
+				04B8496C29FF323B00B84F06 /* BurstStitchConstraints.swift in Sources */,
 				04B8491C29FEA1CF00B84F06 /* ITetherConstraintsBatchImpl.swift in Sources */,
 				04B8490329FE90A400B84F06 /* IConstraintsBatchImpl.swift in Sources */,
 				04B8492129FEA26800B84F06 /* BurstAerodynamicConstraints.swift in Sources */,
 				04B848F729FE8B7300B84F06 /* ObiEdgeMeshContainer.swift in Sources */,
 				04B8485829FD13E900B84F06 /* VInt4.swift in Sources */,
 				04B8491629FEA14300B84F06 /* ISkinConstraintsBatchImpl.swift in Sources */,
+				04B8494F29FEC2DC00B84F06 /* BurstDistanceConstraintsBatch.swift in Sources */,
 				04B8492529FEA2FC00B84F06 /* IBurstConstraintsImpl.swift in Sources */,
+				04B8495629FF298F00B84F06 /* BurstParticleCollisionConstraintsBatch.swift in Sources */,
 				04B8486029FD17D100B84F06 /* CollisionMaterial.swift in Sources */,
 				04B848E129FE864F00B84F06 /* BurstSphereQuery.swift in Sources */,
+				04B8494D29FEC2D400B84F06 /* BurstDistanceConstraints.swift in Sources */,
+				04B8495A29FF29A000B84F06 /* BurstParticleFrictionConstraintsBatch.swift in Sources */,
 				04B8485E29FD15C200B84F06 /* Oni.swift in Sources */,
 				04B8490829FE912300B84F06 /* IAerodynamicConstraintsBatchImpl.swift in Sources */,
 				04B8487D29FD400500B84F06 /* MeshVoxelizer.swift in Sources */,
@@ -3998,6 +4153,7 @@
 				04B848B629FE40D000B84F06 /* GridHash.swift in Sources */,
 				04B8494629FEBDDF00B84F06 /* SpikyKernel.swift in Sources */,
 				04B8486529FD371B00B84F06 /* ColliderShape.swift in Sources */,
+				04B8497129FF335200B84F06 /* BurstStretchShearConstraints.swift in Sources */,
 				04B8485A29FD144B00B84F06 /* SimplexCounts.swift in Sources */,
 				04B848B229FE405000B84F06 /* IConstraint.swift in Sources */,
 				04B8486329FD183900B84F06 /* ObiCollisionMaterial.swift in Sources */,
